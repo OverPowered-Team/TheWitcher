@@ -1,0 +1,1730 @@
+{
+    "Scene": {
+        "Name": "PlayerScene",
+        "GameObjects": [
+            {
+                "Name": "Light",
+                "FamilyNumber": 1,
+                "ID": "16131993768407967109",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            30,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10676385458023174923"
+                    },
+                    {
+                        "Type": 3,
+                        "DiffuseColor": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "AmbienColor": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ],
+                        "Enabled": true,
+                        "ID": "7638642142621387829",
+                        "PrintIcon": true
+                    }
+                ]
+            },
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 1,
+                "ID": "11576812963908154604",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            4.2520103454589844,
+                            -14.855585098266602
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5079031912819129677"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 4,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "9445517126169636402",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "aniTest",
+                "FamilyNumber": 1,
+                "ID": "3689049226018015970",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            -0.25891709327697754
+                        ],
+                        "Rotation": [
+                            0,
+                            1,
+                            0,
+                            -4.3711388286737929e-08
+                        ],
+                        "Scale": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18247688664121929256"
+                    },
+                    {
+                        "Type": 24,
+                        "ID": "4075263483638007022",
+                        "ResourceID": "10023686211497671938",
+                        "DataName": "PlayerController",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Object02",
+                "FamilyNumber": 2,
+                "ID": "12653145715735707728",
+                "ParentID": "3689049226018015970",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            2.5399999618530273,
+                            2.5399999618530273,
+                            2.5399999618530273
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4167889298540946886"
+                    },
+                    {
+                        "Type": 22,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": true,
+                        "DrawOBB": true,
+                        "ID": "11285440577321391942",
+                        "MeshID": "7818945245893020137",
+                        "RootBoneID": "13266510403351287784",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "TextureEnabled": true,
+                        "ID": "10472037623174459339",
+                        "HasTexture": false,
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "transform1",
+                "FamilyNumber": 2,
+                "ID": "1795983073810343520",
+                "ParentID": "3689049226018015970",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -1.1161036491394043,
+                            15.688704490661621,
+                            -0.13840684294700623
+                        ],
+                        "Rotation": [
+                            -0.44879186153411865,
+                            -0.33055087924003601,
+                            -0.44800519943237305,
+                            0.69900882244110107
+                        ],
+                        "Scale": [
+                            2.5399997234344482,
+                            2.5399997234344482,
+                            2.5399999618530273
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12379434492143833552"
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 Pelvis",
+                "FamilyNumber": 3,
+                "ID": "13266510403351287784",
+                "ParentID": "1795983073810343520",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.49999967217445374,
+                            -0.50000035762786865,
+                            -0.49999967217445374,
+                            0.50000029802322388
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999988079071045,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18291091173596097202"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "9331771677994117335",
+                        "BoneID": "468747269900533734",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 Spine",
+                "FamilyNumber": 4,
+                "ID": "3278294056997894271",
+                "ParentID": "13266510403351287784",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.62785243988037109,
+                            0.3180011510848999,
+                            -1.7881393432617188e-07
+                        ],
+                        "Rotation": [
+                            -2.0821623820665991e-06,
+                            -6.9000770963612013e-07,
+                            0.00039814418414607644,
+                            0.99999994039535522
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1.0000001192092896,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4093065535727525816"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "8571706235654794498",
+                        "BoneID": "725718571540136931",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Thigh",
+                "FamilyNumber": 5,
+                "ID": "4562141332694641321",
+                "ParentID": "3278294056997894271",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.62810516357421875,
+                            -0.31749773025512695,
+                            -1.1535696983337402
+                        ],
+                        "Rotation": [
+                            0.46175751090049744,
+                            0.86204314231872559,
+                            0.015326987020671368,
+                            0.20839101076126099
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18150768182810116907"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "17671613186583840073",
+                        "BoneID": "1907647119482920284",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Calf",
+                "FamilyNumber": 6,
+                "ID": "1750773189939266419",
+                "ParentID": "4562141332694641321",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.6564340591430664,
+                            2.384185791015625e-07,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            -0.46143850684165955,
+                            0.88717222213745117
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999994039535522,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10860955216478140495"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "9914593265501918071",
+                        "BoneID": "7779642236181730449",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Foot",
+                "FamilyNumber": 7,
+                "ID": "1084532390647018463",
+                "ParentID": "1750773189939266419",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            3.3164165019989014,
+                            -2.384185791015625e-07,
+                            2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            -0.04051082581281662,
+                            0.14072474837303162,
+                            0.12133371829986572,
+                            0.9817502498626709
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            0.99999994039535522,
+                            0.99999988079071045
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13132657075304779220"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "13957030197502306454",
+                        "BoneID": "7013695594689091612",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Toe0",
+                "FamilyNumber": 8,
+                "ID": "12768773382055160452",
+                "ParentID": "1084532390647018463",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.80660271644592285,
+                            1.3259632587432861,
+                            4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            -7.0458042955579003e-08,
+                            2.8779032845704933e-07,
+                            0.70710724592208862,
+                            0.70710629224777222
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18356623309989208303"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "15057566172906409000",
+                        "BoneID": "1634715268872473294",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Thigh",
+                "FamilyNumber": 5,
+                "ID": "5433087454093835624",
+                "ParentID": "3278294056997894271",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.62810516357421875,
+                            -0.31750392913818359,
+                            1.1535689830780029
+                        ],
+                        "Rotation": [
+                            0.27084267139434814,
+                            0.95505023002624512,
+                            0.043753314763307571,
+                            -0.11228958517313004
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999988079071045,
+                            0.99999988079071045
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4766224467925256422"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "14657906214985990912",
+                        "BoneID": "623971826318171792",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Calf",
+                "FamilyNumber": 6,
+                "ID": "17841635064659203963",
+                "ParentID": "5433087454093835624",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.6564340591430664,
+                            1.1920928955078125e-07,
+                            2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            -0.3290940523147583,
+                            0.944297194480896
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1.0000001192092896,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6900769505855347411"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "5313126254739818301",
+                        "BoneID": "10944918822238063062",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Foot",
+                "FamilyNumber": 7,
+                "ID": "7702986475442463940",
+                "ParentID": "17841635064659203963",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            3.3164162635803223,
+                            -1.4901161193847656e-07,
+                            0
+                        ],
+                        "Rotation": [
+                            0.13742436468601227,
+                            -0.15049974620342255,
+                            0.19602574408054352,
+                            0.95918625593185425
+                        ],
+                        "Scale": [
+                            1,
+                            0.9999997615814209,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16653862667009238171"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "12643828869786138946",
+                        "BoneID": "10832502084295817226",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Toe0",
+                "FamilyNumber": 8,
+                "ID": "11186252891664436932",
+                "ParentID": "7702986475442463940",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.80660265684127808,
+                            1.325963020324707,
+                            0
+                        ],
+                        "Rotation": [
+                            -1.4984837548581709e-07,
+                            6.9308947558965883e-07,
+                            0.70710724592208862,
+                            0.70710629224777222
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12293092660145452144"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "13140197133091185930",
+                        "BoneID": "17517805958118958971",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 Spine1",
+                "FamilyNumber": 5,
+                "ID": "2431894049013715691",
+                "ParentID": "3278294056997894271",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.7980308532714844,
+                            -0.0013594627380371094,
+                            -0.00049537420272827148
+                        ],
+                        "Rotation": [
+                            0.19542096555233002,
+                            -0.14988131821155548,
+                            0.32489684224128723,
+                            0.9131200909614563
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            0.99999988079071045,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9081445505694465493"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "13317784008527480986",
+                        "BoneID": "2915866271314517553",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 Neck",
+                "FamilyNumber": 6,
+                "ID": "3115265388561136140",
+                "ParentID": "2431894049013715691",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.9972019195556641,
+                            -0.23436117172241211,
+                            -4.1723251342773438e-07
+                        ],
+                        "Rotation": [
+                            -0.031273826956748962,
+                            0.19982597231864929,
+                            0.15219809114933014,
+                            0.96743333339691162
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1.0000001192092896,
+                            0.99999988079071045
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16292256546155921093"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "6510698646111510268",
+                        "BoneID": "16465817970501583639",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Clavicle",
+                "FamilyNumber": 7,
+                "ID": "3335372993756341458",
+                "ParentID": "3115265388561136140",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.26788139343261719,
+                            -0.097359657287597656,
+                            -0.87843036651611328
+                        ],
+                        "Rotation": [
+                            -0.63901758193969727,
+                            -0.064629927277565002,
+                            0.74503195285797119,
+                            0.18001922965049744
+                        ],
+                        "Scale": [
+                            1,
+                            1.0000001192092896,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10922664695700406665"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "14268188586177598526",
+                        "BoneID": "17719976530165125046",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R UpperArm",
+                "FamilyNumber": 8,
+                "ID": "4855320434448533220",
+                "ParentID": "3335372993756341458",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.98625373840332031,
+                            -4.76837158203125e-07,
+                            0
+                        ],
+                        "Rotation": [
+                            0.47132483124732971,
+                            -0.33754360675811768,
+                            -0.10736998915672302,
+                            0.80770599842071533
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5397841545873033997"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "17520698162227822648",
+                        "BoneID": "16673151864830345070",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Forearm",
+                "FamilyNumber": 9,
+                "ID": "12278596448548296482",
+                "ParentID": "4855320434448533220",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.3758378028869629,
+                            3.5762786865234375e-07,
+                            4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            -0.27229419350624084,
+                            0.96221405267715454
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14802337006431930618"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "7276107455557970234",
+                        "BoneID": "10331627569747677403",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Hand",
+                "FamilyNumber": 10,
+                "ID": "11123141408485673327",
+                "ParentID": "12278596448548296482",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.8464140892028809,
+                            -9.5367431640625e-07,
+                            0
+                        ],
+                        "Rotation": [
+                            0.56023651361465454,
+                            0.069631285965442657,
+                            0.16953533887863159,
+                            0.80780220031738281
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9703987654057573025"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "17109387874334451956",
+                        "BoneID": "17214981540489276635",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Finger0",
+                "FamilyNumber": 11,
+                "ID": "12020916845134942668",
+                "ParentID": "11123141408485673327",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.94094610214233398,
+                            0.081812381744384766,
+                            0.58038055896759033
+                        ],
+                        "Rotation": [
+                            -0.55319339036941528,
+                            -0.34493878483772278,
+                            0.19145211577415466,
+                            0.73371684551239014
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            0.99999988079071045,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11890020341380738272"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "4794239345832328372",
+                        "BoneID": "18063652841936017732",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Finger01",
+                "FamilyNumber": 12,
+                "ID": "12138391257269785447",
+                "ParentID": "12020916845134942668",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.51724481582641602,
+                            0,
+                            -2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0.23338103294372559,
+                            0.97238540649414063
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2076212784313087242"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "3236859201894518816",
+                        "BoneID": "2745915335295301009",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Finger02",
+                "FamilyNumber": 13,
+                "ID": "2209651496059132778",
+                "ParentID": "12138391257269785447",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.30469560623168945,
+                            1.1920928955078125e-07,
+                            4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            9.5310026537731574e-09,
+                            3.1927779531315537e-08,
+                            0.17268142104148865,
+                            0.98497772216796875
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1.0000001192092896,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15825357701409935107"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "14381522886074274382",
+                        "BoneID": "12158914420017578023",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Finger1",
+                "FamilyNumber": 11,
+                "ID": "16530480511863880848",
+                "ParentID": "11123141408485673327",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.7707755565643311,
+                            0.00036144256591796875,
+                            0.041458725929260254
+                        ],
+                        "Rotation": [
+                            0.0051076384261250496,
+                            0.19857686758041382,
+                            0.39499667286872864,
+                            0.89694970846176147
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5816706223031698578"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "3081255448041507930",
+                        "BoneID": "15762904796062315845",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Finger11",
+                "FamilyNumber": 12,
+                "ID": "12159874376069262764",
+                "ParentID": "16530480511863880848",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.3415369987487793,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -2.6954577236892874e-08,
+                            -1.2713349484272385e-08,
+                            0.42658922076225281,
+                            0.90444546937942505
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13823962653756420227"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "7671838541153360980",
+                        "BoneID": "14136305636817630711",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 R Finger12",
+                "FamilyNumber": 13,
+                "ID": "16778385687943208440",
+                "ParentID": "12159874376069262764",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.25260305404663086,
+                            -4.76837158203125e-07,
+                            2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            -1.6042795536463927e-08,
+                            2.511588448328439e-08,
+                            0.53830677270889282,
+                            0.84274899959564209
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            0.99999994039535522,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16316795086876749288"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "3460342190965386296",
+                        "BoneID": "16624291489935139678",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Clavicle",
+                "FamilyNumber": 7,
+                "ID": "13342259273660644965",
+                "ParentID": "3115265388561136140",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.45527362823486328,
+                            -0.096788406372070313,
+                            0.79764342308044434
+                        ],
+                        "Rotation": [
+                            0.31411594152450562,
+                            -0.10387644916772842,
+                            0.93651831150054932,
+                            0.11607915163040161
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1.0000001192092896,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9601483454235714336"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "3843716760582763350",
+                        "BoneID": "16020226434879525981",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L UpperArm",
+                "FamilyNumber": 8,
+                "ID": "13790082667875143721",
+                "ParentID": "13342259273660644965",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.98625397682189941,
+                            4.76837158203125e-07,
+                            4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            -0.24484546482563019,
+                            0.32088923454284668,
+                            -0.12854091823101044,
+                            0.90584659576416016
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1.0000001192092896,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "178320891982326501"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "13894501158832843836",
+                        "BoneID": "13091505261624009257",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Forearm",
+                "FamilyNumber": 9,
+                "ID": "17139554972656547836",
+                "ParentID": "13790082667875143721",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.3758382797241211,
+                            0,
+                            4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            -0.32770109176635742,
+                            0.94478142261505127
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16211671396555603153"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "6056790090612447109",
+                        "BoneID": "12366127780494144470",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Hand",
+                "FamilyNumber": 10,
+                "ID": "9039012838610770781",
+                "ParentID": "17139554972656547836",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.8464145660400391,
+                            2.384185791015625e-07,
+                            -4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            -0.18265572190284729,
+                            0.041462942957878113,
+                            0.100543312728405,
+                            0.97714322805404663
+                        ],
+                        "Scale": [
+                            0.99999982118606567,
+                            0.99999982118606567,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13458111711856849572"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "7353832608066481493",
+                        "BoneID": "17792130260813092203",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Finger1",
+                "FamilyNumber": 11,
+                "ID": "3868168915634166893",
+                "ParentID": "9039012838610770781",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.770775318145752,
+                            0.00036072731018066406,
+                            -0.041458606719970703
+                        ],
+                        "Rotation": [
+                            -0.086713187396526337,
+                            -0.063716135919094086,
+                            0.1964249461889267,
+                            0.97459650039672852
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            0.99999988079071045,
+                            0.99999988079071045
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3136858877285031644"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "13944170779709482600",
+                        "BoneID": "5784283242532727250",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Finger11",
+                "FamilyNumber": 12,
+                "ID": "9505147954903553884",
+                "ParentID": "3868168915634166893",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.3415369987487793,
+                            4.76837158203125e-07,
+                            4.76837158203125e-07
+                        ],
+                        "Rotation": [
+                            -0.080333918333053589,
+                            -0.021903494372963905,
+                            0.26213955879211426,
+                            0.96143096685409546
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17550835387920130362"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "15336412904337771123",
+                        "BoneID": "2477544720036552163",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Finger12",
+                "FamilyNumber": 13,
+                "ID": "9173485637769782213",
+                "ParentID": "9505147954903553884",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.25260353088378906,
+                            -4.76837158203125e-07,
+                            -2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            -0.079598948359489441,
+                            -0.024439839646220207,
+                            0.29249438643455505,
+                            0.95263516902923584
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13329602676449904300"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "10150051142982039582",
+                        "BoneID": "6521842408956685008",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Finger0",
+                "FamilyNumber": 11,
+                "ID": "7126199979160222496",
+                "ParentID": "9039012838610770781",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.94094634056091309,
+                            0.081811904907226563,
+                            -0.58038067817687988
+                        ],
+                        "Rotation": [
+                            0.58262801170349121,
+                            0.39404591917991638,
+                            0.071983367204666138,
+                            0.70717102289199829
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999988079071045,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11663677034560591574"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "7480701841219162738",
+                        "BoneID": "13326465328152905061",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Finger01",
+                "FamilyNumber": 12,
+                "ID": "9302749771687941472",
+                "ParentID": "7126199979160222496",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.51724433898925781,
+                            1.1920928955078125e-07,
+                            2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            9.9733297176385349e-09,
+                            1.5731416169728618e-08,
+                            0.078393101692199707,
+                            0.99692255258560181
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1146641404384387213"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "5024766708990843018",
+                        "BoneID": "8531586863304940488",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 L Finger02",
+                "FamilyNumber": 13,
+                "ID": "18374744056207979515",
+                "ParentID": "9302749771687941472",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.30469608306884766,
+                            0,
+                            2.384185791015625e-07
+                        ],
+                        "Rotation": [
+                            1.4677311810373794e-08,
+                            2.5731552444341332e-09,
+                            0.1726815402507782,
+                            0.98497772216796875
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5362822928344152546"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "16932155087677569296",
+                        "BoneID": "5702957645609333451",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bip001 Head",
+                "FamilyNumber": 7,
+                "ID": "3011386923085923090",
+                "ParentID": "3115265388561136140",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.1019048690795898,
+                            -9.5367431640625e-07,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.33161324262619019,
+                            -0.046233125030994415,
+                            -0.46153590083122253,
+                            0.82151061296463013
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18071269589455910521"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "16610465198203687443",
+                        "BoneID": "14161724541317442617",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bone001",
+                "FamilyNumber": 8,
+                "ID": "3184903114417628626",
+                "ParentID": "3011386923085923090",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.19279478490352631,
+                            0.020197272300720215,
+                            -9.5367431640625e-07
+                        ],
+                        "Rotation": [
+                            0.58754855394363403,
+                            0.80878400802612305,
+                            0.020709311589598656,
+                            0.015043343417346478
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13350231560154725879"
+                    },
+                    {
+                        "Type": 23,
+                        "ID": "10651611700181643892",
+                        "BoneID": "14626207114899471435",
+                        "Enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}
