@@ -241,6 +241,15 @@ void FileNode::RemoveResourceOfGameObjects()
 		case FileDropType::SCRIPT:
 			// TODO:
 			break;
+		case FileDropType::ANIM_CONTROLLER: {
+			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
+			path_ += "_meta.alien";
+			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
+			ResourceAnimatorController* anim_controller_to_delete = (ResourceAnimatorController*)App->resources->GetResourceWithID(ID);
+			if (anim_controller_to_delete != nullptr) {
+				App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_ANIMATOR_CONTROLLER, (Resource*)anim_controller_to_delete);
+			}
+			break; }
 		case FileDropType::TEXTURE: {
 			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
 			path_ += "_meta.alien";

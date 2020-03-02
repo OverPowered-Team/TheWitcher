@@ -173,8 +173,12 @@ bool ComponentParticleSystem::DrawInspector()
 			bool loop = emmitter->GetLoop();
 			if (ImGui::Checkbox("Looping", &loop)) { emmitter->SetLoop(loop); }
 
+			float delay = emmitter->GetDelay();
+			if (ImGui::DragFloat("Delay", &delay, 0.2f, 0.00f, FLT_MAX)) { emmitter->SetDelay(delay); }
+
 			float spawnRate = emmitter->GetSpawnRate();
 			if (ImGui::DragFloat("Spawn Rate", &spawnRate, 0.2f, 0.00f, FLT_MAX)) { emmitter->SetSpawnRate(spawnRate); }
+
 
 			float3 pos = particleSystem->emmitter.GetRelativePosition();
 			if (ImGui::DragFloat3("Position", (float*)&pos)) { emmitter->SetRelativePosition(pos); }
@@ -229,7 +233,23 @@ bool ComponentParticleSystem::DrawInspector()
 			{
 				ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
 				ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX);
-				ImGui::DragFloat("Angle Rotation", (float*)&particleSystem->particleInfo.angle, 0.1f, 0.0f, 360.0f);
+
+
+				if (ImGui::Checkbox("Start 3D Rotation", &particleSystem->particleInfo.axisRot3DStart))
+				{
+					particleSystem->particleInfo.angle3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angle3D.z);
+				}
+				ImGui::Spacing();
+				if (particleSystem->particleInfo.axisRot3DStart)
+				{
+					ImGui::Text("Start 3D Rotation: "); ImGui::SameLine(200, 15);
+					ImGui::DragFloat3("##rot3D", (float*)&particleSystem->particleInfo.angle3D, 0.1f, 0.0f, 360.0f);
+				}
+				else
+					ImGui::DragFloat("Start Rotation", (float*)&particleSystem->particleInfo.angle3D.z, 0.1f, 0.0f, 360.0f);
+
+
+				//ImGui::DragFloat3("Start Rotation 3D", (float*)&particleSystem->particleInfo.angle3D, 0.1f, 0.0f, 360.0f);
 				ImGui::DragFloat3("Gravity", (float*)&particleSystem->particleInfo.force);
 				ImGui::Checkbox("Change Over Time", &particleSystem->particleInfo.changeOverLifeTime);
 
@@ -243,11 +263,69 @@ bool ComponentParticleSystem::DrawInspector()
 					ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
 						ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
 					ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX);
-					ImGui::DragFloat("Angle Rotation", (float*)&particleSystem->endInfo.angle, 0.1f, 0.0f, FLT_MAX);
 					ImGui::DragFloat3("Gravity", (float*)&particleSystem->endInfo.force);
 					ImVec2 size = ImGui::GetItemRectSize();
 					if (ImGui::Button("Equalize Values", size))
 						particleSystem->endInfo = particleSystem->particleInfo;
+
+
+					ImGui::Spacing(); ImGui::Spacing();
+					
+					ImGui::Checkbox("##pptActiveRotation", &particleSystem->particleInfo.rotateOverTime);
+					ImGui::SameLine();
+
+					if (ImGui::TreeNodeEx("Rotation Over Time", ImGuiTreeNodeFlags_Framed))
+					{
+
+						ImGui::Spacing();
+
+						if (!particleSystem->particleInfo.rotateOverTime)
+						{
+							ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+							ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+						}
+
+						if(ImGui::Checkbox("Separate Axis", &particleSystem->particleInfo.axisRot3D)) 
+						{
+							particleSystem->particleInfo.angularVelocity3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angularVelocity3D.z);
+							particleSystem->particleInfo.angularAcceleration3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angularAcceleration3D.z);
+						}
+
+						ImGui::Spacing();
+						ImGui::Spacing();
+
+						if (particleSystem->particleInfo.axisRot3D)
+						{
+							ImGui::Text("Angular Velocity 3D: "); ImGui::SameLine(240, 15);
+							ImGui::DragFloat3("##angular vel3D", (float*)&particleSystem->particleInfo.angularVelocity3D, 0.1f, 0.0f, 360.0f);
+							ImGui::Spacing();
+							ImGui::Text("Angular Acceleration 3D: "); ImGui::SameLine(240, 15);
+							ImGui::DragFloat3("##angular accl3D", (float*)&particleSystem->particleInfo.angularAcceleration3D, 0.1f, 0.0f, 360.0f);
+						}
+
+						else 
+						{
+							ImGui::Text("Angular Velocity "); ImGui::SameLine(230, 15);
+							ImGui::DragFloat("##angular vel", (float*)&particleSystem->particleInfo.angularVelocity3D.z, 0.1f, 0.0f, 360.0f);
+							ImGui::Spacing();
+							ImGui::Text("Angular Acceleration "); ImGui::SameLine(230, 15);
+							ImGui::DragFloat("##angular acc", (float*)&particleSystem->particleInfo.angularAcceleration3D.z, 0.1f, 0.0f, 360.0f);
+						}
+
+
+
+						if (!particleSystem->particleInfo.rotateOverTime)
+						{
+							ImGui::PopItemFlag();
+							ImGui::PopStyleVar();
+						}
+
+						
+
+						ImGui::TreePop();
+					}
+
+
 					ImGui::TreePop();
 				}
 			}

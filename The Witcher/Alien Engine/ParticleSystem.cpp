@@ -79,6 +79,7 @@ bool ParticleSystem::PreUpdate(float dt)
 		particles[i]->PreUpdate(dt);
 	}
 
+
 	return true;
 }
 
@@ -90,19 +91,21 @@ bool ParticleSystem::Update(float dt)
 	{
 		emmitter.Update(dt);
 
-		int particlesToCreate = emmitter.GetParticlesToInstantiate();
-		InstantiateParticles(particlesToCreate);
 
-		if (emmitter.HasBurstsActive())
-		{
-			int particlesToBurst = emmitter.GetParticlesToBurst();
-			InstantiateParticles(particlesToBurst);
+		if (!emmitter.isDelayed()) {
+
+			int particlesToCreate = emmitter.GetParticlesToInstantiate();
+			InstantiateParticles(particlesToCreate);
+
+			if (emmitter.HasBurstsActive())
+			{
+				int particlesToBurst = emmitter.GetParticlesToBurst();
+				InstantiateParticles(particlesToBurst);
+			}
 		}
-
 	}
-
+	
 	// ------------------------------------------
-
 
 	// --------------- Update Particles -----------------
 	for (uint i = 0; i < particles.size(); ++i)
@@ -246,6 +249,7 @@ void ParticleSystem::ResetSystem()
 {
 	// Reset Emmitter
 	emmitter.Reset();
+	emmitter.current_delay = 0.f;
 
 	// Delete all particles
 	for (std::vector<Particle*>::iterator iter = particles.begin(); iter != particles.end(); ++iter)

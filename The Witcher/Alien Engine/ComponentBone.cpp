@@ -36,6 +36,11 @@ void ComponentBone::AddBone(ResourceBone* b)
 		bone = b;
 }
 
+std::string ComponentBone::GetMeshName()
+{
+	return bone->mesh_name;
+}
+
 uint ComponentBone::GetBoneID()
 {
 	return bone->GetID();

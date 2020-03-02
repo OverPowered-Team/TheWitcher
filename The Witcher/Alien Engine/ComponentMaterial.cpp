@@ -422,8 +422,18 @@ void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
 		if (texture != nullptr)
 			texture->IncreaseReferences();
 	}
+
 	if (to_load->GetBoolean("HasShader")) {
-		u64 ID = std::stoull(to_load->GetString("ShaderID"));
+		u64 ID;
+		if (to_load->GetString("ShaderID") != nullptr)
+		{
+			ID = std::stoull(to_load->GetString("ShaderID"));
+		}
+		else
+		{
+			std::string p = std::string(SHADERS_FOLDER + std::string("default_meta.alien"));
+			ID = App->resources->GetIDFromAlienPath(p.data());
+		}
 		used_shader = (ResourceShader*)App->resources->GetResourceWithID(ID);
 		if (used_shader != nullptr)
 			used_shader->IncreaseReferences();

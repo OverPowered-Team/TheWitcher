@@ -22,10 +22,13 @@ void PanelAnimator::DrawStates()
 	for (uint i = 0, count = current_animator->GetNumStates(); i < count; ++i)
 	{
 		// Start drawing nodes.
-		ax::NodeEditor::BeginNode(++unique_id);
-		current_animator->GetStates()[i]->id = unique_id;
+		ax::NodeEditor::BeginNode(current_animator->GetStates()[i]->id);
 
 		ImGui::Text(current_animator->GetStates()[i]->GetName().c_str());
+
+		if (current_animator->GetStates()[i] == current_animator->GetDefaultNode()) {
+			ImGui::Text("Entry node");
+		}
 
 		if(current_animator->GetStates()[i]->GetClip())
 			ImGui::Text(current_animator->GetStates()[i]->GetClip()->name.c_str());
@@ -59,7 +62,7 @@ void PanelAnimator::HandleContextMenu()
 	}
 
 	if (ax::NodeEditor::ShowNodeContextMenu(&context_node_id)) {
-		context_node = current_animator->GetStates()[(uint)context_node_id - 1]->GetName();
+		context_node = current_animator->FindState((uint)context_node_id)->GetName();
 		ImGui::OpenPopup("State popup");
 	}
 
@@ -90,12 +93,19 @@ void PanelAnimator::ShowStatePopup(){
 	if (ImGui::BeginPopup("State popup")) {
 
 		ImGui::Separator();
+		ImGui::Separator();
 
 		std::string temp_str = current_animator->FindState(context_node)->GetName();
 		if (ImGui::InputText("Name", &temp_str, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			current_animator->FindState(context_node)->SetName(temp_str);
 			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::Separator();
+
+		if (ImGui::Selectable("Set as entry node")) {
+			current_animator->SetDefaultNode(current_animator->FindState(context_node));
 		}
 
 		ImGui::Separator();
@@ -128,12 +138,12 @@ void PanelAnimator::ShowStatePopup(){
 
 void PanelAnimator::CreateState()
 {
-	uint aux = 0;
-	std::string name = "New state";
-	for (; aux < current_animator->GetStates().size(); aux++) {}
+	std::string name = "NewState";
 
-	name.append(std::to_string(aux));
 	current_animator->AddState(name, nullptr);
+	uint node_id = current_animator->GetStates().back()->id;
+	ax::NodeEditor::SetNodePosition(node_id, ax::NodeEditor::ScreenToCanvas(ImGui::GetMousePos()));
+	current_animator->GetStates().back()->SetName(name.append(std::to_string(current_animator->GetStates().back()->id)));
 
 	if (new_node_id != ax::NodeEditor::PinId::Invalid)
 	{
@@ -399,24 +409,22 @@ void PanelAnimator::ShowLinkPopup()
 
 		if (ImGui::Button("Add bool Condition"))
 		{
-			current_animator->GetTransitions()[selected_link_index]->AddBoolCondition();
+			if(current_animator->GetBoolParameters().size() > 0)
+				current_animator->GetTransitions()[selected_link_index]->AddBoolCondition();
 		}		
 		
 		if (ImGui::Button("Add float Condition"))
 		{
-			current_animator->GetTransitions()[selected_link_index]->AddFloatCondition();
+			if (current_animator->GetFloatParameters().size() > 0)
+				current_animator->GetTransitions()[selected_link_index]->AddFloatCondition();
 		}
 
 		if (ImGui::Button("Add int Condition"))
 		{
-			current_animator->GetTransitions()[selected_link_index]->AddIntCondition();
+			if (current_animator->GetIntParameters().size() > 0)
+				current_animator->GetTransitions()[selected_link_index]->AddIntCondition();
 		}
 
-		//ImGui::SameLine();
-		//if (ImGui::Button("Remove int Condition") && current_animator->GetTransitions()[selected_link_index]->GetConditions().size() > 1)
-		//{
-
-		//}
 		ImGui::Separator();
 
 		float blend_v = (float)current_animator->GetTransitions()[selected_link_index]->GetBlend();
@@ -541,8 +549,6 @@ void PanelAnimator::OnAssetSelect()
 		ResourceAnimatorController* anim_ctrl = (ResourceAnimatorController*)App->resources->GetResourceWithID(resource_id);
 		if (current_animator != anim_ctrl)
 		{
-			if(current_animator)
-				current_animator->SaveAsset(current_animator->GetID());
 			SetCurrentResourceAnimatorController(anim_ctrl);
 		}
 	}
@@ -593,7 +599,7 @@ PanelAnimator::PanelAnimator(const std::string& panel_name, const SDL_Scancode& 
 PanelAnimator::~PanelAnimator()
 {
 	if (current_animator)
-		current_animator->SaveAsset();
+		current_animator->SaveAsset(current_animator->GetID());
 }
 
 bool PanelAnimator::FillInfo()
@@ -665,7 +671,7 @@ void PanelAnimator::PanelLogic()
 		ImGui::SetCursorPos({ 4, 24 });
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 100));
 
-		ImGui::BeginChild("Parameters", { 200, 500 }, true);
+		ImGui::BeginChild("Parameters", { 200, 350 }, true);
 		ImGui::CollapsingHeader("Parameters", ImGuiTreeNodeFlags_DefaultOpen);
 
 		DrawParameterList();

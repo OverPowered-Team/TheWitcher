@@ -29,12 +29,27 @@ void Particle::Update(float dt)
 {
 	// Apply forces
 	particleInfo.velocity += particleInfo.force * dt;
-	//particleInfo.angularVelocity += particleInfo.angularAcceleration * dt;
+	
 
 	// Move
 	particleInfo.position += particleInfo.velocity * dt;
-	//particleInfo.angle += particleInfo.angularVelocity * dt;
-	//Rotate
+
+
+	//Rotate (Angular Velocity && Angular Acc in degrees per second)
+	if (particleInfo.rotateOverTime) {
+
+		particleInfo.angularVelocity3D += particleInfo.angularAcceleration3D * dt;
+
+		if (particleInfo.angularVelocity3D.z >= ANGULAR_CAP)
+			particleInfo.angularVelocity3D.z = ANGULAR_CAP;
+		if (particleInfo.angularVelocity3D.y >= ANGULAR_CAP)
+			particleInfo.angularVelocity3D.y = ANGULAR_CAP;
+		if (particleInfo.angularVelocity3D.x >= ANGULAR_CAP)
+			particleInfo.angularVelocity3D.x = ANGULAR_CAP;
+
+		particleInfo.angle3D += particleInfo.angularVelocity3D * dt;
+	}
+	
 }
 
 void Particle::PostUpdate(float dt)
@@ -42,7 +57,7 @@ void Particle::PostUpdate(float dt)
 	if (particleInfo.changeOverLifeTime) {
 
 		InterpolateValues(dt);
-		//particleInfo.angle += particleInfo.angularVelocity * dt;
+		
 	}
 }
 
@@ -50,9 +65,7 @@ void Particle::Draw()
 {
 	glColor4f(particleInfo.color.x, particleInfo.color.y, particleInfo.color.z, particleInfo.color.w);
 
-	//particleInfo.rotation = Quat(0.f, 0.f, 0.5f, 1.f);
 	
-
 	float4x4 particleLocal = float4x4::FromTRS(particleInfo.position, particleInfo.rotation, float3(particleInfo.size, particleInfo.size, 1.f));
 	float4x4 particleGlobal = particleLocal;
 
@@ -179,15 +192,9 @@ void Particle::Orientate(ComponentCamera* camera)
 
 void Particle::Rotate()
 {
-	
-	
-		particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateZ(particleInfo.angle));
-
-		if (particleInfo.changeOverLifeTime)
-		{
-
-		}
-
+	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateX(math::DegToRad(particleInfo.angle3D.x)));
+	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateY(math::DegToRad(particleInfo.angle3D.y)));
+	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateZ(math::DegToRad(particleInfo.angle3D.z)));
 }
 
 void Particle::InterpolateValues(float dt)

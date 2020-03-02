@@ -65,7 +65,7 @@ private:
 public: 
 
 	bool isActive() const;
-
+	bool isDelayed() const;
 	// -------- Bursts -----------
 
 	void Reset();
@@ -154,7 +154,8 @@ private:
 
 	float maxLifeTime = 10.f;
 	float lifeTime = 0.f;
-	float delay = 0.f;
+	float delay = 2.f;
+	float current_delay = 0.f;
 
 	bool loop = true;
 

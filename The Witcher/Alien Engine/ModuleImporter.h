@@ -71,7 +71,7 @@ private:
 	void InitScene(const char* path, const aiScene* scene, const char* extern_path);
 
 	void LoadAnimation(const aiAnimation* animation);
-	void LoadBone(const aiBone* bone);
+	void LoadBone(const aiBone* bone, std::string mesh_name);
 	void LoadMesh(const aiMesh* mesh);
 	void LoadNode(const aiNode* node, const aiScene* scene, uint nodeNum);
 	void LoadMaterials(const aiMaterial* material, const char* extern_path);

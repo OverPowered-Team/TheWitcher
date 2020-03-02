@@ -48,9 +48,9 @@ public:
 public:
 	bool loops = false;
 	uint ticks_per_second = 0;
-	uint start_tick = 0;
-	uint end_tick = 0;
-	uint max_tick = 0;
+	float start_tick = 0;
+	float end_tick = 0;
+	float max_tick = 0;
 
 	uint num_channels = 0;
 	Channel* channels  = nullptr;

@@ -172,7 +172,13 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 			nodes->SetString("parentName", model_nodes[i].parent_name);
 			nodes->SetNumber("meshIndex", model_nodes[i].mesh);
 			nodes->SetNumber("materialIndex", model_nodes[i].material);
-			nodes->SetNumber("boneIndex", model_nodes[i].bone);
+			nodes->SetNumber("numBones", model_nodes[i].bones.size());
+			JSONArraypack* bones = nodes->InitNewArray("bonesIndex");
+			for (uint j = 0; j < model_nodes[i].bones.size(); ++j)
+			{
+				bones->SetAnotherNode();
+				bones->SetNumber(std::to_string(j).data(), model_nodes[i].bones[j]);
+			}
 		}
 
 		if (meta_mesh_paths != nullptr)
@@ -271,7 +277,13 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 			node.parent_name = nodes->GetString("parentName");
 			node.mesh = nodes->GetNumber("meshIndex");
 			node.material = nodes->GetNumber("materialIndex");
-			node.bone = nodes->GetNumber("boneIndex");
+			uint num_bones = nodes->GetNumber("numBones");
+			JSONArraypack* bones = nodes->GetArray("bonesIndex");
+			for (uint j = 0; j < num_bones; ++j)
+			{
+				node.bones.push_back(bones->GetNumber(std::to_string(j).data()));
+				bones->GetAnotherNode();
+			}
 			model_nodes.push_back(node);
 			nodes->GetAnotherNode();
 		}
@@ -431,7 +443,13 @@ void ResourceModel::ReadLibrary(const char* meta_data)
 			node.parent_name = nodes->GetString("parentName");
 			node.mesh = nodes->GetNumber("meshIndex");
 			node.material = nodes->GetNumber("materialIndex");
-			node.bone = nodes->GetNumber("boneIndex");
+			uint num_bones = nodes->GetNumber("numBones");
+			JSONArraypack* bones = nodes->GetArray("bonesIndex");
+			for (uint j = 0; j < num_bones; ++j)
+			{
+				node.bones.push_back(bones->GetNumber(std::to_string(j).data()));
+				bones->GetAnotherNode();
+			}
 			model_nodes.push_back(node);
 			nodes->GetAnotherNode();
 		}
@@ -603,7 +621,13 @@ void ResourceModel::UpdateAnimationInfo()
 			nodes->SetString("parentName", model_nodes[i].parent_name);
 			nodes->SetNumber("meshIndex", model_nodes[i].mesh);
 			nodes->SetNumber("materialIndex", model_nodes[i].material);
-			nodes->SetNumber("boneIndex", model_nodes[i].bone);
+			nodes->SetNumber("numBones", model_nodes[i].bones.size());
+			JSONArraypack* bones = nodes->InitNewArray("bonesIndex");
+			for (uint j = 0; j < model_nodes[i].bones.size(); ++j)
+			{
+				bones->SetAnotherNode();
+				bones->SetNumber(std::to_string(j).data(), model_nodes[i].bones[j]);
+			}
 		}
 
 		alien->FinishSave();
@@ -641,14 +665,21 @@ void ResourceModel::ConvertToGameObjects()
 	std::vector<std::pair<uint, GameObject*>> objects_created;
 	objects_created.push_back({ 1,parent });
 
-	std::pair<GameObject*, GameObject*> skeleton_link = { nullptr, nullptr };
+	GameObject* root_bone = nullptr;
 	for (uint i = 0; i < model_nodes.size(); ++i) {
-		CreateGameObject(model_nodes[i], objects_created, skeleton_link);
+		CreateGameObject(model_nodes[i], objects_created, root_bone);
 	}
 	App->objects->GetRoot(false)->children.back()->transform->RecalculateTransform();
 	App->objects->ignore_cntrlZ = false;
-	if (skeleton_link.first != nullptr && skeleton_link.second != nullptr)
-		((ComponentDeformableMesh*)skeleton_link.first->GetComponent(ComponentType::DEFORMABLE_MESH))->AttachSkeleton(skeleton_link.second->transform);
+
+	for each (std::pair<int,GameObject*> object in objects_created)
+	{
+		ComponentDeformableMesh* def_mesh = object.second->GetComponent<ComponentDeformableMesh>();
+		if (def_mesh && root_bone)
+		{
+			def_mesh->AttachSkeleton(root_bone->transform);
+		}
+	}
 
 	App->objects->SetNewSelectedObject(App->objects->GetRoot(false)->children.back());
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
@@ -661,7 +692,7 @@ bool ResourceModel::SortByFamilyNumber(const ModelNode& node1, const ModelNode& 
 	return node1.node_num < node2.node_num;
 }
 
-GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<std::pair<uint, GameObject*>>& objects_created, std::pair<GameObject*, GameObject*>& skeleton_link)
+GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<std::pair<uint, GameObject*>>& objects_created, GameObject*& root_bone)
 {
 	GameObject* ret = nullptr;
 
@@ -673,23 +704,18 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 			if (node.mesh >= 0) {
 				ResourceMesh* mesh = meshes_attached[node.mesh];
 				if (mesh != nullptr) {
+					ComponentMesh* Cmesh = nullptr;
 					if (mesh->deformable)
 					{
-						ComponentDeformableMesh* Cmesh = new ComponentDeformableMesh(ret);
-						mesh->IncreaseReferences();
-						Cmesh->mesh = mesh;
-						Cmesh->RecalculateAABB_OBB();
-						ret->AddComponent(Cmesh);
-						skeleton_link.first = ret;
+						Cmesh = new ComponentDeformableMesh(ret);
 					}
 					else
-					{
-						ComponentMesh* Cmesh = new ComponentMesh(ret);
-						mesh->IncreaseReferences();
-						Cmesh->mesh = mesh;
-						Cmesh->RecalculateAABB_OBB();
-						ret->AddComponent(Cmesh);
-					}
+						Cmesh = new ComponentMesh(ret);
+
+					mesh->IncreaseReferences();
+					Cmesh->mesh = mesh;
+					Cmesh->RecalculateAABB_OBB();
+					ret->AddComponent(Cmesh);
 				}
 
 				if (node.material >= 0) {
@@ -713,17 +739,20 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 				}
 
 			}
-			if (node.bone >= 0)
+			if (node.bones.size() > 0)
 			{
-				if (skeleton_link.second == nullptr)
-					skeleton_link.second = ret;
+				if (!root_bone)
+					root_bone = ret;
 
-				ResourceBone* bone = bones_attached[node.bone];
-				if (bone != nullptr) {
-					ComponentBone* c_bone = new ComponentBone(ret);
-					bone->IncreaseReferences();
-					c_bone->bone = bone;
-					ret->AddComponent(c_bone);
+				for (uint i = 0; i < node.bones.size(); ++i)
+				{
+					ResourceBone* bone = bones_attached[node.bones[i]];
+					if (bone != nullptr) {
+						ComponentBone* c_bone = new ComponentBone(ret);
+						bone->IncreaseReferences();
+						c_bone->bone = bone;
+						ret->AddComponent(c_bone);
+					}
 				}
 			}
 			objects_created.push_back({ node.node_num, ret });

@@ -12,6 +12,8 @@ public:
 	ResourceBone();
 	~ResourceBone();
 
+	std::string mesh_name = "";
+
 	float4x4 matrix;
 
 	uint num_weights = 0;

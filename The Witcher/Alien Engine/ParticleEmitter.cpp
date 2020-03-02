@@ -16,7 +16,11 @@ ParticleEmmitter::~ParticleEmmitter()
 void ParticleEmmitter::Update(float dt)
 {
 	lifeTime += dt;
-	currentSpawnTime += dt;
+	current_delay += dt;
+
+	if (current_delay >= delay)
+		currentSpawnTime += dt;
+		
 
 	if (loop && lifeTime >= maxLifeTime)
 		Reset();
@@ -338,6 +342,11 @@ void ParticleEmmitter::ResetBursts()
 bool ParticleEmmitter::isActive() const
 {
 	return lifeTime < maxLifeTime;
+}
+
+bool ParticleEmmitter::isDelayed() const
+{
+	return current_delay < delay;
 }
 
 

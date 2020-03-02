@@ -321,6 +321,22 @@ void ImGuiEx::Canvas::RestoreInputState()
 
 void ImGuiEx::Canvas::EnterLocalSpace()
 {
+    auto pViewport = ImGui::GetWindowViewport();
+
+    m_ViewportPosBackup = pViewport->Pos;
+    m_ViewportSizeBackup = pViewport->Size;
+
+    ImVec2 rMin = pViewport->Pos;
+    ImVec2 rMax = pViewport->Pos + pViewport->Size;
+
+    rMin.x = (rMin.x - m_ViewTransformPosition.x) * m_View.InvScale;
+    rMin.y = (rMin.y - m_ViewTransformPosition.y) * m_View.InvScale;
+    rMax.x = (rMax.x - m_ViewTransformPosition.x) * m_View.InvScale;
+    rMax.y = (rMax.y - m_ViewTransformPosition.y) * m_View.InvScale;
+
+    pViewport->Pos = rMin;
+    pViewport->Size = rMax - rMin;
+
     // Prepare ImDrawList for drawing in local coordinate system:
     //   - determine visible part of the canvas
     //   - start unique draw command
@@ -397,6 +413,11 @@ void ImGuiEx::Canvas::LeaveLocalSpace()
     }
     m_CurrentRange = nullptr;
 # endif
+
+    auto pViewport = ImGui::GetWindowViewport();
+
+    pViewport->Pos = m_ViewportPosBackup;
+    pViewport->Size = m_ViewportSizeBackup;
 
     // Move vertices to screen space.
     auto vertex    = m_DrawList->VtxBuffer.Data + m_DrawListStartVertexIndex;

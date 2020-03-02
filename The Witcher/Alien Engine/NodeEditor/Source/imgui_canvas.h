@@ -234,6 +234,8 @@ private:
     ImRect      m_ViewRect;
 
     ImVec2 m_ViewTransformPosition;
+    ImVec2 m_ViewportPosBackup;
+    ImVec2 m_ViewportSizeBackup;
 
     int m_SuspendCounter = 0;
 

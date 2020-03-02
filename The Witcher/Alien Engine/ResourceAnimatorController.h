@@ -6,8 +6,6 @@
 
 #include <vector>
 
-#define NUM_TRIGGERS 5
-
 class ResourceAnimation;
 
 class State
@@ -148,7 +146,6 @@ private:
 	std::vector<State*> states;
 	std::vector<Transition*> transitions;
 	State* default_state = nullptr;
-	std::vector<bool> triggers;
 
 	std::vector <std::pair <std::string, int>> int_parameters;
 	std::vector <std::pair <std::string, float>> float_parameters;
@@ -160,6 +157,9 @@ private:
 public:
 	ResourceAnimatorController();
 	~ResourceAnimatorController();
+
+	int attached_references = 0;
+	int id_bucket = 1;
 
 	void ReImport(const u64& force_id = 0);
 	//Parameters things
@@ -205,7 +205,7 @@ public:
 	void UpdateState(State* state);
 	void Stop();
 	bool CheckTriggers();
-	int times_attached = 0;
+
 
 	//Transform
 	bool GetTransform(std::string channel_name, float3& position, Quat& rotation, float3& scale);
@@ -229,7 +229,7 @@ public:
 	std::vector<Transition*> FindTransitionsFromSourceState(State* state);
 
 	State* GetDefaultNode() const { return default_state; };
-
+	void SetDefaultNode(State* state) { default_state = state; }
 	ax::NodeEditor::EditorContext* GetEditorContext();
 	std::string GetTypeString() const;
 

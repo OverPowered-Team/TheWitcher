@@ -27,7 +27,7 @@ bool ResourceBone::CreateMetaData(const u64& force_id)
 
 	meta_data_path = std::string(LIBRARY_BONES_FOLDER + std::to_string(ID) + ".alienBone");
 
-	uint size = sizeof(uint) + name.size() + sizeof(float4x4) + sizeof(uint) + sizeof(float) * num_weights + sizeof(uint) * num_weights;
+	uint size = sizeof(uint) + name.size() + sizeof(uint) + mesh_name.size() + sizeof(float4x4) + sizeof(uint) + sizeof(float) * num_weights + sizeof(uint) * num_weights;
 	// Allocate
 	char* data = new char[size];
 	char* cursor = data;
@@ -39,6 +39,15 @@ bool ResourceBone::CreateMetaData(const u64& force_id)
 	cursor += bytes;
 	bytes = name.size();
 	memcpy(cursor, name.c_str(), bytes);
+	cursor += bytes;
+
+	// Store mesh name size and name
+	bytes = sizeof(uint);
+	name_size = mesh_name.size();
+	memcpy(cursor, &name_size, bytes);
+	cursor += bytes;
+	bytes = mesh_name.size();
+	memcpy(cursor, mesh_name.c_str(), bytes);
 	cursor += bytes;
 
 	//Store matrix
@@ -88,6 +97,17 @@ bool ResourceBone::LoadMemory()
 	bytes = name_size;
 	name.resize(bytes);
 	memcpy(&name[0], cursor, bytes);
+	cursor += bytes;
+
+	//Load name size
+	bytes = sizeof(uint);
+	memcpy(&name_size, cursor, bytes);
+	cursor += bytes;
+
+	//Load name
+	bytes = name_size;
+	mesh_name.resize(bytes);
+	memcpy(&mesh_name[0], cursor, bytes);
 	cursor += bytes;
 
 	//Load matrix
@@ -151,6 +171,17 @@ bool ResourceBone::ReadBaseInfo(const char* meta_file_path)
 	bytes = name_size;
 	name.resize(bytes);
 	memcpy(&name[0], cursor, bytes);
+	cursor += bytes;
+
+	//Load name size
+	bytes = sizeof(uint);
+	memcpy(&name_size, cursor, bytes);
+	cursor += bytes;
+
+	//Load name
+	bytes = name_size;
+	mesh_name.resize(bytes);
+	memcpy(&mesh_name[0], cursor, bytes);
 	cursor += bytes;
 
 	App->resources->AddResource(this);

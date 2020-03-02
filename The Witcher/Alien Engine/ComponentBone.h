@@ -17,6 +17,7 @@ public:
 	bool debug_draw = false;
 	void Draw();
 	void AddBone(ResourceBone* b);
+	std::string GetMeshName();
 	uint GetBoneID();
 	ResourceBone* GetBone();
 

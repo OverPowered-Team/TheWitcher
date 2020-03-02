@@ -21,7 +21,7 @@ struct ModelNode {
 	uint parent_num = 0;
 	int mesh = -1;
 	int material = -1; 
-	int bone = -1;
+	std::vector<int> bones;
 };
 
 class ResourceModel : public Resource {
@@ -48,8 +48,7 @@ private:
 
 	// sort
 	static bool SortByFamilyNumber(const ModelNode& node1, const ModelNode& node2);
-
-	GameObject* CreateGameObject(const ModelNode& node, std::vector<std::pair<uint, GameObject*>>& objects_created, std::pair<GameObject*, GameObject*>& skeleton_link);
+	GameObject* CreateGameObject(const ModelNode& node, std::vector<std::pair<uint, GameObject*>>& objects_created, GameObject*& root_bone);
 
 public:
 	std::vector<ModelNode> model_nodes;

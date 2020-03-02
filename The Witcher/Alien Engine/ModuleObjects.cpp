@@ -973,6 +973,7 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 
 		if (value != nullptr && object != nullptr)
 		{
+			App->CastEvent(EventType::ON_UNLOAD_SCENE);
 			octree.Clear();
 			Gizmos::ClearAllCurrentGizmos();
 			delete base_game_object;
@@ -1329,7 +1330,7 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 								JSONArraypack* inspector = to_save->InitNewArray("Inspector");
 								for (uint i = 0; i < (*script)->inspector_variables.size(); ++i) {
 									inspector->SetAnotherNode();
-									if ((*script)->inspector_variables[i].ptr == nullptr) {
+									if ((*script)->inspector_variables[i].ptr == nullptr && (*script)->inspector_variables[i].obj == nullptr) {
 										inspector->SetBoolean("IsNull", true);
 										continue;
 									}
@@ -1354,7 +1355,7 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 									case InspectorScriptData::DataType::GAMEOBJECT: {
 										GameObject** obj = ((GameObject**)((*script)->inspector_variables[i].obj));
 										if (obj != nullptr && *obj != nullptr) {
-											inspector->SetString("gameobject", std::to_string((*obj)->prefabID));
+											inspector->SetString("gameobject", std::to_string((*obj)->ID));
 										}
 										else {
 											inspector->SetString("gameobject", "0");
@@ -1598,8 +1599,15 @@ void ModuleObjects::HandleEvent(EventType eventType)
 			break;
 		}
 	}
-
 	objects.clear();
+
+	if (eventType == EventType::ON_PLAY) {
+		InitScripts();
+	}
+	else if (eventType == EventType::ON_UNLOAD_SCENE) {
+		App->ui->panel_animtimeline->changed = true;
+	}
+
 }
 
 void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
