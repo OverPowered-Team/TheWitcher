@@ -16,36 +16,108 @@ Github organization:https://github.com/OverPowered-Team
 
 Github Engine repository: https://github.com/OverPowered-Team/Alien-GameEngine
 
+Github Game issues: https://github.com/OverPowered-Team/TheWitcher/issues
+
+Github Engine issues: https://github.com/OverPowered-Team/Alien-GameEngine/issues
+
 ### Contributors
+
+Lluís Moreu Farran [youis11](https://github.com/youis11) as PRODUCER
+
+#### CODE
+
+Axel Alavedra Cabello [AxelAlavedra](https://github.com/AxelAlavedra) 
+
+Oriol Capdevila Salinas [OriolCS2](https://github.com/OriolCS2) 
+
+Alejandro-AureIio Gamarra Niño [alejandro61299](https://github.com/alejandro61299)
+
+Marc Guillén Saltó [Marcgs96](https://github.com/Marcgs96)
+
+Didac Llop i Serna [didaclis](https://github.com/didaclis)
+
+Sebastián López Tenorio [Sebi-Lopez](https://github.com/Sebi-Lopez)
+
+Gerard Marcos Freixas [vsRushy](https://github.com/vsRushy)
 
 Christian Martínez de la Rosa [christt105](https://github.com/christt105)
 
-Enric Pérez Rifà [PerezEnric](https://github.com/PerezEnric)
+Alex Morales Garcia [AlexMG99](https://github.com/AlexMG99)
+
+Carlos Peña Hernando [CarlosUPC](https://github.com/CarlosUPC)
+
+José Antonio Prieto Garcia [peterMcP](https://github.com/peterMcP) as LEAD
+
+Pol Recasens Sarrà [PolRecasensSarra](https://github.com/PolRecasensSarra)
 
 Iván Ropero García [RoperoIvan](https://github.com/RoperoIvan)
 
-Lluís Moreu Farran [youis11](https://github.com/youis11)
+Yessica Tamara Servín Domínguez [YessicaSD](https://github.com/YessicaSD)
 
-Marc Gálvez [optus23](https://github.com/optus23)
+Francisco Javier Venteo Rodrigo [CereVenteo](https://github.com/CereVenteo)
 
-Nadine Gutiérrez [Nadine044](https://github.com/Nadine044)
+#### DESIGN
 
-Oriol Capdevila [OriolCS2](https://github.com/OriolCS2) 
+Castillo Arria Aleix [AleixCas95](https://github.com/AleixCas95)
+
+Ricardo Castro Vizcaya [ricardocv2](https://github.com/ricardocv2)
+
+Albert Cayuela Naval [AlbertCayuela](https://github.com/AlbertCayuela)
+
+Gerard Clotet Rodriguez [GerardClotet](https://github.com/GerardClotet)
+
+Marc Doctor Pedrosa [thedoctormarc](https://github.com/thedoctormarc)
+
+Marc Gálvez Llorens [optus23](https://github.com/optus23)
+
+Jorge Gemas Herencia [jorgegh2](https://github.com/jorgegh2)
+
+Jaume Montagut Guix [JaumeMontagut](https://github.com/JaumeMontagut) as LEAD
+
+Alejandro Paris Gómez [AlejandroParis](https://github.com/AlejandroParis)
+
+Guillem Sanchez Herranz [GuillemSanchez](https://github.com/GuillemSanchez)
+
+Victor Segura Blanco [VictorSegura99](https://github.com/VictorSegura99)
+
+Marc Tarrés Urbieta [MAtaur00](https://github.com/MAtaur00)
+
+#### ART
+
+Alexandru Mihai Cercel  [AlexandruC5](https://github.com/AlexandruC5)
+
+Sergio Gómez Roldán [Sersius](https://github.com/Sersius)
+
+Nadine Gutiérrez Pociño [Nadine044](https://github.com/Nadine044) as LEAD
+
+Manav Lakhwani Daswani [manavld](https://github.com/manavld)
+
+Laia Martinez Motis [LaiaMartinezMotis](https://github.com/LaiaMartinezMotis)
+
+Eric Navarro de Santiago  [lakaens](https://github.com/lakaens)
+
+Enric Pérez Rifà [PerezEnric](https://github.com/PerezEnric)
+
+Víctor Tirado Fernández [VictorTirado](https://github.com/VictorTirado)
+
+Marti Torras Isanta [martitorras](https://github.com/martitorras)
+
+Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
 
 ## Controls
 ### Player controls:
 
 - Controller:
 
-  - Joystick izq: move
+  - Joystick izq: MOVE
   
-  - X: attack
+  - X: ATTACK
   
-  - RB: dash
+  - RB: DASH
   
-  - B: hechizo
+  - B: SPELL
   
-  - Arrow-Down: Dance
+  - Arrow-Down: DANCE
 
 ## Instructions to execute
 
@@ -55,11 +127,13 @@ Oriol Capdevila [OriolCS2](https://github.com/OriolCS2)
 
 3.- Execute AlienEngine.exe
 
+!Important - This game is only playable for PC
+
 ## Artist references
 
 Mixamo for animations.
-Attack sfx:
-Footstep sfx:
+Attack sfx: https://www.youtube.com/watch?v=J_zCqkM6_V4&feature=youtu.be
+Footstep sfx: https://www.zapsplat.com/music/footsteps-person-wearing-socks-running-slowly-on-carpet-floor/
 
 ## License
 
