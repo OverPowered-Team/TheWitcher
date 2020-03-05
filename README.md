@@ -131,8 +131,10 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
 
 ## Artist references
 
-Mixamo for animations.
+[Mixamo](https://www.mixamo.com/) for Animations.
+
 Attack sfx: https://www.youtube.com/watch?v=J_zCqkM6_V4&feature=youtu.be
+
 Footstep sfx: https://www.zapsplat.com/music/footsteps-person-wearing-socks-running-slowly-on-carpet-floor/
 
 ## License
