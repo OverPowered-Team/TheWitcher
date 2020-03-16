@@ -564,7 +564,7 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::SameLine(535, 15);
 				if (ImGui::Button("Calculate UV", { 120,20 }))
 				{
-					particleSystem->CalculateParticleUV(texRows, texColumns);
+					particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed);
 				}
 				
 

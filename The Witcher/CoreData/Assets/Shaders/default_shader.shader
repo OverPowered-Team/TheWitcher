@@ -89,9 +89,8 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_d
 uniform sampler2D tex;
 uniform vec3 diffuse_color;
 
-uniform int max_dir_lights;
-uniform int max_point_lights;
-uniform int max_spot_lights;
+// max_dir_lights, max_point_lights, max_spot_lights
+uniform ivec3 max_lights;
 
 uniform vec3 view_pos;
 
@@ -132,11 +131,11 @@ void main()
     vec3 view_dir = normalize(view_pos - frag_pos);
 
     // Light calculations
-    for(int i = 0; i < max_dir_lights; i++)
+    for(int i = 0; i < max_lights.x; i++)
         result += CalculateDirectionalLight(dir_light[i], norm, view_dir);
-    for(int i = 0; i < max_point_lights; i++)
+    for(int i = 0; i < max_lights.y; i++)
         result += CalculatePointLight(point_light[i], norm, frag_pos, view_dir);    
-    for(int i = 0; i < max_spot_lights; i++)
+    for(int i = 0; i < max_lights.z; i++)
         result += CalculateSpotLight(spot_light[i], norm, frag_pos, view_dir);   
 
     // ----------------------------------------------------------

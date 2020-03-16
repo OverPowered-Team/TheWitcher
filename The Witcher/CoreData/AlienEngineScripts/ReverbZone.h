@@ -17,7 +17,6 @@ public:
 	virtual void OnTriggerEnter(ComponentCollider* collider);
 	virtual void OnTriggerExit(ComponentCollider* collider);
 
-
 	std::string zone_name = "normal";
 	float strength = 1.f;
 };

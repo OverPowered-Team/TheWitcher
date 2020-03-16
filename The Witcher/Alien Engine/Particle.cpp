@@ -68,6 +68,36 @@ void Particle::Update(float dt)
 		particleInfo.angle3D += particleInfo.angularVelocity3D * dt;
 	}
 	
+	//Animation
+	if (particleInfo.animation != nullptr)
+	{
+		animationTime += dt;
+
+		if (animationTime > particleInfo.animSpeed)
+		{
+			if (particleInfo.animation->size() > currentFrame + 1)
+			{
+				glBindVertexArray(owner->vao);
+
+				
+				glBindBuffer(GL_ARRAY_BUFFER, particleInfo.animation->at(currentFrame));
+				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+				glEnableVertexAttribArray(1);
+
+				glBindVertexArray(0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				
+				currentFrame++;
+			}
+			else
+				currentFrame = 0;
+
+		
+			animationTime = 0.f;
+		}
+	}
+
+
 }
 
 void Particle::PostUpdate(float dt)
@@ -158,11 +188,23 @@ void Particle::Draw()
 	
 	// ------ VAO BUFFER ------ //
 	glBindVertexArray(owner->vao);
+	// --- VERTEX BUFFER ---- //
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, owner->id_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	// ---- INDEX BUFFER ---- //
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->id_index);
+
 
 	if (owner->material != nullptr && p_material != nullptr)
 	{
 
 		owner->DeactivateLight();
+
+		// ---- TEXTCOORD BUFFER ----- //
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, owner->id_uv);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		// --------- MATERIAL -------- //
 		p_material->ApplyMaterial();
@@ -180,21 +222,10 @@ void Particle::Draw()
 		SetUniform(owner->material, mainCamera, particleGlobal);
 
 
-		// ---- TEXTCOORD BUFFER ----- //
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, owner->id_uv);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	}
 	owner->ActivateLight();
 	
 
-	// --- VERTEX BUFFER ---- //
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, owner->id_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	// ---- INDEX BUFFER ---- //
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->id_index);
 
 
 	// ----- DRAW QUAD ------ //
@@ -300,4 +331,12 @@ void Particle::SetUniform(ResourceMaterial* resource_material, ComponentCamera* 
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 	/*resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());
 	resource_material->used_shader->SetUniform1i("animate", animate);*/
+}
+
+void Particle::SetAnimation(std::vector<uint>& uvs, float speed)
+{
+	particleInfo.animation = &uvs;
+	particleInfo.animSpeed = speed;
+	animationTime = 0.0f;
+	currentFrame = 0u;
 }

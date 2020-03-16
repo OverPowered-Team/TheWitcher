@@ -434,97 +434,26 @@ void ModuleImporter::LoadModelTexture(const aiMaterial *material, ResourceMateri
 		}
 		else if (extern_path != nullptr)
 		{
-			std::string aiPath;
-			int dots = 0;
-			int under = 0;
-			std::string hole_name(name);
-			std::string::iterator item = hole_name.begin();
-			bool ignore = false;
-			for (; item != hole_name.end(); ++item)
-			{
-				if (*item == '.' && !ignore)
-				{
-					++dots;
-					if (dots == 2)
-					{
-						++under;
-						dots = 0;
-					}
-				}
-				else
-				{
-					ignore = true;
-					aiPath.push_back(*item);
-				}
+			std::string normExtern(extern_path);
+			App->file_system->NormalizePath(normExtern);
+			std::string textureName = App->file_system->GetBaseFileNameWithExtension(name.data());
+			App->file_system->NormalizePath(textureName);
+			std::string texturePath = App->file_system->GetCurrentHolePathFolder(normExtern) + textureName;
+
+			while (texturePath[0] == '.' || texturePath[1] == '/') {
+				texturePath.erase(texturePath.begin());
 			}
 
-			std::string copy;
-			if (under != 0)
+			if (std::experimental::filesystem::exists(texturePath))
 			{
-				std::string normal(extern_path);
-				App->file_system->NormalizePath(normal);
-				std::string exterString = App->file_system->GetCurrentHolePathFolder(normal);
-				std::string::reverse_iterator it = exterString.rbegin();
-				bool start_copy = false;
-				bool start_cpoy2 = false;
-				for (; it != exterString.rend(); ++it)
-				{
-					if (!start_copy)
-					{
-						if (*it == '/')
-						{
-							--under;
-							if (under == 0)
-							{
-								start_copy = true;
-							}
-						}
-					}
-					else
-					{
-						if (!start_cpoy2)
-						{
-							if (*it == '/')
-							{
-								start_cpoy2 = true;
-							}
-						}
-						else
-						{
-							copy = *it + copy;
-						}
-					}
-				}
-			}
-			else
-			{
-				copy = extern_path;
-				App->file_system->NormalizePath(copy);
-			}
-
-			std::string path;
-
-			if (ai_path.data[0] == '.')
-			{
-				path = copy + "/" + aiPath;
-			}
-			else
-			{
-				std::string normal(extern_path);
-				App->file_system->NormalizePath(normal);
-				path = App->file_system->GetCurrentHolePathFolder(normal) + ai_path.C_Str();
-			}
-
-			if (std::experimental::filesystem::exists(path))
-			{
-				std::string assets_path = TEXTURES_FOLDER + App->file_system->GetBaseFileNameWithExtension(hole_name.data());
-				App->file_system->CopyFromOutsideFS(path.data(), assets_path.data());
+				std::string assets_path = TEXTURES_FOLDER + textureName;
+				App->file_system->CopyFromOutsideFS(texturePath.data(), assets_path.data());
 				tex = new ResourceTexture(assets_path.data());
 
 				tex->CreateMetaData();
 				App->resources->AddNewFileNode(assets_path, true);
 
-				mat->texturesID[(uint)TextureType::DIFFUSE] = tex->GetID();
+				mat->texturesID[(uint)type] = tex->GetID();
 			}
 		}
 	}

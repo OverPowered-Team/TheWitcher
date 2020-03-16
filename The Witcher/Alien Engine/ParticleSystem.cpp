@@ -80,6 +80,7 @@ ParticleSystem::ParticleSystem()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// LIGHTS
 	light_id = GL_LIGHT0;
@@ -188,7 +189,12 @@ void ParticleSystem::CreateParticle(ParticleInfo info, ParticleMutableInfo endIn
 	if (totalParticles > MAX_PARTICLES)
 		return;
 
-	particles.push_back(new Particle(this, info, endInfo));
+	Particle* particle = new Particle(this, info, endInfo);
+
+	if(std::get<0>(animation_uvs).size() > 0)
+		particle->SetAnimation(std::get<0>(animation_uvs), std::get<1>(animation_uvs));
+
+	particles.push_back(particle);
 	totalParticles++;
 }
 
@@ -413,21 +419,16 @@ void ParticleSystem::RemoveMaterial()
 	material = nullptr;
 }
 
-void ParticleSystem::CalculateParticleUV(int rows, int columns)
+void ParticleSystem::CalculateParticleUV(int rows, int columns, float speed)
 {
-	std::vector<uint> ret = LoadTextureUV(rows, columns);
-
-	if (!ret.empty())
-	{
-		LOG_ENGINE("TEXTURE UV IDS FILLED");
-	}
-
+	std::vector<uint> textureUV = LoadTextureUV(rows, columns);
+	animation_uvs = std::make_tuple(textureUV, speed);
 }
 
 std::vector<uint> ParticleSystem::LoadTextureUV(int rows, int columns)
 {
 
-	id_uvs.clear();
+	std::vector<uint> ret;
 
 	if (rows > 0 && rows > 0)
 	{
@@ -446,25 +447,27 @@ std::vector<uint> ParticleSystem::LoadTextureUV(int rows, int columns)
 				{
 					j * c_scale,					1.0f - (i * r_scale + r_scale),
 					j * c_scale + c_scale,			1.0f - (i * r_scale + r_scale),
-					j * c_scale,					1.0f - i * r_scale,
-					j * c_scale + c_scale,			1.0f - i * r_scale,
+					j * c_scale,					1.0f -  i * r_scale,
+					j * c_scale + c_scale,			1.0f -  i * r_scale,
 				};
 
-
+			
 				LOG_ENGINE("Texture UV: \n%.2f %.2f\n%.2f %.2f\n%.2f %.2f\n%.2f %.2f\n", uv[0], uv[1], uv[2], uv[3], uv[4], uv[5], uv[6], uv[7])
-
-				glGenBuffers(1, &texID);
+				
+			
+				glGenBuffers(1, (GLuint*)&texID);
 				glBindBuffer(GL_ARRAY_BUFFER, texID);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, uv, GL_STATIC_DRAW);
+			
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-				id_uvs.push_back(texID);
+				ret.push_back(texID);
 			}
 		}
 
 	}
 
-	return id_uvs;
+	return ret;
 
 }
 

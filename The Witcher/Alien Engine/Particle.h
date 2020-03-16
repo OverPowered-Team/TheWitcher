@@ -41,6 +41,10 @@ struct ParticleInfo
 	bool rotateOverTime = false;
 	bool axisRot3D = false;
 	bool axisRot3DStart = false;
+
+	std::vector<uint>* animation = nullptr;
+	float animSpeed = 0.f;
+
 };
 
 struct ParticleMutableInfo
@@ -88,6 +92,7 @@ public:
 	float Lerp(float v0, float v1, float t);
 	void SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera, float4x4 globalMatrix);
 
+	void SetAnimation(std::vector<uint>& uvs, float speed);
 public:
 
 	bool to_delete = false;
@@ -103,7 +108,8 @@ private:
 	ParticleMutableInfo endInfo;
 
 	float currentLifeTime = 0.f;
-
+	uint currentFrame = 0u;
+	float animationTime = 0.f;
 	
 
 	// -------- Lerping -------------

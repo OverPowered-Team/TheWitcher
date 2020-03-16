@@ -17,6 +17,7 @@ public:
 		MAX
 	);
 
+
 	struct PlayerData {
 		float movementSpeed = 200.0F;
 		float rotationSpeed = 120.0F;

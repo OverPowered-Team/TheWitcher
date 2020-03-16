@@ -228,10 +228,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 void ResourceShader::ApplyLightsUniforms()
 {
 	// Light uniforms set from here
-	SetUniform1i("max_dir_lights", (int)App->objects->GetNumOfDirLights());
-	SetUniform1i("max_point_lights", (int)App->objects->GetNumOfPointLights());
-	SetUniform1i("max_spot_lights", (int)App->objects->GetNumOfSpotLights());
-
+	SetUniform3i("max_lights", App->objects->GetNumOfDirLights(), App->objects->GetNumOfPointLights(), App->objects->GetNumOfSpotLights());
 
 	if (App->objects->directional_light_properites.size() > 0)
 		SetDirectionalLights("dir_light", App->objects->directional_light_properites);
@@ -270,6 +267,13 @@ void ResourceShader::SetUniform1f(const std::string& name, const float& value)
 		glUniform1f(location, value);
 }
 
+void ResourceShader::SetUniform3i(const std::string& name, const int& v0, const int& v1, const int& v2)
+{
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniform3i(GetUniformLocation(name), v0, v1, v2);
+
+}
 void ResourceShader::SetUniformFloat3(const std::string& name, const float3& vec)
 {
 	glUniform3f(GetUniformLocation(name), vec.x, vec.y, vec.z);

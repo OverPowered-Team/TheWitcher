@@ -31,14 +31,20 @@ out vec4 FragColor;
 
 void main()
 {
-    vec4 textureColor = vec4(texture(tex, texCoords).rgb, 1.0);
- 
-    if(textureColor == vec4(0,0,0,1))
-    {
+    vec4 textureColor = texture(tex, texCoords);
+    
+
+    if(textureColor.a < 0.1)
+         discard;
+
+     if(textureColor == vec4(0,0,0,1))
+     {
         FragColor = diffuse_color;
-    }
+     }
     else
-    {
-        FragColor = textureColor * diffuse_color;  
-    }
+     {
+        FragColor = textureColor * diffuse_color;
+     }
+   
+    
 }
