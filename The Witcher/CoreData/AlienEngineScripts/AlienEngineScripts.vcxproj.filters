@@ -1,33 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de origen">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Archivos de encabezado">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Scripts">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="Macros\dllmain.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MoreEventsClass.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TestEvents.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PolScriptSushi.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Testanimator.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTest.cpp" />
+    <ClCompile Include="ReverbZone.cpp" />
+    <ClCompile Include="TerrainSwitch.cpp" />
+    <ClCompile Include="TestSwitches.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macros\AlienScripts.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MoreEventsClass.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TestEvents.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PolScriptSushi.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Testanimator.h">
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
-      <Filter>Scripts</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerTest.h" />
+    <ClInclude Include="ReverbZone.h" />
+    <ClInclude Include="TerrainSwitch.h" />
+    <ClInclude Include="TestSwitches.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Macros\dllmain.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c382f096-597d-453a-8b6b-a3f46765afe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

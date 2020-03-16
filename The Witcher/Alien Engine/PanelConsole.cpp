@@ -1,4 +1,9 @@
 #include "PanelConsole.h"
+#include "Application.h"
+#include "ShortCutManager.h"
+#include "ModuleObjects.h"
+#include "ModuleCamera3D.h"
+
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
 

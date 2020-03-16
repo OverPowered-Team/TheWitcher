@@ -4,13 +4,15 @@
 #include "Bullet/include/BulletCollision/CollisionShapes/btShapeHull.h"
 #include "ComponentCollider.h"
 #include "ComponentRigidBody.h"
+#include "ComponentCharacterController.h"
 #include "ComponentScript.h"
+#include "ModuleRenderer3D.h"
+#include "Time.h"
 #include "Alien.h"
 #include "Optick/include/optick.h"
 
 ModulePhysics::ModulePhysics(bool start_enabled) : Module(start_enabled)
 {
-
 }
 
 ModulePhysics::~ModulePhysics()
@@ -52,7 +54,14 @@ bool ModulePhysics::Init()
 	collision_config = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collision_config);
 	broad_phase = new btDbvtBroadphase();
+	broad_phase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 	solver = new btSequentialImpulseConstraintSolver();
+
+	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_config);
+
+	world->setGravity(GRAVITY);
+	world->setDebugDrawer(debug_renderer);
+	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 	return ret;
 }
@@ -61,43 +70,27 @@ bool ModulePhysics::Start()
 {
 	LOG_ENGINE("Creating Physics environment");
 
-	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_config);
-	world->setGravity(GRAVITY);
-	world->setDebugDrawer(debug_renderer);
-	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
-
 	return true;
 }
 
 // ---------------------------------------------------------
 update_status ModulePhysics::PreUpdate(float dt)
 {
+	static bool first_frame_playing = true;
 	OPTICK_EVENT();
-	if (Time::GetDT() != 0.f)
+
+	if (Time::IsInGameState())
 	{
-		world->stepSimulation(Time::GetDT(), 10);
-	}
-
-	int numManifolds = world->getDispatcher()->getNumManifolds();
-
-	for (int i = 0; i < numManifolds; i++)
-	{
-		btPersistentManifold* contactManifold = world->getDispatcher()->getManifoldByIndexInternal(i);
-		btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
-		btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
-
-		int numContacts = contactManifold->getNumContacts();
-
-		if (numContacts > 0)
+		if (first_frame_playing == false)
 		{
-			GameObject* go_a = (GameObject*)obA->getUserPointer();
-			GameObject* go_b = (GameObject*)obB->getUserPointer();
-
-			if (go_a && go_b)
-			{
-				//GameObject* go = (GameObject*)obA->getUserPointer();
-			}
+			world->stepSimulation(Time::GetDT(), 20);
 		}
+		
+		first_frame_playing = false;
+	}
+	else
+	{
+		first_frame_playing = true;
 	}
 
 	return UPDATE_CONTINUE;
@@ -113,24 +106,24 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-void ModulePhysics::RenderCollider(ComponentCollider* collider)
+void ModulePhysics::DrawCollider(ComponentCollider* collider)
 {
 	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	ModuleRenderer3D::BeginDebugDraw(float4(0.f, 1.f, 0.f, 1.f));
 
 	world->debugDrawObject(
-		((collider->rb) ? collider->rb->body : collider->aux_body)->getWorldTransform()
+		((collider->rigid_body) ? collider->rigid_body->body : collider->aux_body)->getWorldTransform()
 		, collider->shape, btVector3(0.f, 1.f, 0.f));
 
 	ModuleRenderer3D::EndDebugDraw();
 }
 
-void ModulePhysics::RenderConvexCollider(ComponentCollider* collider)
+void ModulePhysics::DrawConvexCollider(ComponentCollider* collider)
 {
 	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	ModuleRenderer3D::BeginDebugDraw(float4(0.f, 1.f, 0.f, 1.f));
 
-	btTransform worldTransform = ((collider->rb) ? collider->rb->body : collider->aux_body)->getWorldTransform();
+	btTransform worldTransform = ((collider->rigid_body) ? collider->rigid_body->body : collider->aux_body)->getWorldTransform();
 	btShapeHull* hull = static_cast<btShapeHull*>(collider->shape->getUserPointer());
 
 	if (hull == nullptr) return;
@@ -152,12 +145,30 @@ void ModulePhysics::RenderConvexCollider(ComponentCollider* collider)
 	ModuleRenderer3D::EndDebugDraw();
 }
 
-void ModulePhysics::RenderConstraint(btTypedConstraint* constraint)
+void ModulePhysics::DrawConstraint(btTypedConstraint* constraint)
 {
 	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawConstraints);
 	ModuleRenderer3D::BeginDebugDraw(float4(1.f, 1.f, 0.f, 1.f));
 	world->debugDrawConstraint(constraint);
 	ModuleRenderer3D::EndDebugDraw();
+}
+
+void ModulePhysics::DrawCharacterController(ComponentCharacterController* controller)
+{
+	debug_renderer->setDebugMode(btIDebugDraw::DBG_FastWireframe);
+	ModuleRenderer3D::BeginDebugDraw(float4(1.f, 1.f, 0.f, 1.f));
+	world->debugDrawObject(controller->body->getWorldTransform(), controller->shape, btVector3(0.f, 1.f, 0.f));
+	ModuleRenderer3D::EndDebugDraw();
+}
+
+void ModulePhysics::DrawWorld()
+{
+	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+
+	ModuleRenderer3D::BeginDebugDraw(float4(0.f, 1.f, 0.f, 1.f));
+	world->debugDrawWorld();
+	ModuleRenderer3D::EndDebugDraw();
+
 }
 
 void ModulePhysics::AddBody(btRigidBody* body)
@@ -168,6 +179,26 @@ void ModulePhysics::AddBody(btRigidBody* body)
 void ModulePhysics::RemoveBody(btRigidBody* body)
 {
 	world->removeRigidBody(body);
+}
+
+void ModulePhysics::AddDetector(btGhostObject* detector)
+{
+	world->addCollisionObject(detector, btBroadphaseProxy::SensorTrigger, btBroadphaseProxy::SensorTrigger);
+}
+
+void ModulePhysics::RemoveDetector(btGhostObject* detector)
+{
+	world->removeCollisionObject(detector);
+}
+
+void ModulePhysics::AddAction(btActionInterface* action)
+{
+	world->addAction(action);
+}
+
+void ModulePhysics::RemoveAction(btActionInterface* action)
+{
+	world->removeAction(action);
 }
 
 void ModulePhysics::AddConstraint(btTypedConstraint* constraint, bool disableBodiesCollision)

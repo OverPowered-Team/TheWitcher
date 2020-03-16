@@ -96,6 +96,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
+      <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,6 +136,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
+      <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,12 +171,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Macros\AlienScripts.h" />
+    <ClInclude Include="PolScriptSushi.h" />
+    <ClInclude Include="PlayerTest.h" />
+    <ClInclude Include="ReverbZone.h" />
+    <ClInclude Include="TerrainSwitch.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="Testanimator.h" />
+    <ClInclude Include="TestEvents.h" />
+    <ClInclude Include="Macros\AlienScripts.h" />
+    <ClInclude Include="MoreEventsClass.h" />
+    <ClInclude Include="TestSwitches.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Macros\dllmain.cpp" />
+    <ClCompile Include="PolScriptSushi.cpp" />
+    <ClCompile Include="PlayerTest.cpp" />
+    <ClCompile Include="ReverbZone.cpp" />
+    <ClCompile Include="TerrainSwitch.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="Testanimator.cpp" />
+    <ClCompile Include="TestEvents.cpp" />
+    <ClCompile Include="Macros\dllmain.cpp" />
+    <ClCompile Include="MoreEventsClass.cpp" />
+    <ClCompile Include="TestSwitches.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

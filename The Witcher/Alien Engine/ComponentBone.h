@@ -6,7 +6,7 @@
 class ResourceBone;
 class ComponentTransform;
 
-class ComponentBone : public Component
+class __declspec(dllexport) ComponentBone : public Component
 {
 	friend class GameObject;
 	friend class ResourceModel;

@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
-#include "SDL/include/SDL.h"
+#include "ModuleUI.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
 
@@ -255,7 +255,6 @@ bool ModuleWindow::CreateCoreWindow()
 	SDL_GetWindowSize(window, &width, &height);
 
 	screen_surface = SDL_GetWindowSurface(window);
-	App->renderer3D->OnResize(width, height);
 	return ret;
 }
 

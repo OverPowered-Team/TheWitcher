@@ -12,7 +12,7 @@ class ResourceMesh : public Resource {
 
 	friend class ModuleImporter;
 	friend class ResourceModel;
-
+	friend class ComponentDeformableMesh;
 public:
 
 	ResourceMesh();
@@ -39,6 +39,8 @@ public:
 	uint id_vertex = 0;
 	uint id_normals = 0;
 	uint id_uv = 0;
+	uint id_weights = 0;
+	uint id_bones = 0;
 	// buffers size
 	uint num_index = 0;
 	uint num_vertex = 0;
@@ -53,7 +55,14 @@ public:
 
 	bool is_primitive = false;
 	bool is_custom = true;
+
+	
+
 private:
 	bool deformable = false;
 	uint bytes_moved = 0;
+	
+	//Skinning with shaders
+	float* weights = nullptr;
+	int* bones_ID = nullptr;
 };

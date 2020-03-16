@@ -4,6 +4,7 @@
 #include "ImGuizmos/ImGuizmo.h"
 
 class ComponentCamera;
+class GameObject;
 class OctreeNode;
 class Viewport;
 

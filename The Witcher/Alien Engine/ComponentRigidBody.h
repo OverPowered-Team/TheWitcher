@@ -9,8 +9,6 @@
 class GameObject;
 class ComponentCollider;
 class ComponentCapsuleCollider;
-//class C_JointP2P;
-//class C_Vehicle;
 
 class __declspec(dllexport) ComponentRigidBody : public Component
 {
@@ -19,8 +17,6 @@ class __declspec(dllexport) ComponentRigidBody : public Component
 	friend class ComponentCollider;
 	friend class ComponentBoxCollider;
 	friend class ComponentSphereCollider;
-	//friend class C_JointP2P;
-	//friend class C_Vehicle;
 
 public:
 
@@ -33,6 +29,8 @@ public:
 	void AddTorque(const float3 force, ForceMode mode = ForceMode::IMPULSE, Space space = Space::Global);
 
 	// Rigid Body Values 
+
+	void SetIsKinematic(const bool value);
 
 	void SetMass(const float mass);
 	float GetMass() { return mass; }
@@ -88,3 +86,7 @@ private:
 #endif // !_C_RIGID_BODY_H__
 
 
+//bool GetFreezePostion(int coordinate);
+//void SetFreezePosition(int coordinate, bool value);	
+//bool GetFreezeRotation(int coordinate);
+//void SetFreezeRotation(int coordinate, bool value);

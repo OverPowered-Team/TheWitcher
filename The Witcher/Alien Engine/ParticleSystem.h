@@ -5,6 +5,9 @@
 #include "Billboard.h"
 #include "ResourceTexture.h"
 #include "ParticleEmitter.h"
+#include "ResourceMaterial.h"
+#include "ResourceShader.h"
+#include "ComponentParticleSystem.h"
 #include <map>
 
 #include "Particle.h"
@@ -71,8 +74,14 @@ public:
 	void Play();
 	void Pause();
 	void Restart();
+	void Stop();
 	void ResetSystem();
-
+	void InitLight();
+	void RenderLight();
+	void ActivateLight();
+	void DeactivateLight();
+	void StopEmmitter();
+	void StartEmmitter();
 
 	void SetBillboardType(BillboardType type);
 	BillboardType GetBillboardType() const;
@@ -99,7 +108,11 @@ public:
 	void SetParticleFinalForce(const float3& initialForce);
 
 	// ---------------------------------------------------------------------------
-
+	void SetMaterial(ResourceMaterial* mat);
+	void RemoveMaterial();
+	
+	void CalculateParticleUV(int rows, int columns);
+	std::vector<uint> LoadTextureUV(int rows, int columns);
 public: 
 
 	ParticleEmmitter emmitter;
@@ -114,9 +127,11 @@ private:
 	//std::map<float, Particle*> sortedParticles;
 	std::vector<Particle*> particles;
 	uint totalParticles = 0u;
+	
 
 public:
 	ResourceTexture* texture = nullptr;
+	ResourceMaterial* material = nullptr;
 	EquationBlendType eqBlend = EquationBlendType::FUNC_ADD;
 	FunctionBlendType funcBlendSource = FunctionBlendType::SRC_ALPHA;
 	FunctionBlendType funcBlendDest = FunctionBlendType::ONE_MINUS_SRC_ALPHA;
@@ -125,7 +140,19 @@ public:
 	int destinationFactor;
 	float alpha_test = 0.1f;
 
-	uint planeVertexBuffer = 0;
-	uint planeIndexBuffer = 0;
-	uint planeUVsBuffer = 0;
+	// Vertex Array Object
+	uint vao = 0u;
+
+	// Buffers id
+	uint id_index = 0;
+	uint id_vertex = 0;
+	uint id_uv = 0;
+
+	// Light
+	Color ambient{ 1.f, 1.f, 1.f, 1.0f };
+	Color diffuse{ 1.f, 1.f, 1.f, 1.0f };
+	uint light_id = 0;
+
+	// UV Buffer ids
+	std::vector<uint> id_uvs;
 };

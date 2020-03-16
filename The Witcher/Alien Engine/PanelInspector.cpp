@@ -7,17 +7,20 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
-#include "ComponentLight.h"
+#include "ComponentLightDirectional.h"
+#include "ComponentLightSpot.h"
+#include "ComponentLightPoint.h"
 #include "ComponentAnimator.h"
+#include "ModuleResources.h"
 
 #include "ResourceAnimation.h"
 #include "ResourceModel.h"
 #include "ResourceBone.h"
 #include "ResourceMesh.h"
+#include "ResourceMaterial.h"
 
 #include "ComponentAudioListener.h"
 #include "ComponentAudioEmitter.h"
-#include "ComponentReverbZone.h"
 #include "ComponentParticleSystem.h"
 #include "ComponentSlider.h"
 #include "ComponentCanvas.h"
@@ -27,10 +30,13 @@
 #include "ComponentText.h"
 #include "ComponentButton.h"
 #include "ComponentCheckbox.h"
+#include "ComponentAnimatedImage.h"
 
 #include "ReturnZ.h"
 #include "Alien.h"
 #include "ComponentScript.h"
+#include "ShortCutManager.h"
+#include "ModuleCamera3D.h"
 
 #include "mmgr/mmgr.h"
 
@@ -39,6 +45,7 @@
 #include "ComponentCapsuleCollider.h"
 #include "ComponentConvexHullCollider.h"
 #include "ComponentRigidBody.h"
+#include "ComponentCharacterController.h"
 
 #include "Optick/include/optick.h"
 
@@ -235,13 +242,16 @@ void PanelInspector::PanelLogic()
 			}
 		}
 	}
-	else if (App->ui->panel_project->GetSelectedFile())
+	else if (App->ui->panel_project->selected_resource != nullptr)
 	{
-		FileNode* selected_file = App->ui->panel_project->GetSelectedFile();
-		if (selected_file->type == FileDropType::MODEL3D)
+		Resource* selected_file = App->ui->panel_project->selected_resource;
+		if (selected_file->GetType() == ResourceType::RESOURCE_MODEL)
 		{
-			ResourceModel* r_model = (ResourceModel*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(std::string(selected_file->path + selected_file->name)) + "_meta.alien").data()));
-			ShowModelImportSettings(r_model);
+			ShowModelImportSettings((ResourceModel*)selected_file);
+		}
+		else if (selected_file->GetType() == ResourceType::RESOURCE_MATERIAL)
+		{
+			static_cast<ResourceMaterial*>(selected_file)->DisplayMaterialOnInspector();
 		}
 	}
 
@@ -352,7 +362,7 @@ void PanelInspector::ButtonAddComponent()
 
 	else {
 		ImGui::Combo("##choose component", &component, 
-			"Select Component\0Mesh\0Material\0Light\0Camera\0Box Collider\0Sphere Collider\0Capsule Collider\0ConvexHull Collider\0Rigid Body\0Animator\0Particle System\0Audio Emitter\0Audio Listener\0Audio Reverb\0Canvas\0Image\0Button\0Text\0Checkbox\0Slider\0Bar\0DeformableMesh\0Bone\0Script\0"); // SCRIPT MUST BE THE LAST ONE
+			"Select Component\0Mesh\0Material\0Light Directional\0Light Spot\0Light Point\0Camera\0Box Collider\0Sphere Collider\0Capsule Collider\0ConvexHull Collider\0Rigid Body\0Constraint Point\0Character Controller\0Animator\0Particle System\0Audio Emitter\0Audio Listener\0Audio Reverb\0Canvas\0Image\0Button\0Text\0Checkbox\0Slider\0Bar\0AnimatedImage\0DeformableMesh\0Bone\0Script\0"); // SCRIPT MUST BE THE LAST ONE
 		ImGui::SameLine();
 
 		if (ImGui::Button("Add Component"))
@@ -397,11 +407,33 @@ void PanelInspector::ButtonAddComponent()
 
 				break; }
 
-			case ComponentType::LIGHT: {
+			case ComponentType::LIGHT_DIRECTIONAL: {
 
-				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::LIGHT))
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::LIGHT_DIRECTIONAL))
 				{
-					comp = new ComponentLight(App->objects->GetSelectedObjects().back());
+					comp = new ComponentLightDirectional(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
+				}
+				else
+					LOG_ENGINE("The selected object already has this component!");
+
+				break; }
+			case ComponentType::LIGHT_SPOT: {
+
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::LIGHT_SPOT))
+				{
+					comp = new ComponentLightSpot(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
+				}
+				else
+					LOG_ENGINE("The selected object already has this component!");
+
+				break; }
+			case ComponentType::LIGHT_POINT: {
+
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::LIGHT_POINT))
+				{
+					comp = new ComponentLightPoint(App->objects->GetSelectedObjects().back());
 					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 				}
 				else
@@ -462,8 +494,9 @@ void PanelInspector::ButtonAddComponent()
 			case ComponentType::A_REVERB: {
 				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::A_REVERB))
 				{
-					comp = new ComponentReverbZone(App->objects->GetSelectedObjects().back());
-					App->objects->GetSelectedObjects().back()->AddComponent(comp);
+					/*comp = new ComponentReverbZone(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);*/
+					LOG_ENGINE("Sorry Oriol, we had to remove that component but it will unbalance all ComponentType ID"); //TODO: remove ComponentReverb
 				}
 
 				else
@@ -564,6 +597,19 @@ void PanelInspector::ButtonAddComponent()
 				else
 					LOG_ENGINE("The selected object already has Component UI!");
 				break; }
+			case ComponentType::UI_ANIMATED_IMAGE: {
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::UI))
+				{
+					ComponentCanvas* canvas = GetCanvas();
+					GameObject* selected = App->objects->GetSelectedObjects().back();
+					comp = new ComponentAnimatedImage(selected);
+					dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
+					selected->AddComponent(comp);
+					App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
+				}
+				else
+					LOG_ENGINE("The selected object already has Component UI!");
+				break; }
 			case ComponentType::BOX_COLLIDER: {
 				if (App->objects->GetSelectedObjects().back()->GetComponent<ComponentCollider>() == nullptr)
 				{
@@ -599,6 +645,13 @@ void PanelInspector::ButtonAddComponent()
 					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 				}
 				break; }
+			case ComponentType::CHARACTER_CONTROLLER: {
+				if (!App->objects->GetSelectedObjects().back()->HasComponent(ComponentType::CHARACTER_CONTROLLER))
+				{
+					comp = new ComponentCharacterController(App->objects->GetSelectedObjects().back());
+					App->objects->GetSelectedObjects().back()->AddComponent(comp);
+				}
+				break; }
 			}
 
 
@@ -625,24 +678,24 @@ void PanelInspector::ShowModelImportSettings(ResourceModel* model)
 				anim->name = anim_name;
 			}
 
-			bool is_dae = (anim->ticks_per_second == 1);
+			//bool is_dae = (anim->ticks_per_second == 1);
 
-			uint max_tick = is_dae ? (uint)(anim->max_tick * DAE_FPS) : (int)anim->max_tick;
-			int start_tick = is_dae ? (int)(anim->start_tick * DAE_FPS) : (int)anim->start_tick;
-			int end_tick = is_dae ? (int)(anim->end_tick * DAE_FPS) : (int)anim->end_tick;
+			uint max_tick = /*is_dae ? (uint)(anim->max_tick * DAE_FPS) : */(int)anim->max_tick;
+			int start_tick = /*is_dae ? (int)(anim->start_tick * DAE_FPS) : */(int)anim->start_tick;
+			int end_tick = /*is_dae ? (int)(anim->end_tick * DAE_FPS) : */(int)anim->end_tick;
 
 			if (ImGui::DragInt("Start", &start_tick, 1.0F, 0, end_tick - 1))
 			{
 				if (start_tick >= 0 && start_tick < end_tick)
 				{
-					anim->start_tick = is_dae ? (float)start_tick / DAE_FPS : (uint)start_tick;
+					anim->start_tick = /*is_dae ? (float)start_tick / DAE_FPS :*/ (uint)start_tick;
 				}
 			}
 			if (ImGui::DragInt("End", &end_tick, 1.0F, start_tick + 1, max_tick))
 			{
 				if (end_tick > start_tick && end_tick <= max_tick)
 				{
-					anim->end_tick = is_dae ? (float)end_tick / DAE_FPS : (uint)end_tick;
+					anim->end_tick = /*is_dae ? (float)end_tick / DAE_FPS :*/ (uint)end_tick;
 				}
 			}
 				
@@ -689,7 +742,6 @@ ComponentCanvas* PanelInspector::GetCanvas()
 	if (canvas == nullptr) {
 		GameObject* obj = new GameObject(App->objects->GetRoot(false));
 		obj->SetName("Canvas");
-		obj->AddComponent(new ComponentTransform(obj, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 }));
 		canvas = new ComponentCanvas(obj);
 		obj->AddComponent(canvas);
 	}

@@ -1,5 +1,6 @@
 #include "ResourceScript.h"
 #include "Application.h"
+#include "ModuleFileSystem.h"
 #include "ModuleResources.h"
 #include <fstream>
 #include "mmgr/mmgr.h"

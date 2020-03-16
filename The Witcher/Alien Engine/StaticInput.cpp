@@ -1,5 +1,7 @@
 #include "StaticInput.h"
 #include "Application.h"
+#include "ModuleInput.h"
+#include "ModuleUI.h"
 #include "PanelGame.h"
 
 KEY_STATE Input::GetKey(const SDL_Scancode& code)

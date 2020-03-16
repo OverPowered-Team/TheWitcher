@@ -1,9 +1,12 @@
 #pragma once
 
+#include <map>
+#include <list>
 #include "Component.h"
 #include "MathGeoLib/include/Math/MathAll.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
 #include "BulletCollision\CollisionDispatch\btGhostObject.h"
+#include "Event.h"
 
 class GameObject;
 class ModulePhysics;
@@ -11,14 +14,17 @@ class ComponentMesh;
 class ComponentRigidBody;
 class ComponentVehicle;
 class ComponentTransform;
+class Alien;
 
 class __declspec(dllexport) ComponentCollider : public Component
 {
 	friend class GameObject;
-	friend class ModuleObjects;
-	friend class ModulePhysics;
 	friend class ReturnZ;
 	friend class CompZ;
+
+	friend class ModuleObjects;
+	friend class ModulePhysics;
+	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
 
 public:
@@ -47,6 +53,7 @@ protected:
 	void Update();
 	void DrawScene();
 	bool DrawInspector();
+	void HandleAlienEvent(const AlienEvent& e);
 
 	virtual void DrawSpecificInspector() {}
 
@@ -56,15 +63,14 @@ protected:
 	virtual void SaveComponent(JSONArraypack* to_save);
 	virtual void LoadComponent(JSONArraypack* to_load);
 
-	void CreateShape();	// Create shape
-	virtual bool WrapMesh() { return false; }
+	virtual void CreateDefaultShape() = 0;
 	virtual void UpdateShape() {} 	// Adjust shape to scale and other factors
 
 protected:
 
 	std::string name = "Collider";
 	ComponentTransform* transform = nullptr;
-	ComponentRigidBody* rb = nullptr;
+	ComponentRigidBody* rigid_body = nullptr;
 
 	float3 center = float3::zero();
 	float3 final_center = float3::zero();
@@ -78,4 +84,13 @@ protected:
 	btCollisionShape* shape = nullptr;
 	// Used when GameObject has notrigid body in run time
 	btRigidBody* aux_body = nullptr;
+	// Detection body 
+	btGhostObject* detector = nullptr;
+
+	// Alien Script 
+	std::list<ComponentScript*> alien_scripts;
+	// Collisions
+	std::map<ComponentCollider*, bool> collisions;
+
+	bool first_frame = false;
 };

@@ -1,8 +1,23 @@
 #include "Application.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleUI.h"
+#include "AnimTween.h"
+#include "ModulePhysics.h"
+#include "ModuleObjects.h"
+#include "ModuleFileSystem.h"
+#include "ModuleResources.h"
+#include "ModuleAudio.h"
+#include "ShortCutManager.h"
 #include "Parson/parson.h"
 #include "Time.h"
+#include "Skybox.h"
+#include "ResourceShader.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
+#include "Event.h"
 
 Application::Application()
 {
@@ -15,6 +30,7 @@ Application::Application()
 	ui = new ModuleUI();
 #endif
 	importer = new ModuleImporter();
+	tween = new AnimTween();
 	objects = new ModuleObjects();
 	physics = new ModulePhysics();
 	file_system = new ModuleFileSystem();
@@ -35,8 +51,9 @@ Application::Application()
 	AddModule(importer);
 	AddModule(audio);
 	// Scenes
-	AddModule(objects);
 	AddModule(physics);
+	AddModule(objects);
+	AddModule(tween);
 #ifndef GAME_VERSION
 	AddModule(camera);
 	AddModule(ui);
@@ -312,6 +329,14 @@ void Application::DeleteJSONfile(JSONfilepack* json_pack)
 	}
 }
 
+void Application::UpdateLogFile(FILE* fp)
+{
+	for (auto it_log = engine_string_logs.begin(); it_log != engine_string_logs.end(); it_log++)
+	{
+		fprintf(fp, std::string((*it_log).loged.at(0).second + '\n').data());
+	}
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
@@ -421,6 +446,17 @@ void Application::CastEvent(EventType eventType)
 	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); ++item)
 		(*item)->HandleEvent(eventType);
 }
+
+void Application::SendAlienEvent(void* object, AlienEventType type)
+{
+	AlienEvent alien_event;
+	alien_event.object = object;
+	alien_event.type = type;
+
+	App->objects->HandleAlienEvent(alien_event);
+	App->resources->HandleAlienEvent(alien_event);
+}
+
 
 void Application::AddModule(Module* mod)
 {

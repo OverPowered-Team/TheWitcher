@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleImporter.h"
-
+#include "ModuleResources.h"
+#include "ModuleFileSystem.h"
 #include "ResourceBone.h"
 #include "mmgr/mmgr.h"
 

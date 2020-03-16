@@ -4,9 +4,11 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "ModuleWindow.h"
 #include "ModuleUI.h"
 #include "ResourceTexture.h"
 #include "ComponentCamera.h"
+#include "ModuleObjects.h"
 #include "ModuleCamera3D.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -45,12 +47,6 @@ bool ModuleRenderer3D::Init()
 	}
 	
 	glewInit();
-
-#ifndef GAME_VERSION
-	App->camera->fake_camera = new ComponentCamera(nullptr);
-	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
-	scene_fake_camera = App->camera->fake_camera;
-#endif
 
 	if(ret == true)
 	{
@@ -122,7 +118,6 @@ bool ModuleRenderer3D::Init()
 
 bool ModuleRenderer3D::Start()
 {
-
 	return true;
 }
 
@@ -130,19 +125,6 @@ bool ModuleRenderer3D::Start()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {	
 	OPTICK_EVENT();
-#ifdef GAME_VERSION
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearStencil(0);
-	if (actual_game_camera != nullptr) {
-		glClearColor(actual_game_camera->camera_color_background.r, actual_game_camera->camera_color_background.g, actual_game_camera->camera_color_background.b, actual_game_camera->camera_color_background.a);
-	}
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	if (actual_game_camera != nullptr) {
-		glLoadMatrixf(actual_game_camera->GetViewMatrix());
-	}
-#endif
 	return UPDATE_CONTINUE;
 }
 
@@ -175,7 +157,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	App->window->width = width;
 	App->window->height = height;
 #ifdef GAME_VERSION
-	App->objects->game_viewport->SetSize(width, height);
+	if (App->objects->game_viewport->GetCamera() != nullptr) {
+		App->objects->game_viewport->SetSize(width, height);
+	}
 #endif
 }
 
@@ -258,7 +242,7 @@ void ModuleRenderer3D::BeginDebugDraw(float4& color)
 {
 	glDisable(GL_LIGHTING);
 	glColor4fv(&color[0]);
-	glLineWidth(4.f);
+	glLineWidth(2.f);
 }
 
 void ModuleRenderer3D::EndDebugDraw()
@@ -268,4 +252,32 @@ void ModuleRenderer3D::EndDebugDraw()
 	glColor4fv(color_default);
 	glLineWidth(1.f);
 
+}
+
+void ModuleRenderer3D::RenderCircleAroundZ(const float& x, const float& y, const float& z, const float& radius, const float& line_width, const int& segments)
+{
+	BeginDebugDraw(float4(0.0f, 1.0f, 0.0f, 1.0f));
+	glLineWidth(line_width);
+	glBegin(GL_LINE_LOOP);
+	for (int a = 0; a < 360; a += 360 / segments)
+	{
+		double heading = a * (double)math::pi / 180;
+		glVertex3d(cos(heading) * radius + x, sin(heading) * radius + y, z);
+	}
+	glEnd();
+	EndDebugDraw();
+}
+
+void ModuleRenderer3D::RenderCircleAroundX(const float& x, const float& y, const float& z, const float& radius, const float& line_width, const int& segments)
+{
+	BeginDebugDraw(float4(0.0f, 1.0f, 0.0f, 1.0f));
+	glLineWidth(line_width);
+	glBegin(GL_LINE_LOOP);
+	for (int a = 0; a < 360; a += 360 / segments)
+	{
+		double heading = a * (double)math::pi / 180;
+		glVertex3d(x, sin(heading) * radius + y, cos(heading) * radius + z);
+	}
+	glEnd();
+	EndDebugDraw();
 }

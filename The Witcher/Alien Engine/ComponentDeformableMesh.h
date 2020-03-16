@@ -4,11 +4,14 @@
 
 class ResourceMesh;
 class ComponentBone;
+class math::float4x4;
 
-class ComponentDeformableMesh : public ComponentMesh
+class __declspec(dllexport) ComponentDeformableMesh : public ComponentMesh
 {
+	friend class ResourceModel;
 	friend class GameObject;
 	friend class ReturnZ;
+	friend class ResourceModel;
 public:
 	ComponentDeformableMesh(GameObject* attach);
 	virtual ~ComponentDeformableMesh();
@@ -18,14 +21,19 @@ public:
 
 protected:
 	void AttachBone(ComponentTransform* bone_transform);
-	void DeformMesh();
-	void DrawPolygon(ComponentCamera* camera);
-	
+	void UpdateBonesMatrix();
+	void DrawPolygon(ComponentCamera* camera) override;
+	void SetUniform(ResourceMaterial*, ComponentCamera* camera) override;
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+	void SendWeightsAndID();
+	void FillWeights(int boneID, ComponentBone* Component_Bone);
 
 private:
-	ResourceMesh* original_mesh = nullptr;
 	std::vector<ComponentBone*> bones;
 	u64 root_bone_id = 0;
+
+	math::float4x4* bones_matrix = nullptr;
+	ComponentMaterial* material = nullptr;
+	
 };

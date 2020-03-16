@@ -11,6 +11,9 @@
 #include "ReturnZ.h"
 #include "ModuleCamera3D.h"
 #include "ResourceTexture.h"
+#include "ResourceMaterial.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
 #include "Optick/include/optick.h"
@@ -27,9 +30,19 @@ ComponentMesh::~ComponentMesh()
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
-	if (mesh != nullptr && mesh->is_custom) {
+	if (mesh != nullptr) {
 		mesh->DecreaseReferences();
+		mesh = nullptr;
 	}
+}
+
+void ComponentMesh::SetResourceMesh(ResourceMesh* resource)
+{
+	if (resource == nullptr)
+		return;
+	mesh = resource;
+	GenerateLocalAABB();
+	RecalculateAABB_OBB();
 }
 
 void ComponentMesh::DrawPolygon(ComponentCamera* camera)
@@ -45,48 +58,36 @@ void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 	}
 
 	ComponentTransform* transform = game_object_attached->transform;
-	ComponentMaterial* material = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
+	ComponentMaterial* mat = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
+
+	// Mandatory Material ??
+	if (mat == nullptr) 
+		return;
+
+	ResourceMaterial* material = mat->material;
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//glEnable(GL_POLYGON_OFFSET_FILL);
-	//glPolygonOffset(1.0f, 0.1f);
-
 	// -------------------------- Actual Drawing -------------------------- 
-
-	if (material->texture != nullptr)
-		glBindTexture(GL_TEXTURE_2D, material->texture->id);
-
-	material->used_shader->Bind();
-	material->used_shader->UpdateUniforms();
+	material->ApplyMaterial();
 
 	glBindVertexArray(mesh->vao);
 
+	// Uniforms --------------
+	SetUniform(material, camera);
 
-	// Uniforms
-	material->used_shader->SetUniformMat4f("view", camera->GetViewMatrix4x4()); // TODO: About in-game camera?
-	material->used_shader->SetUniformMat4f("model", transform->GetGlobalMatrix().Transposed());
-	material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
-	material->used_shader->SetUniform1f("time", Time::GetTimeSinceStart());
-
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, NULL);
-
 
 	// --------------------------------------------------------------------- 
 
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	material->used_shader->Unbind();	
+	material->used_shader->Unbind();
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
-
-
 }
 
 void ComponentMesh::DrawOutLine()
@@ -166,6 +167,17 @@ void ComponentMesh::DrawMesh()
 
 }
 
+void ComponentMesh::SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera)
+{
+	resource_material->used_shader->SetUniformMat4f("view", camera->GetViewMatrix4x4());
+	resource_material->used_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
+	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
+	resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());
+	resource_material->used_shader->SetUniform1i("animate", animate);
+}
+
+
+
 void ComponentMesh::DrawVertexNormals()
 {
 	if (mesh == nullptr || mesh->id_index <= 0)
@@ -209,7 +221,7 @@ void ComponentMesh::DrawFaceNormals()
 		for (uint i = 0; i < mesh->num_index; i += 3)
 		{
 			glVertex3f(mesh->center_point[i], mesh->center_point[i + 1], mesh->center_point[i + 2]);
-			glVertex3f(mesh->center_point[i] + mesh->center_point_normal[i] * App->objects->face_normal_length, mesh->center_point[i + 1] + mesh->center_point_normal[i+ 1] * App->objects->face_normal_length, mesh->center_point[i + 2] + mesh->center_point_normal[i + 2] * App->objects->face_normal_length);
+			glVertex3f(mesh->center_point[i] + mesh->center_point_normal[i] * App->objects->face_normal_length, mesh->center_point[i + 1] + mesh->center_point_normal[i + 1] * App->objects->face_normal_length, mesh->center_point[i + 2] + mesh->center_point_normal[i + 2] * App->objects->face_normal_length);
 		}
 		glEnd();
 		glLineWidth(1);
@@ -251,13 +263,13 @@ bool ComponentMesh::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-	
+
 		check = view_mesh;
 		if (ImGui::Checkbox("Active Mesh          ", &check)) {
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			view_mesh = check;
 		}
-		ImGui::SameLine(); 
+		ImGui::SameLine();
 		check = wireframe;
 		if (ImGui::Checkbox("Active Wireframe", &check)) {
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
@@ -279,13 +291,13 @@ bool ComponentMesh::DrawInspector()
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			draw_AABB = check;
 		}
-		ImGui::SameLine(); 
+		ImGui::SameLine();
 		check = draw_OBB;
 		if (ImGui::Checkbox("Draw OBB", &check)) {
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 			draw_OBB = check;
 		}
-		
+
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
@@ -341,7 +353,7 @@ void ComponentMesh::DrawGlobalAABB(ComponentCamera* camera)
 
 	glVertex3f(global_aabb.minPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
 	glVertex3f(global_aabb.maxPoint.x, global_aabb.maxPoint.y, global_aabb.maxPoint.z);
-	
+
 	glLineWidth(1);
 	glEnd();
 }
@@ -353,7 +365,7 @@ void ComponentMesh::DrawOBB(ComponentCamera* camera)
 
 	glColor3f(App->objects->global_OBB_color.r, App->objects->global_OBB_color.g, App->objects->global_OBB_color.b);
 	glLineWidth(App->objects->OBB_line_width);
-	float3* obb_points=nullptr;
+	float3* obb_points = nullptr;
 	obb.GetCornerPoints(obb_points);
 
 	glBegin(GL_LINES);
@@ -452,21 +464,19 @@ void ComponentMesh::Clone(Component* clone)
 	mesh->wireframe = wireframe;
 }
 
-AABB ComponentMesh::GenerateAABB()
+void ComponentMesh::GenerateLocalAABB()
 {
 	if (mesh != nullptr) {
 		local_aabb.SetNegativeInfinity();
 		local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
 	}
-	return local_aabb;
 }
 
 void ComponentMesh::RecalculateAABB_OBB()
 {
 	ComponentTransform* transform = game_object_attached->transform;
-	obb = GenerateAABB();
+	obb = local_aabb;
 	obb.Transform(transform->global_transformation);
-
 	global_aabb.SetNegativeInfinity();
 	global_aabb.Enclose(obb);
 }
@@ -566,6 +576,6 @@ void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 			}
 		}
 	}
-	GenerateAABB();
+	GenerateLocalAABB();
 	RecalculateAABB_OBB();
 }

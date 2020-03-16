@@ -3,6 +3,8 @@
 #include "ComponentUI.h"
 #include "ReturnZ.h"
 #include "ResourceTexture.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
 #include "Application.h"
 #include "PanelProject.h"
 #include "mmgr/mmgr.h"
@@ -10,6 +12,7 @@
 ComponentImage::ComponentImage(GameObject* obj) : ComponentUI(obj)
 {
 	ui_type = ComponentType::UI_IMAGE;
+	tabbable = false;
 }
 
 bool ComponentImage::DrawInspector()
@@ -30,16 +33,6 @@ bool ComponentImage::DrawInspector()
 		RightClickMenu("Image");
 
 		ImGui::Spacing();
-
-		/*ImGui::PushID(this);
-		ImGui::Text("Size:		"); ImGui::SameLine(); ImGui::SetNextItemWidth(70);
-		if (ImGui::DragFloat("W", &size.x, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static))
-			UpdateVertex();
-		ImGui::SameLine(); ImGui::SetNextItemWidth(70);
-		if (ImGui::DragFloat("H", &size.y, 0.5F, 0, 0, "%.3f", 1, game_object_attached->is_static))
-			UpdateVertex();
-
-		ImGui::PopID();*/
 
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
 		ImGui::Text("Texture");

@@ -1,6 +1,7 @@
 #include "RayCreator.h"
 #include "MathGeoLib/include/Math/float2.h"
 #include "ComponentCamera.h"
+#include "ModuleUI.h"
 #include "Globals.h"
 #include "Application.h"
 #include "PanelGame.h"

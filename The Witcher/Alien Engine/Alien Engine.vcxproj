@@ -85,7 +85,7 @@
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>..\CoreData\AlienEngineScripts;Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CoreData\AlienEngineScripts;Bullet\include;glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Async</ExceptionHandling>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>Default</LanguageStandard>
@@ -93,7 +93,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\CoreData\AlienEngineScripts\OutPut;Bullet\libx86\_Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\CoreData\AlienEngineScripts\OutPut;Bullet\libx86\_Debug;glm;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(IntDir)$(ProjectName).lib" "EngineBuild\$(ProjectName).lib"</Command>
@@ -327,6 +327,7 @@
     <ClInclude Include="AK\Wwise\Utilities.h" />
     <ClInclude Include="Alien.h" />
     <ClInclude Include="AlienEngine.h" />
+    <ClInclude Include="AnimTween.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="Bullet\include\btBulletCollisionCommon.h" />
@@ -683,11 +684,13 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentAnimatedImage.h" />
     <ClInclude Include="ComponentAnimator.h" />
     <ClInclude Include="ComponentBone.h" />
     <ClInclude Include="ComponentBoxCollider.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentCapsuleCollider.h" />
+    <ClInclude Include="ComponentCharacterController.h" />
     <ClInclude Include="ComponentCollider.h" />
     <ClInclude Include="ComponentConvexHullCollider.h" />
     <ClInclude Include="ComponentDeformableMesh.h" />
@@ -697,10 +700,12 @@
     <ClInclude Include="ComponentCanvas.h" />
     <ClInclude Include="ComponentCheckbox.h" />
     <ClInclude Include="ComponentImage.h" />
-    <ClInclude Include="ComponentLight.h" />
+    <ClInclude Include="ComponentLightDirectional.h" />
+    <ClInclude Include="ComponentLightPoint.h" />
+    <ClInclude Include="ComponentLightSpot.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
-    <ClInclude Include="ComponentReverbZone.h" />
+    <ClInclude Include="ComponentPointConstraint.h" />
     <ClInclude Include="ComponentParticleSystem.h" />
     <ClInclude Include="ComponentRigidBody.h" />
     <ClInclude Include="ComponentScript.h" />
@@ -841,6 +846,7 @@
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelLayout.h" />
     <ClInclude Include="PanelParticleSystem.h" />
+    <ClInclude Include="PanelPhysics.h" />
     <ClInclude Include="PanelProject.h" />
     <ClInclude Include="PanelRender.h" />
     <ClInclude Include="PanelScene.h" />
@@ -877,10 +883,14 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShortCutManager.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="StaticInput.h" />
+    <ClInclude Include="StaticTween.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextEdit\TextEditor.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="ModuleTween.h" />
     <ClInclude Include="Viewport.h" />
     <ClInclude Include="WwiseT.h" />
   </ItemGroup>
@@ -893,6 +903,7 @@
     <ClCompile Include="AK\Win32\stdafx.cpp" />
     <ClCompile Include="Alien.cpp" />
     <ClCompile Include="AlienEngine.cpp" />
+    <ClCompile Include="AnimTween.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="Bullet\include\Bullet3Collision\BroadPhaseCollision\b3DynamicBvh.cpp" />
@@ -1090,11 +1101,13 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentAnimatedImage.cpp" />
     <ClCompile Include="ComponentAnimator.cpp" />
     <ClCompile Include="ComponentBone.cpp" />
     <ClCompile Include="ComponentBoxCollider.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentCapsuleCollider.cpp" />
+    <ClCompile Include="ComponentCharacterController.cpp" />
     <ClCompile Include="ComponentCollider.cpp" />
     <ClCompile Include="ComponentConvexHullCollider.cpp" />
     <ClCompile Include="ComponentDeformableMesh.cpp" />
@@ -1105,10 +1118,12 @@
     <ClCompile Include="ComponentCanvas.cpp" />
     <ClCompile Include="ComponentCheckbox.cpp" />
     <ClCompile Include="ComponentImage.cpp" />
-    <ClCompile Include="ComponentLight.cpp" />
+    <ClCompile Include="ComponentLightDirectional.cpp" />
+    <ClCompile Include="ComponentLightPoint.cpp" />
+    <ClCompile Include="ComponentLightSpot.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
-    <ClCompile Include="ComponentReverbZone.cpp" />
+    <ClCompile Include="ComponentPointConstraint.cpp" />
     <ClCompile Include="ComponentParticleSystem.cpp" />
     <ClCompile Include="ComponentRigidBody.cpp" />
     <ClCompile Include="ComponentScript.cpp" />
@@ -1199,6 +1214,7 @@
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelLayout.cpp" />
     <ClCompile Include="PanelParticleSystem.cpp" />
+    <ClCompile Include="PanelPhysics.cpp" />
     <ClCompile Include="PanelProject.cpp" />
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="PanelScene.cpp" />
@@ -1230,10 +1246,13 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="ShortCutManager.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="StaticInput.cpp" />
+    <ClCompile Include="StaticTween.cpp" />
     <ClCompile Include="TextEdit\TextEditor.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="ModuleTween.cpp" />
     <ClCompile Include="Viewport.cpp" />
     <ClCompile Include="WwiseT.cpp" />
   </ItemGroup>

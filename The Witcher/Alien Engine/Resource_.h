@@ -54,6 +54,8 @@ public:
 	virtual bool LoadMemory() { return true; }
 	virtual void FreeMemory() {}
 
+	virtual void OnSelected() {};
+	virtual void OnDeselected() {};
 	const u64& GetID() const;
 
 	const bool NeedToLoad() const;

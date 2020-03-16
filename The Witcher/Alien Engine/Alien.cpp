@@ -1,5 +1,6 @@
 #include "Alien.h"
 #include "Application.h"
+#include "ModuleObjects.h"
 #include "GameObject.h"
 
 Alien::Alien()

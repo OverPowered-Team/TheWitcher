@@ -130,6 +130,8 @@ public:
 
 	// ---------------------------
 
+	void Stop();
+	void Play();
 public:
 
 	ParticleSystem* particleSystem = nullptr;
@@ -158,6 +160,8 @@ private:
 	float current_delay = 0.f;
 
 	bool loop = true;
+
+	bool playing = true;
 
 	// ----- Position Respect Game Object ------
 

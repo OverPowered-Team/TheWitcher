@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include "PanelTextEditor.h"
 #include <fstream>
+#include "ShortCutManager.h"
+#include "ModuleFileSystem.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
 

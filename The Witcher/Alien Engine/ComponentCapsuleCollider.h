@@ -12,7 +12,8 @@ class ComponentCapsuleCollider : public ComponentCollider
 {
 public:
 
-	friend ModulePhysics;
+	friend class GameObject;
+	friend class ModulePhysics;
 
 public:
 
@@ -36,9 +37,8 @@ private:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-	void CreateShape();
+	void CreateDefaultShape();
 	void UpdateShape();
-	bool WrapMesh();
 
 private:
 

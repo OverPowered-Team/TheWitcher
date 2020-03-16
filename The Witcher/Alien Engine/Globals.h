@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include "glew/include/glew.h"
 
 #define LOG_ENGINE(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -18,7 +19,7 @@ __declspec(dllexport) void log(const char file[], int line, const char* format, 
 
 
 // DISCOMMENT TO START THE ENGINE IN PLAY MODE
-//#define GAME_VERSION
+#define GAME_VERSION
 
 #define RELEASE( x )\
     {\

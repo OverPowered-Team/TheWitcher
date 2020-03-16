@@ -6,7 +6,18 @@
 
 #include "Application.h"
 #include "ResourceShader.h"
+#include "ResourceMaterial.h"
+#include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 #include "Globals.h"
+#include "ComponentLightDirectional.h"
+#include "ComponentLightSpot.h"
+#include "ComponentLightPoint.h"
+
+ResourceShader::ResourceShader()
+{
+	type = ResourceType::RESOURCE_SHADER;
+}
 
 ResourceShader::ResourceShader(const char* path, const u64& id) : Resource()
 {
@@ -26,7 +37,7 @@ ResourceShader::ResourceShader(const char* path)
 
 ResourceShader::~ResourceShader()
 {
-	glDeleteProgram(uniform_data.shader_id);
+	glDeleteProgram(shader_id);
 }
 
 bool ResourceShader::LoadMemory()
@@ -38,7 +49,7 @@ bool ResourceShader::LoadMemory()
 
 void ResourceShader::FreeMemory()
 {
-	glDeleteProgram(uniform_data.shader_id);
+	glDeleteProgram(shader_id);
 }
 
 bool ResourceShader::CreateMetaData(const u64& force_id)
@@ -94,6 +105,8 @@ bool ResourceShader::ReadBaseInfo(const char* assets_path)
 
 	this->name = App->file_system->GetBaseFileName(path.c_str());
 
+	TryToSetShaderType();
+
 	JSON_Value* value = json_parse_file(alien_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
@@ -134,97 +147,75 @@ void ResourceShader::ReadLibrary(const char* meta_data)
 	App->resources->AddResource(this);
 }
 
+void ResourceShader::TryToSetShaderType()
+{
+	if (std::strcmp(name.c_str(), "default_shader") == 0)
+		shaderType = SHADER_TEMPLATE::DEFAULT;
+	else if (std::strcmp(name.c_str(), "shader_wave") == 0)
+		shaderType = SHADER_TEMPLATE::WAVE;
+	else if (std::strcmp(name.c_str(), "iluminated_shader") == 0)
+		shaderType = SHADER_TEMPLATE::ILUMINATED;
+	else if (std::strcmp(name.c_str(), "particle_shader") == 0)
+		shaderType = SHADER_TEMPLATE::PARTICLE;
+	else 
+		shaderType = SHADER_TEMPLATE::NO_TEMPLATE;
+}
+
 uint ResourceShader::ParseAndCreateShader()
 {
-	SHADER_PROGRAM_SOURCE source = ParseShader(path);
-	uniform_data.shader_id = CreateShader(source.vertex_source, source.fragment_source);
+	SHADER_PROGRAM_SOURCE source = ParseShader(meta_data_path);
+	shader_id = CreateShader(source.vertex_source, source.fragment_source);
 
-	return uniform_data.shader_id;
+	return shader_id;
+}
+
+SHADER_TEMPLATE ResourceShader::GetShaderType() const
+{
+	return shaderType;
 }
 
 bool ResourceShader::ChangeTemplate()
 {
-	bool ret = false;
-	static int prev_type = (int)uniform_data.type;
-	ImGui::Combo("Select Shader", &prev_type, "Diffuse\0Wave\0Basic Lighting\0\0");
-	{
-		//change shader
-		if (prev_type != (int)uniform_data.type)
-		{
-			uniform_data.type = (SHADER_TEMPLATE)prev_type;
+	//bool ret = false;
+	//static int prev_type = (int)uniform_data.type;
+	//ImGui::Combo("Select Shader", &prev_type, "Diffuse\0Wave\0Basic Lighting\0\0");
+	//{
+	//	//change shader
+	//	if (prev_type != (int)uniform_data.type)
+	//	{
+	//		uniform_data.type = (SHADER_TEMPLATE)prev_type;
 
-			ret = true;
-		}
-	}
-	return ret;
+	//		ret = true;
+	//	}
+	//}
+	//return ret;
+	return true;
 }
 
 void ResourceShader::HierarchyUniforms()
 {
-	ImGui::Text("--Uniforms--");
-	switch (uniform_data.type) 
-	{
-		case SHADER_TEMPLATE::DIFUSSE: {//difusse
-			//ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", "custom_color", (unsigned int)type);
-			ImGui::ColorEdit3("Albedo", uniform_data.standardShaderProperties.diffuse_color.ptr(), ImGuiColorEditFlags_Float);
-			break; }
-		case SHADER_TEMPLATE::WAVE: {//wave
-			/*ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", "custom_color", (unsigned int)type);
-			ImGui::ColorEdit3(" ", &used_shader->material.custom_color.r);*/
-
-			ImGui::Spacing();
-
-			ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", "velocity", (unsigned int)type); ImGui::SameLine();
-			ImGui::InputFloat("## ", &uniform_data.waveShaderProperties.mult_time, 0, 0, 2);
-
-			ImGui::Spacing();
-
-			ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", "amplitude", (unsigned int)type); ImGui::SameLine();
-			ImGui::InputFloat("##", &uniform_data.waveShaderProperties.amplitude, 0, 0, 2);
-
-			break; }
-
-		case SHADER_TEMPLATE::BASIC_LIGHTING: {
-			ImGui::ColorEdit3("Albedo", uniform_data.basicLightingShaderProperties.object_color.ptr(), ImGuiColorEditFlags_Float);
-
-			ImGui::ColorEdit3("Lighting Color", uniform_data.basicLightingShaderProperties.lightColor.ptr(), ImGuiColorEditFlags_Float);
-			ImGui::DragFloat3("Lighting Position", uniform_data.basicLightingShaderProperties.lightPosition.ptr());
-			ImGui::DragFloat("Ambient Light Strength", &uniform_data.basicLightingShaderProperties.ambient_strength, 0.1f, 0.0f, 1.0f);
-			ImGui::DragFloat("Specular Light Strength", &uniform_data.basicLightingShaderProperties.specular_strength, 0.1f, 0.0f, 1.0f);
-
-			break; }
-
-		default:
-			LOG_ENGINE("We currently don't support editing this type of uniform...");
-			break;
-	}
+	
 }
 
-void ResourceShader::UpdateUniforms()
+void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 {
-	switch (uniform_data.type) {
-	case SHADER_TEMPLATE::DIFUSSE: {//difusse
-		// Object Material Properties
-		SetUniformFloat3("diffuse_color", uniform_data.standardShaderProperties.diffuse_color);
-
-		break; }
-	case SHADER_TEMPLATE::WAVE: {//wave
-		SetUniform1f("mult_time", uniform_data.waveShaderProperties.mult_time);
-		SetUniform1f("amplitude", uniform_data.waveShaderProperties.amplitude);
+	switch (shaderType) {
+	case SHADER_TEMPLATE::DEFAULT: { 
+		SetUniformFloat3("diffuse_color", inputs.standardShaderProperties.diffuse_color);
+		ApplyLightsUniforms();
 		break; }
 
-	case SHADER_TEMPLATE::BASIC_LIGHTING: {
+	case SHADER_TEMPLATE::WAVE: {
+		SetUniform1f("mult_time", inputs.waveShaderProperties.mult_time);
+		SetUniform1f("amplitude", inputs.waveShaderProperties.amplitude);
+		break; }
 
-		SetUniformFloat3("objectColor", uniform_data.basicLightingShaderProperties.object_color);
-		// Lighting
-		SetUniformFloat3("lightColor", uniform_data.basicLightingShaderProperties.lightColor);
+	case SHADER_TEMPLATE::ILUMINATED: {
+		SetUniformFloat3("diffuse_color", inputs.iluminatedShaderProperties.object_color);
+		break; }
 
-		SetUniformFloat3("lightPos", uniform_data.basicLightingShaderProperties.lightPosition);
-		SetUniform1f("ambientStrength", uniform_data.basicLightingShaderProperties.ambient_strength);
-		SetUniform1f("specularStrength", uniform_data.basicLightingShaderProperties.specular_strength);
-
-		SetUniformFloat3("viewPos", App->renderer3D->scene_fake_camera->GetCameraPosition());
-
+	case SHADER_TEMPLATE::PARTICLE: {
+		SetUniform4f("diffuse_color", inputs.particleShaderProperties.color);
 		break; }
 
 	default:
@@ -234,9 +225,25 @@ void ResourceShader::UpdateUniforms()
 	}
 }
 
+void ResourceShader::ApplyLightsUniforms()
+{
+	// Light uniforms set from here
+	SetUniform1i("max_dir_lights", (int)App->objects->GetNumOfDirLights());
+	SetUniform1i("max_point_lights", (int)App->objects->GetNumOfPointLights());
+	SetUniform1i("max_spot_lights", (int)App->objects->GetNumOfSpotLights());
+
+
+	if (App->objects->directional_light_properites.size() > 0)
+		SetDirectionalLights("dir_light", App->objects->directional_light_properites);
+	if (App->objects->point_light_properites.size() > 0)
+		SetPointLights("point_light", App->objects->point_light_properites);
+	if (App->objects->spot_light_properites.size() > 0)
+		SetSpotLights("spot_light", App->objects->spot_light_properites);
+}
+
 void ResourceShader::Bind() const
 {
-	glUseProgram(uniform_data.shader_id);
+	glUseProgram(shader_id);
 }
 
 void ResourceShader::Unbind() const
@@ -246,12 +253,21 @@ void ResourceShader::Unbind() const
 
 void ResourceShader::SetUniform1i(const std::string& name, const int& value)
 {
-	glUniform1i(GetUniformLocation(name), value);
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniform1i(location, value);
+}
+
+void ResourceShader::SetUniform1ui(const std::string& name, const uint& value)
+{
+	glUniform1ui(GetUniformLocation(name), value);
 }
 
 void ResourceShader::SetUniform1f(const std::string& name, const float& value)
 {
-	glUniform1f(GetUniformLocation(name), value);
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniform1f(location, value);
 }
 
 void ResourceShader::SetUniformFloat3(const std::string& name, const float3& vec)
@@ -271,7 +287,140 @@ void ResourceShader::SetUniform4f(const std::string& name, const float4& vec)
 
 void ResourceShader::SetUniformMat4f(const std::string& name, const math::float4x4& matrix)
 {
-	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, matrix.ptr());
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniformMatrix4fv(location, 1, GL_FALSE, matrix.ptr());
+}
+
+void ResourceShader::SetUniformMat4f(const std::string& name, const math::float4x4* matrix, uint count)
+{
+
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniformMatrix4fv(location, count, GL_TRUE, matrix[0].ptr());
+}
+
+void ResourceShader::SetDirectionalLights(const std::string& name, const std::list<DirLightProperties*>& dirLights)
+{
+	int i = 0;
+	std::string tmp_name(name.c_str());
+	tmp_name.append("[%i]");
+	for (std::list<DirLightProperties*>::const_iterator iter = dirLights.begin(); iter != dirLights.end(); iter++)
+	{
+		char cname[128];
+		sprintf_s(cname, tmp_name.c_str(), i);
+
+		// All uniforms
+		std::string cintensity = std::string(cname).append(".intensity");
+		SetUniform1f(cintensity, (*iter)->intensity);
+
+		std::string cposition = std::string(cname).append(".position");
+		SetUniformFloat3(cposition, (*iter)->position);
+
+		std::string cdambient = std::string(cname).append(".ambient");
+		SetUniformFloat3(cdambient, (*iter)->ambient);
+
+		std::string cdirection = std::string(cname).append(".direction");
+		SetUniformFloat3(cdirection, (*iter)->direction);
+
+		std::string cdiffuse = std::string(cname).append(".diffuse");
+		SetUniformFloat3(cdiffuse, (*iter)->diffuse);
+
+		std::string cspecular = std::string(cname).append(".specular");
+		SetUniformFloat3(cspecular, (*iter)->specular);
+
+		++i;
+	}
+}
+
+void ResourceShader::SetPointLights(const std::string& name, const std::list<PointLightProperties*>& pointLights)
+{
+	int i = 0;
+	std::string tmp_name(name.c_str());
+	tmp_name.append("[%i]");
+	for (std::list<PointLightProperties*>::const_iterator iter = pointLights.begin(); iter != pointLights.end(); iter++)
+	{
+		char cname[128];
+		sprintf_s(cname, tmp_name.c_str(), i);
+
+		// All uniforms
+		std::string cintensity = std::string(cname).append(".intensity");
+		SetUniform1f(cintensity, (*iter)->intensity);
+
+		std::string cposition = std::string(cname).append(".position");
+		SetUniformFloat3(cposition, (*iter)->position);
+
+		/*std::string cdirection = std::string(cname).append(".direction");
+		SetUniformFloat3(cdirection, (*iter)->direction);*/
+		
+		std::string cdambient = std::string(cname).append(".ambient");
+		SetUniformFloat3(cdambient, (*iter)->ambient);
+
+		std::string cdiffuse = std::string(cname).append(".diffuse");
+		SetUniformFloat3(cdiffuse, (*iter)->diffuse);
+
+		std::string cspecular = std::string(cname).append(".specular");
+		SetUniformFloat3(cspecular, (*iter)->specular);
+
+		std::string cconstant = std::string(cname).append(".constant");
+		SetUniform1f(cconstant, (*iter)->constant);
+
+		std::string clinear = std::string(cname).append(".linear");
+		SetUniform1f(clinear, (*iter)->linear);
+
+		std::string cquadratic = std::string(cname).append(".quadratic");
+		SetUniform1f(cquadratic, (*iter)->quadratic);
+		
+		++i;
+	}
+}
+
+void ResourceShader::SetSpotLights(const std::string& name, const std::list<SpotLightProperties*>& spotLights)
+{
+	int i = 0;
+	std::string tmp_name(name.c_str());
+	tmp_name.append("[%i]");
+	for (std::list<SpotLightProperties*>::const_iterator iter = spotLights.begin(); iter != spotLights.end(); iter++)
+	{
+		char cname[128];
+		sprintf_s(cname, tmp_name.c_str(), i);
+
+		// All uniforms
+		std::string cintensity = std::string(cname).append(".intensity");
+		SetUniform1f(cintensity, (*iter)->intensity);
+
+		std::string cposition = std::string(cname).append(".position");
+		SetUniformFloat3(cposition, (*iter)->position);
+
+		std::string cdirection = std::string(cname).append(".direction");
+		SetUniformFloat3(cdirection, (*iter)->direction);
+
+		std::string cdambient = std::string(cname).append(".ambient");
+		SetUniformFloat3(cdambient, (*iter)->ambient);
+
+		std::string cdiffuse = std::string(cname).append(".diffuse");
+		SetUniformFloat3(cdiffuse, (*iter)->diffuse);
+
+		std::string cspecular = std::string(cname).append(".specular");
+		SetUniformFloat3(cspecular, (*iter)->specular);
+
+		std::string cconstant = std::string(cname).append(".constant");
+		SetUniform1f(cconstant, (*iter)->constant);
+
+		std::string clinear = std::string(cname).append(".linear");
+		SetUniform1f(clinear, (*iter)->linear);
+
+		std::string cquadratic = std::string(cname).append(".quadratic");
+		SetUniform1f(cquadratic, (*iter)->quadratic);
+
+		std::string ccutoff = std::string(cname).append(".cut_off");
+		SetUniform1f(ccutoff, cos(math::DegToRad((*iter)->cut_off)));
+
+		std::string coutercutoff = std::string(cname).append(".outer_cut_off");
+		SetUniform1f(coutercutoff, cos(math::DegToRad((*iter)->outer_cut_off)));
+
+		++i;
+	}
 }
 
 SHADER_PROGRAM_SOURCE ResourceShader::ParseShader(const std::string& path)
@@ -310,17 +459,29 @@ uint ResourceShader::CreateShader(const std::string& vertex_shader, const std::s
 	uint program = glCreateProgram();
 
 	uint vertex_s = CompileShader(GL_VERTEX_SHADER, vertex_shader);
+	//assert(vertex_s == 0, "Vertex Failed To Compile");
 	uint fragment_s = CompileShader(GL_FRAGMENT_SHADER, fragment_shader);
+	//assert(fragment_s == 0, "Fragment Failed To Compile");
 
 	glAttachShader(program, vertex_s);
 	glAttachShader(program, fragment_s);
-
+		
 	glLinkProgram(program);
 	int status;
 	glGetProgramiv(program, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 	{
-		LOG_ENGINE("Shader was not linked successfully...");
+		GLint max_length = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &max_length);
+
+		std::vector<GLchar> infoLog(max_length);
+		glGetProgramInfoLog(program, max_length, &max_length, &infoLog[0]);
+
+		std::string str(infoLog.begin(), infoLog.end());
+
+		LOG_ENGINE("%s", str.c_str());
+
+		LOG_ENGINE("Shader was not linked successfully...\n");
 	}
 
 	glValidateProgram(program);
@@ -388,10 +549,10 @@ int ResourceShader::GetUniformLocation(const std::string& name)
 	if (uniform_location_cache.find(name) != uniform_location_cache.end())
 		return uniform_location_cache[name];
 
-	int location = glGetUniformLocation(uniform_data.shader_id, name.c_str());
+	int location = glGetUniformLocation(shader_id, name.c_str());
 	if (location == -1)
 	{
-		LOG_ENGINE("WARNING: Uniform %s doesn't exist...", name.c_str());
+		LOG_ENGINE("WARNING: Uniform %s doesn't exist...\n", name.c_str());
 	}
 
 	uniform_location_cache[name] = location;

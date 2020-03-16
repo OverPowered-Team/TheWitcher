@@ -1,5 +1,7 @@
 #include "Screen.h"
 #include "PanelGame.h"
+#include "ModuleWindow.h"
+#include "ModuleUI.h"
 
 bool Screen::IsFullScreen()
 {

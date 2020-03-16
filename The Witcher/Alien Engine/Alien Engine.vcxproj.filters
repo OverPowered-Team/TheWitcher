@@ -94,6 +94,15 @@
     <Filter Include="Tools\Optik">
       <UniqueIdentifier>{c070bec9-09d4-4389-a812-f08ff60a9a71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\Tween">
+      <UniqueIdentifier>{c078a6a1-17e7-4785-860e-959347ca3e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{ea1781ef-52f3-4b39-923c-9863d1844099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Stb">
+      <UniqueIdentifier>{f47e6cdd-1441-4790-9eda-58f25045718e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleWindow.h">
@@ -459,9 +468,6 @@
     <ClInclude Include="PanelLayout.h">
       <Filter>Panels</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentLight.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleResources.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -573,6 +579,32 @@
     <ClInclude Include="ResourceShader.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentLightDirectional.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentLightSpot.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentLightPoint.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelPhysics.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentAnimatedImage.h">
+      <Filter>Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTween.h">
+      <Filter>Modules\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Tools\Stb</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCharacterController.h" />
+    <ClInclude Include="ComponentPointConstraint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -791,8 +823,6 @@
     <ClCompile Include="PanelLayout.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentLight.cpp">
-    </ClCompile>
     <ClInclude Include="ComponentBone.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -848,9 +878,6 @@
       <Filter>Components\Audio</Filter>
     </ClInclude>
     <ClInclude Include="ComponentAudioListener.h">
-      <Filter>Components\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentReverbZone.h">
       <Filter>Components\Audio</Filter>
     </ClInclude>
     <ClInclude Include="WwiseT.h">
@@ -2500,12 +2527,41 @@
     <ClInclude Include="ModulePhysics.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="AnimTween.h">
+      <Filter>Modules\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticTween.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
     <ClInclude Include="Optick\include\optick.h">
       <Filter>Tools\Optik</Filter>
     </ClInclude>
     <ClInclude Include="Optick\include\optick.config.h">
       <Filter>Tools\Optik</Filter>
     </ClInclude>
+    <ClCompile Include="ComponentLightDirectional.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLightSpot.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLightPoint.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelPhysics.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentAnimatedImage.cpp">
+      <Filter>Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTween.cpp">
+      <Filter>Modules\Tween</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCharacterController.cpp" />
+    <ClCompile Include="ComponentPointConstraint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -2724,9 +2780,6 @@
     <ClCompile Include="PanelLayout.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentLight.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleResources.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -2884,9 +2937,6 @@
       <Filter>Components\Audio</Filter>
     </ClCompile>
     <ClCompile Include="ComponentAudioEmitter.cpp">
-      <Filter>Components\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentReverbZone.cpp">
       <Filter>Components\Audio</Filter>
     </ClCompile>
     <ClCompile Include="WwiseT.cpp">
@@ -3557,6 +3607,12 @@
     </ClCompile>
     <ClCompile Include="ModulePhysics.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimTween.cpp">
+      <Filter>Modules\Tween</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticTween.cpp">
+      <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="ResourceShader.cpp">
       <Filter>Resources</Filter>

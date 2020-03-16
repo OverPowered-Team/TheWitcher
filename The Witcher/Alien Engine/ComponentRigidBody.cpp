@@ -3,10 +3,14 @@
 #include "ComponentTransform.h"
 #include "ComponentCollider.h"
 #include "GameObject.h"
+#include "Time.h"
 #include "ModuleInput.h"
+#include "Event.h"
 
 ComponentRigidBody::ComponentRigidBody(GameObject* go) : Component(go)
 {
+	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_ADDED);
+
 	// GameObject Components 
 	type = ComponentType::RIGID_BODY;
 	transform = (transform == nullptr) ? game_object_attached->GetComponent<ComponentTransform>() : transform;
@@ -20,9 +24,8 @@ ComponentRigidBody::ComponentRigidBody(GameObject* go) : Component(go)
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(1.f, nullptr, aux_shape);
 	body = new btRigidBody(rbInfo);
 	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	body->setUserPointer(go);
-	App->physics->AddBody(body);
-	
+	body->setUserPointer(this);
+
 	// Default values 
 
 	for (uint i = 0; i < (uint)ForceMode::MAX; ++i)
@@ -43,10 +46,19 @@ ComponentRigidBody::ComponentRigidBody(GameObject* go) : Component(go)
 	{
 		AddCollider(new_coll);
 	}
+
+	SetBodyTranform((collider)
+		? transform->GetGlobalPosition() + collider->GetWorldCenter()
+		: transform->GetGlobalPosition(),
+		transform->GetGlobalRotation());
+
+	App->physics->AddBody(body);
 }
 
-ComponentRigidBody::~ComponentRigidBody() 
+ComponentRigidBody::~ComponentRigidBody()
 {
+	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_DELETED);
+
 	if (collider)
 	{
 		RemoveCollider();
@@ -73,7 +85,7 @@ void ComponentRigidBody::Update()
 	{
 		btTransform bt_transform = body->getCenterOfMassTransform();
 		btQuaternion rotation = bt_transform.getRotation();
-		btVector3 position = (collider) ? bt_transform.getOrigin() - ToBtVector3(collider->GetWorldCenter()): bt_transform.getOrigin();
+		btVector3 position = (collider) ? bt_transform.getOrigin() - ToBtVector3(collider->GetWorldCenter()) : bt_transform.getOrigin();
 
 		body->activate(true);
 		transform->SetGlobalPosition(float3(position));
@@ -81,10 +93,24 @@ void ComponentRigidBody::Update()
 	}
 	else
 	{
-		SetBodyTranform( (collider)
+		SetBodyTranform((collider)
 			? transform->GetGlobalPosition() + collider->GetWorldCenter()
-			:transform->GetGlobalPosition() , 
+			: transform->GetGlobalPosition(),
 			transform->GetGlobalRotation());
+	}
+
+	btVector3 freeze_p((float)!freeze_position[0], (float)!freeze_position[1], (float)!freeze_position[2]);
+	btVector3 freeze_r((float)!freeze_rotation[0], (float)!freeze_rotation[1], (float)!freeze_rotation[2]);
+
+	if (body->getLinearFactor() != freeze_p)
+	{
+		body->activate(true);
+		body->setLinearFactor(freeze_p);
+	}
+	if (body->getAngularFactor() != freeze_r)
+	{
+		body->activate(true);
+		body->setAngularFactor(freeze_r);
 	}
 
 	//	// Apply Forces ----------------------
@@ -127,6 +153,7 @@ void ComponentRigidBody::Update()
 
 bool ComponentRigidBody::DrawInspector()
 {
+	bool current_is_kinematic = is_kinematic;
 	float current_mass = mass;
 	float current_drag = drag;
 	float current_angular_drag = angular_drag;
@@ -134,10 +161,10 @@ bool ComponentRigidBody::DrawInspector()
 
 	// RigidBody Config --------------------------------------
 
-	if (ImGui::CollapsingHeader("Rigid Body", ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader("Rigid Body", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
-
+		ImGui::Title("Is Kinematic", 1);	if (ImGui::Checkbox("##is_kinematic", &current_is_kinematic)) { SetIsKinematic(current_is_kinematic); }
 		ImGui::Title("Mass", 1);			if (ImGui::DragFloat("##mass", &current_mass, 0.01f, 0.00f, FLT_MAX)) { SetMass(current_mass); }
 		ImGui::Title("Drag", 1);			if (ImGui::DragFloat("##drag", &current_drag, 0.01f, 0.00f, FLT_MAX)) { SetDrag(current_drag); }
 		ImGui::Title("Angular Drag", 1);	if (ImGui::DragFloat("##angular_drag", &current_angular_drag, 0.01f, 0.00f, FLT_MAX)) { SetAngularDrag(current_angular_drag); }
@@ -159,21 +186,6 @@ bool ComponentRigidBody::DrawInspector()
 		ImGui::Spacing();
 	}
 
-	// Colliders Config -------------------------------------
-
-	btVector3 freeze_p((float)!freeze_position[0], (float)!freeze_position[1], (float)!freeze_position[2]);
-	btVector3 freeze_r((float)!freeze_rotation[0], (float)!freeze_rotation[1], (float)!freeze_rotation[2]);
-
-	if (body->getLinearFactor() != freeze_p)
-	{
-		body->activate(true);
-		body->setLinearFactor(freeze_p);
-	}
-	if (body->getAngularFactor() != freeze_r)
-	{
-		body->activate(true);
-		body->setAngularFactor(freeze_r);
-	}
 	return true;
 }
 
@@ -200,6 +212,7 @@ void ComponentRigidBody::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
 
+	to_save->SetNumber("IsKinematic", is_kinematic);
 	to_save->SetNumber("Mass", mass);
 	to_save->SetNumber("Drag", drag);
 	to_save->SetNumber("AngularDrag", angular_drag);
@@ -215,9 +228,10 @@ void ComponentRigidBody::SaveComponent(JSONArraypack* to_save)
 
 void ComponentRigidBody::LoadComponent(JSONArraypack* to_load)
 {
-	mass = to_load->GetNumber("Mass");
-	drag = to_load->GetNumber("Drag");
-	angular_drag = to_load->GetNumber("AngularDrag");
+	SetIsKinematic(to_load->GetNumber("IsKinematic"));
+	SetMass(to_load->GetNumber("Mass"));
+	SetDrag(to_load->GetNumber("Drag"));
+	SetAngularDrag(to_load->GetNumber("AngularDrag"));
 
 	freeze_position[0] = to_load->GetBoolean("FreezePosX");
 	freeze_position[1] = to_load->GetBoolean("FreezePosY");
@@ -256,9 +270,17 @@ void ComponentRigidBody::AddTorque(const float3 force, ForceMode mode, Space spa
 
 // Rigid Body Values ----------------------------
 
+void ComponentRigidBody::SetIsKinematic(const bool value)
+{
+	is_kinematic = value;
+	(is_kinematic)
+		? body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT)
+		: body->setCollisionFlags(body->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+}
+
 void ComponentRigidBody::SetMass(const float value)
 {
-	mass = value;	
+	mass = value;
 	UpdateBodyInertia();
 }
 
@@ -303,7 +325,7 @@ void ComponentRigidBody::AddCollider(ComponentCollider* new_coll)
 	if (collider == nullptr)
 	{
 		collider = new_coll;
-		collider->rb = this;
+		collider->rigid_body = this;
 
 		App->physics->RemoveBody(collider->aux_body);
 		body->setCollisionFlags(body->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -341,7 +363,7 @@ void ComponentRigidBody::RemoveCollider()
 		App->physics->AddBody(collider->aux_body);
 		body->setCollisionShape(aux_shape);
 
-		collider->rb = nullptr;
+		collider->rigid_body = nullptr;
 		collider = nullptr;
 
 		UpdateBodyInertia();

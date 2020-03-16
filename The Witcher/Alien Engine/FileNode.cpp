@@ -7,6 +7,7 @@
 #include "ResourcePrefab.h"
 #include "ResourceScene.h"
 #include "ResourceAnimatorController.h"
+#include "ResourceMaterial.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include <fstream>
@@ -127,6 +128,7 @@ void FileNode::ResetPaths()
 		ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 		if (texture != nullptr) {
 			texture->SetAssetsPath(std::string(this->path + name).data());
+			texture->SetName(App->file_system->GetBaseFileName(name.c_str()).c_str());
 		}
 		break; }
 	case FileDropType::SHADER: {
@@ -136,6 +138,17 @@ void FileNode::ResetPaths()
 		ResourceShader* shader = (ResourceShader*)App->resources->GetResourceWithID(ID);
 		if (shader != nullptr) {
 			shader->SetAssetsPath(std::string(this->path + name).data());
+			shader->SetName(App->file_system->GetBaseFileName(name.c_str()).c_str());
+		}
+		break; }
+	case FileDropType::MATERIAL: {
+		std::string path = App->file_system->GetPathWithoutExtension(this->path + name);
+		path += "_meta.alien";
+		u64 ID = App->resources->GetIDFromAlienPath(path.data());
+		ResourceMaterial* material = (ResourceMaterial*)App->resources->GetResourceWithID(ID);
+		if (material != nullptr) {
+			material->SetAssetsPath(std::string(this->path + name).data());
+			material->SetName(App->file_system->GetBaseFileName(name.c_str()).c_str());
 		}
 		break; }
 	case FileDropType::ANIM_CONTROLLER: {
@@ -227,7 +240,7 @@ FileNode* FileNode::FindChildrenByPath(const std::string& path)
 void FileNode::RemoveResourceOfGameObjects()
 {
 	if (is_file) {
-		SDL_assert((uint)FileDropType::UNKNOWN == 10);
+		//SDL_assert((uint)FileDropType::UNKNOWN == 10);
 		switch (type) {
 		case FileDropType::SCENE:
 			static char curr_dir[MAX_PATH];
@@ -268,6 +281,15 @@ void FileNode::RemoveResourceOfGameObjects()
 				App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_SHADER, (Resource*)shader_to_delete);
 			}
 			break; }
+		case FileDropType::MATERIAL: {
+			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
+			path_ += "_meta.alien";
+			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
+			ResourceMaterial* material_to_delete = (ResourceMaterial*)App->resources->GetResourceWithID(ID);
+			if (material_to_delete != nullptr) {
+				App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_MATERIAL, (Resource*)material_to_delete);
+			}
+			break; }
 		case FileDropType::MODEL3D: {
 			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
 			path_ += "_meta.alien";
@@ -305,6 +327,14 @@ void FileNode::RemoveResourceOfGameObjects()
 	}
 }
 
+void FileNode::ResetChildrenPath()
+{
+	for (auto item = children.begin(); item != children.end(); ++item) {
+		(*item)->ResetPaths();
+		(*item)->ResetChildrenPath();
+	}
+}
+
 void FileNode::SetIcon()
 {
 	if (is_file) {
@@ -330,6 +360,10 @@ void FileNode::SetIcon()
 		else if (App->StringCmp(extension.data(), "shader")) {
 			icon = App->resources->icons.shader_file;
 			type = FileDropType::SHADER;
+		}
+		else if (App->StringCmp(extension.data(), "material")) {
+			icon = App->resources->icons.model;
+			type = FileDropType::MATERIAL;
 		}
 		else if (App->StringCmp(extension.data(), "fbx") || App->StringCmp(extension.data(), "dae")) {
 			icon = App->resources->icons.model;

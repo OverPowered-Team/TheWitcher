@@ -48,9 +48,12 @@ namespace WwiseT
 		void SetListener(uint listener_id);
 		void SetSourcePos(float x, float y, float z, float x_front, float y_front, float z_front, float x_top, float y_top, float z_top);
 		void SetListenerPos(float pos_x, float pos_y, float pos_z, float front_rot_x, float front_rot_y, float front_rot_z, float top_rot_x, float top_rot_y, float top_rot_z);
+		void SetSwitch(AkGameObjectID game_object_id, const char* switch_group_id, const char* switch_state_id);
 		// Geters
 		unsigned int GetID() const;
 		const char* GetName() const;
+		AkUInt32 GetWwiseIDFromString(const char* Wwise_name);
+
 	private:
 		u32 id;
 		std::string name; // Event name

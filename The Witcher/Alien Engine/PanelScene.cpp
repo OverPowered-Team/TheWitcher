@@ -11,6 +11,14 @@
 #include "Prefab.h"
 #include "ReturnZ.h"
 #include "PanelGame.h"
+#include "ModuleInput.h"
+#include "ShortCutManager.h"
+#include "ModuleCamera3D.h"
+#include "ModuleResources.h"
+#include "ModuleImporter.h"
+#include "ModuleUI.h"
+#include "ModuleRenderer3D.h"
+#include "Time.h"
 #include "Viewport.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
@@ -108,6 +116,20 @@ void PanelScene::PanelLogic()
 
 				if (shader_dropped != nullptr) {
 					//App->importer->ApplyShaderToSelectedObject(shader_dropped); TODO
+				}
+			}
+
+			// drop material
+			if (node != nullptr && node->type == FileDropType::MATERIAL && !App->objects->GetSelectedObjects().empty()) {
+				std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+				path += "_meta.alien";
+
+				u64 ID = App->resources->GetIDFromAlienPath(path.data());
+
+				ResourceMaterial* material_dropped = (ResourceMaterial*)App->resources->GetResourceWithID(ID);
+
+				if (material_dropped != nullptr) {
+					App->importer->ApplyMaterialToSelectedObject(material_dropped); 
 				}
 			}
 

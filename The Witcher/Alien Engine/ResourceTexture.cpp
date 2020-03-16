@@ -1,6 +1,11 @@
 #include "ResourceTexture.h"
 #include "ModuleResources.h"
 #include "Application.h"
+#include "ModuleFileSystem.h"
+#include "Devil/include/il.h"
+#include "Devil/include/ilu.h"
+#include "Devil/include/ilut.h"
+#include "ModuleImporter.h"
 #include "mmgr/mmgr.h"
 
 ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& width, const uint& height) : Resource()

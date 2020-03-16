@@ -38,6 +38,8 @@ public:
 	FileNode* FindChildrenByPath(const std::string& path); 
 	void RemoveResourceOfGameObjects();
 
+	void ResetChildrenPath();
+
 private:
 
 	void SetIcon();

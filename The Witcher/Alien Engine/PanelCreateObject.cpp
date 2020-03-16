@@ -5,6 +5,9 @@
 #include "Shapes.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+#include "ModuleCamera3D.h"
+#include "ModuleResources.h"
+#include "ShortCutManager.h"
 #include "ComponentBoxCollider.h"
 #include "ComponentMesh.h"
 #include "ReturnZ.h"
@@ -110,7 +113,7 @@ void PanelCreateObject::PanelLogic()
 				break; }
 			}
 			x = y = z = 0;
-			material->color = create_color;
+			//material->color = create_color;
 			object->AddComponent(transform);
 			object->AddComponent(mesh);
 			object->AddComponent(material);

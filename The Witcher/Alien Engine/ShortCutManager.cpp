@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "PanelConfig.h"
+#include "ModuleUI.h"
 #include <algorithm>
 #include "mmgr/mmgr.h"
 

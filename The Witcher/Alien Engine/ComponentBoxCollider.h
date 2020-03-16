@@ -26,17 +26,17 @@ private:
 	float3 CheckInvalidCollider(float3 size);
 	void DrawSpecificInspector();
 
+	void Clone(Component* clone);
 	void Reset();
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 	
-	void CreateShape();
+	void CreateDefaultShape();
 	void UpdateShape();
-	bool WrapMesh();
 
 private:
 
 	float3 final_size = float3::zero();
-	float3 size = float3::zero();
+	float3 size = float3::one();
 };
 

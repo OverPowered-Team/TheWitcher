@@ -15,6 +15,7 @@ class ResourceMesh;
 class ResourceScene;
 class ResourceTexture;
 class ResourceShader;
+class ResourceMaterial;
 class ResourceFont;
 
 struct Icons {
@@ -88,9 +89,17 @@ public:
 
 	ResourceScene* GetSceneByName(const char* name);
 	ResourceFont* GetFontByName(const char* name);
+	ResourceShader* GetShaderByName(std::string shaderName);
+	ResourceMaterial* GetMaterialByName(const char* name); 
+
+	const uint GetTextureidByID(const u64& ID) const;
+	ResourceTexture* GetTextureByID(const u64& ID);
 
 	// Shaders
 	bool GetShaders(std::vector<ResourceShader*>& to_fill);
+	ResourceMaterial* CreateMaterial(const char* name);
+
+	void HandleAlienEvent(const AlienEvent& alienEvent);
 
 private:
 	FileNode* GetFileNodeByPath(const std::string& path, FileNode* node);
@@ -98,6 +107,7 @@ private:
 	void ReadAllMetaData();
 	void ReadTextures(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadShaders(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
+	void ReadMaterials(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadModels(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadAnimControllers(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
 	void ReadPrefabs(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder);
@@ -110,6 +120,7 @@ private:
 
 	void CreateAnimatorController();
 
+
 public:
 
 	Icons icons;
@@ -119,6 +130,11 @@ public:
 	ResourceMesh* camera_mesh = nullptr;
 	ResourceMesh* light_mesh = nullptr; 
 	ResourceFont* default_font = nullptr;
+	ResourceMaterial* default_material = nullptr;
+	ResourceShader* default_shader = nullptr;
+	ResourceShader* default_particle_shader = nullptr;
+	ResourceShader* skybox_shader = nullptr;
+
 	FileNode* assets = nullptr;
 
 private:

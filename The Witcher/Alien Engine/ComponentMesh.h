@@ -7,12 +7,17 @@
 #include "Color.h"
 
 class ResourceMesh;
+class ResourceMaterial;
 
 class __declspec(dllexport) ComponentMesh : public Component {
+
 	friend class ReturnZ;
 	friend class CompZ;
+	friend class ResourceModel;
 	friend class ResourceMesh;
-	friend class ComponentLight;
+	friend class ComponentLightDirectional;
+	friend class ComponentLightSpot;
+	friend class ComponentLightPoint;
 	friend class ComponentMaterial;
 	friend class ComponentTransform;
 	friend class ComponentCamera;
@@ -29,15 +34,20 @@ class __declspec(dllexport) ComponentMesh : public Component {
 	friend class ResourceModel;
 	friend class PanelCreateObject;
 	friend class PanelRender;
+
 public:
 	ComponentMesh(GameObject* attach);
 	virtual ~ComponentMesh();
 
 protected:
 
+	void SetResourceMesh(ResourceMesh* resource);
+
 	virtual void DrawPolygon(ComponentCamera* camera);
 	virtual void DrawOutLine();
 	virtual void DrawMesh();
+	virtual void SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera);
+
 	void DrawVertexNormals();
 	void DrawFaceNormals();
 	bool DrawInspector();
@@ -49,14 +59,14 @@ protected:
 
 	void Clone(Component* clone);
 
+	void GenerateLocalAABB();
 	void RecalculateAABB_OBB();
+
 	const AABB GetGlobalAABB() const;
 	const OBB GetOBB() const;
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
-
-	AABB GenerateAABB();
 
 protected:
 	
@@ -67,10 +77,11 @@ protected:
 	bool view_vertex_normals = false;
 	bool view_face_normals = false;
 
-	bool draw_AABB = true;
-	bool draw_OBB = true;
+	bool draw_AABB = false;
+	bool draw_OBB = false;
 
 	AABB local_aabb;
-	OBB obb;
+	OBB obb;  
 	AABB global_aabb;
+	int animate = 0;
 };

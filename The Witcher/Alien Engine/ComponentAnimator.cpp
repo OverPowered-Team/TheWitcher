@@ -8,6 +8,7 @@
 #include "NodeEditor/Include/imgui_node_editor.h"
 #include "ResourceAnimation.h"
 #include "ResourceAnimatorController.h"
+#include "Time.h"
 #include "ComponentAnimator.h"
 #include "mmgr/mmgr.h"
 
@@ -23,10 +24,11 @@ ComponentAnimator::~ComponentAnimator()
 {
 	if (animator_controller)
 	{
-		animator_controller->DecreaseReferences();
-		animator_controller->attached_references--;
+		animator_controller->FreeMemory();
+		delete animator_controller;
+		animator_controller = nullptr;
+		source_animator_controller->DecreaseReferences();
 	}
-
 }
 
 void ComponentAnimator::Update()
@@ -41,10 +43,20 @@ void ComponentAnimator::Update()
 		UpdateAnimation(game_object_attached);
 }
 
-void ComponentAnimator::PlayState(std::string name)
+void ComponentAnimator::PlayState(const char* name)
 {
 	if (animator_controller)
 		animator_controller->Play(name);
+}
+
+bool ComponentAnimator::IsPlaying(const char* name)
+{
+	bool ret = false;
+
+	if (strcmp(animator_controller->GetCurrentNode()->GetName().c_str(), name) == 0)
+		ret = true;
+
+	return ret;
 }
 
 void ComponentAnimator::UpdateAnimation(GameObject* go_to_update)
@@ -67,35 +79,39 @@ void ComponentAnimator::UpdateAnimation(GameObject* go_to_update)
 
 void ComponentAnimator::OnPlay()
 {
-	if (animator_controller)
+	if (source_animator_controller)
 	{
-		animator_controller->SaveAsset(animator_controller->GetID());
+		source_animator_controller->SaveAsset(source_animator_controller->GetID());
+		animator_controller = new ResourceAnimatorController(source_animator_controller);
+		source_animator_controller->DecreaseReferences();
 		animator_controller->Play();
 	}
 }
 
 ResourceAnimatorController* ComponentAnimator::GetResourceAnimatorController()
 {
+	return source_animator_controller;
+}
+
+ResourceAnimatorController* ComponentAnimator::GetCurrentAnimatorController()
+{
 	return animator_controller;
 }
 
 void ComponentAnimator::SetAnimatorController(ResourceAnimatorController* controller)
 {
-	if (animator_controller) {
-		animator_controller->DecreaseReferences();
-		animator_controller->attached_references--;
-	}
+	if (source_animator_controller) {
+		source_animator_controller->DecreaseReferences();	}
 
-	animator_controller = controller;
-	animator_controller->IncreaseReferences();
-	animator_controller->attached_references++;
+	source_animator_controller = controller;
+	source_animator_controller->IncreaseReferences();
 }
 
 void ComponentAnimator::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("ControllerID", animator_controller ? std::to_string(animator_controller->GetID()) : std::to_string(0));
+	to_save->SetString("ControllerID", source_animator_controller ? std::to_string(source_animator_controller->GetID()) : std::to_string(0));
 	to_save->SetBoolean("Enabled", enabled);
 }
 
@@ -143,7 +159,7 @@ bool ComponentAnimator::DrawInspector()
 		ImGui::Text("Controller");
 		ImGui::SameLine();
 		
-		ImGui::Button(animator_controller ? animator_controller->name.data():"No Controller Assigned", { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button(source_animator_controller ? source_animator_controller->name.data():"No Controller Assigned", { ImGui::GetWindowWidth() * 0.55F , 0 });
 		if (ImGui::BeginDragDropTarget()) {
 			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
 			if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
@@ -161,10 +177,6 @@ bool ComponentAnimator::DrawInspector()
 				}
 			}
 			ImGui::EndDragDropTarget();
-		}
-
-		if (animator_controller != nullptr) {
-			ImGui::Text("References: %i", animator_controller->attached_references);
 		}
 	}
 

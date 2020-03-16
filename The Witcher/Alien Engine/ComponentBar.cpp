@@ -7,6 +7,9 @@
 #include "ComponentTransform.h"
 #include "ComponentBar.h"
 #include "ResourceTexture.h"
+#include "ModuleResources.h"
+#include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
 #include "ReturnZ.h"
 #include "imgui/imgui.h"
 #include "mmgr/mmgr.h"
@@ -14,6 +17,7 @@
 ComponentBar::ComponentBar(GameObject* obj):ComponentUI(obj)
 {
 	ui_type = ComponentType::UI_BAR;
+	tabbable = false;
 }
 
 bool ComponentBar::DrawInspector()
@@ -252,6 +256,10 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 	float4x4 matrix = transform->global_transformation;
 
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
 
 	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
 		glMatrixMode(GL_PROJECTION);
@@ -283,6 +291,7 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
+		matrix[2][3] = 0.0f;
 	}
 
 	if (tex != nullptr) {
@@ -325,6 +334,9 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 
 	glPopMatrix();
 
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	glEnable(GL_LIGHTING);
 	glEnable(GL_CULL_FACE);
 }
 

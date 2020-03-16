@@ -12,7 +12,8 @@ class ComponentSphereCollider : public ComponentCollider
 {
 public:
 
-	friend ModulePhysics;
+	friend class GameObject;
+	friend class ModulePhysics;
 
 public:
 
@@ -28,11 +29,10 @@ private:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-	void CreateShape();
+	void CreateDefaultShape();
 	void UpdateShape();
-	bool WrapMesh();
 
 private:
-
-	float radius;
+	float final_radius = 0.5f;
+	float radius = 0.5f;
 };

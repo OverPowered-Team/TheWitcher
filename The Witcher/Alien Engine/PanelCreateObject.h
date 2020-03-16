@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Panel.h"
+#include "Color.h"
 
 class PanelCreateObject : public Panel {
 

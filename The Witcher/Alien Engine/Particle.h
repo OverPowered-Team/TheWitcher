@@ -7,6 +7,7 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 
 #include "ResourceTexture.h"
+#include "ResourceMaterial.h"
 
 class ParticleSystem;
 class ComponentCamera;
@@ -82,8 +83,10 @@ public:
 	void InterpolateValues(float dt);
 
 	float3 GetPosition() const;
+	ResourceMaterial* GetMaterial() const;
 
 	float Lerp(float v0, float v1, float t);
+	void SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera, float4x4 globalMatrix);
 
 public:
 
@@ -93,6 +96,7 @@ private:
 	//ResourceTexture* resMat = nullptr;
 
 	ParticleSystem* owner = nullptr;
+	ResourceMaterial* p_material = nullptr;
 
 	ParticleInfo particleInfo;
 	ParticleMutableInfo startInfo;
@@ -100,6 +104,7 @@ private:
 
 	float currentLifeTime = 0.f;
 
+	
 
 	// -------- Lerping -------------
 

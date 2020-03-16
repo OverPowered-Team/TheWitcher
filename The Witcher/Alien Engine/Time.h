@@ -19,6 +19,7 @@ private:
 	friend class Application;
 	friend class ModuleUI;
 	friend class ReturnZ;
+	friend class ComponentCollider;
 	friend class ModuleObjects;
 	friend class PanelScene;
 	friend class PanelInspector;
@@ -27,12 +28,14 @@ private:
 	friend class ComponentAnimator;
 	friend class PanelAnimTimeline;
 	friend class ComponentAudioEmitter;
+	friend class ModulePhysics;
 	friend class ModuleAudio;
 	friend class ComponentParticleSystem;
 	friend class ComponentUI;
 	friend class ComponentCheckbox;
 	friend class ComponentSlider;
 	friend class ComponentBar;
+	friend class ComponentCanvas;
 
 	static void Start();
 	static void Update();

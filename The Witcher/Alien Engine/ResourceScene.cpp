@@ -1,5 +1,8 @@
 #include "ResourceScene.h"
 #include "Application.h"
+#include "ModuleFileSystem.h"
+#include "JSONfilepack.h"
+#include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
 ResourceScene::ResourceScene() : Resource()

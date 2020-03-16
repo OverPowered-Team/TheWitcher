@@ -24,15 +24,23 @@ void ComponentSphereCollider::SetRadius(float value)
 	}
 }
 
-void ComponentSphereCollider::CreateShape()
+
+void ComponentSphereCollider::CreateDefaultShape()
 {
-	if (!WrapMesh())
+	ComponentMesh* mesh = game_object_attached->GetComponent<ComponentMesh>();
+
+	if (mesh != nullptr)
 	{
-		// Default values 
-		SetRadius(0.5f);
+		center = mesh->local_aabb.CenterPoint();
+		radius = mesh->local_aabb.Size().MaxElement() * 0.5f;
+	}
+	else
+	{
+		center = float3::zero();
+		radius = 0.5f;
 	}
 
-	if (shape == nullptr) UpdateShape();
+	UpdateShape();
 }
 
 void ComponentSphereCollider::UpdateShape()
@@ -42,24 +50,14 @@ void ComponentSphereCollider::UpdateShape()
 		delete shape;
 	}
 
-	float final_radius = radius * transform->GetGlobalScale().Abs().MaxElement();
+	final_radius = radius * transform->GetGlobalScale().Abs().MaxElement();
+	final_center = center.Mul(final_radius);
+
 	shape = new btSphereShape(final_radius);
 	shape->setMargin(3.f);
 	aux_body->setCollisionShape(shape);
-	if (rb != nullptr)  rb->UpdateCollider();
-}
 
-bool ComponentSphereCollider::WrapMesh()
-{
-	ComponentMesh* mesh = game_object_attached->GetComponent<ComponentMesh>();
-
-	if (mesh != nullptr)
-	{
-		SetCenter(mesh->local_aabb.CenterPoint());
-		SetRadius(mesh->local_aabb.Size().MaxElement() * 0.5f);
-		return true;
-	}
-	return false;
+	if (rigid_body != nullptr)  rigid_body->UpdateCollider();
 }
 
 void ComponentSphereCollider::DrawSpecificInspector()

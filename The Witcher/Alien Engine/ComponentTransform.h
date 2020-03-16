@@ -13,6 +13,7 @@ class __declspec(dllexport) ComponentTransform : public Component {
 	friend class ComponentText;
 	friend class ComponentCheckbox;
 	friend class ComponentBar;
+	friend class ComponentAnimatedImage;
 	friend class ComponentCollider;
 	friend class ComponentBoxCollider;
 	friend class ComponentRigidBody;

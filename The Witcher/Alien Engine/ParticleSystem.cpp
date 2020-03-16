@@ -1,8 +1,12 @@
 #include "ParticleSystem.h"
 #include "Application.h"
 #include "ComponentCamera.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleResources.h"
 #include "Camera.h"
-
+#include "ResourceShader.h"
+#include "GameObject.h"
+#include "ComponentTransform.h"
 #include "GL/gl.h"
 
 ParticleSystem::ParticleSystem()
@@ -10,7 +14,13 @@ ParticleSystem::ParticleSystem()
 	particles.reserve(MAX_PARTICLES);
 	emmitter.particleSystem = this;
 
-	float planeVertex[] =
+	
+	material = App->resources->default_material;
+	material->IncreaseReferences();
+	material->SetShader(App->resources->default_particle_shader);
+
+	
+	float vertex[] =
 	{
 		// 0
 		-0.5f, 0.5f, 0.f, 
@@ -22,7 +32,7 @@ ParticleSystem::ParticleSystem()
 		0.5f, -0.5f, 0.f,
 	};
 
-	float planeUVCoords[] =
+	float uv[] =
 	{
 		// 0
 		0.0f, 0.0f, 
@@ -34,7 +44,7 @@ ParticleSystem::ParticleSystem()
 		1.0f, 1.0f,
 	};
 
-	uint planeIndex[] =
+	uint index[] =
 	{
 		// First tri
 		2, 1, 0,
@@ -42,21 +52,40 @@ ParticleSystem::ParticleSystem()
 		2, 3, 1
 	};
 
-	glGenBuffers(1, &planeVertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 3, planeVertex, GL_STATIC_DRAW);
 
-	// index
-	glGenBuffers(1, &planeIndexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, planeIndexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, planeIndex, GL_STATIC_DRAW);
+	// VAO
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-	// UV
-	glGenBuffers(1, &planeUVsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, planeUVsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, planeUVCoords, GL_STATIC_DRAW);
-	
+	// VERTEX BUFFER
+	glGenBuffers(1, &id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 3, vertex, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
+	glEnableVertexAttribArray(0);
+
+	// UV BUFFER
+	glGenBuffers(1, &id_uv);
+	glBindBuffer(GL_ARRAY_BUFFER, id_uv);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, uv, GL_STATIC_DRAW);	
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);										
+	glEnableVertexAttribArray(1);
+
+	// INDEX BUFFER
+	glGenBuffers(1, &id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, index, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// LIGHTS
+	light_id = GL_LIGHT0;
+	InitLight();
 }
+
 
 ParticleSystem::~ParticleSystem()
 {
@@ -67,7 +96,18 @@ ParticleSystem::~ParticleSystem()
 		(*iter) = nullptr;
 	}
 
+	glDeleteVertexArrays(1, &vao);
+
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_vertex);
+	glDeleteBuffers(1, &id_uv);
+
 	particles.clear();
+
+	if (material != nullptr)
+		material = nullptr;
+
+	DeactivateLight();
 }
 
 bool ParticleSystem::PreUpdate(float dt)
@@ -166,15 +206,20 @@ void ParticleSystem::DrawParticles()
 	// Debugging drawing points in particles Position
 	//DrawPointsForParticles();
 
+	RenderLight();
 	ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
-	//-------------------------- DRAW PARTICLES FAR TO NEAR ------------------
 
+
+	//-------------------------- DRAW PARTICLES FAR TO NEAR ------------------
 	for (std::vector<Particle*>::reverse_iterator iter = particles.rbegin(); iter != particles.rend(); ++iter)
 	{
 		(*iter)->Orientate(mainCamera);
 		(*iter)->Rotate();
 		(*iter)->Draw();
+
+
 	}
+	
 
 }
 
@@ -232,6 +277,7 @@ bool ParticleSystem::isPlaying() const
 void ParticleSystem::Play()
 {
 	playing = true; 
+	emmitter.playing = true;
 }
 
 void ParticleSystem::Pause()
@@ -243,6 +289,12 @@ void ParticleSystem::Restart()
 {
 	ResetSystem();
 	Play();
+}
+
+void ParticleSystem::Stop()
+{
+	ResetSystem();
+	Pause();
 }
 
 void ParticleSystem::ResetSystem()
@@ -262,6 +314,18 @@ void ParticleSystem::ResetSystem()
 
 	// Update counter
 	totalParticles = 0u;
+}
+
+void ParticleSystem::StopEmmitter()
+{
+	emmitter.Stop();
+	
+}
+
+void ParticleSystem::StartEmmitter()
+{
+	emmitter.Play();
+	
 }
 
 bool compareParticles(Particle* a, Particle* b)
@@ -327,4 +391,103 @@ void ParticleSystem::SetParticleFinalForce(const float3& initialForce)
 	endInfo.force = initialForce;
 }
 
-// ------------------------------ PARTICLE INFO ------------------------------
+void ParticleSystem::SetMaterial(ResourceMaterial* mat)
+{
+
+	if (mat == nullptr)
+		return;
+
+	if (material != nullptr)
+	{
+		material->DecreaseReferences();
+		//material = nullptr;
+	}
+
+	material = mat;
+	material->IncreaseReferences();
+}
+
+void ParticleSystem::RemoveMaterial()
+{
+	material->DecreaseReferences();
+	material = nullptr;
+}
+
+void ParticleSystem::CalculateParticleUV(int rows, int columns)
+{
+	std::vector<uint> ret = LoadTextureUV(rows, columns);
+
+	if (!ret.empty())
+	{
+		LOG_ENGINE("TEXTURE UV IDS FILLED");
+	}
+
+}
+
+std::vector<uint> ParticleSystem::LoadTextureUV(int rows, int columns)
+{
+
+	id_uvs.clear();
+
+	if (rows > 0 && rows > 0)
+	{
+
+		uint texID = 0;
+
+		float r_scale = 1.0f / rows;
+		float c_scale = 1.0f / columns;
+
+
+		for (int i = 0; i < rows; ++i)
+		{
+			for (int j = 0; j < columns; ++j)
+			{
+				float uv[]
+				{
+					j * c_scale,					1.0f - (i * r_scale + r_scale),
+					j * c_scale + c_scale,			1.0f - (i * r_scale + r_scale),
+					j * c_scale,					1.0f - i * r_scale,
+					j * c_scale + c_scale,			1.0f - i * r_scale,
+				};
+
+
+				LOG_ENGINE("Texture UV: \n%.2f %.2f\n%.2f %.2f\n%.2f %.2f\n%.2f %.2f\n", uv[0], uv[1], uv[2], uv[3], uv[4], uv[5], uv[6], uv[7])
+
+				glGenBuffers(1, &texID);
+				glBindBuffer(GL_ARRAY_BUFFER, texID);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * 2, uv, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+				id_uvs.push_back(texID);
+			}
+		}
+
+	}
+
+	return id_uvs;
+
+}
+
+// ------------------------------ PARTICLE LIGHT ------------------------------
+
+void ParticleSystem::InitLight()
+{
+	glLightfv(light_id, GL_AMBIENT, &ambient);
+	glLightfv(light_id, GL_DIFFUSE, &diffuse);
+}
+
+void ParticleSystem::RenderLight()
+{
+	float pos[] = { emmitter.GetPosition().x, emmitter.GetPosition().x, emmitter.GetPosition().x, 1.F };
+	glLightfv(light_id, GL_POSITION, pos);
+}
+
+void ParticleSystem::ActivateLight()
+{
+	glEnable(light_id);
+}
+
+void ParticleSystem::DeactivateLight()
+{
+	glDisable(light_id);
+}

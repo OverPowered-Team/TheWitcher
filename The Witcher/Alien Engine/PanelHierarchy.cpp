@@ -8,6 +8,11 @@
 #include "PanelProject.h"
 #include "ResourceTexture.h"
 #include "ComponentTransform.h"
+#include "ModuleResources.h"
+#include "ShortCutManager.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
+#include "ModuleUI.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
 
@@ -501,6 +506,33 @@ void PanelHierarchy::RightClickMenu()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Light"))
+		{
+			if (ImGui::MenuItem("Point light"))
+			{
+				App->objects->CreateLight(LightTypeObj::POINT);
+			}
+			if (ImGui::MenuItem("Spot light"))
+			{
+				App->objects->CreateLight(LightTypeObj::SPOT);
+			}
+			if (ImGui::MenuItem("Directional light"))
+			{
+				App->objects->CreateLight(LightTypeObj::DIRECTIONAL);
+			}
+
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Effects"))
+		{
+			if (ImGui::MenuItem("Particle System"))
+			{
+				App->objects->CreateEffect(ComponentType::PARTICLES);
+			}
+			
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("UI"))
 		{
 			if (ImGui::MenuItem("Image"))
@@ -526,6 +558,10 @@ void PanelHierarchy::RightClickMenu()
 			if (ImGui::MenuItem("Bar"))
 			{
 				App->objects->CreateBaseUI(ComponentType::UI_BAR);
+			}
+			if (ImGui::MenuItem("Animated Image"))
+			{
+				App->objects->CreateBaseUI(ComponentType::UI_ANIMATED_IMAGE);
 			}
 			ImGui::EndMenu();
 		}

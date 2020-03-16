@@ -5,15 +5,24 @@
 #include "..\..\..\Alien Engine\ComponentScript.h"
 #include "..\..\..\Alien Engine\ComponentTransform.h"
 #include "..\..\..\Alien Engine\ComponentCamera.h"
-#include "..\..\..\Alien Engine\ComponentLight.h"
+#include "..\..\..\Alien Engine\ComponentLightDirectional.h"
+#include "..\..\..\Alien Engine\ComponentLightSpot.h"
 #include "..\..\..\Alien Engine\ComponentMaterial.h"
 #include "..\..\..\Alien Engine\ComponentMesh.h"
 #include "../../../Alien Engine/ComponentAudioEmitter.h"
 #include "..\..\..\Alien Engine\ComponentParticleSystem.h"
+#include "..\..\..\Alien Engine\ComponentAnimator.h"
 #include "..\..\..\Alien Engine\ParticleSystem.h"
 #include "..\..\..\Alien Engine\ParticleEmitter.h"
+#include "..\..\..\Alien Engine\ComponentRigidBody.h"
+#include "..\..\..\Alien Engine\ComponentCollider.h"
+#include "..\..\..\Alien Engine\ComponentBoxCollider.h"
+#include "..\..\..\Alien Engine\ComponentCapsuleCollider.h"
+#include "..\..\..\Alien Engine\ComponentSphereCollider.h"
+#include "..\..\..\Alien Engine\ComponentLightDirectional.h"
+#include "..\..\..\Alien Engine\ComponentLightPoint.h"
+#include "..\..\..\Alien Engine\ComponentLightSpot.h"
 #include "..\..\..\Alien Engine\ComponentUI.h"
-#include "..\..\..\Alien Engine\ComponentAnimator.h"
 #include "..\..\..\Alien Engine\ComponentButton.h"
 #include "..\..\..\Alien Engine\ComponentImage.h"
 /*-----------------COMPONENTS-------------------*/
@@ -26,6 +35,7 @@
 
 /*-----------------HELPERS-------------------*/
 #include "..\..\..\Alien Engine\StaticInput.h"
+#include "..\..\..\Alien Engine\StaticTween.h"
 #include "..\..\..\Alien Engine\Maths.h"
 #include "..\..\..\Alien Engine\Debug.h"
 #include "..\..\..\Alien Engine\RandomHelper.h"
@@ -39,6 +49,7 @@
 #include "..\..\..\Alien Engine\RayCreator.h"
 #include "..\..\..\Alien Engine\Screen.h"
 #include "..\\..\..\\Alien Engine\JSONfilepack.h"
+#include "../../../Alien Engine/WwiseT.h"
 /*-----------------HELPERS-------------------*/
 
 #ifdef ALIENENGINESCRIPTS_EXPORTS
@@ -50,6 +61,7 @@
 // define it next to the CreateClass/StructFunct to be able to use the class/struct
 #define ALIEN_FACTORY extern "C" ALIEN_ENGINE_API
 
+static char* helper = nullptr;
 // ------------INSPECTOR MACROS----------------\\
 /*--------------------int--------------------*/
 #define SHOW_IN_INSPECTOR_AS_INPUT_INT(INT_) ComponentScript::InspectorInputInt(&INT_, #INT_)
@@ -61,13 +73,25 @@
 #define SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(FLOAT_, MIN_, MAX_) ComponentScript::InspectorSliderFloat(&FLOAT_, #FLOAT_, MIN_, MAX_)
 /*--------------------bool--------------------*/
 #define SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(BOOL_) ComponentScript::InspectorBool(&BOOL_, #BOOL_)
+/*--------------------string--------------------*/
+#define SHOW_IN_INSPECTOR_AS_STRING(STD_STRING) ComponentScript::InspectorString(STD_STRING.data(), #STD_STRING)
+/*--------------------enum--------------------*/
+#define SHOW_IN_INSPECTOR_AS_ENUM(ENUM_TYPE, ENUM_VALUE) ComponentScript::InspectorEnum((int*)(void*)&ENUM_VALUE, #ENUM_VALUE, ENUM_TYPE##EnumNames)
 /*--------------------prefab--------------------*/
 #define SHOW_IN_INSPECTOR_AS_PREFAB(PREFAB_) ComponentScript::InspectorPrefab(&PREFAB_, #PREFAB_)
 /*--------------------gameobject--------------------*/
 #define SHOW_IN_INSPECTOR_AS_GAMEOBJECT(GAMEOBJECT_) ComponentScript::InspectorGameObject(&GAMEOBJECT_, #GAMEOBJECT_)
+/*--------------------function--------------------*/
+#define SHOW_VOID_FUNCTION(FUNCTION, CONTEXT_) ComponentScript::ShowVoidFunction(std::bind(&FUNCTION, CONTEXT_), #FUNCTION)
+// more info about LAMBDA, allow us to convert functions with arguments to void funtion pointer. https://thispointer.com/c11-lambda-how-to-capture-local-variables-inside-lambda/
+#define SHOW_LAMBDA_FUNCTION(FUNCTION, NAME, CONTEXT_, ...) ComponentScript::ShowVoidFunction([CONTEXT_]() -> void { FUNCTION(__VA_ARGS__); }, NAME)
 // ------------INSPECTOR MACROS----------------\\
 
 #define VARAIBLE_TO_STRING(VAR_) #VAR_
 
 #define LOG(format, ...) Debug::Log(__FILE__, __LINE__, format, __VA_ARGS__);
 
+#define enum(ENUM, ...) enum class ENUM {\
+	__VA_ARGS__\
+	};\
+	inline static const char* ENUM##EnumNames = #__VA_ARGS__;

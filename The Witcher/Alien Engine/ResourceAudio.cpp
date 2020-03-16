@@ -1,5 +1,10 @@
 #include "ResourceAudio.h"
 #include "Application.h"
+#include "ModuleResources.h"
+#include "ModuleFileSystem.h"
+#include "ModuleAudio.h"
+
+#include <ctime>
 #include "mmgr/mmgr.h"
 
 ResourceAudio::ResourceAudio() : Resource() {

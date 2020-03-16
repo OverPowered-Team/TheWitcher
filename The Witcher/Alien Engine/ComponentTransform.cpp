@@ -7,6 +7,9 @@
 #include "ComponentMesh.h"
 #include "PanelScene.h"
 #include "ResourcePrefab.h"
+#include "ModuleCamera3D.h"
+#include "ModuleUI.h"
+#include "ModuleResources.h"
 #include "PanelProject.h"
 #include "mmgr/mmgr.h"
 
@@ -241,44 +244,51 @@ float4x4 ComponentTransform::GetGlobalMatrix() const
 void ComponentTransform::RecalculateTransform()
 {
 	OPTICK_EVENT();
+	if (game_object_attached == nullptr)
+		return;
+
 	local_transformation = float4x4::FromTRS(local_position, local_rotation, local_scale);
 
-	if (game_object_attached == nullptr) 
-		return;
-	
-	if (game_object_attached->parent != nullptr) {
-		ComponentTransform* tr = (ComponentTransform*)game_object_attached->parent->GetComponent(ComponentType::TRANSFORM);
+	if (game_object_attached->parent != nullptr) 
+	{
+		ComponentTransform* tr = game_object_attached->parent->transform;
+		
 		if (tr != nullptr)
 			global_transformation = tr->global_transformation * local_transformation;
 		else
 			global_transformation = local_transformation;
 	}
-	else {
+	else 
+	{
 		global_transformation = local_transformation;
 	}
+
 	up = local_rotation.WorldY();
+
 	forward = { 2 * (local_rotation.x * local_rotation.z + local_rotation.w * local_rotation.y),
 				2 * (local_rotation.y * local_rotation.z - local_rotation.w * local_rotation.x),
 				1 - 2 * (local_rotation.x * local_rotation.x + local_rotation.y * local_rotation.y) };
+
 	right = { 1 - 2 * (local_rotation.y * local_rotation.y + local_rotation.z * local_rotation.z),
 			 2 * (local_rotation.x * local_rotation.y + local_rotation.w * local_rotation.z),
 			 2 * (local_rotation.x * local_rotation.z + local_rotation.w * local_rotation.y) };
 
-	std::vector<GameObject*>::iterator item = game_object_attached->children.begin();
-	for (; item != game_object_attached->children.end(); ++item) {
-		if (*item != nullptr) {
-			ComponentTransform* tr = (ComponentTransform*)(*item)->GetComponent(ComponentType::TRANSFORM);
-			if (tr != nullptr) tr->RecalculateTransform();
+	
+	for (std::vector<GameObject*>::iterator item = game_object_attached->children.begin(); item != game_object_attached->children.end(); ++item) {
+		if (*item != nullptr && (*item)->transform) 
+		{
+			(*item)->transform->RecalculateTransform();
 		}
 	}
 
 	ComponentMesh* mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::MESH);
-	//if (mesh == nullptr)
-	//	mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::DEFORMABLE_MESH);
-	//if (mesh != nullptr)
-	//{
-	//	mesh->RecalculateAABB_OBB();
-	//}
+	if (mesh == nullptr)
+		mesh = (ComponentMesh*)game_object_attached->GetComponent(ComponentType::DEFORMABLE_MESH);
+
+	if (mesh != nullptr)
+	{
+		mesh->RecalculateAABB_OBB();
+	}
 }
 
 

@@ -2,10 +2,11 @@
 
 #include "Component.h"
 #include <vector>
+#include <functional>
 #include <string>
+#include <map>
 
 class Prefab;
-
 
 struct __declspec(dllexport) InspectorScriptData {
 	friend class ComponentScript;
@@ -20,6 +21,7 @@ struct __declspec(dllexport) InspectorScriptData {
 		BOOL, // DONE
 		PREFAB, // DONE
 		GAMEOBJECT, // DONE
+		ENUM,
 	};
 
 	enum ShowMode {
@@ -45,6 +47,9 @@ struct __declspec(dllexport) InspectorScriptData {
 	ShowMode show_as;
 	void* ptr = nullptr;
 
+	const char* previewEnumName = nullptr;
+	std::vector<std::pair<u64, std::string>> enumNames;
+
 	GameObject** obj = nullptr;
 private:
 	//ugly
@@ -57,8 +62,13 @@ class __declspec(dllexport) ComponentScript : public Component {
 	friend class CompZ;
 	friend class PanelInspector;
 	friend class Prefab;
+	friend class PanelAnimTimeline;
+	friend class ResourceAnimatorController;
+	friend class ComponentButton;
+	friend class ComponentCheckbox;
 	friend class ModuleObjects;
 	friend class ModulePhysics;
+	friend class ComponentCollider;
 	friend class GameObject;
 public:
 	ComponentScript(GameObject* attach);
@@ -82,6 +92,9 @@ private:
 	void LoadData(const char* name, bool is_alien);
 
 	static std::string GetVariableName(const char* ptr_name);
+
+	static const char* GetCurrentEnumName(int value, const std::vector<std::string>& enumNames);
+	static void SetEnumValues(const std::string& aux, ComponentScript* script);
 public:
 	/*--------------------INT-----------------------*/
 	static void InspectorInputInt(int* ptr, const char* ptr_name);
@@ -93,12 +106,20 @@ public:
 	static void InspectorSliderFloat(float* ptr, const char* ptr_name, const float& min_value, const float& max_value);
 	/*--------------------BOOL-----------------------*/
 	static void InspectorBool(bool* ptr, const char* ptr_name);
+	/*--------------------STRING-----------------------*/
+	static void InspectorString(const char* ptr, const char* ptr_name);
+	/*--------------------ENUM-----------------------*/
+	static void InspectorEnum(int* ptr, const char* ptr_name, const char* enumAllString);
 	/*--------------------PREFAB-----------------------*/
 	static void InspectorPrefab(Prefab* ptr, const char* ptr_name);
 	/*--------------------GAMEOBJECT-----------------------*/
 	static void InspectorGameObject(GameObject** ptr, const char* ptr_name);
+	/*--------------------FUNCTION-----------------------*/
+	static void ShowVoidFunction(std::function<void()> funct, const char* name);
 
 private:
+
+	std::map<std::string, std::function<void()>> functionMap;
 
 	u64 resourceID = 0;
 

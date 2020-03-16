@@ -15,11 +15,13 @@ public:
 	virtual ~ComponentAnimator();
 	void Update();
 
-	void PlayState(std::string name);
+	void PlayState(const char* name);
+	bool IsPlaying(const char* name);
 	void UpdateAnimation(GameObject* go_to_update);
 	void OnPlay();
 
 	ResourceAnimatorController* GetResourceAnimatorController();
+	ResourceAnimatorController* GetCurrentAnimatorController();
 	void SetAnimatorController(ResourceAnimatorController* controller);
 
 	void SaveComponent(JSONArraypack* to_save);
@@ -30,7 +32,8 @@ public:
 	void SetInt(const char* parameter_name, int parameter_value);
 
 private:
-	ResourceAnimatorController* animator_controller;
+	ResourceAnimatorController* animator_controller = nullptr;
+	ResourceAnimatorController* source_animator_controller = nullptr;
 
 	bool DrawInspector();
 

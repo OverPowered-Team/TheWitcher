@@ -9,16 +9,18 @@ class ResourceTexture;
 
 class __declspec(dllexport) ComponentButton :public ComponentUI
 {
+	friend class ModuleObjects;
 public:
 	ComponentButton(GameObject* obj);
 	~ComponentButton() {};
 
 	void SetActive(bool active);
 
-	void AddListenerOnHover(std::function<void()> funct);
-	void AddListenerOnClick(std::function<void()> funct);
-	void AddListenerOnClickRepeat(std::function<void()> funct);
-	void AddListenerOnRelease(std::function<void()> funct);
+	void AddListenerOnHover(std::string name, std::function<void()> funct);
+	void AddListenerOnClick(std::string name, std::function<void()> funct);
+	void AddListenerOnClickRepeat(std::string name, std::function<void()> funct);
+	void AddListenerOnRelease(std::string name, std::function<void()> funct);
+	bool CheckIfScriptIsAlreadyAdded(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::string& name);
 
 	//void RemoveListenerOnHover(std::function<void()> funct);
 	//void RemoveListenerOnClick(std::function<void()> funct);
@@ -36,7 +38,7 @@ private:
 	bool OnPressed();
 	bool OnRelease();
 
-	void CallListeners(std::vector<std::function<void()>>* listeners);
+	void CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners);
 
 public:
 
@@ -48,10 +50,10 @@ public:
 
 private:
 
-	std::vector<std::function<void()>> listenersOnHover;
-	std::vector<std::function<void()>> listenersOnClick;
-	std::vector<std::function<void()>> listenersOnClickRepeat;
-	std::vector<std::function<void()>> listenersOnRelease;
+	std::vector<std::pair<std::string, std::function<void()>>> listenersOnHover;
+	std::vector<std::pair<std::string, std::function<void()>>> listenersOnClick;
+	std::vector<std::pair<std::string, std::function<void()>>> listenersOnClickRepeat;
+	std::vector<std::pair<std::string, std::function<void()>>> listenersOnRelease;
 
 	bool active = true;
 };

@@ -7,8 +7,11 @@
 #include "Alien.h"
 #include "FileNode.h"
 #include "ResourcePrefab.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
 #include "Prefab.h"
 #include "mmgr/mmgr.h"
+#include "Event.h"
 
 ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
 {
@@ -38,6 +41,8 @@ ComponentScript::~ComponentScript()
 			void (*Deleter)(void*) = (void (*)(void*))GetProcAddress(App->scripts_dll, std::string("Destroy" + std::string(data_name)).data());
 			Deleter(data_ptr);
 		}
+
+		App->SendAlienEvent(this, AlienEventType::SCRIPT_DELETED);
 	}
 }
 
@@ -175,6 +180,43 @@ bool ComponentScript::DrawInspector()
 						break;
 					}
 					break; }
+				case InspectorScriptData::DataType::STRING: {
+					ImGui::PushID(inspector_variables[i].ptr);
+
+					char* ptr = (char*)inspector_variables[i].ptr;
+					static char name[MAX_PATH];
+					memcpy(name, ptr, MAX_PATH);
+
+					ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.5F);
+
+					if (ImGui::InputText(inspector_variables[i].variable_name.data(), name, MAX_PATH, ImGuiInputTextFlags_AutoSelectAll)) {
+						memcpy(ptr, name, MAX_PATH);
+					}
+
+					ImGui::PopID();
+					break; }
+				case InspectorScriptData::DataType::ENUM: {
+					ImGui::PushID(inspector_variables[i].ptr);
+					int* ptr = (int*)inspector_variables[i].ptr;
+					std::string currentEnum;
+					for (auto item = inspector_variables[i].enumNames.begin(); item != inspector_variables[i].enumNames.end(); ++item) {
+						if (*ptr == (*item).first) {
+							currentEnum = (*item).second;
+							break;
+						}
+					}
+					if (ImGui::BeginCombo(std::string(" " + inspector_variables[i].variable_name).data(), currentEnum.data())) {
+						auto item = inspector_variables[i].enumNames.begin();
+						for (; item != inspector_variables[i].enumNames.end(); ++item) {
+							bool is_selected = strcmp(currentEnum.data(), (*item).second.data()) == 0;
+							if (ImGui::Selectable((*item).second.data(), is_selected)) {
+								*ptr = (*item).first;
+							}
+						}
+						ImGui::EndCombo();
+					}
+					ImGui::PopID();
+					break; }
 				case InspectorScriptData::DataType::PREFAB: {
 					ImGui::PushID(inspector_variables[i].ptr);
 					Prefab* ptr = (Prefab*)inspector_variables[i].ptr;
@@ -291,6 +333,14 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 				int value = *(int*)inspector_variables[i].ptr;
 				inspector->SetNumber("int", value);
 				break; }
+			case InspectorScriptData::DataType::ENUM: {
+				int value = *(int*)inspector_variables[i].ptr;
+				inspector->SetNumber("enumInt", value);
+				break; }
+			case InspectorScriptData::DataType::STRING: {
+				char* value = (char*)inspector_variables[i].ptr;
+				inspector->SetString("string", value);
+				break; }
 			case InspectorScriptData::DataType::FLOAT: {
 				float value = *(float*)inspector_variables[i].ptr;
 				inspector->SetNumber("float", value);
@@ -343,6 +393,14 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 						case InspectorScriptData::DataType::INT: {
 							int* value = (int*)inspector_variables[i].ptr;
 							*value = inspector->GetNumber("int");
+							break; }
+						case InspectorScriptData::DataType::ENUM: {
+							int* value = (int*)inspector_variables[i].ptr;
+							*value = inspector->GetNumber("enumInt");
+							break; }
+						case InspectorScriptData::DataType::STRING: {
+							char* value = (char*)inspector_variables[i].ptr;
+							strcpy(value, inspector->GetString("string"));
 							break; }
 						case InspectorScriptData::DataType::FLOAT: {
 							float* value = (float*)inspector_variables[i].ptr;
@@ -407,6 +465,11 @@ void ComponentScript::Clone(Component* clone)
 					int* script_var = (int*)script->inspector_variables[i].ptr;
 					*script_var = variable;
 					break; }
+				case InspectorScriptData::DataType::STRING: {
+					char* variable = (char*)inspector_variables[i].ptr;
+					char* script_var = (char*)script->inspector_variables[i].ptr;
+					strcpy(script_var, variable);
+					break; }
 				case InspectorScriptData::DataType::FLOAT: {
 					float variable = *(float*)inspector_variables[i].ptr;
 					float* script_var = (float*)script->inspector_variables[i].ptr;
@@ -421,6 +484,12 @@ void ComponentScript::Clone(Component* clone)
 				case InspectorScriptData::DataType::GAMEOBJECT: {
 					GameObject* obj = *inspector_variables[i].obj;
 					*script->inspector_variables[i].obj = obj;
+					break; }
+				case InspectorScriptData::DataType::ENUM : {
+					int variable = *(int*)inspector_variables[i].ptr;
+					int* script_var = (int*)script->inspector_variables[i].ptr;
+					*script_var = variable;
+					script->inspector_variables[i].enumNames = inspector_variables[i].enumNames;
 					break; }
 				}
 			}
@@ -576,6 +645,79 @@ void ComponentScript::InspectorBool(bool* ptr, const char* ptr_name)
 	}
 }
 
+void ComponentScript::InspectorString(const char* ptr, const char* ptr_name)
+{
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::STRING, (void*)ptr, InspectorScriptData::NONE));
+	}
+}
+
+void ComponentScript::InspectorEnum(int* ptr, const char* ptr_name, const char* enumAllString)
+{
+	std::string name = typeid(*ptr).name();
+	if (!App->StringCmp(name.data(), "int"))
+		return;
+
+	std::string variable_name = GetVariableName(ptr_name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(variable_name, InspectorScriptData::DataType::ENUM, ptr, InspectorScriptData::NONE));
+		std::string enumVal(enumAllString);
+		auto item = enumVal.begin();
+		std::string aux;
+		for (; item != enumVal.end(); ++item) {
+			if ((*item) != ',') {
+				aux.push_back(*item);
+			}
+			else {
+				if (aux.front() == ' ') {
+					aux.erase(aux.begin());
+				}
+				SetEnumValues(aux, script);
+				aux.clear();
+			}
+		}
+		if (!aux.empty()) {
+			if (aux.front() == ' ')
+				aux.erase(aux.begin());
+			SetEnumValues(aux, script);
+		}
+	}
+}
+
+void ComponentScript::SetEnumValues(const std::string& aux, ComponentScript* script)
+{
+	if (aux.find("=") != std::string::npos) { // exists =
+		bool startCopy = false;
+		std::string copyString;
+		for (auto itemCopy = aux.cbegin(); itemCopy != aux.cend(); ++itemCopy) {
+			if (!startCopy) {
+				if ((*itemCopy) == '=') {
+					startCopy = true;
+				}
+			}
+			else {
+				if ((*itemCopy) != ' ') {
+					copyString.push_back(*itemCopy);
+				}
+			}
+		}
+		script->inspector_variables.back().enumNames.push_back({ std::stoull(copyString), aux });
+	}
+	else {
+		if (script->inspector_variables.back().enumNames.empty()) {
+			script->inspector_variables.back().enumNames.push_back({ 0, aux });
+		}
+		else {
+			script->inspector_variables.back().enumNames.push_back({ script->inspector_variables.back().enumNames.back().first + 1, aux });
+		}
+	}
+}
+
 void ComponentScript::InspectorPrefab(Prefab* ptr, const char* ptr_name)
 {
 	if (ptr != nullptr) {
@@ -604,6 +746,22 @@ void ComponentScript::InspectorGameObject(GameObject** ptr, const char* ptr_name
 		InspectorScriptData data(variable_name, InspectorScriptData::DataType::GAMEOBJECT, nullptr, InspectorScriptData::NONE);
 		data.obj = ptr;
 		script->inspector_variables.push_back(data);
+	}
+}
+
+void ComponentScript::ShowVoidFunction(std::function<void()> funct, const char* name)
+{
+	std::string functName(name);
+
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		auto item = script->functionMap.begin();
+		for (; item != script->functionMap.end(); ++item) {
+			if (strcmp((*item).first.data(), functName.data()) == 0) {
+				return;
+			}
+		}
+		script->functionMap.emplace(functName, funct);
 	}
 }
 
@@ -639,6 +797,8 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 			alien->enabled = &enabled;
 			strcpy(alien->data_name, name);
 		}
+
+		App->SendAlienEvent(this, AlienEventType::SCRIPT_ADDED);
 	}
 }
 
@@ -652,4 +812,12 @@ std::string ComponentScript::GetVariableName(const char* ptr_name)
 		variable_name = ptr_strg[i] + variable_name;
 	}
 	return variable_name;
+}
+
+const char* ComponentScript::GetCurrentEnumName(int value, const std::vector<std::string>& enumNames)
+{
+
+
+
+	return nullptr;
 }

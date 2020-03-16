@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "ModuleObjects.h"
 #include "Viewport.h"
 

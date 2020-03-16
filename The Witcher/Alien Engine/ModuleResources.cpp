@@ -1,4 +1,5 @@
 #include "ModuleResources.h"
+#include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_assert.h"
 #include "Resource_.h"
 #include "ResourceMesh.h"
@@ -8,16 +9,22 @@
 #include "Application.h"
 #include "ResourceTexture.h"
 #include "ResourceShader.h"
+#include "ModuleAudio.h"
 #include "ResourceAnimatorController.h"
 #include "RandomHelper.h"
 #include "ResourceScene.h"
 #include "PanelProject.h"
 #include "ResourcePrefab.h"
 #include "ResourceAudio.h"
+#include "ModuleCamera3D.h"
+#include "ResourceMaterial.h"
+#include "ComponentCamera.h"
 #include "FileNode.h"
 #include "ResourceScript.h"
+#include "Event.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
+#include "ModuleUI.h"
 
 ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 {
@@ -83,7 +90,16 @@ bool ModuleResources::Start()
 
 	ReadAllMetaData();
 
-	default_font = GetFontByName("Arialn");
+	default_font = (ResourceFont*)GetResourceWithID(6090935666492539845);
+	default_material = new ResourceMaterial();
+	default_material->SetName("Default Material");
+	//default_material = (ResourceMaterial*)GetResourceWithID(13753584922284142239);
+
+#ifndef GAME_VERSION
+	App->camera->fake_camera = new ComponentCamera(nullptr);
+	App->camera->fake_camera->frustum.farPlaneDistance = 1000.0F;
+	App->renderer3D->scene_fake_camera = App->camera->fake_camera;
+#endif
 
 	return true;
 }
@@ -102,6 +118,10 @@ bool ModuleResources::CleanUp()
 			if (*item != nullptr) {
 				if ((*item)->GetType() == ResourceType::RESOURCE_MODEL)
 					static_cast<ResourceModel*>(*item)->meshes_attached.clear();
+				#ifndef GAME_VERSION
+				if ((*item)->GetType() == ResourceType::RESOURCE_MATERIAL)
+					static_cast<ResourceMaterial*>(*item)->SaveMaterialFiles();
+				#endif
 				delete* item;
 				*item = nullptr;
 			}
@@ -117,6 +137,8 @@ bool ModuleResources::CleanUp()
 	delete dodecahedron;
 	delete icosahedron;
 	delete octahedron;
+
+	delete default_material;
 
 	delete light_mesh;
 	delete camera_mesh;
@@ -179,6 +201,10 @@ u64 ModuleResources::GetIDFromAlienPath(const char* path)
 Resource* ModuleResources::GetResourceWithID(const u64& ID)
 {
 	OPTICK_EVENT();
+
+	if (ID == 0)
+		return nullptr; 
+
 	std::vector<Resource*>::iterator item = resources.begin();
 	for (; item != resources.end(); ++item) {
 		if (*item != nullptr && (*item)->GetID() == ID)
@@ -382,7 +408,7 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 		(*ret)->SetName("Cube");
 		break; }
 	case PrimitiveType::SPHERE_ALIEN: {
-		par_mesh = par_shapes_create_subdivided_sphere(5);
+		par_mesh = par_shapes_create_subdivided_sphere(1);
 		(*ret)->SetName("Sphere");
 		break; }
 	case PrimitiveType::ROCK: {
@@ -549,6 +575,78 @@ bool ModuleResources::GetShaders(std::vector<ResourceShader*>& to_fill)
 	return !to_fill.empty();
 }
 
+ResourceShader* ModuleResources::GetShaderByName(std::string shaderName)
+{
+	ResourceShader* desiredShader = nullptr; 
+
+	for (auto res = resources.begin(); res != resources.end(); res++) {
+		if ((*res)->GetType() == ResourceType::RESOURCE_SHADER)
+		{
+			if (App->StringCmp((*res)->GetName(), shaderName.c_str()))
+			{
+				desiredShader = (ResourceShader*)(*res);
+				break;
+			}
+		}
+	}
+	LOG_ENGINE("No shader found with name %s", name.c_str());
+	return desiredShader;
+}
+
+ResourceMaterial* ModuleResources::GetMaterialByName(const char* name)
+{
+	ResourceMaterial* desiredMaterial = nullptr;
+
+	for (auto res = resources.begin(); res != resources.end(); res++) {
+		if ((*res)->GetType() == ResourceType::RESOURCE_MATERIAL)
+		{
+			if (App->StringCmp((*res)->GetName(), name))
+			{
+				desiredMaterial = (ResourceMaterial*)(*res);
+				break;
+			}
+		}
+	}
+	LOG_ENGINE("No material found with name %s", name);
+	return desiredMaterial;
+}
+
+const uint ModuleResources::GetTextureidByID(const u64& ID) const // This needs to be redifined
+{
+	OPTICK_EVENT();
+
+	if (ID == 0)
+		return -1;
+
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && (*item)->GetID() == ID) {
+			return static_cast<ResourceTexture*>(*item)->id;
+		}
+	}
+
+	LOG_ENGINE("No texture found with ID %i", ID);
+	return -1;
+}
+
+ResourceTexture* ModuleResources::GetTextureByID(const u64& ID)
+{
+	OPTICK_EVENT();
+
+	if (ID == 0)
+		return nullptr;
+
+	std::vector<Resource*>::const_iterator item = resources.cbegin();
+	for (; item != resources.cend(); ++item) {
+		if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && (*item)->GetID() == ID) {
+			return (ResourceTexture*)(*item);
+		}
+	}
+
+	LOG_ENGINE("No texture found with ID %i", ID);
+	return nullptr;
+}
+
 ResourceFont* ModuleResources::GetFontByName(const char* name)
 {
 	auto item = resources.begin();
@@ -599,6 +697,15 @@ void ModuleResources::ReadAllMetaData()
 	ReadShaders(directories, files, SHADERS_FOLDER);
 	files.clear();
 	directories.clear();
+	default_shader = GetShaderByName("default_shader");
+	default_particle_shader = GetShaderByName("particle_shader");
+
+	skybox_shader = GetShaderByName("skybox_shader");
+	// Init Materials
+	App->file_system->DiscoverFiles(MATERIALS_FOLDER, files, directories);
+	ReadMaterials(directories, files, MATERIALS_FOLDER);
+	files.clear();
+	directories.clear();
 
 	// Init Models & Meshes
 	App->file_system->DiscoverFiles(MODELS_FOLDER, files, directories);
@@ -631,9 +738,6 @@ void ModuleResources::ReadAllMetaData()
 
 	// Init Scenes
 	App->file_system->DiscoverFiles(SCENE_FOLDER, files, directories);
-
-
-
 	ReadScenes(directories, files, SCENE_FOLDER);
 
 	files.clear();
@@ -663,6 +767,18 @@ void ModuleResources::ReadAllMetaData()
 	for (uint i = 0; i < files.size(); ++i) {
 		ResourceShader* shader = new ResourceShader();
 		shader->ReadLibrary(files[i].data());
+	}
+	files.clear();
+	directories.clear();
+	default_shader = (ResourceShader*)GetResourceWithID(2074311779325559006);
+	skybox_shader = (ResourceShader*)GetResourceWithID(10031399484334738574); // TODO
+	default_particle_shader = (ResourceShader*)GetResourceWithID(2017390725125490915);
+
+	// materials
+	App->file_system->DiscoverFiles(LIBRARY_MATERIALS_FOLDER, files, directories, true);
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceMaterial* material = new ResourceMaterial();
+		material->ReadLibrary(files[i].data());
 	}
 	files.clear();
 	directories.clear();
@@ -709,6 +825,8 @@ void ModuleResources::ReadAllMetaData()
 		ResourceAudio* audio = new ResourceAudio();
 		audio->ReadLibrary(files[i].data());
 	}
+	files.clear();
+	directories.clear();
 	// fonts
 	App->file_system->DiscoverFiles(LIBRARY_FONTS_FOLDER, files, directories, true);
 	for (uint i = 0; i < files.size(); ++i) {
@@ -766,6 +884,30 @@ void ModuleResources::ReadShaders(std::vector<std::string> directories, std::vec
 			std::string dir = current_folder + directories[i] + "/";
 			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
 			ReadShaders(new_directories, new_files, dir);
+		}
+	}
+}
+
+void ModuleResources::ReadMaterials(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder)
+{
+	for (uint i = 0; i < files.size(); ++i) {
+		ResourceMaterial* material = new ResourceMaterial();
+		if (!material->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
+			/*u64 id = material->GetID();
+			material->CreateMetaData(id);*/
+		}
+	}
+	if (!directories.empty()) {
+		std::vector<std::string> new_files;
+		std::vector<std::string> new_directories;
+
+		for (uint i = 0; i < directories.size(); ++i) {
+			std::vector<std::string> new_files;
+			std::vector<std::string> new_directories;
+
+			std::string dir = current_folder + directories[i] + "/";
+			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
+			ReadMaterials(new_directories, new_files, dir);
 		}
 	}
 }
@@ -970,6 +1112,7 @@ void ModuleResources::CreateAsset(FileDropType type)
 		break;
 	case FileDropType::ANIMATION:
 		break;
+
 	}
 
 	App->ui->panel_project->RefreshAllNodes();
@@ -983,6 +1126,44 @@ void ModuleResources::CreateAnimatorController()
 	ResourceAnimatorController* new_controller = new ResourceAnimatorController();
 	new_controller->name = asset_name;
 	new_controller->SaveAsset();
+}
+
+void ModuleResources::HandleAlienEvent(const AlienEvent& alienEvent)
+{
+
+	switch (alienEvent.type)
+	{
+	case AlienEventType::RESOURCE_SELECTED:
+		{
+			Resource* resource = static_cast<Resource*>(alienEvent.object);
+			if (resource != nullptr)
+				resource->OnSelected();
+		} break;
+
+	case AlienEventType::RESOURCE_DESELECTED:
+		{
+			Resource* resource = static_cast<Resource*>(alienEvent.object);
+			if (resource != nullptr)
+				resource->OnDeselected();
+		} break;
+
+	default:
+		break;
+	}
+}
+
+ResourceMaterial* ModuleResources::CreateMaterial(const char* name)
+{
+	std::string materialName = name;
+	App->ui->panel_project->GetUniqueFileName(materialName, MATERIALS_FOLDER);
+	
+	ResourceMaterial* new_material = new ResourceMaterial();
+	new_material->SetName(materialName.c_str());
+	new_material->SetAssetsPath(std::string(MATERIALS_FOLDER + materialName + ".material").data());
+	new_material->SaveMaterialFiles();
+	App->ui->panel_project->RefreshAllNodes();
+
+	return new_material;
 }
 
 

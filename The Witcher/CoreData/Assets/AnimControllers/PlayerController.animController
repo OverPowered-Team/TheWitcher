@@ -1,0 +1,136 @@
+{
+    "Controller": {
+        "Name": "PlayerController",
+        "NumStates": 4,
+        "NumTransitions": 6,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "14616852132734576951"
+            },
+            {
+                "Name": "Run",
+                "Speed": 1,
+                "Clip": "12468072880108357545"
+            },
+            {
+                "Name": "Attack",
+                "Speed": 1,
+                "Clip": "1381992307201819049"
+            },
+            {
+                "Name": "Roll",
+                "Speed": 3,
+                "Clip": "5429867868596177869"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Idle",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.20000000298023224
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Run",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.20000000298023224
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Attack",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.20000000298023224
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Attack",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.20000000298023224
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.20000000298023224
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.20000000298023224
+                    }
+                ],
+                "BoolConditions": []
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [
+            {
+                "Name": "speed",
+                "Value": 0
+            }
+        ],
+        "BoolParameters": [],
+        "Events": []
+    }
+}

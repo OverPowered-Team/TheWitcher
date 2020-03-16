@@ -34,6 +34,8 @@ public:
 	void OnAssetDelete();
 	void OnObjectSelect();
 	void OnObjectDelete();
+	void OnPlay();
+	void OnStop();
 
 public:
 	ResourceAnimatorController* current_animator = nullptr;

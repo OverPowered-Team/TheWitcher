@@ -1,20 +1,34 @@
 #include "Application.h"
 #include "Component.h"
+#include "ComponentDeformableMesh.h"
 #include "ComponentTransform.h"
+#include "ModuleObjects.h"
+#include "ModuleResources.h"
 #include "GameObject.h"
 #include "ComponentBone.h"
 #include "ComponentMaterial.h"
+
+
 #include "ResourceMesh.h"
 #include "ResourceBone.h"
-#include "ComponentDeformableMesh.h"
+#include "ResourceTexture.h"
+#include "ResourceShader.h"
+#include "ResourceMaterial.h"
 #include "mmgr/mmgr.h"
 
 #include "Optick/include/optick.h"
+#include <stdio.h>
+#include <iostream>
 
 ComponentDeformableMesh::ComponentDeformableMesh(GameObject* attach) : ComponentMesh(attach)
 {
 	type = ComponentType::DEFORMABLE_MESH;
 	name = "Deformable Mesh";
+
+	//Change this to resource model so is only one new 
+	bones_matrix = new float4x4[100];
+	memset(bones_matrix, 0, sizeof(float) * 100 * 4 * 4);
+	animate = 1;
 }
 
 ComponentDeformableMesh::~ComponentDeformableMesh()
@@ -23,12 +37,9 @@ ComponentDeformableMesh::~ComponentDeformableMesh()
 	{
 		static_cast<ComponentMaterial*>(game_object_attached->GetComponent(ComponentType::MATERIAL))->not_destroy = false;
 	}
-	if (original_mesh != nullptr && original_mesh->is_custom) {
-		original_mesh->DecreaseReferences();
-	}
 	if (mesh)
 	{
-		delete mesh;
+		mesh->DecreaseReferences();
 		mesh = nullptr;
 	}
 	//clear deformable mesh?
@@ -37,16 +48,13 @@ ComponentDeformableMesh::~ComponentDeformableMesh()
 void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)
 {
 	root_bone_id = root->game_object_attached->ID;
-
-	//Duplicate mesh
-	if (mesh)
-	{
-		ResourceMesh* tmp_mesh = new ResourceMesh(mesh);
-		original_mesh = mesh;
-		mesh = tmp_mesh;
-	}
 		
 	AttachBone(root);
+	
+	material = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
+
+	SendWeightsAndID();
+
 }
 
 void ComponentDeformableMesh::AttachSkeleton()
@@ -63,7 +71,7 @@ void ComponentDeformableMesh::AttachBone(ComponentTransform* bone_transform)
 	{
 		for each (ComponentBone* c_bone in c_bones)
 		{
-			if (c_bone->GetMeshName() == original_mesh->name)
+			if (c_bone->GetMeshName() == mesh->name)
 				bones.push_back(c_bone);
 		}
 	}
@@ -73,55 +81,37 @@ void ComponentDeformableMesh::AttachBone(ComponentTransform* bone_transform)
 		AttachBone(go->transform);
 }
 
-void ComponentDeformableMesh::DeformMesh()
+void ComponentDeformableMesh::UpdateBonesMatrix()
 {
-	OPTICK_EVENT();
-	mesh->Reset();
-
-	for (std::vector<ComponentBone*>::iterator it = bones.begin(); it != bones.end(); ++it)
+	uint i = 0;
+	for (std::vector<ComponentBone*>::iterator it = bones.begin(); it != bones.end(); ++it, ++i)
 	{
-		ResourceBone* r_bone = (ResourceBone*)(*it)->GetBone();
-
-		float4x4 matrix = (*it)->game_object_attached->transform->global_transformation;
-		matrix = game_object_attached->transform->global_transformation.Inverted() * matrix;
-		matrix = matrix * r_bone->matrix;
-
-		for (uint i = 0; i < r_bone->num_weights; i++)
-		{
-			uint index = r_bone->vertex_ids[i];
-			float3 original(&original_mesh->vertex[index * 3]);
-			float3 vertex = matrix.TransformPos(original);
-
-			mesh->vertex[index * 3] += vertex.x * r_bone->weights[i];
-			mesh->vertex[index * 3 + 1] += vertex.y * r_bone->weights[i];
-			mesh->vertex[index * 3 + 2] += vertex.z * r_bone->weights[i];
-
-			if ((mesh->num_vertex) > 0)
-			{
-				vertex = matrix.TransformPos(float3(&mesh->normals[index*3]));
-				mesh->normals[index * 3] += vertex.x * r_bone->weights[i];
-				mesh->normals[index * 3 + 1] += vertex.y * r_bone->weights[i];
-				mesh->normals[index * 3 + 2] += vertex.z * r_bone->weights[i];
-			}
-		}
+		ResourceBone* r_bone = (*it)->GetBone();
+		math::float4x4 boneGlobalMatrix = (*it)->game_object_attached->transform->global_transformation;
+		math::float4x4 meshMatrix = game_object_attached->transform->global_transformation.Inverted();
+		math::float4x4 boneTransform = meshMatrix * boneGlobalMatrix * r_bone->matrix;
+		
+		bones_matrix[i] = boneTransform;
 	}
 }
 
+
 void ComponentDeformableMesh::DrawPolygon(ComponentCamera* camera)
 {
-	DeformMesh();
+	OPTICK_EVENT();
+	if (mesh == nullptr || mesh->id_index <= 0 || material == nullptr)
+		return;
 
-	//SKINNING STUFF
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, mesh->num_vertex * sizeof(float) * 3, mesh->vertex, GL_DYNAMIC_DRAW);
+	UpdateBonesMatrix();
 
-	if (mesh->normals)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-		glBufferData(GL_ARRAY_BUFFER, mesh->num_vertex * sizeof(float) * 3, mesh->normals, GL_DYNAMIC_DRAW);
-	}
-	/////////
 	ComponentMesh::DrawPolygon(camera);
+
+}
+
+void ComponentDeformableMesh::SetUniform(ResourceMaterial* material, ComponentCamera* camera)
+{
+	ComponentMesh::SetUniform(material, camera);
+	material->used_shader->SetUniformMat4f("gBones", bones_matrix, bones.size());
 }
 
 void ComponentDeformableMesh::SaveComponent(JSONArraypack* to_save)
@@ -134,7 +124,7 @@ void ComponentDeformableMesh::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("DrawAABB", draw_AABB);
 	to_save->SetBoolean("DrawOBB", draw_OBB);
 	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("MeshID", original_mesh ? std::to_string(original_mesh->GetID()) : std::to_string(0));
+	to_save->SetString("MeshID", mesh ? std::to_string(mesh->GetID()) : std::to_string(0));
 	to_save->SetString("RootBoneID", root_bone_id != 0 ? std::to_string(root_bone_id) : std::to_string(0));
 	to_save->SetBoolean("Enabled", enabled);
 }
@@ -158,7 +148,71 @@ void ComponentDeformableMesh::LoadComponent(JSONArraypack* to_load)
 			mesh->IncreaseReferences();
 	}
 
-	GenerateAABB();
+	GenerateLocalAABB();
 	RecalculateAABB_OBB();
+}
+
+//TODO change this to execute this code only one time
+//When loading resouce model
+void ComponentDeformableMesh::SendWeightsAndID()
+{
+	if (mesh->weights != nullptr && mesh->bones_ID != nullptr)
+		return;
+
+	int bone_id = 0;
+	//Genereting array of weights and bones_ID
+	if (mesh->weights == nullptr && mesh->bones_ID == nullptr)
+	{
+		mesh->weights = new float[mesh->num_vertex * 4];
+		mesh->bones_ID = new int[mesh->num_vertex * 4];
+
+		memset(mesh->weights, 0, sizeof(float) * mesh->num_vertex * 4);
+		memset(mesh->bones_ID, 0, sizeof(int) * mesh->num_vertex * 4);
+	}
+
+	for (std::vector<ComponentBone*>::iterator component_bone = bones.begin();
+		component_bone != bones.end(); component_bone++ , bone_id++)
+	{
+		FillWeights(bone_id, (*component_bone));
+	}
+	glBindVertexArray(mesh->vao);
+
+
+	if (mesh->id_bones == 0)
+	{
+		glGenBuffers(1, &mesh->id_bones);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_bones);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 4, mesh->bones_ID, GL_STATIC_DRAW);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(3);
+
+	if (mesh->id_weights == 0)
+	{
+		glGenBuffers(1, &mesh->id_weights);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_weights);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertex * 4, mesh->weights, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(4);
+}
+
+void ComponentDeformableMesh::FillWeights(int bone_ID, ComponentBone* component_bone)
+{
+	ResourceBone* bone = component_bone->GetBone();
+	for (int i = 0; i < bone->num_weights; i++)
+	{
+		int vertex_id = bone->vertex_ids[i];
+		for (int j = vertex_id * 4; j < (vertex_id * 4) + 4; j++)
+		{
+			if (mesh->weights[j] == 0.0f)
+			{
+				mesh->weights[j] = bone->weights[i];
+				mesh->bones_ID[j] = bone_ID;
+				break;
+			}
+		}
+	}
 }
 

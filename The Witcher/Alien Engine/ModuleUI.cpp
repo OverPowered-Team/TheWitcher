@@ -5,6 +5,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/examples/imgui_impl_opengl3.h"
 #include <gl/GL.h>
+#include "ShortCutManager.h"
 #include "PanelAbout.h"
 #include "Viewport.h"
 #include "PanelConfig.h"
@@ -25,12 +26,19 @@
 #include "PanelTextEditor.h"
 #include "PanelAnimTimeline.h"
 #include "PanelAnimator.h"
+#include "PanelPhysics.h"
 #include <string>
 #include "ResourceTexture.h"
 #include "ReturnZ.h"
 #include "Event.h"
 #include "PanelTextEditor.h"
 #include "PanelParticleSystem.h"
+#include "ModuleObjects.h"
+#include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleResources.h"
+#include "ModuleCamera3D.h"
+#include "ComponentUI.h"
 #include <fstream>
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
@@ -473,6 +481,7 @@ update_status ModuleUI::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+
 void ModuleUI::Draw() 
 {
 	OPTICK_EVENT();
@@ -541,51 +550,24 @@ void ModuleUI::MainMenuBar()
 	}
 	if (ImGui::BeginMenu("View"))
 	{
-		if (ImGui::MenuItem("Configuration", panel_config->shortcut->GetNameScancodes()))
+		for (Panel* panel : panels)
 		{
-			panel_config->ChangeEnable();
+			if (panel->shortcut != nullptr)
+			{
+				if (ImGui::MenuItem(panel->GetName().c_str(), panel->shortcut->GetNameScancodes()))
+				{
+					panel->ChangeEnable();
+				}
+			}
+			else
+			{
+				if (ImGui::MenuItem(panel->GetName().c_str()))
+				{
+					panel->ChangeEnable();
+				}
+			}
 		}
-		if (ImGui::MenuItem("Console", panel_console->shortcut->GetNameScancodes()))
-		{
-			panel_console->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Scene", panel_scene->shortcut->GetNameScancodes()))
-		{
-			panel_scene->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Inspector", panel_inspector->shortcut->GetNameScancodes()))
-		{
-			panel_inspector->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Hierarchy", panel_hierarchy->shortcut->GetNameScancodes()))
-		{
-			panel_hierarchy->ChangeEnable();
-		}
-		if (ImGui::MenuItem("TextEditor", panel_text_editor->shortcut->GetNameScancodes()))
-		{
-			panel_text_editor->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Panel Project", panel_project->shortcut->GetNameScancodes()))
-		{
-			panel_project->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Render Options", panel_render->shortcut->GetNameScancodes()))
-		{
-			panel_render->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Game", panel_render->shortcut->GetNameScancodes()))
-		{
-			panel_game->ChangeEnable();
-		}
-		if (ImGui::MenuItem("Animation Timeline", panel_animtimeline->shortcut->GetNameScancodes()))
-		{
-			panel_animtimeline->ChangeEnable();
-		}
-		
-		if (ImGui::MenuItem("Animator", panel_animator->shortcut->GetNameScancodes()))
-		{
-			panel_animator->ChangeEnable();
-		}
+
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Assets"))
@@ -595,6 +577,12 @@ void ModuleUI::MainMenuBar()
 			if (ImGui::MenuItem("Animator Controller"))
 			{
 				App->resources->CreateAsset(FileDropType::ANIM_CONTROLLER);
+			}
+			if (ImGui::MenuItem("Script")) {
+				App->ui->creating_script = true;
+			}
+			if (ImGui::MenuItem("Material")) {
+				App->resources->CreateMaterial("New Material");
 			}
 			ImGui::EndMenu();
 		}
@@ -638,6 +626,23 @@ void ModuleUI::MainMenuBar()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Light"))
+		{
+			if (ImGui::MenuItem("Point light"))
+			{
+				App->objects->CreateLight(LightTypeObj::POINT);
+			}
+			if (ImGui::MenuItem("Spot light"))
+			{
+				App->objects->CreateLight(LightTypeObj::SPOT);
+			}
+			if (ImGui::MenuItem("Directional light"))
+			{
+				App->objects->CreateLight(LightTypeObj::DIRECTIONAL);
+			}
+
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("UI"))
 		{
 			if (ImGui::MenuItem("Image"))
@@ -663,6 +668,10 @@ void ModuleUI::MainMenuBar()
 			if (ImGui::MenuItem("Bar"))
 			{
 				App->objects->CreateBaseUI(ComponentType::UI_BAR);
+			}
+			if (ImGui::MenuItem("Animated Image"))
+			{
+				App->objects->CreateBaseUI(ComponentType::UI_ANIMATED_IMAGE);
 			}
 			ImGui::EndMenu();
 		}
@@ -1168,6 +1177,7 @@ void ModuleUI::InitPanels()
 	panel_animtimeline = new PanelAnimTimeline("Animation Timeline", panel_animtimeline_codes[0], panel_animtimeline_codes[1], panel_animtimeline_codes[2]);
 	panel_animator = new PanelAnimator("Animator", panel_animator_codes[0], panel_animator_codes[1], panel_animator_codes[2]);
 	panel_particles = new PanelParticleSystem("Particle System", panel_particles_codes[0], panel_particles_codes[1], panel_particles_codes[2]);
+	panel_physics = new PanelPhysics("Physics", panel_physics_codes[0], panel_physics_codes[1], panel_physics_codes[2]);
 
 	panels.push_back(panel_about);
 	panels.push_back(panel_config);
@@ -1186,6 +1196,7 @@ void ModuleUI::InitPanels()
 	panels.push_back(panel_text_editor);
 	panels.push_back(panel_build);
 	panels.push_back(panel_particles);
+	panels.push_back(panel_physics);
 }
 
 void ModuleUI::UpdatePanels()
@@ -1271,6 +1282,10 @@ void ModuleUI::HandleEvent(EventType eventType)
 			break;
 		}
 	}
+
+	if (eventType == EventType::ON_UNLOAD_SCENE) {
+		App->ui->panel_animtimeline->changed = true;
+	}
 }
 
 void ModuleUI::FramerateRegister(float frames, float ms)
@@ -1312,6 +1327,7 @@ void ModuleUI::BackgroundDockspace()
 
 	ImGui::End();
 }
+
 
 Layout::Layout(const char* name)
 {

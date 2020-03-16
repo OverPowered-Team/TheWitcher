@@ -2,6 +2,9 @@
 
 #include "Panel.h"
 #include "ResourceAnimation.h"
+#include "ResourceAnimatorController.h"
+
+#include <vector>
 
 class ComponentAnimator;
 
@@ -14,18 +17,19 @@ public:
 
 	
 	void PanelLogic();
+	void OnObjectSelect();
+	void OnObjectDelete();
 
 public:
 
 	bool changed = true;
-	
 
 private:
 
+	void CleanUp();
 	bool FillInfo();
 	void Play();
 	void Stop();
-	void CleanUp();
 	void MoveBones(GameObject* go);
 	ComponentAnimator* component_animator = nullptr;
 	ResourceAnimation::Channel* channel = nullptr;
@@ -36,7 +40,6 @@ private:
 
 	float button_position = 0.0f;
 
-	bool setted = false;
 	bool scrolled = false;
 
 	float recSize = 1000;
@@ -58,11 +61,14 @@ private:
 	int margin = 200;
 
 	int key = 0;
-
+	int previous_key = 0;
 
 	//Events
 	void ShowNewEventPopUp();
-
-	void CreateAnimationEvent();
-
+	void ShowOptionsToCreate();
+	
+	bool event_created = false;
+	bool event_audio_created = false;
+	bool event_particle_created = false;
+	bool event_script_created = false;
 };

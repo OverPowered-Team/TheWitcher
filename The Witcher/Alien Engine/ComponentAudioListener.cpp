@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleAudio.h"
 #include "ComponentTransform.h"
-#include "MathGeoLib\include\MathGeoLib.h"
+#include "GameObject.h"
 #include "mmgr/mmgr.h"
 
 ComponentAudioListener::ComponentAudioListener(GameObject * parent) : Component(parent)

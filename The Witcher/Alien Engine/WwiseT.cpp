@@ -5,6 +5,7 @@
 #include "AK/Win32/AkFilePackageLowLevelIOBlocking.h"
 #include "AK/MusicEngine/Common/AkMusicEngine.h"                // Music Engine
 #include "AK/Plugin/AkRoomVerbFXFactory.h"
+#include "ModuleAudio.h"
 
 // Wwise libs
 #ifndef _DEBUG  // Profile build configuration must be loaded instead of Debug
@@ -33,6 +34,7 @@
 #include <vector>
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "RandomHelper.h"
+#include "Application.h"
 #include "mmgr/mmgr.h"
 
 
@@ -155,7 +157,7 @@ bool WwiseT::InitSoundEngine()
 
 	AKRESULT res = AK::StreamMgr::SetCurrentLanguage((AkOSChar*)"English");
 	if (res == AK_Fail)
-		assert(!"Invalid language!");
+		//assert(!"Invalid language!"); 
 
 	// Init RTPCs
 	AK::SoundEngine::SetRTPCValue("Pitch", 0, AK_INVALID_GAME_OBJECT);
@@ -387,6 +389,11 @@ const char * WwiseT::AudioSource::GetName() const
 	return name.c_str();
 }
 
+AkUInt32 WwiseT::AudioSource::GetWwiseIDFromString(const char* Wwise_name)
+{
+	return AK::SoundEngine::GetIDFromString(Wwise_name);
+}
+
 void WwiseT::AudioSource::SetSourcePos(float x, float y, float z, float x_front, float y_front, float z_front, float x_top, float y_top, float z_top)
 {
 	position.X = x;
@@ -474,13 +481,21 @@ void WwiseT::AudioSource::SetListenerPos(float pos_x, float pos_y, float pos_z, 
 	
 }
 
+void WwiseT::AudioSource::SetSwitch(AkGameObjectID game_object_id, const char* switch_group_id, const char* switch_state_id)
+{
+	AK::SoundEngine::SetSwitch(switch_group_id, switch_state_id, game_object_id);
+}
+
 void WwiseT::AudioSource::ApplyEnvReverb(AkReal32 desired_level, const char * target)
 {
 	AkAuxSendValue environment;
-	environment.listenerID = id;
+	environment.listenerID = App->audio->listener->id;
 	environment.fControlValue = desired_level;
 	environment.auxBusID = AK::SoundEngine::GetIDFromString(target);
-	AKRESULT res = AK::SoundEngine::SetGameObjectAuxSendValues(id, &environment, 2);
+	AKRESULT res = AK::SoundEngine::SetGameObjectAuxSendValues(id, &environment, 1);
+	if (res != AKRESULT::AK_Success) {
+		LOG_ENGINE("Failed to apply reverb %i", res);
+	}
 }
 
 void WwiseT::AudioSource::ChangeState(const char * group_name, const char * new_state)

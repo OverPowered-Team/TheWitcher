@@ -34,8 +34,12 @@ void ComponentCapsuleCollider::SetHeight(float value)
 
 void ComponentCapsuleCollider::DrawSpecificInspector()
 {
-	ImGui::Title("Radius", 1);	if (ImGui::DragFloat("##radius", &radius, 0.1f, 0.01f, FLT_MAX)) { UpdateShape(); }
-	ImGui::Title("Height", 1);	if (ImGui::DragFloat("##height", &height, 0.1f, 0.01f, FLT_MAX)) { UpdateShape(); }
+	ImGui::Title("Radius", 1);	if (ImGui::DragFloat("##radius", &radius, 0.1f, 0.01f, FLT_MAX)) 
+	{ 
+		UpdateShape(); }
+	ImGui::Title("Height", 1);	if (ImGui::DragFloat("##height", &height, 0.1f, 0.01f, FLT_MAX)) 
+	{
+		UpdateShape(); }
 	ImGui::Title("Direction");
 
 	static const char* items[] = { "X", "Y", "Z" };
@@ -91,11 +95,41 @@ void ComponentCapsuleCollider::LoadComponent(JSONArraypack* to_load)
 	UpdateShape();
 }
 
-void ComponentCapsuleCollider::CreateShape()
+void ComponentCapsuleCollider::CreateDefaultShape()
 {
-	WrapMesh();
+	ComponentMesh* mesh = game_object_attached->GetComponent<ComponentMesh>();
 
-	if (shape == nullptr) UpdateShape();
+	if (mesh != nullptr)
+	{
+		float3 scale = transform->GetGlobalScale();
+		float3 size = mesh->local_aabb.Size();
+
+		switch (capsule_type)
+		{
+		case ComponentCapsuleCollider::CapsuleType::X:
+			height = size.x;
+			radius = math::Max(size.z, size.y) * 0.5f;
+			break;
+		case ComponentCapsuleCollider::CapsuleType::Y:
+			height = size.y;
+			radius = math::Max(size.z, size.x) * 0.5f;
+			break;
+		case ComponentCapsuleCollider::CapsuleType::Z:
+			height = size.z;
+			radius = math::Max(size.y, size.x) * 0.5f;
+			break;
+		}
+
+		center = mesh->local_aabb.CenterPoint();
+	}
+	else
+	{
+		center = float3::zero();
+		height = 1.f;
+		radius = 0.5f;
+	}
+
+	UpdateShape();
 }
 
 void ComponentCapsuleCollider::UpdateShape()
@@ -107,6 +141,7 @@ void ComponentCapsuleCollider::UpdateShape()
 
 	float3 scale = transform->GetGlobalScale();
 
+	final_height = height;
 	final_radius = radius;
 	final_center = center;
 
@@ -140,54 +175,5 @@ void ComponentCapsuleCollider::UpdateShape()
 	}
 }
 
-bool ComponentCapsuleCollider::WrapMesh()
-{
-	ComponentMesh* mesh = game_object_attached->GetComponent<ComponentMesh>();
-
-
-	if (mesh != nullptr)
-	{
-		float3 scale = transform->GetGlobalScale();
-		float3 size = mesh->local_aabb.Size();
-
-		switch (capsule_type)
-		{
-		case ComponentCapsuleCollider::CapsuleType::X:
-			height = size.x;
-			radius = math::Max(size.z, size.y) * 0.5f;
-			break;
-		case ComponentCapsuleCollider::CapsuleType::Y:
-			height = size.y;
-			radius = math::Max(size.z, size.x) * 0.5f;
-			break;
-		case ComponentCapsuleCollider::CapsuleType::Z:
-			height = size.z;
-			radius = math::Max(size.y, size.x) * 0.5f;
-			break;
-		}
-
-		final_height = height;
-		final_radius = radius;
-		final_center = center;
-
-		switch (capsule_type)
-		{
-		case ComponentCapsuleCollider::CapsuleType::X:
-			final_height *= scale.x;
-			final_radius *= math::Max(scale.z, scale.y);
-			break;
-		case ComponentCapsuleCollider::CapsuleType::Y:
-			final_height *= scale.y;
-			final_radius *= math::Max(scale.z, scale.x);
-			break;
-		case ComponentCapsuleCollider::CapsuleType::Z:
-			final_height *= scale.z;
-			final_radius *= math::Max(scale.x, scale.y);
-			break;
-		}
-	}
-
-	return false;
-}
 
 

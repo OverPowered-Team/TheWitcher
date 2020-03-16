@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "Module.h"
@@ -13,6 +14,7 @@
 #include <stack>
 #include <functional>
 #include <map>
+#include <string>
 
 class ReturnZ;
 class ResourcePrefab;
@@ -21,8 +23,13 @@ class Alien;
 class ResourceScene;
 class ComponentCanvas;
 enum class ComponentType;
+class DirLightProperties;
+class PointLightProperties;
+class SpotLightProperties;
+class ComponentUI;
 
 class Viewport;
+struct AlienEvent;
 
 struct InvokeInfo {
 	std::function<void()> function = nullptr;
@@ -51,6 +58,16 @@ enum class PrimitiveType
 	UNKONWN
 };
 
+// Used only at the creation of the object.
+enum class LightTypeObj
+{
+	POINT,
+	SPOT,
+	DIRECTIONAL,
+
+	UNKNOWN = -1
+};
+
 class ModuleObjects : public Module
 {
 public:
@@ -69,11 +86,32 @@ public:
 	void LoadConfig(JSONfilepack*& config);
 	void SaveConfig(JSONfilepack*& config);
 
+	void HandleAlienEvent(const AlienEvent& alien_event);
 	void HandleEvent(EventType eventType) override;
+
+
 
 	// primitives
 	void CreateBasePrimitive(PrimitiveType type);
 	void CreateBaseUI(ComponentType type);
+
+	// lights
+	void CreateLight(LightTypeObj type);
+
+	//particle system
+	void CreateEffect(ComponentType type);
+	
+	uint GetNumOfPointLights() const;
+	uint GetNumOfDirLights() const;
+	uint GetNumOfSpotLights() const;
+	
+	void AddNumOfPointLights();
+	void AddNumOfDirLights();
+	void AddNumOfSpotLights();
+	
+	void ReduceNumOfPointLights();
+	void ReduceNumOfDirLights();
+	void ReduceNumOfSpotLights();
 
 	// poly options
 	void ChangeWireframeMode();
@@ -151,14 +189,22 @@ public:
 	void CancelInvokes(Alien* alien);
 	/*bool IsInvoking(std::function<void()> void_no_params_function);*/
 
+	void ReAttachUIScriptEvents();
+
 private:
 
 	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
 	void ReAssignScripts(JSONArraypack* to_load);
 	void DeleteReturns();
+	void UpdateGamePadInput();
+	u64 SetNewSelected(std::string neightbour, u64 selected_neightbour);
 	ComponentCanvas* GetCanvas();
 
+	void CompareName(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::vector<ComponentScript*>& scriptsVec);
+
 public:
+	//Focus
+	u64 selected_ui = -1;
 
 	ResourceScene* current_scene = nullptr;
 
@@ -249,6 +295,12 @@ public:
 
 	Viewport* game_viewport = nullptr;
 
+	bool first_assigned_selected = false;
+
+	std::list<DirLightProperties*> directional_light_properites;
+	std::list<PointLightProperties*> point_light_properites;
+	std::list<SpotLightProperties*> spot_light_properites;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;
@@ -261,5 +313,11 @@ private:
 	std::vector<std::pair<u64, GameObject**>> to_add;
 
 	std::list<InvokeInfo*> invokes;
+
+	// Lights knowledge
+	uint num_of_dir_lights = 0u;
+	uint num_of_point_lights = 0u;
+	uint num_of_spot_lights = 0u;
+	uint num_of_area_lights = 0u;
 };
 

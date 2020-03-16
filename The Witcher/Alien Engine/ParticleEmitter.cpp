@@ -328,6 +328,7 @@ void ParticleEmmitter::DrawCone()
 void ParticleEmmitter::Reset()
 {
 	lifeTime = 0.f;
+	playing = true;
 	ResetBursts();
 }
 
@@ -341,7 +342,7 @@ void ParticleEmmitter::ResetBursts()
 
 bool ParticleEmmitter::isActive() const
 {
-	return lifeTime < maxLifeTime;
+	return (lifeTime < maxLifeTime) && playing == true;
 }
 
 bool ParticleEmmitter::isDelayed() const
@@ -541,5 +542,15 @@ float3 ParticleEmmitter::GetScale() const
 float4x4 ParticleEmmitter::GetGlobalTransform() const
 {
 	return float4x4::FromTRS(position, rotation, float3::one());
+}
+
+void ParticleEmmitter::Stop()
+{
+	playing = false;
+}
+
+void ParticleEmmitter::Play()
+{
+	playing = true;
 }
 

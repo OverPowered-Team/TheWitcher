@@ -5,16 +5,22 @@
 #include "Time.h"
 #include "imgui/imgui.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
 #include "ReturnZ.h"
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
-
+#include "ResourceMaterial.h"
 #include "Optick/include/optick.h"
+#include "ComponentMaterial.h"
 
 ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component(parent)
 {
 	type = ComponentType::PARTICLES;
 	particleSystem = new ParticleSystem();
+
+	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	
 }
 
 ComponentParticleSystem::~ComponentParticleSystem()
@@ -24,11 +30,43 @@ ComponentParticleSystem::~ComponentParticleSystem()
 		delete particleSystem; 
 		particleSystem = nullptr; 
 	}
+
+	/*if(texture != nullptr)
+	{
+		texture->DecreaseReferences();
+		texture = nullptr;
+	}
+
+	if (selected_texture != nullptr)
+		selected_texture = nullptr;*/
+	
+	/*if (material != nullptr)
+		material = nullptr;*/
 }
 
 void ComponentParticleSystem::OnPlay()
 {
 	particleSystem->Restart();
+}
+
+void ComponentParticleSystem::OnPause()
+{
+	particleSystem->Pause();
+}
+
+void ComponentParticleSystem::OnStop()
+{
+	particleSystem->Stop();
+}
+
+void ComponentParticleSystem::OnEmitterPlay()
+{
+	particleSystem->emmitter.Play();
+}
+
+void ComponentParticleSystem::OnEmitterStop()
+{
+	particleSystem->emmitter.Stop();
 }
 
 void ComponentParticleSystem::PreUpdate()
@@ -81,6 +119,10 @@ void ComponentParticleSystem::OnDisable()
 
 bool ComponentParticleSystem::DrawInspector()
 {
+	
+	//texture = material->material->texture;
+	
+	
 	static bool check;
 
 	ImGui::PushID(this);
@@ -231,7 +273,11 @@ bool ComponentParticleSystem::DrawInspector()
 			// Initial State || Final State
 			if (ImGui::TreeNodeEx("Start State", ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+				if(particleSystem->material != nullptr)
+					ImGui::ColorPicker4("Color", (float*)&particleSystem->material->shaderInputs.particleShaderProperties.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+				else
+					ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+
 				ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX);
 
 
@@ -260,8 +306,13 @@ bool ComponentParticleSystem::DrawInspector()
 			{
 				if (ImGui::TreeNodeEx("Final State", ImGuiTreeNodeFlags_DefaultOpen))
 				{
-					ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
-						ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+					if (particleSystem->material != nullptr)
+						ImGui::ColorPicker4("Color", (float*)&particleSystem->material->shaderInputs.particleShaderProperties.end_color,
+							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+					else
+						ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
+							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+
 					ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX);
 					ImGui::DragFloat3("Gravity", (float*)&particleSystem->endInfo.force);
 					ImVec2 size = ImGui::GetItemRectSize();
@@ -270,7 +321,7 @@ bool ComponentParticleSystem::DrawInspector()
 
 
 					ImGui::Spacing(); ImGui::Spacing();
-					
+
 					ImGui::Checkbox("##pptActiveRotation", &particleSystem->particleInfo.rotateOverTime);
 					ImGui::SameLine();
 
@@ -285,7 +336,7 @@ bool ComponentParticleSystem::DrawInspector()
 							ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 						}
 
-						if(ImGui::Checkbox("Separate Axis", &particleSystem->particleInfo.axisRot3D)) 
+						if (ImGui::Checkbox("Separate Axis", &particleSystem->particleInfo.axisRot3D))
 						{
 							particleSystem->particleInfo.angularVelocity3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angularVelocity3D.z);
 							particleSystem->particleInfo.angularAcceleration3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angularAcceleration3D.z);
@@ -303,7 +354,7 @@ bool ComponentParticleSystem::DrawInspector()
 							ImGui::DragFloat3("##angular accl3D", (float*)&particleSystem->particleInfo.angularAcceleration3D, 0.1f, 0.0f, 360.0f);
 						}
 
-						else 
+						else
 						{
 							ImGui::Text("Angular Velocity "); ImGui::SameLine(230, 15);
 							ImGui::DragFloat("##angular vel", (float*)&particleSystem->particleInfo.angularVelocity3D.z, 0.1f, 0.0f, 360.0f);
@@ -320,7 +371,7 @@ bool ComponentParticleSystem::DrawInspector()
 							ImGui::PopStyleVar();
 						}
 
-						
+
 
 						ImGui::TreePop();
 					}
@@ -329,6 +380,8 @@ bool ComponentParticleSystem::DrawInspector()
 					ImGui::TreePop();
 				}
 			}
+			/*else
+				particleSystem->material->shaderInputs.particleShaderProperties.color = particleSystem->material->shaderInputs.particleShaderProperties.start_color;*/
 
 			ImGui::TreePop();
 		}
@@ -361,80 +414,173 @@ bool ComponentParticleSystem::DrawInspector()
 			ImGui::Spacing();
 			ImGui::Spacing();
 
-			ImGui::Text("Particle Texture ");
+			ImGui::Text("Particle Material");
+			ImGui::SameLine(200, 15);
+
+			if (particleSystem->material != nullptr)
+				ImGui::Button(particleSystem->material->name.data(), { ImGui::GetWindowWidth() * 0.25F , 0 });
+			else
+				ImGui::Button("none", { ImGui::GetWindowWidth() * 0.25F , 0 });
+
+
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+					FileNode* node = *(FileNode**)payload->Data;
+					if (node != nullptr && node->type == FileDropType::MATERIAL) {
+						std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+						path += "_meta.alien";
+						u64 ID = App->resources->GetIDFromAlienPath(path.data());
+						if (ID != 0) {
+							ResourceMaterial* mat = (ResourceMaterial*)App->resources->GetResourceWithID(ID);
+							if (mat != nullptr) {
+								particleSystem->SetMaterial(mat);
+							}
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::SameLine();
+			
+			if (ImGui::Button("Delete", { ImGui::GetWindowWidth() * 0.15F , 0 }))
+			{
+			
+				if (particleSystem->material != nullptr) {
+					particleSystem->RemoveMaterial();
+				}
+			}
+			
+
+
+
+			ImGui::Spacing();
+			ImGui::Spacing();
+
+			//ImGui::Text("Particle Texture ");
 
 			//static ResourceTexture* selected_texture = nullptr;
 
-			if (texture != nullptr)
-			{
-				ImGui::Spacing();
-				ImGui::Spacing();
+			//if (texture != nullptr)
+			//{
+			//	ImGui::Spacing();
+			//	ImGui::Spacing();
 
-				static bool check;
-				check = texture_activated;
-				if (ImGui::Checkbox("Texture Active", &check)) {
-					//ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-					texture_activated = check;
-				}
+			//	static bool check;
+			//	check = texture_activated;
+			//	if (ImGui::Checkbox("Texture Active", &check)) {
+			//		//ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			//		texture_activated = check;
+			//	}
 
-				ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
-				ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
-				ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->GetAssetsPath());
-				ImGui::Text("References:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->references);
-				ImGui::Image((ImTextureID)texture->id, {140 ,140 });
+			//	ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->width);
+			//	ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->height);
+			//	ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", texture->GetAssetsPath());
+			//	ImGui::Text("References:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", texture->references);
+			//	ImGui::Image((ImTextureID)texture->id, {140 ,140 });
 
-				ImGui::Spacing();
+			//	ImGui::Spacing();
 
-				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
-				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
-				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-				if (ImGui::Button("Delete", { 60,20 })) {
-					//ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-					texture->DecreaseReferences();
-					texture = nullptr;
-					particleSystem->texture = texture;
-					selected_texture = nullptr;	
+			//	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			//	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			//	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+			//	if (ImGui::Button("Delete", { 60,20 })) {
+			//		//ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+			//		texture->DecreaseReferences();
+			//		texture = nullptr;
+			//		particleSystem->texture = texture;
+			//		selected_texture = nullptr;	
 
-					
-				}
+			//		
+			//	}
 
-				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
+			//	ImGui::PopStyleColor();
+			//	ImGui::PopStyleColor();
+			//	ImGui::PopStyleColor();
 
-				ImGui::SameLine(80, 15);
-				if (ImGui::Button("Change Texture", { 120,20 })) {
-					change_texture_menu = true;
-					selected_texture = texture;
-				}
-				ImGui::Spacing();
-			}
+			//	ImGui::SameLine(80, 15);
+			//	if (ImGui::Button("Change Texture", { 120,20 })) {
+			//		change_texture_menu = true;
+			//		selected_texture = texture;
+			//	}
+			//	ImGui::Spacing();
+			//}
 
-			else {
-				
+			//else {
+			//	
 
-				ImGui::SameLine(200, 15);
-				if (ImGui::Button("Add Texture", { 120,20 })) {
-					change_texture_menu = true;
-					selected_texture = texture;
-				}
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "No Texture assigned");
-				ImGui::Spacing();
-			}
+			//	ImGui::SameLine(200, 15);
+			//	if (ImGui::Button("Add Texture", { 120,20 })) {
+			//		change_texture_menu = true;
+			//		selected_texture = texture;
+			//	}
+			//	ImGui::SameLine();
+			//	ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "No Texture assigned");
+			//	ImGui::Spacing();
+			//}
 
 
-			if (change_texture_menu) 
+			/*if (change_texture_menu) 
 			{
 				TextureBrowser();
+			}*/
+
+			
+			
+			ImGui::Spacing();
+
+			static bool enable_anim = false;
+
+			// Add Spritesheet texture
+			ImGui::Checkbox("##pptActiveAnim", &enable_anim);
+			ImGui::SameLine();
+
+			if (ImGui::TreeNodeEx("Texture Animation", ImGuiTreeNodeFlags_Framed))
+			{
+
+				ImGui::Spacing();
+
+				if (!enable_anim)
+				{
+					ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+				}
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::Text("Animation Speed: "); ImGui::SameLine(200, 15);
+				ImGui::SliderFloat("##Animation Speed", &animSpeed, 0.0f, 5.0);
+				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::Text("Rows: "); ImGui::SameLine(200, 15);
+				ImGui::SliderInt("##Rows", &texRows, 1, 10);
+				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::Text("Columns: "); ImGui::SameLine(200, 15);
+				ImGui::SliderInt("##Columns", &texColumns, 1, 10);
+				ImGui::Spacing();
+				ImGui::Spacing(); 
+				ImGui::Spacing();
+				ImGui::SameLine(535, 15);
+				if (ImGui::Button("Calculate UV", { 120,20 }))
+				{
+					particleSystem->CalculateParticleUV(texRows, texColumns);
+				}
+				
+
+				if (!enable_anim)
+				{
+					ImGui::PopItemFlag();
+					ImGui::PopStyleVar();
+				}
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				ImGui::TreePop();
 			}
 
-			ImGui::Spacing();
-			ImGui::Spacing();
-			ImGui::Spacing();
 			
-			
-
 			static bool enable_blend = false;
 
 			ImGui::Checkbox("##pptActiveBlend", &enable_blend);
@@ -533,105 +679,125 @@ bool ComponentParticleSystem::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+
+		if (particleSystem->material != nullptr) {
+			particleSystem->material->DisplayMaterialOnInspector();
+		}
+		
 	}
 
 	return true;
 }
 
-void ComponentParticleSystem::TextureBrowser()
-{
-	ImGui::OpenPopup("Textures Loaded");
-	ImGui::SetNextWindowSize({ 522,585 });
+//void ComponentParticleSystem::TextureBrowser()
+//{
+//	ImGui::OpenPopup("Textures Loaded");
+//	ImGui::SetNextWindowSize({ 522,585 });
+//
+//	if (ImGui::BeginPopupModal("Textures Loaded", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+//		ImGui::Spacing();
+//		ImGui::NewLine();
+//		ImGui::SameLine(190);
+//		ImGui::Text("Texture Selected");
+//		ImGui::Text("");
+//		ImGui::SameLine(170);
+//
+//		if (selected_texture != nullptr) {
+//			ImGui::Image((ImTextureID)selected_texture->id, { 150,150 });
+//			ImGui::Spacing();
+//			ImGui::Text("");
+//			ImGui::SameLine(150);
+//
+//			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->width);
+//			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->height);
+//			ImGui::Text("");
+//			ImGui::SameLine(150);
+//			ImGui::Text("References:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->references);
+//			ImGui::Text("");
+//			ImGui::SameLine(112);
+//			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", selected_texture->GetAssetsPath());
+//		}
+//		ImGui::Spacing();
+//
+//		if (ImGui::BeginChild("##TexturesSelectorChild", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
+//			ImGui::Columns(3, 0, false);
+//			ImGui::SetColumnWidth(0, 156);
+//			ImGui::SetColumnWidth(1, 156);
+//			ImGui::SetColumnWidth(2, 156);
+//
+//			std::vector<Resource*>::iterator item = App->resources->resources.begin();
+//			for (; item != App->resources->resources.end(); ++item) {
+//				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
+//
+//					if ((*item)->NeedToLoad())
+//						(*item)->IncreaseReferences();
+//
+//					ImGui::ImageButton((ImTextureID)static_cast<ResourceTexture*>(*item)->id, { 140,140 });
+//					if (ImGui::IsItemClicked()) {
+//						selected_texture = static_cast<ResourceTexture*>(*item);
+//					}
+//					ImGui::NextColumn();
+//				}
+//			}
+//
+//			ImGui::EndChild();
+//		}
+//		ImGui::Spacing();
+//		ImGui::Text("");
+//		ImGui::SameLine(377);
+//		if (ImGui::Button("Apply", { 120,20 })) {
+//			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
+//			texture = selected_texture;
+//			particleSystem->texture = texture;
+//			selected_texture = nullptr;
+//			change_texture_menu = false;
+//
+//			std::vector<Resource*>::iterator item = App->resources->resources.begin();
+//			for (; item != App->resources->resources.end(); ++item) {
+//				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
+//
+//					if (*item != texture)
+//						(*item)->DecreaseReferences();
+//				}
+//			}
+//		}
+//		ImGui::SameLine(237);
+//		if (ImGui::Button("Cancel", { 120,20 })) {
+//			selected_texture = nullptr;
+//			change_texture_menu = false;
+//
+//			std::vector<Resource*>::iterator item = App->resources->resources.begin();
+//			for (; item != App->resources->resources.end(); ++item) {
+//				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
+//						(*item)->DecreaseReferences();
+//				}
+//			}
+//		}
+//		ImGui::EndPopup();
+//	}
+//}
 
-	if (ImGui::BeginPopupModal("Textures Loaded", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
-		ImGui::Spacing();
-		ImGui::NewLine();
-		ImGui::SameLine(190);
-		ImGui::Text("Texture Selected");
-		ImGui::Text("");
-		ImGui::SameLine(170);
-
-		if (selected_texture != nullptr) {
-			ImGui::Image((ImTextureID)selected_texture->id, { 150,150 });
-			ImGui::Spacing();
-			ImGui::Text("");
-			ImGui::SameLine(150);
-
-			ImGui::Text("Texture Size:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->width);
-			ImGui::SameLine(); ImGui::Text("x"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->height);
-			ImGui::Text("");
-			ImGui::SameLine(150);
-			ImGui::Text("References:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%i", selected_texture->references);
-			ImGui::Text("");
-			ImGui::SameLine(112);
-			ImGui::Text("Path:"); ImGui::SameLine(); ImGui::TextColored({ 255, 216, 0, 100 }, "%s", selected_texture->GetAssetsPath());
-		}
-		ImGui::Spacing();
-
-		if (ImGui::BeginChild("##TexturesSelectorChild", { 492,285 }, true, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
-			ImGui::Columns(3, 0, false);
-			ImGui::SetColumnWidth(0, 156);
-			ImGui::SetColumnWidth(1, 156);
-			ImGui::SetColumnWidth(2, 156);
-
-			std::vector<Resource*>::iterator item = App->resources->resources.begin();
-			for (; item != App->resources->resources.end(); ++item) {
-				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
-
-					if ((*item)->NeedToLoad())
-						(*item)->IncreaseReferences();
-
-					ImGui::ImageButton((ImTextureID)static_cast<ResourceTexture*>(*item)->id, { 140,140 });
-					if (ImGui::IsItemClicked()) {
-						selected_texture = static_cast<ResourceTexture*>(*item);
-					}
-					ImGui::NextColumn();
-				}
-			}
-
-			ImGui::EndChild();
-		}
-		ImGui::Spacing();
-		ImGui::Text("");
-		ImGui::SameLine(377);
-		if (ImGui::Button("Apply", { 120,20 })) {
-			ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			texture = selected_texture;
-			particleSystem->texture = texture;
-			selected_texture = nullptr;
-			change_texture_menu = false;
-
-			std::vector<Resource*>::iterator item = App->resources->resources.begin();
-			for (; item != App->resources->resources.end(); ++item) {
-				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
-
-					if (*item != texture)
-						(*item)->DecreaseReferences();
-				}
-			}
-		}
-		ImGui::SameLine(237);
-		if (ImGui::Button("Cancel", { 120,20 })) {
-			selected_texture = nullptr;
-			change_texture_menu = false;
-
-			std::vector<Resource*>::iterator item = App->resources->resources.begin();
-			for (; item != App->resources->resources.end(); ++item) {
-				if (*item != nullptr && (*item)->GetType() == ResourceType::RESOURCE_TEXTURE && static_cast<ResourceTexture*>(*item)->is_custom) {
-						(*item)->DecreaseReferences();
-				}
-			}
-		}
-		ImGui::EndPopup();
-	}
-}
-
-void ComponentParticleSystem::SetTexture(ResourceTexture* tex)
-{
-	texture = tex;
-	particleSystem->texture = texture;
-
-}
+//void ComponentParticleSystem::SetTexture(ResourceTexture* tex)
+//{
+//	texture = tex;
+//	particleSystem->texture = texture;
+//
+//}
+//
+//void ComponentParticleSystem::SetMaterial(ResourceMaterial* mat)
+//{
+//	if (mat == nullptr)
+//		return;
+//	
+//	if (material != nullptr)
+//	{
+//		material->DecreaseReferences();
+//		//material = nullptr;
+//	}
+//
+//	material = mat;
+//	material->IncreaseReferences();
+//}
 
 void ComponentParticleSystem::Play()
 {
@@ -679,14 +845,24 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Start.Speed", (float)particleSystem->particleInfo.speed);
 	// Color
 	to_save->SetFloat4("Start.Color", particleSystem->particleInfo.color);
+
+	
+	
 	// Size
 	to_save->SetNumber("Start.Size", (float)particleSystem->particleInfo.size);
+	
 	// LightColor
 	to_save->SetFloat4("Start.LightColor", particleSystem->particleInfo.lightColor);
 	// MaxLifeTime
 	to_save->SetNumber("Start.MaxLifeTime", (float)particleSystem->particleInfo.maxLifeTime);
+	// AxisRot
+	to_save->SetBoolean("Start.AxisRotationStart", particleSystem->particleInfo.axisRot3DStart);
+	// Angle Rotation
+	to_save->SetFloat3("Start.Angle3D", particleSystem->particleInfo.angle3D);
 	// changeOverLifeTime
 	to_save->SetBoolean("Start.ChangeOverLifeTime", particleSystem->particleInfo.changeOverLifeTime);
+	// rotateOverLifeTime
+	to_save->SetBoolean("Start.RotateOverLifeTime", particleSystem->particleInfo.rotateOverTime);
 	
 	// ----------------- Particle System End Info -------------------- //
 
@@ -698,11 +874,20 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetFloat4("End.LightColor", particleSystem->endInfo.lightColor);
 	// Force
 	to_save->SetFloat3("End.Force", particleSystem->endInfo.force);
+	// AxisRot
+	to_save->SetBoolean("End.AxisRotation", particleSystem->particleInfo.axisRot3D);
+	// Angular Velocity
+	to_save->SetFloat3("End.AngularVelocity", particleSystem->particleInfo.angularVelocity3D);
+	// Angular Acceleration
+	to_save->SetFloat3("End.AngularAcceleration", particleSystem->particleInfo.angularAcceleration3D);
+
 
 	// ---------------------- Emitter Info --------------------------- //
 
 	// Shape
 	to_save->SetNumber("Emmitter.Shape", (int)particleSystem->emmitter.GetShape());
+	//Zone
+	to_save->SetNumber("Emmitter.Zone", (int)particleSystem->emmitter.GetZone());
 	// Radius
 	to_save->SetNumber("Emmitter.Radius", particleSystem->emmitter.GetRadius());
 	// OutterRadius
@@ -757,15 +942,24 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Blending.Equation", (int)particleSystem->eqBlend);
 
 	// --------------- Material Resource Info -------------------- //
-
 	
-	to_save->SetBoolean("TextureEnabled", texture_activated);
+	to_save->SetBoolean("HasMaterial", (particleSystem->material != nullptr) ? true : false);
+	if (particleSystem->material != nullptr) {
+		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()));
+		to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
+		to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
+		to_save->SetFloat4("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
+	}
+
+
+	// --------------- Deprecated -------------------- //
+	/*to_save->SetBoolean("TextureEnabled", texture_activated);
 	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetBoolean("HasTexture", (texture != nullptr) ? true : false);
 	
 	if (texture != nullptr) {
 		to_save->SetString("TextureID", std::to_string(texture->GetID()));
-	}
+	}*/
 	
 }
 
@@ -802,8 +996,14 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->particleInfo.lightColor = to_load->GetFloat4("Start.LightColor");
 	// MaxLifeTime
 	particleSystem->particleInfo.maxLifeTime = to_load->GetNumber("Start.MaxLifeTime");
+	// AxisRot
+	particleSystem->particleInfo.axisRot3DStart = to_load->GetBoolean("Start.AxisRotationStart");
+	// Angle Rotation
+	particleSystem->particleInfo.angle3D =  to_load->GetFloat3("Start.Angle3D");
 	// changeOverLifeTime
 	particleSystem->particleInfo.changeOverLifeTime = to_load->GetBoolean("Start.ChangeOverLifeTime");
+	// rotateOverLifeTime
+	particleSystem->particleInfo.rotateOverTime = to_load->GetBoolean("Start.rotateOverLifeTime");
 
 	// ----------------- Particle System End Info -------------------- //
 
@@ -815,13 +1015,20 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->endInfo.lightColor = to_load->GetFloat4("End.LightColor");
 	// Force
 	particleSystem->endInfo.force = to_load->GetFloat3("End.Force");
-
+	// AxisRot
+	particleSystem->particleInfo.axisRot3D = to_load->GetBoolean("End.AxisRotation");
+	// Angular Velocity
+	particleSystem->particleInfo.angularVelocity3D = to_load->GetFloat3("End.AngularVelocity");
+	// Angular Acceleration
+	particleSystem->particleInfo.angularAcceleration3D = to_load->GetFloat3("End.AngularAcceleration");
 	// ---------------------- Emitter Info --------------------------- //
 
 	particleSystem->ResetSystem();
 
 	// Shape
 	particleSystem->emmitter.SetShape((Emmitter_Shape)(int)to_load->GetNumber("Emmitter.Shape"));
+	//Zone
+	particleSystem->emmitter.SetZone((Emmitter_Zone)(int)to_load->GetNumber("Emmitter.Zone"));
 	// Radius
 	particleSystem->emmitter.SetRadius(to_load->GetNumber("Emmitter.Radius"));
 	// OutterRadius
@@ -881,10 +1088,22 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->eqBlend = (EquationBlendType)(int)to_load->GetNumber("Blending.Equation");
 
 
+
 	// ---------------------- Resource Info -------------------------- //
 
+	if (to_load->GetBoolean("HasMaterial")) {
+		u64 ID = std::stoull(to_load->GetString("MaterialID"));
+		particleSystem->SetMaterial((ResourceMaterial*)App->resources->GetResourceWithID(ID));
+		particleSystem->material->shaderInputs.particleShaderProperties.start_color = to_load->GetFloat4("Start.Color");
+		particleSystem->material->shaderInputs.particleShaderProperties.color = to_load->GetFloat4("Start.Color");
+		particleSystem->material->shaderInputs.particleShaderProperties.end_color = to_load->GetFloat4("End.Color");
+	}
+	ID = std::stoull(to_load->GetString("ID"));
 	
-	texture_activated = to_load->GetBoolean("TextureEnabled");
+	
+
+	// ---------------------- Deprecated -------------------------- //
+	/*texture_activated = to_load->GetBoolean("TextureEnabled");
 
 	if (to_load->GetBoolean("HasTexture")) {
 		u64 ID = std::stoull(to_load->GetString("TextureID"));
@@ -895,7 +1114,9 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 			particleSystem->texture = texture;
 		}
 	}
-	ID = std::stoull(to_load->GetString("ID"));
+	ID = std::stoull(to_load->GetString("ID"));*/
+
+
 }
 
 

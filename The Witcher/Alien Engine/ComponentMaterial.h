@@ -7,6 +7,7 @@
 
 class ResourceTexture;
 class ResourceShader;
+enum class TextureType;
 
 class __declspec(dllexport) ComponentMaterial : public Component {
 	friend class ReturnZ;
@@ -14,15 +15,14 @@ class __declspec(dllexport) ComponentMaterial : public Component {
 	friend class GameObject;
 	friend class ModuleImporter;
 	friend class ResourceMesh;
+	friend class ModuleTween;
+	friend class AnimTween;
 public:
 	ComponentMaterial(GameObject* attach);
 	virtual ~ComponentMaterial();
 
 private:
-	void BindTexture();
 	bool DrawInspector();
-
-	void InspectorShaderProperties();
 
 	void Reset();
 	void SetComponent(Component* component);
@@ -32,16 +32,14 @@ private:
 
 	void Clone(Component* clone);
 
-	const ResourceTexture* GetTexture() const;
 
 public:
-	void SetTexture(ResourceTexture* tex);
+	void SetTexture(ResourceTexture* tex, TextureType texType);
+	void RemoveTexture(TextureType texType);
+	const ResourceTexture* GetTexture(TextureType texType) const;
 
-
-	Color color{ 1,1,1,1 };
-	bool texture_activated = true;
-public:
-	ResourceTexture* texture = nullptr;
+	void SetMaterial(ResourceMaterial* mat);
+	const ResourceMaterial* GetMaterial() const;
 
 private:
 	bool change_texture_menu = false;
@@ -49,7 +47,7 @@ private:
 // Shaders
 public:
 	void ShowShaderTextEditor();
-	ResourceShader* used_shader = nullptr;
+	ResourceMaterial* material = nullptr; 
 
 private:
 	TextEditor shader_editor;

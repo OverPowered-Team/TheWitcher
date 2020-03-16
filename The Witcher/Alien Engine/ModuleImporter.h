@@ -3,15 +3,15 @@
 #include "Globals.h"
 #include "Module.h"
 
-#include "Assimp/include/assimp/cimport.h"
-#include "Assimp/include/assimp/scene.h"
-#include "Assimp/include/assimp/postprocess.h"
-#include "Assimp/include/assimp/cfileio.h"
-#include "Assimp/include/assimp/mesh.h"
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+#include "Assimp/include/mesh.h"
 #include "FreeType/include/ft2build.h"
 #include "FreeType/include/freetype/freetype.h"
 
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
+#pragma comment (lib, "Assimp/libx86/assimp-vc141-mtd.lib")
 #pragma comment (lib, "Devil/libx86/DevIL.lib")
 #pragma comment (lib, "Devil/libx86/ILU.lib")
 #pragma comment (lib, "Devil/libx86/ILUT.lib")
@@ -19,7 +19,7 @@
 #pragma comment(lib, "Freetype/libx86/freetype.lib")
 
 #include <vector>
-#include "glew/include/glew.h"
+//#include "glew/include/glew.h"
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "Shapes.h"
@@ -65,6 +65,8 @@ public:
 	ResourceShader* LoadShaderFile(const char* path, bool has_been_dropped = false, bool is_custom = true); // when dropped
 	void ApplyShaderToSelectedObject(ResourceShader* shader);
 
+	void ApplyMaterialToSelectedObject(ResourceMaterial* material);
+
 private:
 	
 	// models
@@ -74,7 +76,7 @@ private:
 	void LoadBone(const aiBone* bone, std::string mesh_name);
 	void LoadMesh(const aiMesh* mesh);
 	void LoadNode(const aiNode* node, const aiScene* scene, uint nodeNum);
-	void LoadMaterials(const aiMaterial* material, const char* extern_path);
+	void LoadMaterials(aiMaterial* material, const char* extern_path);
 	void LoadModelTexture(const aiMaterial* material, ResourceMaterial* mat, aiTextureType assimp_type, TextureType type, const char* extern_path);
 
 private:

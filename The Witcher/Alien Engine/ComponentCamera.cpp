@@ -3,9 +3,13 @@
 #include "ComponentCamera.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
+#include "ModuleCamera3D.h"
 #include "ComponentTransform.h"
 #include "ModuleObjects.h"
 #include "Gizmos.h"
+#include "ModuleFileSystem.h"
 #include "Application.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -14,6 +18,8 @@
 #include "ReturnZ.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentMesh.h"
+#include "Skybox.h"
+#include "ResourceShader.h"
 #include "mmgr/mmgr.h"
 #include "Viewport.h"
 
@@ -48,6 +54,29 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	mesh_camera = new ComponentMesh(game_object_attached);
 	mesh_camera->mesh = App->resources->camera_mesh;
 #endif
+
+	// Create skybox
+	std::vector<std::string> skybox_faces = {
+		TEXTURES_FOLDER"Skybox/negz.jpg",
+		TEXTURES_FOLDER"Skybox/posz.jpg",
+		TEXTURES_FOLDER"Skybox/posy.jpg",
+		TEXTURES_FOLDER"Skybox/negy.jpg",
+		TEXTURES_FOLDER"Skybox/posx.jpg",
+		TEXTURES_FOLDER"Skybox/negx.jpg"
+	};
+
+	skybox = new Skybox();
+	skybox_texture_id = skybox->LoadCubeMap(skybox_faces);
+	skybox->SetBuffers();
+	skybox_faces.clear();
+
+	skybox_shader = App->resources->skybox_shader;
+	if (skybox_shader != nullptr)
+		skybox_shader->IncreaseReferences();
+
+	skybox_shader->Bind();
+	skybox_shader->SetUniform1i("skybox", 0);
+	skybox_shader->Unbind();
 }
 
 ComponentCamera::~ComponentCamera()
@@ -84,6 +113,8 @@ ComponentCamera::~ComponentCamera()
 #ifndef GAME_VERSION
 	delete mesh_camera;
 #endif
+
+	RELEASE(skybox);
 }
 
 bool ComponentCamera::DrawInspector()
@@ -360,6 +391,31 @@ void ComponentCamera::SetCameraPosition(const float3& position)
 float3 ComponentCamera::GetCameraPosition() const
 {
 	return frustum.pos;
+}
+
+void ComponentCamera::DrawSkybox()
+{
+	glDepthFunc(GL_LEQUAL);
+	skybox_shader->Bind();
+
+	float4x4 view_m = this->GetViewMatrix4x4();
+	// Theoretically this should remove the translation [x, y, z] of the matrix,
+	// but because it is relative to the camera it has no effect.
+	view_m[0][3] = 0;
+	view_m[1][3] = 0;
+	view_m[2][3] = 0;
+	skybox_shader->SetUniformMat4f("view", view_m);
+	float4x4 projection = this->GetProjectionMatrix4f4();
+	skybox_shader->SetUniformMat4f("projection", projection);
+
+	glBindVertexArray(skybox->vao);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox_texture_id);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	glDepthFunc(GL_LESS);
+	glBindVertexArray(0);
+	skybox_shader->Unbind();
 }
 
 void ComponentCamera::DrawFrustum()

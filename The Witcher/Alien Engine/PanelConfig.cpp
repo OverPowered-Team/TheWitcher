@@ -1,11 +1,12 @@
 #include "PanelConfig.h"
+#include "Application.h"
+#include "ShortCutManager.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 #include "ModuleWindow.h"
-#include "SDL/include/SDL.h"
 #include "imgui/imgui.h"
-#include "mmgr/mmgr.h"
 #include "gpudetect/DeviceId.h"
 
-#include <Windows.h>
 #include "mmgr/mmgr.h"
 
 PanelConfig::PanelConfig(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra) :

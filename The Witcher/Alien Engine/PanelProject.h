@@ -21,6 +21,7 @@ public:
 public:
 
 	FileNode* current_active_folder = nullptr;
+	Resource* selected_resource = nullptr;
 
 private:
 

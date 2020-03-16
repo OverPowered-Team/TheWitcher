@@ -2,9 +2,8 @@
 #define _MODULE_PHYSICS_H__
 
 #include "Module.h"
-#include "Globals.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
-#include "MathGeoLib/include/Math/MathAll.h"
+#include "Bullet/include/LinearMath/btVector3.h"
 #include <list>
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
@@ -26,9 +25,15 @@ enum class ForceMode : uint
 
 class ComponentCollider;
 class DebugRenderer;
+class btGhostObject;
 
 class ModulePhysics : public Module
 {
+	friend class ComponentCharacterController;
+	friend class ModuleObjects;
+	friend class ComponentCollider;
+	friend class PanelPhysics;
+
 public:
 	ModulePhysics( bool start_enabled = true);
 
@@ -48,15 +53,27 @@ public:
 
 	bool CleanUp();
 
-	void RenderCollider(ComponentCollider* collider);
+	void DrawCollider(ComponentCollider* collider);
 
-	void RenderConvexCollider(ComponentCollider* collider);
+	void DrawConvexCollider(ComponentCollider* collider);
 
-	void RenderConstraint(btTypedConstraint* constraint);
+	void DrawConstraint(btTypedConstraint* constraint);
+
+	void DrawCharacterController(ComponentCharacterController* controller);
+
+	void DrawWorld();
 
 	void AddBody(btRigidBody* body);
 
 	void RemoveBody(btRigidBody* body);
+
+	void AddDetector(btGhostObject* detector);
+
+	void RemoveDetector(btGhostObject* detector);
+
+	void AddAction(btActionInterface* action);
+
+	void RemoveAction(btActionInterface* action);
 
 	void AddConstraint(btTypedConstraint* constraint, bool bodiesCollision = true);
 
@@ -72,6 +89,7 @@ public:
 
 private:
 
+	bool debug_physics = false;
 	DebugRenderer* debug_renderer = nullptr;
 	btDefaultCollisionConfiguration* collision_config = nullptr;
 	btCollisionDispatcher* dispatcher = nullptr;

@@ -3,11 +3,14 @@
 #include "ModuleFileSystem.h"
 #include "ResourceTexture.h"
 #include <filesystem>
+#include "Application.h"
 #include "imgui/imgui_internal.h"
 #include "ResourceModel.h"
 #include "ResourcePrefab.h"
+#include "ShortCutManager.h"
 #include "ResourceScript.h"
 #include "ResourceScene.h"
+#include "ModuleUI.h"
 #include "PanelAnimator.h"
 #include "Event.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
@@ -177,6 +180,10 @@ void PanelProject::SeeFiles()
 
 			// go back a folder
 			if (ImGui::IsItemClicked()) {
+
+				App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_DESELECTED);
+				selected_resource = nullptr; 
+
 				current_active_file = &go_back_folder;
 				current_active_folder = current_active_folder->parent;
 				ImGui::EndChild();
@@ -205,18 +212,21 @@ void PanelProject::SeeFiles()
 			ImGui::ImageButton((ImTextureID)current_active_folder->children[i]->icon->id, { 53,70 }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1,1,1,1 });
 			ImGui::PopStyleColor();
 
+			//// set the file clicked
+			//if (ImGui::IsItemClicked() || (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1)) ||
+			//	(ImGui::IsMouseReleased(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))) 
+			//{
+			//	current_active_file = current_active_folder->children[i];
+			//	if (ImGui::IsMouseReleased(0) || ImGui::IsMouseClicked(1))
+			//	{
+			//		App->objects->DeselectObjects();
+			//		App->CastEvent(EventType::ON_ASSET_SELECT);
+			//	}		
+			//}
 			// set the file clicked
-			if (ImGui::IsItemClicked() || (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1)) ||
-				(ImGui::IsMouseReleased(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))) 
-			{
+			/*if (ImGui::IsItemClicked() || (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))) {
 				current_active_file = current_active_folder->children[i];
-				if (ImGui::IsMouseReleased(0) || ImGui::IsMouseClicked(1))
-				{
-					App->objects->DeselectObjects();
-					App->CastEvent(EventType::ON_ASSET_SELECT);
-				}		
-			}
-
+			}*/
 			// double click script
 			if (current_active_folder->children[i]->type == FileDropType::SCRIPT && ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
 				ResourceScript* script = (ResourceScript*)App->resources->GetResourceWithID(App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(std::string(current_active_folder->children[i]->path + current_active_folder->children[i]->name).data()) + "_meta.alien").data()));
@@ -241,26 +251,46 @@ void PanelProject::SeeFiles()
 					break;
 			}
 
-			if (ImGui::IsItemHovered()) {
+			if (ImGui::IsItemHovered() && !ImGui::IsMouseDragging()) {
 				ImGui::BeginTooltip();
 				ImGui::Text(current_active_folder->children[i]->name.data());
 				ImGui::EndTooltip();
 			}
 
+			if (ImGui::IsItemClicked() || (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1)) ||
+				(ImGui::IsMouseReleased(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup)))
+			{
+				current_active_file = current_active_folder->children[i];
+				if (ImGui::IsMouseReleased(0) || ImGui::IsMouseClicked(1))
+				{
+					App->objects->DeselectObjects();
+
+					App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_DESELECTED);
+
+					// Cast Events of selected file
+					App->CastEvent(EventType::ON_ASSET_SELECT);
+					std::string path = App->file_system->GetPathWithoutExtension(current_active_file->path + current_active_file->name) + "_meta.alien";
+					u64 ID = App->resources->GetIDFromAlienPath(path.data());
+					selected_resource = App->resources->GetResourceWithID(ID);
+
+					App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_SELECTED);
+				}
+			}
 			// right click in file/folder
 			RightClickInFileOrFolder(i, pop_up_item);
+
 
 			// drag
 			if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file) {
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
 					ImGui::SetDragDropPayload(DROP_ID_PROJECT_NODE, &current_active_file, sizeof(FileNode), ImGuiCond_Once);
-					ImGui::SetCursorPosX(((ImGui::GetWindowWidth())*0.5f)-26);
+					ImGui::SetCursorPosX(((ImGui::GetWindowWidth()) * 0.5f) - 26);
 					ImGui::Image((ImTextureID)current_active_file->icon->id, { 53,70 });
 					ImGui::Text(current_active_file->name.data());
 
 					ImGui::EndDragDropSource();
 				}
-				
+
 			}
 			
 			// go into a folder
@@ -348,20 +378,15 @@ void PanelProject::DeleteSelectedAssetPopUp()
 
 void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 {
-	if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && ImGui::BeginPopupContextItem()) {
+	if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file && ImGui::BeginPopupContextItem()) {
 		pop_up_item = true;
 
-		if (!current_active_file->is_base_file) { // so can not be modified
 			if (ImGui::MenuItem("Delete")) {
 				to_delete_menu = true;
 			}
 			if (ImGui::MenuItem("Rename")) {
 				current_active_folder->children[i]->changing_name = true;
 			}
-		}
-		//if (ImGui::MenuItem("Copy Path")) {
-		//	// TODO: copy path
-		//}
 		ImGui::EndPopup();
 	}
 }
@@ -438,6 +463,12 @@ void PanelProject::RightClickToWindow(bool pop_up_item)
 		if (ImGui::MenuItem("Create New Script")) {
 			App->ui->creating_script = true;
 		}
+		if (ImGui::MenuItem("Create New Material")) {
+			App->resources->CreateMaterial("New Material");
+		}
+		if (ImGui::MenuItem("Create New Animator Controller")) {
+			App->resources->CreateAsset(FileDropType::ANIM_CONTROLLER);
+		}
 		ImGui::Separator();
 		if (ImGui::MenuItem("Create New Folder")) {
 			int folder_number = 0;
@@ -484,7 +515,8 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 
 			if (inside) {
 				if (node_to_move->is_file) { // move file up
-					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {				
+					if (rename(std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data()) == 0) {
+
 						// move the .alien too
 						rename(std::string(App->file_system->GetPathWithoutExtension(std::string(node_to_move->path + node_to_move->name)) + "_meta.alien").data(), std::string(App->file_system->GetPathWithoutExtension(std::string(node->path + node_to_move->name)) + "_meta.alien").data());
 
@@ -499,7 +531,9 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 							}
 						}
 						node->DeleteChildren();
+
 						App->file_system->DiscoverEverythig(node);
+						node->ResetChildrenPath();
 					}
 					else {
 						LOG_ENGINE("Fail when moving %s to %s", std::string(node_to_move->path + node_to_move->name).data(), std::string(node->path + node_to_move->name).data());
@@ -520,6 +554,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						}
 						node->DeleteChildren();
 						App->file_system->DiscoverEverythig(node);
+						node->ResetChildrenPath();
 					}
 					else {
 						LOG_ENGINE("Could not move %s to %s", node_to_move->path.data(), std::string(node->path + node_to_move->name + std::string("/")).data());
@@ -540,6 +575,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
+						next_parent->ResetChildrenPath();
 					}
 					else {
 
@@ -570,6 +606,7 @@ bool PanelProject::MoveToFolder(FileNode* node, bool inside)
 						App->file_system->DiscoverEverythig(next_parent);
 						current_active_folder = next_parent->FindChildrenByPath(actual_folder_path);
 						current_active_file = nullptr;
+						next_parent->ResetChildrenPath();
 					}
 					else {
 						LOG_ENGINE("Could not move %s to %s", node_to_move->path.data(), std::string(node_to_move->parent->parent->path + node_to_move->name + std::string("/")).data());

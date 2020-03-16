@@ -1,8 +1,10 @@
 #include "Component.h"
 #include "imgui/imgui.h"
 #include "Application.h"
+#include "ModuleResources.h"
 #include "SDL/include/SDL_assert.h"
-#include "ComponentLight.h"
+#include "ComponentLightDirectional.h"
+#include "ComponentLightSpot.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
@@ -60,8 +62,11 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 				App->objects->component_in_copy = nullptr;
 			}
 			switch (type) { // add to switch new type
-			case ComponentType::LIGHT:
-				App->objects->component_in_copy = new ComponentLight(nullptr);
+			case ComponentType::LIGHT_DIRECTIONAL:
+				App->objects->component_in_copy = new ComponentLightDirectional(nullptr);
+				break;
+			case ComponentType::LIGHT_SPOT:
+				App->objects->component_in_copy = new ComponentLightSpot(nullptr);
 				break;
 			case ComponentType::TRANSFORM:
 				App->objects->component_in_copy = new ComponentTransform(nullptr);

@@ -1,4 +1,6 @@
 #include "PanelAbout.h"
+#include "ShortCutManager.h"
+#include "ModuleCamera3D.h"
 #include "Devil/include/ilu.h"
 #include "mmgr/mmgr.h"
 

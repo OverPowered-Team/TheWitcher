@@ -1,6 +1,9 @@
 #include "Application.h"
 #include "ModuleImporter.h"
+#include "Resource_.h"
 #include "ResourceAnimation.h"
+#include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
 ResourceAnimation::ResourceAnimation() : Resource()

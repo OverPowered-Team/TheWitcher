@@ -20,6 +20,7 @@ enum UIState {
 
 class __declspec(dllexport) ComponentUI :public Component {
 	friend class GameObject;
+	friend class ComponentCanvas;
 	friend class ComponentImage;
 	friend class ComponentCheckbox;
 	friend class ComponentText;
@@ -27,6 +28,7 @@ class __declspec(dllexport) ComponentUI :public Component {
 	friend class ComponentSlider;
 	friend class ComponentBar;
 	friend class ComponentImage;
+	friend class ModuleObjects;
 	friend class Component;
 	friend class ReturnZ;
 	friend class CompZ;
@@ -55,11 +57,15 @@ public:
 	void SetTexture(ResourceTexture* tex);
 
 	virtual bool CheckMouseInside(float3 mouse_pos);
-	virtual void UILogic();
+	virtual void UILogicMouse();
+	virtual void UILogicGamePad();
 
 	//Script
 	void SetBackgroundColor(float r, float g, float b, float a);
-
+	
+private:
+	void CheckFirstSelected();
+	
 public:
 	Color current_color = { 0.8f,0.8f,0.8f,1.0f };
 
@@ -78,10 +84,20 @@ protected:
 	uint verticesID = 0;
 	uint uvID = 0;
 
-	ComponentCanvas* canvas = nullptr;
-	ComponentTransform* canvas_trans = nullptr;
+	ComponentCanvas* canvas				= nullptr;
+	ComponentTransform* canvas_trans	= nullptr;
 
 	float2 size = { 10,10 };
+
+	//UI FOCUS
+	
+	bool tabbable			= false;
+	u64 select_on_up		= -1;
+	u64 select_on_down		= -1;
+	u64 select_on_left		= -1;
+	u64 select_on_right		= -1;
+
+
 
 };
 

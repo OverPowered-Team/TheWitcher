@@ -1,6 +1,7 @@
 #pragma once
 
 class GameObject;
+struct AlienEvent;
 
 typedef unsigned int uint;
 class JSONArraypack;
@@ -10,13 +11,17 @@ enum class ComponentType {
 	TRANSFORM = 0,
 	MESH,
 	MATERIAL,
-	LIGHT,
+	LIGHT_DIRECTIONAL,
+	LIGHT_SPOT,
+	LIGHT_POINT,
 	CAMERA,
 	BOX_COLLIDER,
 	SPHERE_COLLIDER,
 	CAPSULE_COLLIDER,
 	CONVEX_HULL_COLLIDER,
 	RIGID_BODY,
+	POINT_CONSTRAINT,
+	CHARACTER_CONTROLLER,
 	ANIMATOR,
 	PARTICLES,
 	A_EMITTER,
@@ -28,7 +33,8 @@ enum class ComponentType {
 	UI_TEXT,
 	UI_CHECKBOX,
 	UI_SLIDER,
-	UI_BAR, 
+	UI_BAR,
+	UI_ANIMATED_IMAGE,
 	DEFORMABLE_MESH,
 	BONE,
 	SCRIPT,
@@ -38,7 +44,9 @@ enum class ComponentType {
 
 class __declspec(dllexport) Component {
 	friend class ComponentCamera;
-	friend class ComponentLight;
+	friend class ComponentLightDirectional;
+	friend class ComponentLightSpot;
+	friend class ComponentLightPoint;
 	friend class ComponentMaterial;
 	friend class ComponentTransform;
 	friend class ComponentMesh;
@@ -46,6 +54,7 @@ class __declspec(dllexport) Component {
 	friend class ComponentMaterial;
 	friend class ComponentCanvas;
 	friend class ComponentUI;
+	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
 	friend class ComponentCollider;
 	friend class ComponentScript;
@@ -92,6 +101,7 @@ protected:
 
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
+	virtual void HandleAlienEvent(const AlienEvent& alien_event) {};
 
 	virtual bool DrawInspector() { return true; }
 

@@ -5,10 +5,15 @@
 #include "GameObject.h"
 #include "ComponentCanvas.h"
 #include "ComponentTransform.h"
+#include "ModuleWindow.h"
 #include "ResourceTexture.h"
 #include "ResourceFont.h"
 #include "PanelGame.h"
 #include "PanelScene.h"
+#include "ModuleInput.h"
+#include "ModuleObjects.h"
+#include "ModuleRenderer3D.h"
+#include "StaticInput.h"
 #include "mmgr/mmgr.h"
 
 ComponentUI::ComponentUI(GameObject* obj):Component(obj)
@@ -79,7 +84,10 @@ void ComponentUI::SetCanvas(ComponentCanvas* canvas_)
 void ComponentUI::Update()
 {
 	if (Time::IsPlaying()) {
-		UILogic();
+		if (!App->objects->first_assigned_selected || (App->objects->GetGameObjectByID(App->objects->selected_ui) != nullptr && !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled))
+			CheckFirstSelected();
+		
+		//UILogicMouse();
 
 		switch (state)
 		{
@@ -100,6 +108,7 @@ void ComponentUI::Update()
 		default:
 			break;
 		}
+		UILogicGamePad();
 	}
 }
 
@@ -113,8 +122,13 @@ void ComponentUI::Draw(bool isGame)
 	float4x4 matrix = transform->global_transformation;
 
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
 	
 	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		#ifndef GAME_VERSION
@@ -144,10 +158,11 @@ void ComponentUI::Draw(bool isGame)
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
+		matrix[2][3] = 0.0f;
 	}
 
 	if (texture != nullptr) {
-		glAlphaFunc(GL_GREATER, 0.0f);
+		//glAlphaFunc(GL_GREATER, 0.0f);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 	}
@@ -183,6 +198,9 @@ void ComponentUI::Draw(bool isGame)
 
 	glPopMatrix();
 
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	glEnable(GL_LIGHTING);
 	glEnable(GL_CULL_FACE);
 }
 
@@ -215,7 +233,7 @@ bool ComponentUI::CheckMouseInside(float3 mouse_pos)
 #endif
 }
 
-void ComponentUI::UILogic()
+void ComponentUI::UILogicMouse()
 {
 	float3 mouse_pos;
 
@@ -258,4 +276,50 @@ void ComponentUI::UILogic()
 void ComponentUI::SetBackgroundColor(float r, float g, float b, float a)
 {
 	current_color = { r,g,b,a };
+}
+
+void ComponentUI::CheckFirstSelected()
+{
+	if (tabbable && this->game_object_attached != nullptr && this->game_object_attached->enabled)
+	{
+		if (App->objects->GetGameObjectByID(App->objects->selected_ui)!=nullptr &&  App->objects->selected_ui != -1)
+			App->objects->GetGameObjectByID(App->objects->selected_ui)->GetComponent<ComponentUI>()->state = Release;
+
+		App->objects->selected_ui = this->game_object_attached->ID;
+		App->objects->GetGameObjectByID(App->objects->selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+		App->objects->first_assigned_selected = true;
+	}
+}
+
+
+
+void ComponentUI::UILogicGamePad()
+{
+	switch (state)
+	{
+	case Idle: {
+		//not necessary to do anything
+		break; }
+	case Hover: {
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+			state = Click;
+		
+		break; }
+	case Click: {
+		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_REPEAT)
+			state = Pressed;
+		
+		if (Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
+			state = Hover;
+		
+		break; }
+	case Pressed: {
+		if (Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
+			state = Hover;
+		
+		break; }
+	case Release: {
+		state = Idle;
+		break; }
+	}
 }

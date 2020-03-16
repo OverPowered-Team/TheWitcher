@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Panel.h"
+#include "MathGeoLib/include/Math/float2.h"
 
 class ParticleSystem;
 
@@ -20,4 +21,6 @@ public:
 private:
 
 	ParticleSystem* particleSystem = nullptr;
+	float2 current_viewport_pos = { 0.f, 0.f };
+	float2 current_viewport_size = { 0.f, 0.f };
 };

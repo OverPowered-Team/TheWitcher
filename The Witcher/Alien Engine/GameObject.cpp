@@ -6,7 +6,9 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentDeformableMesh.h"
-#include "ComponentLight.h"
+#include "ComponentLightDirectional.h"
+#include "ComponentLightSpot.h"
+#include "ComponentLightPoint.h"
 #include "ComponentBone.h"
 #include "ComponentAnimator.h"
 #include "ComponentDeformableMesh.h"
@@ -23,20 +25,27 @@
 #include "ComponentUI.h"
 #include "ComponentCheckbox.h"
 #include "ComponentSlider.h"
+#include "ComponentAnimatedImage.h"
 #include "ComponentScript.h"
 #include "ComponentAudioListener.h"
 #include "ComponentAudioEmitter.h"
-#include "ComponentReverbZone.h"
 #include "Prefab.h"
+#include "Event.h"
+#include "ModuleResources.h"
+#include "ModuleRenderer3D.h"
 #include "ResourcePrefab.h"
 #include "ReturnZ.h"
 #include "mmgr/mmgr.h"
+
+#include "ResourceShader.h"
+#include "ResourceMaterial.h"
 
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
 #include "ComponentCapsuleCollider.h"
 #include "ComponentConvexHullCollider.h"
 #include "ComponentRigidBody.h"
+#include "ComponentCharacterController.h"
 
 #include "Optick/include/optick.h"
 
@@ -79,22 +88,23 @@ GameObject::~GameObject()
 	if (std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
 		App->objects->DeselectObject(this);
 	}
+
 	App->objects->octree.Remove(this);
 
-	std::vector<Component*>::iterator item = components.begin();
-	for (; item != components.end(); ++item) {
-		if (*item != nullptr) {
-			delete* item;
-			*item = nullptr;
-		}
+	std::vector<Component*>::iterator component = components.begin();
+
+	while (component != components.end())
+	{
+		delete* component;
+		component = components.erase(component);
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
-	for (; child != children.end(); ++child) {
-		if (*child != nullptr) {
-			delete* child;
-			*child = nullptr;
-		}
+	
+	while (child != children.end())
+	{
+		delete* child;
+		child = children.erase(child);
 	}
 }
 
@@ -525,10 +535,10 @@ void GameObject::DrawScene(ComponentCamera* camera)
 	if (mesh == nullptr) //not sure if this is the best solution
 		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
 
-	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
 		material->BindTexture();
-	}
+	}*/
 
 	if (mesh != nullptr && mesh->IsEnabled())
 	{
@@ -553,10 +563,7 @@ void GameObject::DrawScene(ComponentCamera* camera)
 
 	for (Component* component : components)
 	{
-		if (ComponentCollider* collider = dynamic_cast<ComponentCollider*>(component)) 
-		{
-			collider->DrawScene();
-		}
+		component->DrawScene();
 	}
 }
 
@@ -570,10 +577,10 @@ void GameObject::DrawGame(ComponentCamera* camera)
 	if(mesh == nullptr) //not sure if this is the best solution
 		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
 
-	if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
 		material->BindTexture();
-	}
+	}*/
 
 	if (mesh != nullptr && mesh->IsEnabled())
 	{
@@ -585,6 +592,10 @@ void GameObject::DrawGame(ComponentCamera* camera)
 
 void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
 {
+
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
+
 	if (!is_static) {
 		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 		if (mesh == nullptr) //not sure if this is the best solution
@@ -597,15 +608,31 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 				to_draw->push_back({ distance, this });
 			}
 		}
+		else
+		{
+			float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+			float distance = camera->frustum.pos.Distance(obj_pos);
+			to_draw->push_back({ distance, this });
+		}
 	}
 
-	ComponentLight* light = (ComponentLight*)GetComponent(ComponentType::LIGHT);
-	if (light != nullptr && light->IsEnabled())
+	// Lights
+	ComponentLightDirectional* light_dir = (ComponentLightDirectional*)GetComponent(ComponentType::LIGHT_DIRECTIONAL);
+	if (light_dir != nullptr && light_dir->IsEnabled())
 	{
-		light->LightLogic();
+		light_dir->LightLogic();
 	}
-	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
+	ComponentLightSpot* light_spot = (ComponentLightSpot*)GetComponent(ComponentType::LIGHT_SPOT);
+	if (light_spot != nullptr && light_spot->IsEnabled())
+	{
+		light_spot->LightLogic();
+	}
+	ComponentLightPoint* light_point = (ComponentLightPoint*)GetComponent(ComponentType::LIGHT_POINT);
+	if (light_point != nullptr && light_point->IsEnabled())
+	{
+		light_point->LightLogic();
+	}
+
 	if (camera_ != nullptr && camera_->IsEnabled()) 
 	{
 		if (App->objects->printing_scene && App->objects->draw_frustum && std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
@@ -631,10 +658,12 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 			//camera_->DrawIconCamera();
 		}
 
+		/* TOFIX / DO. Light does not exist anymore here
 		if (light != nullptr && light->IsEnabled())
 		{
 			//light->DrawIconLight();
 		}
+		*/
 
 		if (partSystem != nullptr)
 		{
@@ -757,6 +786,9 @@ void GameObject::Update()
 bool GameObject::HasComponent(ComponentType component) const
 {
 	bool exists = false;
+
+	if (components.size()== 0)
+		return exists;
 
 	std::vector<Component*>::const_iterator item = components.cbegin();
 	for (; item != components.cend(); ++item) {
@@ -1109,6 +1141,7 @@ void GameObject::ToDelete()
 {
 	to_delete = true;
 	App->objects->need_to_delete_objects = true;
+	App->CastEvent(EventType::ON_GO_DELETE);
 #ifndef GAME_VERSION
 	if (!App->objects->in_cntrl_Z) {
 		ReturnZ::AddNewAction(ReturnZ::ReturnActions::DELETE_OBJECT, this);
@@ -1553,15 +1586,24 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 
 	if (components_to_load != nullptr) {
 		for (uint i = 0; i < components_to_load->GetArraySize(); ++i) {
-			SDL_assert((uint)ComponentType::UNKNOWN == 26); // add new type to switch
 			switch ((int)components_to_load->GetNumber("Type")) {
 			case (int)ComponentType::TRANSFORM: {
 				transform = new ComponentTransform(this);
 				transform->LoadComponent(components_to_load);
 				AddComponent(transform);
 				break; }
-			case (int)ComponentType::LIGHT: {
-				ComponentLight* light = new ComponentLight(this);
+			case (int)ComponentType::LIGHT_DIRECTIONAL: {
+				ComponentLightDirectional* light = new ComponentLightDirectional(this);
+				light->LoadComponent(components_to_load);
+				AddComponent(light);
+				break; }
+			case (int)ComponentType::LIGHT_SPOT: {
+				ComponentLightSpot* light = new ComponentLightSpot(this);
+				light->LoadComponent(components_to_load);
+				AddComponent(light);
+				break; }
+			case (int)ComponentType::LIGHT_POINT: {
+				ComponentLightPoint* light = new ComponentLightPoint(this);
 				light->LoadComponent(components_to_load);
 				AddComponent(light);
 				break; }
@@ -1606,9 +1648,9 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				AddComponent(listener);
 				break; }
 			case (int)ComponentType::A_REVERB: {
-				ComponentReverbZone* reverb = new ComponentReverbZone(this);
+				/*ComponentReverbZone* reverb = new ComponentReverbZone(this);
 				reverb->LoadComponent(components_to_load);
-				AddComponent(reverb);
+				AddComponent(reverb);*/
 				break; }
 			case (int)ComponentType::PARTICLES: {
 				ComponentParticleSystem* particleSystem = new ComponentParticleSystem(this);
@@ -1626,14 +1668,14 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				AddComponent(box_collider);
 				break; }
 			case (int)ComponentType::SPHERE_COLLIDER: {
-				ComponentBoxCollider* box_collider = new ComponentBoxCollider(this);
-				box_collider->LoadComponent(components_to_load);
-				AddComponent(box_collider);
+				ComponentSphereCollider* sphere_collider = new ComponentSphereCollider(this);
+				sphere_collider->LoadComponent(components_to_load);
+				AddComponent(sphere_collider);
 				break; }
 			case (int)ComponentType::CAPSULE_COLLIDER: {
-				ComponentBoxCollider* box_collider = new ComponentBoxCollider(this);
-				box_collider->LoadComponent(components_to_load);
-				AddComponent(box_collider);
+				ComponentCapsuleCollider* capsule_collider = new ComponentCapsuleCollider(this);
+				capsule_collider->LoadComponent(components_to_load);
+				AddComponent(capsule_collider);
 				break; }
 			case (int)ComponentType::CONVEX_HULL_COLLIDER: {
 				ComponentBoxCollider* box_collider = new ComponentBoxCollider(this);
@@ -1645,7 +1687,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				rigi_body->LoadComponent(components_to_load);
 				AddComponent(rigi_body);
 				break; }
-
+			case (int)ComponentType::CHARACTER_CONTROLLER: {
+				ComponentCharacterController* character_controller = new ComponentCharacterController(this);
+				character_controller->LoadComponent(components_to_load);
+				AddComponent(character_controller);
+				break; }
 			case (int)ComponentType::SCRIPT: {
 				ComponentScript* script = new ComponentScript(this);
 				script->LoadComponent(components_to_load);
@@ -1689,6 +1735,12 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 					slider->ui_type = typeUI;
 					slider->LoadComponent(components_to_load);
 					AddComponent(slider);
+					break; }
+				case ComponentType::UI_ANIMATED_IMAGE: {
+					ComponentAnimatedImage* aImage = new ComponentAnimatedImage(this);
+					aImage->ui_type = typeUI;
+					aImage->LoadComponent(components_to_load);
+					AddComponent(aImage);
 					break; }
 				default:
 					LOG_ENGINE("Unknown component UItype while loading");
@@ -1750,8 +1802,18 @@ void GameObject::CloningGameObject(GameObject* clone)
 				case ComponentType::TRANSFORM: {
 					clone->transform->SetGlobalTransformation(transform->global_transformation);
 					break; }
-				case ComponentType::LIGHT: {
-					ComponentLight* light = new ComponentLight(clone);
+				case ComponentType::LIGHT_DIRECTIONAL: {
+					ComponentLightDirectional* light = new ComponentLightDirectional(clone);
+					(*item)->Clone(light);
+					clone->AddComponent(light);
+					break; }
+				case ComponentType::LIGHT_SPOT: {
+					ComponentLightSpot* light = new ComponentLightSpot(clone);
+					(*item)->Clone(light);
+					clone->AddComponent(light);
+					break; }
+				case ComponentType::LIGHT_POINT: {
+					ComponentLightPoint* light = new ComponentLightPoint(clone);
 					(*item)->Clone(light);
 					clone->AddComponent(light);
 					break; }
@@ -1803,6 +1865,26 @@ void GameObject::CloningGameObject(GameObject* clone)
 						(*item)->Clone(button);
 						clone->AddComponent(button);
 						break; }
+					case ComponentType::UI_CHECKBOX: {
+						ComponentCheckbox* check = new ComponentCheckbox(clone);
+						(*item)->Clone(check);
+						clone->AddComponent(check);
+						break; }
+					case ComponentType::UI_SLIDER: {
+						ComponentSlider* slider = new ComponentSlider(clone);
+						(*item)->Clone(slider);
+						clone->AddComponent(slider);
+						break; }
+					case ComponentType::UI_BAR: {
+						ComponentBar* bar = new ComponentBar(clone);
+						(*item)->Clone(bar);
+						clone->AddComponent(bar);
+						break; }
+					case ComponentType::UI_ANIMATED_IMAGE: {
+						ComponentAnimatedImage* aImage = new ComponentAnimatedImage(clone);
+						(*item)->Clone(aImage);
+						clone->AddComponent(aImage);
+						break; }
 					}
 					break; }
 
@@ -1832,12 +1914,30 @@ void GameObject::CloningGameObject(GameObject* clone)
 
 void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_delete)
 {
-	SDL_assert((uint)FileDropType::UNKNOWN == 10);
+	//SDL_assert((uint)FileDropType::UNKNOWN == 10);
 	switch (type) {
 	case ResourceType::RESOURCE_TEXTURE: {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-		if (material != nullptr && material->GetTexture() == (ResourceTexture*)to_delete) {
-			material->SetTexture(nullptr);
+		if (material != nullptr ) {
+			for (uint texType = 0; texType < (uint)TextureType::MAX; ++texType)
+			{
+				const ResourceTexture* texture = material->GetTexture((TextureType)texType);
+				if(texture != nullptr && texture == (ResourceTexture*)to_delete)
+					material->RemoveTexture((TextureType)texType);
+			}
+		}
+		break; }
+	case ResourceType::RESOURCE_MATERIAL : {
+		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+		if (material != nullptr && material->material == (ResourceMaterial*)to_delete) {
+			material->material = App->resources->default_material; // TODO: Apply default material when deleting the old one
+		}
+		break; }
+	case ResourceType::RESOURCE_SHADER: {
+		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+		if (material != nullptr && material->material->used_shader == (ResourceShader*)to_delete) {
+			material->material->used_shader = App->resources->default_shader;
+			App->resources->default_shader->IncreaseReferences();
 		}
 		break; }
 	case ResourceType::RESOURCE_MESH: {

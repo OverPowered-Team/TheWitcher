@@ -1,9 +1,16 @@
 #include "ResourcePrefab.h"
 #include "Application.h"
 #include "ModuleObjects.h"
-#include "ComponentLight.h"
+#include "ComponentLightDirectional.h"
 #include "ComponentTransform.h"
 #include "PanelHierarchy.h"
+#include "ModuleFileSystem.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
+#include "ModuleCamera3D.h"
+#include "Time.h"
+#include "ComponentDeformableMesh.h"
+
 #include "mmgr/mmgr.h"
 
 ResourcePrefab::ResourcePrefab() : Resource()
@@ -240,42 +247,38 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 
 		JSONArraypack* game_objects = prefab->GetArray("Prefab.GameObjects");
 
-		// first is family number, second parentID, third is array index in the json file
-		std::vector<std::tuple<uint, u64, uint>> objects_to_create;
-
-		for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
-			uint family_number = game_objects->GetNumber("FamilyNumber");
-			u64 parentID = std::stoull(game_objects->GetString("ParentID"));
-			objects_to_create.push_back({ family_number,parentID, i });
-			game_objects->GetAnotherNode();
-		}
-		std::sort(objects_to_create.begin(), objects_to_create.end(), ModuleObjects::SortByFamilyNumber);
-		game_objects->GetFirstNode();
 		std::vector<GameObject*> objects_created;
 
-		std::vector<std::tuple<uint, u64, uint>>::iterator item = objects_to_create.begin();
-		for (; item != objects_to_create.end(); ++item) {
-			game_objects->GetNode(std::get<2>(*item));
-			GameObject* obj = new GameObject();
-			if (std::get<0>(*item) == 1) { 
-				obj->LoadObject(game_objects, parent, !set_selected);
-			}
-			else { // search parent
+		for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
+			GameObject* obj = new GameObject(true);
+			u64 parentID = std::stoull(game_objects->GetString("ParentID"));
+			if (parentID != 0) {
 				std::vector<GameObject*>::iterator objects = objects_created.begin();
 				for (; objects != objects_created.end(); ++objects) {
-					if ((*objects)->ID == std::get<1>(*item)) {
-						obj->LoadObject(game_objects, *objects, !set_selected);
+					if ((*objects)->ID == parentID) {
+						obj->LoadObject(game_objects, *objects);
 						break;
 					}
 				}
 			}
+			else {
+				obj->LoadObject(game_objects, App->objects->GetRoot(false));
+			}
 			objects_created.push_back(obj);
+			game_objects->GetAnotherNode();
 		}
 		GameObject* obj = parent->children.back();
 		if (list_num != -1) {
 			parent->children.pop_back();
 			parent->children.insert(parent->children.begin() + list_num, obj);
 		}
+		for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+		{
+			ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
+			if (def_mesh)
+				def_mesh->AttachSkeleton();
+		}
+		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
 		obj->SetPrefab(ID);
 		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);

@@ -31,6 +31,7 @@ struct aiFileIO;
 #define MODELS_FOLDER "Assets/Models/"
 #define TEXTURES_FOLDER "Assets/Textures/"
 #define SHADERS_FOLDER "Assets/Shaders/"
+#define MATERIALS_FOLDER "Assets/Materials/"
 #define SCRIPTS_FOLDER "Assets/Scripts/"
 #define SCENE_FOLDER "Assets/Scenes/"
 #define ANIM_CONTROLLER_FOLDER "Assets/AnimControllers/"
@@ -78,6 +79,7 @@ enum class FileDropType {
 	PREFAB,
 	PARTICLES,
 	FONT,
+	MATERIAL,
 
 	UNKNOWN
 };
@@ -135,7 +137,7 @@ public:
 
 	void ManageNewDropFile(const char* extern_path);
 
-	const FileDropType& SearchExtension(const std::string& extern_path);
+	FileDropType SearchExtension(const std::string& extern_path);
 
 	std::string GetBaseFileName(const char* file_name);
 	std::string GetBaseFileNameWithExtension(const char* file_name);

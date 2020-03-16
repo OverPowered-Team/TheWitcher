@@ -6,6 +6,10 @@
 #include "FileNode.h"
 #include "ResourceScene.h"
 #include "PanelProject.h"
+#include "ShortCutManager.h"
+#include "ModuleResources.h"
+#include "ModuleObjects.h"
+#include "ModuleUI.h"
 #include "mmgr/mmgr.h"
 
 PanelSceneSelector::PanelSceneSelector(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)
@@ -104,7 +108,6 @@ void PanelSceneSelector::SaveSceneAsNew()
 		std::string extension;
 		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
 
-		ResourceScene* scene = new ResourceScene();
 		std::string path;
 		if (!App->StringCmp("alienScene", extension.data())) {
 			path = std::string(filename + std::string(".alienScene")).data();
@@ -120,6 +123,25 @@ void PanelSceneSelector::SaveSceneAsNew()
 			path.erase(path.begin());
 		}
 		path.erase(path.begin());
+		if (App->file_system->Exists(path.data())) {
+			ResourceScene* scene = App->resources->GetSceneByName(App->file_system->GetBaseFileName(path.data()).data());
+			if (scene != nullptr) {
+				scene->DeleteMetaData();
+				remove(scene->GetAssetsPath());
+				remove(std::string(App->file_system->GetPathWithoutExtension(scene->GetAssetsPath()) + "_meta.lazy").data());
+				auto item = App->resources->resources.begin();
+				for (; item != App->resources->resources.end(); ++item) {
+					if (*item == scene) {
+						delete* item;
+						*item = nullptr;
+						App->resources->resources.erase(item);
+						break;
+					}
+				}
+			}
+		}
+
+		ResourceScene* scene = new ResourceScene();
 		scene->SetAssetsPath(path.data());
 		scene->CreateMetaData();
 		App->objects->SaveScene(scene);
@@ -206,7 +228,6 @@ void PanelSceneSelector::CreateNewScene()
 		std::string extension;
 		App->file_system->SplitFilePath(filename, nullptr, nullptr, &extension);
 
-		ResourceScene* scene = new ResourceScene();
 		std::string path;
 		if (!App->StringCmp("alienScene", extension.data())) {
 			path = std::string(filename + std::string(".alienScene")).data();
@@ -221,9 +242,30 @@ void PanelSceneSelector::CreateNewScene()
 			path.erase(path.begin());
 		}
 		path.erase(path.begin());
+		
+		if (App->file_system->Exists(path.data())) {
+			ResourceScene* scene = App->resources->GetSceneByName(App->file_system->GetBaseFileName(path.data()).data());
+			if (scene != nullptr) {
+				scene->DeleteMetaData();
+				remove(scene->GetAssetsPath());
+				remove(std::string(App->file_system->GetPathWithoutExtension(scene->GetAssetsPath()) + "_meta.lazy").data());
+				auto item = App->resources->resources.begin();
+				for (; item != App->resources->resources.end(); ++item) {
+					if (*item == scene) {
+						delete* item;
+						*item = nullptr;
+						App->resources->resources.erase(item);
+						break;
+					}
+				}
+			}
+		}
+
+		ResourceScene* scene = new ResourceScene();
 		scene->SetAssetsPath(path.data());
 		scene->CreateMetaData();
 		App->objects->CreateEmptyScene(scene);
+		App->objects->SaveScene(scene);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(
 		App->ui->panel_project->RefreshAllNodes();

@@ -10,6 +10,7 @@
 #include "TextEdit/TextEditor.h"
 #include <utility>
 
+class GameObject;
 class Panel;
 class PanelConfig;
 class PanelAbout;
@@ -28,7 +29,7 @@ class PanelTextEditor;
 class PanelAnimTimeline;
 class PanelAnimator;
 class PanelParticleSystem;
-
+class PanelPhysics;
 struct ShortCut;
 
 struct Layout {
@@ -111,6 +112,10 @@ public:
 	// big window to dock everything
 	void BackgroundDockspace();
 
+	
+
+
+
 private:
 	TextEditor edit;
 	// demo
@@ -164,6 +169,8 @@ private:
 	SDL_Scancode panel_animtimeline_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_animator_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode panel_particles_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+	SDL_Scancode panel_physics_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
+
 	SDL_Scancode shortcut_demo_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_report_bug_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
 	SDL_Scancode shortcut_wireframe_codes[3] = { SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN };
@@ -197,6 +204,7 @@ public:
 	PanelTextEditor* panel_text_editor = nullptr;
 	PanelAnimTimeline* panel_animtimeline = nullptr;
 	PanelAnimator* panel_animator = nullptr;
+	PanelPhysics* panel_physics = nullptr;
 
 	// layouts
 	std::vector<Layout*> layouts;

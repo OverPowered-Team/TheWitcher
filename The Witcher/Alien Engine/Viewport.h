@@ -1,6 +1,9 @@
 #ifndef _VIEWPORT_H__
 #define _VIEWPORT_H__
 
+#include "Color.h"
+#include "MathGeoLib/include/Math/float2.h"
+
 class FBO
 {
 public:
@@ -89,6 +92,10 @@ public:
 	bool ScreenPointToViewport(float2& screen_point);
 
 	bool CanRender();
+
+	float2 GetPos() const;
+
+	float2 GetSize() const;
 
 public:
 

@@ -5,6 +5,7 @@
 #include "WwiseT.h"
 
 #include <list>
+#include <map>
 
 class ComponentAudioEmitter;
 
@@ -24,12 +25,10 @@ public:
 	~ModuleAudio();
 	bool Start();
 	void LoadBanksInfo();
-	void LoadUsedBanks();
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	bool UnloadAllBanksFromWwise();
-	void UnloadAllUsedBanksFromWwise();
 	void AddBank(Bank* bk);
 	// Utils
 	void Play();
@@ -41,13 +40,17 @@ public:
 	const std::vector<Bank*> GetBanks() const;
 	const Bank* GetBankByName(const char* name) const;
 	Bank* GetBankByID(const u64& id) const;
+	const char* GetEventNameByID(const u64& id) const;
+
+	void HandleEvent(EventType eventType) override;
+
 private:
 	std::vector <Bank*> banks;
 	bool play_mode = false;
 
 public:
 	std::list<ComponentAudioEmitter*> emitters;
-	std::list<Bank*> used_banks;
+	//std::list<Bank*> used_banks; TODO: in case of low memory performance optimize only loading the banks we are going to load
 	bool is_playing = false;
 	WwiseT::AudioSource* listener = nullptr;
 	WwiseT::AudioSource* default_listener = nullptr;

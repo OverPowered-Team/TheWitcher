@@ -1,5 +1,7 @@
 #include "PanelBuild.h"
 #include <shlobj.h>
+#include "ShortCutManager.h"
+#include "ModuleFileSystem.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include "mmgr/mmgr.h"

@@ -1,5 +1,7 @@
 #include "PanelLayout.h"
 #include "Application.h"
+#include "ShortCutManager.h"
+#include "ModuleUI.h"
 #include "mmgr/mmgr.h"
 
 PanelLayout::PanelLayout(const std::string& panel_name, const SDL_Scancode& key1_down, const SDL_Scancode& key2_repeat, const SDL_Scancode& key3_repeat_extra)

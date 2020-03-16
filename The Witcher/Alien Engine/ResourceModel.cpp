@@ -7,8 +7,13 @@
 #include "ComponentDeformableMesh.h"
 #include "Application.h"
 #include <algorithm>
+#include "PanelProject.h"
+#include "ModuleUI.h"
 #include "ReturnZ.h"
 #include "ResourceMaterial.h"
+#include "ResourceShader.h"
+#include "ModuleResources.h"
+#include "ModuleCamera3D.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ComponentBone.h"
@@ -23,7 +28,7 @@ ResourceModel::~ResourceModel()
 {
 	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
 	for (; item != meshes_attached.end(); ++item) {
-		if (*item != nullptr) { // aixo passa pq es fa el delete del modul resources i aquest respurce mesh ja la borrat alla
+		if (*item != nullptr) { // aixo passa pq es fa el delete del modul resources i aquest respurce resource_mesh ja la borrat alla
 			delete* item;
 			*item = nullptr;
 		}
@@ -144,12 +149,13 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 		std::string* materials_path = new std::string[materials_attached.size()];
 		for (int i = 0; i < materials_attached.size(); ++i)
 		{
-			if (meta_materials_paths != nullptr) {
-				std::string path_ = App->file_system->GetBaseFileName(meta_materials_paths[i].data()); //std::stoull().data());
-				materials_attached[i]->CreateMetaData(std::stoull(path_));
-			}
-			else {
-				materials_attached[i]->CreateMetaData();
+			if (meta_materials_paths == nullptr) {
+				std::string materialName = materials_attached[i]->GetName();
+				App->ui->panel_project->GetUniqueFileName(materialName, MATERIALS_FOLDER);
+
+				materials_attached[i]->SetName(materialName.c_str());
+				materials_attached[i]->SetAssetsPath(std::string(MATERIALS_FOLDER + materialName + ".material").data());
+				materials_attached[i]->SaveMaterialFiles();
 			}
 
 			materials_path[i] = materials_attached[i]->GetLibraryPath();
@@ -235,6 +241,13 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 		std::string* bones_paths = meta->GetArrayString("Meta.PathBones");
 		std::string* materials_path = meta->GetArrayString("Meta.PathMaterials");
 
+		for (uint i = 0; i < num_materials; ++i) {
+			u64 matID = std::stoull(App->file_system->GetBaseFileName(materials_path[i].data()));
+			ResourceMaterial* mat = (ResourceMaterial*)App->resources->GetResourceWithID(matID);
+			if (mat != nullptr) {
+				materials_attached.push_back(mat);
+			}
+		}
 		for (uint i = 0; i < num_meshes; ++i) {
 			if (!App->file_system->Exists(mesh_paths[i].data())) {
 				delete[] mesh_paths;
@@ -252,13 +265,6 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 		for (uint i = 0; i < num_bones; ++i) {
 			if (!App->file_system->Exists(bones_paths[i].data())) {
 				delete[] bones_paths;
-				delete meta;
-				return false;
-			}
-		}
-		for (uint i = 0; i < num_materials; ++i) {
-			if (!App->file_system->Exists(materials_path[i].data())) {
-				delete[] materials_path;
 				delete meta;
 				return false;
 			}
@@ -341,17 +347,6 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 				}
 			}
 
-			for (uint i = 0; i < num_materials; ++i) {
-				ResourceMaterial* r_material = new ResourceMaterial();
-				if (r_material->ReadBaseInfo(materials_path[i].data())) {
-					materials_attached.push_back(r_material);
-				}
-				else {
-					LOG_ENGINE("Error loading %s", materials_path[i].data());
-					delete r_material;
-				}
-			}
-
 			delete[] anim_path;
 			delete[] mesh_path;
 			delete[] materials_path;
@@ -389,13 +384,10 @@ void ResourceModel::ReadLibrary(const char* meta_data)
 		std::string* materials_path = model->GetArrayString("Meta.PathMaterials");
 
 		for (uint i = 0; i < num_materials; ++i) {
-			ResourceMaterial* r_material = new ResourceMaterial();
-			if (r_material->ReadBaseInfo(materials_path[i].data())) {
-				materials_attached.push_back(r_material);
-			}
-			else {
-				LOG_ENGINE("Error loading %s", materials_path[i].data());
-				delete r_material;
+			u64 matID = std::stoull(App->file_system->GetBaseFileName(materials_path[i].data()));
+			ResourceMaterial* mat = (ResourceMaterial*)App->resources->GetResourceWithID(matID);
+			if (mat != nullptr) {
+				materials_attached.push_back(mat);
 			}
 		}
 
@@ -697,7 +689,8 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 	GameObject* ret = nullptr;
 
 	for (uint i = 0; i < objects_created.size(); ++i) {
-		if (objects_created[i].first == node.parent_num && strcmp(objects_created[i].second->name, (model_nodes.size() > 1) ? node.parent_name.data() : App->objects->GetRoot(true)->GetName()) == 0) {
+		if (objects_created[i].first == node.parent_num && strcmp(objects_created[i].second->name, (model_nodes.size() > 1) ? node.parent_name.data() : App->objects->GetRoot(true)->GetName()) == 0) 
+		{
 			ret = new GameObject(objects_created[i].second, node.pos, node.rot, node.scale);
 			ret->SetName(node.name.data());
 
@@ -713,27 +706,17 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 						Cmesh = new ComponentMesh(ret);
 
 					mesh->IncreaseReferences();
-					Cmesh->mesh = mesh;
-					Cmesh->RecalculateAABB_OBB();
+					Cmesh->SetResourceMesh(mesh);
 					ret->AddComponent(Cmesh);
 				}
 
-				if (node.material >= 0) {
+				if (node.material >= 0)
+				{
 					ResourceMaterial* material = materials_attached[node.material];
-					if (material != nullptr) {
+					if (material != nullptr) 
+					{
 						ComponentMaterial* Cmat = new ComponentMaterial(ret);
-						Cmat->color = material->color;
-
-						// TODO: all texture types!!
-						/*for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
-							alien->SetString(std::to_string(iter), std::to_string(texturesID[iter]));
-						}*/
-
-						// CHANGE
-						if (material->texturesID[0] != 0) {
-							Cmat->SetTexture((ResourceTexture*)App->resources->GetResourceWithID(material->texturesID[0]));
-						}
-
+						Cmat->SetMaterial(material);
 						ret->AddComponent(Cmat);
 					}
 				}
@@ -762,3 +745,5 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 
 	return ret;
 }
+
+

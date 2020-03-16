@@ -3,6 +3,7 @@
 #include "ModuleAudio.h"
 #include "ComponentTransform.h"
 #include "ReturnZ.h"
+#include "Time.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "mmgr/mmgr.h"
 
@@ -11,7 +12,6 @@ ComponentAudioEmitter::ComponentAudioEmitter(GameObject * parent) : Component(pa
 	type = ComponentType::A_EMITTER;
 	source = App->audio->CreateSoundEmitter("Emitter");
 	App->audio->emitters.push_back(this);
-
 }
 
 void ComponentAudioEmitter::Update()
@@ -60,6 +60,11 @@ void ComponentAudioEmitter::StartSound()
 	source->PlayEventByID(current_event);
 }
 
+void ComponentAudioEmitter::StartSound(uint _event)
+{
+	source->PlayEventByID(_event);
+}
+
 void ComponentAudioEmitter::UpdateSourcePos()
 {
 	ComponentTransform* transformation = game_object_attached->GetComponentTransform();
@@ -104,8 +109,6 @@ void ComponentAudioEmitter::LoadComponent(JSONArraypack* to_load)
 		audio_name = App->audio->GetBankByID(current_bank)->events.at(current_event);*/
 
 	auto bank = App->audio->GetBankByID(current_bank);
-	if (!AlreadyUsedBank(bank))
-		App->audio->used_banks.push_back(bank);
 }
 bool ComponentAudioEmitter::DrawInspector()
 {
@@ -131,9 +134,6 @@ bool ComponentAudioEmitter::DrawInspector()
 				if (ImGui::Selectable((*i)->name.c_str(), is_selected))
 				{
 					current_bank = (*i)->id;
-
-					if(!AlreadyUsedBank((*i)))
-						App->audio->used_banks.push_back((*i));
 				}
 					
 			}
@@ -159,14 +159,13 @@ bool ComponentAudioEmitter::DrawInspector()
 			}
 		if(ImGui::Button("Play"))
 		{
-			App->audio->LoadUsedBanks();
 			StartSound();
 		}
 		if (ImGui::Button("Stop"))
 		{
 			App->audio->Stop();
-			App->audio->UnloadAllUsedBanksFromWwise();
-		}			
+			//App->audio->UnloadAllUsedBanksFromWwise(); //TODO 
+		}
 		ImGui::NewLine();
 		ImGui::Checkbox("Mute", &mute);
 		ImGui::Checkbox("PlayOnAwake", &play_on_awake);
@@ -180,15 +179,34 @@ bool ComponentAudioEmitter::DrawInspector()
 	return true;
 }
 
-bool ComponentAudioEmitter::AlreadyUsedBank(const Bank* bk)
+u64 ComponentAudioEmitter::GetCurrentBank()
 {
-	for (auto i = App->audio->used_banks.begin(); i != App->audio->used_banks.end(); ++i)
-	{
-		if (current_bank == (*i)->id)
-			return true;
-	}
+	return current_bank;
+}
 
-	return false;
+u32 ComponentAudioEmitter::GetWwiseIDFromString(const char* Wwise_name) const
+{
+	return source->GetWwiseIDFromString(Wwise_name);
+}
+
+void ComponentAudioEmitter::SetSwitchState(const char* switch_group_id, const char* switch_state_id)
+{
+	source->SetSwitch(source->GetID(), switch_group_id, switch_state_id);
+}
+
+void ComponentAudioEmitter::SetReverb(const float& strength, const char* name) 
+{
+	source->ApplyEnvReverb(strength, name);
+}
+
+void ComponentAudioEmitter::SetState(const char* state_group, const char* new_state)
+{
+	source->ChangeState(state_group, new_state);
+}
+
+WwiseT::AudioSource* ComponentAudioEmitter::GetSource() const
+{
+	return source;
 }
 
 void ComponentAudioEmitter::OnEnable()

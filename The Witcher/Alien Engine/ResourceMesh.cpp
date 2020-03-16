@@ -4,6 +4,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
 #include "ComponentBone.h"
+#include "ModuleResources.h"
 #include "ComponentDeformableMesh.h"
 #include "ResourceTexture.h"
 #include "ResourceBone.h"
@@ -194,6 +195,23 @@ void ResourceMesh::FreeMemory()
 		glDeleteBuffers(1, &id_normals);
 	if (id_uv != 0)
 		glDeleteBuffers(1, &id_uv);
+	if(id_weights!=0)
+		glDeleteBuffers(1, &id_weights);
+	if (id_bones != 0)
+		glDeleteBuffers(1, &id_bones);
+
+	id_vertex = 0;
+	id_index = 0;
+	id_normals = 0;
+	id_uv = 0;
+	id_weights = 0;
+	id_bones = 0;
+	references = 0;
+
+	num_vertex = 0;
+	num_index = 0;
+	num_faces = 0;
+
 
 	if (index != nullptr) {
 		delete[] index;
@@ -219,17 +237,18 @@ void ResourceMesh::FreeMemory()
 		delete[] center_point;
 		center_point = nullptr;
 	}
+	if (weights != nullptr)
+	{
+		delete[] weights;
+		weights = nullptr;
+	}
+	if (bones_ID != nullptr)
+	{
+		delete[] bones_ID;
+		bones_ID = nullptr;
+	}
 
-	id_vertex = 0;
-	id_index = 0;
-	id_normals = 0;
-	id_uv = 0;
 
-	references = 0;
-
-	num_vertex = 0;
-	num_index = 0;
-	num_faces = 0;
 }
 
 bool ResourceMesh::LoadMemory()
@@ -351,8 +370,8 @@ void ResourceMesh::InitBuffers()
 	if (normals != nullptr) {
 		// normals
 		glGenBuffers(1, &id_normals);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_normals);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * num_vertex * 3, normals, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3, normals, GL_STATIC_DRAW);
 
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(2);
@@ -365,6 +384,7 @@ void ResourceMesh::InitBuffers()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 }
 
 void ResourceMesh::Reset()

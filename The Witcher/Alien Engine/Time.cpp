@@ -4,8 +4,11 @@
 #include "PanelConsole.h"
 #include "ModuleObjects.h"
 #include "PanelGame.h"
+#include "ModuleUI.h"
 #include "ResourceScene.h"
 #include "Resource_.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
 #include "PanelScene.h"
 #include "Event.h"
 

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "Resource.h"
+#include "Resource_.h"
 #include "Globals.h"
 #include "NodeEditor/Include/imgui_node_editor.h"
 
 #include <vector>
 
 class ResourceAnimation;
+class ComponentAudioEmitter;
+class ResourceAnimatorController;
 
 class State
 {
@@ -24,6 +26,7 @@ public:
 public:
 	State();
 	State(std::string name, ResourceAnimation* clip);
+	State(State* state);
 
 	void SetName(std::string name);
 	void SetClip(ResourceAnimation* clip);
@@ -43,13 +46,14 @@ public:
 
 public:
 	Condition(std::string type, std::string comp_text = "") { this->type = type; }
+	Condition();
 	virtual bool Compare(ResourceAnimatorController* controller) { return false; }
 
 };
 
 class IntCondition : public Condition {
 public:
-	int comp;
+	int comp = 0;
 
 public:
 	IntCondition(std::string type, uint index, int comp) : Condition(type) {
@@ -61,6 +65,7 @@ public:
 		comp_texts.push_back("Lesser");
 		comp_text = "Greater";
 	}
+	IntCondition(IntCondition* int_condition);
 	bool Compare(ResourceAnimatorController* controller);
 	void SetParameter(uint index) { this->parameter_index = index; }
 	void SetCompValue(int comp) { this->comp = comp; }
@@ -70,7 +75,7 @@ public:
 
 class FloatCondition : public Condition {
 public:
-	float comp;
+	float comp = 0;
 
 public:
 	FloatCondition(std::string type, uint index, float comp) : Condition(type) {
@@ -80,6 +85,7 @@ public:
 		comp_texts.push_back("Lesser");
 		comp_text = "Greater";
 	}
+	FloatCondition(FloatCondition* float_condition);
 	bool Compare(ResourceAnimatorController* controller);
 	void SetParameter(uint index) { this->parameter_index = index; }
 	void SetCompValue(float comp) { this->comp = comp; }
@@ -95,6 +101,7 @@ public:
 		comp_texts.push_back("False");
 		comp_text = "True";
 	}
+	BoolCondition(BoolCondition* bool_condition);
 	bool Compare(ResourceAnimatorController* controller);
 	void SetParameter(uint index) { this->parameter_index = index; }
 	void SetCompText(std::string comp_text) { this->comp_text = comp_text; }
@@ -110,10 +117,12 @@ private:
 	std::vector<FloatCondition*> float_conditions;
 	std::vector<BoolCondition*> bool_conditions;
 	float blend = 2;
+	bool end = false;
 
 public:
 	Transition();
 	Transition(State* source, State* target, float blend);
+	Transition(Transition* transition, ResourceAnimatorController* controller);
 
 public:
 	void SetSource(State* source);
@@ -123,6 +132,8 @@ public:
 	State* GetSource();
 	State* GetTarget();
 	float GetBlend();
+	bool GetEnd() { return end; }
+	void SetEnd(bool hasend) { end = hasend; }
 
 	//Handle Conditions
 	void AddIntCondition();
@@ -139,6 +150,27 @@ public:
 	std::vector<BoolCondition*> GetBoolConditions() { return bool_conditions; }
 };
 
+// EVENTS
+enum class EventAnimType {
+	EVENT_AUDIO,
+	EVENT_PARTICLE,
+	EVENT_SCRIPT,
+	NONE
+};
+
+class AnimEvent
+{
+public:
+
+	AnimEvent(std::string _event_id, u64 _anim_id, uint _key, EventAnimType _type);
+	AnimEvent(AnimEvent* anim_event);
+
+	std::string event_id = "";
+	u64 animation_id = 0ULL;
+	uint frame = 0;
+	EventAnimType type = EventAnimType::NONE;
+};
+
 class ResourceAnimatorController : public Resource
 {
 private:
@@ -151,15 +183,22 @@ private:
 	std::vector <std::pair <std::string, float>> float_parameters;
 	std::vector <std::pair <std::string, bool>> bool_parameters;
 
+	// Events
+	std::vector<AnimEvent*> anim_events;
+	ComponentAudioEmitter* emitter = nullptr;
+	std::vector<ComponentScript*> scripts;
+	uint previous_key_time = 0;
+
 private:
 	ax::NodeEditor::EditorContext* ed_context = nullptr;
 
 public:
 	ResourceAnimatorController();
+	ResourceAnimatorController(ResourceAnimatorController* controller);
 	~ResourceAnimatorController();
 
-	int attached_references = 0;
 	int id_bucket = 1;
+	bool transitioning = false;
 
 	void ReImport(const u64& force_id = 0);
 	//Parameters things
@@ -168,6 +207,7 @@ public:
 	const std::vector <std::pair <std::string, bool>>& GetBoolParameters();
 	const std::vector <std::pair <std::string, float>>& GetFloatParameters();
 	const std::vector <std::pair <std::string, int>>& GetIntParameters();
+	
 	void SetBoolParametersName(uint index, const std::string& name);
 	void SetFloatParametersName(uint index, const std::string& name);
 	void SetIntParametersName(uint index, const std::string& name);
@@ -178,19 +218,21 @@ public:
 	void AddBoolParameter();
 	void AddFloatParameter();
 	void AddIntParameter();
-	void AddBoolParameter(std::pair<std::string, bool> param); 
+	void AddBoolParameter(std::pair<std::string, bool> param);
 	void AddFloatParameter(std::pair<std::string, float> param);
 	void AddIntParameter(std::pair<std::string, int> param);
+	
 	void RemoveBoolParameter(std::string name);
 	void RemoveFloatParameter(std::string name);
 	void RemoveIntParameter(std::string name);
+	
 	//string to const char for scripting
 	void SetBool(std::string name, bool value);
 	void SetFloat(std::string name, float value);
 	void SetInt(std::string name, int value);
 
 public:
-    void FreeMemory();
+	void FreeMemory();
 	bool LoadMemory();
 	bool ReadBaseInfo(const char* meta_file_path);
 	void ReadLibrary(const char* meta_data);
@@ -222,18 +264,30 @@ public:
 	std::vector<State*> GetStates() { return states; }
 
 	//Transitions
-	void AddTransition(State* source, State* target, float blend);
+	void AddTransition(State* source, State* target, float blend, bool end = false);
 	void RemoveTransition(std::string source_name, std::string target_name);
 	std::vector<Transition*> GetTransitions() const { return transitions; }
 	uint GetNumTransitions() const { return transitions.size(); }
 	std::vector<Transition*> FindTransitionsFromSourceState(State* state);
 
 	State* GetDefaultNode() const { return default_state; };
+	State* GetCurrentNode() const { return current_state; };
 	void SetDefaultNode(State* state) { default_state = state; }
 	ax::NodeEditor::EditorContext* GetEditorContext();
 	std::string GetTypeString() const;
 
 	std::string GetName();
+
+	// Events
+	void AddAnimEvent(AnimEvent* _event);
+	void RemoveAnimEvent(AnimEvent* _event);
+	std::vector<AnimEvent*> GetAnimEvents() const { return anim_events; }
+	uint GetNumAnimEvents() const { return anim_events.size(); }
+	ComponentAudioEmitter* GetEmitter() { return emitter; }
+	std::vector<ComponentScript*> GetScripts() { return scripts; }
+	void SetEmitter(ComponentAudioEmitter* _emitter) { emitter = _emitter; }
+	void SetScripts(std::vector<ComponentScript*> _scripts) { scripts = _scripts; }
+	void ActiveEvent(ResourceAnimation* _animation, uint _key);
 
 	//void UnLoad();
 	//void Load();

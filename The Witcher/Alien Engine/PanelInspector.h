@@ -1,8 +1,12 @@
 #pragma once
 
 #include "Panel.h"
+#include <tuple>
 
 class ComponentCanvas;
+typedef uint64_t u64;
+class Component;
+class ResourceModel;
 
 class PanelInspector : public Panel {
 

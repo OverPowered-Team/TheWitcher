@@ -6,18 +6,23 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "PanelGame.h"
-#include "ModuleUI.h"
 #include "ModuleInput.h"
+#include "ModuleWindow.h"
 #include "ReturnZ.h"
 #include "FileNode.h"
 #include "PanelProject.h"
 #include "ComponentCamera.h"
 #include "ComponentTransform.h"
+#include "ModuleResources.h"
+#include "ModuleUI.h"
+#include "StaticInput.h"
+#include "ModuleRenderer3D.h"
 #include "mmgr/mmgr.h"
 
 ComponentSlider::ComponentSlider(GameObject* obj) : ComponentUI(obj)
 {
 	ui_type = ComponentType::UI_SLIDER;
+	tabbable = true;
 }
 
 bool ComponentSlider::DrawInspector()
@@ -146,24 +151,8 @@ bool ComponentSlider::DrawInspector()
 		}
 		/*----------SLIDER TEXTURE------------------*/
 
-		ImGui::Spacing();
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
-		ImGui::Text("Color");
-		ImGui::SameLine(150);
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
-		static bool set_Z = true;
-		static Color col;
-		col = current_color;
-		if (ImGui::ColorEdit4("##RendererColor", &col, ImGuiColorEditFlags_Float)) {
-			if (set_Z)
-				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-			set_Z = false;
-			current_color = col;
-		}
-		else if (!set_Z && ImGui::IsMouseReleased(0)) {
-			set_Z = true;
-		}
-		ImGui::Spacing();
+		ImGui::Spacing(); ImGui::Spacing();
+
 		ImGui::Text("Slider Scale");
 		ImGui::SameLine(150);
 		float sliderScale[] = { sliderScaleX, sliderScaleY };
@@ -178,10 +167,293 @@ bool ComponentSlider::DrawInspector()
 		if (ImGui::DragFloat("##Factor", &factor_slider, 0.01f, 0.0f, 1.0f, "%.3f")) {
 			SetValue(factor_slider);
 		}
+		
+		ImGui::Spacing(); ImGui::Spacing();
+
+		//------------------------COLOR BACKGROUND-------------------------------
+		if (ImGui::TreeNode("Background Colors"))
+		{
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Idle Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			if (ImGui::ColorEdit4("##RendererColorIdle", &idle_color, ImGuiColorEditFlags_Float)) {
+				current_color = idle_color;
+			}
+
+			ImGui::Spacing();
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Hover Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			if (ImGui::ColorEdit4("##RendererColorHover", &hover_color, ImGuiColorEditFlags_Float)) {
+
+			}
+
+			ImGui::Spacing();
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Click Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			if (ImGui::ColorEdit4("##RendererColorClick", &clicked_color, ImGuiColorEditFlags_Float)) {
+
+			}
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Pressed Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			if (ImGui::ColorEdit4("##RendererColorPressed", &pressed_color, ImGuiColorEditFlags_Float)) {
+
+			}
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Disabled Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			if (ImGui::ColorEdit4("##RendererColorDisabled", &disabled_color, ImGuiColorEditFlags_Float)) {
+
+			}
+
+			ImGui::TreePop();
+		}
+
+		//---------------------END COLOR BACKGROUND-----------------------------
+
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+
+		//------------------------COLOR SLIDER-------------------------------
+		if (ImGui::TreeNode("Slider Colors"))
+		{
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Idle Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			if (ImGui::ColorEdit4("##RendererColorIdle", &slider_idle_color, ImGuiColorEditFlags_Float)) {
+				slider_current_color = slider_idle_color;
+			}
+
+			ImGui::Spacing();
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Hover Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			ImGui::ColorEdit4("##RendererColorHover", &slider_hover_color, ImGuiColorEditFlags_Float);
+
+			
+
+			ImGui::Spacing();
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Click Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			ImGui::ColorEdit4("##RendererColorClick", &slider_clicked_color, ImGuiColorEditFlags_Float);
+
+			
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Pressed Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			ImGui::ColorEdit4("##RendererColorPressed", &slider_pressed_color, ImGuiColorEditFlags_Float);
+
+	
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Disabled Color");
+			ImGui::SameLine(140);
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			ImGui::ColorEdit4("##RendererColorDisabled", &slider_disabled_color, ImGuiColorEditFlags_Float);
+
+		
+			ImGui::TreePop();
+		}
+
+		//---------------------END COLOR SLIDER-----------------------------
+
+
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+
+
+
+		if (ImGui::TreeNode("Navigation"))
+		{
+			//--------------------UP-----------------------------
+			ImGui::Text("Select on Up");
+			ImGui::SameLine(140);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			if (App->objects->GetGameObjectByID(select_on_up) != nullptr)
+				ImGui::Button((select_on_up != -1) ? std::string((App->objects->GetGameObjectByID(select_on_up)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			else 
+				ImGui::Button("GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+					GameObject* obj = *(GameObject**)payload->Data;
+					if (obj != nullptr && obj->GetComponent<ComponentUI>()->tabbable) {
+						select_on_up = obj->ID;
+					}
+					else {
+						LOG_ENGINE("Item is null or non tabbable");
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::PushID(select_on_up);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+			if (ImGui::Button("X")) {
+				if (select_on_up != -1) {
+					select_on_up = -1;
+				}
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::Spacing();
+
+			//--------------------DOWN-----------------------------
+			ImGui::Text("Select on Down");
+			ImGui::SameLine(140);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			if (App->objects->GetGameObjectByID(select_on_down) != nullptr)
+				ImGui::Button((select_on_down != -1) ? std::string((App->objects->GetGameObjectByID(select_on_down)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			else
+				ImGui::Button("GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+					GameObject* obj = *(GameObject**)payload->Data;
+					if (obj != nullptr && obj->GetComponent<ComponentUI>()->tabbable) {
+						select_on_down = obj->ID;
+					}
+					else {
+						LOG_ENGINE("Item is null or non tabbable");
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::PushID(select_on_down);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+			if (ImGui::Button("X")) {
+				if (select_on_down != -1) {
+					select_on_down = -1;
+				}
+			}
+			ImGui::PopStyleColor(3);
+
+
+
+
+			ImGui::Spacing();
+
+			//--------------------RIGHT-----------------------------
+			ImGui::Text("Select on Right");
+			ImGui::SameLine(140);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			if (App->objects->GetGameObjectByID(select_on_right) != nullptr)
+				ImGui::Button((select_on_right != -1) ? std::string((App->objects->GetGameObjectByID(select_on_right)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			else
+				ImGui::Button("GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+					GameObject* obj = *(GameObject**)payload->Data;
+					if (obj != nullptr && obj->GetComponent<ComponentUI>()->tabbable) {
+						select_on_right = obj->ID;
+					}
+					else {
+						LOG_ENGINE("Item is null or non tabbable");
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::PushID(select_on_right);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+			if (ImGui::Button("X")) {
+				if (select_on_right != -1) {
+					select_on_right = -1;
+				}
+			}
+			ImGui::PopStyleColor(3);
+
+
+
+
+
+			ImGui::Spacing();
+
+			//--------------------LEFT-----------------------------
+			ImGui::Text("Select on Left");
+			ImGui::SameLine(140);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			if (App->objects->GetGameObjectByID(select_on_left) != nullptr)
+				ImGui::Button((select_on_left != -1) ? std::string((App->objects->GetGameObjectByID(select_on_left)->name)).data() : "GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			else
+				ImGui::Button("GameObject: NULL", { ImGui::GetWindowWidth() * 0.55F , 0 });
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+					GameObject* obj = *(GameObject**)payload->Data;
+					if (obj != nullptr && obj->GetComponent<ComponentUI>()->tabbable) {
+						select_on_left = obj->ID;
+					}
+					else {
+						LOG_ENGINE("Item is null or non tabbable");
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::PopID();
+			ImGui::SameLine();
+			ImGui::PushID(select_on_left);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+			if (ImGui::Button("X")) {
+				if (select_on_left != -1) {
+					select_on_left = -1;
+				}
+			}
+			ImGui::PopStyleColor(3);
+
+			ImGui::Spacing();
+			//----------------------------------------------------------------------
+
+			ImGui::TreePop();
+		}
 
 		ImGui::Spacing();
+
+
 		ImGui::Separator();
-		ImGui::Spacing();
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
 	}
 	else {
 		RightClickMenu("Slider");
@@ -206,7 +478,7 @@ void ComponentSlider::Draw(bool isGame)
 	sliderX = transform->global_transformation[0][3];
 
 
-	DrawTexture(isGame, sliderTexture);
+	DrawTexture(isGame, sliderTexture, false);
 	transform->global_transformation = matrix;
 	DrawTexture(isGame, texture);
 }
@@ -215,7 +487,10 @@ void ComponentSlider::Draw(bool isGame)
 void ComponentSlider::Update()
 {
 	if (Time::IsPlaying()) {
-		UILogic();
+		if (!App->objects->first_assigned_selected || !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled)
+			CheckFirstSelected();
+		//UILogicMouse();
+		
 		GetValue();
 
 		switch (state)
@@ -237,16 +512,21 @@ void ComponentSlider::Update()
 		default:
 			break;
 		}
+		UILogicGamePad();
 	}
 }
 
 
-void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex)
+void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex, bool background)
 {
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	float4x4 matrix = transform->global_transformation;
 
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
 
 	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
 		glMatrixMode(GL_PROJECTION);
@@ -284,6 +564,7 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex)
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
+		matrix[2][3] = 0.0f;
 	}
 
 	if (tex != nullptr) {
@@ -292,7 +573,10 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex)
 		glBindTexture(GL_TEXTURE_2D, tex->id);
 	}
 
-	glColor4f(current_color.r, current_color.g, current_color.b, current_color.a);
+	if (background)
+		glColor4f(current_color.r, current_color.g, current_color.b, current_color.a);
+	else
+		glColor4f(slider_current_color.r, slider_current_color.g, slider_current_color.b, slider_current_color.a);
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
@@ -323,6 +607,9 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex)
 
 	glPopMatrix();
 
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	glEnable(GL_LIGHTING);
 	glEnable(GL_CULL_FACE);
 }
 
@@ -365,6 +652,18 @@ void ComponentSlider::SaveComponent(JSONArraypack* to_save)
 	to_save->SetColor("ColorPressed", pressed_color);
 	to_save->SetColor("ColorDisabled", disabled_color);
 
+	to_save->SetColor("SliderColorCurrent", slider_current_color);
+	to_save->SetColor("SliderColorIdle", slider_idle_color);
+	to_save->SetColor("SliderColorHover", slider_hover_color);
+	to_save->SetColor("SliderColorClicked", slider_clicked_color);
+	to_save->SetColor("SliderColorPressed", slider_pressed_color);
+	to_save->SetColor("SliderColorDisabled", slider_disabled_color);
+
+	to_save->SetString("SelectOnUp", std::to_string(select_on_up));
+	to_save->SetString("SelectOnDown", std::to_string(select_on_down));
+	to_save->SetString("SelectOnRight", std::to_string(select_on_right));
+	to_save->SetString("SelectOnLeft", std::to_string(select_on_left));
+
 }
 
 void ComponentSlider::LoadComponent(JSONArraypack* to_load)
@@ -388,6 +687,18 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 	clicked_color = to_load->GetColor("ColorClicked");
 	pressed_color = to_load->GetColor("ColorPressed");
 	disabled_color = to_load->GetColor("ColorDisabled");
+
+	slider_current_color = to_load->GetColor("SliderColorCurrent");
+	slider_idle_color = to_load->GetColor("SliderColorIdle");
+	slider_hover_color = to_load->GetColor("SliderColorHover");
+	slider_clicked_color = to_load->GetColor("SliderColorClicked");
+	slider_pressed_color = to_load->GetColor("SliderColorPressed");
+	slider_disabled_color = to_load->GetColor("SliderColorDisabled");
+
+	select_on_up = std::stoull(to_load->GetString("SelectOnUp"));
+	select_on_down = std::stoull(to_load->GetString("SelectOnDown"));
+	select_on_right = std::stoull(to_load->GetString("SelectOnRight"));
+	select_on_left = std::stoull(to_load->GetString("SelectOnLeft"));
 
 	u64 textureID = std::stoull(to_load->GetString("TextureID"));
 	if (textureID != 0) {
@@ -426,22 +737,25 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 			SetCanvas(nullptr);
 		}
 	}
+	App->objects->first_assigned_selected = false;
 }
 bool ComponentSlider::OnHover()
 {
 	current_color = hover_color;
+	slider_current_color = slider_hover_color;
 	return true;
 }
 
 bool ComponentSlider::OnClick()
 {
 	current_color = clicked_color;
+	slider_current_color = slider_clicked_color;
 	return true;
 }
 
 bool ComponentSlider::OnPressed()
 {
-	ComponentTransform* trans = game_object_attached->GetComponent<ComponentTransform>();
+	/*ComponentTransform* trans = game_object_attached->GetComponent<ComponentTransform>();
 	float width = (sliderX + ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (sliderX - ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
 	float width_bg = (x + ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (x - ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
 	
@@ -462,16 +776,36 @@ bool ComponentSlider::OnPressed()
 	if (factor <= 0.0f)
 	{
 		factor = 0.0f;
+	}*/
+
+	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || Input::GetControllerHoritzontalLeftAxis(1) < -0.2f)
+	{
+		factor += (0.01f);
+	}
+	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || Input::GetControllerHoritzontalLeftAxis(1) > 0.2f)
+	{
+		factor -= (0.01f);
 	}
 
 
+	if (factor >= 1.0f)
+	{
+		factor = 1.0f;
+	}
+	if (factor <= 0.0f)
+	{
+		factor = 0.0f;
+	}
+
 	current_color = pressed_color;
+	slider_current_color = slider_pressed_color;
 	return true;
 }
 
 bool ComponentSlider::OnRelease()
 {
 	current_color = idle_color;
+	slider_current_color = slider_idle_color;
 	return true;
 }
 
@@ -492,10 +826,39 @@ float ComponentSlider::GetValue()
 	float startPos = (x - (width_bg * 0.5f));
 	float endPos = (x + (width_bg * 0.5f)- width);
 	float thumbPos = sliderX - width * 0.5f;
-	LOG_ENGINE("SLIDER VALUE: %f", (thumbPos - startPos) / (endPos - startPos));
+
 	return((thumbPos - startPos) / (endPos - startPos));
 
 }
+
+void ComponentSlider::UILogicGamePad()
+{
+	switch (state)
+	{
+	case Idle: {
+		//not necessary to do anything
+		break; }
+	case Hover: {
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+		{
+			state = Click;
+		}
+		break; }
+	case Click: {
+		state = Pressed;
+		break; }
+	case Pressed: {
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+		{
+			state = Hover;
+		}
+		break; }
+	case Release: {
+		state = Idle;
+		break; }
+	}
+}
+
 
 
 

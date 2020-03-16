@@ -6,15 +6,18 @@
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
 
+#include "ModuleUI.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ComponentParticleSystem.h"
 #include "GameObject.h"
 #include "ModuleCamera3D.h"
+#include "ModuleFileSystem.h"
 
 #include "ModuleResources.h"
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
+#include "PanelProject.h"
 #include "ResourceTexture.h"
 #include "ResourceShader.h"
 #include "ResourceAnimation.h"
@@ -29,6 +32,8 @@
 #include "FreeType/include/freetype/freetype.h"
 
 #include "Optick/include/optick.h"
+
+#define DAE_FPS 30
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled)
 {
@@ -101,7 +106,8 @@ bool ModuleImporter::LoadModelFile(const char *path, const char *extern_path)
 			LOG_ENGINE("Error type: %s", aiGetErrorString());
 		}
 		aiReleaseImport(scene);
-		App->resources->AddNewFileNode(path, true);
+		if(ret)
+			App->resources->AddNewFileNode(path, true);
 	}
 	else
 	{
@@ -165,6 +171,7 @@ void ModuleImporter::InitScene(const char *path, const aiScene *scene, const cha
 	if (model->CreateMetaData())
 	{
 		App->resources->AddResource(model);
+		App->ui->panel_project->RefreshAllNodes();
 		model->ConvertToGameObjects();
 		ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
 	}
@@ -175,14 +182,16 @@ void ModuleImporter::InitScene(const char *path, const aiScene *scene, const cha
 void ModuleImporter::LoadAnimation(const aiAnimation *anim)
 {
 	OPTICK_EVENT();
+	bool is_dae = anim->mTicksPerSecond == 1;
+
 	ResourceAnimation* resource_animation = new ResourceAnimation();
 	resource_animation->name = std::string(anim->mName.C_Str()) ==  "" ? "Take 001" : anim->mName.C_Str();
-	resource_animation->ticks_per_second = anim->mTicksPerSecond;
+	resource_animation->ticks_per_second = is_dae ? DAE_FPS : anim->mTicksPerSecond;
 	resource_animation->num_channels = anim->mNumChannels;
 	resource_animation->channels = new ResourceAnimation::Channel[resource_animation->num_channels];
 	resource_animation->start_tick = 0;
-	resource_animation->end_tick = anim->mDuration;
-	resource_animation->max_tick = anim->mDuration;
+	resource_animation->end_tick = is_dae ? anim->mDuration * DAE_FPS : anim->mDuration;
+	resource_animation->max_tick = resource_animation->end_tick;
 
 	for (uint i = 0u; i < resource_animation->num_channels; ++i)
 	{
@@ -202,7 +211,7 @@ void ModuleImporter::LoadAnimation(const aiAnimation *anim)
 		{
 			channel.position_keys[j].value.Set(anim->mChannels[i]->mPositionKeys[j].mValue.x, anim->mChannels[i]->mPositionKeys[j].mValue.y,
 											   anim->mChannels[i]->mPositionKeys[j].mValue.z);
-			channel.position_keys[j].time = anim->mChannels[i]->mPositionKeys[j].mTime;
+			channel.position_keys[j].time = is_dae ? std::round(anim->mChannels[i]->mPositionKeys[j].mTime * DAE_FPS) : anim->mChannels[i]->mPositionKeys[j].mTime;
 		}
 
 		//Load scaling keys
@@ -210,7 +219,7 @@ void ModuleImporter::LoadAnimation(const aiAnimation *anim)
 		{
 			channel.scale_keys[j].value.Set(anim->mChannels[i]->mScalingKeys[j].mValue.x, anim->mChannels[i]->mScalingKeys[j].mValue.y,
 											anim->mChannels[i]->mScalingKeys[j].mValue.z);
-			channel.scale_keys[j].time = anim->mChannels[i]->mScalingKeys[j].mTime;
+			channel.scale_keys[j].time = is_dae ? std::round(anim->mChannels[i]->mScalingKeys[j].mTime * DAE_FPS) : anim->mChannels[i]->mScalingKeys[j].mTime;
 		}
 
 		//Load rotation keys
@@ -218,7 +227,7 @@ void ModuleImporter::LoadAnimation(const aiAnimation *anim)
 		{
 			channel.rotation_keys[j].value.Set(anim->mChannels[i]->mRotationKeys[j].mValue.x, anim->mChannels[i]->mRotationKeys[j].mValue.y,
 											   anim->mChannels[i]->mRotationKeys[j].mValue.z, anim->mChannels[i]->mRotationKeys[j].mValue.w);
-			channel.rotation_keys[j].time = anim->mChannels[i]->mRotationKeys[j].mTime;
+			channel.rotation_keys[j].time = is_dae ? std::round(anim->mChannels[i]->mRotationKeys[j].mTime * DAE_FPS) : anim->mChannels[i]->mRotationKeys[j].mTime;
 		}
 	}
 
@@ -363,7 +372,7 @@ void ModuleImporter::LoadNode(const aiNode *node, const aiScene *scene, uint nod
 			ModelNode nodeMesh;
 			nodeMesh.name = std::string(node->mName.C_Str() + std::to_string(i));
 			nodeMesh.mesh = node->mMeshes[i];
-			model_node.material = scene->mMeshes[node->mMeshes[i]]->mMaterialIndex;
+			nodeMesh.material = scene->mMeshes[node->mMeshes[i]]->mMaterialIndex;
 			nodeMesh.parent_name = model_node.name;
 			nodeMesh.node_num = nodeNum + 2;
 			nodeMesh.parent_num = nodeNum + 1;
@@ -392,23 +401,21 @@ void ModuleImporter::LoadNode(const aiNode *node, const aiScene *scene, uint nod
 	model->model_nodes.push_back(model_node);
 }
 
-void ModuleImporter::LoadMaterials(const aiMaterial *material, const char *extern_path)
+void ModuleImporter::LoadMaterials(aiMaterial *material, const char *extern_path)
 {
 	OPTICK_EVENT();
 	ResourceMaterial* mat = new ResourceMaterial();
-
+	mat->SetName(material->GetName().C_Str());
 	aiColor4D col;
 	if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, col))
 	{
-		mat->color.r = col.r;
-		mat->color.g = col.g;
-		mat->color.b = col.b;
-		mat->color.a = col.a;
+		mat->color.x = col.r;
+		mat->color.y = col.g;
+		mat->color.z = col.b;
+		mat->color.w = col.a;
 	}
 
 	LoadModelTexture(material, mat, aiTextureType_DIFFUSE, TextureType::DIFFUSE, extern_path);
-
-	App->resources->AddResource(mat);
 	model->materials_attached.push_back(mat);
 }
 
@@ -663,31 +670,33 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture *texture)
 	{
 		if (*item != nullptr)
 		{
-			ComponentMaterial *material = (ComponentMaterial *)(*item)->GetComponent(ComponentType::MATERIAL);
+			ComponentMaterial *compMaterial = (ComponentMaterial *)(*item)->GetComponent(ComponentType::MATERIAL);
 
-			if ((*item)->HasComponent(ComponentType::MESH))
+			if ((*item)->HasComponent(ComponentType::MESH) || (*item)->HasComponent(ComponentType::DEFORMABLE_MESH))
 			{
 				bool exists = true;
-				if (material == nullptr)
+				if (compMaterial == nullptr)
 				{
 					exists = false;
-					material = new ComponentMaterial((*item));
-					(*item)->AddComponent(material);
+					compMaterial = new ComponentMaterial((*item));
+					(*item)->AddComponent(compMaterial);
 				}
-				material->SetTexture(texture);
+				compMaterial->SetTexture(texture, TextureType::DIFFUSE);
+
 				if (!exists)
 				{
-					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, material);
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, compMaterial);
 				}
 				else
 				{
-					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, material);
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, compMaterial);
 				}
 			}
 			else
 				LOG_ENGINE("Selected GameObject has no mesh");
 
-			if ((*item)->HasComponent(ComponentType::PARTICLES))
+
+			/*if ((*item)->HasComponent(ComponentType::PARTICLES))
 			{
 
 				ComponentParticleSystem *particleSystem = (ComponentParticleSystem *)(*item)->GetComponent(ComponentType::PARTICLES);
@@ -698,7 +707,7 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture *texture)
 				particleSystem->SetTexture(texture);
 			}
 			else
-				LOG_ENGINE("Selected GameObject has no particle system");
+				LOG_ENGINE("Selected GameObject has no particle system");*/
 		}
 	}
 }
@@ -749,6 +758,31 @@ void ModuleImporter::ApplyShaderToSelectedObject(ResourceShader *shader)
 {
 	// TODO
 }
+
+void ModuleImporter::ApplyMaterialToSelectedObject(ResourceMaterial* material)
+{
+	std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+	auto item = selected.begin();
+	for (; item != selected.end(); ++item)
+	{
+		if (*item != nullptr)
+		{
+			if (!(*item)->HasComponent(ComponentType::MESH) && !(*item)->HasComponent(ComponentType::DEFORMABLE_MESH) && !(*item)->HasComponent(ComponentType::PARTICLES))
+				continue;	
+
+			ComponentMaterial* materialComp = (ComponentMaterial*)(*item)->GetComponent(ComponentType::MATERIAL);
+
+			if (materialComp == nullptr)
+			{
+				materialComp = new ComponentMaterial(*item);
+				(*item)->AddComponent(materialComp);
+			}
+
+			materialComp->SetMaterial(material);
+		}
+	}
+}
+
 void ModuleImporter::ApplyParticleSystemToSelectedObject(std::string path)
 {
 
@@ -964,14 +998,6 @@ bool ModuleImporter::ReImportModel(ResourceModel *model)
 			}
 		}
 		ReImportAnimations(model, scene);
-
-		if (scene->HasMaterials())
-		{
-			for (uint i = 0; i < scene->mNumMaterials; ++i)
-			{
-				LoadMaterials(scene->mMaterials[i], nullptr);
-			}
-		}
 
 		// start recursive function to all nodes
 		for (uint i = 0; i < scene->mRootNode->mNumChildren; ++i)
