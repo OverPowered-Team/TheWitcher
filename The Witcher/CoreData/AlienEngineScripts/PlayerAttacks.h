@@ -29,21 +29,31 @@ public:
 class ALIEN_ENGINE_API PlayerAttacks : public Alien {
 
 public:
+
+	enum (AttackType,
+		LIGHT,
+		HEAVY,
+		NONE
+	);
+
+public:
 	PlayerAttacks();
 	virtual ~PlayerAttacks();
 	
 	void Start();
-	void StartAttack();
-	void UpdateAttack();
-	void SaveInput(char input);
+	void StartAttack(AttackType attack);
+	void UpdateAttack(AttackType new_attack);
 
 	void ActiveCollider();
 	void DesactiveCollider();
 
+public:
+	float input_window;
+
 protected:
 	void CreateAttacks();
 	void DoAttack();
-	void SelectAttack();
+	void SelectAttack(AttackType attack);
 	bool CanReceiveInput();
 
 protected:
@@ -52,11 +62,8 @@ protected:
 	Attack* base_heavy_attack = nullptr;
 	PlayerController* player_controller = nullptr;
 
-	float start_attack_time = 0.0f;
-	float input_window = 0.0f;
+	float final_attack_time = 0.0f;
 	float attack_input_time = 0.0f;
-
-	char last_input = ' ';
 
 	std::vector<Attack*> attacks;
 };
@@ -65,6 +72,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	PlayerAttacks* player_attacks = new PlayerAttacks();
 	// To show in inspector here
 
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->input_window);
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActiveCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DesactiveCollider, player_attacks);
 
