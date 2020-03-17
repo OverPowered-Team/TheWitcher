@@ -1,4 +1,5 @@
 #include "UI_Char_Frame.h"
+#include "../../Alien Engine/ComponentBar.h"
 
 UI_Char_Frame::UI_Char_Frame() : Alien()
 {
@@ -35,9 +36,22 @@ void UI_Char_Frame::Start()
 			yen_img->SetEnable(false);
 		}
 	}
+
+	lifebar = (ComponentBar*)game_object->GetChild("Lifebar")->GetComponent(ComponentType::UI_BAR);
+	//mana_bar = (ComponentBar*)game_object->GetChild("")->GetComponent(ComponentType::UI_BAR);
+	//xp_bar = (ComponentBar*)game_object->GetChild("Lifebar")->GetComponent(ComponentType::UI_BAR);
+
 }
 
 void UI_Char_Frame::Update()
 {
+	if (Input::GetKeyDown(SDL_SCANCODE_A))
+	{
+		lifebar->SetBarValue(lifebar->GetBarValue() - 0.05f);
+	}
 
+	if (Input::GetKeyDown(SDL_SCANCODE_D))
+	{
+		lifebar->SetBarValue(lifebar->GetBarValue() + 0.05f);
+	}
 }
