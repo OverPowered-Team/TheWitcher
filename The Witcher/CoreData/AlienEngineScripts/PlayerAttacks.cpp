@@ -16,6 +16,10 @@ void PlayerAttacks::Update()
 {
 }
 
+void PlayerAttacks::StartAttack()
+{
+}
+
 void PlayerAttacks::CreateAttacks()
 {
 }

@@ -4,6 +4,7 @@
 #include "Macros/AlienScripts.h"
 
 class Attack {
+public:
 	std::string name = "";
 	std::string input = "";
 	float3 collider_position;
@@ -22,12 +23,16 @@ public:
 	
 	void Start();
 	void Update();
+	void StartAttack();
 
 protected:
 	void CreateAttacks();
 
 protected:
 	Attack* current_attack = nullptr;
+	Attack* base_light_attack = nullptr;
+	Attack* base_heavy_attack = nullptr;
+
 	std::vector<Attack*> attacks;
 };
 
