@@ -3,6 +3,8 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class PlayerController;
+
 class Attack {
 public:
 	std::string name = "";
@@ -22,19 +24,30 @@ public:
 	virtual ~PlayerAttacks();
 	
 	void Start();
-	void Update();
 	void StartAttack();
+	void UpdateAttack();
+	void SaveInput(char input);
 
 	void ActiveCollider();
 	void DesactiveCollider();
 
 protected:
 	void CreateAttacks();
+	void DoAttack();
+	void SelectAttack();
+	bool CanReceiveInput();
 
 protected:
 	Attack* current_attack = nullptr;
 	Attack* base_light_attack = nullptr;
 	Attack* base_heavy_attack = nullptr;
+	PlayerController* player_controller = nullptr;
+
+	float start_attack_time = 0.0f;
+	float input_window = 0.0f;
+	float attack_input_time = 0.0f;
+
+	char last_input = ' ';
 
 	std::vector<Attack*> attacks;
 };

@@ -1,3 +1,4 @@
+#include "PlayerAttacks.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -12,6 +13,7 @@ void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	rbody = (ComponentRigidBody*)GetComponent(ComponentType::RIGID_BODY);
+	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
 }
 
 void PlayerController::Update()
@@ -27,7 +29,13 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::IDLE: {
 
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
-			animator->PlayState("Attack");
+			attacks->SaveInput('X');
+			attacks->StartAttack();
+			state = PlayerState::BASIC_ATTACK;
+		}
+		else if(Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y)) {
+			attacks->SaveInput('Y');
+			attacks->StartAttack();
 			state = PlayerState::BASIC_ATTACK;
 		}
 
@@ -51,7 +59,14 @@ void PlayerController::Update()
 
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
-		break;
+	{
+		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X))
+			attacks->SaveInput('X');
+		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y))
+			attacks->SaveInput('Y');
+
+		attacks->UpdateAttack();
+	} break;
 	case PlayerController::PlayerState::JUMPING:
 		break;
 	case PlayerController::PlayerState::DASHING:
