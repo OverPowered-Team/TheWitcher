@@ -1,0 +1,266 @@
+{
+  "Combos": [
+    {
+      // X Combos
+      "name": "L",
+      "button": "L",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.5,
+      "next_attack": "LL"
+    },
+    {
+      "name": "LH",
+      "button": "LH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": "LHL"
+    },
+
+    {
+      "name": "LL",
+      "button": "LL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.5,
+      "next_attack": [ "LLL", "LLH" ]
+    },
+
+    {
+      "name": "LLL",
+      "button": "LLL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.6,
+      "next_attack": [ "LLLL, LLLH" ]
+    },
+    {
+      "name": "LHL",
+      "button": "LHL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 1.0,
+      //Aplly AoE effect
+      "next_attack": "End" //Horizontal Death
+    },
+    {
+      "name": "LLH",
+      "button": "LLH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": "LLHL"
+    },
+    {
+      "name": "LLHL",
+      "button": "LLHL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 1.5,
+      //Apply positioning
+      "next_attack": "End" // Sword charge
+    },
+    {
+      "name": "LLLL",
+      "button": "LLLL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": "LLLLL"
+    },
+    {
+      "name": "LLLLL",
+      "button": "LLLLL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 1.0,
+      "next_attack": "End" // Light base 
+    },
+    {
+      "name": "LLLH",
+      "button": "LLLH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": "LLLHH"
+    },
+    {
+      "name": "LLLHH",
+      "button": "LLLHH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 1.0,
+      // Aplies effect
+      "next_attack": "End" // Radian slash
+    },
+
+    // Y Combos
+    {
+      "name": "H",
+      "button": "H",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": [ "HL", "HH" ]
+    },
+    {
+      "name": "HL",
+      "button": "HL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.5,
+      "next_attack": "HLL"
+    },
+    {
+      "name": "HLL",
+      "button": "HLL",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.8,
+      //Apply repositioning
+      "next_attack": "End" // Nilfgaard Fade
+    },
+    {
+      "name": "HH",
+      "button": "HH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": "HHH"
+    },
+    {
+      "name": "HHH",
+      "button": "HHH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.8,
+      "next_attack": "HHHH"
+    },
+    {
+      "name": "HHHH",
+      "button": "HHHH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 0.7,
+      "next_attack": "HHHHH"
+    },
+    {
+      "name": "HHHHH",
+      "button": "HHHHH",
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "multiplier": 1.4,
+      "next_attack": "End" // Heavy base combo
+    }
+
+  ]
+}

@@ -96,22 +96,40 @@ void PlayerAttacks::CreateAttacks()
 {
 	LOG("CREATE ATTACKS");
 
-	Attack* attack = new Attack();
-	Attack* tmp_attack = attack;
-	attack->name = "XXX";
-	attacks.push_back(attack);
+	JSON_Value* value = json_parse_file("Configuration/GeraltCombos.json");
+	JSON_Object* object = json_value_get_object(value);
 
-	attack = new Attack();
-	attack->name = "XX";
-	attack->light_attack_link = tmp_attack;
-	tmp_attack = attack;
-	attacks.push_back(attack);
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* combo = new JSONfilepack("Configuration/GeraltCombos.json", object, value);
+		
+		JSONArraypack* attack_combo = combo->GetArray("Combos");
+		if (attack_combo)
+		{
+			attack_combo->GetFirstNode();
+			for (uint i = 0; i < attack_combo->GetArraySize(); i++)
+			{
+				std::string attack_name = attack_combo->GetString("name");
+				std::string button_name = attack_combo->GetString("button");
 
-	attack = new Attack();
-	attack->name = "X";
-	attack->light_attack_link = tmp_attack;
-	base_light_attack = attack;
-	attacks.push_back(attack);
+				float3 pos = float3(attack_combo->GetNumber("collider.pos_x"),
+					attack_combo->GetNumber("collider.pos_y"),
+					attack_combo->GetNumber("collider.pos_z"));
+				float3 size = float3(attack_combo->GetNumber("collider.width"),
+					attack_combo->GetNumber("collider.height"),
+					attack_combo->GetNumber("collider.depth"));
+				float multiplier = attack_combo->GetNumber("multiplier");
+				std::string next_attack = attack_combo->GetString("next_attack");
+				Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier);
+				attacks.push_back(attack);
+			}
+		}
+		
+		delete[] attack_combo;
+		delete combo;
+		delete object;
+		delete value;
+	}
 }
 
 void PlayerAttacks::ActiveCollider()
