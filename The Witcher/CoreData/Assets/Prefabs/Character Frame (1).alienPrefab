@@ -1,192 +1,20 @@
 {
-    "Scene": {
-        "Name": "UI",
+    "Prefab": {
         "GameObjects": [
             {
-                "Name": "Main Camera",
-                "FamilyNumber": 1,
-                "ID": "7138120710968152888",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            0
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "4114116160527096612"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 6,
-                        "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.067001342773438,
-                        "BackCol": [
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            1
-                        ],
-                        "FarPlane": 200,
-                        "NearPlane": 0.10000000149011612,
-                        "isFovHori": 0,
-                        "ID": "14134049128210429488",
-                        "IsGameCamera": true,
-                        "IsSelectedCamera": false,
-                        "PrintIcon": true,
-                        "IconColor": [
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Directional Light",
-                "FamilyNumber": 1,
-                "ID": "11514662629142535508",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0.2798481285572052,
-                            -0.36470523476600647,
-                            0.115916907787323,
-                            0.88047623634338379
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            0.99999994039535522
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "10352151725249784355"
-                    },
-                    {
-                        "Type": 3,
-                        "Enabled": true,
-                        "ID": "13618221331313114550",
-                        "PrintIcon": true,
-                        "Intensity": 1,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Direction": [
-                            -0.57735037803649902,
-                            -0.57735025882720947,
-                            0.57735025882720947
-                        ],
-                        "Ambient": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Diffuse": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "Specular": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "InGame UI",
-                "FamilyNumber": 1,
-                "ID": "13226883940310893092",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            0
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "12347455825717457340"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 19
-                    }
-                ]
-            },
-            {
                 "Name": "Character Frame",
-                "FamilyNumber": 2,
+                "FamilyNumber": 1,
                 "ID": "12215182589219583907",
                 "ParentID": "13226883940310893092",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "14336817234344442991",
                 "Components": [
                     {
                         "Type": 0,
@@ -241,17 +69,18 @@
             },
             {
                 "Name": "Lifebar",
-                "FamilyNumber": 3,
+                "FamilyNumber": 2,
                 "ID": "11476342710869602794",
                 "ParentID": "12215182589219583907",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "14336817234344442991",
                 "Components": [
                     {
                         "Type": 0,
@@ -309,17 +138,18 @@
             },
             {
                 "Name": "Geralt",
-                "FamilyNumber": 3,
+                "FamilyNumber": 2,
                 "ID": "693033887174723301",
                 "ParentID": "12215182589219583907",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
+                "Selected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "14336817234344442991",
                 "Components": [
                     {
                         "Type": 0,
@@ -360,17 +190,18 @@
             },
             {
                 "Name": "Yennefer",
-                "FamilyNumber": 3,
+                "FamilyNumber": 2,
                 "ID": "10057780292273380798",
                 "ParentID": "12215182589219583907",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "14336817234344442991",
                 "Components": [
                     {
                         "Type": 0,
