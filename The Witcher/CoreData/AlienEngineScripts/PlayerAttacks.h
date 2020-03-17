@@ -23,6 +23,9 @@ public:
 	void Start();
 	void Update();
 
+	void ActiveCollider();
+	void DesactiveCollider();
+
 protected:
 	void CreateAttacks();
 
@@ -32,8 +35,11 @@ protected:
 };
 
 ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
-	PlayerAttacks* alien = new PlayerAttacks();
+	PlayerAttacks* player_attacks = new PlayerAttacks();
 	// To show in inspector here
 
-	return alien;
+	SHOW_VOID_FUNCTION(PlayerAttacks::ActiveCollider, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::DesactiveCollider, player_attacks);
+
+	return player_attacks;
 } 
