@@ -58,14 +58,10 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 	{
-		PlayerAttacks::AttackType new_attack = PlayerAttacks::AttackType::NONE;
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X))
-			new_attack = PlayerAttacks::AttackType::LIGHT;
+			attacks->ComboAttack(PlayerAttacks::AttackType::LIGHT);
 		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y))
-			new_attack = PlayerAttacks::AttackType::HEAVY;
-
-		attacks->UpdateAttack(new_attack);
-		
+			attacks->ComboAttack(PlayerAttacks::AttackType::HEAVY);
 	} break;
 	case PlayerController::PlayerState::JUMPING:
 		break;

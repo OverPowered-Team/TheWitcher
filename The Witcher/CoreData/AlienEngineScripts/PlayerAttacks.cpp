@@ -22,18 +22,12 @@ void PlayerAttacks::StartAttack(AttackType attack)
 	DoAttack();
 }
 
-void PlayerAttacks::UpdateAttack(AttackType new_attack)
+void PlayerAttacks::ComboAttack(AttackType new_attack)
 {
 	LOG("UPDATE ATTACK");
-	if (new_attack != AttackType::NONE && CanReceiveInput())
+	if (CanReceiveInput())
 	{
 		StartAttack(new_attack);
-	}
-	else if (Time::GetGameTime() > final_attack_time)
-	{
-		LOG("NO NEXT ATTACK");
-		current_attack = nullptr;
-		player_controller->state = PlayerController::PlayerState::IDLE;			
 	}
 }
 
@@ -84,7 +78,7 @@ void PlayerAttacks::CreateAttacks()
 {
 	LOG("CREATE ATTACKS");
 
-	JSON_Value* value = json_parse_file("Configuration/GeraltCombos.json");
+	/*JSON_Value* value = json_parse_file("Configuration/GeraltCombos.json");
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
@@ -117,7 +111,23 @@ void PlayerAttacks::CreateAttacks()
 		delete combo;
 		delete object;
 		delete value;
-	}
+	}*/
+	Attack* attack = new Attack();
+	Attack* tmp_attack = attack;
+	attack->name = "XXX";
+	attacks.push_back(attack);
+
+	attack = new Attack();
+	attack->name = "XX";
+	attack->light_attack_link = tmp_attack;
+	tmp_attack = attack;
+	attacks.push_back(attack);
+
+	attack = new Attack();
+	attack->name = "X";
+	attack->light_attack_link = tmp_attack;
+	base_light_attack = attack;
+	attacks.push_back(attack);
 }
 
 void PlayerAttacks::ActiveCollider()
@@ -128,4 +138,13 @@ void PlayerAttacks::ActiveCollider()
 void PlayerAttacks::DesactiveCollider()
 {
 	LOG("COLLIDER DESACTIVED");
+}
+
+void PlayerAttacks::OnAnimationEnd(const char* name) {
+	if (current_attack)
+	{
+		LOG("NO NEXT ATTACK");
+		current_attack = nullptr;
+		player_controller->state = PlayerController::PlayerState::IDLE;
+	}
 }

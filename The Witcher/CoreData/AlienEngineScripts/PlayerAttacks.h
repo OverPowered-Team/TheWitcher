@@ -42,10 +42,12 @@ public:
 	
 	void Start();
 	void StartAttack(AttackType attack);
-	void UpdateAttack(AttackType new_attack);
+	void ComboAttack(AttackType new_attack);
 
 	void ActiveCollider();
 	void DesactiveCollider();
+
+	void OnAnimationEnd(const char* name);
 
 public:
 	float input_window;
