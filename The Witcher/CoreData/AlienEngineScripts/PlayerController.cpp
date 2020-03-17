@@ -29,13 +29,11 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::IDLE: {
 
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
-			attacks->SaveInput('X');
-			attacks->StartAttack();
+			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 			state = PlayerState::BASIC_ATTACK;
 		}
 		else if(Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y)) {
-			attacks->SaveInput('Y');
-			attacks->StartAttack();
+			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 		}
 
@@ -60,12 +58,14 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 	{
+		PlayerAttacks::AttackType new_attack = PlayerAttacks::AttackType::NONE;
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X))
-			attacks->SaveInput('X');
+			new_attack = PlayerAttacks::AttackType::LIGHT;
 		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y))
-			attacks->SaveInput('Y');
+			new_attack = PlayerAttacks::AttackType::HEAVY;
 
-		attacks->UpdateAttack();
+		attacks->UpdateAttack(new_attack);
+		
 	} break;
 	case PlayerController::PlayerState::JUMPING:
 		break;

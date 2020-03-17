@@ -15,21 +15,21 @@ void PlayerAttacks::Start()
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
 }
 
-void PlayerAttacks::StartAttack()
+void PlayerAttacks::StartAttack(AttackType attack)
 {
 	LOG("START ATTACK");
-	SelectAttack();
+	SelectAttack(attack);
 	DoAttack();
 }
 
-void PlayerAttacks::UpdateAttack()
+void PlayerAttacks::UpdateAttack(AttackType new_attack)
 {
 	LOG("UPDATE ATTACK");
-	if (last_input != ' ')
+	if (new_attack != AttackType::NONE && CanReceiveInput())
 	{
-		StartAttack();
+		StartAttack(new_attack);
 	}
-	else if (!player_controller->animator->IsPlaying(current_attack->name.c_str()))
+	else if (Time::GetGameTime() > final_attack_time)
 	{
 		LOG("NO NEXT ATTACK");
 		current_attack = nullptr;
@@ -37,47 +37,37 @@ void PlayerAttacks::UpdateAttack()
 	}
 }
 
-void PlayerAttacks::SaveInput(char input)
-{
-	/*if (current_attack)
-	{
-		if(CanReceiveInput())
-			last_input = input;
-	}
-	else*/
-		last_input = input;
-}
-
 void PlayerAttacks::DoAttack()
 {
 	LOG("DO ATTACK %s", current_attack->name.c_str());
 	player_controller->animator->PlayState(current_attack->name.c_str());
 
-	/*float start_time = Time::GetGameTime();
-	float final_time = start_time + player_controller->animator->GetCurrentStateDuration();
-	attack_input_time = (start_time - final_time) - input_window;*/
+	float start_time = Time::GetGameTime();
+	//final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
+	attack_input_time = (start_time - final_attack_time) - input_window;
 }
-void PlayerAttacks::SelectAttack()
+
+void PlayerAttacks::SelectAttack(AttackType attack)
 {
 	LOG("SELECT ATTACK");
-	LOG("INPUT IS %s", std::to_string(last_input).c_str());
+	LOG("INPUT IS %s", attack == AttackType::LIGHT? "LIGHT ATTACK":"HEAVY ATTACK");
 	if (!current_attack)
 	{
-		if(last_input == 'X')
+		if(attack == AttackType::LIGHT)
 			current_attack = base_light_attack;
 		else
 			current_attack = base_heavy_attack;
 	}
 	else
 	{
-		if (last_input == 'X')
+		if (attack == AttackType::LIGHT)
 		{
 			if (current_attack->light_attack_link)
 				current_attack = current_attack->light_attack_link;
 			else
 				current_attack = base_light_attack;
 		}
-		else if(last_input == 'Y')
+		else
 		{
 			if (current_attack->heavy_attack_link)
 				current_attack = current_attack->heavy_attack_link;
@@ -85,8 +75,6 @@ void PlayerAttacks::SelectAttack()
 				current_attack = base_heavy_attack;
 		}		
 	}
-
-	last_input = ' ';
 }
 bool PlayerAttacks::CanReceiveInput()
 {
