@@ -19,7 +19,7 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 	void OnTriggerExit(ComponentCollider* collider);
 	void InterChangeInfoWithCamera();
-	bool CompareCameraWithTrigger();
+	bool IsCameraDifferent();
 public:
 	InfoCamera info_to_cam;
 	InfoCamera info_from_cam;

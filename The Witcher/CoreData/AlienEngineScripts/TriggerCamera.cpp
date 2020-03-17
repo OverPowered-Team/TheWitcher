@@ -20,16 +20,18 @@ void TriggerCamera::Update()
 {
 	if (cam_script != nullptr && player_counter == cam_script->num_curr_players)
 	{
-		bool yes = CompareCameraWithTrigger();
-		if (yes)
-			cam_script->destination = cam_script->CalculateCameraPos(info_from_cam.hor_angle, info_from_cam.vert_angle, info_from_cam.distance);
-		else
+		//bool yes = ;
+		//if (yes)
+		//	cam_script->destination = cam_script->CalculateCameraPos(info_from_cam.hor_angle, info_from_cam.vert_angle, info_from_cam.distance);
+		//else
+		if (IsCameraDifferent())
+		{
 			cam_script->destination = cam_script->CalculateCameraPos(info_to_cam.hor_angle, info_to_cam.vert_angle, info_to_cam.distance);
-
-		InterChangeInfoWithCamera();
-		Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
-		cam_script->t1 = Time::GetGameTime();
-		cam_script->state = CameraMovement::CameraState::MOVING;
+			InterChangeInfoWithCamera();
+			Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
+			cam_script->t1 = Time::GetGameTime();
+			cam_script->state = CameraMovement::CameraState::MOVING;
+		}
 		player_counter = 0;
 	}
 }
@@ -87,21 +89,21 @@ void TriggerCamera::InterChangeInfoWithCamera()
 	cam_script->distance = info_to_cam.distance;
 }
 
-bool TriggerCamera::CompareCameraWithTrigger()
+bool TriggerCamera::IsCameraDifferent()
 {
-	if (is_backing)
-	{
-		cam_script->top_angle = info_from_cam.hor_angle;
-		cam_script->vertical_angle = info_from_cam.vert_angle;
-		cam_script->distance = info_from_cam.distance;
-		is_backing = false;
-	}
+	//if (is_backing)
+	//{
+	//	cam_script->top_angle = info_from_cam.hor_angle;
+	//	cam_script->vertical_angle = info_from_cam.vert_angle;
+	//	cam_script->distance = info_from_cam.distance;
+	//	is_backing = false;
+	//}
 	if (info_to_cam.hor_angle == cam_script->top_angle &&
 		info_to_cam.vert_angle == cam_script->vertical_angle &&
 		info_to_cam.distance == cam_script->distance)
 	{
-		is_backing = true;
-		return true;
+		//is_backing = true;
+		return false;
 	}
-	return false;
+	return true;
 }
