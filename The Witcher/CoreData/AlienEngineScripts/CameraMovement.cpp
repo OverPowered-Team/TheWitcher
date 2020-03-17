@@ -94,8 +94,7 @@ void CameraMovement::SearchAndAssignPlayers()
     size = GameObject::FindGameObjectsWithTag("Player", &get_players);
     for (int i = 0; i < size; i++) {
         GameObject* g = get_players[i];
-        bool is_inside = false;
-        std::pair<GameObject*, bool> p(g, is_inside);
+        std::pair<GameObject*, PlayerState> p(g, PlayerState::NONE);
         players.insert(p);
     }
     GameObject::FreeArrayMemory((void***)&get_players);
@@ -105,7 +104,7 @@ void CameraMovement::SearchAndAssignPlayers()
 float3 CameraMovement::CalculateMidPoint()
 {
     float3 mid_pos(0,0,0);
-    for (std::map<GameObject*, bool>::iterator it = players.begin(); it != players.end(); ++it)
+    for (std::map<GameObject*, PlayerState>::iterator it = players.begin(); it != players.end(); ++it)
     {
         mid_pos += it->first->transform->GetGlobalPosition();
     }
@@ -116,7 +115,7 @@ float3 CameraMovement::CalculateAxisMidPoint()
 {
     float3 mid_pos(0, 0, 0);
     axis_cam.Normalize();
-    for (std::map<GameObject*, bool>::iterator it = players.begin(); it != players.end(); ++it)
+    for (std::map<GameObject*, PlayerState>::iterator it = players.begin(); it != players.end(); ++it)
     {
         mid_pos += it->first->transform->GetGlobalPosition();
     }

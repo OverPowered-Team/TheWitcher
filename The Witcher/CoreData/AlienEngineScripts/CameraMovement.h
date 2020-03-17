@@ -17,6 +17,9 @@ public:
 		CameraAxis,
 		X,Y,Z
 	);
+	enum (PlayerState,
+		NONE, ENTER_FIRST, ENTER_LAST, EXIT_FIRST, EXIT_LAST, ON_EXIT
+		);
 
 	CameraMovement();
 	virtual ~CameraMovement();
@@ -39,7 +42,7 @@ public:
 	float3 destination;
 	float t1 = 0.f;
 	CameraAxis axis = CameraAxis::X;
-	std::map<GameObject*, bool> players;
+	std::map<GameObject*, PlayerState> players;
 	uint num_curr_players = 0u;
 	float3 axis_cam;
 

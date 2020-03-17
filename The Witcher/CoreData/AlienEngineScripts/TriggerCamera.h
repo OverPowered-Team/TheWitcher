@@ -9,22 +9,25 @@ public:
 	enum (ToState,
 		DYNAMIC,
 		STATIC,
-		AXIS
+		AXIS_NOT_IMPLEMENTED
 	);
+
 	struct InfoCamera
 	{
 		float distance = 0.f;
 		float hor_angle = 0.f;
 		float vert_angle = 0.f;
 	};
+
 	TriggerCamera();
 	virtual ~TriggerCamera();
 	void Start();
 	void Update();
-	void OnTriggerEnter(ComponentCollider* collider);
-	void OnTriggerExit(ComponentCollider* collider);
 	void InterChangeInfoWithCamera();
 	bool IsCameraDifferent();
+
+	void OnDrawGizmos() override;
+
 public:
 	InfoCamera info_to_cam;
 	InfoCamera info_from_cam;
@@ -37,6 +40,7 @@ public:
 	bool is_backing = false;
 	float t1 = 0.f;
 };
+
 ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	TriggerCamera* alien = new TriggerCamera();
 	// To show in inspector here

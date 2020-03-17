@@ -14,17 +14,12 @@ void TriggerCamera::Start()
 	camera = Camera::GetCurrentCamera()->game_object_attached;
 	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 	t1 = Time::GetGameTime();
-	
 }
 
 void TriggerCamera::Update()
 {
 	if (cam_script != nullptr && player_counter == cam_script->num_curr_players)
 	{
-		//bool yes = ;
-		//if (yes)
-		//	cam_script->destination = cam_script->CalculateCameraPos(info_from_cam.hor_angle, info_from_cam.vert_angle, info_from_cam.distance);
-		//else
 		if (IsCameraDifferent())
 		{
 			if (state == ToState::DYNAMIC) {
@@ -44,42 +39,13 @@ void TriggerCamera::Update()
 	}
 }
 
-void TriggerCamera::OnTriggerEnter(ComponentCollider* collider)
+void TriggerCamera::OnDrawGizmos()
 {
-	Component* c = (Component*)collider;
-
-	if (player_counter < cam_script->num_curr_players + 1)
-	{
-		for (std::map<GameObject*, bool>::iterator it = cam_script->players.begin(); it != cam_script->players.end(); ++it)
-		{
-			if (it->first == c->game_object_attached && it->second == false)
-			{
-				it->second = true;
-				player_counter++;
-				LOG("PLAYER ENTER");
-			}
-					
-		}
-	}
-}
-
-void TriggerCamera::OnTriggerExit(ComponentCollider* collider)
-{
-	Component* c = (Component*)collider;
-	if (player_counter >= 0)
-	{
-		if (player_counter == 0)
-			player_counter = cam_script->num_curr_players;
-		for (std::map<GameObject*, bool>::iterator it = cam_script->players.begin(); it != cam_script->players.end(); ++it)
-		{
-			if (it->first == c->game_object_attached)
-			{
-				it->second = false;
-				player_counter--;
-				LOG("PLAYER EXIT");
-			}
-
-		}
+	GameObject* enter = game_object->GetChild("Enter");
+	GameObject* exit = game_object->GetChild("Exit");
+	if (enter != nullptr && exit != nullptr) {
+		Gizmos::DrawLine(enter->transform->GetGlobalPosition(), exit->transform->GetGlobalPosition(), Color::Red());
+		Gizmos::DrawSphere(exit->transform->GetGlobalPosition(), 0.3f, Color::Red());
 	}
 }
 
