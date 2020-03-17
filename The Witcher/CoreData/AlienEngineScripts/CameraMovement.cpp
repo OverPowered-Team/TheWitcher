@@ -20,19 +20,22 @@ void CameraMovement::Start()
 
 void CameraMovement::Update()
 {
-    switch ((CameraState)state) {
+    switch (state) {
     case CameraState::DYNAMIC:
         transform->SetGlobalPosition(diff_pos + CalculateMidPoint());
         break;
     case CameraState::STATIC:
-    case CameraState::MOVING:
+    case CameraState::MOVING_TO_DYNAMIC:
+    case CameraState::MOVING_TO_STATIC:
     {
         float3 curr_pos = transform->GetGlobalPosition();
         if (Time::GetGameTime() - t1 >= 2)
         {
             LOG("cambio");
-
-            state = CameraState::DYNAMIC;
+            if (state == CameraState::MOVING_TO_DYNAMIC)
+                state = CameraState::DYNAMIC;
+            else if (state == CameraState::MOVING_TO_STATIC)
+                state = CameraState::STATIC;
             diff_pos = transform->GetGlobalPosition() - CalculateMidPoint();
             transform->SetGlobalPosition(diff_pos + CalculateMidPoint());
             t1 = 0.f;

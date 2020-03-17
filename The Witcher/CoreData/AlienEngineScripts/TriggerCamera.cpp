@@ -11,6 +11,7 @@ TriggerCamera::~TriggerCamera()
 
 void TriggerCamera::Start()
 {
+	camera = Camera::GetCurrentCamera()->game_object_attached;
 	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 	t1 = Time::GetGameTime();
 	
@@ -26,11 +27,18 @@ void TriggerCamera::Update()
 		//else
 		if (IsCameraDifferent())
 		{
-			cam_script->destination = cam_script->CalculateCameraPos(info_to_cam.hor_angle, info_to_cam.vert_angle, info_to_cam.distance);
+			if (state == ToState::DYNAMIC) {
+				cam_script->destination = cam_script->CalculateCameraPos(info_to_cam.hor_angle, info_to_cam.vert_angle, info_to_cam.distance);
+				cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+			}
+			else if (state == ToState::STATIC) {
+				cam_script->destination = static_pos->transform->GetGlobalPosition();
+				cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
+			}
+
 			InterChangeInfoWithCamera();
 			Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
 			cam_script->t1 = Time::GetGameTime();
-			cam_script->state = CameraMovement::CameraState::MOVING;
 		}
 		player_counter = 0;
 	}

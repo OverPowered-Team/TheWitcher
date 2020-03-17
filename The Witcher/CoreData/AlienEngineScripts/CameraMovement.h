@@ -11,7 +11,7 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, STATIC, MOVING, AXIS,
+		DYNAMIC, STATIC, MOVING_TO_STATIC, MOVING_TO_DYNAMIC, AXIS,
 		);
 	enum (
 		CameraAxis,
