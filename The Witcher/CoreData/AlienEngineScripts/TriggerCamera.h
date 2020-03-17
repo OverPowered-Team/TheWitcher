@@ -18,7 +18,7 @@ public:
 		float distance = 0.f;
 		float hor_angle = 0.f;
 		float vert_angle = 0.f;
-		bool tp_players = false;
+		bool tp_players = true;
 		float tp_distance = 0.f;
 	};
 
@@ -26,7 +26,7 @@ public:
 	virtual ~TriggerCamera();
 	void Start();
 	void Update();
-	void ManageTransition();
+	void ManageTransition(bool normal_way);
 	void InterChangeInfoWithCamera();
 	void TeleportTheRestOfPlayers();
 	bool IsCameraDifferent();

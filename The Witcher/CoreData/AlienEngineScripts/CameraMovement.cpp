@@ -29,7 +29,7 @@ void CameraMovement::Update()
     case CameraState::MOVING_TO_STATIC:
     {
         float3 curr_pos = transform->GetGlobalPosition();
-        if (Time::GetGameTime() - t1 >= 2)
+        if (Time::GetGameTime() - t1 >= 2.f)
         {
             LOG("cambio");
             if (state == CameraState::MOVING_TO_DYNAMIC)
