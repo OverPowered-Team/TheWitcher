@@ -29,7 +29,6 @@ public:
 class ALIEN_ENGINE_API PlayerAttacks : public Alien {
 
 public:
-
 	enum (AttackType,
 		LIGHT,
 		HEAVY,

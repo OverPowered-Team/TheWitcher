@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerController",
-        "NumStates": 6,
-        "NumTransitions": 9,
+        "NumStates": 8,
+        "NumTransitions": 13,
         "States": [
             {
                 "Name": "Idle",
@@ -20,11 +20,6 @@
                 "Clip": "4244113142840779604"
             },
             {
-                "Name": "Attack",
-                "Speed": 1,
-                "Clip": "4871813718953062991"
-            },
-            {
                 "Name": "Jump",
                 "Speed": 3,
                 "Clip": "1528621542894041346"
@@ -33,6 +28,21 @@
                 "Name": "Air",
                 "Speed": 1,
                 "Clip": "9449538334584208347"
+            },
+            {
+                "Name": "X",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
+            },
+            {
+                "Name": "XX",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
+            },
+            {
+                "Name": "XXX",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
             }
         ],
         "Transitions": [
@@ -101,42 +111,10 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Attack",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": 1,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Attack",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": 1,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Greater",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
                 "Source": "Jump",
                 "Target": "Air",
                 "Blend": 0.25,
-                "End": 0,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
@@ -145,7 +123,7 @@
                 "Source": "Air",
                 "Target": "Idle",
                 "Blend": 0.05000000074505806,
-                "End": 0,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -167,7 +145,7 @@
                 "Source": "Air",
                 "Target": "Run",
                 "Blend": 0.05000000074505806,
-                "End": 0,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -184,6 +162,60 @@
                         "ParameterIndex": 0
                     }
                 ]
+            },
+            {
+                "Source": "X",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "XX",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "X",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "XX",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "XXX",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "XXX",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],

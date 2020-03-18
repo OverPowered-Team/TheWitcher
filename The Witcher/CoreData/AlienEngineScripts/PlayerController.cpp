@@ -1,3 +1,4 @@
+#include "PlayerAttacks.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -12,6 +13,7 @@ void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
+	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
 }
 
 void PlayerController::Update()
@@ -30,7 +32,12 @@ void PlayerController::Update()
 		can_move = true;
 
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
-			animator->PlayState("Attack");
+			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
+			state = PlayerState::BASIC_ATTACK;
+			can_move = false;
+		}
+		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y)) {
+			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 			can_move = false;
 		}
@@ -57,8 +64,14 @@ void PlayerController::Update()
 		can_move = true;
 
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
-			animator->PlayState("Attack");
+			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 			state = PlayerState::BASIC_ATTACK;
+			can_move = false;
+		}
+		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y)) {
+			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
+			state = PlayerState::BASIC_ATTACK;
+			can_move = false;
 		}
 
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
@@ -80,6 +93,12 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		ccontroller->SetWalkDirection(float3::zero());
 		can_move = false;
+
+		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X))
+			attacks->ComboAttack(PlayerAttacks::AttackType::LIGHT);
+		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y))
+			attacks->ComboAttack(PlayerAttacks::AttackType::HEAVY);
+
 		break;
 	case PlayerController::PlayerState::JUMPING:
 		can_move = true;
