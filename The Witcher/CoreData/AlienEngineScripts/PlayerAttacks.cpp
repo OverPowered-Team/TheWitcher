@@ -75,6 +75,7 @@ bool PlayerAttacks::CanReceiveInput()
 {
 	return (Time::GetGameTime() > attack_input_time);
 }
+
 void PlayerAttacks::CreateAttacks()
 {
 	LOG("CREATE ATTACKS");
@@ -97,14 +98,42 @@ void PlayerAttacks::CreateAttacks()
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
 			float multiplier = attack_combo->GetNumber("multiplier");
-			std::string next_attack = attack_combo->GetString("next_attack");
+
 			Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier);
 			attacks.push_back(attack);
 
 			attack_combo->GetAnotherNode();
 		}
+		ConnectAttacks();
+		attacks;
 	}
 	JSONfilepack::FreeJSON(combo);
+}
+
+void PlayerAttacks::ConnectAttacks()
+{
+	for (auto it_attack = attacks.begin(); it_attack != attacks.end(); it_attack++)
+	{
+		const char* n_light = (*it_attack)->next_light.data();
+		const char* n_heavy = (*it_attack)->next_heavy.data();
+
+		if (n_light == "End" && n_heavy == "End")
+			continue;
+
+		for (auto it_next = attacks.begin(); it_next != attacks.end(); it_next++)
+		{
+			if (n_light == (*it_next)->name.data())
+			{
+				(*it_attack)->light_attack_link = (*it_next);
+				break;
+			}
+			else if (n_heavy == (*it_next)->name.data())
+			{
+				(*it_attack)->heavy_attack_link = (*it_next);
+				break;
+			}
+		}
+	}
 }
 
 void PlayerAttacks::ActiveCollider()

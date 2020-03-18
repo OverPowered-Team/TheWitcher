@@ -16,11 +16,14 @@ public:
 		this->collider_size = coll_size;
 		this->base_damage = mult;
 	}
+
 	std::string name = "";
 	std::string input = "";
 	float3 collider_position;
 	float3 collider_size;
 	float base_damage = 0.0f;
+	std::string next_light = "";
+	std::string next_heavy = "";
 
 	Attack* light_attack_link = nullptr;
 	Attack* heavy_attack_link = nullptr;
@@ -54,6 +57,7 @@ public:
 
 protected:
 	void CreateAttacks();
+	void ConnectAttacks();
 	void DoAttack();
 	void SelectAttack(AttackType attack);
 	bool CanReceiveInput();
