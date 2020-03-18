@@ -42,10 +42,10 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* ccontroller = nullptr;
 	bool can_move = false;
+	float stick_threshold = 0.1f;
 
 private:
 	float angle = 0.0f;
-	float stick_threshold = 0.1f;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
@@ -54,6 +54,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controllerIndex, 1, 2);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->playerData.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->playerData.rotationSpeed);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
 	return player;
 }
