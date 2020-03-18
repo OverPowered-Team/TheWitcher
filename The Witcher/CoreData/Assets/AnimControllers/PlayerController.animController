@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerController",
-        "NumStates": 8,
-        "NumTransitions": 13,
+        "NumStates": 10,
+        "NumTransitions": 17,
         "States": [
             {
                 "Name": "Idle",
@@ -30,17 +30,27 @@
                 "Clip": "9449538334584208347"
             },
             {
-                "Name": "X",
+                "Name": "L",
                 "Speed": 1,
                 "Clip": "4871813718953062991"
             },
             {
-                "Name": "XX",
+                "Name": "LL",
                 "Speed": 1,
                 "Clip": "4871813718953062991"
             },
             {
-                "Name": "XXX",
+                "Name": "LLL",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
+            },
+            {
+                "Name": "LLLL",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
+            },
+            {
+                "Name": "LLLLL",
                 "Speed": 1,
                 "Clip": "4871813718953062991"
             }
@@ -164,7 +174,7 @@
                 ]
             },
             {
-                "Source": "X",
+                "Source": "L",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": 1,
@@ -173,7 +183,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "XX",
+                "Source": "LL",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": 0,
@@ -182,7 +192,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "X",
+                "Source": "L",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": 1,
@@ -191,7 +201,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "XX",
+                "Source": "LL",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": 1,
@@ -200,7 +210,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "XXX",
+                "Source": "LLL",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": 1,
@@ -209,7 +219,43 @@
                 "BoolConditions": []
             },
             {
-                "Source": "XXX",
+                "Source": "LLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLLL",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": 1,

@@ -108,7 +108,6 @@ void PlayerAttacks::CreateAttacks()
 			attack_combo->GetAnotherNode();
 		}
 		ConnectAttacks();
-		attacks.size();
 	}
 	JSONfilepack::FreeJSON(combo);
 }
@@ -117,6 +116,11 @@ void PlayerAttacks::ConnectAttacks()
 {
 	for (auto it_attack = attacks.begin(); it_attack != attacks.end(); it_attack++)
 	{
+		if ((*it_attack)->name == "H")
+			base_heavy_attack = (*it_attack);
+		else if ((*it_attack)->name == "L")
+			base_light_attack = (*it_attack);
+
 		std::string n_light = (*it_attack)->next_light.c_str();
 		std::string n_heavy = (*it_attack)->next_heavy.c_str();
 
