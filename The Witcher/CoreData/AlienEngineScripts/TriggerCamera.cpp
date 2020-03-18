@@ -58,9 +58,14 @@ void TriggerCamera::ManageTransition(bool normal_way)
 		}
 	}
 	if (cam_script != nullptr) {
+		cam_script->current_transition_time = 0.f;
+		cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+		cam_script->top_angle = info->hor_angle;
+		cam_script->vertical_angle = info->vert_angle;
+		cam_script->distance = info->distance;
 		//InterChangeInfoWithCamera();
-		Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
-		cam_script->t1 = Time::GetGameTime();
+		//Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
+		//cam_script->t1 = Time::GetGameTime();
 	}
 	/*}
 	player_counter = 0;*/

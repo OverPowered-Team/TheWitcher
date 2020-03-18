@@ -26,6 +26,23 @@ void CameraMovement::Update()
         break;
     case CameraState::STATIC:
     case CameraState::MOVING_TO_DYNAMIC:
+    {
+        current_transition_time += Time::GetDT();
+        float3 trg_pos = CalculateCameraPos(top_angle, vertical_angle, distance, true);
+        if (current_transition_time >= 2.f) {
+            transform->SetGlobalPosition(trg_pos);
+            state = CameraState::DYNAMIC;
+        }
+        else {
+            float3 curr_pos = transform->GetGlobalPosition();
+
+            float remaining_time = (2.f - current_transition_time);
+            float3 curr_movement = (trg_pos - curr_pos) / remaining_time;
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + curr_movement);
+            LookAtMidPoint();
+        }
+        break;
+    }
     case CameraState::MOVING_TO_STATIC:
     {
         float3 curr_pos = transform->GetGlobalPosition();

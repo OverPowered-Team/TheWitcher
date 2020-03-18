@@ -13,8 +13,8 @@ void PlayerController::Start()
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 
-	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
-	c_run->GetSystem()->StopEmmitter();
+	//c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
+	//c_run->GetSystem()->StopEmmitter();
 
 
 	if (controller_index == 1) {

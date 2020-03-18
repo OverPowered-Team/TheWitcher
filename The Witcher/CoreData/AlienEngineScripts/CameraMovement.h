@@ -46,6 +46,7 @@ public:
 	uint num_curr_players = 0u;
 	float3 axis_cam;
 
+	float current_transition_time = 0.f;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {

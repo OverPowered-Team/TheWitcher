@@ -138,19 +138,19 @@ void CameraEnterExit::OnTriggerExit(ComponentCollider* collider)
 						LOG("%s ON EXIT", (*it).first->GetName());
 
 						script_parent->InterChangeInfoWithCamera();
-						script_parent->ManageTransition(false);
+						script_parent->ManageTransition(true);
 
-						GameObject* tp = tp1;
-						float3 gobj_pos = collider->game_object_attached->transform->GetGlobalPosition();
-						float dis1 = gobj_pos.Distance(tp1->transform->GetGlobalPosition());
-						if (dis1 < gobj_pos.Distance(tp2->transform->GetGlobalPosition()))
-							tp = tp2;
-						for (auto i = players->begin(); i != players->end(); ++i) {
-							(*i).second = CameraMovement::PlayerState::NONE;
-							if ((*i).first != collider->game_object_attached) {
-								(*i).first->transform->SetGlobalPosition(tp->transform->GetGlobalPosition());
-							}
-						}
+						//GameObject* tp = tp1;
+						//float3 gobj_pos = collider->game_object_attached->transform->GetGlobalPosition();
+						//float dis1 = gobj_pos.Distance(tp1->transform->GetGlobalPosition());
+						//if (dis1 < gobj_pos.Distance(tp2->transform->GetGlobalPosition()))
+						//	tp = tp2;
+						//for (auto i = players->begin(); i != players->end(); ++i) {
+						//	(*i).second = CameraMovement::PlayerState::NONE;
+						//	if ((*i).first != collider->game_object_attached) {
+						//		(*i).first->transform->SetGlobalPosition(tp->transform->GetGlobalPosition());
+						//	}
+						//}
 						break;
 					}
 					case CameraMovement::PlayerState::ON_EXIT:
