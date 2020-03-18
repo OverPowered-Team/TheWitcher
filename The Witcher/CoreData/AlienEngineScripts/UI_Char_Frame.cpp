@@ -38,20 +38,84 @@ void UI_Char_Frame::Start()
 	}
 
 	lifebar = (ComponentBar*)game_object->GetChild("Lifebar")->GetComponent(ComponentType::UI_BAR);
-	//mana_bar = (ComponentBar*)game_object->GetChild("")->GetComponent(ComponentType::UI_BAR);
-	//xp_bar = (ComponentBar*)game_object->GetChild("Lifebar")->GetComponent(ComponentType::UI_BAR);
+	mana_bar = (ComponentBar*)game_object->GetChild("Mana")->GetComponent(ComponentType::UI_BAR);
+	xp_bar = (ComponentBar*)game_object->GetChild("Xp")->GetComponent(ComponentType::UI_BAR);
 
 }
 
 void UI_Char_Frame::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_A))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_D))
 	{
-		lifebar->SetBarValue(lifebar->GetBarValue() - 0.05f);
+		LifeChange(5);
 	}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_D))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_A))
 	{
-		lifebar->SetBarValue(lifebar->GetBarValue() + 0.05f);
+		LifeChange(-5);
+	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_W))
+	{
+		ManaChange(5);
+	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_Q))
+	{
+		ManaChange(-5);
+	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_X))
+	{
+		XpChange(5);
+	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_Z))
+	{
+		XpChange(-5);
 	}
 }
+
+
+void UI_Char_Frame::LifeChange(float life_change)
+{
+	float hp = 0.0f;
+	hp = lifebar->GetBarValue();
+
+	// WHEN CHARACTER IS DONE
+	// hp = character->life / character->max_life;
+	life_change /= max_life;
+
+	hp += life_change;
+
+	lifebar->SetBarValue(hp);
+}
+
+void UI_Char_Frame::ManaChange(float mana_change)
+{
+	float mana = 0.0f;
+	mana = mana_bar->GetBarValue();
+
+	// WHEN CHARACTER IS DONE
+	// hp = character->life / character->max_life;
+	mana_change /= max_mana;
+
+	mana += mana_change;
+
+	mana_bar->SetBarValue(mana);
+}
+
+void UI_Char_Frame::XpChange(float xp_change)
+{
+	float xp = 0.0f;
+	xp = xp_bar->GetBarValue();
+
+	// WHEN CHARACTER IS DONE
+	// hp = character->life / character->max_life;
+	xp_change /= max_xp;
+
+	xp += xp_change;
+
+	xp_bar->SetBarValue(xp);
+}
+
