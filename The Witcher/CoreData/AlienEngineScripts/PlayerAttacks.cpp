@@ -11,9 +11,10 @@ PlayerAttacks::~PlayerAttacks()
 
 void PlayerAttacks::Start()
 {
-	CreateAttacks();
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
 	collider = (ComponentBoxCollider*)GetComponent(ComponentType::BOX_COLLIDER);
+
+	CreateAttacks();
 }
 
 void PlayerAttacks::StartAttack(AttackType attack)
@@ -38,7 +39,7 @@ void PlayerAttacks::DoAttack()
 	player_controller->animator->PlayState(current_attack->name.c_str());
 
 	float start_time = Time::GetGameTime();
-	//final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
+	final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
 	attack_input_time = (start_time - final_attack_time) - input_window;
 }
 
