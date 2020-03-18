@@ -93,7 +93,12 @@ void PlayerController::Update()
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
 			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
+		}
 
+		if (Input::GetControllerButtonDown(controller_index, controller_spell)
+			|| Input::GetKeyDown(keyboard_spell)) {
+			animator->PlayState("Spell");
+			state = PlayerState::CASTING;
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
@@ -124,6 +129,12 @@ void PlayerController::Update()
 			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 		}
 
+		if (Input::GetControllerButtonDown(controller_index, controller_spell)
+			|| Input::GetKeyDown(keyboard_spell)) {
+			animator->PlayState("Spell");
+			state = PlayerState::CASTING;
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
@@ -145,6 +156,10 @@ void PlayerController::Update()
 			animator->SetBool("air", false);
 		break;
 	case PlayerController::PlayerState::DASHING:
+		can_move = false;
+		break;
+	case PlayerController::PlayerState::CASTING:
+		ccontroller->SetWalkDirection(float3::zero());
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
@@ -206,6 +221,10 @@ void PlayerController::OnAnimationEnd(const char* name) {
 		state = PlayerState::IDLE;
 
 	if (strcmp(name, "Roll") == 0) {
+		state = PlayerState::IDLE;
+	}
+
+	if (strcmp(name, "Spell") == 0) {
 		state = PlayerState::IDLE;
 	}
 }

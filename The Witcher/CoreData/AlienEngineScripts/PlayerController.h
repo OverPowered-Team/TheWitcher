@@ -13,6 +13,7 @@ public:
 		BASIC_ATTACK,
 		JUMPING,
 		DASHING,
+		CASTING,
 
 		MAX
 		);
@@ -56,11 +57,13 @@ public:
 	SDL_Scancode keyboard_jump;
 	SDL_Scancode keyboard_dash;
 	SDL_Scancode keyboard_light_attack;
+	SDL_Scancode keyboard_spell;
 
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_attack = Input::CONTROLLER_BUTTON_X;
+	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
 
 private:
 

@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerController",
-        "NumStates": 6,
-        "NumTransitions": 9,
+        "NumStates": 7,
+        "NumTransitions": 10,
         "States": [
             {
                 "Name": "Idle",
@@ -33,6 +33,11 @@
                 "Name": "Air",
                 "Speed": 1,
                 "Clip": "9449538334584208347"
+            },
+            {
+                "Name": "Spell",
+                "Speed": 1,
+                "Clip": "7211782662776671787"
             }
         ],
         "Transitions": [
@@ -184,6 +189,15 @@
                         "ParameterIndex": 0
                     }
                 ]
+            },
+            {
+                "Source": "Spell",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
