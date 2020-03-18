@@ -84,7 +84,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::IDLE: {
 
 		can_move = true;
-
+		c_run->GetSystem()->StopEmmitter();
 		if (Input::GetControllerButtonDown(controller_index, controller_attack)
 			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
@@ -118,8 +118,9 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
+		c_run->GetSystem()->StartEmmitter();
 		can_move = true;
-
+		
 		if (Input::GetControllerButtonDown(controller_index, controller_attack)
 			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
@@ -151,18 +152,22 @@ void PlayerController::Update()
 
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
+		c_run->GetSystem()->StopEmmitter();
 		ccontroller->SetWalkDirection(float3::zero());
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::JUMPING:
+		c_run->GetSystem()->StopEmmitter();
 		can_move = true;
 		if (ccontroller->CanJump())
 			animator->SetBool("air", false);
 		break;
 	case PlayerController::PlayerState::DASHING:
+		c_run->GetSystem()->StopEmmitter();
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::CASTING:
+		c_run->GetSystem()->StopEmmitter();
 		ccontroller->SetWalkDirection(float3::zero());
 		can_move = false;
 		break;
