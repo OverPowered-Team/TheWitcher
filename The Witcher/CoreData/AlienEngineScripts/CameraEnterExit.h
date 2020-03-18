@@ -23,6 +23,9 @@ public:
 	CameraTriggerType type = CameraTriggerType::ENTER;
 
 	TriggerCamera* script_parent = nullptr;
+
+	GameObject* tp1 = nullptr;
+	GameObject* tp2 = nullptr;
 };
 
 ALIEN_FACTORY CameraEnterExit* CreateCameraEnterExit() {
