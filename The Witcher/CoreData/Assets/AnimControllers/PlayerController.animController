@@ -71,7 +71,7 @@
             {
                 "Source": "Roll",
                 "Target": "Idle",
-                "Blend": 0,
+                "Blend": 0.25,
                 "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
@@ -87,7 +87,7 @@
             {
                 "Source": "Roll",
                 "Target": "Run",
-                "Blend": 0,
+                "Blend": 0.25,
                 "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
@@ -145,7 +145,7 @@
                 "Source": "Air",
                 "Target": "Idle",
                 "Blend": 0.05000000074505806,
-                "End": 0,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -166,8 +166,8 @@
             {
                 "Source": "Air",
                 "Target": "Run",
-                "Blend": 0.10000000149011612,
-                "End": 0,
+                "Blend": 0.05000000074505806,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -184,15 +184,6 @@
                         "ParameterIndex": 0
                     }
                 ]
-            },
-            {
-                "Source": "Spell",
-                "Target": "Idle",
-                "Blend": 0.10000000149011612,
-                "End": 1,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -208,6 +199,13 @@
                 "Value": false
             }
         ],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "PlayerController::OnAttackEffect",
+                "Animation_Id": "4871813718953062991",
+                "Frame": 20,
+                "Type": 2
+            }
+        ]
     }
 }
