@@ -1,0 +1,204 @@
+{
+    "Controller": {
+        "Name": "PlayerController",
+        "NumStates": 6,
+        "NumTransitions": 9,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "11847928359428543970"
+            },
+            {
+                "Name": "Run",
+                "Speed": 1,
+                "Clip": "6946917102901728312"
+            },
+            {
+                "Name": "Roll",
+                "Speed": 3,
+                "Clip": "4244113142840779604"
+            },
+            {
+                "Name": "Attack",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
+            },
+            {
+                "Name": "Jump",
+                "Speed": 3,
+                "Clip": "1528621542894041346"
+            },
+            {
+                "Name": "Air",
+                "Speed": 1,
+                "Clip": "9449538334584208347"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Idle",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Run",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Attack",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Attack",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Jump",
+                "Target": "Air",
+                "Blend": 0.25,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Air",
+                "Target": "Idle",
+                "Blend": 0.05000000074505806,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Air",
+                "Target": "Run",
+                "Blend": 0.05000000074505806,
+                "End": 0,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [
+            {
+                "Name": "speed",
+                "Value": 0
+            }
+        ],
+        "BoolParameters": [
+            {
+                "Name": "air",
+                "Value": false
+            }
+        ],
+        "Events": []
+    }
+}
