@@ -81,6 +81,9 @@ float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, 
 
 void CameraMovement::OnDrawGizmos()
 {
+    if (players.size() < 2)
+        SearchAndAssignPlayers();
+
     float3 mid_point = CalculateMidPoint();
     Gizmos::DrawWireSphere(mid_point, .15f, Color::Cyan(), 0.5F); // mid point
 
