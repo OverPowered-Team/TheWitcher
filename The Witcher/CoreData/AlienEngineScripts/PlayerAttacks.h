@@ -8,13 +8,15 @@ class PlayerController;
 class Attack {
 public:
 	Attack() {};
-	Attack(const char* name, const char* input, float3 coll_pos, float3 coll_size, float mult)
+	Attack(const char* name, const char* input, float3 coll_pos, float3 coll_size, float mult, const char* n_light, const char* n_heavy)
 	{
 		this->name = name;
 		this->input = input;
 		this->collider_position = coll_pos;
 		this->collider_size = coll_size;
 		this->base_damage = mult;
+		this->next_light = n_light;
+		this->next_heavy = n_heavy;
 	}
 
 	std::string name = "";

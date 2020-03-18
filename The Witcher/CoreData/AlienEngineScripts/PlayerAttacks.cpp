@@ -99,14 +99,16 @@ void PlayerAttacks::CreateAttacks()
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
 			float multiplier = attack_combo->GetNumber("multiplier");
+			std::string n_light = attack_combo->GetString("next_attack_light");
+			std::string n_heavy = attack_combo->GetString("next_attack_heavy");
 
-			Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier);
+			Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier, n_light.data(), n_heavy.data());
 			attacks.push_back(attack);
 
 			attack_combo->GetAnotherNode();
 		}
 		ConnectAttacks();
-		attacks;
+		attacks.size();
 	}
 	JSONfilepack::FreeJSON(combo);
 }
@@ -115,23 +117,21 @@ void PlayerAttacks::ConnectAttacks()
 {
 	for (auto it_attack = attacks.begin(); it_attack != attacks.end(); it_attack++)
 	{
-		const char* n_light = (*it_attack)->next_light.data();
-		const char* n_heavy = (*it_attack)->next_heavy.data();
+		std::string n_light = (*it_attack)->next_light.c_str();
+		std::string n_heavy = (*it_attack)->next_heavy.c_str();
 
 		if (n_light == "End" && n_heavy == "End")
 			continue;
 
 		for (auto it_next = attacks.begin(); it_next != attacks.end(); it_next++)
 		{
-			if (n_light == (*it_next)->name.data())
+			if (n_light == (*it_next)->name)
 			{
 				(*it_attack)->light_attack_link = (*it_next);
-				break;
 			}
-			else if (n_heavy == (*it_next)->name.data())
+			if (n_heavy == (*it_next)->name)
 			{
 				(*it_attack)->heavy_attack_link = (*it_next);
-				break;
 			}
 		}
 	}
