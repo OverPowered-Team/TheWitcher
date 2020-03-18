@@ -15,7 +15,7 @@ public:
 
 	JSONfilepack(const char* path, JSON_Object*& object, JSON_Value*& value);
 
-	~JSONfilepack();
+	~ JSONfilepack();
 
 	static JSONfilepack* CreateJSON(const char* path);
 	static JSONfilepack* GetJSON(const char* path);

@@ -3,8 +3,6 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class PlayerAttacks;
-
 class ALIEN_ENGINE_API PlayerController : public Alien {
 
 public:
@@ -41,7 +39,6 @@ public:
 	int controllerIndex = 1;
 	PlayerState state = PlayerState::IDLE;
 	PlayerData playerData;
-	PlayerAttacks* attacks;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* ccontroller = nullptr;
 	bool can_move = false;

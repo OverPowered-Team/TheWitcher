@@ -1,4 +1,3 @@
-#include "PlayerAttacks.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -12,8 +11,7 @@ PlayerController::~PlayerController()
 void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	rbody = (ComponentRigidBody*)GetComponent(ComponentType::RIGID_BODY);
-	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
+	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 }
 
 void PlayerController::Update()
@@ -32,11 +30,7 @@ void PlayerController::Update()
 		can_move = true;
 
 		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
-			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
-			state = PlayerState::BASIC_ATTACK;
-		}
-		else if(Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y)) {
-			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
+			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
 			can_move = false;
 		}
@@ -84,12 +78,9 @@ void PlayerController::Update()
 
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
-	{
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X))
-			attacks->ComboAttack(PlayerAttacks::AttackType::LIGHT);
-		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y))
-			attacks->ComboAttack(PlayerAttacks::AttackType::HEAVY);
-	} break;
+		ccontroller->SetWalkDirection(float3::zero());
+		can_move = false;
+		break;
 	case PlayerController::PlayerState::JUMPING:
 		can_move = true;
 		if (ccontroller->CanJump())
