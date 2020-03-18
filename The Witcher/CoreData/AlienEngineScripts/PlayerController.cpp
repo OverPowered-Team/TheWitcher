@@ -14,7 +14,10 @@ void PlayerController::Start()
 	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 
 	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
+	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
+
 	c_run->GetSystem()->StopEmmitter();
+	c_attack->GetSystem()->Stop();
 
 
 	if (controller_index == 1) {
@@ -153,6 +156,7 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
+		//c_attack->GetSystem()->Restart();
 		ccontroller->SetWalkDirection(float3::zero());
 		can_move = false;
 		break;
@@ -223,6 +227,11 @@ void PlayerController::HandleMovement(float2 joystickInput)
 	}
 
 	animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
+}
+
+void PlayerController::OnAttackEffect()
+{
+	c_attack->Restart();
 }
 
 void PlayerController::OnAnimationEnd(const char* name) {
