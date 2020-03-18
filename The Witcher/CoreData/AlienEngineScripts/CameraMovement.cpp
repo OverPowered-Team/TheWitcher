@@ -114,7 +114,9 @@ float3 CameraMovement::CalculateMidPoint()
     {
         mid_pos += it->first->transform->GetGlobalPosition();
     }
-    return float3((mid_pos.x) * 0.5f, (mid_pos.y) * 0.5f, (mid_pos.z) * 0.5f);
+    if (players.size() == 0)
+        return mid_pos;
+    return mid_pos / players.size();
 }
 
 float3 CameraMovement::CalculateAxisMidPoint()

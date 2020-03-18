@@ -19,15 +19,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -6.8261785507202148,
+                            3.5156145095825195,
+                            -3.0739431381225586
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
-                            0
+                            0.14582493901252747,
+                            0.67055153846740723,
+                            -0.13687537610530853,
+                            0.71439546346664429
                         ],
                         "Scale": [
                             1,
@@ -67,6 +67,39 @@
                         "Skybox_NegativeY": "Assets\/Textures\/Skybox\/negy.jpg",
                         "Skybox_PositiveX": "Assets\/Textures\/Skybox\/posx.jpg",
                         "Skybox_NegativeX": "Assets\/Textures\/Skybox\/negx.jpg"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5979084151689017123",
+                        "ResourceID": "1588234331990510291",
+                        "DataName": "CameraMovement",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "First parameters"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "top_angle",
+                                "float": -157.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vertical_angle",
+                                "float": 31.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "distance",
+                                "float": 9
+                            }
+                        ]
                     }
                 ]
             },
@@ -87,14 +120,14 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            172.60444641113281,
+                            -18.448762893676758,
+                            12.460390090942383
                         ],
                         "Rotation": [
                             0.2798481285572052,
                             -0.36470523476600647,
-                            0.115916907787323,
+                            0.1159169003367424,
                             0.88047623634338379
                         ],
                         "Scale": [
@@ -112,9 +145,9 @@
                         "PrintIcon": true,
                         "Intensity": 1,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            172.60444641113281,
+                            -18.448762893676758,
+                            12.460390090942383
                         ],
                         "Direction": [
                             -0.57735037803649902,
@@ -156,15 +189,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            172.60444641113281,
+                            -18.448762893676758,
+                            12.460390090942383
                         ],
                         "Rotation": [
                             0,
                             0,
                             0,
-                            0
+                            1
                         ],
                         "Scale": [
                             0.0099999997764825821,
@@ -32234,7 +32267,7 @@
                 "ParentID": "5197662545586671386",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -61405,7 +61438,7 @@
                             -0.1818644106388092,
                             -12.758895874023438
                         ],
-                        "ScaleNegative": false,
+                        "ScaleNegative": true,
                         "ID": "2695952262558559504"
                     },
                     {
@@ -64459,8 +64492,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -2055.0009765625,
-                            -62.0001220703125,
+                            -2055.00146484375,
+                            -62.000095367431641,
                             -1308
                         ],
                         "Rotation": [
@@ -64610,8 +64643,8 @@
                         "Type": 0,
                         "Position": [
                             -1668,
-                            -83.600006103515625,
-                            -1957
+                            -83.60009765625,
+                            -1956.999267578125
                         ],
                         "Rotation": [
                             0,
@@ -67488,9 +67521,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -122.40705871582031,
-                            14.797592163085938,
-                            4.9585342407226563
+                            -122.4072265625,
+                            14.797607421875,
+                            4.95855712890625
                         ],
                         "Rotation": [
                             0,
@@ -75399,9 +75432,9 @@
                 ]
             },
             {
-                "Name": "Cube",
+                "Name": "Colliders",
                 "FamilyNumber": 1,
-                "ID": "7646527102512688088",
+                "ID": "8127042748547350224",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -75415,9 +75448,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -165.28010559082031,
-                            17.567499160766602,
-                            -15.145158767700195
+                            172.60444641113281,
+                            -18.448762893676758,
+                            12.460390090942383
                         ],
                         "Rotation": [
                             0,
@@ -75427,6 +75460,43 @@
                         ],
                         "Scale": [
                             1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11629994623194040755"
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "7646527102512688088",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -165.28009033203125,
+                            17.567501068115234,
+                            -15.1451416015625
+                        ],
+                        "Rotation": [
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
                             1,
                             1
                         ],
@@ -75475,9 +75545,9 @@
             },
             {
                 "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "15726284887457410601",
-                "ParentID": "0",
+                "FamilyNumber": 2,
+                "ID": "12721209336414147595",
+                "ParentID": "8127042748547350224",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -75490,23 +75560,23 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -171.08677673339844,
-                            17.217203140258789,
-                            -21.267488479614258
+                            -169.14700317382813,
+                            19.806816101074219,
+                            3.4146652221679688
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
+                            1.6583513229306845e-08,
+                            -0.056692760437726974,
+                            3.9168686072343917e-08,
+                            0.99839168787002563
                         ],
                         "Scale": [
-                            1,
-                            1,
+                            6.9999995231628418,
+                            2.7000002861022949,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17798579518866916452"
+                        "ID": "12493456988276725436"
                     },
                     {
                         "Type": 1,
@@ -75516,7 +75586,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "5392602660724752127",
+                        "ID": "12888721326279144194",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -75524,7 +75594,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1441418564872051340",
+                        "ID": "11653731563827640597",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -75533,55 +75603,505 @@
                         "Type": 7,
                         "IsTrigger": false,
                         "Center": [
-                            0,
-                            0.55000001192092896,
+                            0.5,
+                            0.5,
                             0.5
                         ],
                         "Bouncing": 0.10000000149011612,
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            11.5,
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "3315248762375103800",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.7576465606689453,
+                            16.68107795715332,
+                            32.180305480957031
+                        ],
+                        "Rotation": [
+                            0.14777418971061707,
+                            0.021575333550572395,
+                            0.0032244478352367878,
+                            0.98878055810928345
+                        ],
+                        "Scale": [
+                            43.000003814697266,
+                            10.5,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17845028651190020897"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "9292211978268535331",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "13448752376541813042",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "18143424511024060264",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            8.58306884765625e-06,
+                            16.12336540222168,
+                            47.11370849609375
+                        ],
+                        "Rotation": [
+                            -0.24183936417102814,
+                            -0.025399338454008102,
+                            0.0063328538089990616,
+                            0.96996313333511353
+                        ],
+                        "Scale": [
+                            35.499996185302734,
+                            8,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11195485572428173435"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "4166919526190885620",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "995495403312564738",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "15297525495682679914",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -82.427474975585938,
+                            14.543987274169922,
+                            31.957309722900391
+                        ],
+                        "Rotation": [
+                            -2.0319759208575761e-09,
+                            3.8799250035026489e-08,
+                            2.1674418704265008e-08,
+                            1
+                        ],
+                        "Scale": [
+                            26.499996185302734,
+                            5.4999995231628418,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9724348711434762078"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1677714264191534298",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "14905497989155400971",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "10199600271715693482",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -132.52328491210938,
+                            17.269668579101563,
+                            6.4744071960449219
+                        ],
+                        "Rotation": [
+                            -2.7052454498743828e-08,
+                            0.17364832758903503,
+                            4.3924302417508443e-08,
+                            0.98480772972106934
+                        ],
+                        "Scale": [
+                            29.499996185302734,
+                            1.1000000238418579,
+                            6.0000014305114746
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4555782855487664391"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "17583038281036705353",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "14271001179958883120",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube (1)",
+                "FamilyNumber": 2,
+                "ID": "6697187977738876512",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -148.71342468261719,
+                            20.909309387207031,
+                            -2.2287483215332031
+                        ],
+                        "Rotation": [
+                            -8.8307565704326407e-08,
+                            0.02181505411863327,
+                            1.7033951138500925e-08,
+                            0.99976205825805664
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            3.5,
+                            9.5000028610229492
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14529381792168309146"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "11316797434112933382",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6462642714908660237",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "11414651953697880097",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -152.76252746582031,
+                            20.9093017578125,
+                            -4.86578369140625
+                        ],
+                        "Rotation": [
+                            -3.5379542850932921e-08,
+                            0.33380696177482605,
+                            3.613229537791085e-08,
+                            0.94264155626296997
+                        ],
+                        "Scale": [
+                            6.4999990463256836,
+                            3.5,
+                            7.4999990463256836
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1936350989117989186"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "17789831361707516797",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6684861210073545126",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "11771902082184671200",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -155.98773193359375,
+                            21.632198333740234,
+                            25.290119171142578
+                        ],
+                        "Rotation": [
+                            0.00423063850030303,
+                            0.48479115962982178,
+                            0.0076324278488755226,
+                            0.87458640336990356
+                        ],
+                        "Scale": [
+                            14.500001907348633,
                             3,
-                            1.1000000238418579
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "3507339576736944656",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -165.60302734375,
-                            17.591514587402344,
-                            -20.892040252685547
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
+                            10.000000953674316
                         ],
                         "ScaleNegative": false,
-                        "ID": "15175734413448812455"
+                        "ID": "12911986538790211478"
                     },
                     {
                         "Type": 1,
@@ -75591,7 +76111,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2594746592265226552",
+                        "ID": "12645722127455409710",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -75599,7 +76119,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "7719396117739073476",
+                        "ID": "16724192126998476149",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -75608,7 +76128,7 @@
                         "Type": 7,
                         "IsTrigger": false,
                         "Center": [
-                            0.40000000596046448,
+                            0.5,
                             0.5,
                             0.5
                         ],
@@ -75616,18 +76136,18 @@
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            0.5,
-                            3.2000000476837158,
-                            9
+                            1,
+                            1,
+                            1
                         ]
                     }
                 ]
             },
             {
                 "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "13071237030943791407",
-                "ParentID": "0",
+                "FamilyNumber": 2,
+                "ID": "4063228380736883769",
+                "ParentID": "8127042748547350224",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -75640,18 +76160,843 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -160.86090087890625,
-                            17.369392395019531,
-                            -15.026819229125977
+                            -169.49365234375,
+                            18.791187286376953,
+                            -5.7961196899414063
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
                             1
                         ],
                         "Scale": [
+                            0.9999997615814209,
                             1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10656452213406266678"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "9723181534176979524",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "16258035739188429982",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            17.700000762939453,
+                            5.6999998092651367,
+                            1.2000000476837158
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "14767464998475599943",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -169.5496826171875,
+                            17.248744964599609,
+                            -5.9063148498535156
+                        ],
+                        "Rotation": [
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11411633721803235242"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "16033059742455650653",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "3282850462777088253",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1.5,
+                            5.6999998092651367,
+                            9.8999996185302734
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "14624894122831169502",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -162.56381225585938,
+                            20.777202606201172,
+                            5.0622100830078125
+                        ],
+                        "Rotation": [
+                            -0.032948270440101624,
+                            0.32948991656303406,
+                            -0.011505966074764729,
+                            0.94351387023925781
+                        ],
+                        "Scale": [
+                            0.79999983310699463,
+                            2,
+                            5
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2616611112216096076"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "6266490521394872002",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "9518284212938395840",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "13987782220903937719",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -168.21293640136719,
+                            20.838565826416016,
+                            20.832229614257813
+                        ],
+                        "Rotation": [
+                            -1.5807879449880602e-08,
+                            0.33380717039108276,
+                            4.742365433685336e-08,
+                            0.9426414966583252
+                        ],
+                        "Scale": [
+                            0.99999982118606567,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9134854076034392625"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "17863507163652184211",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "1437568721972443818",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.44999998807907104,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            7,
+                            2.309999942779541,
+                            0.5
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "2392445389521237867",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -176.96475219726563,
+                            19.841339111328125,
+                            19.364791870117188
+                        ],
+                        "Rotation": [
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5313136050973042714"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "9971000162627274398",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "12312640735484297126",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10.399999618530273,
+                            3.2999999523162842,
+                            6.3000001907348633
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "3197928226355777787",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -173.59512329101563,
+                            21.129611968994141,
+                            22.939552307128906
+                        ],
+                        "Rotation": [
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2729751014495782097"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "9687986954348583379",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "1832006017897748377",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            31.600000381469727,
+                            12.600000381469727,
+                            15.600000381469727
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "9985256263564027386",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -167.83793640136719,
+                            22.790126800537109,
+                            -4.1394844055175781
+                        ],
+                        "Rotation": [
+                            0.85650646686553955,
+                            0.033652309328317642,
+                            -0.020220385864377022,
+                            0.5146409273147583
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1.0000001192092896,
+                            0.099999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8358719452220131201"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1118865960746862924",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "16648883768221036783",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1.4099999666213989,
+                            5.5999999046325684,
+                            1.7999999523162842
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "9102690625816018886",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -165.86376953125,
+                            19.661628723144531,
+                            -3.4829444885253906
+                        ],
+                        "Rotation": [
+                            -8.8096667738568613e-09,
+                            3.0833838593480323e-08,
+                            -0.53361469507217407,
+                            0.84572774171829224
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15554111684642263119"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "13063953852179327433",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "8809396780942300728",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            0,
+                            3.5,
+                            7.9000000953674316
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "7233792356538312012",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -167.67538452148438,
+                            19.553085327148438,
+                            9.8678436279296875
+                        ],
+                        "Rotation": [
+                            -5.3004434619197127e-08,
+                            3.5336288561893525e-08,
+                            -0.53729963302612305,
+                            0.84339141845703125
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999988079071045,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17754148765722702348"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "2058923851772367314",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "5225192633782585208",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            3.7999999523162842,
+                            3.0999999046325684,
+                            4.4000000953674316
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "16243580671940188195",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -173.14144897460938,
+                            18.423118591308594,
+                            -4.9326515197753906
+                        ],
+                        "Rotation": [
+                            0.51129317283630371,
+                            1.1270284971942601e-07,
+                            -7.3690330282261129e-08,
+                            0.85940641164779663
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999994039535522,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "314865709278306302"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "8426680642327140329",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6913177481741080663",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            3.9000000953674316,
+                            2.7999999523162842,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "6996244887097134495",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -174.81340026855469,
+                            17.625205993652344,
+                            -9.6746063232421875
+                        ],
+                        "Rotation": [
+                            0.51877349615097046,
+                            9.5865331672939647e-08,
+                            -8.7150269223457144e-09,
+                            0.85491174459457397
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5968702246513030230"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "10865030998138058146",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "18427794548125988201",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            4.0100002288818359,
+                            2.2999999523162842,
+                            2.4000000953674316
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 2,
+                "ID": "13071237030943791407",
+                "ParentID": "8127042748547350224",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -160.86088562011719,
+                            17.369388580322266,
+                            -15.026802062988281
+                        ],
+                        "Rotation": [
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
                             1,
                             1
                         ],
@@ -75712,9 +77057,9 @@
             },
             {
                 "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "6996244887097134495",
-                "ParentID": "0",
+                "FamilyNumber": 2,
+                "ID": "3507339576736944656",
+                "ParentID": "8127042748547350224",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -75727,23 +77072,23 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -174.81341552734375,
-                            17.625204086303711,
-                            -9.6746187210083008
+                            -165.60301208496094,
+                            17.591510772705078,
+                            -20.89202880859375
                         ],
                         "Rotation": [
-                            0.51877349615097046,
-                            0,
-                            0,
-                            0.85491174459457397
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
                         ],
                         "Scale": [
-                            1,
+                            0.9999997615814209,
                             1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5968702246513030230"
+                        "ID": "15175734413448812455"
                     },
                     {
                         "Type": 1,
@@ -75753,7 +77098,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10865030998138058146",
+                        "ID": "2594746592265226552",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -75761,7 +77106,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "18427794548125988201",
+                        "ID": "7719396117739073476",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -75770,7 +77115,7 @@
                         "Type": 7,
                         "IsTrigger": false,
                         "Center": [
-                            0.5,
+                            0.40000000596046448,
                             0.5,
                             0.5
                         ],
@@ -75778,18 +77123,18 @@
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            4.0100002288818359,
-                            2.2999999523162842,
-                            2.4000000953674316
+                            0.5,
+                            3.2000000476837158,
+                            9
                         ]
                     }
                 ]
             },
             {
                 "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "16243580671940188195",
-                "ParentID": "0",
+                "FamilyNumber": 2,
+                "ID": "15726284887457410601",
+                "ParentID": "8127042748547350224",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -75802,23 +77147,23 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -173.14146423339844,
-                            18.423114776611328,
-                            -4.9326639175415039
+                            -171.08676147460938,
+                            17.217193603515625,
+                            -21.267471313476563
                         ],
                         "Rotation": [
-                            0.51129311323165894,
-                            0,
-                            0,
-                            0.85940641164779663
+                            -3.7252902984619141e-08,
+                            1.1175871605928478e-07,
+                            1.4901159417490817e-08,
+                            1
                         ],
                         "Scale": [
-                            1,
+                            0.9999997615814209,
                             1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "314865709278306302"
+                        "ID": "17798579518866916452"
                     },
                     {
                         "Type": 1,
@@ -75828,7 +77173,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "8426680642327140329",
+                        "ID": "5392602660724752127",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -75836,7 +77181,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6913177481741080663",
+                        "ID": "1441418564872051340",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -75846,265 +77191,141 @@
                         "IsTrigger": false,
                         "Center": [
                             0,
-                            0.5,
+                            0.55000001192092896,
                             0.5
                         ],
                         "Bouncing": 0.10000000149011612,
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            3.9000000953674316,
-                            2.7999999523162842,
-                            1
+                            11.5,
+                            3,
+                            1.1000000238418579
                         ]
                     }
                 ]
             },
             {
-                "Name": "Cube",
+                "Name": "Great Sword Idle",
                 "FamilyNumber": 1,
-                "ID": "7233792356538312012",
+                "ID": "9629371065730836263",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -167.6754150390625,
-                            19.553079605102539,
-                            9.8678388595581055
+                            0.48248633742332458,
+                            0.7240636944770813,
+                            -3.5843896865844727
                         ],
                         "Rotation": [
                             0,
                             0,
-                            -0.53729963302612305,
-                            0.84339141845703125
-                        ],
-                        "Scale": [
-                            1,
-                            1,
+                            0,
                             1
                         ],
-                        "ScaleNegative": false,
-                        "ID": "17754148765722702348"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "2058923851772367314",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "5225192633782585208",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            3.7999999523162842,
-                            3.0999999046325684,
-                            4.4000000953674316
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "9102690625816018886",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -165.86378479003906,
-                            19.661628723144531,
-                            -3.4829516410827637
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            -0.53361469507217407,
-                            0.84572774171829224
-                        ],
                         "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "15554111684642263119"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "13063953852179327433",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "8809396780942300728",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            0,
-                            3.5,
-                            7.9000000953674316
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "9985256263564027386",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -167.83795166015625,
-                            22.790130615234375,
-                            -4.139498233795166
-                        ],
-                        "Rotation": [
-                            0.85650646686553955,
-                            0.03365224227309227,
-                            -0.020220305770635605,
-                            0.51464098691940308
-                        ],
-                        "Scale": [
-                            1,
-                            1,
+                            0.10000000149011612,
+                            0.10000000149011612,
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "8358719452220131201"
+                        "ID": "6596882199354527717"
                     },
                     {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "1118865960746862924",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
+                        "Type": 13,
+                        "CharacterOffset": [
+                            0,
+                            0.69999998807907104,
+                            0
+                        ],
+                        "CharacterRadius": 0.5,
+                        "CharacterHeight": 1,
+                        "JumpSpeed": 10,
+                        "Gravity": 20.170000076293945
                     },
                     {
-                        "Type": 2,
-                        "ID": "16648883768221036783",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
+                        "Type": 14,
+                        "ID": "3411468613608655008",
+                        "ControllerID": "450649482241151269",
                         "Enabled": true
                     },
                     {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1.4099999666213989,
-                            5.5999999046325684,
-                            1.7999999523162842
+                        "Type": 29,
+                        "ID": "12002911166129318376",
+                        "ResourceID": "4631760735126527781",
+                        "DataName": "PlayerController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "controller_index",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "movementSpeed",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "rotationSpeed",
+                                "float": 120
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "stick_threshold",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dash_power",
+                                "float": 1.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "jump_power",
+                                "float": 25
+                            }
                         ]
                     }
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "3197928226355777787",
-                "ParentID": "0",
+                "Name": "default",
+                "FamilyNumber": 2,
+                "ID": "8743453284725216602",
+                "ParentID": "9629371065730836263",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
-                "Tag": "UnTagged",
+                "Tag": "Player",
+                "PrefabID": "5498400758606246120",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -173.59515380859375,
-                            21.129619598388672,
-                            22.939533233642578
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -76118,68 +77339,48 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2729751014495782097"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "9687986954348583379",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "1832006017897748377",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
+                        "ID": "7313246836865892217"
                     },
                     {
                         "Type": 7,
                         "IsTrigger": false,
                         "Center": [
-                            0.5,
-                            0.5,
-                            0.5
+                            0,
+                            19.850000381469727,
+                            0
                         ],
                         "Bouncing": 0.10000000149011612,
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            31.600000381469727,
-                            12.600000381469727,
-                            15.600000381469727
+                            1,
+                            1,
+                            1
                         ]
                     }
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "2392445389521237867",
-                "ParentID": "0",
+                "Name": "GeraltSubs_Belt006_Belt007",
+                "FamilyNumber": 2,
+                "ID": "2723654483462511833",
+                "ParentID": "9629371065730836263",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -176.96476745605469,
-                            19.841337203979492,
-                            19.364767074584961
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -76193,74 +77394,321 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5313136050973042714"
+                        "ID": "11978761920897323119"
                     },
                     {
-                        "Type": 1,
+                        "Type": 27,
                         "ViewMesh": false,
                         "Wireframe": false,
                         "ViewVertexNormals": false,
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "9971000162627274398",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "12312640735484297126",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
+                        "ID": "9867209436293186435",
+                        "MeshID": "4547184986923532365",
+                        "RootBoneID": "4593462083155888182",
                         "Enabled": true
                     },
                     {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            10.399999618530273,
-                            3.2999999523162842,
-                            6.3000001907348633
-                        ]
+                        "Type": 2,
+                        "ID": "7349339209584312806",
+                        "HasMaterial": true,
+                        "MaterialID": "18191688252243006856",
+                        "Enabled": true
                     }
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "13987782220903937719",
-                "ParentID": "0",
+                "Name": "mixamorig_Hips",
+                "FamilyNumber": 2,
+                "ID": "4593462083155888182",
+                "ParentID": "9629371065730836263",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -168.21296691894531,
-                            20.838565826416016,
-                            20.832218170166016
+                            -0.002082000020891428,
+                            4.135502815246582,
+                            -0.013757999986410141
+                        ],
+                        "Rotation": [
+                            0.0035447529517114162,
+                            0.98970234394073486,
+                            0.043269574642181396,
+                            0.1363980621099472
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999958276748657,
+                            1.0000004768371582
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9261888683635789393"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "3352713460601583277",
+                        "BoneID": "1032848394238661699",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_Spine",
+                "FamilyNumber": 3,
+                "ID": "16562603458839033663",
+                "ParentID": "4593462083155888182",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.63122701644897461,
+                            0.18945799767971039
+                        ],
+                        "Rotation": [
+                            -0.055621262639760971,
+                            0.037026125937700272,
+                            -0.0093899006024003029,
+                            0.99772095680236816
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            0.9999997615814209,
+                            1.0000003576278687
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8453040045844684699"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "16991357995963140177",
+                        "BoneID": "6249126393845122175",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_Spine1",
+                "FamilyNumber": 4,
+                "ID": "1349550348505932308",
+                "ParentID": "16562603458839033663",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.7688869833946228,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.03219270333647728,
+                            0.012609618715941906,
+                            0.0035571490880101919,
+                            0.99939578771591187
+                        ],
+                        "Scale": [
+                            1.0000002384185791,
+                            1,
+                            0.9999997615814209
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8401086507035467842"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "10519556343679214300",
+                        "BoneID": "3378626092054945910",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_Spine2",
+                "FamilyNumber": 5,
+                "ID": "2863203991291715669",
+                "ParentID": "1349550348505932308",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.87872797250747681,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.032129589468240738,
+                            0.013238321989774704,
+                            0.0034483519848436117,
+                            0.99939006567001343
+                        ],
+                        "Scale": [
+                            1.0000002384185791,
+                            1.0000003576278687,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2600544118932294662"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "5660692534100889495",
+                        "BoneID": "9453885965035171694",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_Neck",
+                "FamilyNumber": 6,
+                "ID": "8422642090077223124",
+                "ParentID": "2863203991291715669",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.98856902122497559,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.035159654915332794,
+                            0.0090991193428635597,
+                            -0.020241754129528999,
+                            0.99913525581359863
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999988079071045,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6525880470380022282"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "10971259100257615002",
+                        "BoneID": "17963598945331428101",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_Head",
+                "FamilyNumber": 7,
+                "ID": "5714882301740304745",
+                "ParentID": "8422642090077223124",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.65297198295593262,
+                            -0.08799300342798233
+                        ],
+                        "Rotation": [
+                            0.1242477148771286,
+                            0.064208388328552246,
+                            0.036869432777166367,
+                            0.98948496580123901
+                        ],
+                        "Scale": [
+                            1.0000002384185791,
+                            0.99999964237213135,
+                            1.0000003576278687
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2480445146139719448"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "13061103827539648038",
+                        "BoneID": "9420301100113934915",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_HeadTop_End",
+                "FamilyNumber": 8,
+                "ID": "13087478433165226103",
+                "ParentID": "5714882301740304745",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            939.6246337890625,
+                            155.98945617675781,
+                            63.697830200195313
                         ],
                         "Rotation": [
                             0,
-                            0.33380702137947083,
-                            0,
-                            0.94264143705368042
+                            -3.4924596548080444e-10,
+                            -8.7311491370201111e-11,
+                            1
                         ],
                         "Scale": [
                             1,
@@ -76268,82 +77716,1322 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9134854076034392625"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "17863507163652184211",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "1437568721972443818",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.44999998807907104,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            7,
-                            2.309999942779541,
-                            0.5
-                        ]
+                        "ID": "1788108087880747662"
                     }
                 ]
             },
             {
-                "Name": "Cube",
+                "Name": "mixamorig_LeftShoulder",
+                "FamilyNumber": 6,
+                "ID": "3838108393585805076",
+                "ParentID": "2863203991291715669",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.71246099472045898,
+                            0.82975798845291138,
+                            0.046773999929428101
+                        ],
+                        "Rotation": [
+                            0.35879582166671753,
+                            -0.57139217853546143,
+                            0.60664182901382446,
+                            0.42043113708496094
+                        ],
+                        "Scale": [
+                            0.99999964237213135,
+                            0.99999964237213135,
+                            0.9999995231628418
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15104003283712192268"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "16595780272289605271",
+                        "BoneID": "8639155535151660928",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftArm",
+                "FamilyNumber": 7,
+                "ID": "5956789397081447344",
+                "ParentID": "3838108393585805076",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.4574849605560303,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.11954479664564133,
+                            0.73008638620376587,
+                            0.66737055778503418,
+                            0.085436828434467316
+                        ],
+                        "Scale": [
+                            0.99999982118606567,
+                            0.99999970197677612,
+                            0.99999964237213135
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7168796197249338106"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "9893579975590017832",
+                        "BoneID": "5777558173640564447",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftForeArm",
+                "FamilyNumber": 8,
+                "ID": "15816483785144273820",
+                "ParentID": "5956789397081447344",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.9163460731506348,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.034116979688405991,
+                            0.022103065624833107,
+                            -0.36666679382324219,
+                            0.92946380376815796
+                        ],
+                        "Scale": [
+                            1,
+                            1.0000001192092896,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3459123630937282292"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "13299865136589504997",
+                        "BoneID": "12125902267771002018",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftHand",
+                "FamilyNumber": 9,
+                "ID": "7534703050846213705",
+                "ParentID": "15816483785144273820",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.93196702003479,
+                            0
+                        ],
+                        "Rotation": [
+                            0.087721362709999084,
+                            0.92283707857131958,
+                            -0.11443080753087997,
+                            0.35718655586242676
+                        ],
+                        "Scale": [
+                            0.99999964237213135,
+                            0.9999997615814209,
+                            1.0000002384185791
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3050652050856659637"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "7601368869325181165",
+                        "BoneID": "6420702416048369470",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftHandIndex1",
+                "FamilyNumber": 10,
+                "ID": "11732623175798493081",
+                "ParentID": "7534703050846213705",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.27029299736022949,
+                            0
+                        ],
+                        "Rotation": [
+                            0.37013798952102661,
+                            0.7674560546875,
+                            0.48779386281967163,
+                            0.18991149961948395
+                        ],
+                        "Scale": [
+                            0.99999958276748657,
+                            0.99999958276748657,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7483723775708705953"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "3602214526652497594",
+                        "BoneID": "15397320424224257109",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftHandIndex2",
+                "FamilyNumber": 11,
+                "ID": "9151493057621900544",
+                "ParentID": "11732623175798493081",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.29118001461029053,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.040223043411970139,
+                            0.030814431607723236,
+                            0.19050784409046173,
+                            0.98037713766098022
+                        ],
+                        "Scale": [
+                            0.99999946355819702,
+                            1.0000002384185791,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13905216597145885578"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "12618284597396548072",
+                        "BoneID": "1958177252006353524",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftHandIndex3",
+                "FamilyNumber": 12,
+                "ID": "825453374464756605",
+                "ParentID": "9151493057621900544",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.08865799754858017,
+                            0.49332600831985474,
+                            -0.29333201050758362
+                        ],
+                        "Rotation": [
+                            -0.53987246751785278,
+                            0.13161022961139679,
+                            0.40363812446594238,
+                            0.72683745622634888
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            0.99999970197677612,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12137013721512056951"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "6692196773688374497",
+                        "BoneID": "1534987534677330080",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftHandIndex4",
+                "FamilyNumber": 13,
+                "ID": "12252600691140336024",
+                "ParentID": "825453374464756605",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.0030819999519735575,
+                            0.23386099934577942,
+                            -0.11834699660539627
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9839322280498008402"
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightShoulder",
+                "FamilyNumber": 6,
+                "ID": "3853354952734718772",
+                "ParentID": "2863203991291715669",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.71246099472045898,
+                            0.83024901151657104,
+                            0.048409998416900635
+                        ],
+                        "Rotation": [
+                            0.25421378016471863,
+                            0.63201248645782471,
+                            -0.60896760225296021,
+                            0.40631797909736633
+                        ],
+                        "Scale": [
+                            1,
+                            0.9999997615814209,
+                            0.99999970197677612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8469949640528464067"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "14312796579497060657",
+                        "BoneID": "17957749487994532973",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightArm",
+                "FamilyNumber": 7,
+                "ID": "16994081822460443821",
+                "ParentID": "3853354952734718772",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.4574849605560303,
+                            0
+                        ],
+                        "Rotation": [
+                            0.12331724166870117,
+                            0.71294552087783813,
+                            0.66323697566986084,
+                            -0.19135898351669312
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1.0000002384185791,
+                            0.99999958276748657
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13943937765372217522"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "15515662116290759103",
+                        "BoneID": "12843663199718634035",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightForeArm",
+                "FamilyNumber": 8,
+                "ID": "12053444630543238685",
+                "ParentID": "16994081822460443821",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.9166600704193115,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.032238714396953583,
+                            -0.032424870878458023,
+                            0.4859142005443573,
+                            0.87280964851379395
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            0.9999995231628418,
+                            1.0000003576278687
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14934903069862054693"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "10161442300623961254",
+                        "BoneID": "8253113155993815461",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightHand",
+                "FamilyNumber": 9,
+                "ID": "1401445757376535963",
+                "ParentID": "12053444630543238685",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.9371629953384399,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.13906137645244598,
+                            0.92829686403274536,
+                            -0.075570404529571533,
+                            -0.3364759087562561
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            0.9999997615814209
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5938119798993987133"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "1347370115936121722",
+                        "BoneID": "7127019782240428522",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightHandIndex1",
+                "FamilyNumber": 10,
+                "ID": "8604269592046839938",
+                "ParentID": "1401445757376535963",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.27524000406265259,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.1575363427400589,
+                            0.95941203832626343,
+                            0.22543030977249146,
+                            0.062386669218540192
+                        ],
+                        "Scale": [
+                            0.99999964237213135,
+                            1,
+                            0.99999964237213135
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9298783767682392384"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "14246143445069450574",
+                        "BoneID": "17390056104549545603",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightHandIndex2",
+                "FamilyNumber": 11,
+                "ID": "12274654012892027561",
+                "ParentID": "8604269592046839938",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.30868300795555115,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.50832122564315796,
+                            -0.098255492746829987,
+                            -0.37803590297698975,
+                            0.76749211549758911
+                        ],
+                        "Scale": [
+                            0.99999946355819702,
+                            0.99999994039535522,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10313498836696892656"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "1603233805027296065",
+                        "BoneID": "6446829632462776928",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightHandIndex3",
+                "FamilyNumber": 12,
+                "ID": "6620492903614658890",
+                "ParentID": "12274654012892027561",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.045494001358747482,
+                            0.44763600826263428,
+                            -0.33125999569892883
+                        ],
+                        "Rotation": [
+                            -0.26609963178634644,
+                            -0.11699309200048447,
+                            -0.16230340301990509,
+                            0.94295346736907959
+                        ],
+                        "Scale": [
+                            0.9999995231628418,
+                            0.9999997615814209,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5642937969857461437"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "13651944560915688499",
+                        "BoneID": "13161790449646297942",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightHandIndex4",
+                "FamilyNumber": 13,
+                "ID": "2487534467117784619",
+                "ParentID": "6620492903614658890",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.0063240001909434795,
+                            0.24164299666881561,
+                            -0.16220399737358093
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9817536171378926356"
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftUpLeg",
+                "FamilyNumber": 3,
+                "ID": "2248624321721828952",
+                "ParentID": "4593462083155888182",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.58730500936508179,
+                            -0.35083600878715515,
+                            0.03566800057888031
+                        ],
+                        "Rotation": [
+                            0.06928689032793045,
+                            -0.31402799487113953,
+                            0.93924695253372192,
+                            0.12000411003828049
+                        ],
+                        "Scale": [
+                            1.0000002384185791,
+                            1,
+                            0.99999958276748657
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3938387163019748074"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "13477109608255883400",
+                        "BoneID": "13344470957085982803",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftLeg",
+                "FamilyNumber": 4,
+                "ID": "2289717868473000743",
+                "ParentID": "2248624321721828952",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            2.2067329883575439,
+                            0
+                        ],
+                        "Rotation": [
+                            0.44950199127197266,
+                            -0.23915177583694458,
+                            -0.026987273246049881,
+                            0.86024773120880127
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            0.99999970197677612,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2050040689995407560"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "9176148054975941411",
+                        "BoneID": "8824059436366854012",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftFoot",
+                "FamilyNumber": 5,
+                "ID": "6525267478016523412",
+                "ParentID": "2289717868473000743",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.4395929574966431,
+                            0
+                        ],
+                        "Rotation": [
+                            0.010400572791695595,
+                            0.7529149055480957,
+                            -0.65574193000793457,
+                            -0.054895631968975067
+                        ],
+                        "Scale": [
+                            1.0000003576278687,
+                            1.0000003576278687,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17283170430916240231"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "4301906274292792561",
+                        "BoneID": "17629205964519978840",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftToeBase",
+                "FamilyNumber": 6,
+                "ID": "1458665618430790966",
+                "ParentID": "6525267478016523412",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.2073630094528198,
+                            0
+                        ],
+                        "Rotation": [
+                            0.22140085697174072,
+                            -0.14795877039432526,
+                            0.021180955693125725,
+                            0.96366029977798462
+                        ],
+                        "Scale": [
+                            0.99999988079071045,
+                            1.0000001192092896,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17776022358943430442"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "5253377907963785706",
+                        "BoneID": "817165781664745946",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_LeftToe_End",
+                "FamilyNumber": 7,
+                "ID": "14901794257049326254",
+                "ParentID": "1458665618430790966",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.58688598871231079,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13424074620232804151"
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightUpLeg",
+                "FamilyNumber": 3,
+                "ID": "14749260124679961773",
+                "ParentID": "4593462083155888182",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.58730500936508179,
+                            -0.35083600878715515,
+                            0.054205998778343201
+                        ],
+                        "Rotation": [
+                            -0.11581506580114365,
+                            -0.12879078090190887,
+                            0.97424501180648804,
+                            -0.14438331127166748
+                        ],
+                        "Scale": [
+                            1.0000004768371582,
+                            1.0000001192092896,
+                            0.99999940395355225
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17340234769367038735"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "5880249318381770664",
+                        "BoneID": "6313905419139817193",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightLeg",
+                "FamilyNumber": 4,
+                "ID": "7182692134400877131",
+                "ParentID": "14749260124679961773",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            2.2046499252319336,
+                            0
+                        ],
+                        "Rotation": [
+                            0.44116130471229553,
+                            0.27228054404258728,
+                            0.0072346110828220844,
+                            0.85509508848190308
+                        ],
+                        "Scale": [
+                            1,
+                            1.0000005960464478,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5686285214096812065"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "8546043437190360750",
+                        "BoneID": "15346287262826142896",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightFoot",
+                "FamilyNumber": 5,
+                "ID": "6669270038569079719",
+                "ParentID": "7182692134400877131",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.43163001537323,
+                            0
+                        ],
+                        "Rotation": [
+                            -0.093887194991111755,
+                            -0.66949516534805298,
+                            0.73680436611175537,
+                            -0.008984406478703022
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1.0000001192092896,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13967547563098534017"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "8322092574971153194",
+                        "BoneID": "12214804073133095548",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightToeBase",
+                "FamilyNumber": 6,
+                "ID": "9919877488373462106",
+                "ParentID": "6669270038569079719",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.2110639810562134,
+                            0
+                        ],
+                        "Rotation": [
+                            0.22925774753093719,
+                            0.13073375821113586,
+                            -0.019389459863305092,
+                            0.96435141563415527
+                        ],
+                        "Scale": [
+                            0.99999958276748657,
+                            0.99999994039535522,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7179610325571406524"
+                    },
+                    {
+                        "Type": 28,
+                        "ID": "464766075606919468",
+                        "BoneID": "8222261861419078742",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "mixamorig_RightToe_End",
+                "FamilyNumber": 7,
+                "ID": "2676305360954607714",
+                "ParentID": "9919877488373462106",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "5498400758606246120",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0.60265398025512695,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2226489002821525416"
+                    }
+                ]
+            },
+            {
+                "Name": "CameraTrigger",
                 "FamilyNumber": 1,
-                "ID": "14624894122831169502",
+                "ID": "16110335659014423047",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -162.56382751464844,
-                            20.777198791503906,
-                            5.0621967315673828
+                            -1.182002067565918,
+                            2.3672940731048584,
+                            6.5831136703491211
                         ],
                         "Rotation": [
-                            -0.032948218286037445,
-                            0.32948979735374451,
-                            -0.011505997739732265,
-                            0.94351392984390259
+                            0,
+                            0,
+                            0,
+                            1
                         ],
                         "Scale": [
-                            0.80000001192092896,
-                            2,
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5710024953661905225"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1913087321873321590",
+                        "ResourceID": "3700915403338815760",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "distance",
+                                "float": 6
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "hor_angle",
+                                "float": -61.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vert_angle",
+                                "float": 40.5
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "static_pos",
+                                "gameobject": "0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Enter",
+                "FamilyNumber": 2,
+                "ID": "17212043646850882871",
+                "ParentID": "16110335659014423047",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0.63671350479125977
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.35994625091552734,
+                            0.82790106534957886,
+                            0.39769667387008667
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9273426058274566122"
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            5,
                             5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5656689745268172335",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "type",
+                                "enumInt": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TpPos1",
+                "FamilyNumber": 3,
+                "ID": "13198817790795050994",
+                "ParentID": "17212043646850882871",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.2518918514251709,
+                            0,
+                            -4.1579194068908691
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            2.0726075172424316,
+                            1,
+                            2.0718598365783691
                         ],
                         "ScaleNegative": false,
-                        "ID": "2616611112216096076"
+                        "ID": "3285726310181212052"
                     },
                     {
                         "Type": 1,
@@ -76353,58 +79041,170 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "6266490521394872002",
+                        "ID": "13257667119755906677",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "9518284212938395840",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
                         "Enabled": true
                     },
                     {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
+                        "Type": 2,
+                        "ID": "16964733353052396706",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
                     }
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "14767464998475599943",
-                "ParentID": "0",
+                "Name": "TpPos2",
+                "FamilyNumber": 3,
+                "ID": "12742939589411406132",
+                "ParentID": "17212043646850882871",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -2.5997228622436523,
+                            0,
+                            -4.3809657096862793
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            2.6248559951782227,
+                            1,
+                            2.3043062686920166
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15791096523482608222"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1407632036608209150",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "16419385230966657808",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Exit",
+                "FamilyNumber": 2,
+                "ID": "16835678063340474366",
+                "ParentID": "16110335659014423047",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -169.54969787597656,
-                            17.248741149902344,
-                            -5.9063272476196289
+                            0,
+                            0,
+                            2.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            0.32982426881790161,
+                            0.80711668729782104,
+                            0.43396782875061035
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "969911103855927379"
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            5,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11429956330860474469",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "type",
+                                "enumInt": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TpPos1",
+                "FamilyNumber": 3,
+                "ID": "9446222650724998624",
+                "ParentID": "16835678063340474366",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -2.871699333190918,
+                            0,
+                            3.7817463874816895
                         ],
                         "Rotation": [
                             0,
@@ -76418,7 +79218,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11411633721803235242"
+                        "ID": "6656085054933461235"
                     },
                     {
                         "Type": 1,
@@ -76428,7 +79228,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "16033059742455650653",
+                        "ID": "9042596078351136423",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -76436,50 +79236,34 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "3282850462777088253",
+                        "ID": "15251535985149884505",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1.5,
-                            5.6999998092651367,
-                            9.8999996185302734
-                        ]
                     }
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "4063228380736883769",
-                "ParentID": "0",
-                "Enabled": true,
+                "Name": "TpPos2",
+                "FamilyNumber": 3,
+                "ID": "5965072715624790247",
+                "ParentID": "16835678063340474366",
+                "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "11440818713881303491",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -169.49368286132813,
-                            18.791179656982422,
-                            -5.7961325645446777
+                            1.2829523086547852,
+                            0,
+                            3.7025966644287109
                         ],
                         "Rotation": [
                             0,
@@ -76493,7 +79277,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10656452213406266678"
+                        "ID": "10836431458676369007"
                     },
                     {
                         "Type": 1,
@@ -76503,42 +79287,25 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "9723181534176979524",
+                        "ID": "41547866741732688",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "16258035739188429982",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
                         "Enabled": true
                     },
                     {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            17.700000762939453,
-                            5.6999998092651367,
-                            1.2000000476837158
-                        ]
+                        "Type": 2,
+                        "ID": "13259923417923608064",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
                     }
                 ]
             },
             {
-                "Name": "Cube",
+                "Name": "FolderCameraTriggers",
                 "FamilyNumber": 1,
-                "ID": "11771902082184671200",
+                "ID": "5624908888893925590",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -76552,309 +79319,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -155.98774719238281,
-                            21.632205963134766,
-                            25.290102005004883
-                        ],
-                        "Rotation": [
-                            0.0042307064868509769,
-                            0.48479112982749939,
-                            0.0076323957182466984,
-                            0.87458640336990356
-                        ],
-                        "Scale": [
-                            14.5,
-                            3,
-                            10
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "12911986538790211478"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "12645722127455409710",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "16724192126998476149",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "11414651953697880097",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -152.76254272460938,
-                            20.909309387207031,
-                            -4.8657970428466797
-                        ],
-                        "Rotation": [
-                            0,
-                            0.33380687236785889,
-                            0,
-                            0.9426414966583252
-                        ],
-                        "Scale": [
-                            6.5,
-                            3.5,
-                            7.5
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "1936350989117989186"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "17789831361707516797",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "6684861210073545126",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube (1)",
-                "FamilyNumber": 1,
-                "ID": "6697187977738876512",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -148.71343994140625,
-                            20.909309387207031,
-                            -2.2287588119506836
-                        ],
-                        "Rotation": [
-                            0,
-                            0.021814886480569839,
-                            0,
-                            0.99976211786270142
-                        ],
-                        "Scale": [
-                            1,
-                            3.5,
-                            9.5
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "14529381792168309146"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "11316797434112933382",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "6462642714908660237",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "10199600271715693482",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -132.52330017089844,
-                            17.26966667175293,
-                            6.4744024276733398
-                        ],
-                        "Rotation": [
-                            0,
-                            0.17364819347858429,
-                            0,
-                            0.98480784893035889
-                        ],
-                        "Scale": [
-                            29.5,
-                            1.1000000238418579,
-                            6
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "4555782855487664391"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "17583038281036705353",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "14271001179958883120",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "15297525495682679914",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -82.427482604980469,
-                            14.543991088867188,
-                            31.957300186157227
+                            172.60444641113281,
+                            -18.448762893676758,
+                            12.460390090942383
                         ],
                         "Rotation": [
                             0,
@@ -76863,275 +79330,12 @@
                             1
                         ],
                         "Scale": [
-                            26.5,
-                            5.5,
+                            1,
+                            1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9724348711434762078"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "1677714264191534298",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "14905497989155400971",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "18143424511024060264",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            16.123367309570313,
-                            47.11370849609375
-                        ],
-                        "Rotation": [
-                            -0.24183931946754456,
-                            -0.025399375706911087,
-                            0.0063328058458864689,
-                            0.9699631929397583
-                        ],
-                        "Scale": [
-                            35.5,
-                            8,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "11195485572428173435"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "4166919526190885620",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "995495403312564738",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "3315248762375103800",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            2.7576429843902588,
-                            16.68107795715332,
-                            32.180305480957031
-                        ],
-                        "Rotation": [
-                            0.14777420461177826,
-                            0.021575266495347023,
-                            0.0032244448084384203,
-                            0.98878049850463867
-                        ],
-                        "Scale": [
-                            43,
-                            10.5,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "17845028651190020897"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "9292211978268535331",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "13448752376541813042",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "12721209336414147595",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -169.14701843261719,
-                            19.806814193725586,
-                            3.4146537780761719
-                        ],
-                        "Rotation": [
-                            0,
-                            -0.056692786514759064,
-                            0,
-                            0.99839168787002563
-                        ],
-                        "Scale": [
-                            7,
-                            2.7000000476837158,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "12493456988276725436"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "12888721326279144194",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": false
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "11653731563827640597",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
+                        "ID": "7334641281344693544"
                     }
                 ]
             }
