@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerController",
-        "NumStates": 7,
-        "NumTransitions": 10,
+        "NumStates": 6,
+        "NumTransitions": 9,
         "States": [
             {
                 "Name": "Idle",
@@ -21,7 +21,7 @@
             },
             {
                 "Name": "Attack",
-                "Speed": 2,
+                "Speed": 1,
                 "Clip": "4871813718953062991"
             },
             {
@@ -33,11 +33,6 @@
                 "Name": "Air",
                 "Speed": 1,
                 "Clip": "9449538334584208347"
-            },
-            {
-                "Name": "Spell",
-                "Speed": 1,
-                "Clip": "7211782662776671787"
             }
         ],
         "Transitions": [
@@ -213,25 +208,6 @@
                 "Value": false
             }
         ],
-        "Events": [
-            {
-                "Event_Id": "2453392179",
-                "Animation_Id": "6946917102901728312",
-                "Frame": 0,
-                "Type": 0
-            },
-            {
-                "Event_Id": "2453392179",
-                "Animation_Id": "6946917102901728312",
-                "Frame": 7,
-                "Type": 0
-            },
-            {
-                "Event_Id": "2453392179",
-                "Animation_Id": "6946917102901728312",
-                "Frame": 14,
-                "Type": 0
-            }
-        ]
+        "Events": []
     }
 }

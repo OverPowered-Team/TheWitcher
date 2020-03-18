@@ -896,6 +896,8 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Emmitter.Shape", (int)particleSystem->emmitter.GetShape());
 	//Zone
 	to_save->SetNumber("Emmitter.Zone", (int)particleSystem->emmitter.GetZone());
+	// CubeSize
+	to_save->SetFloat3("Emmitter.CubeSize", (float3)particleSystem->emmitter.GetCubeSize());
 	// Radius
 	to_save->SetNumber("Emmitter.Radius", particleSystem->emmitter.GetRadius());
 	// OutterRadius
@@ -1037,6 +1039,8 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->emmitter.SetShape((Emmitter_Shape)(int)to_load->GetNumber("Emmitter.Shape"));
 	//Zone
 	particleSystem->emmitter.SetZone((Emmitter_Zone)(int)to_load->GetNumber("Emmitter.Zone"));
+	// Radius
+	particleSystem->emmitter.SetCubeSize(to_load->GetFloat3("Emmitter.CubeSize"));
 	// Radius
 	particleSystem->emmitter.SetRadius(to_load->GetNumber("Emmitter.Radius"));
 	// OutterRadius
