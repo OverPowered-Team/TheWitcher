@@ -39,8 +39,8 @@ void PlayerAttacks::DoAttack()
 	player_controller->animator->PlayState(current_attack->name.c_str());
 
 	float start_time = Time::GetGameTime();
-	final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
-	attack_input_time = (start_time - final_attack_time) - input_window;
+	float final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
+	attack_input_time = final_attack_time - input_window;
 }
 
 void PlayerAttacks::SelectAttack(AttackType attack)
@@ -74,7 +74,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 }
 bool PlayerAttacks::CanReceiveInput()
 {
-	return (Time::GetGameTime() > attack_input_time);
+	return (Time::GetGameTime() > attack_input_time && (current_attack->heavy_attack_link != nullptr || current_attack->light_attack_link != nullptr));
 }
 
 void PlayerAttacks::CreateAttacks()
@@ -164,6 +164,7 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	{
 		LOG("NO NEXT ATTACK");
 		current_attack = nullptr;
+		player_controller->animator->PlayState("Idle");
 		player_controller->state = PlayerController::PlayerState::IDLE;
 	}
 }

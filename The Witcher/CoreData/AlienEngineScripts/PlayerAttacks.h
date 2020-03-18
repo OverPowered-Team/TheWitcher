@@ -54,7 +54,7 @@ public:
 	void OnAnimationEnd(const char* name);
 
 public:
-	float input_window;
+	float input_window = 0.0f;
 
 protected:
 	void CreateAttacks();
@@ -70,7 +70,6 @@ protected:
 	PlayerController* player_controller = nullptr;
 	ComponentBoxCollider* collider = nullptr;
 
-	float final_attack_time = 0.0f;
 	float attack_input_time = 0.0f;
 
 	std::vector<Attack*> attacks;
