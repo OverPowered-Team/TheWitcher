@@ -938,6 +938,7 @@ bool ModuleImporter::ReImportModel(ResourceModel *model)
 		if (model->CreateMetaData(model->ID))
 		{
 			App->resources->AddResource(model);
+			model->FreeMemory();
 		}
 
 		this->model = nullptr;

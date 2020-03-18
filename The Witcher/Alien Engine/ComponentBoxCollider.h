@@ -18,7 +18,7 @@ public:
 	ComponentBoxCollider(GameObject* go);
 
 	void SetCenter(float3 center);
-	void SetSize(float3 size);
+	void SetSize(const float3 size);
 	float3 GetSize() { return size; }
 
 private:

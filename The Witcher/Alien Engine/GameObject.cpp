@@ -912,7 +912,7 @@ const char* GameObject::GetTag() const
 
 Component* GameObject::GetComponent(const ComponentType& type)
 {
-	if (type == ComponentType::UI_BUTTON || type == ComponentType::UI_IMAGE) {
+	if (type == ComponentType::UI_BUTTON || type == ComponentType::UI_IMAGE || type == ComponentType::UI_CHECKBOX || type == ComponentType::UI_BAR || type == ComponentType::UI_SLIDER || type == ComponentType::UI_ANIMATED_IMAGE || type == ComponentType::UI_TEXT) {
 		std::vector<Component*>::iterator item = components.begin();
 		for (; item != components.end(); ++item) {
 			if (*item != nullptr && (*item)->GetType() == ComponentType::UI && dynamic_cast<ComponentUI*>(*item)->ui_type == type) {
@@ -1529,8 +1529,8 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 {
 	to_save->SetString("Name", name);
 	to_save->SetNumber("FamilyNumber", family_number);
-	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("ParentID",(parent != nullptr) ? std::to_string(parent->ID) : "0");
+	to_save->SetString("ID", std::to_string(ID).data());
+	to_save->SetString("ParentID",(parent != nullptr) ? std::to_string(parent->ID).data() : "0");
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetBoolean("ParentEnabled", parent_enabled);
 	to_save->SetBoolean("Selected", selected);
@@ -1540,7 +1540,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 	to_save->SetBoolean("PrefabLocked", prefab_locked);
 	to_save->SetString("Tag", tag);
 	if (IsPrefab()) {
-		to_save->SetString("PrefabID", std::to_string(prefabID));
+		to_save->SetString("PrefabID", std::to_string(prefabID).data());
 	}
 
 	JSONArraypack* components_to_save = to_save->InitNewArray("Components");
@@ -1678,9 +1678,9 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				AddComponent(capsule_collider);
 				break; }
 			case (int)ComponentType::CONVEX_HULL_COLLIDER: {
-				ComponentBoxCollider* box_collider = new ComponentBoxCollider(this);
-				box_collider->LoadComponent(components_to_load);
-				AddComponent(box_collider);
+				ComponentConvexHullCollider* convex_hull_collider = new ComponentConvexHullCollider(this);
+				convex_hull_collider->LoadComponent(components_to_load);
+				AddComponent(convex_hull_collider);
 				break; }
 			case (int)ComponentType::RIGID_BODY: {
 				ComponentRigidBody* rigi_body = new ComponentRigidBody(this);

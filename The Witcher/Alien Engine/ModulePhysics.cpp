@@ -79,19 +79,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 	static bool first_frame_playing = true;
 	OPTICK_EVENT();
 
-	if (Time::IsInGameState())
-	{
-		if (first_frame_playing == false)
-		{
-			world->stepSimulation(Time::GetDT(), 20);
-		}
-		
-		first_frame_playing = false;
-	}
-	else
-	{
-		first_frame_playing = true;
-	}
+	world->stepSimulation(Time::GetDT(), 20);
 
 	return UPDATE_CONTINUE;
 }
@@ -108,7 +96,7 @@ bool ModulePhysics::CleanUp()
 
 void ModulePhysics::DrawCollider(ComponentCollider* collider)
 {
-	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	debug_renderer->setDebugMode(btIDebugDraw::DBG_FastWireframe);
 	ModuleRenderer3D::BeginDebugDraw(float4(0.f, 1.f, 0.f, 1.f));
 
 	world->debugDrawObject(
@@ -147,7 +135,7 @@ void ModulePhysics::DrawConvexCollider(ComponentCollider* collider)
 
 void ModulePhysics::DrawConstraint(btTypedConstraint* constraint)
 {
-	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawConstraints);
+	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	ModuleRenderer3D::BeginDebugDraw(float4(1.f, 1.f, 0.f, 1.f));
 	world->debugDrawConstraint(constraint);
 	ModuleRenderer3D::EndDebugDraw();
@@ -155,7 +143,7 @@ void ModulePhysics::DrawConstraint(btTypedConstraint* constraint)
 
 void ModulePhysics::DrawCharacterController(ComponentCharacterController* controller)
 {
-	debug_renderer->setDebugMode(btIDebugDraw::DBG_FastWireframe);
+	debug_renderer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	ModuleRenderer3D::BeginDebugDraw(float4(1.f, 1.f, 0.f, 1.f));
 	world->debugDrawObject(controller->body->getWorldTransform(), controller->shape, btVector3(0.f, 1.f, 0.f));
 	ModuleRenderer3D::EndDebugDraw();
@@ -223,10 +211,10 @@ void ModulePhysics::RemoveVehicle(btRaycastVehicle* vehicle)
 
 void DebugRenderer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	glColor3f(color[0], color[1], color[2]);
+	glColor3fv(&color[0]);
 	glBegin(GL_LINES);
-	glVertex3f(from[0], from[1], from[2]);
-	glVertex3f(to[0], to[1], to[2]);
+	glVertex3fv(&from[0]);
+	glVertex3fv(&to[0]);
 	glEnd();
 }
 

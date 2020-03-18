@@ -310,11 +310,11 @@ void ComponentText::Clone(Component* clone)
 void ComponentText::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("Text", text);
+	to_save->SetString("ID", std::to_string(ID).data());
+	to_save->SetString("Text", text.data());
 	to_save->SetNumber("UIType", (int)ui_type);
 	if (font != nullptr) {
-		to_save->SetString("FontID", std::to_string(font->GetID()));
+		to_save->SetString("FontID", std::to_string(font->GetID()).data());
 	}
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetColor("Color", current_color);

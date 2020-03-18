@@ -54,8 +54,8 @@ ResourceBone* ComponentBone::GetBone()
 void ComponentBone::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("BoneID", bone ? std::to_string(bone->GetID()) : std::to_string(0));
+	to_save->SetString("ID", std::to_string(ID).data());
+	to_save->SetString("BoneID", bone ? std::to_string(bone->GetID()).data() : std::to_string(0).data());
 	to_save->SetBoolean("Enabled", enabled);
 }
 

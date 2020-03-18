@@ -296,7 +296,7 @@ JSONfilepack* Application::LoadJSONFile(const std::string& path)
 		return nullptr;
 	}
 	else {
-		json_files.push_back(new JSONfilepack(path, object, value));
+		json_files.push_back(new JSONfilepack(path.data(), object, value));
 		return json_files.back();
 	}
 }
@@ -311,7 +311,7 @@ JSONfilepack* Application::CreateJSONFile(const std::string& path)
 		return nullptr;
 	}
 	else {
-		json_files.push_back(new JSONfilepack(path, object, value));
+		json_files.push_back(new JSONfilepack(path.data(), object, value));
 		return json_files.back();
 	}
 }

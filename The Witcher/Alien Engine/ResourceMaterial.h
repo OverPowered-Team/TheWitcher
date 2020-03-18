@@ -7,6 +7,9 @@
 
 #define NO_TEXTURE_ID 0
 
+#define DEFAULT_SMOOTHNESS 32.f
+#define DEFAULT_METALNESS 0.5f
+
 enum class TextureType {
 	NONE = -1,
 	DIFFUSE = 0,
@@ -32,7 +35,8 @@ struct ShaderInputs
 	struct StandardShaderProperties
 	{
 		float3 diffuse_color = float3::one();
-		float shininess = 0.5f;
+		float smoothness = DEFAULT_SMOOTHNESS;
+		float metalness = DEFAULT_METALNESS;
 	} standardShaderProperties;
 
 	struct WaveShaderProperties

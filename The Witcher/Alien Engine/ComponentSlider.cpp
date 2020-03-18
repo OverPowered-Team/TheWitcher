@@ -635,8 +635,8 @@ void ComponentSlider::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetNumber("UIType", (int)ui_type);
-	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()) : "0");
-	to_save->SetString("sliderTexture", (sliderTexture != nullptr) ? std::to_string(sliderTexture->GetID()) : "0");
+	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()).data() : "0");
+	to_save->SetString("sliderTexture", (sliderTexture != nullptr) ? std::to_string(sliderTexture->GetID()).data() : "0");
 	to_save->SetColor("Color", current_color);
 
 	to_save->SetNumber("sliderScaleX", sliderScaleX);
@@ -659,10 +659,10 @@ void ComponentSlider::SaveComponent(JSONArraypack* to_save)
 	to_save->SetColor("SliderColorPressed", slider_pressed_color);
 	to_save->SetColor("SliderColorDisabled", slider_disabled_color);
 
-	to_save->SetString("SelectOnUp", std::to_string(select_on_up));
-	to_save->SetString("SelectOnDown", std::to_string(select_on_down));
-	to_save->SetString("SelectOnRight", std::to_string(select_on_right));
-	to_save->SetString("SelectOnLeft", std::to_string(select_on_left));
+	to_save->SetString("SelectOnUp", std::to_string(select_on_up).data());
+	to_save->SetString("SelectOnDown", std::to_string(select_on_down).data());
+	to_save->SetString("SelectOnRight", std::to_string(select_on_right).data());
+	to_save->SetString("SelectOnLeft", std::to_string(select_on_left).data());
 
 }
 

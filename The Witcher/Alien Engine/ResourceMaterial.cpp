@@ -90,9 +90,9 @@ bool ResourceMaterial::CreateMetaData(const u64& force_id)
 	json_serialize_to_file_pretty(alien_value, alien_path.data());
 
 	if (alien_value != nullptr && alien_object != nullptr) {
-		JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
+		JSONfilepack* alien = new JSONfilepack(alien_path.data(), alien_object, alien_value);
 		alien->StartSave();
-		alien->SetString("Meta.ID", std::to_string(ID));
+		alien->SetString("Meta.ID", std::to_string(ID).data());
 		alien->FinishSave();
 		delete alien;
 	}
@@ -133,7 +133,7 @@ bool ResourceMaterial::ReadBaseInfo(const char* assets_file_path)
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(alien_path, object, value);
+		JSONfilepack* meta = new JSONfilepack(alien_path.data(), object, value);
 
 		ID = std::stoull(meta->GetString("Meta.ID"));
 
@@ -147,7 +147,7 @@ bool ResourceMaterial::ReadBaseInfo(const char* assets_file_path)
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* matFile = new JSONfilepack(alien_path, object, value);
+		JSONfilepack* matFile = new JSONfilepack(alien_path.data(), object, value);
 
 		ReadMaterialValues(matFile);
 
@@ -189,7 +189,7 @@ void ResourceMaterial::ReadLibrary(const char* meta_data)
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
+		JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
 		ReadMaterialValues(meta);
 		delete meta;
 	}
@@ -212,7 +212,7 @@ void ResourceMaterial::SaveMaterialFiles()
 	json_serialize_to_file_pretty(alien_value, path.data());
 
 	if (alien_value != nullptr && alien_object != nullptr) {
-		JSONfilepack* alien = new JSONfilepack(path, alien_object, alien_value);
+		JSONfilepack* alien = new JSONfilepack(path.data(), alien_object, alien_value);
 		SaveMaterialValues(alien);
 		delete alien;
 	}
@@ -224,11 +224,15 @@ void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 {
 	file->StartSave();
 
-	file->SetString("Name", name);
+	file->SetString("Name", name.data());
+
 	file->SetFloat4("Color", color);
-	file->SetString("ShaderID", std::to_string(used_shader_ID));
+	file->SetNumber("Smoothness", shaderInputs.standardShaderProperties.smoothness);
+	file->SetNumber("Metalness", shaderInputs.standardShaderProperties.metalness);
+
+	file->SetString("ShaderID", std::to_string(used_shader_ID).data());
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
-		file->SetString(std::to_string(iter), std::to_string(texturesID[iter]));
+		file->SetString(std::to_string(iter).data(), std::to_string(texturesID[iter]).data());
 	}
 
 	file->FinishSave();
@@ -237,32 +241,42 @@ void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 {
 	this->name = file->GetString("Name");
+
 	color = file->GetFloat4("Color");
+	shaderInputs.standardShaderProperties.smoothness = (float)file->GetNumber("Smoothness");
+	shaderInputs.standardShaderProperties.metalness = (float)file->GetNumber("Metalness");
+
 	SetShader((ResourceShader*)App->resources->GetResourceWithID(std::stoull(file->GetString("ShaderID"))));
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
-		texturesID[iter] = std::stoull(file->GetString(std::to_string(iter)));
+		texturesID[iter] = std::stoull(file->GetString(std::to_string(iter).data()));
 	}
 }
 
 void ResourceMaterial::ApplyMaterial()
 {
+	// Bind the actual shader
+	used_shader->Bind();
 
+	// Bind textures
 	if (texturesID[(uint)TextureType::DIFFUSE] != NO_TEXTURE_ID && textureActivated)
 	{
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, App->resources->GetTextureidByID(texturesID[(uint)TextureType::DIFFUSE]));
-		used_shader->SetUniform1i("tex", 0);
+		used_shader->SetUniform1i("objectMaterial.diffuseTexture", 0);
+		used_shader->SetUniform1i("objectMaterial.hasDiffuseTexture", 1);
 	}
+	else
+		used_shader->SetUniform1i("objectMaterial.hasDiffuseTexture", 0);
 
-	/*if (texturesID[(uint)TextureType::NORMALS] != NO_TEXTURE_ID)
+	if (texturesID[(uint)TextureType::SPECULAR] != NO_TEXTURE_ID)
 	{
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, App->resources->GetTextureidByID(texturesID[(uint)TextureType::NORMALS]));
-		used_shader->SetUniform1i("normalMap", 1);
-	}*/
-
-	// Bind the actual shader
-	used_shader->Bind();
+		glBindTexture(GL_TEXTURE_2D, App->resources->GetTextureidByID(texturesID[(uint)TextureType::SPECULAR]));
+		used_shader->SetUniform1i("objectMaterial.specularMap", 1);
+		used_shader->SetUniform1i("objectMaterial.hasSpecularMap", 1);
+	}
+	else	
+		used_shader->SetUniform1i("objectMaterial.hasSpecularMap", 0);
 
 	// Update uniforms
 	shaderInputs.standardShaderProperties.diffuse_color = float3(color.x, color.y, color.z);
@@ -406,7 +420,6 @@ void ResourceMaterial::ShaderSelectionHeader()
 
 void ResourceMaterial::ShaderInputsSegment()
 {
-	
 
 	switch (used_shader->GetShaderType())
 	{
@@ -423,7 +436,14 @@ void ResourceMaterial::ShaderInputsSegment()
 		ImGui::Text("Specular:");
 		InputTexture(TextureType::SPECULAR);
 		ImGui::SameLine();
-		ImGui::DragFloat("Shininess", &shaderInputs.standardShaderProperties.shininess, 0.05f, 0.f, 32.f);
+		float posX = ImGui::GetCursorPosX();
+		ImGui::SliderFloat("Metalness", &shaderInputs.standardShaderProperties.metalness, 0.0f, 1.f);
+		ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(posX, -15));
+		if(ImGui::Button("Reset Metalness")) shaderInputs.standardShaderProperties.metalness = DEFAULT_METALNESS;
+		ImGui::SetCursorPosX(posX);
+		ImGui::SliderFloat("Smoothness", &shaderInputs.standardShaderProperties.smoothness, 16.f, 128.f);
+		ImGui::SetCursorPosX(posX);
+		if (ImGui::Button("Reset Smoothness"))  shaderInputs.standardShaderProperties.smoothness = DEFAULT_SMOOTHNESS;
 
 		// Normal Map
 		ImGui::Text("Normal Map:");
