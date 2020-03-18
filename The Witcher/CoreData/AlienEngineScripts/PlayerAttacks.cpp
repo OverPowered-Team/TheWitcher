@@ -160,7 +160,7 @@ void PlayerAttacks::DesactiveCollider()
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {
-	if (current_attack && strcmp(name, "Idle") == 1)
+	if (current_attack)
 	{
 		LOG("NO NEXT ATTACK");
 		current_attack = nullptr;

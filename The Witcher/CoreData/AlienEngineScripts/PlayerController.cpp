@@ -176,9 +176,11 @@ void PlayerController::Update()
 		ccontroller->SetWalkDirection(float3::zero());
 		can_move = false;
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X))
+		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
+			|| Input::GetKeyDown(keyboard_light_attack))
 			attacks->ComboAttack(PlayerAttacks::AttackType::LIGHT);
-		else if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_Y))
+		if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+			|| Input::GetKeyDown(keyboard_heavy_attack))
 			attacks->ComboAttack(PlayerAttacks::AttackType::HEAVY);
 
 		break;
