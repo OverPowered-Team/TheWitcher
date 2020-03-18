@@ -12,10 +12,9 @@
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": true,
+                "IsPrefab": false,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14336817234344442991",
                 "Components": [
                     {
                         "Type": 0,
@@ -72,7 +71,7 @@
                 ]
             },
             {
-                "Name": "Canvas",
+                "Name": "UI_InGame",
                 "FamilyNumber": 1,
                 "ID": "13228716199218308750",
                 "ParentID": "0",
@@ -84,7 +83,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
@@ -97,7 +96,7 @@
                             0,
                             0,
                             0,
-                            0
+                            1
                         ],
                         "Scale": [
                             1,
@@ -114,25 +113,25 @@
                 ]
             },
             {
-                "Name": "Frame",
+                "Name": "Character 1",
                 "FamilyNumber": 2,
                 "ID": "2983764090807356643",
                 "ParentID": "13228716199218308750",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
+                            -53.215187072753906,
+                            31.135036468505859,
                             0
                         ],
                         "Rotation": [
@@ -142,8 +141,8 @@
                             1
                         ],
                         "Scale": [
-                            25,
-                            25,
+                            10,
+                            10,
                             1
                         ],
                         "ScaleNegative": false,
@@ -202,12 +201,12 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
@@ -254,12 +253,12 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
@@ -306,12 +305,12 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
@@ -335,8 +334,8 @@
                         "ID": "7088788688682260624"
                     },
                     {
-                        "X": 650.94256591796875,
-                        "Y": 279.7974853515625,
+                        "X": 224.94635009765625,
+                        "Y": 83.616950988769531,
                         "Width": 2.6099998950958252,
                         "Height": 0.18999999761581421,
                         "Enabled": true,
@@ -375,12 +374,12 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
@@ -404,8 +403,8 @@
                         "ID": "7724034926700317638"
                     },
                     {
-                        "X": 544.883544921875,
-                        "Y": 325.31085205078125,
+                        "X": 182.52273559570313,
+                        "Y": 101.82232666015625,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -444,12 +443,12 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "105533542940939943",
+                "PrefabID": "10544982368564961170",
                 "Components": [
                     {
                         "Type": 0,
@@ -473,8 +472,8 @@
                         "ID": "100751101429321652"
                     },
                     {
-                        "X": 536.7637939453125,
-                        "Y": 360.51815795898438,
+                        "X": 179.27487182617188,
+                        "Y": 115.90522766113281,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -501,6 +500,75 @@
                         "barScaleX": 1,
                         "barScaleY": 0.80000001192092896,
                         "offsetX": 0,
+                        "offsetY": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Bar",
+                "FamilyNumber": 2,
+                "ID": "18250579420019191891",
+                "ParentID": "13228716199218308750",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10544982368564961170",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -38,
+                            7.4505805969238281e-09
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            7,
+                            7,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4658469136171888409"
+                    },
+                    {
+                        "X": 543.5,
+                        "Y": 568.0888671875,
+                        "Width": 11.590000152587891,
+                        "Height": 0.87999999523162842,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 25,
+                        "TextureID": "15319854443099540283",
+                        "sliderTexture": "17906902311267563192",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "BarColor": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "maxValue": 100,
+                        "minValue": 0,
+                        "currentValue": 100,
+                        "factor": 1,
+                        "barScaleX": 0.93999999761581421,
+                        "barScaleY": 0.44999998807907104,
+                        "offsetX": 0.40000000596046448,
                         "offsetY": 0
                     }
                 ]
