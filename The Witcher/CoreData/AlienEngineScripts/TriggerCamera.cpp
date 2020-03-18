@@ -39,18 +39,29 @@ void TriggerCamera::ManageTransition(bool normal_way)
 	else
 		info = &info_from_cam;
 
-		if (state == ToState::DYNAMIC) {
+	if (state == ToState::DYNAMIC) {
+		if (cam_script != nullptr) {
 			cam_script->destination = cam_script->CalculateCameraPos(info->hor_angle, info->vert_angle, info->distance);
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
 		}
-		else if (state == ToState::STATIC) {
+		else {
+			LOG("THERE IS NOT CAMERA MOVEMENT SCRIPT IN CURRENT CAMERA");
+		}
+	}
+	else if (state == ToState::STATIC) {
+		if (static_pos != nullptr) {
 			cam_script->destination = static_pos->transform->GetGlobalPosition();
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
 		}
-
+		else {
+			LOG("Static object is NULL");
+		}
+	}
+	if (cam_script != nullptr) {
 		//InterChangeInfoWithCamera();
 		Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
 		cam_script->t1 = Time::GetGameTime();
+	}
 	/*}
 	player_counter = 0;*/
 }
@@ -63,6 +74,32 @@ void TriggerCamera::OnDrawGizmos()
 		Gizmos::DrawLine(enter->transform->GetGlobalPosition(), exit->transform->GetGlobalPosition(), Color::Red());
 		Gizmos::DrawSphere(exit->transform->GetGlobalPosition(), 0.3f, Color::Red());
 	}
+
+	switch (state)
+	{
+	case TriggerCamera::ToState::DYNAMIC: {
+		if (cam_script == nullptr) {
+			camera = Camera::GetCurrentCamera()->game_object_attached;
+			cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+		}
+		float3 cam_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(info_to_cam.hor_angle, info_to_cam.vert_angle, info_to_cam.distance, false);
+		Gizmos::DrawLine(transform->GetGlobalPosition(), cam_pos, Color::Red()); // line mid -> future camera pos
+		Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
+		break;
+	}
+	case TriggerCamera::ToState::STATIC: {
+		if (static_pos != nullptr)
+			Gizmos::DrawSphere(static_pos->transform->GetGlobalPosition(), 0.5, Color::Purple());
+		break;
+	}
+	case TriggerCamera::ToState::AXIS_NOT_IMPLEMENTED:
+		break;
+	default:
+		break;
+	}
+
+	
+	//Gizmos::DrawLine(cam_pos, cam_pos + axis_cam.Normalized(), Color::Magenta());
 }
 
 void TriggerCamera::InterChangeInfoWithCamera()

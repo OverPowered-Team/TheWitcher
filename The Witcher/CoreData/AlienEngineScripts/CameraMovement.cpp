@@ -68,12 +68,15 @@ void CameraMovement::LookAtMidPoint()
     transform->SetGlobalRotation(rot2 * rot1);
 }
 
-float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst)
+float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst, bool with_mid_point)
 {
     float angle1 = math::DegToRad(ang1);
     float angle2 = math::DegToRad(ang2);
 
-    return CalculateMidPoint() + float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
+    if (with_mid_point)
+        return CalculateMidPoint() + float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
+    else
+        return float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
 }
 
 void CameraMovement::OnDrawGizmos()

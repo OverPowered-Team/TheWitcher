@@ -31,7 +31,7 @@ public:
 	float3 CalculateMidPoint();
 	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
-	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
+	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst, bool with_mid_point = true);
 	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
 	float top_angle = 0.f;
@@ -51,14 +51,15 @@ public:
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	CameraMovement* alien = new CameraMovement();
 	// To show in inspector here
+	SHOW_TEXT("First parameters");
+	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraState, alien->state);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->top_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->vertical_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->distance);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.x,0, 1);
+	/*SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.x,0, 1);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.y, 0, 1);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.z, 0, 1);
-	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraState, alien->state);
-	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.z, 0, 1);*/
+	//SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
 
 	return alien;
 }
