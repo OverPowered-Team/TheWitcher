@@ -13,6 +13,7 @@ void PlayerAttacks::Start()
 {
 	CreateAttacks();
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
+	collider = (ComponentBoxCollider*)GetComponent(ComponentType::BOX_COLLIDER);
 }
 
 void PlayerAttacks::StartAttack(AttackType attack)
@@ -109,11 +110,19 @@ void PlayerAttacks::CreateAttacks()
 void PlayerAttacks::ActiveCollider()
 {
 	LOG("COLLIDER ACTIVED");
+	if (collider)
+	{
+		collider->SetCenter(current_attack->collider_position);
+		collider->SetSize(current_attack->collider_size);
+		collider->SetEnable(true);
+	}
 }
 
 void PlayerAttacks::DesactiveCollider()
 {
 	LOG("COLLIDER DESACTIVED");
+	if(collider)
+		collider->SetEnable(false);
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {

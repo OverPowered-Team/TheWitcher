@@ -63,6 +63,7 @@ protected:
 	Attack* base_light_attack = nullptr;
 	Attack* base_heavy_attack = nullptr;
 	PlayerController* player_controller = nullptr;
+	ComponentBoxCollider* collider = nullptr;
 
 	float final_attack_time = 0.0f;
 	float attack_input_time = 0.0f;
