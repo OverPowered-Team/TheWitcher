@@ -33,7 +33,7 @@ public:
 	void Start();
 	void Update();
 
-	void HandleMovement();
+	void HandleMovement(float2 joystickInput);
 
 	void OnAnimationEnd(const char* name);
 
@@ -45,6 +45,22 @@ public:
 	ComponentCharacterController* ccontroller = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
+	
+	bool keyboard_input = false;
+
+	//Keyboard input
+	SDL_Scancode keyboard_move_up;
+	SDL_Scancode keyboard_move_left;
+	SDL_Scancode keyboard_move_right;
+	SDL_Scancode keyboard_move_down;
+	SDL_Scancode keyboard_jump;
+	SDL_Scancode keyboard_dash;
+	SDL_Scancode keyboard_light_attack;
+
+	//Joystick input
+	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
+	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
+	Input::CONTROLLER_BUTTONS controller_attack = Input::CONTROLLER_BUTTON_X;
 
 private:
 

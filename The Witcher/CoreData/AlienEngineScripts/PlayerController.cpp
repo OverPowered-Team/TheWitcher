@@ -12,16 +12,68 @@ void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
+
+	if (controller_index == 1) {
+		keyboard_move_up = SDL_SCANCODE_W;
+		keyboard_move_left = SDL_SCANCODE_A;
+		keyboard_move_right = SDL_SCANCODE_D;
+		keyboard_move_down = SDL_SCANCODE_S;
+		keyboard_jump = SDL_SCANCODE_SPACE;
+		keyboard_dash = SDL_SCANCODE_LALT;
+		keyboard_light_attack = SDL_SCANCODE_V;
+	}
+	else if (controller_index == 2) {
+		keyboard_move_up = SDL_SCANCODE_I;
+		keyboard_move_left = SDL_SCANCODE_J;
+		keyboard_move_right = SDL_SCANCODE_L;
+		keyboard_move_down = SDL_SCANCODE_K;
+		keyboard_jump = SDL_SCANCODE_RSHIFT;
+		keyboard_dash = SDL_SCANCODE_RALT;
+		keyboard_light_attack = SDL_SCANCODE_RCTRL;
+	}
 }
 
 void PlayerController::Update()
 {
+	float2 joystickInput = float2(
+		Input::GetControllerHoritzontalLeftAxis(controller_index),
+		Input::GetControllerVerticalLeftAxis(controller_index));
 
-	/*---------------CONTROLLER-----------------------*/
+	if (joystickInput.Length() > 0) {
+		keyboard_input = false;
+	}
+	else if (Input::GetKeyDown(keyboard_move_up)
+		|| Input::GetKeyDown(keyboard_move_down)
+		|| Input::GetKeyDown(keyboard_move_left)
+		|| Input::GetKeyDown(keyboard_move_right)
+		|| Input::GetKeyDown(keyboard_dash)
+		|| Input::GetKeyDown(keyboard_jump))
+	{
+		keyboard_input = true;
+	}
+
 	if (can_move)
-		HandleMovement();
-
-	/*---------------CONTROLLER-----------------------*/
+	{
+		if (!keyboard_input) {
+			HandleMovement(joystickInput);
+		}
+		else {
+			float2 keyboardInput = float2(0.f, 0.f);
+			if (Input::GetKeyRepeat(keyboard_move_left)) {
+				keyboardInput.x += 1.f;
+			}
+			if (Input::GetKeyRepeat(keyboard_move_right)) {
+				keyboardInput.x -= 1.f;
+			}
+			if (Input::GetKeyRepeat(keyboard_move_up)) {
+				keyboardInput.y += 1.f;
+			}
+			if (Input::GetKeyRepeat(keyboard_move_down)) {
+				keyboardInput.y -= 1.f;
+			}
+			HandleMovement(keyboardInput);
+		}
+	}
 
 	switch (state)
 	{
@@ -29,20 +81,23 @@ void PlayerController::Update()
 
 		can_move = true;
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_X)) {
+		if (Input::GetControllerButtonDown(controller_index, controller_attack)
+			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
 			can_move = false;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+		if (Input::GetControllerButtonDown(controller_index, controller_dash)
+			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
 			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_A)) {
+		if (Input::GetControllerButtonDown(controller_index, controller_jump)
+			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
 			animator->PlayState("Jump");
 			if (ccontroller->CanJump()) {
@@ -56,18 +111,21 @@ void PlayerController::Update()
 	{
 		can_move = true;
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_X)) {
+		if (Input::GetControllerButtonDown(controller_index, controller_attack)
+			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+		if (Input::GetControllerButtonDown(controller_index, controller_dash)
+			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
 			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_A)) {
+		if (Input::GetControllerButtonDown(controller_index, controller_jump)
+			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
 			animator->PlayState("Jump");
 			if (ccontroller->CanJump()) {
@@ -113,11 +171,8 @@ void PlayerController::Update()
 	player_data.currentSpeed = 0;
 }
 
-void PlayerController::HandleMovement()
+void PlayerController::HandleMovement(float2 joystickInput)
 {
-	float2 joystickInput = float2(
-		Input::GetControllerHoritzontalLeftAxis(controller_index),
-		Input::GetControllerVerticalLeftAxis(controller_index));
 	float joystickIntensity = joystickInput.Length();
 
 	float3 vector = float3(joystickInput.x, 0.f, joystickInput.y);
