@@ -29,24 +29,24 @@ void PlayerController::Update()
 
 		can_move = true;
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_X)) {
 			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
 			can_move = false;
 		}
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
 			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 
 		}
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_A)) {
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_A)) {
 			state = PlayerState::JUMPING;
 			animator->PlayState("Jump");
 			if (ccontroller->CanJump()) {
-				ccontroller->Jump(transform->up * 10);
+				ccontroller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
 			}
 		}
@@ -56,22 +56,22 @@ void PlayerController::Update()
 	{
 		can_move = true;
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_X)) {
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_X)) {
 			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
 		}
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_RIGHTSHOULDER)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
 			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 		}
 
-		if (Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_A)) {
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_A)) {
 			state = PlayerState::JUMPING;
 			animator->PlayState("Jump");
 			if (ccontroller->CanJump()) {
-				ccontroller->Jump(transform->up * 10);
+				ccontroller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
 			}
 		}
@@ -97,46 +97,53 @@ void PlayerController::Update()
 
 	/*---------------KEYBOARD-----------------------*/
 
-	if (state == PlayerState::RUNNING && abs(playerData.currentSpeed) < 0.1F)
+	if (state == PlayerState::RUNNING && abs(player_data.currentSpeed) < 0.1F)
 		state = PlayerState::IDLE;
 
-	if (state == PlayerState::IDLE && abs(playerData.currentSpeed) > 0.1F)
+	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.1F)
 		state = PlayerState::RUNNING;
 
 	if (state == PlayerState::JUMPING && ccontroller->CanJump()) {
-		if (abs(playerData.currentSpeed) < 0.1F)
+		if (abs(player_data.currentSpeed) < 0.1F)
 			state = PlayerState::IDLE;
-		if (abs(playerData.currentSpeed) > 0.1F)
+		if (abs(player_data.currentSpeed) > 0.1F)
 			state = PlayerState::RUNNING;
 	}
 
-	playerData.currentSpeed = 0;
+	player_data.currentSpeed = 0;
 }
 
 void PlayerController::HandleMovement()
 {
-	float axisX = Input::GetControllerHoritzontalLeftAxis(controllerIndex);
-	float axisY = Input::GetControllerVerticalLeftAxis(controllerIndex);
+	float2 joystickInput = float2(
+		Input::GetControllerHoritzontalLeftAxis(controller_index),
+		Input::GetControllerVerticalLeftAxis(controller_index));
+	float joystickIntensity = joystickInput.Length();
 
-	float speed = (abs(axisX) + abs(axisY)) * 0.5F;
+	float3 vector = float3(joystickInput.x, 0.f, joystickInput.y);
+	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
+	vector.y = 0.f;
+	vector.Normalize();
 
-	float3 vector = float3(axisX, 0.f, axisY);
-	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector).Normalized();
 	float angle = atan2f(vector.z, vector.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90) * Maths::Deg2Rad());
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
-	if (abs(axisX) >= stick_threshold || abs(axisY) >= stick_threshold) {
-		playerData.currentSpeed = (playerData.movementSpeed * speed * Time::GetDT());
+	if (abs(joystickInput.x) >= stick_threshold || abs(joystickInput.y) >= stick_threshold)
+	{
+		player_data.currentSpeed = (player_data.movementSpeed * joystickIntensity * Time::GetDT());
 		ccontroller->SetRotation(rot);
 	}
 
-	if (state == PlayerState::DASHING) {
-		ccontroller->SetWalkDirection(transform->forward.Normalized() * playerData.movementSpeed * 1.5 * Time::GetDT());
+	if (state == PlayerState::DASHING)
+	{
+		ccontroller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT());
 	}
 	else
-		ccontroller->SetWalkDirection(vector.Normalized() * playerData.currentSpeed);
+	{
+		ccontroller->SetWalkDirection(vector * player_data.currentSpeed);
+	}
 
-	animator->SetFloat("speed", Maths::Abs(playerData.currentSpeed));
+	animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
 }
 
 void PlayerController::OnAnimationEnd(const char* name) {
