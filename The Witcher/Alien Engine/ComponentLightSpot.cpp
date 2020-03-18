@@ -139,7 +139,7 @@ void ComponentLightSpot::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", enabled);
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetBoolean("PrintIcon", print_icon);
 
 	to_save->SetNumber("Intensity", float(light_props.intensity));

@@ -62,7 +62,7 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 
 			for (uint i = 0; i < data_structures.size(); ++i) {
 				structures->SetAnotherNode();
-				structures->SetString("DataName", data_structures[i].first);
+				structures->SetString("DataName", data_structures[i].first.data());
 				structures->SetBoolean("UsesAlien", data_structures[i].second);
 			}
 		}
@@ -82,9 +82,9 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 
 		if (meta_value != nullptr && meta_object != nullptr) {
 
-			JSONfilepack* file = new JSONfilepack(meta_path, meta_object, meta_value);
+			JSONfilepack* file = new JSONfilepack(meta_path.data(), meta_object, meta_value);
 			file->StartSave();
-			file->SetString("Meta.ID", std::to_string(ID));
+			file->SetString("Meta.ID", std::to_string(ID).data());
 			file->FinishSave();
 			delete file;
 		}
@@ -120,7 +120,7 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(path, object, value);
+		JSONfilepack* meta = new JSONfilepack(path.data(), object, value);
 
 		if (meta->GetBoolean("HasData")) {
 			JSONArraypack* structures = meta->GetArray("DataStructure");
@@ -158,7 +158,7 @@ void ResourceScript::ReadLibrary(const char* meta_data)
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* script = new JSONfilepack(meta_data_path, object, value);
+		JSONfilepack* script = new JSONfilepack(meta_data_path.data(), object, value);
 
 		ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 
@@ -230,7 +230,7 @@ void ResourceScript::Reimport()
 
 			for (uint i = 0; i < data_structures.size(); ++i) {
 				structures->SetAnotherNode();
-				structures->SetString("DataName", data_structures[i].first);
+				structures->SetString("DataName", data_structures[i].first.data());
 				structures->SetBoolean("UsesAlien", data_structures[i].second);
 			}
 		}
@@ -249,9 +249,9 @@ void ResourceScript::Reimport()
 
 		if (value != nullptr && json_object != nullptr) {
 
-			JSONfilepack* file = new JSONfilepack(meta_path, json_object, value);
+			JSONfilepack* file = new JSONfilepack(meta_path.data(), json_object, value);
 			file->StartSave();
-			file->SetString("Meta.ID", std::to_string(ID));
+			file->SetString("Meta.ID", std::to_string(ID).data());
 			file->FinishSave();
 			delete file;
 		}

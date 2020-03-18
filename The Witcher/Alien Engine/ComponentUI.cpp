@@ -60,10 +60,10 @@ void ComponentUI::ChangeVertex(float width, float height)
 
 void ComponentUI::UpdateVertex()
 {
-	vertices[0] = { -size.x,size.y,0 };
+	/*vertices[0] = { -size.x,size.y,0 };
 	vertices[1] = { -size.x, -size.y,0 };
 	vertices[2] = { size.x, -size.y,0 };
-	vertices[3] = { size.x, size.y,0 };
+	vertices[3] = { size.x, size.y,0 };*/
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, verticesID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 4 * 3, vertices, GL_DYNAMIC_DRAW);
@@ -220,6 +220,7 @@ void ComponentUI::SetTexture(ResourceTexture* tex)
 			texture->DecreaseReferences();
 		}
 		texture = tex;
+		SetSize(tex->width, tex->height);
 	}
 }
 
@@ -289,6 +290,22 @@ void ComponentUI::CheckFirstSelected()
 		App->objects->GetGameObjectByID(App->objects->selected_ui)->GetComponent<ComponentUI>()->state = Hover;
 		App->objects->first_assigned_selected = true;
 	}
+}
+
+void ComponentUI::SetSize(float width, float height)
+{
+	size.x = width / 100.0f;
+	size.y = height / 100.0f;
+
+	float halfWidth = size.x * 0.5F;
+	float halfHeight = size.y * 0.5F;
+
+	vertices[0] = { -halfWidth, halfHeight, 0 };
+	vertices[1] = { -halfWidth, -halfHeight, 0 };
+	vertices[2] = { halfWidth, -halfHeight, 0 };
+	vertices[3] = { halfWidth, halfHeight, 0 };
+
+	UpdateVertex();
 }
 
 

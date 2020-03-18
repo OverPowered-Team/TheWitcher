@@ -3,6 +3,7 @@
 
 #include "ComponentUI.h"
 #include "Color.h"
+#include "Event.h"
 #include <functional>
 
 class ResourceTexture;
@@ -29,6 +30,10 @@ public:
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+
+protected:
+	void HandleAlienEvent(const AlienEvent& e);
+
 
 private:
 	bool DrawInspector();

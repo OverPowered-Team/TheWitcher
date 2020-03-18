@@ -94,7 +94,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 
 		if (meta_value != nullptr && meta_object != nullptr) {
 			JSONfilepack* meta = new JSONfilepack(meta_path.data(), meta_object, meta_value);
 			meta->StartSave();
-			meta->SetString("Meta.ID", std::to_string(ID));
+			meta->SetString("Meta.ID", std::to_string(ID).data());
 			meta->FinishSave();
 			delete meta;
 

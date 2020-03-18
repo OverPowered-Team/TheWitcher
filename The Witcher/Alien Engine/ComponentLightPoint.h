@@ -11,7 +11,6 @@ struct __declspec(dllexport) PointLightProperties
 {
 	float intensity = 1.0f;
 	float3 position = float3::zero();
-	float3 direction = float3::zero();
 	float3 ambient = float3::zero();
 	float3 diffuse = float3::one();
 	float3 specular = float3::one();

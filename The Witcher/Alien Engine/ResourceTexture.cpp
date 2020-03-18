@@ -15,7 +15,6 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 	this->width = width;
 	this->height = height;
 	name = App->file_system->GetBaseFileName(path);
-	name = App->file_system->GetBaseFileName(path);
 	type = ResourceType::RESOURCE_TEXTURE;
 }
 
@@ -48,9 +47,9 @@ bool ResourceTexture::CreateMetaData(const u64& force_id)
 		json_serialize_to_file_pretty(alien_value, alien_path.data());
 
 		if (alien_value != nullptr && alien_object != nullptr) {
-			JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
+			JSONfilepack* alien = new JSONfilepack(alien_path.data(), alien_object, alien_value);
 			alien->StartSave();
-			alien->SetString("Meta.ID", std::to_string(ID));
+			alien->SetString("Meta.ID", std::to_string(ID).data());
 			alien->FinishSave();
 			delete alien;
 		}
@@ -132,7 +131,7 @@ bool ResourceTexture::ReadBaseInfo(const char* assets_path)
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(alien_path, object, value);
+		JSONfilepack* meta = new JSONfilepack(alien_path.data(), object, value);
 
 		ID = std::stoull(meta->GetString("Meta.ID"));
 

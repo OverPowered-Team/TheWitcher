@@ -164,6 +164,13 @@ void ComponentTransform::SetLocalScale(const float& x, const float& y, const flo
 	RecalculateTransform();
 }
 
+void ComponentTransform::SetLocalTransform(const float3& position, const Quat& rotation, const float3& scale)
+{
+	local_position = position;
+	local_rotation = rotation;
+	local_scale = scale;
+}
+
 void ComponentTransform::LookScale()
 {
 	bool aux_scale = is_scale_negative;
@@ -682,7 +689,7 @@ bool ComponentTransform::DrawInspector()
 					auto item = App->objects->tags.begin() + 1;
 					for (; item != App->objects->tags.end(); ++item) {
 						new_tags->SetAnotherNode();
-						new_tags->SetString("Tag", *item);
+						new_tags->SetString("Tag", (*item).data());
 					}
 					alien->FinishSave();
 					delete alien;
@@ -827,7 +834,7 @@ bool ComponentTransform::AddNewTagClicked(const char* new_tag)
 		auto item = App->objects->tags.begin() + 1;
 		for (; item != App->objects->tags.end(); ++item) {
 			new_tags->SetAnotherNode();
-			new_tags->SetString("Tag", *item);
+			new_tags->SetString("Tag", (*item).data());
 		}
 		alien->FinishSave();
 		delete alien;
@@ -901,7 +908,7 @@ void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 	to_save->SetQuat("Rotation", local_rotation);
 	to_save->SetFloat3("Scale", local_scale);
 	to_save->SetBoolean("ScaleNegative", is_scale_negative);
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 }
 
 void ComponentTransform::LoadComponent(JSONArraypack* to_load)

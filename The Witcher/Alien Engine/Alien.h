@@ -3,6 +3,7 @@
 #include <functional>
 
 class ComponentTransform;
+class ComponentCharacterController;
 class ComponentCollider;
 class GameObject;
 enum class ComponentType;

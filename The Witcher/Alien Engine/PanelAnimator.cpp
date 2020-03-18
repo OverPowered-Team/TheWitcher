@@ -710,7 +710,7 @@ PanelAnimator::PanelAnimator(const std::string& panel_name, const SDL_Scancode& 
 
 PanelAnimator::~PanelAnimator()
 {
-	if (current_animator)
+	if (current_animator && !App->IsQuiting())
 		current_animator->SaveAsset(current_animator->GetID());
 }
 

@@ -6,6 +6,7 @@
 #include "ModuleObjects.h"
 
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 #include "glew/include/glew.h"
 
 // FBO ========================================================================
@@ -256,7 +257,11 @@ void Viewport::BeginViewport()
 
 void Viewport::EndViewport()
 {
-	camera->DrawSkybox();
+	// This will draw the editor skybox too.
+	// Note that the editor skybox will use the default skybox, so if you change the skybox on a 
+	// component camera it will have no effect on the editor skybox.
+	if(camera != nullptr)
+		camera->DrawSkybox();
 
 	// Disables --------------------------------------------
 	glDisable(GL_LIGHTING);

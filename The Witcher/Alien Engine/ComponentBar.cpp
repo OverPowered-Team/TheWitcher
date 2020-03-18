@@ -350,8 +350,8 @@ void ComponentBar::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetNumber("UIType", (int)ui_type);
-	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()) : "0");
-	to_save->SetString("sliderTexture", (barTexture != nullptr) ? std::to_string(barTexture->GetID()) : "0");
+	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()).data() : "0");
+	to_save->SetString("sliderTexture", (barTexture != nullptr) ? std::to_string(barTexture->GetID()).data() : "0");
 	to_save->SetColor("Color", current_color);
 	to_save->SetColor("BarColor", bar_color);
 
@@ -441,6 +441,11 @@ float ComponentBar::GetBarValue()
 
 void ComponentBar::SetBarValue(float factor)
 {
+	if (factor < 0)
+		factor = 0;
+	else if (factor > 1)
+		factor = 1;
+
 	this->factor = factor;
 	currentValue = (factor * (maxValue - minValue)) + minValue;
 }

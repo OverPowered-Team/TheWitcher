@@ -260,7 +260,7 @@ void ModuleUI::LoadLayouts()
 		std::vector<Panel*>::iterator panel = panels.begin();
 		for (; panel != panels.end(); ++panel) {
 			if (*panel != nullptr) {
-				layout->panels_enabled.push_back(arr_layouts->GetBoolean((*panel)->GetPanelName()));
+				layout->panels_enabled.push_back(arr_layouts->GetBoolean((*panel)->GetPanelName().data()));
 			}
 		}
 
@@ -294,14 +294,14 @@ void ModuleUI::SaveAllLayouts()
 		if (*item != nullptr) {
 			arr_layouts->SetAnotherNode();
 			arr_layouts->SetBoolean("Active", (*item)->active);
-			arr_layouts->SetString("Name", (*item)->name);
-			arr_layouts->SetString("Path", (*item)->path);
+			arr_layouts->SetString("Name", (*item)->name.data());
+			arr_layouts->SetString("Path", (*item)->path.data());
 
 			std::vector<Panel*>::iterator panel = panels.begin();
 			for (; panel != panels.end(); ++panel) {
 				if (*panel != nullptr) {
 					bool enabled = (*panel)->IsEnabled();
-					arr_layouts->SetBoolean((*panel)->GetPanelName(), enabled);
+					arr_layouts->SetBoolean((*panel)->GetPanelName().data(), enabled);
 				}
 			}
 		}
@@ -331,14 +331,14 @@ void ModuleUI::SaveLayout(Layout* layout, bool is_new)
 	}
 
 	arr_layout->SetBoolean("Active", layout->active);
-	arr_layout->SetString("Name", layout->name);
-	arr_layout->SetString("Path", layout->path);
+	arr_layout->SetString("Name", layout->name.data());
+	arr_layout->SetString("Path", layout->path.data());
 	layout->panels_enabled.clear();
 	std::vector<Panel*>::iterator panel = panels.begin();
 	for (; panel != panels.end(); ++panel) {
 		if (*panel != nullptr) {
 			bool enabled = (*panel)->IsEnabled();
-			arr_layout->SetBoolean((*panel)->GetPanelName(), enabled);
+			arr_layout->SetBoolean((*panel)->GetPanelName().data(), enabled);
 			layout->panels_enabled.push_back(enabled);
 		}
 	}

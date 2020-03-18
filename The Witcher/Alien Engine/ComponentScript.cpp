@@ -180,6 +180,24 @@ bool ComponentScript::DrawInspector()
 						break;
 					}
 					break; }
+				case InspectorScriptData::DataType::TEXT: {
+					ImGui::Text(inspector_variables[i].variable_name.data());	
+					break; }
+				case InspectorScriptData::DataType::SEPARATOR: {
+					ImGui::Separator();
+					break; }
+				case InspectorScriptData::DataType::TOOL_TIP: {
+					ImGui::SameLine();
+					ImGui::TextDisabled("(?)");
+					if (ImGui::IsItemHovered()) {
+						ImGui::BeginTooltip();
+						ImGui::Text(inspector_variables[i].variable_name.data());
+						ImGui::EndTooltip();
+					}
+					break; }
+				case InspectorScriptData::DataType::SPACING: {
+					ImGui::Spacing();
+					break; }
 				case InspectorScriptData::DataType::STRING: {
 					ImGui::PushID(inspector_variables[i].ptr);
 
@@ -315,9 +333,9 @@ bool ComponentScript::DrawInspector()
 void ComponentScript::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("ResourceID", std::to_string(resourceID));
-	to_save->SetString("DataName", data_name);
+	to_save->SetString("ID", std::to_string(ID).data());
+	to_save->SetString("ResourceID", std::to_string(resourceID).data());
+	to_save->SetString("DataName", data_name.data());
 	if (inspector_variables.empty()) {
 		to_save->SetBoolean("HasInspector", false);
 	}
@@ -327,7 +345,7 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 		for (uint i = 0; i < inspector_variables.size(); ++i) {
 			inspector->SetAnotherNode();
 			inspector->SetNumber("VarType", inspector_variables[i].variable_type);
-			inspector->SetString("Name", inspector_variables[i].variable_name);
+			inspector->SetString("Name", inspector_variables[i].variable_name.data());
 			switch (inspector_variables[i].variable_type) {
 			case InspectorScriptData::DataType::INT: {
 				int value = *(int*)inspector_variables[i].ptr;
@@ -351,11 +369,11 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 				break; }
 			case InspectorScriptData::DataType::PREFAB: {
 				Prefab* value = (Prefab*)inspector_variables[i].ptr;
-				inspector->SetString("prefab", std::to_string(value->prefabID));
+				inspector->SetString("prefab", std::to_string(value->prefabID).data());
 				break; }
 			case InspectorScriptData::DataType::GAMEOBJECT: {
 				if (inspector_variables[i].obj != nullptr && *inspector_variables[i].obj != nullptr) {
-					inspector->SetString("gameobject", std::to_string((*inspector_variables[i].obj)->ID));
+					inspector->SetString("gameobject", std::to_string((*inspector_variables[i].obj)->ID).data());
 				}
 				else {
 					inspector->SetString("gameobject", "0");
@@ -734,6 +752,49 @@ void ComponentScript::InspectorPrefab(Prefab* ptr, const char* ptr_name)
 	}
 	else {
 		LOG_ENGINE("Prefab variable must not be a pointer!!");
+	}
+}
+
+void ComponentScript::InspectorText(const char* textToSHow)
+{
+	if (textToSHow != nullptr) {
+		ComponentScript* script = App->objects->actual_script_loading;
+		if (script != nullptr) {
+			script->inspector_variables.push_back(InspectorScriptData(textToSHow, InspectorScriptData::DataType::TEXT, nullptr, InspectorScriptData::NONE));
+		}
+	}
+}
+
+void ComponentScript::InspectorSeparator()
+{
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(std::string(), InspectorScriptData::DataType::SEPARATOR, nullptr, InspectorScriptData::NONE));
+	}
+}
+
+void ComponentScript::InspectorToolTip(const char* textToSHow)
+{
+	if (textToSHow != nullptr) {
+		ComponentScript* script = App->objects->actual_script_loading;
+		if (script != nullptr) {
+			int index = script->inspector_variables.size();
+			for (auto item = script->inspector_variables.rbegin(); item != script->inspector_variables.rend(); ++item) {
+				if ((*item).ptr != nullptr) {
+					script->inspector_variables.insert(script->inspector_variables.begin() + index, InspectorScriptData(textToSHow, InspectorScriptData::DataType::TOOL_TIP, nullptr, InspectorScriptData::NONE));
+					break;
+				}
+				--index;
+			}
+		}
+	}
+}
+
+void ComponentScript::InspectorSpacing()
+{
+	ComponentScript* script = App->objects->actual_script_loading;
+	if (script != nullptr) {
+		script->inspector_variables.push_back(InspectorScriptData(std::string(), InspectorScriptData::DataType::SPACING, nullptr, InspectorScriptData::NONE));
 	}
 }
 

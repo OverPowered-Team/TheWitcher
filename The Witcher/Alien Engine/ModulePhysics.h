@@ -32,6 +32,7 @@ class ModulePhysics : public Module
 	friend class ComponentCharacterController;
 	friend class ModuleObjects;
 	friend class ComponentCollider;
+	friend class ComponentConvexHullCollider;
 	friend class PanelPhysics;
 
 public:

@@ -13,7 +13,7 @@ class __declspec(dllexport) JSONfilepack {
 
 public:
 
-	JSONfilepack(const std::string& path, JSON_Object*& object, JSON_Value*& value);
+	JSONfilepack(const char* path, JSON_Object*& object, JSON_Value*& value);
 
 	~ JSONfilepack();
 
@@ -24,50 +24,50 @@ public:
 	void StartSave();
 	void FinishSave();
 	
-	void SetNumber(const std::string& name, const double& number);
-	double GetNumber(const std::string& name);
+	void SetNumber(const char* name, const double& number);
+	double GetNumber(const char* name);
 
-	void SetBoolean(const std::string& name, const bool& boolean);
-	bool GetBoolean(const std::string& name);
+	void SetBoolean(const char* name, const bool& boolean);
+	bool GetBoolean(const char* name);
 
-	void SetColor(const std::string& name, const Color& color);
-	Color GetColor(const std::string& name);
+	void SetColor(const char* name, const Color& color);
+	Color GetColor(const char* name);
 
-	void SetFloat3(const std::string& name, const float3& numbers);
-	float3 GetFloat3(const std::string& name);
+	void SetFloat3(const char* name, const float3& numbers);
+	float3 GetFloat3(const char* name);
 
-	void SetFloat4(const std::string& name, const float4& numbers);
-	float4 GetFloat4(const std::string& name);
+	void SetFloat4(const char* name, const float4& numbers);
+	float4 GetFloat4(const char* name);
 
-	void SetQuat(const std::string& name, const Quat& numbers);
-	Quat GetQuat(const std::string& name);
+	void SetQuat(const char* name, const Quat& numbers);
+	Quat GetQuat(const char* name);
 	
-	void SetNumberArray(const std::string& name, float* numbers, uint size);
-	float* GetNumberArray(const std::string& name);
+	void SetNumberArray(const char* name, float* numbers, uint size);
+	float* GetNumberArray(const char* name);
 
-	void SetUintArray(const std::string& name, uint* numbers, uint size);
-	uint* GetUintArray(const std::string& name);
+	void SetUintArray(const char* name, uint* numbers, uint size);
+	uint* GetUintArray(const char* name);
 
-	void SetShortcutCodes(const std::string& name, SDL_Scancode* codes);
-	SDL_Scancode* GetShortcutCodes(const std::string& name);
+	void SetShortcutCodes(const char* name, SDL_Scancode* codes);
+	SDL_Scancode* GetShortcutCodes(const char* name);
 
-	void SetArrayString(const std::string& name, std::string* strings, uint size);
-	void SetArrayNumber(const std::string& name, const double& number);
-	double GetArrayNumber(const std::string& name, const uint& index);
-	std::string* GetArrayString(const std::string& name);
+	void SetArrayString(const char* name, std::string* strings, uint size);
+	void SetArrayNumber(const char* name, const double& number);
+	double GetArrayNumber(const char* name, const uint& index);
+	std::string* GetArrayString(const char* name);
 
-	void SetString(const std::string& name, const std::string& string_parameter);
-	const char* GetString(const std::string& name);
+	void SetString(const char* name, const char* string_parameter);
+	const char* GetString(const char* name);
 
-	JSONArraypack* InitNewArray(const std::string& name);
+	JSONArraypack* InitNewArray(const char* name);
 
-	JSONArraypack* GetArray(const std::string& name);
+	JSONArraypack* GetArray(const char* name);
 
 	void ClearArrays();
 
 private:
 
-	std::string path;
+	const char* path;
 	JSON_Object* object = nullptr;
 	JSON_Value* value = nullptr;
 	JSON_Value* save_value = nullptr;
@@ -84,23 +84,23 @@ public:
 	JSONArraypack(JSON_Array* arr, JSON_Value* value) { this->arr = arr; this->value = value; }
 	~JSONArraypack();
 
-	void SetNumber(const std::string& name, const double& number);
-	double GetNumber(const std::string& name);
+	void SetNumber(const char* name, const double& number);
+	double GetNumber(const char* name);
 
-	void SetBoolean(const std::string& name, const bool& boolean);
-	bool GetBoolean(const std::string& name);
+	void SetBoolean(const char* name, const bool& boolean);
+	bool GetBoolean(const char* name);
 
-	void SetColor(const std::string& name, const Color& color);
-	Color GetColor(const std::string& name);
+	void SetColor(const char* name, const Color& color);
+	Color GetColor(const char* name);
 
-	void SetFloat3(const std::string& name, const float3& numbers);
-	float3 GetFloat3(const std::string& name);
+	void SetFloat3(const char* name, const float3& numbers);
+	float3 GetFloat3(const char* name);
 
-	void SetFloat4(const std::string& name, const float4& numbers);
-	float4 GetFloat4(const std::string& name);
+	void SetFloat4(const char* name, const float4& numbers);
+	float4 GetFloat4(const char* name);
 
-	void SetQuat(const std::string& name, const Quat& numbers);
-	Quat GetQuat(const std::string& name);
+	void SetQuat(const char* name, const Quat& numbers);
+	Quat GetQuat(const char* name);
 
 	void SetAnotherNode();
 	bool GetAnotherNode();
@@ -109,13 +109,13 @@ public:
 
 	uint GetArraySize();
 
-	void SetString(const std::string& name, const std::string& string_parameter);
+	void SetString(const char* name, const char* string_parameter);
 
-	const char* GetString(const std::string& name);
+	const char* GetString(const char* name);
 
-	JSONArraypack* InitNewArray(const std::string& name);
+	JSONArraypack* InitNewArray(const char* name);
 
-	JSONArraypack* GetArray(const std::string& name);
+	JSONArraypack* GetArray(const char* name);
 
 
 private:
