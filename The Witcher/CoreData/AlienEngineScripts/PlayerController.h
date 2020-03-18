@@ -65,14 +65,17 @@ public:
 	Input::CONTROLLER_BUTTONS controller_attack = Input::CONTROLLER_BUTTON_X;
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
 
+	float delay = 1.f;
 private:
-
+	ComponentAudioEmitter* audio = nullptr;
+	float timer = 0.f;
 	float angle = 0.0f;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
 	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->delay);
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);

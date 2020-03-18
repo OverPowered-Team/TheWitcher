@@ -12,7 +12,7 @@ void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
-
+	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 	if (controller_index == 1) {
 		keyboard_move_up = SDL_SCANCODE_W;
 		keyboard_move_left = SDL_SCANCODE_A;
@@ -116,6 +116,12 @@ void PlayerController::Update()
 	{
 		can_move = true;
 
+		if (Time::GetGameTime() - timer >= delay) {
+			LOG("%.3f", Time::GetGameTime() - timer);
+			timer = Time::GetGameTime();
+			audio->StartSound();
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_attack)
 			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
@@ -173,8 +179,11 @@ void PlayerController::Update()
 	if (state == PlayerState::RUNNING && abs(player_data.currentSpeed) < 0.1F)
 		state = PlayerState::IDLE;
 
-	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.1F)
+	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.1F) {
 		state = PlayerState::RUNNING;
+		timer = Time::GetGameTime();
+		LOG("%.3f", Time::GetGameTime());
+	}
 
 	if (state == PlayerState::JUMPING && ccontroller->CanJump()) {
 		if (abs(player_data.currentSpeed) < 0.1F)
