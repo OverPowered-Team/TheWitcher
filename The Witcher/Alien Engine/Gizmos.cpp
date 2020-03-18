@@ -103,6 +103,7 @@ void Gizmos::DrawWireMesh(const ComponentMesh * mesh, const float4x4& global_tra
 
 void Gizmos::DrawPoly(const ResourceMesh * mesh, const float4x4& matrix, const Color& color)
 {
+	glDisable(GL_LIGHTING);
 	glColor4f(color.r, color.g, color.b, color.a);
 	glPushMatrix();
 	glMultMatrixf(matrix.Transposed().ptr());
@@ -131,10 +132,12 @@ void Gizmos::DrawPoly(const ResourceMesh * mesh, const float4x4& matrix, const C
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glPopMatrix();
+	glEnable(GL_LIGHTING);
 }
 
 void Gizmos::DrawWire(const ResourceMesh * mesh, const float4x4& matrix, const Color& color, const float& line_width)
 {
+	glDisable(GL_LIGHTING);
 	glPushMatrix();
 	glMultMatrixf(matrix.Transposed().ptr());
 
@@ -156,6 +159,8 @@ void Gizmos::DrawWire(const ResourceMesh * mesh, const float4x4& matrix, const C
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glPopMatrix();
+
+	glEnable(GL_LIGHTING);
 }
 
 void Gizmos::RemoveGizmos()

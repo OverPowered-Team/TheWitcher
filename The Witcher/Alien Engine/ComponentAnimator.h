@@ -31,6 +31,8 @@ public:
 	void SetFloat(const char* parameter_name, float parameter_value);
 	void SetInt(const char* parameter_name, int parameter_value);
 
+	float GetCurrentStateDuration();
+
 private:
 	ResourceAnimatorController* animator_controller = nullptr;
 	ResourceAnimatorController* source_animator_controller = nullptr;

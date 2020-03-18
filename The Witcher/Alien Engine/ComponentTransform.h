@@ -39,6 +39,8 @@ public:
 
 	void SetLocalScale(const float3& new_local_scale);
 	void SetLocalScale(const float& x, const float& y, const float& z);
+
+	void SetLocalTransform(const float3& position, const Quat& rotation, const float3& scale);
 	
 	const float3 GetLocalScale() const;
 	const float3 GetGlobalScale() const;

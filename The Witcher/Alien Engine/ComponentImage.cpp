@@ -168,7 +168,7 @@ void ComponentImage::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetNumber("UIType", (int)ui_type);
-	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()) : "0");
+	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()).data() : "0");
 	to_save->SetColor("Color", current_color);
 }
 

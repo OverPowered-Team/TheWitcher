@@ -207,6 +207,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 		ResourceTexture* tex = GetCurrentFrame(Time::GetDT());
 		if (tex != nullptr)
 		{
+			SetSize(tex->width, tex->height);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glBindTexture(GL_TEXTURE_2D, tex->id);
 		}
@@ -266,7 +267,7 @@ void ComponentAnimatedImage::SaveComponent(JSONArraypack* to_save)
 		auto item = images.begin();
 		for (; item != images.end(); ++item) {
 			imagesArray->SetAnotherNode();
-			imagesArray->SetString(std::to_string(item - images.begin()), ((*item) != nullptr) ? std::to_string((*item)->GetID()) : "0");
+			imagesArray->SetString(std::to_string(item - images.begin()).data(), ((*item) != nullptr) ? std::to_string((*item)->GetID()).data() : "0");
 		}
 	}
 	
@@ -285,7 +286,7 @@ void ComponentAnimatedImage::LoadComponent(JSONArraypack* to_load)
 	if (to_load->GetBoolean("HasAnimatedImages")) {
 		JSONArraypack* imagesVector = to_load->GetArray("AnimatedImages");
 		for (int i = 0; i < imagesVector->GetArraySize(); ++i) {
-			u64 textureID = std::stoull(imagesVector->GetString(std::to_string(i)));
+			u64 textureID = std::stoull(imagesVector->GetString(std::to_string(i).data()));
 			if (textureID != 0) {
 				ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureID);
 				if (tex != nullptr) {

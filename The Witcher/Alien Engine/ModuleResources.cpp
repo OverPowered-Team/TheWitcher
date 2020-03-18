@@ -33,6 +33,35 @@ ModuleResources::ModuleResources(bool start_enabled) : Module(start_enabled)
 
 ModuleResources::~ModuleResources()
 {
+
+	std::vector<Resource*>::iterator item = resources.begin();
+	for (; item != resources.end(); ++item) {
+		if (*item != nullptr) {
+			if ((*item)->GetType() == ResourceType::RESOURCE_MODEL)
+				static_cast<ResourceModel*>(*item)->meshes_attached.clear();
+#ifndef GAME_VERSION
+			if ((*item)->GetType() == ResourceType::RESOURCE_MATERIAL)
+				static_cast<ResourceMaterial*>(*item)->SaveMaterialFiles();
+#endif
+			delete* item;
+			*item = nullptr;
+		}
+	}
+
+	resources.clear();
+
+	delete cube;
+	delete sphere;
+	delete rock;
+	delete torus;
+	delete dodecahedron;
+	delete icosahedron;
+	delete octahedron;
+
+	delete default_material;
+
+	delete light_mesh;
+	delete camera_mesh;
 }
 
 bool ModuleResources::Start()
@@ -112,36 +141,6 @@ update_status ModuleResources::Update(float dt)
 bool ModuleResources::CleanUp()
 {
 	OPTICK_EVENT();
-	try {
-		std::vector<Resource*>::iterator item = resources.begin();
-		for (; item != resources.end(); ++item) {
-			if (*item != nullptr) {
-				if ((*item)->GetType() == ResourceType::RESOURCE_MODEL)
-					static_cast<ResourceModel*>(*item)->meshes_attached.clear();
-				#ifndef GAME_VERSION
-				if ((*item)->GetType() == ResourceType::RESOURCE_MATERIAL)
-					static_cast<ResourceMaterial*>(*item)->SaveMaterialFiles();
-				#endif
-				delete* item;
-				*item = nullptr;
-			}
-		}
-	}
-	catch (...) {}
-	resources.clear();
-
-	delete cube;
-	delete sphere;
-	delete rock;
-	delete torus;
-	delete dodecahedron;
-	delete icosahedron;
-	delete octahedron;
-
-	delete default_material;
-
-	delete light_mesh;
-	delete camera_mesh;
 
 	return true;
 }

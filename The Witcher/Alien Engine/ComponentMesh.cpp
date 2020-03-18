@@ -500,12 +500,12 @@ void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("ViewFaceNormals", view_face_normals);
 	to_save->SetBoolean("DrawAABB", draw_AABB);
 	to_save->SetBoolean("DrawOBB", draw_OBB);
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetBoolean("HasMesh", (mesh != nullptr) ? true : false);
 	if (mesh != nullptr) {
 		to_save->SetBoolean("IsPrimitive", mesh->is_primitive);
 		if (!mesh->is_primitive)
-			to_save->SetString("MeshID", std::to_string(mesh->GetID()));
+			to_save->SetString("MeshID", std::to_string(mesh->GetID()).data());
 		else {
 			if (App->StringCmp("Cube", mesh->GetName())) {
 				to_save->SetNumber("PrimType", (int)PrimitiveType::CUBE);

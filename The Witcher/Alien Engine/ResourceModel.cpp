@@ -42,7 +42,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 		ID = App->resources->GetRandomID();
 	else
 		ID = force_id;
-
+	meta_data_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
 	std::string* meta_mesh_paths = nullptr;
 	std::string* meta_animation_paths = nullptr;
 	std::string* meta_bones_paths = nullptr;
@@ -74,9 +74,9 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 
 	if (alien_value != nullptr && alien_object != nullptr) 
 	{
-		JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
+		JSONfilepack* alien = new JSONfilepack(alien_path.data(), alien_object, alien_value);
 		alien->StartSave();
-		alien->SetString("Meta.ID", std::to_string(ID));
+		alien->SetString("Meta.ID", std::to_string(ID).data());
 
 		std::string library_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(std::to_string(ID) + ".alienModel");
 
@@ -98,7 +98,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 				meshes_paths[item - meshes_attached.begin()] = (*item)->GetLibraryPath();
 			}
 		}
-		alien->SetString("Meta.Name", name);
+		alien->SetString("Meta.Name", name.data());
 		alien->SetNumber("Meta.NumBones", bones_attached.size());
 
 		std::string* bones_paths = new std::string[bones_attached.size()];
@@ -174,8 +174,8 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 			nodes->SetQuat("rot", model_nodes[i].rot);
 			nodes->SetNumber("nodeNum", model_nodes[i].node_num);
 			nodes->SetNumber("parentNum", model_nodes[i].parent_num);
-			nodes->SetString("nodeName", model_nodes[i].name);
-			nodes->SetString("parentName", model_nodes[i].parent_name);
+			nodes->SetString("nodeName", model_nodes[i].name.data());
+			nodes->SetString("parentName", model_nodes[i].parent_name.data());
 			nodes->SetNumber("meshIndex", model_nodes[i].mesh);
 			nodes->SetNumber("materialIndex", model_nodes[i].material);
 			nodes->SetNumber("numBones", model_nodes[i].bones.size());
@@ -207,7 +207,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 		delete alien;
 
 		App->file_system->Copy(alien_path.data(), library_path.data());
-		meta_data_path = alien_path.data();
+		meta_data_path = library_path.data();
 
 		return true;
 	}
@@ -222,14 +222,13 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 	bool ret = true;
 
 	path = std::string(assets_file_path);
-	meta_data_path = App->file_system->GetPathWithoutExtension(assets_file_path) + "_meta.alien";
-
+	meta_data_path = App->file_system->GetPathWithoutExtension(path) + "_meta.alien";
 	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
 
 	if (value != nullptr && object != nullptr)
 	{
-		JSONfilepack* meta = new JSONfilepack(meta_data_path, object, value);
+		JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
 
 		ID = std::stoull(meta->GetString("Meta.ID"));
 		int num_meshes = meta->GetNumber("Meta.NumMeshes");
@@ -302,12 +301,13 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 
 		// InitMeshes
 		std::string library_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+		meta_data_path = library_path;
 		JSON_Value* mesh_value = json_parse_file(library_path.data());
 		JSON_Object* mesh_object = json_value_get_object(mesh_value);
 
 		if (mesh_value != nullptr && mesh_object != nullptr) {
 
-			JSONfilepack* model = new JSONfilepack(library_path, mesh_object, mesh_value);
+			JSONfilepack* model = new JSONfilepack(library_path.data(), mesh_object, mesh_value);
 
 			name = model->GetString("Meta.Name");
 
@@ -371,7 +371,7 @@ void ResourceModel::ReadLibrary(const char* meta_data)
 
 	if (mesh_value != nullptr && mesh_object != nullptr) {
 
-		JSONfilepack* model = new JSONfilepack(meta_data_path, mesh_object, mesh_value);
+		JSONfilepack* model = new JSONfilepack(meta_data_path.data(), mesh_object, mesh_value);
 
 		name = model->GetString("Meta.Name");
 		int num_meshes = model->GetNumber("Meta.NumMeshes");
@@ -483,6 +483,30 @@ bool ResourceModel::LoadMemory()
 	return ret;
 }
 
+void ResourceModel::FreeMemory()
+{
+	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
+	for (; item != meshes_attached.end(); ++item) {
+		if (*item != nullptr) {
+			(*item)->FreeMemory();
+		}
+	}
+
+	std::vector<ResourceAnimation*>::iterator anim_item = animations_attached.begin();
+	for (; anim_item != animations_attached.end(); ++anim_item) {
+		if (*anim_item != nullptr) {
+			(*anim_item)->FreeMemory();
+		}
+	}
+
+	std::vector<ResourceBone*>::iterator bone_item = bones_attached.begin();
+	for (; bone_item != bones_attached.end(); ++bone_item) {
+		if (*bone_item != nullptr) {
+			(*bone_item)->FreeMemory();
+		}
+	}
+}
+
 bool ResourceModel::DeleteMetaData()
 {
 	remove(std::string(LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel").data());
@@ -541,7 +565,7 @@ void ResourceModel::UpdateAnimationInfo()
 
 	if (mesh_value != nullptr && mesh_object != nullptr) {
 
-		JSONfilepack* model = new JSONfilepack(meta_data_path, mesh_object, mesh_value);
+		JSONfilepack* model = new JSONfilepack(meta_data_path.data(), mesh_object, mesh_value);
 
 		name = model->GetString("Meta.Name");
 		int num_meshes = model->GetNumber("Meta.NumMeshes");
@@ -558,14 +582,14 @@ void ResourceModel::UpdateAnimationInfo()
 		JSON_Value* alien_value = json_value_init_object();
 		JSON_Object* alien_object = json_value_get_object(alien_value);
 		json_serialize_to_file_pretty(alien_value, alien_path.data());
-		JSONfilepack* alien = new JSONfilepack(alien_path, alien_object, alien_value);
+		JSONfilepack* alien = new JSONfilepack(alien_path.data(), alien_object, alien_value);
 		alien->StartSave();
-		alien->SetString("Meta.ID", std::to_string(ID));
+		alien->SetString("Meta.ID", std::to_string(ID).data());
 
 		std::string library_path = std::string(LIBRARY_MODELS_FOLDER) + std::string(std::to_string(ID) + ".alienModel");
 
 		alien->SetNumber("Meta.NumMeshes", meshes_attached.size());
-		alien->SetString("Meta.Name", name);
+		alien->SetString("Meta.Name", name.data());
 		alien->SetNumber("Meta.NumBones", bones_attached.size());
 		alien->SetNumber("Meta.NumAnimations", animations_attached.size());
 		alien->SetNumber("Meta.NumMaterials", materials_attached.size());
@@ -609,8 +633,8 @@ void ResourceModel::UpdateAnimationInfo()
 			nodes->SetQuat("rot", model_nodes[i].rot);
 			nodes->SetNumber("nodeNum", model_nodes[i].node_num);
 			nodes->SetNumber("parentNum", model_nodes[i].parent_num);
-			nodes->SetString("nodeName", model_nodes[i].name);
-			nodes->SetString("parentName", model_nodes[i].parent_name);
+			nodes->SetString("nodeName", model_nodes[i].name.data());
+			nodes->SetString("parentName", model_nodes[i].parent_name.data());
 			nodes->SetNumber("meshIndex", model_nodes[i].mesh);
 			nodes->SetNumber("materialIndex", model_nodes[i].material);
 			nodes->SetNumber("numBones", model_nodes[i].bones.size());

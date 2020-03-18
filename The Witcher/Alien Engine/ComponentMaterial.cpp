@@ -197,10 +197,10 @@ void ComponentMaterial::SetComponent(Component* component)
 void ComponentMaterial::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetBoolean("HasMaterial", (material != nullptr) ? true : false);
 	if (material != nullptr) {
-		to_save->SetString("MaterialID", std::to_string(material->GetID()));
+		to_save->SetString("MaterialID", std::to_string(material->GetID()).data());
 	}
 	to_save->SetBoolean("Enabled", enabled);
 }

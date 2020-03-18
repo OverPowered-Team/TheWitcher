@@ -179,6 +179,8 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 
 		App->resources->AddResource(this);
 		delete[] data;
+
+		return true;
 	}
 	else {
 		return false;

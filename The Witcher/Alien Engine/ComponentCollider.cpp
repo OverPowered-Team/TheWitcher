@@ -27,7 +27,7 @@ ComponentCollider::ComponentCollider(GameObject* go) : Component(go)
 	}
 
 	// Default values 
-	SetCenter(float3::zero());
+	center = float3::zero();
 }
 
 ComponentCollider::~ComponentCollider()
@@ -141,6 +141,11 @@ void ComponentCollider::LoadComponent(JSONArraypack* to_load)
 	UpdateShape();
 }
 
+void ComponentCollider::SetScale(float3 scale)
+{
+	UpdateShape();
+}
+
 void ComponentCollider::Update()
 {
 	static float3 last_scale = transform->GetGlobalScale();
@@ -149,7 +154,7 @@ void ComponentCollider::Update()
 	if (!last_scale.Equals(current_scale))
 	{
 		last_scale = current_scale;
-		UpdateShape();
+		SetScale(last_scale);
 	}
 
 	btTransform go_bullet_transform = ToBtTransform(transform->GetGlobalPosition() + GetWorldCenter(), transform->GetGlobalRotation());
@@ -275,7 +280,7 @@ bool ComponentCollider::DrawInspector()
 	if (ImGui::CollapsingHeader(name.c_str(), &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
-		ImGui::Title("Center", 1);			if (ImGui::DragFloat3("##center", current_center.ptr(), 0.1f)) { SetCenter(current_center); }
+		ImGui::Title("Center", 1);			if (ImGui::DragFloat3("##center", current_center.ptr(), 0.05f)) { SetCenter(current_center); }
 
 		DrawSpecificInspector();
 

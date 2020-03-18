@@ -65,9 +65,9 @@ void ComponentAudioListener::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", (bool)enabled);
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 	if (enabled)
-		to_save->SetString("ListenerID", std::to_string(listener->GetID()));
+		to_save->SetString("ListenerID", std::to_string(listener->GetID()).data());
 }
 
 void ComponentAudioListener::LoadComponent(JSONArraypack* to_load)
