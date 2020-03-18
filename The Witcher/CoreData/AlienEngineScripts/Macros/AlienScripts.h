@@ -11,6 +11,7 @@
 #include "..\..\..\Alien Engine\ComponentMesh.h"
 #include "../../../Alien Engine/ComponentAudioEmitter.h"
 #include "..\..\..\Alien Engine\ComponentParticleSystem.h"
+#include "../../../Alien Engine/ComponentCharacterController.h"
 #include "..\..\..\Alien Engine\ComponentAnimator.h"
 #include "..\..\..\Alien Engine\ParticleSystem.h"
 #include "..\..\..\Alien Engine\ParticleEmitter.h"
