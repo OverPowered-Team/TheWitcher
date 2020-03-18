@@ -13,6 +13,10 @@ void PlayerController::Start()
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 
+	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
+	c_run->GetSystem()->StopEmmitter();
+
+
 	if (controller_index == 1) {
 		keyboard_move_up = SDL_SCANCODE_W;
 		keyboard_move_left = SDL_SCANCODE_A;
