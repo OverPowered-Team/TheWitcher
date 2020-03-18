@@ -21,6 +21,8 @@ public:
 		float movementSpeed = 200.0F;
 		float rotationSpeed = 120.0F;
 		float currentSpeed = 0.f;
+		float dash_power = 1.5f;
+		float jump_power = 25.f;
 		// dmg, deff, lvl bla bla
 	};
 
@@ -36,24 +38,28 @@ public:
 	void OnAnimationEnd(const char* name);
 
 public:
-	int controllerIndex = 1;
+	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
-	PlayerData playerData;
+	PlayerData player_data;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* ccontroller = nullptr;
 	bool can_move = false;
+	float stick_threshold = 0.1f;
 
 private:
+
 	float angle = 0.0f;
-	float stick_threshold = 0.1f;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controllerIndex, 1, 2);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->playerData.movementSpeed);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->playerData.rotationSpeed);
+	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
 	return player;
 }
