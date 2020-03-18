@@ -373,6 +373,11 @@ void ParticleEmmitter::SetOutRadius(float radius)
 	this->outRadius = radius;
 }
 
+void ParticleEmmitter::SetCubeSize(float3 size)
+{
+	this->cubeSize = size;
+}
+
 void ParticleEmmitter::SetDistance(float distance)
 {
 	this->distance = distance;
