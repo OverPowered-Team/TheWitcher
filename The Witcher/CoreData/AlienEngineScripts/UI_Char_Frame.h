@@ -27,9 +27,13 @@ public:
 
 	GameObject* geralt_img = nullptr;
 	GameObject* yen_img = nullptr;
-	ComponentBar* lifebar = nullptr;
-	ComponentBar* mana_bar = nullptr;
-	ComponentBar* xp_bar = nullptr;
+	GameObject* lifebar = nullptr;
+	GameObject* mana_bar = nullptr;
+	GameObject* xp_bar = nullptr;
+
+	ComponentBar* lifebar_comp = nullptr;
+	ComponentBar* mana_bar_comp = nullptr;
+	ComponentBar* xp_bar_comp = nullptr;
 
 	// TODO VS3: CHANGE WITH PLAYER VALUES
 	float max_life = 100.0f;
@@ -41,7 +45,13 @@ ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {
 	UI_Char_Frame* alien = new UI_Char_Frame();
 	// To show in inspector here
 
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->geralt_img);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->yen_img);
 	SHOW_IN_INSPECTOR_AS_ENUM(UI_Char_Frame::CHARACTER, alien->character);
+
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->lifebar);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->mana_bar);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->xp_bar);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->max_life,0.0f,100.0f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->max_mana, 0.0f, 100.0f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->max_xp, 0.0f, 100.0f);

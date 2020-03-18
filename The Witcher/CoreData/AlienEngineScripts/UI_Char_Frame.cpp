@@ -11,9 +11,6 @@ UI_Char_Frame::~UI_Char_Frame()
 
 void UI_Char_Frame::Start()
 {
-	geralt_img = game_object->GetChild("Geralt");
-	yen_img = game_object->GetChild("Yennefer");
-
 	if (character == CHARACTER::YENNEFER)
 	{
 		if (geralt_img->IsEnabled())
@@ -37,9 +34,9 @@ void UI_Char_Frame::Start()
 		}
 	}
 
-	lifebar = (ComponentBar*)game_object->GetChild("Lifebar")->GetComponent(ComponentType::UI_BAR);
-	mana_bar = (ComponentBar*)game_object->GetChild("Mana")->GetComponent(ComponentType::UI_BAR);
-	xp_bar = (ComponentBar*)game_object->GetChild("Xp")->GetComponent(ComponentType::UI_BAR);
+	lifebar_comp = (ComponentBar*)lifebar->GetComponent(ComponentType::UI_BAR);
+	mana_bar_comp = (ComponentBar*)mana_bar->GetComponent(ComponentType::UI_BAR);
+	xp_bar_comp = (ComponentBar*)xp_bar->GetComponent(ComponentType::UI_BAR);
 
 }
 
@@ -80,20 +77,20 @@ void UI_Char_Frame::Update()
 void UI_Char_Frame::LifeChange(float life_change)
 {
 	float hp = 0.0f;
-	hp = lifebar->GetBarValue();
+	hp = lifebar_comp->GetBarValue();
 
 	// WHEN CHARACTER IS DONE
 	// hp = character->life / character->max_life;
 	life_change /= max_life;
 
 	hp += life_change;
-	lifebar->SetBarValue(hp);
+	lifebar_comp->SetBarValue(hp);
 }
 
 void UI_Char_Frame::ManaChange(float mana_change)
 {
 	float mana = 0.0f;
-	mana = mana_bar->GetBarValue();
+	mana = mana_bar_comp->GetBarValue();
 
 	// WHEN CHARACTER IS DONE
 	// hp = character->life / character->max_life;
@@ -101,13 +98,13 @@ void UI_Char_Frame::ManaChange(float mana_change)
 
 	mana += mana_change;
 
-	mana_bar->SetBarValue(mana);
+	mana_bar_comp->SetBarValue(mana);
 }
 
 void UI_Char_Frame::XpChange(float xp_change)
 {
 	float xp = 0.0f;
-	xp = xp_bar->GetBarValue();
+	xp = xp_bar_comp->GetBarValue();
 
 	// WHEN CHARACTER IS DONE
 	// hp = character->life / character->max_life;
@@ -115,6 +112,6 @@ void UI_Char_Frame::XpChange(float xp_change)
 
 	xp += xp_change;
 
-	xp_bar->SetBarValue(xp);
+	xp_bar_comp->SetBarValue(xp);
 }
 
