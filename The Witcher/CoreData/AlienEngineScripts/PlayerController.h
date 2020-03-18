@@ -17,8 +17,7 @@ public:
 		DASHING,
 
 		MAX
-	);
-
+		);
 
 	struct PlayerData {
 		float movementSpeed = 200.0F;
@@ -44,8 +43,8 @@ public:
 	PlayerData playerData;
 	PlayerAttacks* attacks;
 	ComponentAnimator* animator = nullptr;
-	ComponentRigidBody* rbody = nullptr;
-
+	ComponentCharacterController* ccontroller = nullptr;
+	bool can_move = false;
 
 private:
 	float angle = 0.0f;
