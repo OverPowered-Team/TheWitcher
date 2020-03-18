@@ -217,14 +217,26 @@ void PlayerController::HandleMovement(float2 joystickInput)
 }
 
 void PlayerController::OnAnimationEnd(const char* name) {
-	if (strcmp(name, "Attack") == 0)
-		state = PlayerState::IDLE;
+
+	LOG("entro acabar %s", name);
+	if (strcmp(name, "Attack") == 0) {
+		if (abs(player_data.currentSpeed) < 0.1F)
+			state = PlayerState::IDLE;
+		if (abs(player_data.currentSpeed) > 0.1F)
+			state = PlayerState::RUNNING;
+	}
 
 	if (strcmp(name, "Roll") == 0) {
-		state = PlayerState::IDLE;
+		if(abs(player_data.currentSpeed) < 0.1F)
+			state = PlayerState::IDLE;
+		if (abs(player_data.currentSpeed) > 0.1F)
+			state = PlayerState::RUNNING;
 	}
 
 	if (strcmp(name, "Spell") == 0) {
-		state = PlayerState::IDLE;
+		if (abs(player_data.currentSpeed) < 0.1F)
+			state = PlayerState::IDLE;
+		if (abs(player_data.currentSpeed) > 0.1F)
+			state = PlayerState::RUNNING;
 	}
 }
