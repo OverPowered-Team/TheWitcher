@@ -34,7 +34,7 @@ void main()
     vec4 textureColor = texture(tex, texCoords);
     
 
-    if(textureColor.a < 0.1)
+    if(textureColor.a < 0.001)
          discard;
 
      if(textureColor == vec4(0,0,0,1))

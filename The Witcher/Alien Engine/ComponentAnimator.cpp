@@ -66,9 +66,7 @@ void ComponentAnimator::UpdateAnimation(GameObject* go_to_update)
 
 	if (animator_controller->GetTransform(go_to_update->GetName(), position, rotation, scale))
 	{
-		go_to_update->transform->SetLocalPosition(position);
-		go_to_update->transform->SetLocalRotation(rotation);
-		go_to_update->transform->SetLocalScale(scale);
+		go_to_update->transform->SetLocalTransform(position, rotation, scale);
 	}
 
 	for (int i = 0; i < go_to_update->GetChildren().size(); i++)
@@ -110,8 +108,8 @@ void ComponentAnimator::SetAnimatorController(ResourceAnimatorController* contro
 void ComponentAnimator::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetString("ID", std::to_string(ID));
-	to_save->SetString("ControllerID", source_animator_controller ? std::to_string(source_animator_controller->GetID()) : std::to_string(0));
+	to_save->SetString("ID", std::to_string(ID).data());
+	to_save->SetString("ControllerID", source_animator_controller ? std::to_string(source_animator_controller->GetID()).data() : std::to_string(0).data());
 	to_save->SetBoolean("Enabled", enabled);
 }
 
@@ -141,6 +139,11 @@ void ComponentAnimator::SetFloat(const char* parameter_name, float parameter_val
 void ComponentAnimator::SetInt(const char* parameter_name, int parameter_value)
 {
 	animator_controller->SetInt(parameter_name, parameter_value);
+}
+
+float ComponentAnimator::GetCurrentStateDuration()
+{
+	return animator_controller->GetCurrentNode()->GetClip()->GetDuration() * animator_controller->GetCurrentNode()->GetSpeed();
 }
 
 bool ComponentAnimator::DrawInspector()

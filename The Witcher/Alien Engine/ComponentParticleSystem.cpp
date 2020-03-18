@@ -549,22 +549,30 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::Spacing();
 				ImGui::Spacing();
 				ImGui::Text("Animation Speed: "); ImGui::SameLine(200, 15);
-				ImGui::SliderFloat("##Animation Speed", &animSpeed, 0.0f, 5.0);
+				//ImGui::SliderFloat("##Animation Speed", &animSpeed, 0.0f, 5.0);
+				ImGui::DragFloat("##Animation Speed", &animSpeed, 0.0f, 5.0f);
 				ImGui::Spacing();
 				ImGui::Spacing();
 				ImGui::Text("Rows: "); ImGui::SameLine(200, 15);
-				ImGui::SliderInt("##Rows", &texRows, 1, 10);
+				ImGui::SliderInt("##Rows", &texRows, 0, 10);
 				ImGui::Spacing();
 				ImGui::Spacing();
 				ImGui::Text("Columns: "); ImGui::SameLine(200, 15);
-				ImGui::SliderInt("##Columns", &texColumns, 1, 10);
+				ImGui::SliderInt("##Columns", &texColumns, 0, 10);
 				ImGui::Spacing();
 				ImGui::Spacing(); 
 				ImGui::Spacing();
-				ImGui::SameLine(535, 15);
+				//ImGui::SameLine(535, 15);
 				if (ImGui::Button("Calculate UV", { 120,20 }))
 				{
 					particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed);
+				}
+				ImGui::SameLine();
+
+
+				if (ImGui::Button("Reset", { 120,20 })  ||  !enable_anim)
+				{
+					particleSystem->ResetParticleUV();
 				}
 				
 
@@ -823,7 +831,7 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 {
 	// --------------- General Info -------------------- //
 	to_save->SetNumber("Type", (int)type);
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 
 	// ----------------------- Billboard Info ----------------------- //
 
@@ -945,7 +953,7 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	
 	to_save->SetBoolean("HasMaterial", (particleSystem->material != nullptr) ? true : false);
 	if (particleSystem->material != nullptr) {
-		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()));
+		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()).data());
 		to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
 		to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
 		to_save->SetFloat4("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
@@ -1240,7 +1248,7 @@ void ComponentParticleSystem::SaveParticles()
 			App->file_system->NormalizePath(path);
 			std::string name = App->file_system->GetBaseFileName(path.data());
 
-			particles->SetString("ParticleSystem.Name", name);
+			particles->SetString("ParticleSystem.Name", name.data());
 			JSONArraypack* properties = particles->InitNewArray("ParticleSystem.Properties");
 			
 			properties->SetAnotherNode();

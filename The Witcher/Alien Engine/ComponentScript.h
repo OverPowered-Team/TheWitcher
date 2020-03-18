@@ -21,6 +21,10 @@ struct __declspec(dllexport) InspectorScriptData {
 		BOOL, // DONE
 		PREFAB, // DONE
 		GAMEOBJECT, // DONE
+		TOOL_TIP,
+		TEXT,
+		SEPARATOR,
+		SPACING,
 		ENUM,
 	};
 
@@ -112,6 +116,14 @@ public:
 	static void InspectorEnum(int* ptr, const char* ptr_name, const char* enumAllString);
 	/*--------------------PREFAB-----------------------*/
 	static void InspectorPrefab(Prefab* ptr, const char* ptr_name);
+	/*--------------------TEXT--------------------------*/
+	static void InspectorText(const char* textToSHow);
+	/*--------------------SEPARATOR--------------------------*/
+	static void InspectorSeparator();
+	/*--------------------TOOLTIP--------------------------*/
+	static void InspectorToolTip(const char* textToSHow);
+	/*--------------------SPACING--------------------------*/
+	static void InspectorSpacing();
 	/*--------------------GAMEOBJECT-----------------------*/
 	static void InspectorGameObject(GameObject** ptr, const char* ptr_name);
 	/*--------------------FUNCTION-----------------------*/

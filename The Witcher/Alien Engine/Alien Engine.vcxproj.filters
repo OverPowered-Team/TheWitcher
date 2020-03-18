@@ -103,6 +103,21 @@
     <Filter Include="Tools\Stb">
       <UniqueIdentifier>{f47e6cdd-1441-4790-9eda-58f25045718e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\Physiscs\Constraints">
+      <UniqueIdentifier>{70f05f8c-bd98-4422-a1e5-e125d4dbfcb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Physiscs\Controllers">
+      <UniqueIdentifier>{1867fcbc-9bd2-48f6-bd5b-2dc3dba4f928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Animations">
+      <UniqueIdentifier>{271dbc4b-b35f-4ebc-9e0c-1ea0e489399d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Lights">
+      <UniqueIdentifier>{bbe0047a-a6a4-4e4e-abf1-2a1b09c3529c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Scripting">
+      <UniqueIdentifier>{cad274f0-ed77-48f0-b9a8-ceb3246c8743}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleWindow.h">
@@ -453,9 +468,6 @@
     <ClInclude Include="ComponentTransform.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentMaterial.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="PanelHierarchy.h">
       <Filter>Panels</Filter>
     </ClInclude>
@@ -522,14 +534,8 @@
     <ClInclude Include="ResourcePrefab.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentScript.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="StaticInput.h">
       <Filter>ScriptHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Alien.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="ResourceScript.h">
       <Filter>Resources</Filter>
@@ -579,15 +585,6 @@
     <ClInclude Include="ResourceShader.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentLightDirectional.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentLightSpot.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentLightPoint.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="PanelPhysics.h">
       <Filter>Panels</Filter>
     </ClInclude>
@@ -603,8 +600,45 @@
     <ClInclude Include="stb_image.h">
       <Filter>Tools\Stb</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentCharacterController.h" />
-    <ClInclude Include="ComponentPointConstraint.h" />
+    <ClInclude Include="ComponentPointConstraint.h">
+      <Filter>Components\Physiscs\Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCharacterController.h">
+      <Filter>Components\Physiscs\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentRigidBody.h">
+      <Filter>Components\Physiscs\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentAnimator.h">
+      <Filter>Components\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBone.h">
+      <Filter>Components\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentDeformableMesh.h">
+      <Filter>Components\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentLightSpot.h">
+      <Filter>Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentLightPoint.h">
+      <Filter>Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentLightDirectional.h">
+      <Filter>Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentParticleSystem.h">
+      <Filter>Components\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentScript.h">
+      <Filter>Components\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Alien.h">
+      <Filter>Components\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -808,9 +842,6 @@
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentMaterial.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="PanelHierarchy.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
@@ -823,26 +854,17 @@
     <ClCompile Include="PanelLayout.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
-    <ClInclude Include="ComponentBone.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceBone.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="ResourceAnimation.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentAnimator.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceAnimatorController.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="PanelAnimTimeline.h">
       <Filter>Panels</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentDeformableMesh.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="NodeEditor\Include\imgui_node_editor.h">
       <Filter>Tools\NodeEditor</Filter>
@@ -1401,9 +1423,6 @@
     </ClInclude>
     <ClInclude Include="ResourceAudio.h">
       <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentParticleSystem.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
       <Filter>Components\ParticleSystem</Filter>
@@ -2521,9 +2540,6 @@
     <ClInclude Include="ComponentSphereCollider.h">
       <Filter>Components\Physiscs\Colliders</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentRigidBody.h">
-      <Filter>Components\Physiscs</Filter>
-    </ClInclude>
     <ClInclude Include="ModulePhysics.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -2539,15 +2555,6 @@
     <ClInclude Include="Optick\include\optick.config.h">
       <Filter>Tools\Optik</Filter>
     </ClInclude>
-    <ClCompile Include="ComponentLightDirectional.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentLightSpot.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentLightPoint.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="PanelPhysics.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
@@ -2560,8 +2567,45 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentCharacterController.cpp" />
-    <ClCompile Include="ComponentPointConstraint.cpp" />
+    <ClCompile Include="ComponentPointConstraint.cpp">
+      <Filter>Components\Physiscs\Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCharacterController.cpp">
+      <Filter>Components\Physiscs\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentRigidBody.cpp">
+      <Filter>Components\Physiscs\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentAnimator.cpp">
+      <Filter>Components\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentBone.cpp">
+      <Filter>Components\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentDeformableMesh.cpp">
+      <Filter>Components\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLightSpot.cpp">
+      <Filter>Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLightPoint.cpp">
+      <Filter>Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLightDirectional.cpp">
+      <Filter>Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Components\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentParticleSystem.cpp">
+      <Filter>Components\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentScript.cpp">
+      <Filter>Components\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Alien.cpp">
+      <Filter>Components\Scripting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -2834,17 +2878,11 @@
     <ClCompile Include="ResourcePrefab.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentScript.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="StaticInput.cpp">
       <Filter>ScriptHelpers</Filter>
     </ClCompile>
     <ClCompile Include="ResourceScript.cpp">
       <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Alien.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="TextEdit\TextEditor.cpp">
       <Filter>Tools\TextEdit</Filter>
@@ -2888,26 +2926,17 @@
     <ClCompile Include="ResourceScene.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentBone.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceBone.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="ResourceAnimation.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentAnimator.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceAnimatorController.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="PanelAnimTimeline.cpp">
       <Filter>Panels</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentDeformableMesh.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="NodeEditor\Source\crude_json.cpp">
       <Filter>Tools\NodeEditor</Filter>
@@ -2962,9 +2991,6 @@
     </ClCompile>
     <ClCompile Include="ResourceAudio.cpp">
       <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentParticleSystem.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Billboard.cpp">
       <Filter>Components\ParticleSystem</Filter>
@@ -3601,9 +3627,6 @@
     </ClCompile>
     <ClCompile Include="ComponentSphereCollider.cpp">
       <Filter>Components\Physiscs\Colliders</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentRigidBody.cpp">
-      <Filter>Components\Physiscs</Filter>
     </ClCompile>
     <ClCompile Include="ModulePhysics.cpp">
       <Filter>Modules</Filter>

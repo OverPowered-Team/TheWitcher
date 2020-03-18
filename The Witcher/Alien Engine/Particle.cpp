@@ -33,6 +33,8 @@ Particle::~Particle()
 {
 	if (owner->material != nullptr)
 		delete p_material;
+
+	
 }
 
 void Particle::PreUpdate(float dt)
@@ -90,12 +92,13 @@ void Particle::Update(float dt)
 				currentFrame++;
 			}
 			else
-				currentFrame = 0;
+				currentFrame = 0.f;
 
 		
 			animationTime = 0.f;
 		}
 	}
+	
 
 
 }
@@ -335,7 +338,15 @@ void Particle::SetUniform(ResourceMaterial* resource_material, ComponentCamera* 
 
 void Particle::SetAnimation(std::vector<uint>& uvs, float speed)
 {
-	particleInfo.animation = &uvs;
+
+
+	if (!uvs.empty()) {
+		particleInfo.animation = &uvs;
+	}
+	else
+		particleInfo.animation = nullptr;
+
+
 	particleInfo.animSpeed = speed;
 	animationTime = 0.0f;
 	currentFrame = 0u;

@@ -86,13 +86,13 @@ void ComponentAudioEmitter::UpdateSourcePos()
 
 void ComponentAudioEmitter::SaveComponent(JSONArraypack* to_save)
 {
-	to_save->SetString("ID", std::to_string(ID));
+	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Volume", volume);
 	to_save->SetBoolean("Mute", mute);
-	to_save->SetString("Bank", std::to_string(current_bank));
-	to_save->SetString("Event", std::to_string(current_event));
+	to_save->SetString("Bank", std::to_string(current_bank).data());
+	to_save->SetString("Event", std::to_string(current_event).data());
 	to_save->SetBoolean("PlayOnAwake", play_on_awake);
 }
 void ComponentAudioEmitter::LoadComponent(JSONArraypack* to_load)

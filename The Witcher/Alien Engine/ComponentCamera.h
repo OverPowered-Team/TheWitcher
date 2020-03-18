@@ -8,6 +8,7 @@
 
 class Skybox;
 class ResourceShader;
+struct Cubemap;
 
 class __declspec(dllexport) ComponentCamera : public Component {
 	friend class GameObject;
@@ -98,6 +99,7 @@ public:
 	Color camera_color_background{ 0.05f, 0.05f, 0.05f, 1.0f };
 
 	Skybox* skybox = nullptr;
+	Cubemap* cubemap = nullptr;
 	ResourceShader* skybox_shader = nullptr;
 	uint skybox_texture_id = 0u;
 };

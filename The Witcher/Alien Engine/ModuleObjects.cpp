@@ -1377,10 +1377,10 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 					for (; script != scripts.end(); ++script) {
 						if (*script != nullptr) {
 							to_save->SetAnotherNode();
-							to_save->SetString("GameObjectID", std::to_string((*item)->ID));
-							to_save->SetString("ResourceScriptID", std::to_string((*script)->resourceID));
-							to_save->SetString("DataName", (*script)->data_name);
-							to_save->SetString("CompScriptID", std::to_string((*script)->ID));
+							to_save->SetString("GameObjectID", std::to_string((*item)->ID).data());
+							to_save->SetString("ResourceScriptID", std::to_string((*script)->resourceID).data());
+							to_save->SetString("DataName", (*script)->data_name.data());
+							to_save->SetString("CompScriptID", std::to_string((*script)->ID).data());
 							if ((*script)->inspector_variables.empty()) {
 								to_save->SetBoolean("HasInspector", false);
 							}
@@ -1394,7 +1394,7 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 										continue;
 									}
 									inspector->SetBoolean("IsNull", false);
-									inspector->SetString("Name", (*script)->inspector_variables[i].variable_name);
+									inspector->SetString("Name", (*script)->inspector_variables[i].variable_name.data());
 									inspector->SetNumber("Type", (*script)->inspector_variables[i].variable_type);
 									switch ((*script)->inspector_variables[i].variable_type)
 									{
@@ -1415,12 +1415,12 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 										break; }
 									case InspectorScriptData::DataType::PREFAB: {
 										Prefab* prefab = ((Prefab*)((*script)->inspector_variables[i].ptr));
-										inspector->SetString("prefab", std::to_string(prefab->prefabID));
+										inspector->SetString("prefab", std::to_string(prefab->prefabID).data());
 										break; }
 									case InspectorScriptData::DataType::GAMEOBJECT: {
 										GameObject** obj = ((GameObject**)((*script)->inspector_variables[i].obj));
 										if (obj != nullptr && *obj != nullptr) {
-											inspector->SetString("gameobject", std::to_string((*obj)->ID));
+											inspector->SetString("gameobject", std::to_string((*obj)->ID).data());
 										}
 										else {
 											inspector->SetString("gameobject", "0");
@@ -1547,7 +1547,7 @@ void ModuleObjects::DeleteReturns()
 
 void ModuleObjects::UpdateGamePadInput()
 {
-	if (GetGameObjectByID(selected_ui) != nullptr &&GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed)
+	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed)
 	{
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_UP) || App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || Input::GetControllerVerticalLeftAxis(1) > 0.2f)
 		{

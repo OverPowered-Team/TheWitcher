@@ -51,12 +51,12 @@ protected:
 
 	void Init();
 	void Update();
-	void DrawScene();
+	
 	bool DrawInspector();
 	void HandleAlienEvent(const AlienEvent& e);
 
 	virtual void DrawSpecificInspector() {}
-
+	virtual void DrawScene();
 	virtual void Reset();
 	virtual void Clone(Component* clone) {}
 	virtual void SetComponent(Component* component) {}
@@ -65,6 +65,7 @@ protected:
 
 	virtual void CreateDefaultShape() = 0;
 	virtual void UpdateShape() {} 	// Adjust shape to scale and other factors
+	virtual void SetScale(float3 scale);
 
 protected:
 

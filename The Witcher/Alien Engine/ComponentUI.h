@@ -59,12 +59,15 @@ public:
 	virtual bool CheckMouseInside(float3 mouse_pos);
 	virtual void UILogicMouse();
 	virtual void UILogicGamePad();
+	virtual void SetSize(float width, float height);
 
 	//Script
 	void SetBackgroundColor(float r, float g, float b, float a);
-	
+
+
 private:
 	void CheckFirstSelected();
+	
 	
 public:
 	Color current_color = { 0.8f,0.8f,0.8f,1.0f };

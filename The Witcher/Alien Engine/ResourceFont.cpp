@@ -34,10 +34,10 @@ void ResourceFont::CreateMeta()
 
 	if (value != nullptr && json_object != nullptr) {
 
-		JSONfilepack* file = new JSONfilepack(meta_path, json_object, value);
+		JSONfilepack* file = new JSONfilepack(meta_path.data(), json_object, value);
 		file->StartSave();
-		file->SetString("Meta.ID", std::to_string(ID));
-		file->SetString("Meta.name", name);
+		file->SetString("Meta.ID", std::to_string(ID).data());
+		file->SetString("Meta.name", name.data());
 		file->FinishSave();
 		delete file;
 	}

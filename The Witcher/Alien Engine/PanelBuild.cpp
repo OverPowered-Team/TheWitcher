@@ -335,7 +335,7 @@ void PanelBuild::CreateBuild()
 		JSONfilepack* build = new JSONfilepack(BUILD_SETTINGS_PATH, json_object, value);
 		build->StartSave();
 
-		build->SetString("Build.FirstScene", full_path_scenes[selected]);
+		build->SetString("Build.FirstScene", full_path_scenes[selected].data());
 		build->SetString("Build.GameName", game_name);
 
 		build->FinishSave();

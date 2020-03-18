@@ -76,15 +76,26 @@ struct SpotLight
     float outer_cut_off;
 };
 
+struct Material {
+    vec3 diffuse_color;
+
+    sampler2D diffuseTexture;
+    bool hasDiffuseTexture;
+
+    sampler2D specularMap;
+    bool hasSpecularMap;
+
+    float smoothness;
+    float metalness;
+};
+
 // Function declarations
-vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir);
-vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_dir);
-vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_dir);
+vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir, Material objectMat, vec2 texCoords);
+vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_dir, Material objectMat, vec2 texCoords);
+vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_dir, Material objectMat, vec2 texCoords);
 
 // Uniforms
-uniform sampler2D tex;
-uniform vec3 diffuse_color;
-
+uniform Material objectMaterial;
 // max_dir_lights, max_point_lights, max_spot_lights
 uniform ivec3 max_lights;
 
@@ -106,15 +117,10 @@ out vec4 FragColor;
 void main()
 {
     // ----------------------- Object Color ---------------------
-    vec4 objectColor = vec4(0);
-    vec4 textureColor = vec4(texture(tex, texCoords).rgb, 1.0);
-    if(textureColor != vec4(0,0,0,1))
+    vec4 objectColor = vec4(objectMaterial.diffuse_color, 1.0f);
+    if(objectMaterial.hasDiffuseTexture == true)
     {
-        objectColor = textureColor * vec4(diffuse_color, 1.0f);
-    }
-    else 
-    {
-        objectColor = vec4(diffuse_color,1.0f);
+        objectColor = objectColor * vec4(texture(objectMaterial.diffuseTexture, texCoords).rgb, 1.0);
     }
 
     // ----------------------------------------------------------
@@ -128,11 +134,11 @@ void main()
 
     // Light calculations
     for(int i = 0; i < max_lights.x; i++)
-        result += CalculateDirectionalLight(dir_light[i], norm, view_dir);
+        result += CalculateDirectionalLight(dir_light[i], norm, view_dir, objectMaterial, texCoords);
     for(int i = 0; i < max_lights.y; i++)
-        result += CalculatePointLight(point_light[i], norm, frag_pos, view_dir);    
+        result += CalculatePointLight(point_light[i], norm, frag_pos, view_dir, objectMaterial, texCoords);    
     for(int i = 0; i < max_lights.z; i++)
-        result += CalculateSpotLight(spot_light[i], norm, frag_pos, view_dir);   
+        result += CalculateSpotLight(spot_light[i], norm, frag_pos, view_dir, objectMaterial, texCoords);   
 
     // ----------------------------------------------------------
 
@@ -140,7 +146,7 @@ void main()
 }
 
 // Function definitions
-vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir)
+vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir, Material objectMaterial, vec2 texCoords)
 {
     // Intensity
     float intensity = light.intensity;
@@ -155,13 +161,18 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_di
     
     // Specular
     vec3 reflectDir = reflect(-lightDir, normal);  
-    float spec = pow(max(dot(view_dir, reflectDir), 0.0), 32);
-    vec3 specular = light.dirLightProperties[indexSpecular] * spec;
+    float spec = pow(max(dot(view_dir, reflectDir), 0.0), objectMaterial.smoothness) * objectMaterial.metalness;
+
+    vec3 specular = vec3(0);
+    if(objectMaterial.hasSpecularMap == true)
+        specular = light.dirLightProperties[indexSpecular] * spec * vec3(texture(objectMaterial.specularMap, texCoords));
+    else   
+        specular = light.dirLightProperties[indexSpecular] * spec;
 
     return (ambient + diffuse + specular) * vec3(intensity, intensity, intensity);
 }
 
-vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_dir)
+vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_dir, Material objectMaterial, vec2 texCoords)
 {
     // Intensity
     float intensity = light.intensity;
@@ -176,8 +187,13 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view
 
      // Specular
     vec3 reflectDir = reflect(-lightDir, normal);  
-    float spec = pow(max(dot(view_dir, reflectDir), 0.0), 32);
-    vec3 specular = light.pointLightProperties[indexSpecular] * spec;
+    float spec = pow(max(dot(view_dir, reflectDir), 0.0), objectMaterial.smoothness) * objectMaterial.metalness;
+        
+    vec3 specular = vec3(0);
+    if(objectMaterial.hasSpecularMap == true)
+        specular = light.pointLightProperties[indexSpecular] * spec * vec3(texture(objectMaterial.specularMap, texCoords));
+    else 
+        specular = light.pointLightProperties[indexSpecular] * spec;
 
     // attenuation
     float distance = length(light.pointLightProperties[indexPosition] - frag_pos);
@@ -186,7 +202,7 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view
     return (ambient + diffuse + specular) * attenuation * vec3(intensity, intensity, intensity);
 }
 
-vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_dir)
+vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_dir, Material objectMaterial, vec2 texCoords)
 {
     // Intensity
     float intensity = light.intensity;
@@ -203,9 +219,14 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_d
     // specular
     vec3 viewDir = normalize(view_pos - frag_pos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
-    vec3 specular = light.spotLightProperties[indexSpecular] * spec;  
-    
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), objectMaterial.smoothness) * objectMaterial.metalness;
+
+    vec3 specular = vec3(0);
+    if(objectMaterial.hasSpecularMap == true)
+        specular = light.spotLightProperties[indexSpecular] * spec * vec3(texture(objectMaterial.specularMap, texCoords));  
+    else
+        specular = light.spotLightProperties[indexSpecular] * spec;  
+
     // soft edges
     float theta = dot(lightDir, normalize(-light.spotLightProperties[indexDirection])); 
     float epsilon = (light.cut_off - light.outer_cut_off);

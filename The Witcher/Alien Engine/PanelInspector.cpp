@@ -634,7 +634,7 @@ void PanelInspector::ButtonAddComponent()
 			case ComponentType::CONVEX_HULL_COLLIDER: {
 				if (App->objects->GetSelectedObjects().back()->GetComponent<ComponentCollider>() == nullptr)
 				{
-					comp = new ComponentSphereCollider(App->objects->GetSelectedObjects().back());
+					comp = new ComponentConvexHullCollider(App->objects->GetSelectedObjects().back());
 					App->objects->GetSelectedObjects().back()->AddComponent(comp);
 				}
 				break; }
