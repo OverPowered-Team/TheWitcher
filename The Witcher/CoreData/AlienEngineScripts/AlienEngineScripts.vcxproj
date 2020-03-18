@@ -171,14 +171,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraEnterExit.h" />
+    <ClInclude Include="CameraMovement.h" />
+    <ClInclude Include="PlayerTest.h" />
     <ClInclude Include="ReverbZone.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
+    <ClInclude Include="TriggerCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraEnterExit.cpp" />
+    <ClCompile Include="CameraMovement.cpp" />
+    <ClCompile Include="PlayerTest.cpp" />
     <ClCompile Include="ReverbZone.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
+    <ClCompile Include="TriggerCamera.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

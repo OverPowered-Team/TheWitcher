@@ -30,6 +30,7 @@ public:
 
 	void Jump(float3 direction= float3::zero());
 	bool CanJump();
+	bool OnGround();
 
 	float GetJumpSpeed() { return jump_speed; }
 	void SetJumpSpeed(const float jump_speed);
