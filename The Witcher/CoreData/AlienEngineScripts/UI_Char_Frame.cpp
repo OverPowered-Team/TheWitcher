@@ -87,7 +87,6 @@ void UI_Char_Frame::LifeChange(float life_change)
 	life_change /= max_life;
 
 	hp += life_change;
-
 	lifebar->SetBarValue(hp);
 }
 
