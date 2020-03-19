@@ -148,13 +148,7 @@ bool ComponentBar::DrawInspector()
 						ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(ID);
 						if (tex != nullptr) {
 							ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
-							if (tex != nullptr && tex != barTexture) {
-								tex->IncreaseReferences();
-								if (barTexture != nullptr) {
-									barTexture->DecreaseReferences();
-								}
-								barTexture = tex;
-							}
+							SetTextureBar(tex);
 						}
 					}
 				}
@@ -455,7 +449,7 @@ void ComponentBar::SetBarColor(float r, float g, float b, float a)
 	bar_color = { r,g,b,a };
 }
 
-void ComponentBar::SetTexture(ResourceTexture* tex)
+void ComponentBar::SetTextureBar(ResourceTexture* tex)
 {
 	if (tex != nullptr && tex != barTexture) {
 		tex->IncreaseReferences();

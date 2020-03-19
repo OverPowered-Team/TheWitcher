@@ -867,10 +867,16 @@ std::string ComponentScript::GetVariableName(const char* ptr_name)
 {
 	std::string ptr_strg(ptr_name);
 	std::string variable_name;
-	for (uint i = ptr_strg.size() - 1; i >= 0; --i) {
-		if (ptr_strg[i] == '&' || ptr_strg[i] == '*' || ptr_strg[i] == '>' || ptr_strg[i] == '.')
-			break;
-		variable_name = ptr_strg[i] + variable_name;
+	bool startCopy = false;
+	for (uint i = 0; i < ptr_strg.size(); ++i) {
+		if (!startCopy) {
+			if (ptr_strg[i] == '>' || ptr_strg[i] == '.') {
+				startCopy = true;
+			}
+		}
+		else {
+			variable_name = variable_name + ptr_strg[i];
+		}
 	}
 	return variable_name;
 }
