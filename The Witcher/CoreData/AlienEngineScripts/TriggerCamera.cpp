@@ -34,6 +34,7 @@ void TriggerCamera::StartTransition(TransitionInfo transition_info)
 		cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
 		cam_script->curr_transition = transition_info;
 		cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+		//cam_script->start_transition_pos = camera->transform->GetGlobalPosition();
 		LOG("Started transition");
 	}
 }

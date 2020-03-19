@@ -26,16 +26,25 @@ void CameraMovement::Update()
     {
         current_transition_time += Time::GetDT();
         float3 trg_pos = CalculateMidPoint() + trg_offset;
-        if (current_transition_time >= curr_transition.transition_time) {
+        float3 curr_pos = transform->GetGlobalPosition();
+        float min_dist = 0.1f;
+        if ((trg_pos - curr_pos).Length() < min_dist) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
             LookAtMidPoint();
             state = CameraState::DYNAMIC;
         }
         else {
-            float3 curr_pos = transform->GetGlobalPosition();
-            //Lerp
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (current_transition_time / curr_transition.transition_time));
+			//INFO: This is more like an accelerated movement than a lerp since we're using the current position as the starting point
+
+            float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
+			
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
+			
+            //TODO: We could add the option to configure smoothness (cuadratic t, cubic t, etc.)
+            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent));//Less fast on the beggining
+			//transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent * time_percent));//Even less fast on the beggining
+
             LookAtMidPoint();
         }
         break;

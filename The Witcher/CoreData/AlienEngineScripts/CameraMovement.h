@@ -39,6 +39,7 @@ public:
 	std::map<GameObject*, PlayerState> players;
 	uint num_curr_players = 0u;
 	float3 trg_offset;
+	//float3 start_transition_pos;
 
 	float current_transition_time = 0.f;
 };
