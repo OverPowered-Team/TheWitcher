@@ -185,6 +185,7 @@ private:
 
 	// Events
 	std::vector<AnimEvent*> anim_events;
+	std::vector<GameObject*> gameobjects;
 	ComponentAudioEmitter* emitter = nullptr;
 	std::vector<ComponentScript*> scripts;
 	uint previous_key_time = 0;
@@ -287,6 +288,7 @@ public:
 	std::vector<ComponentScript*> GetScripts() { return scripts; }
 	void SetEmitter(ComponentAudioEmitter* _emitter) { emitter = _emitter; }
 	void SetScripts(std::vector<ComponentScript*> _scripts) { scripts = _scripts; }
+	void AddAnimGameObject(GameObject* _game_object);
 	void ActiveEvent(ResourceAnimation* _animation, uint _key);
 
 	//void UnLoad();

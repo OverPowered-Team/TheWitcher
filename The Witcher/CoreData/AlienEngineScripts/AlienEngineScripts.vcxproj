@@ -23,7 +23,7 @@
     <ProjectGuid>{E3DD4AE4-9CAE-4F01-8B11-19E9627F734A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AlienEngineScripts</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -178,7 +178,12 @@
     <ClInclude Include="ReverbZone.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
+    <ClInclude Include="UI_Char_Frame.h" />
+    <ClInclude Include="UltiBar.h" />
+    <ClInclude Include="TriggerAudioEvent.h" />
     <ClInclude Include="TriggerCamera.h" />
+    <ClInclude Include="TriggerEnvironment.h" />
+    <ClInclude Include="TriggerFootsteps.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraEnterExit.cpp" />
@@ -188,7 +193,12 @@
     <ClCompile Include="ReverbZone.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
+    <ClCompile Include="UI_Char_Frame.cpp" />
+    <ClCompile Include="UltiBar.cpp" />
+    <ClCompile Include="TriggerAudioEvent.cpp" />
     <ClCompile Include="TriggerCamera.cpp" />
+    <ClCompile Include="TriggerEnvironment.cpp" />
+    <ClCompile Include="TriggerFootsteps.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

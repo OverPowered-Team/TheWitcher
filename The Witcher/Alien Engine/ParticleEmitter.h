@@ -86,7 +86,6 @@ public:
 	void SetZone(Emmitter_Zone zone);
 	void SetRadius(float radius);
 	void SetOutRadius(float radius);
-	void SetCubeSize(float3 size);
 	void SetDistance(float distance);
 
 	void SetMaxLife(float maxLife);
@@ -103,6 +102,7 @@ public:
 	void SetRelativeRotation(float3 rotation);
 	void SetScale(float3 scale);
 
+	void SetCubeSize(float3 size);
 	// ---------------------------
 
 	// ----- Get Emmitter -----

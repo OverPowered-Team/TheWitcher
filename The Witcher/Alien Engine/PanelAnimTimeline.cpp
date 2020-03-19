@@ -55,6 +55,7 @@ bool PanelAnimTimeline::FillInfo()
 				if (component_animator->GetResourceAnimatorController() != nullptr)
 				{
 					animator = component_animator->GetResourceAnimatorController();
+					animator->AddAnimGameObject((*go));
 
 					for (uint i = 0; i < animator->GetNumStates(); ++i)
 					{
@@ -141,10 +142,8 @@ void PanelAnimTimeline::PanelLogic()
 	aboutFlags |= ImGuiWindowFlags_HorizontalScrollbar;
 	ImGui::Begin("Animation Timeline", &enabled, aboutFlags);
 
-	if (current_animation && !current_animation->channels)
-	{
+	if ((current_animation && !current_animation->channels) || !animator || !component_animator)
 		changed = true;
-	}
 
 	if (changed)
 	{
@@ -195,19 +194,19 @@ void PanelAnimTimeline::PanelLogic()
 			}
 
 			ImGui::SameLine();
-		}
 
-		//Check Events 
-		// Audio
-		if (!animator->GetEmitter() && component_animator->game_object_attached->GetComponent(ComponentType::A_EMITTER))
-			animator->SetEmitter((ComponentAudioEmitter*)component_animator->game_object_attached->GetComponent(ComponentType::A_EMITTER));
-		else if (!component_animator->game_object_attached->GetComponent(ComponentType::A_EMITTER))
-			animator->SetEmitter(nullptr);
-		// Scripts
-		if (animator->GetScripts().size() < 1 && component_animator->game_object_attached->GetComponent(ComponentType::SCRIPT))
-			animator->SetScripts(component_animator->game_object_attached->GetComponents<ComponentScript>());
-		else if (!component_animator->game_object_attached->GetComponent(ComponentType::SCRIPT))
-			animator->GetScripts().clear();
+			//Check Events 
+			// Audio
+			if (!animator->GetEmitter() && component_animator->game_object_attached->GetComponent(ComponentType::A_EMITTER))
+				animator->SetEmitter((ComponentAudioEmitter*)component_animator->game_object_attached->GetComponent(ComponentType::A_EMITTER));
+			else if (!component_animator->game_object_attached->GetComponent(ComponentType::A_EMITTER))
+				animator->SetEmitter(nullptr);
+			// Scripts
+			if (animator->GetScripts().size() < 1 && component_animator->game_object_attached->GetComponent(ComponentType::SCRIPT))
+				animator->SetScripts(component_animator->game_object_attached->GetComponents<ComponentScript>());
+			else if (!component_animator->game_object_attached->GetComponent(ComponentType::SCRIPT))
+				animator->GetScripts().clear();
+		}
 
 		//Animation bar Progress
 		ImGui::SetCursorPosX(165);

@@ -1,8 +1,8 @@
 {
     "Controller": {
-        "Name": "PlayerController",
+        "Name": "PlayerAnimController",
         "NumStates": 6,
-        "NumTransitions": 9,
+        "NumTransitions": 10,
         "States": [
             {
                 "Name": "Idle",
@@ -15,24 +15,24 @@
                 "Clip": "6946917102901728312"
             },
             {
+                "Name": "Attack",
+                "Speed": 2,
+                "Clip": "4871813718953062991"
+            },
+            {
                 "Name": "Roll",
                 "Speed": 3,
                 "Clip": "4244113142840779604"
             },
             {
-                "Name": "Attack",
-                "Speed": 1,
-                "Clip": "4871813718953062991"
-            },
-            {
-                "Name": "Jump",
-                "Speed": 3,
-                "Clip": "1528621542894041346"
-            },
-            {
                 "Name": "Air",
                 "Speed": 1,
                 "Clip": "9449538334584208347"
+            },
+            {
+                "Name": "Spell",
+                "Speed": 1,
+                "Clip": "7211782662776671787"
             }
         ],
         "Transitions": [
@@ -40,7 +40,7 @@
                 "Source": "Idle",
                 "Target": "Run",
                 "Blend": 0.25,
-                "End": 0,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -56,44 +56,12 @@
                 "Source": "Run",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": 0,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Roll",
-                "Target": "Idle",
-                "Blend": 0.25,
                 "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
                         "Type": "float",
                         "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Roll",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": 1,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Greater",
                         "ParameterIndex": 0,
                         "CompValue": 0.0099999997764825821
                     }
@@ -103,7 +71,7 @@
             {
                 "Source": "Attack",
                 "Target": "Idle",
-                "Blend": 0.25,
+                "Blend": 0.10000000149011612,
                 "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
@@ -119,7 +87,7 @@
             {
                 "Source": "Attack",
                 "Target": "Run",
-                "Blend": 0.25,
+                "Blend": 0.10000000149011612,
                 "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
@@ -133,19 +101,64 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Jump",
-                "Target": "Air",
-                "Blend": 0.25,
+                "Source": "Roll",
+                "Target": "Idle",
+                "Blend": 0.10000000149011612,
                 "End": 1,
                 "IntConditions": [],
-                "FloatConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Run",
+                "Blend": 0.10000000149011612,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
                 "BoolConditions": []
             },
             {
                 "Source": "Air",
+                "Target": "Run",
+                "Blend": 0.10000000149011612,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Air",
                 "Target": "Idle",
-                "Blend": 0.05000000074505806,
-                "End": 0,
+                "Blend": 0.10000000149011612,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -164,10 +177,26 @@
                 ]
             },
             {
-                "Source": "Air",
+                "Source": "Spell",
+                "Target": "Idle",
+                "Blend": 0.10000000149011612,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Spell",
                 "Target": "Run",
-                "Blend": 0.05000000074505806,
-                "End": 0,
+                "Blend": 0.10000000149011612,
+                "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -177,13 +206,7 @@
                         "CompValue": 0.0099999997764825821
                     }
                 ],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 0
-                    }
-                ]
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -199,6 +222,24 @@
                 "Value": false
             }
         ],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "2453392179",
+                "Animation_Id": "6946917102901728312",
+                "Frame": 7,
+                "Type": 0
+            },
+            {
+                "Event_Id": "2453392179",
+                "Animation_Id": "6946917102901728312",
+                "Frame": 14,
+                "Type": 0
+            }
+        ],
+        "Objects": [
+            {
+                "Id": "11243204973043734183"
+            }
+        ]
     }
 }

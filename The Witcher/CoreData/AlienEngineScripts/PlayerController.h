@@ -35,7 +35,7 @@ public:
 	void Update();
 
 	void HandleMovement(float2 joystickInput);
-
+	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 
 public:
@@ -71,6 +71,9 @@ public:
 	GameObject* p_run = nullptr;
 	//ComponentParticleSystem* c_run = nullptr;
 
+	GameObject* p_attack = nullptr;
+	ComponentParticleSystem* c_attack = nullptr;
+
 private:
 
 	float angle = 0.0f;
@@ -87,7 +90,9 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
 
-	
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_run);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_attack);
+	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
+
 	return player;
 }
