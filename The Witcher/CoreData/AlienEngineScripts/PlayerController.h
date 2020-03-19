@@ -69,7 +69,7 @@ public:
 	//Particles
 	
 	GameObject* p_run = nullptr;
-	ComponentParticleSystem* c_run = nullptr;
+	//ComponentParticleSystem* c_run = nullptr;
 
 	GameObject* p_attack = nullptr;
 	ComponentParticleSystem* c_attack = nullptr;

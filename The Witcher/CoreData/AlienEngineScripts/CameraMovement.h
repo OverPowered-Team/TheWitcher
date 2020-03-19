@@ -2,6 +2,7 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "TriggerCamera.h"
 
 class ALIEN_ENGINE_API CameraMovement : public Alien {
 public:
@@ -11,7 +12,7 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, STATIC, MOVING_TO_STATIC, MOVING_TO_DYNAMIC, AXIS,
+		DYNAMIC, MOVING_TO_DYNAMIC
 		);
 	enum (
 		CameraAxis,
@@ -29,23 +30,22 @@ public:
 	void OnDrawGizmos();
 	void SearchAndAssignPlayers();
 	float3 CalculateMidPoint();
-	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
-	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst, bool with_mid_point = true);
+	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
 	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
-	float top_angle = 0.f;
-	float vertical_angle = 0.f;
-	float distance = 5.f;
+	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
-	float3 diff_pos;
-	float3 destination;
-	float t1 = 0.f;
-	CameraAxis axis = CameraAxis::X;
 	std::map<GameObject*, PlayerState> players;
 	uint num_curr_players = 0u;
-	float3 axis_cam;
+	float3 trg_offset;
+	//float3 start_transition_pos;
 
+	float current_transition_time = 0.f;
+
+	float distance = 0.f;
+	float hor_angle = 0.f;
+	float vert_angle = 0.f;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
@@ -53,13 +53,10 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	// To show in inspector here
 	SHOW_TEXT("First parameters");
 	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraState, alien->state);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->top_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->vertical_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->distance);
-	/*SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.x,0, 1);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.y, 0, 1);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.z, 0, 1);*/
-	//SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
+
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->distance, 0, 100);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->hor_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->vert_angle, -360.f, 360.f);
 
 	return alien;
 }
