@@ -1,5 +1,6 @@
 #include "TriggerCamera.h"
 #include "../../Alien Engine/StaticTween.h"
+#include "CameraEnterExit.h"
 
 TriggerCamera::TriggerCamera() : Alien()
 {
@@ -35,9 +36,9 @@ void TriggerCamera::ManageTransition(bool normal_way)
 	{*/
 	InfoCamera* info = nullptr;
 	if (normal_way)
-		info = &info_to_cam;
+		info = &prev_camera;
 	else
-		info = &info_from_cam;
+		info = &next_camera;
 
 	if (state == ToState::DYNAMIC) {
 		if (cam_script != nullptr) {
@@ -87,7 +88,7 @@ void TriggerCamera::OnDrawGizmos()
 			camera = Camera::GetCurrentCamera()->game_object_attached;
 			cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 		}
-		float3 cam_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(info_to_cam.hor_angle, info_to_cam.vert_angle, info_to_cam.distance, false);
+		float3 cam_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.distance, false);
 		Gizmos::DrawLine(transform->GetGlobalPosition(), cam_pos, Color::Red()); // line mid -> future camera pos
 		Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
 		break;
@@ -109,43 +110,57 @@ void TriggerCamera::OnDrawGizmos()
 
 void TriggerCamera::InterChangeInfoWithCamera()
 {
-	// TODO: update to new STATIC MODE
-	info_from_cam.hor_angle = cam_script->top_angle;
-	info_from_cam.vert_angle = cam_script->vertical_angle;
-	info_from_cam.distance = cam_script->distance;
-	/*if (ftime)
-	{*/
-	/*ftime = false;
-	}
-	cam_script->top_angle = info_to_cam.hor_angle;
-	cam_script->vertical_angle = info_to_cam.vert_angle;
-	cam_script->distance = info_to_cam.distance;*/
-}
-
-void TriggerCamera::TeleportTheRestOfPlayers()
-{
-	float3 first_player_pos = info_to_cam.first_player->transform->GetGlobalPosition();
-	GameObject** get_players = nullptr;
-	uint size;
-	size = GameObject::FindGameObjectsWithTag("Player", &get_players);
-	for (int i = 0; i < size; i++) {
-		GameObject* g = get_players[i];
-		if (g != info_to_cam.first_player)
-		{
-			float3 dist(info_to_cam.tp_distance, 0, 0); //Delete this info?
-			g->transform->SetGlobalPosition(first_player_pos + dist);
-		}
-	}
-	info_to_cam.first_player = nullptr;
+	next_camera.hor_angle = cam_script->top_angle;
+	next_camera.vert_angle = cam_script->vertical_angle;
+	next_camera.distance = cam_script->distance;
 }
 
 bool TriggerCamera::IsCameraDifferent()
 {
-	if (info_to_cam.hor_angle == cam_script->top_angle &&
-		info_to_cam.vert_angle == cam_script->vertical_angle &&
-		info_to_cam.distance == cam_script->distance)
+	if (prev_camera.hor_angle == cam_script->top_angle &&
+		prev_camera.vert_angle == cam_script->vertical_angle &&
+		prev_camera.distance == cam_script->distance)
 	{
 		return false;
 	}
 	return true;
+}
+
+void TriggerCamera::RegisterMovement(int playerNum, int collider_position)
+{
+	//TODO: Remove this workaround when we fix the bug that collider enters 2 times on OnTriggerEnter
+	//INFO: This is done to avoid duplicates
+	int size = registered_position[playerNum].size();
+	if (!(size > 0
+		&& registered_position[playerNum][size - 1] == collider_position))
+	{
+		LOG("entered collider: %i", collider_position);
+		registered_position[playerNum].push_back(collider_position);
+
+		//TODO: Create a for that checks for all players
+		if (PlayerMovedForward(0)/* && PlayerMovedForward(1)*/) {
+			LOG("All players forward");
+		}
+		if (PlayerMovedBackward(0) /*&& PlayerMovedBackward(1)*/) {
+			LOG("All players back");
+		}
+	}
+}
+
+bool TriggerCamera::PlayerMovedForward(int player_num) {
+	int size = registered_position[player_num].size();
+	if (size < 2) {
+		return false;
+	}
+	return (registered_position[player_num][size - 2] == 0
+		&& registered_position[player_num][size - 1] == 1);
+}
+
+bool TriggerCamera::PlayerMovedBackward(int player_num) {
+	int size = registered_position[player_num].size();
+	if (size < 2) {
+		return false;
+	}
+	return (registered_position[player_num][size - 2] == 1
+		&& registered_position[player_num][size - 1] == 0);
 }
