@@ -30,7 +30,7 @@ public:
 	float GetBarValue();
 	void SetBarValue(float factor);
 	void SetBarColor(float r, float g, float b, float a);
-	void SetTexture(ResourceTexture* tex);
+	void SetTextureBar(ResourceTexture* tex);
 
 public:
 	float currentValue = 0.0f, maxValue = 100.0f, minValue = 0.0f;

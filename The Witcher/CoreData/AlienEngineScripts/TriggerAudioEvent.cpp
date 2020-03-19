@@ -20,7 +20,7 @@ void TriggerAudioEvent::Update()
 void TriggerAudioEvent::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (!triggered) {
-		emitter->StartSound();
+		emitter->StartSound(event_name.data());
 		triggered = true;
 	}
 }
