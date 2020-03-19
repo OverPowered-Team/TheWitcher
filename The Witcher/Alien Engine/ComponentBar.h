@@ -30,9 +30,11 @@ public:
 	float GetBarValue();
 	void SetBarValue(float factor);
 	void SetBarColor(float r, float g, float b, float a);
+	void SetTexture(ResourceTexture* tex);
 
 public:
 	float currentValue = 0.0f, maxValue = 100.0f, minValue = 0.0f;
+	Color bar_color = { 1.0f, 1.0f,1.0f,1.0f };
 
 private:
 	ResourceTexture* barTexture = nullptr;
@@ -40,7 +42,6 @@ private:
 	float barScaleY = 0.8F, barScaleX = 1.0f;
 
 	float offsetX = 0.0f, offsetY = 0.0f;
-	Color bar_color = { 1.0f, 1.0f,1.0f,1.0f };
 };
 
 #endif // !_COMPONENT_BAR_H_

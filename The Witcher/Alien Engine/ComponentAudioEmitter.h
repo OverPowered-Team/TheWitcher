@@ -12,6 +12,7 @@ struct Bank;
 class __declspec(dllexport) ComponentAudioEmitter : public Component
 {
 	friend class GameObject;
+	friend class ResourceAnimatorController;
 public:
 	ComponentAudioEmitter(GameObject* parent);
 	~ComponentAudioEmitter();
@@ -22,6 +23,9 @@ public:
 	void Mute(bool mute);
 	void StartSound();
 	void StartSound(uint _event);
+	void StartSound(const char* event_name);
+	void StopSoundByName(const char* even_name);
+	void StopOwnSound();
 	u64 GetCurrentBank();
 	u32 GetWwiseIDFromString(const char* Wwise_name) const;
 	void SetSwitchState(const char* switch_group_id, const char* switch_state_id);

@@ -65,6 +65,21 @@ void ComponentAudioEmitter::StartSound(uint _event)
 	source->PlayEventByID(_event);
 }
 
+void ComponentAudioEmitter::StartSound(const char* event_name)
+{
+	source->PlayEventByName(event_name);
+}
+
+void ComponentAudioEmitter::StopSoundByName(const char* even_name)
+{
+	source->StopEventByName(even_name);
+}
+
+void ComponentAudioEmitter::StopOwnSound()
+{
+	source->StopEventByName(audio_name.c_str());
+}
+
 void ComponentAudioEmitter::UpdateSourcePos()
 {
 	ComponentTransform* transformation = game_object_attached->GetComponentTransform();

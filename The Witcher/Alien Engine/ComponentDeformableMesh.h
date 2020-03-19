@@ -12,6 +12,7 @@ class __declspec(dllexport) ComponentDeformableMesh : public ComponentMesh
 	friend class GameObject;
 	friend class ReturnZ;
 	friend class ResourceModel;
+	friend class ResourcePrefab;
 public:
 	ComponentDeformableMesh(GameObject* attach);
 	virtual ~ComponentDeformableMesh();
@@ -31,7 +32,8 @@ protected:
 
 private:
 	std::vector<ComponentBone*> bones;
-	u64 root_bone_id = 0;
+	GameObject* root_bone = nullptr;
+	u64 rootID = 0;
 
 	math::float4x4* bones_matrix = nullptr;
 	ComponentMaterial* material = nullptr;

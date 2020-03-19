@@ -76,11 +76,6 @@ bool ComponentCharacterController::CanJump()
 	return controller->canJump();
 }
 
-bool ComponentCharacterController::OnGround()
-{
-	return controller->onGround();
-}
-
 void ComponentCharacterController::SetRotation(const Quat rotation)
 {
 	body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, rotation));
