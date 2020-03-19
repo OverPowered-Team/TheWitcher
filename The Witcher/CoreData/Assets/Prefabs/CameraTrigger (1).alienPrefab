@@ -66,7 +66,7 @@
                             {
                                 "VarType": 3,
                                 "Name": "prev_camera_transition_time",
-                                "float": 2
+                                "float": 10
                             },
                             {
                                 "VarType": 12,
@@ -79,22 +79,22 @@
                             {
                                 "VarType": 3,
                                 "Name": "next_camera_distance",
-                                "float": 20
+                                "float": 19.5
                             },
                             {
                                 "VarType": 3,
                                 "Name": "next_camera_hor_angle",
-                                "float": 90
+                                "float": 126.5
                             },
                             {
                                 "VarType": 3,
                                 "Name": "next_camera_vert_angle",
-                                "float": 45
+                                "float": 40.5
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 2
+                                "Name": "next_camera_transition_time",
+                                "float": 10
                             },
                             {
                                 "VarType": 12,
@@ -124,7 +124,7 @@
                         "Position": [
                             0,
                             0,
-                            0.63671350479125977
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -141,6 +141,23 @@
                         "ID": "2677461716054280719"
                     },
                     {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            -1.5499999523162842
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
                         "Type": 29,
                         "ID": "15938743595386257186",
                         "ResourceID": "7753277895768345165",
@@ -152,23 +169,6 @@
                                 "Name": "collider_position",
                                 "int": 0
                             }
-                        ]
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": true,
-                        "Center": [
-                            0,
-                            0,
-                            -0.25
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            10,
-                            10,
-                            5
                         ]
                     }
                 ]
@@ -292,6 +292,75 @@
                 ]
             },
             {
+                "Name": "Middle",
+                "FamilyNumber": 2,
+                "ID": "15230655476176836104",
+                "ParentID": "14102857433973072269",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10843564036807663028"
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            10,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5573210067524856033",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
                 "Name": "Exit",
                 "FamilyNumber": 2,
                 "ID": "3697233053161320145",
@@ -311,7 +380,7 @@
                         "Position": [
                             0,
                             0,
-                            2.5
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -328,6 +397,23 @@
                         "ID": "5782659923740270129"
                     },
                     {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            1.5499999523162842
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
                         "Type": 29,
                         "ID": "16288559604443836332",
                         "ResourceID": "7753277895768345165",
@@ -337,25 +423,8 @@
                             {
                                 "VarType": 0,
                                 "Name": "collider_position",
-                                "int": 1
+                                "int": 2
                             }
-                        ]
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": true,
-                        "Center": [
-                            0,
-                            0,
-                            0.25
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            10,
-                            10,
-                            5
                         ]
                     }
                 ]

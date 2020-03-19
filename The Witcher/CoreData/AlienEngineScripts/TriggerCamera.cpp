@@ -89,8 +89,8 @@ bool TriggerCamera::PlayerMovedForward(int player_num) {
 	if (size < 2) {
 		return false;
 	}
-	return (registered_position[player_num][size - 2] == 0
-		&& registered_position[player_num][size - 1] == 1);
+	return (registered_position[player_num][size - 2] == 1
+		&& registered_position[player_num][size - 1] == 2);
 }
 
 bool TriggerCamera::PlayerMovedBackward(int player_num) {
