@@ -67,7 +67,7 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera_distance);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera_hor_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera_vert_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(   alien->prev_camera_transition_time);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(   alien->next_camera_transition_time);
 	SHOW_SEPARATOR();
 
 	return alien;

@@ -74,11 +74,11 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 		//TODO: Create a for that checks for all players
 		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
 			LOG("All players moved forward - Transition to next camera");
-			StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
+			StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
 		}
 		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
 			LOG("All players moved back - Transition to prev camera");
-			StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
+			StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
 		}
 	}
 }
