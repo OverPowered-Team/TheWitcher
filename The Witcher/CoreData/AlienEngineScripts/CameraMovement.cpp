@@ -11,6 +11,8 @@ CameraMovement::~CameraMovement()
 void CameraMovement::Start()
 {
     //Get the players in the scene
+    transform->SetGlobalPosition(CalculateCameraPos(hor_angle, vert_angle, distance));
+    LookAtMidPoint();
     SearchAndAssignPlayers();
     trg_offset = transform->GetGlobalPosition() - CalculateMidPoint();
 }
@@ -87,6 +89,9 @@ void CameraMovement::OnDrawGizmos()
 
     float3 mid_point = CalculateMidPoint();
     Gizmos::DrawWireSphere(mid_point, .15f, Color::Cyan(), 0.5F); // mid point
+
+    float3 cam_pos = CalculateCameraPos(hor_angle, vert_angle, distance);
+    Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
 
     Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 0.15f, Color::Green());
     Gizmos::DrawLine(mid_point, transform->GetGlobalPosition(), Color::Green());

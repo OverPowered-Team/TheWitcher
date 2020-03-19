@@ -42,6 +42,10 @@ public:
 	//float3 start_transition_pos;
 
 	float current_transition_time = 0.f;
+
+	float distance = 0.f;
+	float hor_angle = 0.f;
+	float vert_angle = 0.f;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
@@ -49,10 +53,10 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	// To show in inspector here
 	SHOW_TEXT("First parameters");
 	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraState, alien->state);
-	/*SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.x,0, 1);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.y, 0, 1);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.z, 0, 1);*/
-	//SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
+
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->distance, 0, 100);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->hor_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->vert_angle, -360.f, 360.f);
 
 	return alien;
 }
