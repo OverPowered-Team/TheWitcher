@@ -15,10 +15,11 @@ void PlayerController::Start()
 
 	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
+	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
-
+	c_spell->GetSystem()->StopEmmitter();
 
 	if (controller_index == 1) {
 		keyboard_move_up = SDL_SCANCODE_W;
