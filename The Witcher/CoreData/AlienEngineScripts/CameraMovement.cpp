@@ -11,10 +11,10 @@ CameraMovement::~CameraMovement()
 void CameraMovement::Start()
 {
     //Get the players in the scene
-    LookAtMidPoint();
     SearchAndAssignPlayers();
     trg_offset = CalculateCameraPos(hor_angle, vert_angle, distance);
     transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+    LookAtMidPoint();
 }
 
 void CameraMovement::Update()
@@ -90,11 +90,10 @@ void CameraMovement::OnDrawGizmos()
     float3 mid_point = CalculateMidPoint();
     Gizmos::DrawWireSphere(mid_point, .15f, Color::Cyan(), 0.5F); // mid point
 
-    float3 cam_pos = CalculateCameraPos(hor_angle, vert_angle, distance);
-    Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
+    float3 cam_pos = mid_point + CalculateCameraPos(hor_angle, vert_angle, distance);
+    Gizmos::DrawWireSphere(cam_pos, 0.15f, Color::Green());
 
-    Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 0.15f, Color::Green());
-    Gizmos::DrawLine(mid_point, transform->GetGlobalPosition(), Color::Green());
+    Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
 }
 
 void CameraMovement::SearchAndAssignPlayers()
