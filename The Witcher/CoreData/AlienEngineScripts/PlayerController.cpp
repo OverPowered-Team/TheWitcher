@@ -111,7 +111,7 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
-			animator->PlayState("Jump");
+			animator->PlayState("Air");
 			if (ccontroller->CanJump()) {
 				ccontroller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
@@ -146,7 +146,7 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
-			animator->PlayState("Jump");
+			animator->PlayState("Air");
 			if (ccontroller->CanJump()) {
 				ccontroller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
