@@ -164,7 +164,6 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	{
 		LOG("NO NEXT ATTACK");
 		current_attack = nullptr;
-		player_controller->animator->PlayState("Idle");
 		player_controller->state = PlayerController::PlayerState::IDLE;
 	}
 }
