@@ -17,6 +17,8 @@ void PlayerController::Start()
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
 	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
+	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+	
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
 	c_spell->GetSystem()->StopEmmitter();
@@ -93,6 +95,7 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
+			audio->StartSound("Hit_Sword");
 			can_move = false;
 		}
 
@@ -124,11 +127,17 @@ void PlayerController::Update()
 	{
 		c_run->GetSystem()->StartEmmitter();
 		can_move = true;
+
+		if (Time::GetGameTime() - timer >= delay_footsteps) {
+			timer = Time::GetGameTime();
+			audio->StartSound();
+		}
 		
 		if (Input::GetControllerButtonDown(controller_index, controller_attack)
 			|| Input::GetKeyDown(keyboard_light_attack)) {
 			animator->PlayState("Attack");
 			state = PlayerState::BASIC_ATTACK;
+			audio->StartSound("Hit_Sword");
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -184,11 +193,14 @@ void PlayerController::Update()
 
 	/*---------------KEYBOARD-----------------------*/
 
-	if (state == PlayerState::RUNNING && abs(player_data.currentSpeed) < 0.1F)
+	if (state == PlayerState::RUNNING && abs(player_data.currentSpeed) < 0.05F)
 		state = PlayerState::IDLE;
 
-	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.1F)
+	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.05F) {
 		state = PlayerState::RUNNING;
+		audio->StartSound();
+		timer = Time::GetGameTime();
+	}
 
 	if (state == PlayerState::JUMPING && controller->CanJump()) {
 		if (abs(player_data.currentSpeed) < 0.1F)

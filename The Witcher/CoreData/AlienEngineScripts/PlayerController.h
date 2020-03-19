@@ -77,10 +77,12 @@ public:
 	GameObject* p_spell = nullptr;
 	ComponentParticleSystem* c_spell = nullptr;
 
-
+	float delay_footsteps = 0.5f;
 private:
 
 	float angle = 0.0f;
+	float timer = 0.f;
+	ComponentAudioEmitter* audio = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
@@ -98,6 +100,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_attack);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_spell);
 	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
+
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 
 	return player;
 }
