@@ -16,14 +16,7 @@ void CameraMovement::Start()
 }
 
 void CameraMovement::Update()
-{
-    if (state == CameraState::DYNAMIC) {
-        LOG("dynamic camera");
-    }
-    if (state == CameraState::MOVING_TO_DYNAMIC) {
-        LOG("moving to dynamic");
-    }
-    
+{    
     switch (state) {
     case CameraState::DYNAMIC: {
         transform->SetGlobalPosition(diff_pos + CalculateMidPoint());
@@ -34,7 +27,6 @@ void CameraMovement::Update()
         current_transition_time += Time::GetDT();
         float3 camera_offset = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
         float3 trg_pos = CalculateMidPoint() + camera_offset;
-        LOG("Doing transition");
         if (current_transition_time >= curr_transition.transition_time) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
@@ -43,10 +35,8 @@ void CameraMovement::Update()
         }
         else {
             float3 curr_pos = transform->GetGlobalPosition();
-
-            float remaining_time = (curr_transition.transition_time - current_transition_time);
-            float3 curr_movement = (trg_pos - curr_pos) / remaining_time;
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + curr_movement);
+            //Lerp
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (current_transition_time / curr_transition.transition_time));
             LookAtMidPoint();
         }
         break;
@@ -92,7 +82,6 @@ void CameraMovement::OnDrawGizmos()
     float3 cam_pos = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
     Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
     Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
-    Gizmos::DrawLine(cam_pos, cam_pos + axis_cam.Normalized(), Color::Magenta());
 }
 
 void CameraMovement::SearchAndAssignPlayers()
@@ -119,29 +108,6 @@ float3 CameraMovement::CalculateMidPoint()
     if (players.size() == 0)
         return mid_pos;
     return mid_pos / players.size();
-}
-
-float3 CameraMovement::CalculateAxisMidPoint()
-{
-    float3 mid_pos(0, 0, 0);
-    axis_cam.Normalize();
-    for (std::map<GameObject*, PlayerState>::iterator it = players.begin(); it != players.end(); ++it)
-    {
-        mid_pos += it->first->transform->GetGlobalPosition();
-    }
-    //switch ((CameraAxis)axis)
-    //{
-    //case CameraAxis::X://X
-    //    return float3((mid_pos.x) * 0.5f, 0, 0);
-    //    break;
-    //case CameraAxis::Y://Y
-    //    return float3(0, (mid_pos.y) * 0.5f, 0);
-    //    break;
-    //case CameraAxis::Z://Z
-    //    return float3(0, 0, (mid_pos.z) * 0.5f);
-    //    break;
-    //}
-    return float3(((mid_pos.x)/num_curr_players) * (axis_cam.x), ((mid_pos.y)/ num_curr_players) * (axis_cam.y), (((mid_pos.z)*num_curr_players) * (axis_cam.z)));
 }
 
 Quat CameraMovement::RotationBetweenVectors(math::float3& start, math::float3& dest) // Include in MathGeoLib

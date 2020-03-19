@@ -17,6 +17,16 @@ void TriggerCamera::Start()
 	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 }
 
+void TriggerCamera::Update()
+{
+	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
+		ManageTransition(prev_camera);
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_2)) {
+		ManageTransition(next_camera);
+	}
+}
+
 void TriggerCamera::ManageTransition(TransitionInfo transition_info)
 {
 	if (cam_script != nullptr) {
@@ -63,14 +73,10 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 		//TODO: Create a for that checks for all players
 		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
 			LOG("All players moved forward - Transition to next camera");
-			cam_script->current_transition_time = 0.f;
-			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
 			ManageTransition(next_camera);
 		}
 		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
 			LOG("All players moved back - Transition to prev camera");
-			cam_script->current_transition_time = 0.f;
-			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
 			ManageTransition(prev_camera);
 		}
 	}

@@ -20,6 +20,7 @@ public:
 	TriggerCamera();
 	virtual ~TriggerCamera();
 	void Start() override;
+	void Update() override;//TODO: Remove
 	void ManageTransition(TransitionInfo transition_info);
 	
 	void RegisterMovement(int playerNum, int collider_position);

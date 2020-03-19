@@ -38,12 +38,8 @@ public:
 	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
 	float3 diff_pos;
-	float3 destination;
-	float t1 = 0.f;
-	CameraAxis axis = CameraAxis::X;
 	std::map<GameObject*, PlayerState> players;
 	uint num_curr_players = 0u;
-	float3 axis_cam;
 
 	float current_transition_time = 0.f;
 };
