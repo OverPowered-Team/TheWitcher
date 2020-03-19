@@ -554,3 +554,7 @@ void ParticleEmmitter::Play()
 	playing = true;
 }
 
+void ParticleEmmitter::SetCubeSize(float3 size)
+{
+	this->cubeSize = size;
+}

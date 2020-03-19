@@ -11,10 +11,12 @@
 #include "..\..\..\Alien Engine\ComponentMesh.h"
 #include "../../../Alien Engine/ComponentAudioEmitter.h"
 #include "..\..\..\Alien Engine\ComponentParticleSystem.h"
+#include "../../../Alien Engine/ComponentCharacterController.h"
 #include "..\..\..\Alien Engine\ComponentAnimator.h"
 #include "..\..\..\Alien Engine\ParticleSystem.h"
 #include "..\..\..\Alien Engine\ParticleEmitter.h"
 #include "..\..\..\Alien Engine\ComponentRigidBody.h"
+#include "..\..\..\Alien Engine\ComponentCharacterController.h"
 #include "..\..\..\Alien Engine\ComponentCollider.h"
 #include "..\..\..\Alien Engine\ComponentBoxCollider.h"
 #include "..\..\..\Alien Engine\ComponentCapsuleCollider.h"
@@ -85,6 +87,17 @@ static char* helper = nullptr;
 #define SHOW_VOID_FUNCTION(FUNCTION, CONTEXT_) ComponentScript::ShowVoidFunction(std::bind(&FUNCTION, CONTEXT_), #FUNCTION)
 // more info about LAMBDA, allow us to convert functions with arguments to void funtion pointer. https://thispointer.com/c11-lambda-how-to-capture-local-variables-inside-lambda/
 #define SHOW_LAMBDA_FUNCTION(FUNCTION, NAME, CONTEXT_, ...) ComponentScript::ShowVoidFunction([CONTEXT_]() -> void { FUNCTION(__VA_ARGS__); }, NAME)
+
+// -------------HELPERS INSPECTOR----------------- \\
+/*--------------------text help--------------------*/
+#define SHOW_TEXT(TEXT_) ComponentScript::InspectorText(TEXT_)
+/*--------------------separator help--------------------*/
+#define SHOW_SEPARATOR() ComponentScript::InspectorSeparator()
+/*--------------------spacing help--------------------*/
+#define SHOW_SPACING() ComponentScript::InspectorSpacing()
+/*--------------------tooltip help--------------------*/
+#define SHOW_TOOLTIP(TOOLTIP_) ComponentScript::InspectorToolTip(TOOLTIP_)
+// -------------HELPERS INSPECTOR----------------- \\
 // ------------INSPECTOR MACROS----------------\\
 
 #define VARAIBLE_TO_STRING(VAR_) #VAR_

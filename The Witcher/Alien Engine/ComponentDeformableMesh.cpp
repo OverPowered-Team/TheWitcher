@@ -47,7 +47,7 @@ ComponentDeformableMesh::~ComponentDeformableMesh()
 
 void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)
 {
-	root_bone_id = root->game_object_attached->ID;
+	root_bone = root->game_object_attached;
 		
 	AttachBone(root);
 	
@@ -59,8 +59,11 @@ void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)
 
 void ComponentDeformableMesh::AttachSkeleton()
 {
-	if (root_bone_id != 0)
-		AttachSkeleton(App->objects->GetGameObjectByID(root_bone_id)->transform);
+	if (rootID != 0) {
+		root_bone = App->objects->GetGameObjectByID(rootID);
+		if (root_bone != nullptr)
+			AttachSkeleton(root_bone->transform);
+	}
 }
 
 void ComponentDeformableMesh::AttachBone(ComponentTransform* bone_transform)
@@ -125,7 +128,7 @@ void ComponentDeformableMesh::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("DrawOBB", draw_OBB);
 	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetString("MeshID", mesh ? std::to_string(mesh->GetID()).data() : std::to_string(0).data());
-	to_save->SetString("RootBoneID", root_bone_id != 0 ? std::to_string(root_bone_id).data() : std::to_string(0).data());
+	to_save->SetString("RootBoneID", root_bone != nullptr ? std::to_string(root_bone->ID).data() : std::to_string(0).data());
 	to_save->SetBoolean("Enabled", enabled);
 }
 
@@ -138,7 +141,7 @@ void ComponentDeformableMesh::LoadComponent(JSONArraypack* to_load)
 	draw_AABB = to_load->GetBoolean("DrawAABB");
 	draw_OBB = to_load->GetBoolean("DrawOBB");
 	enabled = to_load->GetBoolean("Enabled");
-	root_bone_id = std::stoull(to_load->GetString("RootBoneID"));
+	rootID = std::stoull(to_load->GetString("RootBoneID"));
 	ID = std::stoull(to_load->GetString("ID"));
 	u64 mesh_ID = std::stoull(to_load->GetString("MeshID"));
 	if (mesh_ID != 0)

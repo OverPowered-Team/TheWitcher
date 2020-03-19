@@ -102,6 +102,7 @@ public:
 	void SetRelativeRotation(float3 rotation);
 	void SetScale(float3 scale);
 
+	void SetCubeSize(float3 size);
 	// ---------------------------
 
 	// ----- Get Emmitter -----

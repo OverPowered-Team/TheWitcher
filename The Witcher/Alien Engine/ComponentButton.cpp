@@ -308,7 +308,21 @@ bool ComponentButton::DrawInspector()
 			if (ImGui::TreeNode("Functions Added")) {
 				if (ImGui::TreeNode("On Click Added")) {
 					for (auto item = listenersOnClick.begin(); item != listenersOnClick.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							listenersOnClick.erase(item);
+							ImGui::PopStyleColor(3);
+							break;
+							//delete function
+						}
+						ImGui::PopStyleColor(3);
 					}
 
 					ImGui::TreePop();
@@ -316,7 +330,22 @@ bool ComponentButton::DrawInspector()
 				ImGui::Spacing();
 				if (ImGui::TreeNode("On Hover Added")) {
 					for (auto item = listenersOnHover.begin(); item != listenersOnHover.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							listenersOnHover.erase(item);
+							ImGui::PopStyleColor(3);
+							break;
+							//delete function
+						}
+						ImGui::PopStyleColor(3);
+
 					}
 
 					ImGui::TreePop();
@@ -324,7 +353,21 @@ bool ComponentButton::DrawInspector()
 				ImGui::Spacing();
 				if (ImGui::TreeNode("On Pressed Added")) {
 					for (auto item = listenersOnClickRepeat.begin(); item != listenersOnClickRepeat.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnClickRepeat.erase(item);
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopStyleColor(3);
 					}
 
 					ImGui::TreePop();
@@ -332,7 +375,21 @@ bool ComponentButton::DrawInspector()
 				ImGui::Spacing();
 				if (ImGui::TreeNode("On Release Added")) {
 					for (auto item = listenersOnRelease.begin(); item != listenersOnRelease.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnRelease.erase(item);
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopStyleColor(3);
 					}
 
 					ImGui::TreePop();

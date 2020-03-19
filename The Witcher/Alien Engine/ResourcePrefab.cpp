@@ -275,8 +275,18 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 		for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
 		{
 			ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
-			if (def_mesh)
-				def_mesh->AttachSkeleton();
+			if (def_mesh) {
+				if (def_mesh->rootID != 0) {
+					if (list_num != -1) {
+						def_mesh->root_bone = parent->children[list_num]->GetGameObjectByID(def_mesh->rootID);
+					}
+					else {
+						def_mesh->root_bone = parent->children.back()->GetGameObjectByID(def_mesh->rootID);
+					}
+					if (def_mesh->root_bone != nullptr)
+						def_mesh->AttachSkeleton(def_mesh->root_bone->transform);
+				}
+			}
 		}
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();

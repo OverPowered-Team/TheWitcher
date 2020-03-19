@@ -21,12 +21,6 @@ public:
 
 private:
 
-	void OnPlay() override; 
-	void OnPause() override;
-	void OnStop() override;
-	void OnEmitterPlay();
-	void OnEmitterStop();
-
 	void PreUpdate() override; 
 	void Update() override;
 	void PostUpdate() override;
@@ -60,6 +54,12 @@ public:
 	void Play();
 	void Pause();
 	void Restart(); 
+
+	void OnPlay() override;
+	void OnPause() override;
+	void OnStop() override;
+	void OnEmitterPlay();
+	void OnEmitterStop();
 
 private:
 

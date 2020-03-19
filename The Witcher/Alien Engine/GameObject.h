@@ -65,6 +65,7 @@ class __declspec(dllexport) GameObject
 	friend class ResourceMesh;
 	friend class ResourcePrefab;
 	friend class ResourceTexture;
+	friend class ResourceAnimatorController;
 	friend class ModuleObjects;
 	friend class ComponentImage;
 	friend class ComponentSlider;
