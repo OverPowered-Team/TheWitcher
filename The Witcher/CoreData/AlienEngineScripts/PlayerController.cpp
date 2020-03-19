@@ -271,3 +271,8 @@ void PlayerController::OnAnimationEnd(const char* name) {
 			state = PlayerState::RUNNING;
 	}
 }
+
+void PlayerController::PlaySpell()
+{
+	c_spell->Restart();
+}
