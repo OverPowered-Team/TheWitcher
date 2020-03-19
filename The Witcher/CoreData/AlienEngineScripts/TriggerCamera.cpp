@@ -1,5 +1,7 @@
 #include "TriggerCamera.h"
 #include "../../Alien Engine/StaticTween.h"
+#include "CameraEnterExit.h"
+#include "CameraMovement.h"
 
 TriggerCamera::TriggerCamera() : Alien()
 {
@@ -13,57 +15,28 @@ void TriggerCamera::Start()
 {
 	camera = Camera::GetCurrentCamera()->game_object_attached;
 	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
-	t1 = Time::GetGameTime();
 }
 
 void TriggerCamera::Update()
 {
-	/*if (info_to_cam.tp_players && cam_script != nullptr && player_counter == 1)
-	{
-		ManageTransition();
-		TeleportTheRestOfPlayers();
+	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
+		StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
 	}
-	else if (cam_script != nullptr && player_counter == cam_script->num_curr_players)
-	{
-		ManageTransition();
-	}*/
+	if (Input::GetKeyDown(SDL_SCANCODE_2)) {
+		StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
+	}
 }
 
-void TriggerCamera::ManageTransition(bool normal_way)
+void TriggerCamera::StartTransition(TransitionInfo transition_info)
 {
-	/*if (IsCameraDifferent())
-	{*/
-	InfoCamera* info = nullptr;
-	if (normal_way)
-		info = &info_to_cam;
-	else
-		info = &info_from_cam;
-
-	if (state == ToState::DYNAMIC) {
-		if (cam_script != nullptr) {
-			cam_script->destination = cam_script->CalculateCameraPos(info->hor_angle, info->vert_angle, info->distance);
-			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
-		}
-		else {
-			LOG("THERE IS NOT CAMERA MOVEMENT SCRIPT IN CURRENT CAMERA");
-		}
-	}
-	else if (state == ToState::STATIC) {
-		if (static_pos != nullptr) {
-			cam_script->destination = static_pos->transform->GetGlobalPosition();
-			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
-		}
-		else {
-			LOG("Static object is NULL");
-		}
-	}
 	if (cam_script != nullptr) {
-		//InterChangeInfoWithCamera();
-		Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
-		cam_script->t1 = Time::GetGameTime();
+		cam_script->current_transition_time = 0.f;
+		cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+		cam_script->curr_transition = transition_info;
+		cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+		//cam_script->start_transition_pos = camera->transform->GetGlobalPosition();
+		LOG("Started transition");
 	}
-	/*}
-	player_counter = 0;*/
 }
 
 void TriggerCamera::OnDrawGizmos()
@@ -72,75 +45,59 @@ void TriggerCamera::OnDrawGizmos()
 	GameObject* exit = game_object->GetChild("Exit");
 	if (enter != nullptr && exit != nullptr) {
 		Gizmos::DrawLine(enter->transform->GetGlobalPosition(), exit->transform->GetGlobalPosition(), Color::Red());
-		Gizmos::DrawSphere(exit->transform->GetGlobalPosition(), 0.3f, Color::Red());
 	}
 
-	switch (state)
+	if (cam_script == nullptr) {
+		camera = Camera::GetCurrentCamera()->game_object_attached;
+		cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+	}
+	VisualizeCameraTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time), Color::Red());
+	VisualizeCameraTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time), Color::Green());
+}
+
+void TriggerCamera::VisualizeCameraTransition (TransitionInfo transition_info, Color color) {
+	float3 camera_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+	Gizmos::DrawLine(transform->GetGlobalPosition(), camera_pos, color); // line mid -> future camera pos
+	Gizmos::DrawSphere(camera_pos, 0.15f, color);
+}
+
+void TriggerCamera::RegisterMovement(int player_num, int collider_position)
+{
+	//TODO: Remove this workaround when we fix the bug that collider enters 2 times on OnTriggerEnter
+	//INFO: This is done to avoid duplicates
+	int size = registered_position[player_num].size();
+	if (!(size > 0
+		&& registered_position[player_num][size - 1] == collider_position))
 	{
-	case TriggerCamera::ToState::DYNAMIC: {
-		if (cam_script == nullptr) {
-			camera = Camera::GetCurrentCamera()->game_object_attached;
-			cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+		LOG("entered collider: %i", collider_position);
+		registered_position[player_num].push_back(collider_position);
+
+		//TODO: Create a for that checks for all players
+		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
+			LOG("All players moved forward - Transition to next camera");
+			StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
 		}
-		float3 cam_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(info_to_cam.hor_angle, info_to_cam.vert_angle, info_to_cam.distance, false);
-		Gizmos::DrawLine(transform->GetGlobalPosition(), cam_pos, Color::Red()); // line mid -> future camera pos
-		Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
-		break;
-	}
-	case TriggerCamera::ToState::STATIC: {
-		if (static_pos != nullptr)
-			Gizmos::DrawSphere(static_pos->transform->GetGlobalPosition(), 0.5, Color::Purple());
-		break;
-	}
-	case TriggerCamera::ToState::AXIS_NOT_IMPLEMENTED:
-		break;
-	default:
-		break;
-	}
-
-	
-	//Gizmos::DrawLine(cam_pos, cam_pos + axis_cam.Normalized(), Color::Magenta());
-}
-
-void TriggerCamera::InterChangeInfoWithCamera()
-{
-	// TODO: update to new STATIC MODE
-	info_from_cam.hor_angle = cam_script->top_angle;
-	info_from_cam.vert_angle = cam_script->vertical_angle;
-	info_from_cam.distance = cam_script->distance;
-	/*if (ftime)
-	{*/
-	/*ftime = false;
-	}
-	cam_script->top_angle = info_to_cam.hor_angle;
-	cam_script->vertical_angle = info_to_cam.vert_angle;
-	cam_script->distance = info_to_cam.distance;*/
-}
-
-void TriggerCamera::TeleportTheRestOfPlayers()
-{
-	float3 first_player_pos = info_to_cam.first_player->transform->GetGlobalPosition();
-	GameObject** get_players = nullptr;
-	uint size;
-	size = GameObject::FindGameObjectsWithTag("Player", &get_players);
-	for (int i = 0; i < size; i++) {
-		GameObject* g = get_players[i];
-		if (g != info_to_cam.first_player)
-		{
-			float3 dist(info_to_cam.tp_distance, 0, 0); //Delete this info?
-			g->transform->SetGlobalPosition(first_player_pos + dist);
+		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
+			LOG("All players moved back - Transition to prev camera");
+			StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
 		}
 	}
-	info_to_cam.first_player = nullptr;
 }
 
-bool TriggerCamera::IsCameraDifferent()
-{
-	if (info_to_cam.hor_angle == cam_script->top_angle &&
-		info_to_cam.vert_angle == cam_script->vertical_angle &&
-		info_to_cam.distance == cam_script->distance)
-	{
+bool TriggerCamera::PlayerMovedForward(int player_num) {
+	int size = registered_position[player_num].size();
+	if (size < 2) {
 		return false;
 	}
-	return true;
+	return (registered_position[player_num][size - 2] == 1
+		&& registered_position[player_num][size - 1] == 2);
+}
+
+bool TriggerCamera::PlayerMovedBackward(int player_num) {
+	int size = registered_position[player_num].size();
+	if (size < 2) {
+		return false;
+	}
+	return (registered_position[player_num][size - 2] == 1
+		&& registered_position[player_num][size - 1] == 0);
 }

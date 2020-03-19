@@ -47,7 +47,7 @@ public:
 	PlayerData player_data;
 
 	ComponentAnimator* animator = nullptr;
-	ComponentCharacterController* ccontroller = nullptr;
+	ComponentCharacterController* controller = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
 	
@@ -80,6 +80,10 @@ public:
 	GameObject* p_attack = nullptr;
 	ComponentParticleSystem* c_attack = nullptr;
 
+	GameObject* p_spell = nullptr;
+	ComponentParticleSystem* c_spell = nullptr;
+
+
 private:
 
 	float angle = 0.0f;
@@ -98,6 +102,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_run);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_attack);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_spell);
 	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
 
 	return player;

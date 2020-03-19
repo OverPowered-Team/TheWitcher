@@ -24,16 +24,20 @@ void TriggerEnvironment::Update()
 
 void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 {
-	emitter->SetSwitchState("Env_Lvl1", GetNameByEnum(environment).c_str());
-	emitter->StartSound();
-	LOG("ENTER");
+	if (emitter) {
+		emitter->SetSwitchState("Env_Lvl1", GetNameByEnum(environment).c_str());
+		emitter->StartSound();
+		LOG("ENTER");
+	}
 }
 
 void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 {
-	emitter->SetSwitchState("Env_Lvl1", "Quiet");
-	LOG("EXIT");
-	emitter->StartSound();
+	if (emitter) {
+		emitter->SetSwitchState("Env_Lvl1", "Quiet");
+		LOG("EXIT");
+		emitter->StartSound();
+	}
 }
 
 std::string TriggerEnvironment::GetNameByEnum(Environment mat)

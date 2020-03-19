@@ -12,15 +12,15 @@ PlayerController::~PlayerController()
 void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	ccontroller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
-	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
+	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 
 	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
+	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
-
+	c_spell->GetSystem()->StopEmmitter();
 
 	if (controller_index == 1) {
 		keyboard_move_up = SDL_SCANCODE_W;
@@ -121,9 +121,9 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
-			animator->PlayState("Jump");
-			if (ccontroller->CanJump()) {
-				ccontroller->Jump(transform->up * player_data.jump_power);
+			animator->PlayState("Air");
+			if (controller->CanJump()) {
+				controller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
 			}
 		}
@@ -162,9 +162,9 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
-			animator->PlayState("Jump");
-			if (ccontroller->CanJump()) {
-				ccontroller->Jump(transform->up * player_data.jump_power);
+			animator->PlayState("Air");
+			if (controller->CanJump()) {
+				controller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
 			}
 		}
@@ -173,7 +173,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
 		//c_attack->GetSystem()->Restart();
-		ccontroller->SetWalkDirection(float3::zero());
+		controller->SetWalkDirection(float3::zero());
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -187,7 +187,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::JUMPING:
 		c_run->GetSystem()->StopEmmitter();
 		can_move = true;
-		if (ccontroller->CanJump())
+		if (controller->CanJump())
 			animator->SetBool("air", false);
 		break;
 	case PlayerController::PlayerState::DASHING:
@@ -196,7 +196,7 @@ void PlayerController::Update()
 		break;
 	case PlayerController::PlayerState::CASTING:
 		c_run->GetSystem()->StopEmmitter();
-		ccontroller->SetWalkDirection(float3::zero());
+		controller->SetWalkDirection(float3::zero());
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
@@ -213,7 +213,7 @@ void PlayerController::Update()
 	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.1F)
 		state = PlayerState::RUNNING;
 
-	if (state == PlayerState::JUMPING && ccontroller->CanJump()) {
+	if (state == PlayerState::JUMPING && controller->CanJump()) {
 		if (abs(player_data.currentSpeed) < 0.1F)
 			state = PlayerState::IDLE;
 		if (abs(player_data.currentSpeed) > 0.1F)
@@ -238,16 +238,16 @@ void PlayerController::HandleMovement(float2 joystickInput)
 	if (abs(joystickInput.x) >= stick_threshold || abs(joystickInput.y) >= stick_threshold)
 	{
 		player_data.currentSpeed = (player_data.movementSpeed * joystickIntensity * Time::GetDT());
-		ccontroller->SetRotation(rot);
+		controller->SetRotation(rot);
 	}
 
 	if (state == PlayerState::DASHING)
 	{
-		ccontroller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT());
+		controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT());
 	}
 	else
 	{
-		ccontroller->SetWalkDirection(vector * player_data.currentSpeed);
+		controller->SetWalkDirection(vector * player_data.currentSpeed);
 	}
 
 	animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
