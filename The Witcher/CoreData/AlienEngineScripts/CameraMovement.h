@@ -2,6 +2,7 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "TriggerCamera.h"
 
 class ALIEN_ENGINE_API CameraMovement : public Alien {
 public:
@@ -11,7 +12,7 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, STATIC, MOVING_TO_STATIC, MOVING_TO_DYNAMIC, AXIS,
+		DYNAMIC, MOVING_TO_DYNAMIC
 		);
 	enum (
 		CameraAxis,
@@ -31,12 +32,10 @@ public:
 	float3 CalculateMidPoint();
 	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
-	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst, bool with_mid_point = true);
+	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
 	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
-	float top_angle = 0.f;
-	float vertical_angle = 0.f;
-	float distance = 5.f;
+	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
 	float3 diff_pos;
 	float3 destination;
@@ -54,9 +53,6 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	// To show in inspector here
 	SHOW_TEXT("First parameters");
 	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraState, alien->state);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->top_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->vertical_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->distance);
 	/*SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.x,0, 1);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.y, 0, 1);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->axis_cam.z, 0, 1);*/

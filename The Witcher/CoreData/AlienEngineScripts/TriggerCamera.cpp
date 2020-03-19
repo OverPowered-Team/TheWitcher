@@ -1,6 +1,7 @@
 #include "TriggerCamera.h"
 #include "../../Alien Engine/StaticTween.h"
 #include "CameraEnterExit.h"
+#include "CameraMovement.h"
 
 TriggerCamera::TriggerCamera() : Alien()
 {
@@ -14,62 +15,16 @@ void TriggerCamera::Start()
 {
 	camera = Camera::GetCurrentCamera()->game_object_attached;
 	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
-	t1 = Time::GetGameTime();
 }
 
-void TriggerCamera::Update()
+void TriggerCamera::ManageTransition(TransitionInfo transition_info)
 {
-	/*if (info_to_cam.tp_players && cam_script != nullptr && player_counter == 1)
-	{
-		ManageTransition();
-		TeleportTheRestOfPlayers();
-	}
-	else if (cam_script != nullptr && player_counter == cam_script->num_curr_players)
-	{
-		ManageTransition();
-	}*/
-}
-
-void TriggerCamera::ManageTransition(bool normal_way)
-{
-	/*if (IsCameraDifferent())
-	{*/
-	InfoCamera* info = nullptr;
-	if (normal_way)
-		info = &prev_camera;
-	else
-		info = &next_camera;
-
-	if (state == ToState::DYNAMIC) {
-		if (cam_script != nullptr) {
-			cam_script->destination = cam_script->CalculateCameraPos(info->hor_angle, info->vert_angle, info->distance);
-			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
-		}
-		else {
-			LOG("THERE IS NOT CAMERA MOVEMENT SCRIPT IN CURRENT CAMERA");
-		}
-	}
-	else if (state == ToState::STATIC) {
-		if (static_pos != nullptr) {
-			cam_script->destination = static_pos->transform->GetGlobalPosition();
-			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
-		}
-		else {
-			LOG("Static object is NULL");
-		}
-	}
 	if (cam_script != nullptr) {
 		cam_script->current_transition_time = 0.f;
 		cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
-		cam_script->top_angle = info->hor_angle;
-		cam_script->vertical_angle = info->vert_angle;
-		cam_script->distance = info->distance;
-		//InterChangeInfoWithCamera();
-		//Tween::TweenMoveTo(camera, cam_script->destination, 2, Tween::linear);
-		//cam_script->t1 = Time::GetGameTime();
+		cam_script->curr_transition = transition_info;
+		LOG("Started transition");
 	}
-	/*}
-	player_counter = 0;*/
 }
 
 void TriggerCamera::OnDrawGizmos()
@@ -78,71 +33,45 @@ void TriggerCamera::OnDrawGizmos()
 	GameObject* exit = game_object->GetChild("Exit");
 	if (enter != nullptr && exit != nullptr) {
 		Gizmos::DrawLine(enter->transform->GetGlobalPosition(), exit->transform->GetGlobalPosition(), Color::Red());
-		Gizmos::DrawSphere(exit->transform->GetGlobalPosition(), 0.3f, Color::Red());
 	}
 
-	switch (state)
-	{
-	case TriggerCamera::ToState::DYNAMIC: {
-		if (cam_script == nullptr) {
-			camera = Camera::GetCurrentCamera()->game_object_attached;
-			cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
-		}
-		float3 cam_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.distance, false);
-		Gizmos::DrawLine(transform->GetGlobalPosition(), cam_pos, Color::Red()); // line mid -> future camera pos
-		Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
-		break;
+	if (cam_script == nullptr) {
+		camera = Camera::GetCurrentCamera()->game_object_attached;
+		cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 	}
-	case TriggerCamera::ToState::STATIC: {
-		if (static_pos != nullptr)
-			Gizmos::DrawSphere(static_pos->transform->GetGlobalPosition(), 0.5, Color::Purple());
-		break;
-	}
-	case TriggerCamera::ToState::AXIS_NOT_IMPLEMENTED:
-		break;
-	default:
-		break;
-	}
-
-	
-	//Gizmos::DrawLine(cam_pos, cam_pos + axis_cam.Normalized(), Color::Magenta());
+	VisualizeCameraTransition(prev_camera, Color::Red());
+	VisualizeCameraTransition(next_camera, Color::Green());
 }
 
-void TriggerCamera::InterChangeInfoWithCamera()
-{
-	next_camera.hor_angle = cam_script->top_angle;
-	next_camera.vert_angle = cam_script->vertical_angle;
-	next_camera.distance = cam_script->distance;
+void TriggerCamera::VisualizeCameraTransition (TransitionInfo transition_info, Color color) {
+	float3 camera_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+	Gizmos::DrawLine(transform->GetGlobalPosition(), camera_pos, color); // line mid -> future camera pos
+	Gizmos::DrawSphere(camera_pos, 0.15f, color);
 }
 
-bool TriggerCamera::IsCameraDifferent()
-{
-	if (prev_camera.hor_angle == cam_script->top_angle &&
-		prev_camera.vert_angle == cam_script->vertical_angle &&
-		prev_camera.distance == cam_script->distance)
-	{
-		return false;
-	}
-	return true;
-}
-
-void TriggerCamera::RegisterMovement(int playerNum, int collider_position)
+void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 {
 	//TODO: Remove this workaround when we fix the bug that collider enters 2 times on OnTriggerEnter
 	//INFO: This is done to avoid duplicates
-	int size = registered_position[playerNum].size();
+	int size = registered_position[player_num].size();
 	if (!(size > 0
-		&& registered_position[playerNum][size - 1] == collider_position))
+		&& registered_position[player_num][size - 1] == collider_position))
 	{
 		LOG("entered collider: %i", collider_position);
-		registered_position[playerNum].push_back(collider_position);
+		registered_position[player_num].push_back(collider_position);
 
 		//TODO: Create a for that checks for all players
-		if (PlayerMovedForward(0)/* && PlayerMovedForward(1)*/) {
-			LOG("All players forward");
+		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
+			LOG("All players moved forward - Transition to next camera");
+			cam_script->current_transition_time = 0.f;
+			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+			ManageTransition(next_camera);
 		}
-		if (PlayerMovedBackward(0) /*&& PlayerMovedBackward(1)*/) {
-			LOG("All players back");
+		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
+			LOG("All players moved back - Transition to prev camera");
+			cam_script->current_transition_time = 0.f;
+			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+			ManageTransition(prev_camera);
 		}
 	}
 }

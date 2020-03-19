@@ -10,59 +10,47 @@ CameraMovement::~CameraMovement()
 
 void CameraMovement::Start()
 {
-    transform->SetGlobalPosition(CalculateCameraPos(top_angle, vertical_angle, distance));
-    LookAtMidPoint();
-
-    diff_pos = transform->GetGlobalPosition() - CalculateMidPoint();
     //Get the players in the scene
     SearchAndAssignPlayers();
+    diff_pos = transform->GetGlobalPosition() - CalculateMidPoint();
 }
 
 void CameraMovement::Update()
 {
+    if (state == CameraState::DYNAMIC) {
+        LOG("dynamic camera");
+    }
+    if (state == CameraState::MOVING_TO_DYNAMIC) {
+        LOG("moving to dynamic");
+    }
+    
     switch (state) {
-    case CameraState::DYNAMIC:
+    case CameraState::DYNAMIC: {
         transform->SetGlobalPosition(diff_pos + CalculateMidPoint());
         break;
-    case CameraState::STATIC:
+    }
     case CameraState::MOVING_TO_DYNAMIC:
     {
         current_transition_time += Time::GetDT();
-        float3 trg_pos = CalculateCameraPos(top_angle, vertical_angle, distance, true);
-        if (current_transition_time >= 2.f) {
+        float3 camera_offset = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
+        float3 trg_pos = CalculateMidPoint() + camera_offset;
+        LOG("Doing transition");
+        if (current_transition_time >= curr_transition.transition_time) {
+            LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
+            diff_pos = camera_offset;
             state = CameraState::DYNAMIC;
         }
         else {
             float3 curr_pos = transform->GetGlobalPosition();
 
-            float remaining_time = (2.f - current_transition_time);
+            float remaining_time = (curr_transition.transition_time - current_transition_time);
             float3 curr_movement = (trg_pos - curr_pos) / remaining_time;
             transform->SetGlobalPosition(transform->GetGlobalPosition() + curr_movement);
             LookAtMidPoint();
         }
         break;
     }
-    case CameraState::MOVING_TO_STATIC:
-    {
-        float3 curr_pos = transform->GetGlobalPosition();
-        if (Time::GetGameTime() - t1 >= 2.f)
-        {
-            LOG("cambio");
-            if (state == CameraState::MOVING_TO_DYNAMIC)
-                state = CameraState::DYNAMIC;
-            else if (state == CameraState::MOVING_TO_STATIC)
-                state = CameraState::STATIC;
-            diff_pos = transform->GetGlobalPosition() - CalculateMidPoint();
-            transform->SetGlobalPosition(diff_pos + CalculateMidPoint());
-            t1 = 0.f;
-        }
-        LookAtMidPoint();
-        break;
-    }       
-    case CameraState::AXIS:
-        transform->SetGlobalPosition(CalculateCameraPos(top_angle, vertical_angle, distance) + CalculateAxisMidPoint());
-        break;
     }
 }
 
@@ -85,15 +73,12 @@ void CameraMovement::LookAtMidPoint()
     transform->SetGlobalRotation(rot2 * rot1);
 }
 
-float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst, bool with_mid_point)
+float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst)
 {
     float angle1 = math::DegToRad(ang1);
     float angle2 = math::DegToRad(ang2);
-
-    if (with_mid_point)
-        return CalculateMidPoint() + float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
-    else
-        return float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
+    
+    return float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
 }
 
 void CameraMovement::OnDrawGizmos()
@@ -104,7 +89,7 @@ void CameraMovement::OnDrawGizmos()
     float3 mid_point = CalculateMidPoint();
     Gizmos::DrawWireSphere(mid_point, .15f, Color::Cyan(), 0.5F); // mid point
 
-    float3 cam_pos = CalculateCameraPos(top_angle, vertical_angle, distance);
+    float3 cam_pos = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
     Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
     Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
     Gizmos::DrawLine(cam_pos, cam_pos + axis_cam.Normalized(), Color::Magenta());
