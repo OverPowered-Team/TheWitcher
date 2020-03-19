@@ -31,7 +31,7 @@ void UltiBar::Update()
 		ultibar_charged->SetEnable(true);
 	}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_P))
+	if (Input::GetKeyDown(SDL_SCANCODE_0))
 	{
 		ultibar->SetEnable(true);
 		normal_ulti->SetBarValue(0);

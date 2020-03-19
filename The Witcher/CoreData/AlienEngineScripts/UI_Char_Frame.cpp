@@ -42,32 +42,32 @@ void UI_Char_Frame::Start()
 
 void UI_Char_Frame::Update()
 {
-	if (Input::GetKeyRepeat(SDL_SCANCODE_D))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_P))
 	{
 		LifeChange(5);
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_A))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_O))
 	{
 		LifeChange(-5);
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_W))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_L))
 	{
 		ManaChange(5);
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_Q))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_K))
 	{
 		ManaChange(-5);
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_X))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_M))
 	{
 		XpChange(5);
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_Z))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_N))
 	{
 		XpChange(-5);
 	}
