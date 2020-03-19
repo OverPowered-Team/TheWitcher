@@ -19,7 +19,7 @@ void UltiBar::Start()
 
 void UltiBar::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_SPACE))
+	if (Input::GetKeyDown(SDL_SCANCODE_7))
 	{
 		normal_ulti->SetBarValue(normal_ulti->GetBarValue() + 0.1f);
 	}
