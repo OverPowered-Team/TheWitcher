@@ -157,7 +157,7 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
-		//c_attack->GetSystem()->Restart();
+		c_attack->GetSystem()->Restart();
 		controller->SetWalkDirection(float3::zero());
 		can_move = false;
 		break;
