@@ -33,6 +33,7 @@ void TriggerCamera::ManageTransition(TransitionInfo transition_info)
 		cam_script->current_transition_time = 0.f;
 		cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
 		cam_script->curr_transition = transition_info;
+		cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
 		LOG("Started transition");
 	}
 }

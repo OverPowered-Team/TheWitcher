@@ -12,25 +12,23 @@ void CameraMovement::Start()
 {
     //Get the players in the scene
     SearchAndAssignPlayers();
-    diff_pos = transform->GetGlobalPosition() - CalculateMidPoint();
+    trg_offset = transform->GetGlobalPosition() - CalculateMidPoint();
 }
 
 void CameraMovement::Update()
 {    
     switch (state) {
     case CameraState::DYNAMIC: {
-        transform->SetGlobalPosition(diff_pos + CalculateMidPoint());
+        transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
         break;
     }
     case CameraState::MOVING_TO_DYNAMIC:
     {
         current_transition_time += Time::GetDT();
-        float3 camera_offset = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
-        float3 trg_pos = CalculateMidPoint() + camera_offset;
+        float3 trg_pos = CalculateMidPoint() + trg_offset;
         if (current_transition_time >= curr_transition.transition_time) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
-            diff_pos = camera_offset;
             state = CameraState::DYNAMIC;
         }
         else {
@@ -73,15 +71,19 @@ float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, 
 
 void CameraMovement::OnDrawGizmos()
 {
-    if (players.size() < 2)
+    if (players.size() < 2) {
         SearchAndAssignPlayers();
+    }
 
     float3 mid_point = CalculateMidPoint();
     Gizmos::DrawWireSphere(mid_point, .15f, Color::Cyan(), 0.5F); // mid point
 
-    float3 cam_pos = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
-    Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
-    Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
+    Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 0.15f, Color::Green());
+    Gizmos::DrawLine(mid_point, transform->GetGlobalPosition(), Color::Green());
+
+    //float3 cam_pos = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
+    //Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
+    //Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
 }
 
 void CameraMovement::SearchAndAssignPlayers()

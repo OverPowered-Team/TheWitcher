@@ -30,16 +30,15 @@ public:
 	void OnDrawGizmos();
 	void SearchAndAssignPlayers();
 	float3 CalculateMidPoint();
-	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
 	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
 	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
 	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
-	float3 diff_pos;
 	std::map<GameObject*, PlayerState> players;
 	uint num_curr_players = 0u;
+	float3 trg_offset;
 
 	float current_transition_time = 0.f;
 };
