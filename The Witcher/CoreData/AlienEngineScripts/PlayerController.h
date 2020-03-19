@@ -43,7 +43,7 @@ public:
 	PlayerState state = PlayerState::IDLE;
 	PlayerData player_data;
 	ComponentAnimator* animator = nullptr;
-	ComponentCharacterController* ccontroller = nullptr;
+	ComponentCharacterController* controller = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
 	
@@ -69,7 +69,7 @@ public:
 	//Particles
 	
 	GameObject* p_run = nullptr;
-	//ComponentParticleSystem* c_run = nullptr;
+	ComponentParticleSystem* c_run = nullptr;
 
 	GameObject* p_attack = nullptr;
 	ComponentParticleSystem* c_attack = nullptr;
