@@ -29,6 +29,7 @@ void CameraMovement::Update()
         if (current_transition_time >= curr_transition.transition_time) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
+            LookAtMidPoint();
             state = CameraState::DYNAMIC;
         }
         else {
@@ -80,10 +81,6 @@ void CameraMovement::OnDrawGizmos()
 
     Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 0.15f, Color::Green());
     Gizmos::DrawLine(mid_point, transform->GetGlobalPosition(), Color::Green());
-
-    //float3 cam_pos = CalculateCameraPos(curr_transition.hor_angle, curr_transition.vert_angle, curr_transition.distance);
-    //Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
-    //Gizmos::DrawSphere(cam_pos, 0.15f, Color::Green());
 }
 
 void CameraMovement::SearchAndAssignPlayers()

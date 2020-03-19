@@ -20,14 +20,14 @@ void TriggerCamera::Start()
 void TriggerCamera::Update()
 {
 	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
-		ManageTransition(prev_camera);
+		StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
 	}
 	if (Input::GetKeyDown(SDL_SCANCODE_2)) {
-		ManageTransition(next_camera);
+		StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
 	}
 }
 
-void TriggerCamera::ManageTransition(TransitionInfo transition_info)
+void TriggerCamera::StartTransition(TransitionInfo transition_info)
 {
 	if (cam_script != nullptr) {
 		cam_script->current_transition_time = 0.f;
@@ -50,8 +50,8 @@ void TriggerCamera::OnDrawGizmos()
 		camera = Camera::GetCurrentCamera()->game_object_attached;
 		cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 	}
-	VisualizeCameraTransition(prev_camera, Color::Red());
-	VisualizeCameraTransition(next_camera, Color::Green());
+	VisualizeCameraTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time), Color::Red());
+	VisualizeCameraTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time), Color::Green());
 }
 
 void TriggerCamera::VisualizeCameraTransition (TransitionInfo transition_info, Color color) {
@@ -74,11 +74,11 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 		//TODO: Create a for that checks for all players
 		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
 			LOG("All players moved forward - Transition to next camera");
-			ManageTransition(next_camera);
+			StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
 		}
 		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
 			LOG("All players moved back - Transition to prev camera");
-			ManageTransition(prev_camera);
+			StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
 		}
 	}
 }
