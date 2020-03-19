@@ -288,7 +288,7 @@ public:
 	std::vector<ComponentScript*> GetScripts() { return scripts; }
 	void SetEmitter(ComponentAudioEmitter* _emitter) { emitter = _emitter; }
 	void SetScripts(std::vector<ComponentScript*> _scripts) { scripts = _scripts; }
-	void AddGameObject(GameObject* _game_object);
+	void AddAnimGameObject(GameObject* _game_object);
 	void ActiveEvent(ResourceAnimation* _animation, uint _key);
 
 	//void UnLoad();

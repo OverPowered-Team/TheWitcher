@@ -55,7 +55,7 @@ bool PanelAnimTimeline::FillInfo()
 				if (component_animator->GetResourceAnimatorController() != nullptr)
 				{
 					animator = component_animator->GetResourceAnimatorController();
-					animator->AddGameObject((*go));
+					animator->AddAnimGameObject((*go));
 
 					for (uint i = 0; i < animator->GetNumStates(); ++i)
 					{

@@ -456,7 +456,6 @@ void ResourceAnimatorController::UpdateState(State* state)
 			state->fade_time = 0;
 			state->fade_duration = 0;
 			transitioning = false;
-
 		}
 	}
 }
@@ -612,8 +611,8 @@ bool ResourceAnimatorController::SaveAsset(const u64& force_id)
 
 	JSONArraypack* objects_array = asset->InitNewArray("Controller.Objects");
 	for (std::vector <GameObject*>::iterator it = gameobjects.begin(); it != gameobjects.end(); ++it) {
-		events_array->SetAnotherNode();
-		events_array->SetString("Id", std::to_string((*it)->ID).data());
+		objects_array->SetAnotherNode();
+		objects_array->SetString("Id", std::to_string((*it)->ID).data());
 	}
 
 	asset->FinishSave();
@@ -657,6 +656,7 @@ void ResourceAnimatorController::FreeMemory()
 
 	anim_events.clear();
 	scripts.clear();
+	gameobjects.clear();
 	emitter = nullptr;
 
 	default_state = nullptr;
@@ -1734,9 +1734,11 @@ void ResourceAnimatorController::RemoveAnimEvent(AnimEvent* _event)
 	}
 }
 
-void ResourceAnimatorController::AddGameObject(GameObject* _game_object)
+void ResourceAnimatorController::AddAnimGameObject(GameObject* _game_object)
 {
 	bool add = true;
+	if (!_game_object)
+		add = false;
 	for (auto it = gameobjects.begin(); it != gameobjects.end(); ++it)
 	{
 		if ((*it)->ID == _game_object->ID)
