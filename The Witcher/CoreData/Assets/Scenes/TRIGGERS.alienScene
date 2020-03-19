@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
+                        "HoritzontalFov": 91.222320556640625,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -80268,6 +80268,552 @@
                 ]
             },
             {
+                "Name": "CameraTrigger",
+                "FamilyNumber": 3,
+                "ID": "17825210104461523412",
+                "ParentID": "14544930758928467893",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -134.77122497558594,
+                            25.358657836914063,
+                            8.4941997528076172
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.7071068286895752,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7877692956714776752"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16980247330683920418",
+                        "ResourceID": "3700915403338815760",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Previous camera"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera_distance",
+                                "float": 3
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera_hor_angle",
+                                "float": -286
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera_vert_angle",
+                                "float": 45
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera_transition_time",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Next camera"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera_distance",
+                                "float": 11
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera_hor_angle",
+                                "float": -8.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera_vert_angle",
+                                "float": 35.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera_transition_time",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Enter",
+                "FamilyNumber": 4,
+                "ID": "3277853031041725084",
+                "ParentID": "17825210104461523412",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11626222402348571970"
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            -1.5499999523162842
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7713920906260772018",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TpPos1",
+                "FamilyNumber": 5,
+                "ID": "11452177709020898339",
+                "ParentID": "3277853031041725084",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.2518918514251709,
+                            0,
+                            -4.1579194068908691
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            2.0726075172424316,
+                            1,
+                            2.0718598365783691
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5853372181893649833"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1240148081648349324",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "18096036952905962749",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "TpPos2",
+                "FamilyNumber": 5,
+                "ID": "14184483868864325765",
+                "ParentID": "3277853031041725084",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -2.5997228622436523,
+                            0,
+                            -4.3809657096862793
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            2.6248559951782227,
+                            1,
+                            2.3043062686920166
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "409875118806045994"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "4874914345395533210",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "8683984300127112973",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Middle",
+                "FamilyNumber": 4,
+                "ID": "14133522560828861369",
+                "ParentID": "17825210104461523412",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15665621942182147329"
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            10,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7622755596264174631",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Exit",
+                "FamilyNumber": 4,
+                "ID": "7646070925967850566",
+                "ParentID": "17825210104461523412",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14625269352300803161"
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            1.5499999523162842
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11122325377860334376",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TpPos1",
+                "FamilyNumber": 5,
+                "ID": "3107336509241331032",
+                "ParentID": "7646070925967850566",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -2.871699333190918,
+                            0,
+                            3.7817463874816895
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3869095623197074583"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "7652415225590647278",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "5304469287794381727",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "TpPos2",
+                "FamilyNumber": 5,
+                "ID": "11202605943798667072",
+                "ParentID": "7646070925967850566",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "18019264320408624239",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.2829523086547852,
+                            0,
+                            3.7025966644287109
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10629750792592736672"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "6504855202614703443",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "16233108686888496237",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
                 "Name": "Great Sword Idle",
                 "FamilyNumber": 1,
                 "ID": "4772062833115511879",
@@ -81207,9 +81753,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.5642766952514648,
-                                -1.4407824277877808,
-                                1.4462102651596069
+                                -0.27154156565666199,
+                                -4.3788957595825195,
+                                -2.3982353210449219
                             ],
                             "Force": [
                                 0,
@@ -81282,7 +81828,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 12.225000381469727,
+                            "CurrentLife": 12.682999610900879,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -82153,9 +82699,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -3.7572345733642578,
-                                -3.1407487392425537,
-                                -1.0093985795974731
+                                -1.8215024471282959,
+                                -0.074599049985408783,
+                                4.6558094024658203
                             ],
                             "Force": [
                                 0,
@@ -82228,7 +82774,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 12.225000381469727,
+                            "CurrentLife": 12.682999610900879,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -82329,9 +82875,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.31005653738975525,
-                                -1.9279687404632568,
-                                0.43220606446266174
+                                -1.0197486877441406,
+                                0.56158715486526489,
+                                1.6262633800506592
                             ],
                             "Force": [
                                 0,
@@ -82404,7 +82950,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 4.8880019187927246,
+                            "CurrentLife": 1.7459995746612549,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -83387,9 +83933,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.39944952726364136,
-                                -4.9504308700561523,
-                                -0.57764261960983276
+                                -1.1492302417755127,
+                                -4.6145119667053223,
+                                1.5445234775543213
                             ],
                             "Force": [
                                 0,
@@ -83462,7 +84008,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 12.225000381469727,
+                            "CurrentLife": 12.682999610900879,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -84333,9 +84879,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -2.6712656021118164,
-                                -0.1381116509437561,
-                                4.2243657112121582
+                                2.3701307773590088,
+                                -1.1368687152862549,
+                                4.2532353401184082
                             ],
                             "Force": [
                                 0,
@@ -84408,7 +84954,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 12.225000381469727,
+                            "CurrentLife": 12.682999610900879,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -84509,9 +85055,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.44382834434509277,
-                                -1.7719243764877319,
-                                0.81443232297897339
+                                1.5301398038864136,
+                                1.0427372455596924,
+                                -0.75589126348495483
                             ],
                             "Force": [
                                 0,
@@ -84584,7 +85130,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 4.8880019187927246,
+                            "CurrentLife": 1.7459995746612549,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -84624,552 +85170,6 @@
                         },
                         "HasMaterial": true,
                         "MaterialID": "2908214226867487015"
-                    }
-                ]
-            },
-            {
-                "Name": "CameraTrigger",
-                "FamilyNumber": 1,
-                "ID": "17825210104461523412",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -134.77122497558594,
-                            25.358657836914063,
-                            8.4941997528076172
-                        ],
-                        "Rotation": [
-                            0,
-                            -0.7071068286895752,
-                            0,
-                            0.70710670948028564
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "7877692956714776752"
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "16980247330683920418",
-                        "ResourceID": "3700915403338815760",
-                        "DataName": "TriggerCamera",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 11,
-                                "Name": "Previous camera"
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 7
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 180
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 45
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
-                            },
-                            {
-                                "VarType": 12,
-                                "Name": ""
-                            },
-                            {
-                                "VarType": 11,
-                                "Name": "Next camera"
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 7
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 68
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 35.5
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
-                            },
-                            {
-                                "VarType": 12,
-                                "Name": ""
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Enter",
-                "FamilyNumber": 2,
-                "ID": "3277853031041725084",
-                "ParentID": "17825210104461523412",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "11626222402348571970"
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": true,
-                        "Center": [
-                            0,
-                            0,
-                            -1.5499999523162842
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            10,
-                            10,
-                            2.5
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "7713920906260772018",
-                        "ResourceID": "7753277895768345165",
-                        "DataName": "CameraEnterExit",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 0,
-                                "Name": "collider_position",
-                                "int": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "TpPos1",
-                "FamilyNumber": 3,
-                "ID": "11452177709020898339",
-                "ParentID": "3277853031041725084",
-                "Enabled": false,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            2.2518918514251709,
-                            0,
-                            -4.1579194068908691
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            2.0726075172424316,
-                            1,
-                            2.0718598365783691
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "5853372181893649833"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "1240148081648349324",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "18096036952905962749",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TpPos2",
-                "FamilyNumber": 3,
-                "ID": "14184483868864325765",
-                "ParentID": "3277853031041725084",
-                "Enabled": false,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -2.5997228622436523,
-                            0,
-                            -4.3809657096862793
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            2.6248559951782227,
-                            1,
-                            2.3043062686920166
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "409875118806045994"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "4874914345395533210",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "8683984300127112973",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Middle",
-                "FamilyNumber": 2,
-                "ID": "14133522560828861369",
-                "ParentID": "17825210104461523412",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "15665621942182147329"
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": true,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            10,
-                            10,
-                            5
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "7622755596264174631",
-                        "ResourceID": "7753277895768345165",
-                        "DataName": "CameraEnterExit",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 0,
-                                "Name": "collider_position",
-                                "int": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Exit",
-                "FamilyNumber": 2,
-                "ID": "7646070925967850566",
-                "ParentID": "17825210104461523412",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            0
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "14625269352300803161"
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": true,
-                        "Center": [
-                            0,
-                            0,
-                            1.5499999523162842
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            10,
-                            10,
-                            2.5
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "11122325377860334376",
-                        "ResourceID": "7753277895768345165",
-                        "DataName": "CameraEnterExit",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 0,
-                                "Name": "collider_position",
-                                "int": 2
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "TpPos1",
-                "FamilyNumber": 3,
-                "ID": "3107336509241331032",
-                "ParentID": "7646070925967850566",
-                "Enabled": false,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -2.871699333190918,
-                            0,
-                            3.7817463874816895
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "3869095623197074583"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "7652415225590647278",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "5304469287794381727",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TpPos2",
-                "FamilyNumber": 3,
-                "ID": "11202605943798667072",
-                "ParentID": "7646070925967850566",
-                "Enabled": false,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "18019264320408624239",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            1.2829523086547852,
-                            0,
-                            3.7025966644287109
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "10629750792592736672"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "6504855202614703443",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "16233108686888496237",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
                     }
                 ]
             }

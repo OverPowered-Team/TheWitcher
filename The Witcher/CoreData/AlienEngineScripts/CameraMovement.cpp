@@ -11,10 +11,10 @@ CameraMovement::~CameraMovement()
 void CameraMovement::Start()
 {
     //Get the players in the scene
-    transform->SetGlobalPosition(CalculateCameraPos(hor_angle, vert_angle, distance));
     LookAtMidPoint();
     SearchAndAssignPlayers();
-    trg_offset = transform->GetGlobalPosition() - CalculateMidPoint();
+    trg_offset = CalculateCameraPos(hor_angle, vert_angle, distance);
+    transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
 }
 
 void CameraMovement::Update()
@@ -109,6 +109,7 @@ void CameraMovement::SearchAndAssignPlayers()
     }
     GameObject::FreeArrayMemory((void***)&get_players);
     num_curr_players = size;
+    LOG("player num %i", num_curr_players);
 }
 
 float3 CameraMovement::CalculateMidPoint()
