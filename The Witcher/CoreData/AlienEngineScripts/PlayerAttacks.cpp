@@ -24,12 +24,12 @@ void PlayerAttacks::StartAttack(AttackType attack)
 	DoAttack();
 }
 
-void PlayerAttacks::ComboAttack(AttackType new_attack)
+void PlayerAttacks::ComboAttack()
 {
 	LOG("UPDATE ATTACK");
-	if (CanReceiveInput())
+	if (can_execute_input && next_attack != AttackType::NONE)
 	{
-		StartAttack(new_attack);
+		StartAttack(next_attack);
 	}
 }
 
@@ -37,10 +37,12 @@ void PlayerAttacks::DoAttack()
 {
 	LOG("DO ATTACK %s", current_attack->name.c_str());
 	player_controller->animator->PlayState(current_attack->name.c_str());
+	can_execute_input = false;
+	next_attack = AttackType::NONE;
 
-	float start_time = Time::GetGameTime();
+	/*float start_time = Time::GetGameTime();
 	float final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
-	attack_input_time = final_attack_time - input_window;
+	attack_input_time = final_attack_time - input_window;*/
 }
 
 void PlayerAttacks::SelectAttack(AttackType attack)
@@ -72,10 +74,14 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 }
-bool PlayerAttacks::CanReceiveInput()
+void PlayerAttacks::ReceiveInput(AttackType attack)
+{
+	next_attack = attack;
+}
+/*bool PlayerAttacks::CanReceiveInput()
 {
 	return (Time::GetGameTime() > attack_input_time && (current_attack->heavy_attack_link != nullptr || current_attack->light_attack_link != nullptr));
-}
+}*/
 
 void PlayerAttacks::CreateAttacks()
 {
@@ -157,6 +163,8 @@ void PlayerAttacks::DesactiveCollider()
 	LOG("COLLIDER DESACTIVED");
 	if(collider)
 		collider->SetEnable(false);
+
+	can_execute_input = true;
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {

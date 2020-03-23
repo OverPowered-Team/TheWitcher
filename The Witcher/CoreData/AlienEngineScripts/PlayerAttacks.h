@@ -46,40 +46,41 @@ public:
 	
 	void Start();
 	void StartAttack(AttackType attack);
-	void ComboAttack(AttackType new_attack);
+	void ComboAttack();
+	void ReceiveInput(AttackType attack);
 
 	void ActiveCollider();
 	void DesactiveCollider();
 
 	void OnAnimationEnd(const char* name);
 
-public:
-	float input_window = 0.0f;
-
 protected:
 	void CreateAttacks();
 	void ConnectAttacks();
 	void DoAttack();
 	void SelectAttack(AttackType attack);
-	bool CanReceiveInput();
+
+	//bool CanReceiveInput();
 
 protected:
 	Attack* current_attack = nullptr;
 	Attack* base_light_attack = nullptr;
 	Attack* base_heavy_attack = nullptr;
+
 	PlayerController* player_controller = nullptr;
 	ComponentBoxCollider* collider = nullptr;
 
-	float attack_input_time = 0.0f;
-
 	std::vector<Attack*> attacks;
+
+	bool can_execute_input = false;
+	AttackType next_attack = AttackType::NONE;
 };
 
 ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	PlayerAttacks* player_attacks = new PlayerAttacks();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->input_window);
+	//SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->input_window);
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActiveCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DesactiveCollider, player_attacks);
 

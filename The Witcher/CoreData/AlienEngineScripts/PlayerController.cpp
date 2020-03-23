@@ -13,6 +13,7 @@ void PlayerController::Start()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
+	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
 
 	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
@@ -104,7 +105,9 @@ void PlayerController::Update()
 		}
 		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
+			state = PlayerState::BASIC_ATTACK;
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
+			audio->StartSound("Hit_Sword");
 			can_move = false;
 		}
 
@@ -112,7 +115,6 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
-			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
@@ -160,7 +162,6 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
-			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
@@ -188,10 +189,12 @@ void PlayerController::Update()
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 			|| Input::GetKeyDown(keyboard_light_attack))
-			attacks->ComboAttack(PlayerAttacks::AttackType::LIGHT);
+			attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
 		if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack))
-			attacks->ComboAttack(PlayerAttacks::AttackType::HEAVY);
+			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
+
+		attacks->ComboAttack();
 
 		break;
 	case PlayerController::PlayerState::JUMPING:

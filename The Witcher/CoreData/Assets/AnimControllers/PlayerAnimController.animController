@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 6,
-        "NumTransitions": 10,
+        "NumStates": 8,
+        "NumTransitions": 12,
         "States": [
             {
                 "Name": "Idle",
@@ -33,6 +33,16 @@
                 "Name": "Spell",
                 "Speed": 1,
                 "Clip": "7211782662776671787"
+            },
+            {
+                "Name": "L",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
+            },
+            {
+                "Name": "LL",
+                "Speed": 1,
+                "Clip": "4871813718953062991"
             }
         ],
         "Transitions": [
@@ -207,6 +217,24 @@
                     }
                 ],
                 "BoolConditions": []
+            },
+            {
+                "Source": "L",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -236,30 +264,15 @@
                 "Type": 0
             },
             {
-                "Event_Id": "2480223178",
+                "Event_Id": "PlayerAttacks::DesactiveCollider",
                 "Animation_Id": "4871813718953062991",
-                "Frame": 16,
-                "Type": 0
-            },
-            {
-                "Event_Id": "PlayerController::PlaySpell",
-                "Animation_Id": "7211782662776671787",
-                "Frame": 10,
+                "Frame": 22,
                 "Type": 2
             }
         ],
         "Objects": [
             {
-                "Id": "0"
-            },
-            {
-                "Id": "568899586953194793"
-            },
-            {
-                "Id": "0"
-            },
-            {
-                "Id": "17410189700768392093"
+                "Id": "11618135046122023756"
             }
         ]
     }
