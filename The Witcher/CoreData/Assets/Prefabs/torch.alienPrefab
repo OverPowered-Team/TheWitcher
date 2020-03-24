@@ -2,9 +2,9 @@
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "Tin",
+                "Name": "torch",
                 "FamilyNumber": 1,
-                "ID": "2633038071847235338",
+                "ID": "5956674122888289732",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -14,57 +14,66 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "563634842898234084",
+                "PrefabID": "8231009396974195011",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -0.49589243531227112,
-                            0.082937806844711304,
-                            1.3855358362197876
+                            -3.3462140560150146,
+                            6.9368276596069336,
+                            -5.6451687812805176
                         ],
                         "Rotation": [
-                            -0.70710664987564087,
                             0,
                             0,
-                            0.70710688829421997
+                            0,
+                            1
                         ],
                         "Scale": [
-                            0.039999999105930328,
-                            0.03999999538064003,
-                            0.017999997362494469
+                            1,
+                            1,
+                            1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11369763630358633921"
+                        "ID": "7265387574676413716"
                     },
                     {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "4526513530528784637",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "758655377786166765",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "8134705923745349683",
-                        "HasMaterial": true,
-                        "MaterialID": "8232905727971335410",
-                        "Enabled": true
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "13745847884641418121",
+                        "PrintIcon": true,
+                        "Intensity": 2,
+                        "Position": [
+                            -3.3462140560150146,
+                            6.9368276596069336,
+                            -5.6451687812805176
+                        ],
+                        "Ambient": [
+                            1,
+                            0.4999997615814209,
+                            0
+                        ],
+                        "Diffuse": [
+                            0.51470589637756348,
+                            0.51470386981964111,
+                            0.51470077037811279
+                        ],
+                        "Specular": [
+                            9.9999999747524271e-07,
+                            9.9999647318327334e-07,
+                            9.9998999303352321e-07
+                        ],
+                        "Constant": 1,
+                        "Linear": 0.10000000149011612,
+                        "Quadratic": 0.019999999552965164
                     }
                 ]
             },
             {
                 "Name": "Cube",
                 "FamilyNumber": 2,
-                "ID": "15398187499313302129",
-                "ParentID": "2633038071847235338",
+                "ID": "13220612126467483449",
+                "ParentID": "5956674122888289732",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -73,28 +82,28 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "563634842898234084",
+                "PrefabID": "8231009396974195011",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -18.353538513183594,
-                            14.639373779296875,
-                            -4.8730020523071289
+                            0,
+                            -0.89597606658935547,
+                            -4.3771271705627441
                         ],
                         "Rotation": [
-                            0.70710659027099609,
+                            0.23246105015277863,
                             0,
                             0,
-                            0.70710694789886475
+                            0.97260570526123047
                         ],
                         "Scale": [
-                            33.389369964599609,
-                            55,
-                            28.430303573608398
+                            0.28841665387153625,
+                            1.4654635190963745,
+                            0.28471693396568298
                         ],
                         "ScaleNegative": false,
-                        "ID": "1752010809640795651"
+                        "ID": "4940128600785720442"
                     },
                     {
                         "Type": 1,
@@ -104,7 +113,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "5822453295922066710",
+                        "ID": "11563247002835023057",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -112,9 +121,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "97642328987027369",
+                        "ID": "11918619950902740632",
                         "HasMaterial": true,
-                        "MaterialID": "18432814117328817957",
+                        "MaterialID": "8232905727971335410",
                         "Enabled": true
                     },
                     {
@@ -137,10 +146,10 @@
                 ]
             },
             {
-                "Name": "Torus",
-                "FamilyNumber": 2,
-                "ID": "614254700950336026",
-                "ParentID": "2633038071847235338",
+                "Name": "Particle System",
+                "FamilyNumber": 3,
+                "ID": "4612840734513867475",
+                "ParentID": "13220612126467483449",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -149,97 +158,38 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "563634842898234084",
+                "PrefabID": "8231009396974195011",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            7.2479248046875e-05,
-                            43.273658752441406
+                            9.5367431640625e-07,
+                            1.2021708488464355,
+                            -0.088672637939453125
                         ],
                         "Rotation": [
-                            -1.779909553079051e-12,
+                            -0.78628253936767578,
                             0,
                             0,
-                            1
+                            0.617867112159729
                         ],
                         "Scale": [
-                            17.799999237060547,
-                            17.799999237060547,
-                            16
+                            3.4672062397003174,
+                            1.7008205652236938,
+                            3.1478278636932373
                         ],
                         "ScaleNegative": false,
-                        "ID": "14488331872505362577"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "8749186936477323085",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 5,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "9143190195823701054",
-                        "HasMaterial": true,
-                        "MaterialID": "18432814117328817957",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "TinParticle",
-                "FamilyNumber": 2,
-                "ID": "851602441483780568",
-                "ParentID": "2633038071847235338",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "563634842898234084",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            3.0947799682617188,
-                            1.4854545593261719,
-                            69.06390380859375
-                        ],
-                        "Rotation": [
-                            -3.1855375937084318e-07,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            25,
-                            25.000003814697266,
-                            55.555564880371094
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "7942901851985383213"
+                        "ID": "17994385889626733798"
                     },
                     {
                         "Type": 15,
-                        "ID": "8361336719727876068",
+                        "ID": "832699155148975569",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.15651506185531616,
-                                1.2904788255691528,
-                                2.0584378242492676
+                                -3.4049787521362305,
+                                7.4964604377746582,
+                                -9.1587820053100586
                             ],
                             "Rotation": [
                                 0,
@@ -250,8 +200,8 @@
                             "Global": true,
                             "Velocity": [
                                 0,
-                                0.99999994039535522,
-                                -4.76837158203125e-07
+                                0.99592465162277222,
+                                0.09019005298614502
                             ],
                             "Force": [
                                 0,
@@ -280,7 +230,7 @@
                                 0
                             ],
                             "ChangeOverLifeTime": false,
-                            "RotateOverLifeTime": true
+                            "RotateOverLifeTime": false
                         },
                         "End": {
                             "Color": [
@@ -319,19 +269,19 @@
                             "Radius": 5,
                             "OutRadius": 10,
                             "CubeSize": [
-                                2,
-                                2,
-                                2
+                                0.5,
+                                0.5,
+                                0.5
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 5.7679977416992188,
+                            "CurrentLife": 1.4509999752044678,
                             "SpawnRate": 20,
                             "Delay": 2,
                             "Loop": true,
                             "Position": [
-                                -0.37210124731063843,
-                                1.3260878324508667,
-                                1.3261181116104126
+                                -3.3462138175964355,
+                                7.623603343963623,
+                                -9.2481813430786133
                             ],
                             "RelativePosition": [
                                 0,
@@ -339,7 +289,7 @@
                                 0
                             ],
                             "Rotation": [
-                                -90.000022888183594,
+                                -84.825454711914063,
                                 0,
                                 0
                             ],
@@ -367,9 +317,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "4050226309875908824",
+                        "ID": "11743766423669782883",
                         "HasMaterial": true,
-                        "MaterialID": "1597422254137296850",
+                        "MaterialID": "16799967633806808947",
                         "Enabled": true
                     }
                 ]
