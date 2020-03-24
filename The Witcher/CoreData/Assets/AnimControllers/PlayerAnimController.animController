@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 8,
-        "NumTransitions": 12,
+        "NumStates": 11,
+        "NumTransitions": 15,
         "States": [
             {
                 "Name": "Idle",
@@ -36,13 +36,28 @@
             },
             {
                 "Name": "L",
-                "Speed": 3,
-                "Clip": "8264459782882532946"
+                "Speed": 2,
+                "Clip": "17156228017399226362"
             },
             {
                 "Name": "LL",
-                "Speed": 3,
-                "Clip": "8264459782882532946"
+                "Speed": 2,
+                "Clip": "7930577302406065666"
+            },
+            {
+                "Name": "LLL",
+                "Speed": 2,
+                "Clip": "16304126710174412820"
+            },
+            {
+                "Name": "LLLL",
+                "Speed": 2,
+                "Clip": "16819087015883391959"
+            },
+            {
+                "Name": "LLLLL",
+                "Speed": 2,
+                "Clip": "17588914217724974085"
             }
         ],
         "Transitions": [
@@ -235,6 +250,33 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "LLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -273,6 +315,36 @@
                 "Event_Id": "PlayerAttacks::DesactiveCollider",
                 "Animation_Id": "8264459782882532946",
                 "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DesactiveCollider",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 33,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DesactiveCollider",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 49,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DesactiveCollider",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 26,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DesactiveCollider",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActiveCollider",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 26,
                 "Type": 2
             }
         ],

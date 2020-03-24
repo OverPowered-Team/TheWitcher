@@ -12,7 +12,7 @@ PlayerAttacks::~PlayerAttacks()
 void PlayerAttacks::Start()
 {
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
-	collider = (ComponentBoxCollider*)GetComponent(ComponentType::BOX_COLLIDER);
+	collider = (ComponentBoxCollider*)collider_go->GetComponent(ComponentType::BOX_COLLIDER);
 
 	CreateAttacks();
 }
@@ -165,6 +165,15 @@ void PlayerAttacks::DesactiveCollider()
 		collider->SetEnable(false);
 
 	can_execute_input = true;
+}
+
+bool PlayerAttacks::CanBeInterrupted()
+{
+	LOG("CHECKING IF CAN BE INTERRUPTED");
+	if (collider)
+		return !collider->IsEnabled();
+	else
+		return true;
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {

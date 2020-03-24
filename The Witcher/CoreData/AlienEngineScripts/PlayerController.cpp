@@ -111,16 +111,16 @@ void PlayerController::Update()
 			can_move = false;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, controller_dash)
-			|| Input::GetKeyDown(keyboard_dash)) {
-			animator->PlayState("Roll");
-			state = PlayerState::DASHING;
-		}
-
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
 			animator->PlayState("Spell");
 			state = PlayerState::CASTING;
+		}
+
+		if (Input::GetControllerButtonDown(controller_index, controller_dash)
+			|| Input::GetKeyDown(keyboard_dash)) {
+			animator->PlayState("Roll");
+			state = PlayerState::DASHING;
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
@@ -190,11 +190,27 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 			|| Input::GetKeyDown(keyboard_light_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-		if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
 		attacks->ComboAttack();
+
+		if ((Input::GetControllerButtonDown(controller_index, controller_dash)
+			|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
+			animator->PlayState("Roll");
+			state = PlayerState::DASHING;
+		}
+
+		if ((Input::GetControllerButtonDown(controller_index, controller_jump)
+			|| Input::GetKeyDown(keyboard_jump)) && attacks->CanBeInterrupted()) {
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			if (controller->CanJump()) {
+				controller->Jump(transform->up * player_data.jump_power);
+				animator->SetBool("air", true);
+			}
+		}
 
 		break;
 	case PlayerController::PlayerState::JUMPING:

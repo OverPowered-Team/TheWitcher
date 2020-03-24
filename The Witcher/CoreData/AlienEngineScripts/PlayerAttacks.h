@@ -51,8 +51,12 @@ public:
 
 	void ActiveCollider();
 	void DesactiveCollider();
+	bool CanBeInterrupted();
 
 	void OnAnimationEnd(const char* name);
+
+public:
+	GameObject* collider_go = nullptr;
 
 protected:
 	void CreateAttacks();
@@ -80,6 +84,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	PlayerAttacks* player_attacks = new PlayerAttacks();
 	// To show in inspector here
 
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->collider_go);
 	//SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->input_window);
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActiveCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DesactiveCollider, player_attacks);

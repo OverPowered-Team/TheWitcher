@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 40.928871154785156,
+                        "HoritzontalFov": 91.492843627929688,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -87,12 +87,12 @@
                             {
                                 "VarType": 3,
                                 "Name": "distance",
-                                "float": 8.8789997100830078
+                                "float": 3.7379999160766602
                             },
                             {
                                 "VarType": 3,
                                 "Name": "hor_angle",
-                                "float": 20.187000274658203
+                                "float": 90.84100341796875
                             },
                             {
                                 "VarType": 3,
@@ -155,9 +155,9 @@
                             0.57735025882720947
                         ],
                         "Ambient": [
-                            0,
-                            0,
-                            0
+                            0.49019604921340942,
+                            0.47818145155906677,
+                            0.47818145155906677
                         ],
                         "Diffuse": [
                             1,
@@ -173,88 +173,13 @@
                 ]
             },
             {
-                "Name": "Cube",
-                "FamilyNumber": 1,
-                "ID": "12439525199899762356",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -5.3101530075073242,
-                            -1.0490865707397461,
-                            -4.1885881423950195
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            31.203067779541016,
-                            1,
-                            31.054584503173828
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "11183183655854095279"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "12252299767648094976",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "3526471426146507397",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
                 "Name": "Great Sword Idle",
                 "FamilyNumber": 1,
                 "ID": "11618135046122023756",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -306,7 +231,7 @@
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
-                        "Mute": false,
+                        "Mute": true,
                         "Bank": "393239870",
                         "Event": "2453392179",
                         "PlayOnAwake": false
@@ -380,7 +305,14 @@
                         "ID": "14408365117431525782",
                         "ResourceID": "9324436860167185061",
                         "DataName": "PlayerAttacks",
-                        "HasInspector": false
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "collider_go",
+                                "gameobject": "2738975923642234327"
+                            }
+                        ]
                     }
                 ]
             },
@@ -392,7 +324,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -447,7 +379,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -505,7 +437,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -515,20 +447,20 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -0.062765002250671387,
-                            4.1228070259094238,
-                            -0.37064400315284729
+                            -0.099738001823425293,
+                            4.1182069778442383,
+                            -0.42322000861167908
                         ],
                         "Rotation": [
-                            0.0047053382731974125,
-                            0.91358977556228638,
-                            0.030366193503141403,
-                            0.40547433495521545
+                            -0.0013648458989337087,
+                            0.9006534218788147,
+                            0.025787390768527985,
+                            0.43377026915550232
                         ],
                         "Scale": [
-                            1.0000003576278687,
-                            1.0000004768371582,
-                            0.99999988079071045
+                            1.0000001192092896,
+                            0.99999970197677612,
+                            1.0000002384185791
                         ],
                         "ScaleNegative": false,
                         "ID": "9258482145273615457"
@@ -549,7 +481,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -564,15 +496,15 @@
                             0.18659999966621399
                         ],
                         "Rotation": [
-                            -0.056160610169172287,
-                            -0.0032322709448635578,
-                            -0.0097341258078813553,
-                            0.99836909770965576
+                            -0.05011165514588356,
+                            -0.0043069091625511646,
+                            -0.018117660656571388,
+                            0.9985700249671936
                         ],
                         "Scale": [
-                            1.0000003576278687,
-                            0.9999995231628418,
-                            0.99999994039535522
+                            0.99999964237213135,
+                            0.99999982118606567,
+                            1.0000003576278687
                         ],
                         "ScaleNegative": false,
                         "ID": "2073431560200559227"
@@ -593,7 +525,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -608,15 +540,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.030629878863692284,
-                            -0.023914063349366188,
-                            -4.5031738409306854e-06,
-                            0.99924468994140625
+                            -0.029016641899943352,
+                            -0.025670116767287254,
+                            -0.0026414927560836077,
+                            0.99924576282501221
                         ],
                         "Scale": [
-                            0.9999997615814209,
-                            1.0000003576278687,
-                            1.0000001192092896
+                            0.99999988079071045,
+                            0.99999988079071045,
+                            0.99999982118606567
                         ],
                         "ScaleNegative": false,
                         "ID": "11759757065261540175"
@@ -637,7 +569,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -652,15 +584,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.03045167401432991,
-                            -0.023330429568886757,
-                            -0.00073679274646565318,
-                            0.99926364421844482
+                            -0.028793182224035263,
+                            -0.025095205754041672,
+                            -0.0033819868694990873,
+                            0.99926459789276123
                         ],
                         "Scale": [
-                            0.99999970197677612,
-                            0.99999964237213135,
-                            1.0000002384185791
+                            1.0000003576278687,
+                            0.99999988079071045,
+                            0.99999964237213135
                         ],
                         "ScaleNegative": false,
                         "ID": "4609243881410359540"
@@ -681,7 +613,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -696,15 +628,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.06661592423915863,
-                            -0.000916996446903795,
-                            0.069281250238418579,
-                            0.99537009000778198
+                            -0.07415354996919632,
+                            0.0045760883949697018,
+                            0.077887266874313354,
+                            0.99419009685516357
                         ],
                         "Scale": [
+                            0.99999970197677612,
                             1.0000003576278687,
-                            1.0000001192092896,
-                            1
+                            1.0000002384185791
                         ],
                         "ScaleNegative": false,
                         "ID": "17979659307160049350"
@@ -725,7 +657,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -740,15 +672,15 @@
                             -0.072899997234344482
                         ],
                         "Rotation": [
-                            0.1206519827246666,
-                            -0.37042498588562012,
-                            -0.13790141046047211,
-                            0.9106106162071228
+                            0.12307900935411453,
+                            -0.35859495401382446,
+                            -0.12489636987447739,
+                            0.91687625646591187
                         ],
                         "Scale": [
+                            0.9999997615814209,
                             1.0000001192092896,
-                            1.0000002384185791,
-                            1.0000002384185791
+                            1.0000005960464478
                         ],
                         "ScaleNegative": false,
                         "ID": "11085374178331908119"
@@ -769,7 +701,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -807,7 +739,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -822,15 +754,15 @@
                             0.045699998736381531
                         ],
                         "Rotation": [
-                            0.42824047803878784,
-                            -0.52376818656921387,
-                            0.6071469783782959,
-                            0.41671261191368103
+                            0.42500969767570496,
+                            -0.52667522430419922,
+                            0.61321282386779785,
+                            0.407369464635849
                         ],
                         "Scale": [
                             1.0000003576278687,
-                            0.9999997615814209,
-                            0.99999988079071045
+                            1.0000002384185791,
+                            0.99999994039535522
                         ],
                         "ScaleNegative": false,
                         "ID": "2392582238156079434"
@@ -851,7 +783,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -866,15 +798,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.17667245864868164,
-                            0.69309341907501221,
-                            0.60727870464324951,
-                            -0.34586247801780701
+                            -0.18902477622032166,
+                            0.66818642616271973,
+                            0.64310926198959351,
+                            -0.32281121611595154
                         ],
                         "Scale": [
-                            1,
-                            1.0000004768371582,
-                            1
+                            0.99999970197677612,
+                            0.99999964237213135,
+                            0.99999970197677612
                         ],
                         "ScaleNegative": false,
                         "ID": "9253796384562384147"
@@ -895,7 +827,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -910,15 +842,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.19347104430198669,
-                            -0.11257078498601913,
-                            -0.52081853151321411,
-                            0.82379907369613647
+                            0.21846456825733185,
+                            -0.10818322002887726,
+                            -0.45744279026985168,
+                            0.85517001152038574
                         ],
                         "Scale": [
-                            1.0000001192092896,
-                            0.99999958276748657,
-                            1.0000004768371582
+                            0.99999994039535522,
+                            0.99999946355819702,
+                            0.99999958276748657
                         ],
                         "ScaleNegative": false,
                         "ID": "3595761299929295270"
@@ -939,7 +871,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -954,15 +886,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.14941024780273438,
-                            0.7931404709815979,
-                            0.17293758690357208,
-                            0.5645330548286438
+                            0.19797290861606598,
+                            0.75954627990722656,
+                            0.14856481552124023,
+                            0.60151875019073486
                         ],
                         "Scale": [
-                            1.0000001192092896,
-                            0.99999982118606567,
-                            0.99999982118606567
+                            1,
+                            1.0000007152557373,
+                            0.99999970197677612
                         ],
                         "ScaleNegative": false,
                         "ID": "12109460314346151337"
@@ -983,7 +915,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -998,15 +930,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.37195277214050293,
-                            0.76484096050262451,
-                            0.49057745933532715,
-                            0.18974502384662628
+                            0.37191927433013916,
+                            0.76487690210342407,
+                            0.49053975939750671,
+                            0.18976350128650665
                         ],
                         "Scale": [
                             1.0000002384185791,
-                            1,
-                            0.99999994039535522
+                            0.9999997615814209,
+                            1.0000002384185791
                         ],
                         "ScaleNegative": false,
                         "ID": "9018819087304685755"
@@ -1027,7 +959,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1043,12 +975,12 @@
                         ],
                         "Rotation": [
                             -0.040223296731710434,
-                            0.030814178287982941,
-                            0.19050784409046173,
+                            0.030814157798886299,
+                            0.19050776958465576,
                             0.98037713766098022
                         ],
                         "Scale": [
-                            0.99999946355819702,
+                            1.0000003576278687,
                             1.0000002384185791,
                             0.99999982118606567
                         ],
@@ -1071,7 +1003,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1115,7 +1047,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1153,7 +1085,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1187,9 +1119,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.27858632802963257,
-                                0.355986088514328,
-                                0.42441615462303162
+                                -0.080612659454345703,
+                                0.33237805962562561,
+                                0.11683415621519089
                             ],
                             "Rotation": [
                                 0,
@@ -1199,9 +1131,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.34143674373626709,
-                                -4.9468555450439453,
-                                0.64190572500228882
+                                -1.1708934307098389,
+                                -2.0169827938079834,
+                                -4.4227585792541504
                             ],
                             "Force": [
                                 0,
@@ -1274,14 +1206,14 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.79099994897842407,
+                            "CurrentLife": 0.79600000381469727,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
-                                -0.064321279525756836,
-                                0.33448156714439392,
-                                0.13042224943637848
+                                -0.080612659454345703,
+                                0.33237805962562561,
+                                0.11683415621519089
                             ],
                             "RelativePosition": [
                                 0,
@@ -1289,9 +1221,9 @@
                                 0
                             ],
                             "Rotation": [
-                                120.99745178222656,
-                                -53.179790496826172,
-                                -31.843770980834961
+                                122.63339996337891,
+                                -55.330699920654297,
+                                -30.229623794555664
                             ],
                             "RelativeRotation": [
                                 -0,
@@ -1325,7 +1257,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1340,15 +1272,15 @@
                             0.049899999052286148
                         ],
                         "Rotation": [
-                            0.12726442515850067,
-                            0.69800096750259399,
-                            -0.64680695533752441,
-                            0.27971243858337402
+                            0.11462825536727905,
+                            0.69899410009384155,
+                            -0.6614958643913269,
+                            0.24635507166385651
                         ],
                         "Scale": [
-                            0.99999958276748657,
-                            1.0000003576278687,
-                            1.0000001192092896
+                            1.0000001192092896,
+                            1.0000002384185791,
+                            1
                         ],
                         "ScaleNegative": false,
                         "ID": "1220003179094130926"
@@ -1369,7 +1301,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1384,15 +1316,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.25511452555656433,
-                            0.81934362649917603,
-                            0.50897860527038574,
-                            -0.067331060767173767
+                            0.22481462359428406,
+                            0.84584569931030273,
+                            0.48295396566390991,
+                            -0.027549337595701218
                         ],
                         "Scale": [
-                            0.9999997615814209,
-                            1.0000004768371582,
-                            1.0000002384185791
+                            1.0000001192092896,
+                            1,
+                            0.99999994039535522
                         ],
                         "ScaleNegative": false,
                         "ID": "10946200300942352818"
@@ -1413,7 +1345,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1428,15 +1360,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.15855520963668823,
-                            -0.094479069113731384,
-                            0.45033517479896545,
-                            0.87357437610626221
+                            -0.16403043270111084,
+                            -0.10318753123283386,
+                            0.47198742628097534,
+                            0.86004316806793213
                         ],
                         "Scale": [
-                            1.0000002384185791,
                             0.99999982118606567,
-                            1.0000001192092896
+                            0.99999988079071045,
+                            1.0000002384185791
                         ],
                         "ScaleNegative": false,
                         "ID": "13459268933975281720"
@@ -1457,7 +1389,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1472,15 +1404,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.14931514859199524,
-                            0.8874889612197876,
-                            -0.01228013914078474,
-                            -0.43579533696174622
+                            -0.16079668700695038,
+                            0.87923777103424072,
+                            0.015332580544054508,
+                            -0.44816330075263977
                         ],
                         "Scale": [
-                            0.99999994039535522,
-                            0.99999958276748657,
-                            1
+                            0.99999964237213135,
+                            1.0000002384185791,
+                            0.99999988079071045
                         ],
                         "ScaleNegative": false,
                         "ID": "11626911012731107573"
@@ -1501,7 +1433,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1516,9 +1448,9 @@
                             0
                         ],
                         "Rotation": [
-                            -0.1575363427400589,
+                            -0.15753661096096039,
                             0.95941203832626343,
-                            0.22543030977249146,
+                            0.22543002665042877,
                             0.062386669218540192
                         ],
                         "Scale": [
@@ -1545,7 +1477,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1560,15 +1492,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.50832098722457886,
-                            -0.098255641758441925,
-                            -0.37803646922111511,
-                            0.76749199628829956
+                            -0.50832152366638184,
+                            -0.09825548529624939,
+                            -0.37803599238395691,
+                            0.76749193668365479
                         ],
                         "Scale": [
-                            1.0000004768371582,
+                            0.99999946355819702,
                             0.99999994039535522,
-                            0.99999982118606567
+                            0.99999940395355225
                         ],
                         "ScaleNegative": false,
                         "ID": "709153240055983273"
@@ -1589,7 +1521,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1633,7 +1565,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1671,7 +1603,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1709,7 +1641,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1768,7 +1700,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1827,7 +1759,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1842,15 +1774,15 @@
                             0.03319999948143959
                         ],
                         "Rotation": [
-                            0.11252269893884659,
-                            -0.21544191241264343,
-                            0.93859052658081055,
-                            0.24489030241966248
+                            0.11308665573596954,
+                            -0.19253499805927277,
+                            0.94129401445388794,
+                            0.25319430232048035
                         ],
                         "Scale": [
+                            0.99999970197677612,
                             1.0000001192092896,
-                            1.0000001192092896,
-                            1.0000001192092896
+                            0.99999970197677612
                         ],
                         "ScaleNegative": false,
                         "ID": "14320262084417845763"
@@ -1871,7 +1803,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1886,15 +1818,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.44042128324508667,
-                            -0.4128880500793457,
-                            -0.0079483054578304291,
-                            0.79717588424682617
+                            0.42990711331367493,
+                            -0.4367465078830719,
+                            -0.0012615771265700459,
+                            0.79020935297012329
                         ],
                         "Scale": [
-                            1.0000005960464478,
-                            1.0000001192092896,
-                            1
+                            1.0000004768371582,
+                            0.9999995231628418,
+                            0.99999988079071045
                         ],
                         "ScaleNegative": false,
                         "ID": "11968536835809843351"
@@ -1915,7 +1847,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1930,15 +1862,15 @@
                             0
                         ],
                         "Rotation": [
-                            -0.052424490451812744,
-                            0.78172409534454346,
-                            -0.62115961313247681,
-                            -0.017884811386466026
+                            -0.059561494737863541,
+                            0.79017502069473267,
+                            -0.60981142520904541,
+                            -0.014349046163260937
                         ],
                         "Scale": [
-                            1.0000004768371582,
-                            1.0000002384185791,
-                            1
+                            0.99999982118606567,
+                            0.99999988079071045,
+                            1.0000001192092896
                         ],
                         "ScaleNegative": false,
                         "ID": "14700091290123695728"
@@ -1959,7 +1891,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1974,15 +1906,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.21720680594444275,
-                            -0.14986555278301239,
-                            0.02599119208753109,
-                            0.96420222520828247
+                            0.21481053531169891,
+                            -0.15061460435390472,
+                            0.026588061824440956,
+                            0.96460604667663574
                         ],
                         "Scale": [
-                            1.0000003576278687,
-                            0.99999958276748657,
-                            1.0000001192092896
+                            1.0000002384185791,
+                            0.99999994039535522,
+                            0.99999970197677612
                         ],
                         "ScaleNegative": false,
                         "ID": "2430520239304803"
@@ -2003,7 +1935,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2041,7 +1973,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2056,15 +1988,15 @@
                             0.042199999094009399
                         ],
                         "Rotation": [
-                            -0.09070625901222229,
-                            -0.26529985666275024,
-                            0.95869076251983643,
-                            -0.047962039709091187
+                            -0.0803384929895401,
+                            -0.27557888627052307,
+                            0.95727783441543579,
+                            -0.034945972263813019
                         ],
                         "Scale": [
                             0.99999994039535522,
-                            0.99999970197677612,
-                            1.0000002384185791
+                            0.99999982118606567,
+                            0.99999994039535522
                         ],
                         "ScaleNegative": false,
                         "ID": "12859094085638682225"
@@ -2085,7 +2017,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2100,15 +2032,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.47037720680236816,
-                            0.063244916498661041,
-                            0.038828860968351364,
-                            0.87933933734893799
+                            0.47701346874237061,
+                            0.046523753553628922,
+                            0.046138945966959,
+                            0.87645018100738525
                         ],
                         "Scale": [
-                            1.0000001192092896,
+                            1.0000004768371582,
                             1,
-                            1.0000002384185791
+                            0.9999997615814209
                         ],
                         "ScaleNegative": false,
                         "ID": "4136554518233482184"
@@ -2129,7 +2061,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2144,15 +2076,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.0083558009937405586,
-                            -0.69415175914764404,
-                            0.7162703275680542,
-                            -0.070995531976222992
+                            0.018179913982748985,
+                            -0.69316756725311279,
+                            0.71650594472885132,
+                            -0.076206982135772705
                         ],
                         "Scale": [
-                            1.0000002384185791,
-                            1,
-                            0.99999982118606567
+                            0.99999994039535522,
+                            0.99999988079071045,
+                            0.99999946355819702
                         ],
                         "ScaleNegative": false,
                         "ID": "11296668203373449187"
@@ -2173,7 +2105,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2188,15 +2120,15 @@
                             0
                         ],
                         "Rotation": [
-                            0.23380857706069946,
-                            0.12770114839076996,
-                            -0.014149574562907219,
-                            0.96375608444213867
+                            0.23635967075824738,
+                            0.12753096222877502,
+                            -0.013716011308133602,
+                            0.96316242218017578
                         ],
                         "Scale": [
-                            0.9999995231628418,
-                            1.0000003576278687,
-                            1.0000002384185791
+                            0.99999958276748657,
+                            1,
+                            1
                         ],
                         "ScaleNegative": false,
                         "ID": "16324597488359435696"
@@ -2217,7 +2149,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2255,7 +2187,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2301,9 +2233,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                4.5728340148925781,
-                                0.86265498399734497,
-                                -1.8289386034011841
+                                -1.7366522550582886,
+                                -4.6232881546020508,
+                                0.78054517507553101
                             ],
                             "Force": [
                                 0,
@@ -2376,7 +2308,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0139999389648438,
+                            "CurrentLife": 2.0009994506835938,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -2431,7 +2363,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2477,9 +2409,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.0956189632415771,
-                                1.5267366170883179,
-                                -0.6846126914024353
+                                1.8258869647979736,
+                                0.56024545431137085,
+                                0.59351605176925659
                             ],
                             "Force": [
                                 0,
@@ -2552,7 +2484,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 2.1439988613128662,
+                            "CurrentLife": 2.9459998607635498,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -2592,6 +2524,147 @@
                         },
                         "HasMaterial": true,
                         "MaterialID": "2908214226867487015"
+                    }
+                ]
+            },
+            {
+                "Name": "Attacks_Collider",
+                "FamilyNumber": 2,
+                "ID": "2738975923642234327",
+                "ParentID": "11618135046122023756",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            10,
+                            10,
+                            10
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1774192040700079667"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "17495579082620393675",
+                        "HasMesh": false,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0.64999997615814209,
+                            1.1499999761581421
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            0.60000002384185791,
+                            0.89999997615814209,
+                            0.70999997854232788
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 1,
+                "ID": "7893562576495422229",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -8.7086973190307617,
+                            -1.3351621627807617,
+                            -8.7089519500732422
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            19.077095031738281,
+                            1,
+                            18.997982025146484
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7462372363888844832"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1681172526802483150",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "3504365244601419535",
+                        "HasMaterial": true,
+                        "MaterialID": "1792464709397293632",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
                     }
                 ]
             }
