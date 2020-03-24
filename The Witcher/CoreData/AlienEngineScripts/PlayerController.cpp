@@ -198,12 +198,14 @@ void PlayerController::Update()
 
 		if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
+			can_move = true;
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
 		}
 
 		if ((Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) && attacks->CanBeInterrupted()) {
+			can_move = true;
 			state = PlayerState::JUMPING;
 			animator->PlayState("Air");
 			if (controller->CanJump()) {
