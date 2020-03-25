@@ -20,13 +20,27 @@ public:
 		MAX
 		);
 
+	struct Stat {
+		float max_value, current_value, base_value;
+		std::string name;
+
+		Stat(std::string name, float base_value, float max_value, float current_value) { this->name = name; this->base_value = base_value; this->max_value = max_value; this->current_value = current_value; }
+
+		void IncreaseStat(float value);
+		void DecreaseStat(float value);
+	};
+
 	struct PlayerData {
 		float movementSpeed = 200.0F;
 		float rotationSpeed = 120.0F;
 		float currentSpeed = 0.f;
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
-		// dmg, deff, lvl bla bla
+		Stat health = Stat("Health", 100.0f, 100.0f, 100.0f);
+		Stat power = Stat("Strength", 10.0f, 10.0f, 10.0f);
+		Stat chaos = Stat("Chaos", 150.0f, 150.0f, 150.0f);
+		Stat attack_speed = Stat("Attack Speed", 1.0f, 1.0f, 1.0f);
+		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
 public:

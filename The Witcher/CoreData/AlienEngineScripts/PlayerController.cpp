@@ -321,3 +321,19 @@ void PlayerController::PlaySpell()
 {
 	c_spell->Restart();
 }
+
+void PlayerController::Stat::IncreaseStat(float value)
+{
+	if (current_value + value <= max_value)
+		current_value += value;
+	else
+		current_value = max_value;
+}
+
+void PlayerController::Stat::DecreaseStat(float value)
+{
+	if (current_value - value >= 0)
+		current_value -= value;
+	else
+		current_value = 0;
+}
