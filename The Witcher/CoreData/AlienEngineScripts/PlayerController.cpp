@@ -296,23 +296,23 @@ void PlayerController::OnAnimationEnd(const char* name) {
 
 	LOG("entro acabar %s", name);
 	if (strcmp(name, "Attack") == 0) {
-		if (abs(player_data.currentSpeed) < 0.1F)
+		if (abs(player_data.currentSpeed) < 0.01F)
 			state = PlayerState::IDLE;
-		if (abs(player_data.currentSpeed) > 0.1F)
+		if (abs(player_data.currentSpeed) > 0.01F)
 			state = PlayerState::RUNNING;
 	}
 
 	if (strcmp(name, "Roll") == 0) {
-		if(abs(player_data.currentSpeed) < 0.1F)
+		if(abs(player_data.currentSpeed) < 0.01F)
 			state = PlayerState::IDLE;
-		if (abs(player_data.currentSpeed) > 0.1F)
+		if (abs(player_data.currentSpeed) > 0.01F)
 			state = PlayerState::RUNNING;
 	}
 
 	if (strcmp(name, "Spell") == 0) {
-		if (abs(player_data.currentSpeed) < 0.1F)
+		if (abs(player_data.currentSpeed) < 0.01F)
 			state = PlayerState::IDLE;
-		if (abs(player_data.currentSpeed) > 0.1F)
+		if (abs(player_data.currentSpeed) > 0.01F)
 			state = PlayerState::RUNNING;
 	}
 }

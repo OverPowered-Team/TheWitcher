@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "PlayerAnimController",
         "NumStates": 11,
-        "NumTransitions": 15,
+        "NumTransitions": 16,
         "States": [
             {
                 "Name": "Idle",
@@ -234,15 +234,6 @@
                 "BoolConditions": []
             },
             {
-                "Source": "L",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": 1,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
-            },
-            {
                 "Source": "LL",
                 "Target": "Idle",
                 "Blend": 0.25,
@@ -276,6 +267,38 @@
                 "End": 1,
                 "IntConditions": [],
                 "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "L",
+                "Target": "Run",
+                "Blend": 0.5,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "L",
+                "Target": "Idle",
+                "Blend": 0.5,
+                "End": 1,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
                 "BoolConditions": []
             }
         ],

@@ -181,6 +181,10 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	{
 		LOG("NO NEXT ATTACK");
 		current_attack = nullptr;
-		player_controller->state = PlayerController::PlayerState::IDLE;
+		
+		if (abs(player_controller->player_data.currentSpeed) < 0.01F)
+			player_controller->state = PlayerController::PlayerState::IDLE;
+		if (abs(player_controller->player_data.currentSpeed) > 0.01F)
+			player_controller->state = PlayerController::PlayerState::RUNNING;
 	}
 }
