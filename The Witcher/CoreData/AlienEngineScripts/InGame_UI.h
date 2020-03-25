@@ -13,6 +13,8 @@ public:
 	void Start();
 	void Update();
 
+	void PauseMenu(bool to_open);
+
 	GameObject* in_game = nullptr;
 	GameObject* pause_menu = nullptr;
 
