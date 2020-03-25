@@ -4,7 +4,7 @@
             {
                 "Name": "UI_InGame",
                 "FamilyNumber": 1,
-                "ID": "18422888173633629715",
+                "ID": "3977107501746723530",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -14,7 +14,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -35,19 +35,38 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5142449312177784475"
+                        "ID": "3404038717936536451"
                     },
                     {
                         "Enabled": true,
                         "Type": 19
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13219902540864052712",
+                        "ResourceID": "12710574585551353167",
+                        "DataName": "InGame_UI",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "in_game",
+                                "gameobject": "8732434614302612413"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "pause_menu",
+                                "gameobject": "18416540150212088976"
+                            }
+                        ]
                     }
                 ]
             },
             {
-                "Name": "Character 1",
+                "Name": "Pause_Menu",
                 "FamilyNumber": 2,
-                "ID": "5109532575706363113",
-                "ParentID": "18422888173633629715",
+                "ID": "18416540150212088976",
+                "ParentID": "3977107501746723530",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -56,12 +75,140 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -52,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "584146384377473578"
+                    }
+                ]
+            },
+            {
+                "Name": "Image",
+                "FamilyNumber": 3,
+                "ID": "12472712235133237365",
+                "ParentID": "18416540150212088976",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14667518259417635510",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            80,
+                            46,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10881502885711953590"
+                    },
+                    {
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "0",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "InGame",
+                "FamilyNumber": 2,
+                "ID": "8732434614302612413",
+                "ParentID": "3977107501746723530",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14667518259417635510",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14980649018152433797"
+                    }
+                ]
+            },
+            {
+                "Name": "Character2",
+                "FamilyNumber": 3,
+                "ID": "7930017658633583121",
+                "ParentID": "8732434614302612413",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14667518259417635510",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            52,
                             31,
                             0
                         ],
@@ -77,7 +224,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10537409637510212047"
+                        "ID": "4708641703356289199"
                     },
                     {
                         "Width": 4.4699997901916504,
@@ -95,7 +242,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "4874280516204106043",
+                        "ID": "11604791438441011817",
                         "ResourceID": "13238945312953367188",
                         "DataName": "UI_Char_Frame",
                         "HasInspector": true,
@@ -103,32 +250,32 @@
                             {
                                 "VarType": 9,
                                 "Name": "geralt_img",
-                                "gameobject": "6414378679697775515"
+                                "gameobject": "1670405774586992800"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "yen_img",
-                                "gameobject": "17775919752271291962"
+                                "gameobject": "14985853038310562076"
                             },
                             {
                                 "VarType": 14,
                                 "Name": "character",
-                                "enumInt": 0
+                                "enumInt": 1
                             },
                             {
                                 "VarType": 9,
                                 "Name": "lifebar",
-                                "gameobject": "11340858829983618686"
+                                "gameobject": "18058972548495517879"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "mana_bar",
-                                "gameobject": "10474067259003390153"
+                                "gameobject": "1018425499709450790"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "xp_bar",
-                                "gameobject": "12077183301407812420"
+                                "gameobject": "3833666353246577375"
                             },
                             {
                                 "VarType": 3,
@@ -150,11 +297,11 @@
                 ]
             },
             {
-                "Name": "Geralt",
-                "FamilyNumber": 3,
-                "ID": "6414378679697775515",
-                "ParentID": "5109532575706363113",
-                "Enabled": true,
+                "Name": "Geralt2",
+                "FamilyNumber": 4,
+                "ID": "1670405774586992800",
+                "ParentID": "7930017658633583121",
+                "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
@@ -162,13 +309,13 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -1.4127014875411987,
-                            0.05005313828587532,
+                            -1.4127016067504883,
+                            0.050052642822265625,
                             0
                         ],
                         "Rotation": [
@@ -183,7 +330,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13213657755445857368"
+                        "ID": "9588905104517737822"
                     },
                     {
                         "Width": 1.3300000429153442,
@@ -202,11 +349,11 @@
                 ]
             },
             {
-                "Name": "Yennefer",
-                "FamilyNumber": 3,
-                "ID": "17775919752271291962",
-                "ParentID": "5109532575706363113",
-                "Enabled": false,
+                "Name": "Yennefer2",
+                "FamilyNumber": 4,
+                "ID": "14985853038310562076",
+                "ParentID": "7930017658633583121",
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
@@ -214,7 +361,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -235,7 +382,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6860422238251332026"
+                        "ID": "16578287379156807810"
                     },
                     {
                         "Width": 1.2599999904632568,
@@ -254,10 +401,10 @@
                 ]
             },
             {
-                "Name": "Lifebar",
-                "FamilyNumber": 3,
-                "ID": "11340858829983618686",
-                "ParentID": "5109532575706363113",
+                "Name": "Mana2",
+                "FamilyNumber": 4,
+                "ID": "1018425499709450790",
+                "ParentID": "7930017658633583121",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -266,76 +413,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0.63259673118591309,
-                            0.16481994092464447,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1.309999942779541,
-                            0.14000000059604645,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "2546949639815229551"
-                    },
-                    {
-                        "X": 233.20204162597656,
-                        "Y": 85.090171813964844,
-                        "Width": 2.6099998950958252,
-                        "Height": 0.18999999761581421,
-                        "Enabled": true,
-                        "Type": 30,
-                        "UIType": 25,
-                        "TextureID": "0",
-                        "sliderTexture": "8243990881878598584",
-                        "Color": [
-                            1,
-                            0.99998998641967773,
-                            0.99998998641967773,
-                            0
-                        ],
-                        "BarColor": [
-                            1,
-                            1,
-                            0.99998998641967773,
-                            1
-                        ],
-                        "maxValue": 100,
-                        "minValue": 0,
-                        "currentValue": 100,
-                        "factor": 1,
-                        "barScaleX": 1,
-                        "barScaleY": 0.80000001192092896,
-                        "offsetX": 0,
-                        "offsetY": 0
-                    }
-                ]
-            },
-            {
-                "Name": "Mana",
-                "FamilyNumber": 3,
-                "ID": "10474067259003390153",
-                "ParentID": "5109532575706363113",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -356,11 +434,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7130723753298259285"
+                        "ID": "17773492765240609077"
                     },
                     {
-                        "X": 190.77841186523438,
-                        "Y": 103.41375732421875,
+                        "X": 897.328369140625,
+                        "Y": 102.74657440185547,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -369,15 +447,15 @@
                         "TextureID": "0",
                         "sliderTexture": "580153043839796657",
                         "Color": [
-                            1,
-                            0.99998998641967773,
-                            0.99998998641967773,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
                             0
                         ],
                         "BarColor": [
                             1,
                             1,
-                            0.99998998641967773,
+                            1,
                             1
                         ],
                         "maxValue": 100,
@@ -392,10 +470,10 @@
                 ]
             },
             {
-                "Name": "Xp",
-                "FamilyNumber": 3,
-                "ID": "12077183301407812420",
-                "ParentID": "5109532575706363113",
+                "Name": "Xp2",
+                "FamilyNumber": 4,
+                "ID": "3833666353246577375",
+                "ParentID": "7930017658633583121",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -404,7 +482,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -425,11 +503,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15900136879710612340"
+                        "ID": "10321221697391207484"
                     },
                     {
-                        "X": 187.53054809570313,
-                        "Y": 117.58811950683594,
+                        "X": 894.08056640625,
+                        "Y": 116.82948303222656,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -437,6 +515,75 @@
                         "UIType": 25,
                         "TextureID": "0",
                         "sliderTexture": "5426257491602371054",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0
+                        ],
+                        "BarColor": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "maxValue": 100,
+                        "minValue": 0,
+                        "currentValue": 100,
+                        "factor": 1,
+                        "barScaleX": 1,
+                        "barScaleY": 0.80000001192092896,
+                        "offsetX": 1.0439819236432513e-30,
+                        "offsetY": 1.0436772355075182e-30
+                    }
+                ]
+            },
+            {
+                "Name": "Lifebar2",
+                "FamilyNumber": 4,
+                "ID": "18058972548495517879",
+                "ParentID": "7930017658633583121",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14667518259417635510",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.63259649276733398,
+                            0.16481995582580566,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1.309999942779541,
+                            0.14000000059604645,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9711345385791684688"
+                    },
+                    {
+                        "X": 939.751953125,
+                        "Y": 84.541206359863281,
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 25,
+                        "TextureID": "0",
+                        "sliderTexture": "8243990881878598584",
                         "Color": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -455,16 +602,16 @@
                         "factor": 1,
                         "barScaleX": 1,
                         "barScaleY": 0.80000001192092896,
-                        "offsetX": 1.0434944226260783e-30,
-                        "offsetY": 1.0444084870332777e-30
+                        "offsetX": 0,
+                        "offsetY": 0
                     }
                 ]
             },
             {
                 "Name": "Ulti_Bar",
-                "FamilyNumber": 2,
-                "ID": "10983370240432773688",
-                "ParentID": "18422888173633629715",
+                "FamilyNumber": 3,
+                "ID": "16452586226304210694",
+                "ParentID": "8732434614302612413",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -473,7 +620,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -494,11 +641,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2030218686778556608"
+                        "ID": "15630464210877314060"
                     },
                     {
                         "Type": 29,
-                        "ID": "12089146366833072533",
+                        "ID": "7300399632690561394",
                         "ResourceID": "16641756662378091880",
                         "DataName": "UltiBar",
                         "HasInspector": true,
@@ -506,12 +653,12 @@
                             {
                                 "VarType": 9,
                                 "Name": "ultibar",
-                                "gameobject": "14345181270935459148"
+                                "gameobject": "15735378164138463220"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "ultibar_charged",
-                                "gameobject": "17313474818312798335"
+                                "gameobject": "6746927437605650844"
                             }
                         ]
                     }
@@ -519,9 +666,9 @@
             },
             {
                 "Name": "Ultibar",
-                "FamilyNumber": 3,
-                "ID": "14345181270935459148",
-                "ParentID": "10983370240432773688",
+                "FamilyNumber": 4,
+                "ID": "15735378164138463220",
+                "ParentID": "16452586226304210694",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -530,7 +677,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -551,11 +698,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15365381229145635428"
+                        "ID": "13776196657599532022"
                     },
                     {
                         "X": 543.5,
-                        "Y": 571.77777099609375,
+                        "Y": 568.0888671875,
                         "Width": 11.590000152587891,
                         "Height": 0.87999999523162842,
                         "Enabled": true,
@@ -588,9 +735,9 @@
             },
             {
                 "Name": "Animated Image",
-                "FamilyNumber": 4,
-                "ID": "11482106274871619852",
-                "ParentID": "14345181270935459148",
+                "FamilyNumber": 5,
+                "ID": "6629069541464252829",
+                "ParentID": "15735378164138463220",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -599,7 +746,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -620,7 +767,7 @@
                             7
                         ],
                         "ScaleNegative": false,
-                        "ID": "16584039747980749904"
+                        "ID": "10418861573220855605"
                     },
                     {
                         "Width": 11.619999885559082,
@@ -659,9 +806,9 @@
             },
             {
                 "Name": "Ultibar_Charged",
-                "FamilyNumber": 3,
-                "ID": "17313474818312798335",
-                "ParentID": "10983370240432773688",
+                "FamilyNumber": 4,
+                "ID": "6746927437605650844",
+                "ParentID": "16452586226304210694",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -670,7 +817,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -691,7 +838,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9958061085773275252"
+                        "ID": "11378557290838351452"
                     },
                     {
                         "X": 543.5,
@@ -727,10 +874,10 @@
                 ]
             },
             {
-                "Name": "Character2",
-                "FamilyNumber": 2,
-                "ID": "6796068835663764424",
-                "ParentID": "18422888173633629715",
+                "Name": "Character 1",
+                "FamilyNumber": 3,
+                "ID": "1737962832415685530",
+                "ParentID": "8732434614302612413",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -739,12 +886,12 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            52,
+                            -52,
                             31,
                             0
                         ],
@@ -760,7 +907,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11321386460098903080"
+                        "ID": "8604364576675134709"
                     },
                     {
                         "Width": 4.4699997901916504,
@@ -778,7 +925,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "15079850892227152326",
+                        "ID": "6321686163467056769",
                         "ResourceID": "13238945312953367188",
                         "DataName": "UI_Char_Frame",
                         "HasInspector": true,
@@ -786,32 +933,32 @@
                             {
                                 "VarType": 9,
                                 "Name": "geralt_img",
-                                "gameobject": "14234215658837284930"
+                                "gameobject": "3123512703654790101"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "yen_img",
-                                "gameobject": "9002365368618333731"
+                                "gameobject": "6369229911779883137"
                             },
                             {
                                 "VarType": 14,
                                 "Name": "character",
-                                "enumInt": 1
+                                "enumInt": 0
                             },
                             {
                                 "VarType": 9,
                                 "Name": "lifebar",
-                                "gameobject": "1388705076607922861"
+                                "gameobject": "4745927504457803610"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "mana_bar",
-                                "gameobject": "6607478729271214278"
+                                "gameobject": "16072244007942906281"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "xp_bar",
-                                "gameobject": "16258389676773308477"
+                                "gameobject": "11420689905597712910"
                             },
                             {
                                 "VarType": 3,
@@ -833,11 +980,11 @@
                 ]
             },
             {
-                "Name": "Geralt2",
-                "FamilyNumber": 3,
-                "ID": "14234215658837284930",
-                "ParentID": "6796068835663764424",
-                "Enabled": false,
+                "Name": "Geralt",
+                "FamilyNumber": 4,
+                "ID": "3123512703654790101",
+                "ParentID": "1737962832415685530",
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
@@ -845,13 +992,13 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -1.4127016067504883,
-                            0.050052642822265625,
+                            -1.4127014875411987,
+                            0.05005313828587532,
                             0
                         ],
                         "Rotation": [
@@ -866,7 +1013,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5048824633598197499"
+                        "ID": "12659100990323166910"
                     },
                     {
                         "Width": 1.3300000429153442,
@@ -885,11 +1032,11 @@
                 ]
             },
             {
-                "Name": "Yennefer2",
-                "FamilyNumber": 3,
-                "ID": "9002365368618333731",
-                "ParentID": "6796068835663764424",
-                "Enabled": true,
+                "Name": "Yennefer",
+                "FamilyNumber": 4,
+                "ID": "6369229911779883137",
+                "ParentID": "1737962832415685530",
+                "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
@@ -897,7 +1044,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -918,7 +1065,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17936150009412044414"
+                        "ID": "9745140860047693911"
                     },
                     {
                         "Width": 1.2599999904632568,
@@ -937,10 +1084,10 @@
                 ]
             },
             {
-                "Name": "Lifebar2",
-                "FamilyNumber": 3,
-                "ID": "1388705076607922861",
-                "ParentID": "6796068835663764424",
+                "Name": "Lifebar",
+                "FamilyNumber": 4,
+                "ID": "4745927504457803610",
+                "ParentID": "1737962832415685530",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -949,7 +1096,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -970,22 +1117,22 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14991300249153008699"
+                        "ID": "18293516035867014346"
                     },
                     {
-                        "X": 939.751953125,
-                        "Y": 85.090171813964844,
-                        "Width": 10,
-                        "Height": 10,
+                        "X": 233.20204162597656,
+                        "Y": 84.541206359863281,
+                        "Width": 2.6099998950958252,
+                        "Height": 0.18999999761581421,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 25,
                         "TextureID": "0",
                         "sliderTexture": "8243990881878598584",
                         "Color": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0.80000001192092896,
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
                             0
                         ],
                         "BarColor": [
@@ -1006,10 +1153,10 @@
                 ]
             },
             {
-                "Name": "Mana2",
-                "FamilyNumber": 3,
-                "ID": "6607478729271214278",
-                "ParentID": "6796068835663764424",
+                "Name": "Mana",
+                "FamilyNumber": 4,
+                "ID": "16072244007942906281",
+                "ParentID": "1737962832415685530",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1018,7 +1165,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -1039,11 +1186,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8629566027250106081"
+                        "ID": "1032521444818099913"
                     },
                     {
-                        "X": 897.328369140625,
-                        "Y": 103.41375732421875,
+                        "X": 190.77841186523438,
+                        "Y": 102.74657440185547,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -1052,15 +1199,15 @@
                         "TextureID": "0",
                         "sliderTexture": "580153043839796657",
                         "Color": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0.80000001192092896,
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
                             0
                         ],
                         "BarColor": [
                             1,
                             1,
-                            1,
+                            0.99998998641967773,
                             1
                         ],
                         "maxValue": 100,
@@ -1075,10 +1222,10 @@
                 ]
             },
             {
-                "Name": "Xp2",
-                "FamilyNumber": 3,
-                "ID": "16258389676773308477",
-                "ParentID": "6796068835663764424",
+                "Name": "Xp",
+                "FamilyNumber": 4,
+                "ID": "11420689905597712910",
+                "ParentID": "1737962832415685530",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1087,7 +1234,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "15674802875929022215",
+                "PrefabID": "14667518259417635510",
                 "Components": [
                     {
                         "Type": 0,
@@ -1108,11 +1255,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6598054128968325795"
+                        "ID": "14887474677164202587"
                     },
                     {
-                        "X": 894.08056640625,
-                        "Y": 117.58811950683594,
+                        "X": 187.53054809570313,
+                        "Y": 116.82948303222656,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -1129,7 +1276,7 @@
                         "BarColor": [
                             1,
                             1,
-                            1,
+                            0.99998998641967773,
                             1
                         ],
                         "maxValue": 100,
@@ -1138,8 +1285,8 @@
                         "factor": 1,
                         "barScaleX": 1,
                         "barScaleY": 0.80000001192092896,
-                        "offsetX": 1.0439819236432513e-30,
-                        "offsetY": 1.0436772355075182e-30
+                        "offsetX": 1.0434944226260783e-30,
+                        "offsetY": 1.0444084870332777e-30
                     }
                 ]
             }
