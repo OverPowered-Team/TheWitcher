@@ -10,8 +10,9 @@ Enemy::~Enemy()
 
 void Enemy::StartEnemy()
 {
+	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	state = EnemyState::IDLE;
-	std::string json_str = "";
+	std::string json_str;
 
 	switch (type)
 	{
