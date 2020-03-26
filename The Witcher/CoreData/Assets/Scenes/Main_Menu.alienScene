@@ -1812,9 +1812,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.26694577932357788,
-                                1.6309337615966797,
-                                1.0722228288650513
+                                0.29096394777297974,
+                                0.76455533504486084,
+                                1.3960028886795044
                             ],
                             "Rotation": [
                                 0,
@@ -1899,7 +1899,7 @@
                                 2
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 6.8680028915405273,
+                            "CurrentLife": 4.5629987716674805,
                             "SpawnRate": 20,
                             "Delay": 2,
                             "Loop": true,
@@ -2135,9 +2135,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -3.2032821178436279,
-                                7.4462184906005859,
-                                -9.2182407379150391
+                                -3.5739929676055908,
+                                7.7667222023010254,
+                                -9.1542673110961914
                             ],
                             "Rotation": [
                                 0,
@@ -2222,7 +2222,7 @@
                                 0.5
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 6.8680028915405273,
+                            "CurrentLife": 4.5629987716674805,
                             "SpawnRate": 20,
                             "Delay": 2,
                             "Loop": true,
@@ -2439,15 +2439,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            3.4043149948120117,
+                            3.5441961288452148,
                             3.619666576385498,
-                            7.9995617866516113
+                            6.0721120834350586
                         ],
                         "Rotation": [
-                            -0.059227488934993744,
-                            0.87854963541030884,
-                            -0.11304576694965363,
-                            -0.46028611063957214
+                            -0.059722691774368286,
+                            0.87652319669723511,
+                            -0.11278542131185532,
+                            -0.46413335204124451
                         ],
                         "Scale": [
                             1,
@@ -3517,7 +3517,7 @@
                 ]
             },
             {
-                "Name": "Canvas",
+                "Name": "MainMenu",
                 "FamilyNumber": 1,
                 "ID": "8715160805957186391",
                 "ParentID": "0",
@@ -3650,11 +3650,11 @@
                         "Type": 30,
                         "UIType": 21,
                         "TextureID": "0",
-			"TextureIdleID": "0",
-			"TextureHoverID": "0",
-			"TextureClickedID": "0",
-			"TexturePressedID": "0",
-			"TextureDisabledID": "0",
+                        "TextureIdleID": "0",
+                        "TextureHoverID": "0",
+                        "TextureClickedID": "0",
+                        "TexturePressedID": "0",
+                        "TextureDisabledID": "0",
                         "ColorCurrent": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -3694,11 +3694,23 @@
                         "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
-                        "HasListenersOnRelease": false,
+                        "HasListenersOnRelease": true,
+                        "ListenersOnRelease": [
+                            {
+                                "0": "MainMenu_Buttons::NewGame"
+                            }
+                        ],
                         "SelectOnUp": "4622482525051973945",
                         "SelectOnDown": "14723405946886118544",
                         "SelectOnRight": "14723405946886118544",
                         "SelectOnLeft": "4622482525051973945"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3773202790732176802",
+                        "ResourceID": "10290786987156997685",
+                        "DataName": "MainMenu_Buttons",
+                        "HasInspector": false
                     }
                 ]
             },
@@ -3744,11 +3756,11 @@
                         "Type": 30,
                         "UIType": 21,
                         "TextureID": "0",
-			"TextureIdleID": "0",
-			"TextureHoverID": "0",
-			"TextureClickedID": "0",
-			"TexturePressedID": "0",
-			"TextureDisabledID": "0",
+                        "TextureIdleID": "0",
+                        "TextureHoverID": "0",
+                        "TextureClickedID": "0",
+                        "TexturePressedID": "0",
+                        "TextureDisabledID": "0",
                         "ColorCurrent": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -3788,11 +3800,26 @@
                         "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
-                        "HasListenersOnRelease": false,
+                        "HasListenersOnRelease": true,
+                        "ListenersOnRelease": [
+                            {
+                                "0": "MainMenu_Buttons::ExitGame"
+                            },
+                            {
+                                "1": "MainMenu_Buttons::NewGame"
+                            }
+                        ],
                         "SelectOnUp": "11730144501804820082",
                         "SelectOnDown": "10565918868070424962",
                         "SelectOnRight": "10565918868070424962",
                         "SelectOnLeft": "11730144501804820082"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6571050427932085815",
+                        "ResourceID": "10290786987156997685",
+                        "DataName": "MainMenu_Buttons",
+                        "HasInspector": false
                     }
                 ]
             },
@@ -3838,11 +3865,11 @@
                         "Type": 30,
                         "UIType": 21,
                         "TextureID": "0",
-			"TextureIdleID": "0",
-			"TextureHoverID": "0",
-			"TextureClickedID": "0",
-			"TexturePressedID": "0",
-			"TextureDisabledID": "0",
+                        "TextureIdleID": "0",
+                        "TextureHoverID": "0",
+                        "TextureClickedID": "0",
+                        "TexturePressedID": "0",
+                        "TextureDisabledID": "0",
                         "ColorCurrent": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -3932,11 +3959,11 @@
                         "Type": 30,
                         "UIType": 21,
                         "TextureID": "0",
-			"TextureIdleID": "0",
-			"TextureHoverID": "0",
-			"TextureClickedID": "0",
-			"TexturePressedID": "0",
-			"TextureDisabledID": "0",
+                        "TextureIdleID": "0",
+                        "TextureHoverID": "0",
+                        "TextureClickedID": "0",
+                        "TexturePressedID": "0",
+                        "TextureDisabledID": "0",
                         "ColorCurrent": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -3991,7 +4018,7 @@
                 "ParentID": "8715160805957186391",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -4026,11 +4053,11 @@
                         "Type": 30,
                         "UIType": 21,
                         "TextureID": "0",
-			"TextureIdleID": "0",
-			"TextureHoverID": "0",
-			"TextureClickedID": "0",
-			"TexturePressedID": "0",
-			"TextureDisabledID": "0",
+                        "TextureIdleID": "0",
+                        "TextureHoverID": "0",
+                        "TextureClickedID": "0",
+                        "TexturePressedID": "0",
+                        "TextureDisabledID": "0",
                         "ColorCurrent": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -4083,7 +4110,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "13020038402071045092",
+                        "ID": "3725896867342510726",
                         "ResourceID": "10290786987156997685",
                         "DataName": "MainMenu_Buttons",
                         "HasInspector": false
@@ -4097,7 +4124,7 @@
                 "ParentID": "8715160805957186391",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -4132,11 +4159,11 @@
                         "Type": 30,
                         "UIType": 21,
                         "TextureID": "10310628212071808628",
-			"TextureIdleID": "10310628212071808628",
-			"TextureHoverID": "0",
-			"TextureClickedID": "0",
-			"TexturePressedID": "0",
-			"TextureDisabledID": "0",
+                        "TextureIdleID": "10310628212071808628",
+                        "TextureHoverID": "0",
+                        "TextureClickedID": "0",
+                        "TexturePressedID": "0",
+                        "TextureDisabledID": "0",
                         "ColorCurrent": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -4189,7 +4216,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "11108979818511617062",
+                        "ID": "16910026659441153896",
                         "ResourceID": "10290786987156997685",
                         "DataName": "MainMenu_Buttons",
                         "HasInspector": false
