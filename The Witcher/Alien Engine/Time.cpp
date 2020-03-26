@@ -17,6 +17,7 @@ float Time::time_since_start = 0.0F;
 float Time::game_time = 0.0F;
 float Time::delta_time = 0.0F;
 float Time::engine_dt = 0.0F;
+bool Time::is_paused = false;
 float Time::scale_time = 1.0F;
 Timer* Time::start_timer = new Timer();
 Timer* Time::game_timer = new Timer();
@@ -65,6 +66,7 @@ void Time::Play()
 	}
 	else if (state == GameState::PLAY) {
 		App->objects->CleanUpScriptsOnStop();
+		is_paused = false;
 		state = GameState::NONE;
 		App->CastEvent(EventType::ON_STOP);
 		game_time = 0.0F;
@@ -157,6 +159,16 @@ float Time::GetGameTime()
 float Time::GetScaleTime()
 {
 	return scale_time;
+}
+
+void Time::SetPause(bool is_pause)
+{
+	is_paused = is_pause;
+}
+
+bool Time::IsGamePaused()
+{
+	return is_paused;
 }
 
 bool Time::IsPlaying()

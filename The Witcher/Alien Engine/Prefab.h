@@ -12,6 +12,7 @@ class __declspec(dllexport) Prefab {
 	friend class ModuleObjects;
 	friend class GameObject;
 	friend class PanelScene;
+	friend class ResourcePrefab;
 public:
 
 	Prefab();

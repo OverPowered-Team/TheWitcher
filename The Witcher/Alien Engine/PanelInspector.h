@@ -21,6 +21,7 @@ public:
 private:
 	void ShowModelImportSettings(ResourceModel* model);
 	ComponentCanvas* GetCanvas();
+	void DropScript();
 
 private:
 

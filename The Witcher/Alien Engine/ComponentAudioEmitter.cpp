@@ -148,6 +148,7 @@ bool ComponentAudioEmitter::DrawInspector()
 				bool is_selected = (bk == nullptr) ? false : (bk->id == (*i)->id);
 				if (ImGui::Selectable((*i)->name.c_str(), is_selected))
 				{
+					source->StopEventByName(audio_name.c_str());
 					current_bank = (*i)->id;
 				}
 					
@@ -166,6 +167,7 @@ bool ComponentAudioEmitter::DrawInspector()
 					bool is_selected = (current_event == (*i).first);
 					if (ImGui::Selectable((*i).second.c_str(), is_selected))
 					{
+						source->StopEventByName(audio_name.c_str());
 						current_event = (*i).first;
 						audio_name = (*i).second;
 					}
@@ -182,9 +184,10 @@ bool ComponentAudioEmitter::DrawInspector()
 			//App->audio->UnloadAllUsedBanksFromWwise(); //TODO 
 		}
 		ImGui::NewLine();
-		ImGui::Checkbox("Mute", &mute);
+		if (ImGui::Checkbox("Mute", &mute)) {
+			Mute(mute);
+		}
 		ImGui::Checkbox("PlayOnAwake", &play_on_awake);
-		ImGui::Checkbox("Loop", &loop);
 		if (ImGui::SliderFloat("Volume", &volume, 0.F, 1.F))
 			ChangeVolume(volume);
 	}

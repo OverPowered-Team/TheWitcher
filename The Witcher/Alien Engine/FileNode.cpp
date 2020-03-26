@@ -318,6 +318,15 @@ void FileNode::RemoveResourceOfGameObjects()
 				}
 			}
 			break; }
+		case FileDropType::FONT: {
+			std::string path_ = App->file_system->GetPathWithoutExtension(path + name);
+			path_ += "_meta.alien";
+			u64 ID = App->resources->GetIDFromAlienPath(path_.data());
+			ResourceFont* font_to_delete = (ResourceFont*)App->resources->GetResourceWithID(ID);
+			if (font_to_delete != nullptr) {
+				App->objects->GetRoot(true)->SearchResourceToDelete(ResourceType::RESOURCE_FONT, (Resource*)font_to_delete);
+			}
+			break; }
 		}
 	}
 	else {
@@ -369,6 +378,14 @@ void FileNode::SetIcon()
 			icon = App->resources->icons.model;
 			type = FileDropType::MODEL3D;
 		}
+		else if (App->StringCmp(extension.data(), "ttf")) {
+			icon = App->resources->icons.model;
+			type = FileDropType::FONT;
+		}
+		else if (App->StringCmp(extension.data(), "otf")) {
+			icon = App->resources->icons.model;
+			type = FileDropType::FONT;
+		}
 		else if (App->StringCmp(extension.data(), "alienScene")) {
 			icon = App->resources->icons.scene_file;
 			type = FileDropType::SCENE;
@@ -388,6 +405,10 @@ void FileNode::SetIcon()
 		else if (App->StringCmp(extension.data(), "alienParticles")) {
 			icon = App->resources->icons.model;
 			type = FileDropType::PARTICLES;
+		}
+		else if (App->StringCmp(extension.data(), "fnt")) {
+			icon = App->resources->icons.model;
+			type = FileDropType::FONT;
 		}
 		else {
 			// TODO: fer un icon que sigui unknown

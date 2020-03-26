@@ -245,12 +245,19 @@ void Application::PrepareUpdate()
 	frame_count++;
 	last_sec_frame_count++;
 	dt = frame_time.ReadSec();
-	Time::engine_dt = dt;
-	if (Time::IsPlaying()) {
-		Time::SetDT(dt);
+	if (Time::is_paused) {
+		Time::engine_dt = 0;
+		Time::SetDT(0);
+		dt = 0;
 	}
 	else {
-		Time::SetDT(0);
+		Time::engine_dt = dt;
+		if (Time::IsPlaying()) {
+			Time::SetDT(dt);
+		}
+		else {
+			Time::SetDT(0);
+		}
 	}
 	frame_time.Start();
 	ptimer.Start();

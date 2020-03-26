@@ -301,6 +301,8 @@ public:
 	std::list<PointLightProperties*> point_light_properites;
 	std::list<SpotLightProperties*> spot_light_properites;
 
+	std::vector<std::pair<u64, GameObject**>> to_add;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;
@@ -310,7 +312,7 @@ private:
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
 
-	std::vector<std::pair<u64, GameObject**>> to_add;
+
 
 	std::list<InvokeInfo*> invokes;
 
