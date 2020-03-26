@@ -55,9 +55,8 @@ void CameraMovement::Update()
         break;
     }
     case CameraState::MOVING_TO_STATIC: {
-        current_transition_time += Time::GetDT();
         float min_dist = 0.1f;
-        if ((trg_offset - transform->GetGlobalPosition()).Length() < min_dist) {
+        if (trg_offset.Distance(transform->GetGlobalPosition()) < min_dist) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_offset);
             state = CameraState::STATIC;

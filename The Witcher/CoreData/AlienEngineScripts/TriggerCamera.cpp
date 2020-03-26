@@ -30,6 +30,7 @@ void TriggerCamera::StartTransition(TransitionInfo transition_info)
 		case TransitionInfo::ToTransitionType::STATIC:
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
 			cam_script->trg_offset = transition_info.to_move->transform->GetGlobalPosition();
+			Tween::TweenMoveTo(camera, cam_script->trg_offset, transition_info.transition_time);
 			break;
 		case TransitionInfo::ToTransitionType::AXIS:
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_AXIS;
