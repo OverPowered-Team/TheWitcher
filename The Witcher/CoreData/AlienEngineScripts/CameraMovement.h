@@ -12,15 +12,13 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, MOVING_TO_DYNAMIC
+		DYNAMIC, MOVING_TO_DYNAMIC,
+		STATIC, MOVING_TO_STATIC
 		);
 	enum (
 		CameraAxis,
 		X,Y,Z
 	);
-	enum (PlayerState,
-		NONE, ENTER_FIRST, ENTER_FIRST_MIDDLE, ENTER_LAST, EXIT_FIRST, EXIT_FIRST_MIDDLE, EXIT_LAST, ON_EXIT
-		);
 
 	CameraMovement();
 	virtual ~CameraMovement();
@@ -36,7 +34,7 @@ public:
 
 	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
-	std::map<GameObject*, PlayerState> players;
+	std::vector<GameObject*> players;
 	uint num_curr_players = 0u;
 	float3 trg_offset;
 	//float3 start_transition_pos;

@@ -80955,9 +80955,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.2275505065917969,
-                                -2.6584651470184326,
-                                0.24571932852268219
+                                -4.7012939453125,
+                                -1.578336238861084,
+                                -0.63772308826446533
                             ],
                             "Force": [
                                 0,
@@ -81030,7 +81030,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.96899998188018799,
+                            "CurrentLife": 17.958000183105469,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -82057,9 +82057,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.37658309936523438,
-                                -2.6389389038085938,
-                                4.2301521301269531
+                                -0.70954471826553345,
+                                -3.5463216304779053,
+                                -3.4525563716888428
                             ],
                             "Force": [
                                 0,
@@ -82132,7 +82132,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0009996891021729,
+                            "CurrentLife": 17.958000183105469,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -82186,7 +82186,7 @@
                 "ParentID": "17410189700768392093",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -82233,9 +82233,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.93169265985488892,
-                                -1.0381067991256714,
-                                1.4332771301269531
+                                1.3682433366775513,
+                                0.92947304248809814,
+                                -1.1242730617523193
                             ],
                             "Force": [
                                 0,
@@ -82308,7 +82308,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 3.1779999732971191,
+                            "CurrentLife": 3.0110013484954834,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -83296,9 +83296,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.1674323081970215,
-                                -1.8119739294052124,
-                                2.0854880809783936
+                                -3.6031005382537842,
+                                -3.4663770198822021,
+                                -0.043532270938158035
                             ],
                             "Force": [
                                 0,
@@ -83371,7 +83371,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.96899998188018799,
+                            "CurrentLife": 17.958000183105469,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -84398,9 +84398,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -3.1383740901947021,
-                                -0.22217690944671631,
-                                -3.8860318660736084
+                                1.3795998096466064,
+                                -4.5457243919372559,
+                                1.5598381757736206
                             ],
                             "Force": [
                                 0,
@@ -84473,7 +84473,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0009996891021729,
+                            "CurrentLife": 17.958000183105469,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -84574,9 +84574,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.2962239980697632,
-                                -0.76006299257278442,
-                                1.3198891878128052
+                                -0.29700827598571777,
+                                1.2660783529281616,
+                                -1.5194840431213379
                             ],
                             "Force": [
                                 0,
@@ -84649,7 +84649,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 3.1779999732971191,
+                            "CurrentLife": 3.0110013484954834,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -85381,24 +85381,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 10
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 180
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 40
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -85409,24 +85427,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 15.5
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 136
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 59.5
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -85927,24 +85963,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 7
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 208.5
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 45
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -85955,24 +86009,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 8
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 240.5
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 24
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -86473,24 +86545,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 9.5
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 187
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 40.5
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -86501,24 +86591,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 8
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 240
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 24
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -87019,24 +87127,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 8
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 240
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 24
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -87047,24 +87173,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 6.5
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 180
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 20
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -87565,24 +87709,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 6.5
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 180
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 20
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -87593,24 +87755,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 10
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 185
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 50
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -88111,24 +88291,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 10
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 185
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 50
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -88139,24 +88337,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 16.5
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 190
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 65
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -88616,7 +88832,7 @@
                 "ParentID": "3405940519219092428",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -88657,24 +88873,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 7
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 183.5
+                                "Name": "prev_camera.distance",
+                                "float": 5.5
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 45
+                                "Name": "prev_camera.hor_angle",
+                                "float": 313.5
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 34.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "12285325497453283682"
                             },
                             {
                                 "VarType": 12,
@@ -88685,24 +88919,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 7
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 273
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 31.5
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -88720,7 +88972,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -88789,7 +89041,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -88848,7 +89100,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -88907,7 +89159,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -88976,7 +89228,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -89045,7 +89297,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -89104,7 +89356,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -89203,24 +89455,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 7
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 180
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 45
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -89231,24 +89501,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 7
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 182
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 24
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -89749,24 +90037,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 18.5
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": -292.5
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 26.5
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 20
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -89777,24 +90083,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 6
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 20.5
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 35.5
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 20
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -90295,24 +90619,42 @@
                                 "Name": "Previous camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "prev_camera_distance",
-                                "float": 10
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_hor_angle",
-                                "float": 180
+                                "Name": "prev_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_vert_angle",
-                                "float": 40
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "prev_camera_transition_time",
-                                "float": 10
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -90323,24 +90665,42 @@
                                 "Name": "Next camera"
                             },
                             {
-                                "VarType": 3,
-                                "Name": "next_camera_distance",
-                                "float": 10
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_hor_angle",
-                                "float": 180
+                                "Name": "next_camera.distance",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_vert_angle",
-                                "float": 40
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
-                                "Name": "next_camera_transition_time",
-                                "float": 10
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 12,
@@ -90942,6 +91302,43 @@
                             0.50999999046325684,
                             0.125
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "Empty GameObject",
+                "FamilyNumber": 1,
+                "ID": "12285325497453283682",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -184.135009765625,
+                            29.277862548828125,
+                            1.63148033618927
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12384292645154314058"
                     }
                 ]
             }
