@@ -25,7 +25,9 @@ void TriggerFootsteps::Update()
 void TriggerFootsteps::OnTriggerEnter(ComponentCollider* collider)
 {
 	ComponentAudioEmitter* emitter = (ComponentAudioEmitter*)collider->game_object_attached->GetComponent(ComponentType::A_EMITTER);
-	emitter->SetSwitchState("Material", GetNameByEnum(material_1).c_str());
+
+	if (emitter != nullptr)
+		emitter->SetSwitchState("Material", GetNameByEnum(material_1).c_str());
 }
 
 void TriggerFootsteps::OnTriggerExit(ComponentCollider* collider)

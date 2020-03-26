@@ -10,14 +10,14 @@ class __declspec(dllexport) ComponentText :public ComponentUI
 {
 public:
 	ComponentText(GameObject* obj);
-	virtual ~ComponentText() {};
+	~ComponentText();
 
 	bool DrawInspector();
-	bool DrawCharacter(Character ch);
 
 	void Draw(bool isGame) override;
-	void Reset() {};
-	void SetComponent(Component* component) {};
+
+	void Reset();
+	void SetComponent(Component* component);
 	void Clone(Component* clone);
 
 	void SaveComponent(JSONArraypack* to_save);

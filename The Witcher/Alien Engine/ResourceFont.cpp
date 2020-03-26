@@ -3,6 +3,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
 #include "ModuleImporter.h"
+#include "ResourceShader.h"
 #include "FreeType/include/freetype/freetype.h"
 #include "glew/include/glew.h"
 #include "mmgr/mmgr.h"
@@ -14,13 +15,7 @@ ResourceFont::ResourceFont(ResourceFontData fontData):Resource(), fontData(fontD
 
 ResourceFont::~ResourceFont()
 {
-	for (auto itBuff = fontData.fontBuffer.begin(); itBuff != fontData.fontBuffer.end(); itBuff++)
-	{
-		delete[](*itBuff);
-	}
-
-	fontData.fontBuffer.clear();
-
+	FreeMemory();
 }
 
 void ResourceFont::CreateMeta()
@@ -136,8 +131,10 @@ ResourceFont* ResourceFont::ImportFont(const char* file, u64 forced_id)
 		font->path = file;
 		font->name = App->file_system->GetBaseFileName(file);
 		font->meta_data_path = LIBRARY_FONTS_FOLDER + std::to_string(font->GetID()) + ".fnt";
+		font->text_shader = SetShader("text_shader_meta.alien");
+		font->text_ortho = SetShader("text_ortho_meta.alien");
 
-		ResourceFont::SaveFile(fontData, font->meta_data_path.c_str());
+		ResourceFont::SaveFile(fontData, font->meta_data_path.c_str(), font->text_ortho->GetID(), font->text_shader->GetID());
 		font->CreateMeta();
 	}
 
@@ -200,6 +197,18 @@ ResourceFont* ResourceFont::LoadFile(const char* file, u64 forced_id)
 		res->ID = forced_id;
 		res->meta_data_path = LIBRARY_FONTS_FOLDER + std::to_string(res->GetID()) + ".fnt";
 
+		// Ortho Shader ID
+		bytes = sizeof(u64);
+		u64 ID = 0;
+		memcpy(&ID, cursor, bytes);
+		res->text_ortho = (ResourceShader*)App->resources->GetResourceWithID(ID);
+		cursor += bytes;
+
+		// Text Shader ID
+		memcpy(&ID, cursor, bytes);
+		res->text_shader = (ResourceShader*)App->resources->GetResourceWithID(ID);
+		cursor += bytes;
+
 		RELEASE_ARRAY(buffer);
 	
 	}
@@ -224,7 +233,7 @@ uint ResourceFont::LoadTextureCharacter(uint width, uint height, uchar* buffer)
 	return texture;
 }
 
-uint ResourceFont::SaveFile(ResourceFontData& fontData, const char* exported_path)
+uint ResourceFont::SaveFile(ResourceFontData& fontData, const char* exported_path, u64 ortho, u64 text)
 {
 	uint sizeBuffer = 0;
 	for (uint i = 0; i < fontData.charactersMap.size(); ++i)
@@ -233,7 +242,7 @@ uint ResourceFont::SaveFile(ResourceFontData& fontData, const char* exported_pat
 	}
 
 	uint size = sizeof(uint) * 3 + sizeBuffer +
-		sizeof(Character) * fontData.charactersMap.size();
+		sizeof(Character) * fontData.charactersMap.size() + sizeof(u64) * 2;
 
 	char* buffer = new char[size];
 	char* cursor = buffer;
@@ -262,7 +271,16 @@ uint ResourceFont::SaveFile(ResourceFontData& fontData, const char* exported_pat
 		memcpy(cursor, fontData.fontBuffer[i], bytes);
 		cursor += bytes;
 	}
-	// --------------------------------------------------
+
+	// Ortho Shader ID
+	bytes = sizeof(u64);
+	memcpy(cursor, &ortho, bytes);
+	cursor += bytes;
+
+	// Text Shader ID
+	memcpy(cursor, &text, bytes);
+	cursor += bytes;
+
 
 	// Save the file
 	uint ret = App->file_system->Save(exported_path, buffer, size);
@@ -277,4 +295,45 @@ uint ResourceFont::SaveFile(ResourceFontData& fontData, const char* exported_pat
 	RELEASE_ARRAY(buffer);
 
 	return ret;
+}
+
+bool ResourceFont::LoadMemory()
+{
+	if (text_shader != nullptr)
+		text_shader->LoadMemory();
+	if (text_ortho != nullptr)
+		text_ortho->LoadMemory();
+	return true;
+}
+
+void ResourceFont::FreeMemory()
+{
+	for (auto itBuff = fontData.fontBuffer.begin(); itBuff != fontData.fontBuffer.end(); itBuff++)
+	{
+		delete[](*itBuff);
+	}
+
+	fontData.fontBuffer.clear();
+
+	if (!App->IsQuiting())
+	{
+		text_shader->FreeMemory();
+		text_ortho->FreeMemory();
+	}
+}
+
+ResourceShader* ResourceFont::SetShader(const char* path)
+{
+	ResourceShader* shader = nullptr;
+	if (shader != nullptr)
+	{
+		shader->DecreaseReferences();
+	}
+	std::string fullpath = SHADERS_FOLDER;
+	fullpath += path;
+	u64 id_s = App->resources->GetIDFromAlienPath(fullpath.c_str()); // needs fix. meta is not created too...
+	shader = (ResourceShader*)App->resources->GetResourceWithID(id_s);
+	shader->IncreaseReferences();
+
+	return shader;
 }

@@ -66,11 +66,13 @@ class __declspec(dllexport) ComponentScript : public Component {
 	friend class CompZ;
 	friend class PanelInspector;
 	friend class Prefab;
+	friend class PanelHierarchy;
 	friend class PanelAnimTimeline;
 	friend class ResourceAnimatorController;
 	friend class ComponentButton;
 	friend class ComponentCheckbox;
 	friend class ModuleObjects;
+	friend class ComponentTransform;
 	friend class ModulePhysics;
 	friend class ComponentCollider;
 	friend class GameObject;

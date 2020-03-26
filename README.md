@@ -1,12 +1,26 @@
-# TheWitcher:ProjectM
+# TheWitcher
 
-TheWitcher:ProjectM v.0.1
+TheWitcher v.0.2.3
 
 ## Description
 
 In this game players will take the role of Geralt and Yennefer, on their quest to rescue Ciri.
 The game will introduce a series of “relics”, objects that when grabbed, will improve one of the existing combos (making it stun, do fire damage, etc.). By shifting what combos do in each game, the player will be incentivized to use different combos, which in the long will traduce into knowledge of what each combo does.
 The player will end up mastering its character, each time being able to complete their adventure with faster times and better scores.
+
+In this release you will see:
+
+Main character with basic stage navigation (Idle / move / dash / jump).
+The main character must collide with the level.
+The character looking graphically finished.
+A basic attack of the player.
+We must be able to play 2 players with Xbox controller.
+Blockout of the integrated engine and navigable scenario.
+The 3d asset with final art on the level.
+Functional camera system.
+HUD integrated.
+Sound: walk and hit.
+Particles: walk and hit.
 
 ## Links
 
@@ -109,7 +123,7 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
 
 - Controller:
 
-  - Joystick izq: MOVE
+  - Left Joystick: MOVE
   
   - X: ATTACK
   
@@ -117,7 +131,7 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
   
   - B: SPELL
   
-  - Arrow-Down: DANCE
+  - A: JUMP
 
 ## Instructions to execute
 
