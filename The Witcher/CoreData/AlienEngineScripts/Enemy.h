@@ -1,8 +1,9 @@
 #pragma once
 
+#include "..\..\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class Enemy {
+class Enemy : public Alien {
 
 public: 
 
@@ -37,8 +38,8 @@ public:
 
 	virtual void StartEnemy();
 	virtual void SetStats(const char* json);
-	virtual void Update() {}
-	virtual void CleanUp() {}
+	virtual void UpdateEnemy() {}
+	virtual void CleaningUp() {}
 
 public:
 	EnemyType type = EnemyType::NONE;

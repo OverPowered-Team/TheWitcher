@@ -4,16 +4,16 @@
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
 
-class ALIEN_ENGINE_API NilfgaardSoldier : public Enemy, Alien {
+class ALIEN_ENGINE_API NilfgaardSoldier : public Enemy {
 public:
 
 	NilfgaardSoldier() {}
 	virtual ~NilfgaardSoldier() {}
 
-	void Start() override;
+	void StartEnemy() override;
 	void SetStats(const char* json) override;
-	void Update() override;
-	void CleanUp() override;
+	void UpdateEnemy() override;
+	void CleaningUp() override;
 
 public:
 

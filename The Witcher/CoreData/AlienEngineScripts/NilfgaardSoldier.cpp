@@ -1,9 +1,8 @@
 #include "NilfgaardSoldier.h"
 
-void NilfgaardSoldier::Start()
+void NilfgaardSoldier::StartEnemy()
 {
 	type = Enemy::EnemyType::NILFGAARD_SOLDIER;
-	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 
 	Enemy::StartEnemy();
 }
@@ -30,10 +29,10 @@ void NilfgaardSoldier::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-void NilfgaardSoldier::Update()
+void NilfgaardSoldier::UpdateEnemy()
 {
 }
 
-void NilfgaardSoldier::CleanUp()
+void NilfgaardSoldier::CleaningUp()
 {
 }
