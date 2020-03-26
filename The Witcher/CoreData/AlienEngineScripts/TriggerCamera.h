@@ -23,7 +23,7 @@ struct TransitionInfo
 		: to_move(to_move), transition_time(transition_time), type(ToTransitionType::STATIC)
 	{}
 	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, ToAxisType type)
-		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), axis_type(type), type(ToTransitionType::DYNAMIC)
+		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), axis_type(type), type(ToTransitionType::AXIS)
 	{};
 
 	float distance = 0.f;

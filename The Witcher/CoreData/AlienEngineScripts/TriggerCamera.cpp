@@ -34,7 +34,8 @@ void TriggerCamera::StartTransition(TransitionInfo transition_info)
 			break;
 		case TransitionInfo::ToTransitionType::AXIS:
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_AXIS;
-			cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance, (CameraMovement::CameraAxis)transition_info.axis_type);
+			cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+			cam_script->axis = (CameraMovement::CameraAxis)transition_info.axis_type;
 			break;
 		default:
 			break;

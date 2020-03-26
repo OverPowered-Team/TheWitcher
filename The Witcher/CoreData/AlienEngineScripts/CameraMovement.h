@@ -31,7 +31,7 @@ public:
 	float3 CalculateMidPoint();
 	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
-	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst, CameraAxis axis_type = CameraAxis::NONE);
+	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
 	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
 	TransitionInfo curr_transition;

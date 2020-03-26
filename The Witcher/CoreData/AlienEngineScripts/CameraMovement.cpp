@@ -111,11 +111,10 @@ void CameraMovement::LookAtMidPoint()
     transform->SetGlobalRotation(rot2 * rot1);
 }
 
-float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst, CameraAxis axis_type)
+float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst)
 {
     float angle1 = math::DegToRad(ang1);
     float angle2 = math::DegToRad(ang2);
-    axis = axis_type;
 
     return float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
 }
