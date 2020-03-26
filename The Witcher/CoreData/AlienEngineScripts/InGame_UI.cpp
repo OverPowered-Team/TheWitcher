@@ -16,15 +16,21 @@ void InGame_UI::Start()
 
 void InGame_UI::Update()
 {
-	if ((Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonUp(2, Input::CONTROLLER_BUTTON_START)))
+	if ((Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonUp(2, Input::CONTROLLER_BUTTON_START))||(Input::GetKeyDown(SDL_SCANCODE_ESCAPE)))
 	{
-		PauseMenu(!pause_active);
+		PauseMenu(!Time::IsGamePaused());
 	}
 }
 
 void InGame_UI::PauseMenu(bool to_open)
 {
 	in_game->SetEnable(!to_open);
+	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
-	pause_active = to_open;
+	if (Time::IsGamePaused())
+	{
+		LOG("%s", "paused");
+	}
+	else
+		LOG("%s", "going");
 }
