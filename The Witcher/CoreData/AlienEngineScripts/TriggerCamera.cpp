@@ -31,6 +31,10 @@ void TriggerCamera::StartTransition(TransitionInfo transition_info)
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
 			cam_script->trg_offset = transition_info.to_move->transform->GetGlobalPosition();
 			break;
+		case TransitionInfo::ToTransitionType::AXIS:
+			cam_script->state = CameraMovement::CameraState::MOVING_TO_AXIS;
+			cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance, (CameraMovement::CameraAxis)transition_info.axis_type);
+			break;
 		default:
 			break;
 		}
@@ -63,6 +67,9 @@ void TriggerCamera::OnDrawGizmos()
 	case TransitionInfo::ToTransitionType::STATIC:
 		VisualizeCameraTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time), Color::Green());
 		break;
+	case TransitionInfo::ToTransitionType::AXIS:
+		VisualizeCameraTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.axis_type), Color::Green());
+		break;
 	}
 
 	switch (next_camera.type)
@@ -74,6 +81,11 @@ void TriggerCamera::OnDrawGizmos()
 	}
 	case TransitionInfo::ToTransitionType::STATIC: {
 		VisualizeCameraTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time), Color::Green());
+		break;
+	}
+	case TransitionInfo::ToTransitionType::AXIS: {
+		TransitionInfo transition = TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.axis_type);
+		VisualizeCameraTransition(transition, Color::Green());
 		break;
 	}
 	}
@@ -92,6 +104,12 @@ void TriggerCamera::VisualizeCameraTransition (TransitionInfo transition_info, C
 		Gizmos::DrawSphere(transition_info.to_move->transform->GetGlobalPosition(), 0.3f, Color::Purple());
 		Gizmos::DrawLine(transform->GetGlobalPosition(), transition_info.to_move->transform->GetGlobalPosition(), Color::Black());
 		break;
+	case TransitionInfo::ToTransitionType::AXIS: {
+		float3 camera_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+		Gizmos::DrawLine(transform->GetGlobalPosition(), camera_pos, color); // line mid -> future camera pos
+		Gizmos::DrawSphere(camera_pos, 0.15f, color);
+		break;
+	}
 	default:
 		break;
 	}
@@ -120,6 +138,9 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 			case TransitionInfo::ToTransitionType::STATIC:
 				StartTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time));
 				break;
+			case TransitionInfo::ToTransitionType::AXIS:
+				StartTransition(TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.axis_type));
+				break;
 			default:
 				break;
 			}
@@ -133,6 +154,9 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 				break;
 			case TransitionInfo::ToTransitionType::STATIC:
 				StartTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time));
+				break;
+			case TransitionInfo::ToTransitionType::AXIS:
+				StartTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.axis_type));
 				break;
 			default:
 				break;

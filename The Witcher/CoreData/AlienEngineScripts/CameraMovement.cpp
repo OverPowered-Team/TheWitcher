@@ -27,6 +27,33 @@ void CameraMovement::Update()
     case CameraState::STATIC:
         LookAtMidPoint();
         break;
+    case CameraState::AXIS:
+        transform->SetGlobalPosition(CalculateAxisMidPoint() + trg_offset);
+        break;
+    case CameraState::MOVING_TO_AXIS: {
+        current_transition_time += Time::GetDT();
+        float3 trg_pos = CalculateMidPoint() + trg_offset;
+        float3 curr_pos = transform->GetGlobalPosition();
+        float min_dist = 0.1f;
+        if ((trg_pos - curr_pos).Length() < min_dist) {
+            LOG("Finished transition");
+            transform->SetGlobalPosition(trg_pos);
+            state = CameraState::AXIS;
+        }
+        else {
+            //INFO: This is more like an accelerated movement than a lerp since we're using the current position as the starting point
+
+            float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
+
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
+
+            //TODO: We could add the option to configure smoothness (cuadratic t, cubic t, etc.)
+            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent));//Less fast on the beggining
+            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent * time_percent));//Even less fast on the beggining
+        }
+        LookAtMidPoint();
+        break;
+    }
     case CameraState::MOVING_TO_STATIC: {
         current_transition_time += Time::GetDT();
         float min_dist = 0.1f;
@@ -85,11 +112,12 @@ void CameraMovement::LookAtMidPoint()
     transform->SetGlobalRotation(rot2 * rot1);
 }
 
-float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst)
+float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst, CameraAxis axis_type)
 {
     float angle1 = math::DegToRad(ang1);
     float angle2 = math::DegToRad(ang2);
-    
+    axis = axis_type;
+
     return float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
 }
 
@@ -135,7 +163,26 @@ float3 CameraMovement::CalculateMidPoint()
         return mid_pos;
     return mid_pos / players.size();
 }
-
+float3 CameraMovement::CalculateAxisMidPoint()
+{
+    float3 mid_pos(0, 0, 0);
+    for (std::vector<GameObject*>::iterator it = players.begin(); it != players.end(); ++it)
+    {
+        mid_pos += (*it)->transform->GetGlobalPosition();
+    }
+    switch ((CameraAxis)axis)
+    {
+    case CameraAxis::X://X
+        return float3((mid_pos.x) * 0.5f, 0, 0);
+        break;
+    case CameraAxis::Y://Y
+        return float3(0, (mid_pos.y) * 0.5f, 0);
+        break;
+    case CameraAxis::Z://Z
+        return float3(0, 0, (mid_pos.z) * 0.5f);
+        break;
+    }
+}
 Quat CameraMovement::RotationBetweenVectors(math::float3& start, math::float3& dest) // Include in MathGeoLib
 {
     start.Normalize();

@@ -7,9 +7,11 @@
 struct TransitionInfo
 {
 	enum (ToTransitionType,
-		DYNAMIC, STATIC
+		DYNAMIC, STATIC,
+		AXIS
 		);
-
+	enum(ToAxisType,
+		NONE, X, Y, Z);
 	TransitionInfo()
 	{};
 
@@ -20,7 +22,9 @@ struct TransitionInfo
 	TransitionInfo(GameObject* to_move, float transition_time)
 		: to_move(to_move), transition_time(transition_time), type(ToTransitionType::STATIC)
 	{}
-
+	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, ToAxisType type)
+		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), axis_type(type), type(ToTransitionType::DYNAMIC)
+	{};
 	float distance;
 	float hor_angle;
 	float vert_angle;
@@ -30,6 +34,7 @@ struct TransitionInfo
 	float transition_time = 2.f;
 
 	TransitionInfo::ToTransitionType type = TransitionInfo::ToTransitionType::DYNAMIC;
+	TransitionInfo::ToAxisType axis_type = TransitionInfo::ToAxisType::NONE;
 };
 
 class CameraMovement;
@@ -69,6 +74,8 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->prev_camera.transition_time);
 	SHOW_TEXT("If Static");
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->prev_camera.to_move);
+	SHOW_TEXT("If Axis");
+	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->prev_camera.axis_type);
 	SHOW_SEPARATOR();
 
 	SHOW_TEXT("Next camera");//The camera that will transition to when all players have moved forward
@@ -80,6 +87,8 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->next_camera.transition_time);
 	SHOW_TEXT("If Static");
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->next_camera.to_move);
+	SHOW_TEXT("If Axis");
+	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->next_camera.axis_type);
 	SHOW_SEPARATOR();
 
 	return alien;
