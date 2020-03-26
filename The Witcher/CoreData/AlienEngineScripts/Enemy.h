@@ -7,14 +7,16 @@ class Enemy {
 public: 
 
 	struct EnemyStats {
+		std::string weapon = "None";
 		float health = 0.0F;
 		float agility = 0.0F;
 		float damage = 0.0F;
+		float attack_speed = 0.0F;
 	};
 
 	enum (EnemyType,
 		NONE = -1,
-		RANGED,
+		GHOUL,
 		NILFGAARD_SOLDIER
 	);
 
@@ -33,13 +35,12 @@ public:
 	Enemy();
 	virtual ~Enemy();
 
-	virtual void Start();
-	virtual void SetStats() {}
+	virtual void StartEnemy();
+	virtual void SetStats(const char* json);
 	virtual void Update() {}
 	virtual void CleanUp() {}
 
 public:
-		
 	EnemyType type = EnemyType::NONE;
 	EnemyStats stats;
 	EnemyState state = EnemyState::NONE;

@@ -10,7 +10,8 @@ public:
 	NilfgaardSoldier() {}
 	virtual ~NilfgaardSoldier() {}
 
-	void SetStats() override;
+	void Start() override;
+	void SetStats(const char* json) override;
 	void Update() override;
 	void CleanUp() override;
 
