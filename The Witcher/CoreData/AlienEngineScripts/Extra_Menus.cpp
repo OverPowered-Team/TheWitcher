@@ -33,13 +33,3 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 		break;
 	}
 }
-
-void Extra_Menus::Controls()
-{
-	MenuSpawn(MENU::CONTROLS);
-}
-
-void Extra_Menus::Settings()
-{
-	MenuSpawn(MENU::SETTINGS);
-}
