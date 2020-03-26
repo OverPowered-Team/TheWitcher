@@ -21,9 +21,9 @@ struct TransitionInfo
 		: to_move(to_move), transition_time(transition_time), type(ToTransitionType::STATIC)
 	{}
 
-	float distance;
-	float hor_angle;
-	float vert_angle;
+	float distance = 0.f;
+	float hor_angle = 0.f;
+	float vert_angle = 0.f;
 
 	GameObject* to_move = nullptr;
 
