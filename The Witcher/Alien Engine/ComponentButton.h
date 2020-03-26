@@ -44,6 +44,9 @@ private:
 	bool OnRelease();
 
 	void CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners);
+	void SetStateTexture(UIState state, ResourceTexture* tex);
+	void ClearStateTexture(UIState state);
+
 
 public:
 
@@ -52,6 +55,13 @@ public:
 	Color clicked_color = { 0.7f,0.7f,0.7f,1.0f };
 	Color pressed_color = { 0.75f,0.75f,0.75f,1.0f };
 	Color disabled_color = { 0.3f,0.3f,0.3f,1.0f };
+
+protected:
+	ResourceTexture* idle_tex		= nullptr;
+	ResourceTexture* hover_tex		= nullptr;
+	ResourceTexture* clicked_tex	= nullptr;
+	ResourceTexture* pressed_tex	= nullptr;
+	ResourceTexture* disabled_tex	= nullptr;
 
 private:
 

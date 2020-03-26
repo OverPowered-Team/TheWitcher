@@ -276,6 +276,10 @@ void PanelScene::GuizmosLogic()
 
 void PanelScene::GuizmosControls()
 {
+	if (ImGuizmo::IsUsing()) {
+		return;
+	}
+
 	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)&& (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
 	{
 		guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;

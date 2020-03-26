@@ -27,6 +27,11 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetNumber("UIType", (int)ui_type);
 	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()).data() : "0");
+	to_save->SetString("TextureIdleID", (idle_tex != nullptr) ? std::to_string(idle_tex->GetID()).data() : "0");
+	to_save->SetString("TextureHoverID", (hover_tex != nullptr) ? std::to_string(hover_tex->GetID()).data() : "0");
+	to_save->SetString("TextureClickedID", (clicked_tex != nullptr) ? std::to_string(clicked_tex->GetID()).data() : "0");
+	to_save->SetString("TexturePressedID", (pressed_tex != nullptr) ? std::to_string(pressed_tex->GetID()).data() : "0");
+	to_save->SetString("TextureDisabledID", (disabled_tex != nullptr) ? std::to_string(disabled_tex->GetID()).data() : "0");
 	to_save->SetColor("ColorCurrent", current_color);
 	to_save->SetColor("ColorIdle", idle_color);
 	to_save->SetColor("ColorHover", hover_color);
@@ -145,6 +150,43 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 			SetTexture(tex);
 		}
 	}
+	u64 textureIdleID = std::stoull(to_load->GetString("TextureIdleID"));
+	if (textureIdleID != 0) {
+		ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureIdleID);
+		if (tex != nullptr) {
+			SetStateTexture(UIState::Idle, tex);
+		}
+	}
+	u64 textureHoverID = std::stoull(to_load->GetString("TextureHoverID"));
+	if (textureHoverID != 0) {
+		ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureHoverID);
+		if (tex != nullptr) {
+			SetStateTexture(UIState::Hover, tex);
+		}
+	}
+	u64 textureClickedID = std::stoull(to_load->GetString("TextureClickedID"));
+	if (textureClickedID != 0) {
+		ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureClickedID);
+		if (tex != nullptr) {
+			SetStateTexture(UIState::Click, tex);
+		}
+	}
+	u64 texturePressedID = std::stoull(to_load->GetString("TexturePressedID"));
+	if (texturePressedID != 0) {
+		ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(texturePressedID);
+		if (tex != nullptr) {
+			SetStateTexture(UIState::Pressed, tex);
+		}
+	}
+	u64 textureDisabledID = std::stoull(to_load->GetString("TextureDisabledID"));
+	if (textureDisabledID != 0) {
+		ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureDisabledID);
+		if (tex != nullptr) {
+			SetStateTexture(UIState::Disabled, tex);
+		}
+	}
+
+
 	GameObject* p = game_object_attached->parent;
 	bool changed = true;
 	while (changed) {
@@ -254,51 +296,253 @@ bool ComponentButton::DrawInspector()
 		RightClickMenu("Button");
 
 		ImGui::Spacing();
+		if (ImGui::TreeNode("Textures"))
+		{
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Idle Texture");
 
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
-		ImGui::Text("Texture");
+			ImGui::SameLine(150);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::SameLine(120);
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+			ImGui::Button((idle_tex == nullptr) ? "NULL" : std::string(idle_tex->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
-		ImGui::Button((texture == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+			if (ImGui::IsItemClicked() && idle_tex != nullptr) {
+				App->ui->panel_project->SelectFile(idle_tex->GetAssetsPath(), App->resources->assets);
+			}
 
-		if (ImGui::IsItemClicked() && texture != nullptr) {
-			App->ui->panel_project->SelectFile(texture->GetAssetsPath(), App->resources->assets);
-		}
-
-		ImGui::PopStyleColor(3);
-		if (ImGui::BeginDragDropTarget()) {
-			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
-			if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
-				FileNode* node = *(FileNode**)payload->Data;
-				if (node != nullptr && node->type == FileDropType::TEXTURE) {
-					std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
-					path += "_meta.alien";
-					u64 ID = App->resources->GetIDFromAlienPath(path.data());
-					if (ID != 0) {
-						ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
-						if (texture != nullptr) {
-							SetTexture(texture);
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+					FileNode* node = *(FileNode**)payload->Data;
+					if (node != nullptr && node->type == FileDropType::TEXTURE) {
+						std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+						path += "_meta.alien";
+						u64 ID = App->resources->GetIDFromAlienPath(path.data());
+						if (ID != 0) {
+							ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+							if (texture != nullptr) {
+								SetStateTexture(UIState::Idle, texture);
+								SetTexture(texture);
+							}
 						}
 					}
 				}
+				ImGui::EndDragDropTarget();
 			}
-			ImGui::EndDragDropTarget();
-		}
-		if (texture != nullptr) {
-			ImGui::SameLine();
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X") && texture != nullptr) {
-				ClearTexture();
+			if (idle_tex != nullptr) {
+				ImGui::SameLine();
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				if (ImGui::Button("X##idletex") && idle_tex != nullptr) {
+					ClearStateTexture(UIState::Idle);
+				}
+				ImGui::PopStyleColor(3);
 			}
+
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Hover Texture");
+
+			ImGui::SameLine(150);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+
+			ImGui::Button((hover_tex == nullptr) ? "NULL" : std::string(hover_tex->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+
+			if (ImGui::IsItemClicked() && hover_tex != nullptr) {
+				App->ui->panel_project->SelectFile(hover_tex->GetAssetsPath(), App->resources->assets);
+			}
+
 			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+					FileNode* node = *(FileNode**)payload->Data;
+					if (node != nullptr && node->type == FileDropType::TEXTURE) {
+						std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+						path += "_meta.alien";
+						u64 ID = App->resources->GetIDFromAlienPath(path.data());
+						if (ID != 0) {
+							ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+							if (texture != nullptr) {
+								SetStateTexture(UIState::Hover, texture);
+
+							}
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			if (hover_tex != nullptr) {
+				ImGui::SameLine();
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				if (ImGui::Button("X##hovertex") && hover_tex != nullptr) {
+					ClearStateTexture(UIState::Hover);
+				}
+				ImGui::PopStyleColor(3);
+			}
+
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Clicked Texture");
+
+			ImGui::SameLine(150);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+
+			ImGui::Button((clicked_tex == nullptr) ? "NULL" : std::string(clicked_tex->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+
+			if (ImGui::IsItemClicked() && clicked_tex != nullptr) {
+				App->ui->panel_project->SelectFile(clicked_tex->GetAssetsPath(), App->resources->assets);
+			}
+
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+					FileNode* node = *(FileNode**)payload->Data;
+					if (node != nullptr && node->type == FileDropType::TEXTURE) {
+						std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+						path += "_meta.alien";
+						u64 ID = App->resources->GetIDFromAlienPath(path.data());
+						if (ID != 0) {
+							ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+							if (texture != nullptr) {
+								SetStateTexture(UIState::Click, texture);
+
+							}
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			if (clicked_tex != nullptr) {
+				ImGui::SameLine();
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				if (ImGui::Button("X##clickedtex") && clicked_tex != nullptr) {
+					ClearStateTexture(UIState::Click);
+				}
+				ImGui::PopStyleColor(3);
+			}
+
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Pressed Texture");
+
+			ImGui::SameLine(150);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+
+			ImGui::Button((pressed_tex == nullptr) ? "NULL" : std::string(pressed_tex->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+
+			if (ImGui::IsItemClicked() && pressed_tex != nullptr) {
+				App->ui->panel_project->SelectFile(pressed_tex->GetAssetsPath(), App->resources->assets);
+			}
+
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+					FileNode* node = *(FileNode**)payload->Data;
+					if (node != nullptr && node->type == FileDropType::TEXTURE) {
+						std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+						path += "_meta.alien";
+						u64 ID = App->resources->GetIDFromAlienPath(path.data());
+						if (ID != 0) {
+							ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+							if (texture != nullptr) {
+								SetStateTexture(UIState::Pressed, texture);
+
+							}
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			if (pressed_tex != nullptr) {
+				ImGui::SameLine();
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				if (ImGui::Button("X##pressedtex") && pressed_tex != nullptr) {
+					ClearStateTexture(UIState::Pressed);
+				}
+				ImGui::PopStyleColor(3);
+			}
+
+			ImGui::Spacing();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+			ImGui::Text("Disabled Texture");
+
+			ImGui::SameLine(150);
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
+
+			ImGui::Button((disabled_tex == nullptr) ? "NULL" : std::string(disabled_tex->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+
+			if (ImGui::IsItemClicked() && disabled_tex != nullptr) {
+				App->ui->panel_project->SelectFile(disabled_tex->GetAssetsPath(), App->resources->assets);
+			}
+
+			ImGui::PopStyleColor(3);
+			if (ImGui::BeginDragDropTarget()) {
+				const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+				if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+					FileNode* node = *(FileNode**)payload->Data;
+					if (node != nullptr && node->type == FileDropType::TEXTURE) {
+						std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+						path += "_meta.alien";
+						u64 ID = App->resources->GetIDFromAlienPath(path.data());
+						if (ID != 0) {
+							ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
+							if (texture != nullptr) {
+								SetStateTexture(UIState::Disabled, texture);
+
+							}
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			if (disabled_tex != nullptr) {
+				ImGui::SameLine();
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				if (ImGui::Button("X##disabledtex") && disabled_tex != nullptr) {
+					ClearStateTexture(UIState::Disabled);
+				}
+				ImGui::PopStyleColor(3);
+			}
+
+			ImGui::TreePop();
+
 		}
 		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
 
@@ -316,12 +560,15 @@ bool ComponentButton::DrawInspector()
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnClick.begin(), item) + 3876987);
 						if (ImGui::Button("X") && (*item).second != nullptr) {
 							listenersOnClick.erase(item);
+							ImGui::PopID();
 							ImGui::PopStyleColor(3);
 							break;
 							//delete function
 						}
+						ImGui::PopID();
 						ImGui::PopStyleColor(3);
 					}
 
@@ -338,12 +585,15 @@ bool ComponentButton::DrawInspector()
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnHover.begin(), item) + 58613446);
 						if (ImGui::Button("X") && (*item).second != nullptr) {
 							listenersOnHover.erase(item);
+							ImGui::PopID();
 							ImGui::PopStyleColor(3);
 							break;
 							//delete function
 						}
+						ImGui::PopID();
 						ImGui::PopStyleColor(3);
 
 					}
@@ -361,12 +611,15 @@ bool ComponentButton::DrawInspector()
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnClickRepeat.begin(), item) + 4987543);
 						if (ImGui::Button("X") && (*item).second != nullptr) {
 							//delete function
 							listenersOnClickRepeat.erase(item);
+							ImGui::PopID();
 							ImGui::PopStyleColor(3);
 							break;
 						}
+						ImGui::PopID();
 						ImGui::PopStyleColor(3);
 					}
 
@@ -383,12 +636,15 @@ bool ComponentButton::DrawInspector()
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnRelease.begin(), item) + 7654367);
 						if (ImGui::Button("X") && (*item).second != nullptr) {
 							//delete function
 							listenersOnRelease.erase(item);
+							ImGui::PopID();
 							ImGui::PopStyleColor(3);
 							break;
 						}
+						ImGui::PopID();
 						ImGui::PopStyleColor(3);
 					}
 
@@ -586,7 +842,7 @@ bool ComponentButton::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectUpBut")) {
 				if (select_on_up != -1) {
 					select_on_up = -1;
 				}
@@ -624,7 +880,7 @@ bool ComponentButton::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectDownBut")) {
 				if (select_on_down != -1) {
 					select_on_down = -1;
 				}
@@ -666,7 +922,7 @@ bool ComponentButton::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectRightBut")) {
 				if (select_on_right != -1) {
 					select_on_right = -1;
 				}
@@ -709,7 +965,7 @@ bool ComponentButton::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectLeftBut")) {
 				if (select_on_left != -1) {
 					select_on_left = -1;
 				}
@@ -739,6 +995,10 @@ bool ComponentButton::OnHover()
 {
 	if (active) {
 		current_color = hover_color;
+		if (hover_tex != nullptr){
+			SetTexture(hover_tex);
+			SetSize(hover_tex->width, hover_tex->height);
+		}
 		CallListeners(&listenersOnHover);
 	}
 	return true;
@@ -748,6 +1008,10 @@ bool ComponentButton::OnClick()
 {
 	if (active) {
 		current_color = clicked_color;
+		if (clicked_tex != nullptr) {
+			SetTexture(clicked_tex);
+			SetSize(clicked_tex->width, clicked_tex->height);
+		}
 		CallListeners(&listenersOnClick);
 	}
 	return true;
@@ -757,6 +1021,10 @@ bool ComponentButton::OnPressed()
 {
 	if (active) {
 		current_color = pressed_color;
+		if (pressed_tex != nullptr) {
+			SetTexture(pressed_tex);
+			SetSize(pressed_tex->width, pressed_tex->height);
+		}
 		CallListeners(&listenersOnClickRepeat);
 	}
 	return true;
@@ -766,6 +1034,10 @@ bool ComponentButton::OnRelease()
 {
 	if (active) {
 		current_color = idle_color;
+		if (idle_tex != nullptr) {
+			SetTexture(idle_tex);
+			SetSize(idle_tex->width, idle_tex->height);
+		}
 		CallListeners(&listenersOnRelease);
 	}
 	return true;
@@ -791,14 +1063,122 @@ void ComponentButton::CallListeners(std::vector<std::pair<std::string, std::func
 	}
 }
 
+void ComponentButton::SetStateTexture(UIState state, ResourceTexture* tex)
+{
+	switch (state)
+	{
+	case Idle: {
+		if (tex != nullptr && tex != idle_tex) {
+			tex->IncreaseReferences();
+			if (idle_tex != nullptr) {
+				idle_tex->DecreaseReferences();
+			}
+			idle_tex = tex;
+		}
+		break; }
+	case Hover: {
+		if (tex != nullptr && tex != hover_tex) {
+			tex->IncreaseReferences();
+			if (hover_tex != nullptr) {
+				hover_tex->DecreaseReferences();
+			}
+			hover_tex = tex;
+		}
+		break; }
+	case Click: {
+		if (tex != nullptr && tex != clicked_tex) {
+			tex->IncreaseReferences();
+			if (clicked_tex != nullptr) {
+				clicked_tex->DecreaseReferences();
+			}
+			clicked_tex = tex;
+			
+		}
+		break; }
+	case Pressed: {
+		if (tex != nullptr && tex != pressed_tex) {
+			tex->IncreaseReferences();
+			if (pressed_tex != nullptr) {
+				pressed_tex->DecreaseReferences();
+			}
+			pressed_tex = tex;
+			
+		}
+		break; }
+	case Disabled: {
+		if (tex != nullptr && tex != disabled_tex) {
+			tex->IncreaseReferences();
+			if (disabled_tex != nullptr) {
+				disabled_tex->DecreaseReferences();
+			}
+			disabled_tex = tex;
+			
+		}
+		break; }
+	default: {
+		break; }
+	}
+	
+	
+}
+
+void ComponentButton::ClearStateTexture(UIState state)
+{
+	switch (state)
+	{
+	case Idle: {
+		if (idle_tex != nullptr) {
+			idle_tex->DecreaseReferences();
+			idle_tex = nullptr;
+		}
+		break; }
+	case Hover: {
+		if (hover_tex != nullptr) {
+			hover_tex->DecreaseReferences();
+			hover_tex = nullptr;
+		}
+		break; }
+	case Click: {
+		if (clicked_tex != nullptr) {
+			clicked_tex->DecreaseReferences();
+			clicked_tex = nullptr;
+		}
+		break; }
+	case Pressed: {
+		if (pressed_tex != nullptr) {
+			pressed_tex->DecreaseReferences();
+			pressed_tex = nullptr;
+		}
+		break; }
+	case Disabled: {
+		if (disabled_tex != nullptr) {
+			disabled_tex->DecreaseReferences();
+			disabled_tex = nullptr;
+		}
+		break; }
+	default: {
+		break; }
+	}
+}
+
+
 void ComponentButton::SetActive(bool active)
 {
 	this->active = active;
 	if (active) {
 		current_color = idle_color;
+
+		if (idle_tex != nullptr) {
+			SetTexture(idle_tex);
+			SetSize(idle_tex->width, idle_tex->height);
+		}
 	}
 	else {
 		current_color = disabled_color;
+		if (disabled_tex != nullptr) {
+			SetTexture(disabled_tex);
+			SetSize(disabled_tex->width, disabled_tex->height);
+		}
 	}
 }
 

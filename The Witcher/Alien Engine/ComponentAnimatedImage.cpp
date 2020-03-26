@@ -108,10 +108,12 @@ bool ComponentAnimatedImage::DrawInspector()
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				ImGui::PushID(std::distance(images.begin(), item) + 964723);
 				if (ImGui::Button("X") && (*item) != nullptr) {
 					//ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 					(*item) = ClearTextureArray((*item));
 				}
+				ImGui::PopID();
 				ImGui::PopStyleColor(3);
 			}
 		}

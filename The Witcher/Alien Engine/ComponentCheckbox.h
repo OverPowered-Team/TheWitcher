@@ -3,6 +3,7 @@
 
 #include "ComponentUI.h"
 #include "Color.h"
+#include "Event.h"
 #include <functional>
 
 class ResourceTexture;
@@ -54,6 +55,8 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
+protected:
+	void HandleAlienEvent(const AlienEvent& e);
 private:
 	void CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners);
 
