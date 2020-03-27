@@ -10,6 +10,7 @@ public:
 	enum(MENU,
 		CONTROLS,
 		SETTINGS,
+		LEADERBOARD,
 		);
 
 	Extra_Menus();
@@ -26,6 +27,7 @@ ALIEN_FACTORY Extra_Menus* CreateExtra_Menus() {
 
 	SHOW_LAMBDA_FUNCTION(alien->MenuSpawn,"MenuControls",alien,Extra_Menus::MENU::CONTROLS);
 	SHOW_LAMBDA_FUNCTION(alien->MenuSpawn,"MenuSettings",alien,Extra_Menus::MENU::SETTINGS);
+	SHOW_LAMBDA_FUNCTION(alien->MenuSpawn,"MenuLeaderboard",alien,Extra_Menus::MENU::LEADERBOARD);
 
 	return alien;
 } 

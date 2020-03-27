@@ -24,12 +24,19 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 	switch (menu_type) 
 	{
 	case MENU::CONTROLS:
+		GameObject::FindWithName("Leaderboard")->SetEnable(false);
 		GameObject::FindWithName("Settings")->SetEnable(false);
 		GameObject::FindWithName("Controls")->SetEnable(true);
 		break;
 	case MENU::SETTINGS:
+		GameObject::FindWithName("Leaderboard")->SetEnable(false);
 		GameObject::FindWithName("Controls")->SetEnable(false);
 		GameObject::FindWithName("Settings")->SetEnable(true);
+		break;
+	case MENU::LEADERBOARD:
+		GameObject::FindWithName("Controls")->SetEnable(false);
+		GameObject::FindWithName("Settings")->SetEnable(false);
+		GameObject::FindWithName("Leaderboard")->SetEnable(true);
 		break;
 	}
 }
