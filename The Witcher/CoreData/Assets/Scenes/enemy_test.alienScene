@@ -3,9 +3,9 @@
         "Name": "enemy_test",
         "GameObjects": [
             {
-                "Name": "Cube",
+                "Name": "Main Camera",
                 "FamilyNumber": 1,
-                "ID": "16077168540928436092",
+                "ID": "4548440146856480953",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -19,9 +19,146 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -10.492385864257813,
                             0,
-                            -8.0684785842895508
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7302207732756576576"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 73.612632751464844,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "13927051369744398082",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Skybox_NegativeZ": "Assets\/Textures\/Skybox\/negz.jpg",
+                        "Skybox_PositiveZ": "Assets\/Textures\/Skybox\/posz.jpg",
+                        "Skybox_PositiveY": "Assets\/Textures\/Skybox\/posy.jpg",
+                        "Skybox_NegativeY": "Assets\/Textures\/Skybox\/negy.jpg",
+                        "Skybox_PositiveX": "Assets\/Textures\/Skybox\/posx.jpg",
+                        "Skybox_NegativeX": "Assets\/Textures\/Skybox\/negx.jpg"
+                    }
+                ]
+            },
+            {
+                "Name": "Directional Light",
+                "FamilyNumber": 1,
+                "ID": "10308187593297030273",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0.2798481285572052,
+                            -0.36470523476600647,
+                            0.115916907787323,
+                            0.88047623634338379
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11121991726088982762"
+                    },
+                    {
+                        "Type": 3,
+                        "Enabled": true,
+                        "ID": "8121721760208187596",
+                        "PrintIcon": true,
+                        "Intensity": 1,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Direction": [
+                            -0.57735037803649902,
+                            -0.57735025882720947,
+                            0.57735025882720947
+                        ],
+                        "Ambient": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Diffuse": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Ground",
+                "FamilyNumber": 1,
+                "ID": "8510395808857729130",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -9.5962181091308594,
+                            0,
+                            -12.335756301879883
                         ],
                         "Rotation": [
                             0,
@@ -30,12 +167,12 @@
                             1
                         ],
                         "Scale": [
-                            21.10246467590332,
-                            0.8842921257019043,
-                            18.570077896118164
+                            19.539852142333984,
+                            0.50999999046325684,
+                            23.253145217895508
                         ],
                         "ScaleNegative": false,
-                        "ID": "6126271707532253297"
+                        "ID": "8790169091594659179"
                     },
                     {
                         "Type": 1,
@@ -45,7 +182,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "5390835581601500193",
+                        "ID": "14700012972195686712",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -53,7 +190,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "2641357603419221704",
+                        "ID": "9508081770720961471",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -78,9 +215,9 @@
                 ]
             },
             {
-                "Name": "Directional light",
+                "Name": "Player1",
                 "FamilyNumber": 1,
-                "ID": "11146722891025349838",
+                "ID": "9681997445904711781",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -94,146 +231,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -13.499963760375977,
-                            9.9830198287963867,
-                            11.043119430541992
-                        ],
-                        "Rotation": [
-                            0.38601669669151306,
-                            0.5740286111831665,
-                            -0.40297466516494751,
-                            0.59924429655075073
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "13400839222205862517"
-                    },
-                    {
-                        "Type": 3,
-                        "Enabled": true,
-                        "ID": "383440945655754498",
-                        "PrintIcon": true,
-                        "Intensity": 1,
-                        "Position": [
-                            -13.499963760375977,
-                            9.9830198287963867,
-                            11.043119430541992
-                        ],
-                        "Direction": [
-                            0.37685680389404297,
-                            -0.92527449131011963,
-                            0.042964577674865723
-                        ],
-                        "Ambient": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Diffuse": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "Specular": [
-                            1,
-                            1,
-                            1
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Empty GameObject",
-                "FamilyNumber": 1,
-                "ID": "3194022534696868682",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            9.79010009765625,
-                            -24.336650848388672
-                        ],
-                        "Rotation": [
-                            0.16969531774520874,
-                            0,
-                            0,
-                            0.98549658060073853
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "32953118877285624"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 6,
-                        "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
-                        "BackCol": [
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            1
-                        ],
-                        "FarPlane": 200,
-                        "NearPlane": 0.10000000149011612,
-                        "isFovHori": 0,
-                        "ID": "2138912398325663865",
-                        "IsGameCamera": true,
-                        "IsSelectedCamera": false,
-                        "PrintIcon": true,
-                        "IconColor": [
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            1
-                        ],
-                        "Skybox_NegativeZ": "Assets\/Textures\/Skybox\/negz.jpg",
-                        "Skybox_PositiveZ": "Assets\/Textures\/Skybox\/posz.jpg",
-                        "Skybox_PositiveY": "Assets\/Textures\/Skybox\/posy.jpg",
-                        "Skybox_NegativeY": "Assets\/Textures\/Skybox\/negy.jpg",
-                        "Skybox_PositiveX": "Assets\/Textures\/Skybox\/posx.jpg",
-                        "Skybox_NegativeX": "Assets\/Textures\/Skybox\/negx.jpg"
-                    }
-                ]
-            },
-            {
-                "Name": "Player",
-                "FamilyNumber": 1,
-                "ID": "9577834880548958604",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            7.5348601341247559,
-                            1.7268693447113037,
-                            -6.2154397964477539
+                            -6.6061038970947266,
+                            0.87278211116790771,
+                            8.2363061904907227
                         ],
                         "Rotation": [
                             0,
@@ -247,7 +247,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11708432401973159366"
+                        "ID": "8262306908895598479"
                     },
                     {
                         "Type": 1,
@@ -257,7 +257,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3731081628788463837",
+                        "ID": "15348888056679527015",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -265,9 +265,84 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "3601973947190450427",
+                        "ID": "3459545211049007472",
                         "HasMaterial": true,
-                        "MaterialID": "11946318694184528271",
+                        "MaterialID": "18012963031525131083",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Player2",
+                "FamilyNumber": 1,
+                "ID": "8550721761491834705",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -4.8186154365539551,
+                            0.87488818168640137,
+                            8.5639324188232422
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10323542824536252583"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "14009170667269676829",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "1180272466908660588",
+                        "HasMaterial": true,
+                        "MaterialID": "18012963031525131083",
                         "Enabled": true
                     },
                     {
@@ -292,7 +367,7 @@
             {
                 "Name": "Chest",
                 "FamilyNumber": 1,
-                "ID": "7192795218180852427",
+                "ID": "5474634327369360235",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -306,9 +381,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -6.4992871284484863,
-                            2.6959304809570313,
-                            8.3603963851928711
+                            8.1937923431396484,
+                            0.92666935920715332,
+                            -10.573421478271484
                         ],
                         "Rotation": [
                             -0.70710664987564087,
@@ -322,7 +397,7 @@
                             0.0099999997764825821
                         ],
                         "ScaleNegative": false,
-                        "ID": "11770513072701502452"
+                        "ID": "9749745765069994768"
                     },
                     {
                         "Type": 1,
@@ -332,7 +407,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10080140234989531187",
+                        "ID": "14677928335096763031",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9754188463517285973",
@@ -340,10 +415,27 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "152502510790707172",
+                        "ID": "7677575162201092060",
                         "HasMaterial": true,
                         "MaterialID": "15068483807303977470",
                         "Enabled": true
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": false,
+                        "Center": [
+                            0,
+                            0,
+                            0.5
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            148.71542358398438,
+                            109.36257171630859,
+                            262.68798828125
+                        ]
                     },
                     {
                         "Type": 11,
@@ -359,26 +451,9 @@
                         "FreezeRotZ": false
                     },
                     {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0,
-                            0,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            148.71542358398438,
-                            103.66300201416016,
-                            260.78799438476563
-                        ]
-                    },
-                    {
                         "Type": 29,
-                        "ID": "12846937364373416504",
-                        "ResourceID": "5139949674322948660",
+                        "ID": "17263563795942245401",
+                        "ResourceID": "5896852997294469752",
                         "DataName": "NilfgaardSoldier",
                         "HasInspector": true,
                         "Inspector": [
@@ -395,151 +470,18 @@
                             {
                                 "VarType": 9,
                                 "Name": "weapon",
-                                "gameobject": "17822704376206353589"
+                                "gameobject": "9681997445904711781"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "player_1",
-                                "gameobject": "9577834880548958604"
+                                "gameobject": "9681997445904711781"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "player_2",
-                                "gameobject": "14055588471315789377"
+                                "gameobject": "8550721761491834705"
                             }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Sword",
-                "FamilyNumber": 2,
-                "ID": "17822704376206353589",
-                "ParentID": "7192795218180852427",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -68.22808837890625,
-                            29.37872314453125,
-                            80.057525634765625
-                        ],
-                        "Rotation": [
-                            0.93797528743743896,
-                            0,
-                            0,
-                            0.34670236706733704
-                        ],
-                        "Scale": [
-                            23.015512466430664,
-                            100.00001525878906,
-                            26.873420715332031
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "12796615133390346698"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "17901305799739494575",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "4108442104515814251",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Player2",
-                "FamilyNumber": 1,
-                "ID": "14055588471315789377",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            5.2108001708984375,
-                            1.7907006740570068,
-                            -6.1857342720031738
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "4139032916044905120"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "14248930891049983127",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "4304640113443359025",
-                        "HasMaterial": true,
-                        "MaterialID": "18012963031525131083",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 7,
-                        "IsTrigger": false,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
                         ]
                     }
                 ]
