@@ -13,6 +13,8 @@ public:
 		float agility = 0.0F;
 		float damage = 0.0F;
 		float attack_speed = 0.0F;
+		float attack_range = 0.0F;
+		float vision_range = 0.0F;
 	};
 
 	enum (EnemyType,
@@ -36,15 +38,19 @@ public:
 	Enemy();
 	virtual ~Enemy();
 
-	virtual void StartEnemy();
+	void Start();
 	virtual void SetStats(const char* json);
-	virtual void UpdateEnemy() {}
+	virtual void Move(float3 direction) {}
+	void Update() {}
 	virtual void CleaningUp() {}
 
 public:
 	EnemyType type = EnemyType::NONE;
 	EnemyStats stats;
 	EnemyState state = EnemyState::NONE;
-	GameObject* game_object = nullptr;
 	ComponentAnimator* animator = nullptr;
+	ComponentRigidBody* rb = nullptr;
+
+	GameObject* player_1 = nullptr;
+	GameObject* player_2 = nullptr;
 };

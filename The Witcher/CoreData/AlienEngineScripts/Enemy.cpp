@@ -8,11 +8,16 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::StartEnemy()
+void Enemy::Start()
 {
+	LOG("oLE OEL ERNJF K");
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
+	rb = (ComponentRigidBody*)GetComponent(ComponentType::RIGID_BODY);
 	state = EnemyState::IDLE;
 	std::string json_str;
+
+	//player_1 = TODO: Find gameObject of player 1
+	//player_2 = TODO: Find gameObject of player 2
 
 	switch (type)
 	{
@@ -44,7 +49,10 @@ void Enemy::SetStats(const char* json)
 		stats.agility = stat->GetNumber("Agility");
 		stats.damage = stat->GetNumber("Damage");
 		stats.attack_speed = stat->GetNumber("AttackSpeed");
+		stats.attack_range = stat->GetNumber("AttackRange");
+		stats.vision_range = stat->GetNumber("VisionRange");
 	}
 
 	JSONfilepack::FreeJSON(stat);
 }
+
