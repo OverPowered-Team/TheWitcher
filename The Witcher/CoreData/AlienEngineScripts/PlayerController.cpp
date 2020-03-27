@@ -117,6 +117,12 @@ void PlayerController::Update()
 			state = PlayerState::CASTING;
 		}
 
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_UP)) {
+			animator->PlayState("Death");
+			state = PlayerState::DEAD;
+			animator->SetBool("dead", true);
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
@@ -228,6 +234,13 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::CASTING:
 		c_run->GetSystem()->StopEmmitter();
 		controller->SetWalkDirection(float3::zero());
+		can_move = false;
+		break;
+	case PlayerController::PlayerState::DEAD:
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_DOWN)) {
+			state = PlayerState::IDLE;
+			animator->SetBool("dead", false);
+		}
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:

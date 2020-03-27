@@ -16,6 +16,7 @@ public:
 		JUMPING,
 		DASHING,
 		CASTING,
+		DEAD,
 
 		MAX
 		);
