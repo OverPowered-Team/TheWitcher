@@ -5,6 +5,7 @@
 #include "ResourceScene.h"
 #include "ResourcePrefab.h"
 #include "imgui/imgui_internal.h"
+#include "ComponentScript.h"
 #include "PanelProject.h"
 #include "ResourceTexture.h"
 #include "ComponentTransform.h"
@@ -113,19 +114,30 @@ void PanelHierarchy::PanelLogic()
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover | ImGuiDragDropFlags_AcceptNoDrawDefaultRect);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
-			if (obj != nullptr) {
-				if (obj->IsPrefab() && obj->FindPrefabRoot() != obj) {
-					if (!App->objects->prefab_scene) {
-						popup_prefab_restructurate = true;
+			std::vector<GameObject*> objects;
+			if (!obj->IsSelected()) {
+				objects.push_back(obj);
+			}
+			else {
+				objects.assign(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end());
+			}
+			for (auto item = objects.begin(); item != objects.end(); ++item) {
+				if ((*item) != nullptr) {
+					if ((*item)->IsPrefab() && (*item)->FindPrefabRoot() != (*item)) {
+						if (!App->objects->prefab_scene) {
+							popup_prefab_restructurate = true;
+						}
+						else {
+							popup_move_child_outof_root_prefab_scene = true;
+						}
+					}
+					else if (!(*item)->is_static) {
+						App->objects->ReparentGameObject((*item), App->objects->GetRoot(false));
 					}
 					else {
-						popup_move_child_outof_root_prefab_scene = true;
+						LOG_ENGINE("Objects static can not be reparented");
 					}
 				}
-				else if (!obj->is_static)
-					App->objects->ReparentGameObject(obj, App->objects->GetRoot(false));
-				else
-					LOG_ENGINE("Objects static can not be reparented");
 			}
 			ImGui::ClearDragDrop();
 		}
@@ -304,13 +316,26 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
 			GameObject* obj = *(GameObject**)payload->Data;
-			if (obj != nullptr) {
-				if (!App->objects->prefab_scene && obj->IsPrefab() && obj->FindPrefabRoot() != obj)
-					popup_prefab_restructurate = true;
-				else if (!obj->is_static)
-					App->objects->ReparentGameObject(obj, node);
-				else
-					LOG_ENGINE("Objects static can not be reparented");
+			std::vector<GameObject*> objects;
+			if (!obj->IsSelected()) {
+				objects.push_back(obj);
+			}
+			else {
+				objects.assign(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end());
+			}
+			for (auto item = objects.begin(); item != objects.end(); ++item) {
+				if ((*item) != nullptr) {
+					if (!App->objects->prefab_scene && (*item)->IsPrefab() && (*item)->FindPrefabRoot() != (*item)) {
+						popup_prefab_restructurate = true;
+					}
+					else if (!(*item)->is_static) {
+						App->objects->ReparentGameObject((*item), node);
+						node->open_node = true;
+					}
+					else {
+						LOG_ENGINE("Objects static can not be reparented");
+					}
+				}
 			}
 			ImGui::ClearDragDrop();
 		}
@@ -426,8 +451,40 @@ void PanelHierarchy::RightClickMenu()
 							if (*item != nullptr && *item == obj) {
 								ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(obj->GetPrefabID());
 								if (prefab != nullptr) {
+									std::vector<ComponentScript*> current_scripts;
+									App->objects->GetRoot(true)->GetComponentsChildren(ComponentType::SCRIPT, (std::vector<Component*>*) & current_scripts, true);
+									std::vector<std::pair<GameObject**, std::string>> objectsToAssign;
+									for (auto scripts = current_scripts.begin(); scripts != current_scripts.end(); ++scripts) {
+										if (!(*item)->Exists((*scripts)->game_object_attached)) {
+											for (auto variables = (*scripts)->inspector_variables.begin(); variables != (*scripts)->inspector_variables.end(); ++variables) {
+												if ((*variables).variable_type == InspectorScriptData::DataType::GAMEOBJECT && (*variables).obj != nullptr && (*item)->Exists(*(*variables).obj)) {
+													GameObject* nameObj = *(*variables).obj;
+													objectsToAssign.push_back({ (*variables).obj, nameObj->GetName() });
+													*(*variables).obj = nullptr;
+												}
+											}
+										}
+									}
+
 									(*item)->ToDelete();
-									prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin(), obj->GetComponent<ComponentTransform>()->GetGlobalPosition());
+									GameObject* newObj = prefab->ConvertToGameObjects(obj->parent, item - obj->parent->children.begin(), obj->GetComponent<ComponentTransform>()->GetGlobalPosition());
+								
+									if (!objectsToAssign.empty()) {
+										std::stack<GameObject*> objects;
+										objects.push(newObj);
+										while (!objects.empty()) {
+											GameObject* toCheck = objects.top();
+											objects.pop();
+											for (auto it = objectsToAssign.begin(); it != objectsToAssign.end(); ++it) {
+												if (strcmp((*it).second.data(), toCheck->GetName()) == 0) {
+													*(*it).first = toCheck;
+												}
+											}
+											for (auto child = toCheck->children.begin(); child != toCheck->children.end(); ++child) {
+												objects.push(*child);
+											}
+										}
+									}
 								}
 								break;
 							}

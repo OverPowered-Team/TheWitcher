@@ -55,6 +55,7 @@ public:
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
+	//void PickUpRelic(Relic* _relic);
 
 public:
 	int controller_index = 1;

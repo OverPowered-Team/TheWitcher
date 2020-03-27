@@ -14,6 +14,7 @@ class __declspec(dllexport) Alien {
 	friend class ComponentScript;
 	friend class ComponentCollider;
 	friend class ModuleObjects;
+	friend class ComponentTransform;
 	friend class ResourceAnimatorController;
 public:
 	Alien();
@@ -127,5 +128,4 @@ private:
 
 	bool* enabled = nullptr;
 	char data_name[260];
-
 };

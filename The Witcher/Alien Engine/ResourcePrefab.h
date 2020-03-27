@@ -29,7 +29,7 @@ public:
 	void OpenPrefabScene();
 
 	// create GameObjects
-	void ConvertToGameObjects(GameObject* parent, int list_num = -1, float3 pos = { 0,0,0 }, bool set_selected = true);
+	GameObject* ConvertToGameObjects(GameObject* parent, int list_num = -1, float3 pos = { 0,0,0 }, bool set_selected = true);
 
 private:
 

@@ -1,5 +1,6 @@
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
+#include "RelicBehaviour.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -350,3 +351,12 @@ void PlayerController::Stat::DecreaseStat(float value)
 	else
 		current_value = 0;
 }
+//void PlayerController::PickUpRelic(Relic* _relic)
+//{
+//	/*Debug.Log("Picked up relic " + new_relic.relic_name + ": " + new_relic.description);
+//	relics.Add(new_relic);
+//	foreach(Effect effect in new_relic.effects)
+//	{
+//		AddEffect(effect);
+//	}*/
+//}
