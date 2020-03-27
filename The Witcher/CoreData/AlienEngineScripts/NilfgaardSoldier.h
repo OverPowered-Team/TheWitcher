@@ -17,11 +17,11 @@ public:
 	NilfgaardSoldier() {}
 	virtual ~NilfgaardSoldier() {}
 
-	/*void Start() override;*/
+	void Start() override;
 	void Update() override;
 	//void SetStats(const char* json) override;
 	void Move(float3 direction) override;
-	void CleaningUp() override;
+	void CleanUp() override;
 
 public:
 	GameObject* weapon = nullptr;
@@ -37,11 +37,6 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->player_1);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->player_2);
 	return alien;
-}
-
-ALIEN_FACTORY void DestroyNilfgaardSoldier(void* pointer) {
-	delete pointer;
-	pointer = nullptr;
 }
 
 

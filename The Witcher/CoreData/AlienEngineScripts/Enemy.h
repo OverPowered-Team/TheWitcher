@@ -38,11 +38,11 @@ public:
 	Enemy();
 	virtual ~Enemy();
 
-	void Start();
+	virtual void Start();
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction) {}
-	void Update() {}
-	virtual void CleaningUp() {}
+	virtual void Update() {}
+	virtual void CleanUp() {}
 
 public:
 	EnemyType type = EnemyType::NONE;

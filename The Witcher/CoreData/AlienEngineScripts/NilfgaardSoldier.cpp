@@ -1,11 +1,11 @@
 #include "NilfgaardSoldier.h"
 
-//void NilfgaardSoldier::Start()
-//{
-//	type = Enemy::EnemyType::NILFGAARD_SOLDIER;
-//
-//	Enemy::Start();
-//}
+void NilfgaardSoldier::Start()
+{
+	type = Enemy::EnemyType::NILFGAARD_SOLDIER;
+
+	Enemy::Start();
+}
 
 //void NilfgaardSoldier::SetStats(const char* json)
 //{
@@ -83,6 +83,6 @@ void NilfgaardSoldier::Update()
 
 }
 
-void NilfgaardSoldier::CleaningUp()
+void NilfgaardSoldier::CleanUp()
 {
 }
