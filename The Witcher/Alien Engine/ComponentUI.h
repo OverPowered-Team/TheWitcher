@@ -15,7 +15,8 @@ enum UIState {
 	Hover,
 	Click,
 	Pressed,
-	Release
+	Release,
+	Disabled
 };
 
 class __declspec(dllexport) ComponentUI :public Component {

@@ -140,7 +140,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X") && sliderTexture != nullptr) {
+			if (ImGui::Button("X##sliderTex") && sliderTexture != nullptr) {
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				if (sliderTexture != nullptr) {
 					sliderTexture->DecreaseReferences();
@@ -313,7 +313,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectUPSlid")) {
 				if (select_on_up != -1) {
 					select_on_up = -1;
 				}
@@ -351,7 +351,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectDownSlid")) {
 				if (select_on_down != -1) {
 					select_on_down = -1;
 				}
@@ -393,7 +393,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectRightSlid")) {
 				if (select_on_right != -1) {
 					select_on_right = -1;
 				}
@@ -436,7 +436,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectLeftSlid")) {
 				if (select_on_left != -1) {
 					select_on_left = -1;
 				}

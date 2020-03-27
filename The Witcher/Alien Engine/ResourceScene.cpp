@@ -69,8 +69,24 @@ bool ResourceScene::ReadBaseInfo(const char* assets_file_path)
 	name = App->file_system->GetBaseFileName(path.data());
 
 	std::string meta_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien");
+	if (App->file_system->Exists(meta_path.data())) {
+		ID = App->resources->GetIDFromAlienPath(meta_path.data());
+	}
+	else {
+		ID = App->resources->GetRandomID();
+		JSON_Value* value2 = json_value_init_object();
+		JSON_Object* json_object2 = json_value_get_object(value2);
+		json_serialize_to_file_pretty(value2, meta_path.data());
 
-	ID = App->resources->GetIDFromAlienPath(meta_path.data());
+		if (value2 != nullptr && json_object2 != nullptr) {
+
+			JSONfilepack* file = new JSONfilepack(meta_path.data(), json_object2, value2);
+			file->StartSave();
+			file->SetString("Meta.ID", std::to_string(ID).data());
+			file->FinishSave();
+			delete file;
+		}
+	}
 
 	if (ID != 0) {
 		meta_data_path = LIBRARY_SCENES_FOLDER + std::to_string(ID) + ".alienScene";

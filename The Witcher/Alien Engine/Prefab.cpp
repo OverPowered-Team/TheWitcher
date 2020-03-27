@@ -34,7 +34,7 @@ GameObject* Prefab::ConvertToGameObject(float3 local_position, GameObject* paren
 
 	GameObject* created = (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
 
-	InitScripts(created);
+	//InitScripts(created);
 
 	return created;
 }

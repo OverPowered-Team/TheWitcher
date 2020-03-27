@@ -140,7 +140,7 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X") && crossTexture != nullptr) {
+			if (ImGui::Button("X##CheckCrossTex") && crossTexture != nullptr) {
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				if (crossTexture != nullptr) {
 					crossTexture->DecreaseReferences();
@@ -198,7 +198,7 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X") && tickTexture != nullptr) {
+			if (ImGui::Button("X##CheckTickTex") && tickTexture != nullptr) {
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				if (tickTexture != nullptr) {
 					tickTexture->DecreaseReferences();
@@ -229,7 +229,24 @@ bool ComponentCheckbox::DrawInspector()
 			if (ImGui::TreeNode("Functions Added")) {
 				if (ImGui::TreeNode("On Click Added")) {
 					for (auto item = listenersOnClick.begin(); item != listenersOnClick.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnClick.begin(), item) + 312387);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							listenersOnClick.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+							//delete function
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
 					}
 
 					ImGui::TreePop();
@@ -237,7 +254,25 @@ bool ComponentCheckbox::DrawInspector()
 				ImGui::Spacing();
 				if (ImGui::TreeNode("On Hover Added")) {
 					for (auto item = listenersOnHover.begin(); item != listenersOnHover.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnHover.begin(), item) + 7867246);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							listenersOnHover.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+							//delete function
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
+
 					}
 
 					ImGui::TreePop();
@@ -245,7 +280,24 @@ bool ComponentCheckbox::DrawInspector()
 				ImGui::Spacing();
 				if (ImGui::TreeNode("On Pressed Added")) {
 					for (auto item = listenersOnClickRepeat.begin(); item != listenersOnClickRepeat.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnClickRepeat.begin(), item) + 4987321);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnClickRepeat.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
 					}
 
 					ImGui::TreePop();
@@ -253,14 +305,31 @@ bool ComponentCheckbox::DrawInspector()
 				ImGui::Spacing();
 				if (ImGui::TreeNode("On Release Added")) {
 					for (auto item = listenersOnRelease.begin(); item != listenersOnRelease.end(); ++item) {
+
 						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnRelease.begin(), item) + 7691967);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnRelease.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
 					}
 
 					ImGui::TreePop();
 				}
 				ImGui::TreePop();
 			}
-			//--------------
+			//----------------------
 
 			ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
 
@@ -507,7 +576,7 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectUpCheck")) {
 				if (select_on_up != -1) {
 					select_on_up = -1;
 				}
@@ -545,7 +614,7 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectDownCheck")) {
 				if (select_on_down != -1) {
 					select_on_down = -1;
 				}
@@ -587,7 +656,7 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectRightCheck")) {
 				if (select_on_right != -1) {
 					select_on_right = -1;
 				}
@@ -627,7 +696,7 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectLeftCheck")) {
 				if (select_on_left != -1) {
 					select_on_left = -1;
 				}
@@ -1093,6 +1162,76 @@ void ComponentCheckbox::LoadComponent(JSONArraypack* to_load)
 		}
 	}
 	App->objects->first_assigned_selected = false;
+}
+
+void ComponentCheckbox::HandleAlienEvent(const AlienEvent& e)
+{
+	switch (e.type)
+	{
+	case AlienEventType::SCRIPT_DELETED: {
+		ComponentScript* script = (ComponentScript*)e.object;
+		if (script->game_object_attached == game_object_attached)
+		{
+			//Delete on Click
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnClick.begin(); item != listenersOnClick.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnClick.erase(item);
+						//delete this from listeners on Click
+						break;
+					}
+				}
+
+			}
+
+			//Delete on Hover
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnHover.begin(); item != listenersOnHover.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnHover.erase(item);
+						//delete this from listeners on Click
+
+						break;
+					}
+				}
+			}
+
+			//Delete on pressed
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnClickRepeat.begin(); item != listenersOnClickRepeat.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnClickRepeat.erase(item);
+						//delete this from listeners on Click
+						break;
+					}
+				}
+
+			}
+
+			//delete on release
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnRelease.begin(); item != listenersOnRelease.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnRelease.erase(item);
+						break;
+					}
+				}
+			}
+
+		}
+		break; }
+
+	default: {
+		break; }
+	}
 }
 
 void ComponentCheckbox::CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners)

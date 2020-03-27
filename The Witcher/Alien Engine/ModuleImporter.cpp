@@ -753,7 +753,6 @@ void ModuleImporter::ApplyParticleSystemToSelectedObject(std::string path)
 	}
 }
 
-
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh *shape, ResourceMesh *mesh)
 {
 	par_shapes_unweld(shape, true);

@@ -24,7 +24,7 @@ void TriggerEnvironment::Update()
 
 void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (emitter) {
+	if (emitter != nullptr) {
 		emitter->SetSwitchState("Env_Lvl1", GetNameByEnum(environment).c_str());
 		emitter->StartSound();
 		LOG("ENTER");
@@ -33,7 +33,7 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 
 void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 {
-	if (emitter) {
+	if (emitter != nullptr) {
 		emitter->SetSwitchState("Env_Lvl1", "Quiet");
 		LOG("EXIT");
 		emitter->StartSound();
