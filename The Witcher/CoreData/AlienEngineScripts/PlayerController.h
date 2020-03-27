@@ -75,7 +75,6 @@ public:
 
 
 	//Particles
-	
 	GameObject* p_run = nullptr;
 	ComponentParticleSystem* c_run = nullptr;
 

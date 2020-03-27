@@ -78,15 +78,19 @@ void PlayerController::Update()
 			float2 keyboardInput = float2(0.f, 0.f);
 			if (Input::GetKeyRepeat(keyboard_move_left)) {
 				keyboardInput.x += 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			if (Input::GetKeyRepeat(keyboard_move_right)) {
 				keyboardInput.x -= 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			if (Input::GetKeyRepeat(keyboard_move_up)) {
 				keyboardInput.y += 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			if (Input::GetKeyRepeat(keyboard_move_down)) {
 				keyboardInput.y -= 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			HandleMovement(keyboardInput);
 		}
@@ -151,6 +155,7 @@ void PlayerController::Update()
 			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
+			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}
 		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
@@ -158,6 +163,7 @@ void PlayerController::Update()
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
+			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}
 
@@ -187,7 +193,6 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
 		c_attack->GetSystem()->Restart();
-		controller->SetWalkDirection(float3::zero());
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)

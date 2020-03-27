@@ -8,13 +8,14 @@ class PlayerController;
 class Attack {
 public:
 	Attack() {};
-	Attack(const char* name, const char* input, float3 coll_pos, float3 coll_size, float mult, const char* n_light, const char* n_heavy)
+	Attack(const char* name, const char* input, float3 coll_pos, float3 coll_size, float mult, float m_strgth, const char* n_light, const char* n_heavy)
 	{
 		this->name = name;
 		this->input = input;
 		this->collider_position = coll_pos;
 		this->collider_size = coll_size;
 		this->base_damage = mult;
+		this->movement_strength = m_strgth;
 		this->next_light = n_light;
 		this->next_heavy = n_heavy;
 	}
@@ -24,6 +25,8 @@ public:
 	float3 collider_position;
 	float3 collider_size;
 	float base_damage = 0.0f;
+	float movement_strength = 0.0f;
+
 	std::string next_light = "";
 	std::string next_heavy = "";
 
@@ -49,9 +52,11 @@ public:
 	void ComboAttack();
 	void ReceiveInput(AttackType attack);
 
-	void ActiveCollider();
-	void DesactiveCollider();
+	void ActivateCollider();
+	void DeactivateCollider();
+	void AllowCombo();
 	bool CanBeInterrupted();
+	float3 GetAttackImpulse();
 
 	void OnAnimationEnd(const char* name);
 
@@ -63,8 +68,6 @@ protected:
 	void ConnectAttacks();
 	void DoAttack();
 	void SelectAttack(AttackType attack);
-
-	//bool CanReceiveInput();
 
 protected:
 	Attack* current_attack = nullptr;
@@ -87,8 +90,9 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->collider_go);
 	//SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->input_window);
-	SHOW_VOID_FUNCTION(PlayerAttacks::ActiveCollider, player_attacks);
-	SHOW_VOID_FUNCTION(PlayerAttacks::DesactiveCollider, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::AllowCombo, player_attacks);
 
 	return player_attacks;
 } 

@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 11,
-        "NumTransitions": 16,
+        "NumStates": 10,
+        "NumTransitions": 14,
         "States": [
             {
                 "Name": "Idle",
@@ -13,11 +13,6 @@
                 "Name": "Run",
                 "Speed": 1,
                 "Clip": "6946917102901728312"
-            },
-            {
-                "Name": "Attack",
-                "Speed": 2,
-                "Clip": "4871813718953062991"
             },
             {
                 "Name": "Roll",
@@ -36,7 +31,7 @@
             },
             {
                 "Name": "L",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "17156228017399226362"
             },
             {
@@ -87,38 +82,6 @@
                     {
                         "Type": "float",
                         "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Attack",
-                "Target": "Idle",
-                "Blend": 0.10000000149011612,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Attack",
-                "Target": "Run",
-                "Blend": 0.10000000149011612,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Greater",
                         "ParameterIndex": 0,
                         "CompValue": 0.0099999997764825821
                     }

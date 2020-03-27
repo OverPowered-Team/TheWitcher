@@ -46,11 +46,11 @@ void PlayerAttacks::DoAttack()
 	player_controller->animator->PlayState(current_attack->name.c_str());
 	can_execute_input = false;
 	next_attack = AttackType::NONE;
+	player_controller->controller->ApplyImpulse(GetAttackImpulse());
 
 	float start_time = Time::GetGameTime();
 	float animation_duration = player_controller->animator->GetCurrentStateDuration();
 	finish_attack_time = start_time + animation_duration;
-	//attack_input_time = final_attack_time - input_window;*/
 }
 
 void PlayerAttacks::SelectAttack(AttackType attack)
@@ -113,10 +113,11 @@ void PlayerAttacks::CreateAttacks()
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
 			float multiplier = attack_combo->GetNumber("multiplier");
+			float movement_strength = attack_combo->GetNumber("movement_strength");
 			std::string n_light = attack_combo->GetString("next_attack_light");
 			std::string n_heavy = attack_combo->GetString("next_attack_heavy");
 
-			Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier, n_light.data(), n_heavy.data());
+			Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier, movement_strength, n_light.data(), n_heavy.data());
 			attacks.push_back(attack);
 
 			attack_combo->GetAnotherNode();
@@ -155,7 +156,7 @@ void PlayerAttacks::ConnectAttacks()
 	}
 }
 
-void PlayerAttacks::ActiveCollider()
+void PlayerAttacks::ActivateCollider()
 {
 	LOG("COLLIDER ACTIVED");
 	if (collider)
@@ -166,12 +167,17 @@ void PlayerAttacks::ActiveCollider()
 	}
 }
 
-void PlayerAttacks::DesactiveCollider()
+void PlayerAttacks::DeactivateCollider()
 {
 	LOG("COLLIDER DESACTIVED");
 	if(collider)
 		collider->SetEnable(false);
 
+	can_execute_input = true;
+}
+
+void PlayerAttacks::AllowCombo()
+{
 	can_execute_input = true;
 }
 
@@ -182,6 +188,25 @@ bool PlayerAttacks::CanBeInterrupted()
 		return !collider->IsEnabled();
 	else
 		return true;
+}
+
+float3 PlayerAttacks::GetAttackImpulse()
+{
+	float3 vector = float3(Input::GetControllerHoritzontalLeftAxis(player_controller->controller_index), 0.f,
+		Input::GetControllerVerticalLeftAxis(player_controller->controller_index));
+	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
+	vector.y = 0.f;
+
+	if (vector.Length() > player_controller->stick_threshold)
+		vector.Normalize();
+	else
+		vector = player_controller->transform->forward;
+
+	vector *= current_attack->movement_strength;
+
+	LOG("ATTACK IMPULSE IS (%f, %f, %f)", vector.x, vector.y, vector.z);
+
+	return vector;
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {
