@@ -18,10 +18,6 @@ public:
 	void MenuSpawn(MENU menu_type);
 
 	GameObject* extramenus_canvas = nullptr;
-
-	// Buttons
-
-
 };
 
 ALIEN_FACTORY Extra_Menus* CreateExtra_Menus() {
