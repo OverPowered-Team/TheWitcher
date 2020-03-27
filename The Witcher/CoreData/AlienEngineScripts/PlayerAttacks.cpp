@@ -194,15 +194,17 @@ float3 PlayerAttacks::GetAttackImpulse()
 {
 	float3 vector = float3(Input::GetControllerHoritzontalLeftAxis(player_controller->controller_index), 0.f,
 		Input::GetControllerVerticalLeftAxis(player_controller->controller_index));
-	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
-	vector.y = 0.f;
 
-	if (vector.Length() > player_controller->stick_threshold)
-		vector.Normalize();
-	else
+	if (vector.Length() < player_controller->stick_threshold)
 		vector = player_controller->transform->forward;
 
+	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
+	vector.y = 0.f;
+	vector.Normalize();
 	vector *= current_attack->movement_strength;
+
+	//raycast here
+
 
 	LOG("ATTACK IMPULSE IS (%f, %f, %f)", vector.x, vector.y, vector.z);
 
