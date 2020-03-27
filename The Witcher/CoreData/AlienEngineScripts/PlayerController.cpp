@@ -53,6 +53,8 @@ void PlayerController::Update()
 		Input::GetControllerHoritzontalLeftAxis(controller_index),
 		Input::GetControllerVerticalLeftAxis(controller_index));
 
+	animator->SetBool("movement_input", joystickInput.Length() > stick_threshold ? true : false);
+
 	if (joystickInput.Length() > 0) {
 		keyboard_input = false;
 	}

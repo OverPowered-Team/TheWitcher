@@ -75,6 +75,7 @@ protected:
 	ComponentBoxCollider* collider = nullptr;
 
 	std::vector<Attack*> attacks;
+	float finish_attack_time = 0.0f;
 
 	bool can_execute_input = false;
 	AttackType next_attack = AttackType::NONE;

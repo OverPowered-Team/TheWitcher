@@ -27,6 +27,13 @@ void PlayerAttacks::StartAttack(AttackType attack)
 void PlayerAttacks::ComboAttack()
 {
 	LOG("UPDATE ATTACK");
+	if (Time::GetGameTime() > finish_attack_time)
+	{
+		if (abs(player_controller->player_data.currentSpeed) < 0.01F)
+			player_controller->state = PlayerController::PlayerState::IDLE;
+		if (abs(player_controller->player_data.currentSpeed) > 0.01F)
+			player_controller->state = PlayerController::PlayerState::RUNNING;
+	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
 		StartAttack(next_attack);
@@ -40,9 +47,10 @@ void PlayerAttacks::DoAttack()
 	can_execute_input = false;
 	next_attack = AttackType::NONE;
 
-	/*float start_time = Time::GetGameTime();
-	float final_attack_time = start_time + player_controller->animator->GetCurrentStateDuration();
-	attack_input_time = final_attack_time - input_window;*/
+	float start_time = Time::GetGameTime();
+	float animation_duration = player_controller->animator->GetCurrentStateDuration();
+	finish_attack_time = start_time + animation_duration;
+	//attack_input_time = final_attack_time - input_window;*/
 }
 
 void PlayerAttacks::SelectAttack(AttackType attack)
@@ -181,10 +189,5 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	{
 		LOG("NO NEXT ATTACK");
 		current_attack = nullptr;
-		
-		if (abs(player_controller->player_data.currentSpeed) < 0.01F)
-			player_controller->state = PlayerController::PlayerState::IDLE;
-		if (abs(player_controller->player_data.currentSpeed) > 0.01F)
-			player_controller->state = PlayerController::PlayerState::RUNNING;
 	}
 }
