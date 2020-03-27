@@ -32,7 +32,27 @@ void NilfgaardSoldier::Start()
 
 void NilfgaardSoldier::Move(float3 direction)
 {
-	rb->AddForce(direction * stats.agility);
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+
+	//Quat current_rot = math::Slerp() TODO: Slerp between char current rot and desired rot
+	character_ctrl->SetRotation(rot);
+	character_ctrl->SetWalkDirection(direction * stats.agility);
+	animator->SetFloat("speed", stats.agility);
+
+	if (distance < stats.attack_range)
+	{
+		state = Enemy::EnemyState::ATTACK;
+		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		animator->SetFloat("speed", 0.0F);
+		animator->PlayState("Attack");
+	}
+	if (distance > stats.vision_range)
+	{
+		state = Enemy::EnemyState::IDLE;
+		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		animator->SetFloat("speed", 0.0F);
+	}
 }
 
 void NilfgaardSoldier::Update()
@@ -43,35 +63,20 @@ void NilfgaardSoldier::Update()
 	float distance_2 = player_2->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_2 = player_2->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+	distance = (distance_1 < distance_2) ? distance_1 : distance_2;
 	float3 direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
 
 	switch (state)
 	{
 	case Enemy::EnemyState::IDLE:
-		//1.Enemy is In Idle or patroling
 		if (distance < stats.vision_range)
-		{
 			state = Enemy::EnemyState::MOVE;
-		}
+
 		break;
 	case Enemy::EnemyState::MOVE:
 		Move(direction);
-		if (distance < stats.attack_range)
-		{
-			state = Enemy::EnemyState::ATTACK;
-		}
 		break;
 	case Enemy::EnemyState::ATTACK:
-		//3.Enemy attacks
-		// Check which weapon the enemy has and make one of the attack
-		break;
-	case Enemy::EnemyState::BLOCK:
-		//2.Enemy is blocking
-		if (true/*can attack*/)
-		{
-			state = Enemy::EnemyState::ATTACK;
-		}
 		break;
 	case Enemy::EnemyState::DEAD:
 		break;
@@ -85,4 +90,18 @@ void NilfgaardSoldier::Update()
 
 void NilfgaardSoldier::CleanUp()
 {
+}
+
+void NilfgaardSoldier::OnAnimationEnd(const char* name) {
+
+	if (strcmp(name, "Attack") == 0) {
+		if (distance < stats.vision_range)
+		{
+			state = Enemy::EnemyState::MOVE;
+		}
+		else
+		{
+			state = Enemy::EnemyState::IDLE;
+		}
+	}
 }

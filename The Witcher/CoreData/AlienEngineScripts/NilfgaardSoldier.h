@@ -23,9 +23,14 @@ public:
 	void Move(float3 direction) override;
 	void CleanUp() override;
 
+	void OnAnimationEnd(const char* name) override;
+
+
+
 public:
 	GameObject* weapon = nullptr;
 	NilfgaardType nilf_type = NilfgaardType::NONE;
+	float distance = 0.0F;
 };
 
 ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {

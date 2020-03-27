@@ -49,7 +49,7 @@ public:
 	EnemyStats stats;
 	EnemyState state = EnemyState::NONE;
 	ComponentAnimator* animator = nullptr;
-	ComponentRigidBody* rb = nullptr;
+	ComponentCharacterController* character_ctrl = nullptr;
 
 	GameObject* player_1 = nullptr;
 	GameObject* player_2 = nullptr;

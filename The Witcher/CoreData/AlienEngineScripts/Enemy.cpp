@@ -12,7 +12,7 @@ void Enemy::Start()
 {
 	LOG("oLE OEL ERNJF K");
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	rb = (ComponentRigidBody*)GetComponent(ComponentType::RIGID_BODY);
+	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	state = EnemyState::IDLE;
 	std::string json_str;
 
