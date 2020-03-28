@@ -92,6 +92,30 @@ void PlayerAttacks::ReceiveInput(AttackType attack)
 	return (Time::GetGameTime() > attack_input_time && (current_attack->heavy_attack_link != nullptr || current_attack->light_attack_link != nullptr));
 }*/
 
+std::vector<std::string> PlayerAttacks::GetFinalAttacks()
+{
+	std::vector<std::string> final_attacks;
+
+	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
+	{
+		if ((*it)->heavy_attack_link == nullptr && (*it)->light_attack_link == nullptr)
+			final_attacks.push_back((*it)->name);
+	}
+	return final_attacks;
+}
+
+void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
+{
+	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
+	{
+		if ((*it)->name == _attack_name)
+		{
+			(*it)->base_damage->CalculateStat(player_controller->effects);
+			//(*it)->base_range.CalculateStat(player_controller->effects);
+		}
+	}
+}
+
 void PlayerAttacks::CreateAttacks()
 {
 	LOG("CREATE ATTACKS");

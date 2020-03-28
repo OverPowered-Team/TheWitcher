@@ -350,6 +350,6 @@ void PlayerController::AddEffect(Effect* _effect)
 
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
-		//attacks.OnAddAttackEffect(((AttackEffect)new_effect).GetAttackIdentifier());
+		attacks->OnAddAttackEffect(((AttackEffect*)_effect)->GetAttackIdentifier());
 	}
 }

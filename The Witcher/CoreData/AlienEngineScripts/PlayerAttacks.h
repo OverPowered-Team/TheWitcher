@@ -2,6 +2,7 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "Stat.h"
 
 class PlayerController;
 
@@ -14,7 +15,7 @@ public:
 		this->input = input;
 		this->collider_position = coll_pos;
 		this->collider_size = coll_size;
-		this->base_damage = mult;
+		this->base_damage = new Stat("Attack_Damage",mult);
 		this->movement_strength = m_strgth;
 		this->next_light = n_light;
 		this->next_heavy = n_heavy;
@@ -24,7 +25,7 @@ public:
 	std::string input = "";
 	float3 collider_position;
 	float3 collider_size;
-	float base_damage = 0.0f;
+	Stat* base_damage = nullptr;
 	float movement_strength = 0.0f;
 
 	std::string next_light = "";
@@ -52,8 +53,11 @@ public:
 	void ComboAttack();
 	void ReceiveInput(AttackType attack);
 
+	std::vector<std::string> GetFinalAttacks();
+	void OnAddAttackEffect(std::string _attack_name);
 	void ActivateCollider();
 	void DeactivateCollider();
+
 	void AllowCombo();
 	bool CanBeInterrupted();
 	float3 GetAttackImpulse();
