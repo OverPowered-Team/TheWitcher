@@ -7,28 +7,38 @@ void NilfgaardSoldier::Start()
 	Enemy::Start();
 }
 
-//void NilfgaardSoldier::SetStats(const char* json)
-//{
-//	//todo handfle array json
-//	std::string json_path = std::string("Configuration/") + std::string(json) + std::string(".json");
-//	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
-//
-//	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
-//
-//	JSONArraypack* stat_weapon = stat->GetArray("Weapons");;
-//	if (stat_weapon)
-//	{
-//		stat_weapon->GetFirstNode();
-//		stats.health = stat->GetNumber("Health");
-//		stats.agility = stat->GetNumber("Agility");
-//		stats.damage = stat->GetNumber("Damage");
-//		stats.attack_speed = stat->GetNumber("AttackSpeed");
-//
-//		stat_weapon->GetAnotherNode();
-//	}
-//
-//	JSONfilepack::FreeJSON(stat);
-//}
+void NilfgaardSoldier::SetStats(const char* json)
+{
+	//todo handfle array json
+	std::string json_path = std::string("Configuration/") + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+
+	JSONArraypack* stat_weapon = stat->GetArray("Weapons");
+	int i = 0;
+	if (stat_weapon)
+	{
+		stat_weapon->GetFirstNode();
+
+		for (int i = 0; i < stat_weapon->GetArraySize(); ++i)
+			if (stat_weapon->GetNumber("Type") != (int)nilf_type)
+				stat_weapon->GetAnotherNode();
+			else
+				break;
+
+		stats.health = stat_weapon->GetNumber("Health");
+		stats.agility = stat_weapon->GetNumber("Agility");
+		stats.damage = stat_weapon->GetNumber("Damage");
+		stats.attack_speed = stat_weapon->GetNumber("AttackSpeed");
+		stats.vision_range = stat_weapon->GetNumber("VisionRange");
+		stats.attack_range = stat_weapon->GetNumber("AttackRange");
+
+		stat_weapon->GetAnotherNode();
+	}
+
+	JSONfilepack::FreeJSON(stat);
+}
 
 void NilfgaardSoldier::Move(float3 direction)
 {
@@ -71,7 +81,6 @@ void NilfgaardSoldier::Update()
 	case Enemy::EnemyState::IDLE:
 		if (distance < stats.vision_range)
 			state = Enemy::EnemyState::MOVE;
-
 		break;
 	case Enemy::EnemyState::MOVE:
 		Move(direction);

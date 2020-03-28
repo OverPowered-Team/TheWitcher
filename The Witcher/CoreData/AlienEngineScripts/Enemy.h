@@ -8,7 +8,6 @@ class Enemy : public Alien {
 public: 
 
 	struct EnemyStats {
-		std::string weapon = "None";
 		float health = 0.0F;
 		float agility = 0.0F;
 		float damage = 0.0F;

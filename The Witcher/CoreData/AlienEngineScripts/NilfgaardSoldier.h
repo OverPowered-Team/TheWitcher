@@ -8,10 +8,11 @@ class ALIEN_ENGINE_API NilfgaardSoldier : public Enemy {
 public:
 	enum(NilfgaardType,
 		NONE = -1,
-		SWORD_SHIELD,
-		SPEAR,
-		LARGE_SWORD,
-		ARCHER
+		SWORD_SHIELD = 0,
+		ARCHER = 1,
+		SPEAR = 2,
+		LARGE_SWORD = 3,
+		MAX_NILFGAARD
 		);
 
 	NilfgaardSoldier() {}
@@ -19,7 +20,7 @@ public:
 
 	void Start() override;
 	void Update() override;
-	//void SetStats(const char* json) override;
+	void SetStats(const char* json) override;
 	void Move(float3 direction) override;
 	void CleanUp() override;
 
