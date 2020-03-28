@@ -47,10 +47,10 @@ void AttackRelic::OnPickUp(PlayerController* _player)
 	case Relic_Effect::POISON:
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->AddFlatModifier(0.1f, "YEISON");
+		test_effect->AddFlatModifier(0.1f, "EARTH");
 		break;
 	case Relic_Effect::RANGE:
-		test_effect->AddFlatModifier(1.5f, "YEISON");
+		test_effect->AddFlatModifier(1.5f, "RANGE");
 		break;
 	}
 

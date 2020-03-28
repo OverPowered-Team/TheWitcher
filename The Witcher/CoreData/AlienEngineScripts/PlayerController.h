@@ -41,6 +41,8 @@ public:
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
+
+	//Relics
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
@@ -72,6 +74,7 @@ public:
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
 
 	//Relics
+	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
 
 	//Particles

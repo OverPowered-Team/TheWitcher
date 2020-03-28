@@ -3,11 +3,12 @@
 // AttackEffect
 AttackEffect::AttackEffect()
 {
-	// Inicialize effects with a json
+	
 }
 
 AttackEffect::~AttackEffect()
 {
+
 }
 
 void AttackEffect::SetAttackIdentifier(std::string identifier)
@@ -23,7 +24,7 @@ std::string AttackEffect::GetAttackIdentifier()
 // Effect
 Effect::Effect()
 {
-	// Inicialize effects with a json
+	
 }
 
 Effect::~Effect()
@@ -52,13 +53,14 @@ float Effect::GetAdditiveAmount(std::string identifier)
 {
     float final_value = 0.0f;
 
-    /*foreach(Modifier mod in additive_modifiers)
+    for (std::vector<Modifier>::iterator it = additive_modifiers.begin(); it != additive_modifiers.end(); ++it)
     {
-        if (mod.identifier == identifier)
+        if ((*it).identifier == identifier)
         {
-            final_value += mod.amount;
+            final_value += (*it).amount;
         }
-    }*/
+    }
+
 
     return final_value;
 }
@@ -67,13 +69,13 @@ float Effect::GetMultiplicativeAmount(std::string identifier)
 {
     float final_value = 0.0f;
 
-    /*foreach(Modifier mod in multiplicative_modifers)
+    for (std::vector<Modifier>::iterator it = multiplicative_modifiers.begin(); it != multiplicative_modifiers.end(); ++it)
     {
-        if (mod.identifier == identifier)
+        if ((*it).identifier == identifier)
         {
-            final_value += mod.amount;
+            final_value += (*it).amount;
         }
-    }*/
+    }
 
     return final_value;
 }
