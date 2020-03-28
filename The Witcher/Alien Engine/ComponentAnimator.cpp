@@ -147,6 +147,21 @@ float ComponentAnimator::GetCurrentStateDuration()
 	return animator_controller->GetCurrentNode()->GetClip()->GetDuration() / animator_controller->GetCurrentNode()->GetSpeed();
 }
 
+float ComponentAnimator::GetCurrentStateSpeed()
+{
+	return animator_controller->GetCurrentNode()->GetSpeed();
+}
+
+float ComponentAnimator::GetCurrentStateTime()
+{
+	return animator_controller->GetCurrentNode()->time;
+}
+
+uint ComponentAnimator::GetCurrentAnimTPS()
+{
+	return animator_controller->GetCurrentNode()->GetClip()->ticks_per_second;
+}
+
 bool ComponentAnimator::DrawInspector()
 {
 	static bool en;

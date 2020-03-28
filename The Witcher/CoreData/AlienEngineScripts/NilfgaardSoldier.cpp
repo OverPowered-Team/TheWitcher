@@ -1,34 +1,45 @@
 #include "NilfgaardSoldier.h"
+#include "ArrowMovement.h"
 
 void NilfgaardSoldier::Start()
 {
-	type = Enemy::EnemyType::NILFGAARD_SOLDIER;
+	type = EnemyType::NILFGAARD_SOLDIER;
 
 	Enemy::Start();
 }
 
-//void NilfgaardSoldier::SetStats(const char* json)
-//{
-//	//todo handfle array json
-//	std::string json_path = std::string("Configuration/") + std::string(json) + std::string(".json");
-//	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
-//
-//	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
-//
-//	JSONArraypack* stat_weapon = stat->GetArray("Weapons");;
-//	if (stat_weapon)
-//	{
-//		stat_weapon->GetFirstNode();
-//		stats.health = stat->GetNumber("Health");
-//		stats.agility = stat->GetNumber("Agility");
-//		stats.damage = stat->GetNumber("Damage");
-//		stats.attack_speed = stat->GetNumber("AttackSpeed");
-//
-//		stat_weapon->GetAnotherNode();
-//	}
-//
-//	JSONfilepack::FreeJSON(stat);
-//}
+void NilfgaardSoldier::SetStats(const char* json)
+{
+	//todo handfle array json
+	std::string json_path = std::string("Configuration/") + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+
+	JSONArraypack* stat_weapon = stat->GetArray("Weapons");
+	int i = 0;
+	if (stat_weapon)
+	{
+		stat_weapon->GetFirstNode();
+
+		for (int i = 0; i < stat_weapon->GetArraySize(); ++i)
+			if (stat_weapon->GetNumber("Type") != (int)nilf_type)
+				stat_weapon->GetAnotherNode();
+			else
+				break;
+
+		stats.health = stat_weapon->GetNumber("Health");
+		stats.agility = stat_weapon->GetNumber("Agility");
+		stats.damage = stat_weapon->GetNumber("Damage");
+		stats.attack_speed = stat_weapon->GetNumber("AttackSpeed");
+		stats.vision_range = stat_weapon->GetNumber("VisionRange");
+		stats.attack_range = stat_weapon->GetNumber("AttackRange");
+
+		stat_weapon->GetAnotherNode();
+	}
+
+	JSONfilepack::FreeJSON(stat);
+}
 
 void NilfgaardSoldier::Move(float3 direction)
 {
@@ -46,6 +57,7 @@ void NilfgaardSoldier::Move(float3 direction)
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
 		animator->PlayState("Attack");
+		Attack();
 	}
 	if (distance > stats.vision_range)
 	{
@@ -53,6 +65,27 @@ void NilfgaardSoldier::Move(float3 direction)
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
 	}
+}
+
+void NilfgaardSoldier::Attack()
+{
+	switch (nilf_type)
+	{
+	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
+		break;
+	case NilfgaardSoldier::NilfgaardType::ARCHER:
+		ShootAttack();
+		break;
+	}
+}
+
+void NilfgaardSoldier::ShootAttack()
+{
+	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
+	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
+
+	ArrowMovement* arrow_mov = (ArrowMovement*)arrow_go->GetComponentScript("ArrowMovement");
+	arrow_mov->direction = direction;
 }
 
 void NilfgaardSoldier::Update()
@@ -64,14 +97,13 @@ void NilfgaardSoldier::Update()
 	float3 direction_2 = player_2->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-	float3 direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+	direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
 
 	switch (state)
 	{
 	case Enemy::EnemyState::IDLE:
 		if (distance < stats.vision_range)
 			state = Enemy::EnemyState::MOVE;
-
 		break;
 	case Enemy::EnemyState::MOVE:
 		Move(direction);

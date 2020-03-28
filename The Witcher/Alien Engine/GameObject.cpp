@@ -593,7 +593,7 @@ void GameObject::DrawGame(ComponentCamera* camera)
 	}
 }
 
-void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
+void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {
 
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -684,7 +684,7 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
-			(*child)->SetDrawList(to_draw, camera);
+			(*child)->SetDrawList(to_draw, to_draw_ui, camera);
 		}
 	}
 
@@ -692,7 +692,10 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 
 	if (ui != nullptr && ui->IsEnabled())
 	{
-		ui->Draw(!App->objects->printing_scene);
+		float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+		float distance = obj_pos.z;
+		//ui->Draw(!App->objects->printing_scene);
+		to_draw_ui->push_back({distance, this });
 	}
 }
 
