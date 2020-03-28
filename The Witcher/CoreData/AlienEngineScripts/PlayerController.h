@@ -37,12 +37,16 @@ public:
 	void Start();
 	void Update();
 
+	void OnDrawGizmos() override;
+
 	void HandleMovement(float2 joystickInput);
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
+
+	bool CheckBoundaries(const float2& joystickInput);
 
 public:
 	int controller_index = 1;
@@ -86,11 +90,13 @@ public:
 	ComponentParticleSystem* c_spell = nullptr;
 
 	float delay_footsteps = 0.5f;
-private:
 
+private:
 	float angle = 0.0f;
 	float timer = 0.f;
 	ComponentAudioEmitter* audio = nullptr;
+
+	Frustum* frustum = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
