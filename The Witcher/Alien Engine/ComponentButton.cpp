@@ -991,6 +991,18 @@ bool ComponentButton::DrawInspector()
 	return true;
 }
 
+bool ComponentButton::OnIdle()
+{
+	if (active) {
+		current_color = idle_color;
+		if (idle_tex != nullptr && texture != idle_tex) {
+			SetTexture(idle_tex);
+			SetSize(idle_tex->width, idle_tex->height);
+		}
+	}
+	return true;
+}
+
 bool ComponentButton::OnHover()
 {
 	if (active) {
@@ -1033,10 +1045,10 @@ bool ComponentButton::OnPressed()
 bool ComponentButton::OnRelease()
 {
 	if (active) {
-		current_color = idle_color;
-		if (idle_tex != nullptr) {
-			SetTexture(idle_tex);
-			SetSize(idle_tex->width, idle_tex->height);
+		current_color = hover_color;
+		if (hover_tex != nullptr) {
+			SetTexture(hover_tex);
+			SetSize(hover_tex->width, hover_tex->height);
 		}
 		CallListeners(&listenersOnRelease);
 	}

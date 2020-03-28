@@ -57,6 +57,32 @@ PanelInspector::PanelInspector(const std::string& panel_name, const SDL_Scancode
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Inspector", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+
+	components.push_back(std::pair<std::string, ComponentType>("AASelect Component", ComponentType::NONE)); // This name is for the sort in order to have it at the begin
+	for (int i = 0; i < (int)ComponentType::MAX; i++) {
+		if (i != (int)ComponentType::BONE && i != (int)ComponentType::MESH && i != (int)ComponentType::DEFORMABLE_MESH && i != (int)ComponentType::MAX && i != (int)ComponentType::UI) //Add the component types you don't want to show in combo
+			components.push_back(
+				std::pair<std::string, ComponentType>(
+					Component::EnumToString((ComponentType)i), (ComponentType)i)
+			);
+	}
+
+	//if there is an empty id in ComponentType we have to exclude if they have no name
+	auto i = components.begin();
+	while (i != components.end()) {
+		if ((*i).first.compare("Not valid") == 0)
+			i = components.erase(i);
+		else
+			++i;
+	}
+
+	std::sort(components.begin(), components.end()); // Sort components by name
+
+	for (auto i = components.begin(); i != components.end(); i++) { // iterate and add the name and '\0' to the combo for imgui
+		if ((*i).second == ComponentType::NONE)
+			(*i).first.assign("Select Component"); // rename NONE id
+		combo_select += (*i).first + '\0';
+	}
 }
 
 PanelInspector::~PanelInspector()
@@ -298,7 +324,7 @@ void PanelInspector::ButtonAddComponent()
 {
 	ImGui::Spacing();
 
-	if (component == (uint)ComponentType::SCRIPT) {
+	if (components[component].second == ComponentType::SCRIPT) {
 		if (ImGui::BeginCombo("##Scriptss", std::get<0>(script_info)))
 		{
 			bool sel = App->StringCmp("Return To Components", std::get<0>(script_info));
@@ -350,12 +376,13 @@ void PanelInspector::ButtonAddComponent()
 						added = true;
 						ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, (void*)comp_script);
 						if (Time::IsInGameState() && comp_script->need_alien && comp_script->data_ptr != nullptr) {
-							Alien* alien = (Alien*)comp_script;
+							Alien* alien = (Alien*)comp_script->data_ptr;
 							if (alien != nullptr) {
 								alien->Awake();
 								alien->Start();
 							}
 						}
+						break;
 					}
 					else {
 						LOG_ENGINE("This script is already attached!");
@@ -373,8 +400,7 @@ void PanelInspector::ButtonAddComponent()
 	}
 
 	else {
-		ImGui::Combo("##choose component", &component, 
-			"Select Component\0Mesh\0Material\0Light Directional\0Light Spot\0Light Point\0Camera\0Box Collider\0Sphere Collider\0Capsule Collider\0ConvexHull Collider\0Rigid Body\0Constraint Point\0Character Controller\0Animator\0Particle System\0Audio Emitter\0Audio Listener\0Audio Reverb\0Canvas\0Image\0Button\0Text\0Checkbox\0Slider\0Bar\0AnimatedImage\0DeformableMesh\0Bone\0Script\0"); // SCRIPT MUST BE THE LAST ONE
+		ImGui::Combo("##choose component", &component, combo_select.c_str());
 		ImGui::SameLine();
 
 		if (ImGui::Button("Add Component"))
@@ -383,10 +409,10 @@ void PanelInspector::ButtonAddComponent()
 			for (auto item = App->objects->GetSelectedObjects().begin(); item != App->objects->GetSelectedObjects().end(); ++item) {
 				Component* comp = nullptr;
 				GameObject* selected = *item;
-				switch ((ComponentType)component)
+				switch (components[component].second)
 				{
 
-				case (ComponentType)0: {
+				case ComponentType::NONE: {
 					LOG_ENGINE("Select a Component!");
 					break; }
 
@@ -397,12 +423,10 @@ void PanelInspector::ButtonAddComponent()
 						comp = new ComponentMesh(selected);
 						selected->AddComponent(comp);
 					}
-
 					else
 						LOG_ENGINE("The selected object already has this component!");
 
 					break; }
-
 				case ComponentType::MATERIAL: {
 
 					if ((!selected->HasComponent(ComponentType::MATERIAL)) &&
@@ -502,18 +526,6 @@ void PanelInspector::ButtonAddComponent()
 						comp = new ComponentAudioListener(selected);
 						selected->AddComponent(comp);
 					}
-					else
-						LOG_ENGINE("The selected object already has this component!");
-					break; }
-
-				case ComponentType::A_REVERB: {
-					if (!selected->HasComponent(ComponentType::A_REVERB))
-					{
-						/*comp = new ComponentReverbZone(selected);
-						selected->AddComponent(comp);*/
-						LOG_ENGINE("Sorry Oriol, we had to remove that component but it will unbalance all ComponentType ID"); //TODO: remove ComponentReverb
-					}
-
 					else
 						LOG_ENGINE("The selected object already has this component!");
 					break; }
@@ -661,7 +673,6 @@ void PanelInspector::ButtonAddComponent()
 					}
 					break; }
 				}
-
 
 				if (comp != nullptr) {
 					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_COMPONENT, comp);

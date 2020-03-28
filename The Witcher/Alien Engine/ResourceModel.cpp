@@ -736,12 +736,14 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 
 				if (node.material >= 0)
 				{
-					ResourceMaterial* material = materials_attached[node.material];
-					if (material != nullptr) 
-					{
-						ComponentMaterial* Cmat = new ComponentMaterial(ret);
-						Cmat->SetMaterial(material);
-						ret->AddComponent(Cmat);
+					if (node.material < materials_attached.size()) {
+						ResourceMaterial* material = materials_attached[node.material];
+						if (material != nullptr)
+						{
+							ComponentMaterial* Cmat = new ComponentMaterial(ret);
+							Cmat->SetMaterial(material);
+							ret->AddComponent(Cmat);
+						}
 					}
 				}
 

@@ -174,6 +174,21 @@ update_status ModuleObjects::PreUpdate(float dt)
 	}
 	base_game_object->PreUpdate();
 	ScriptsPreUpdate();
+
+#ifndef GAME_VERSION
+	for (Viewport* viewport : viewports)
+	{
+		if (!viewport->active || !viewport->CanRender() || (App->renderer3D->selected_game_camera == nullptr) && viewport == App->camera->selected_viewport)
+			continue;
+
+		viewport->BeginViewport();
+		printing_scene = (viewport == App->camera->scene_viewport) ? true : false;
+		bool isGameCamera = (viewport == game_viewport) ? true : false;
+
+		viewport->EndViewport();
+	}
+#endif
+
 	return UPDATE_CONTINUE;
 }
 
@@ -1525,7 +1540,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("up", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up);
 				if (selected_ui == -1)
@@ -1537,7 +1552,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("down", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down);
 				if (selected_ui == -1)
@@ -1549,7 +1564,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("right", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right);
 				if (selected_ui == -1)
@@ -1561,7 +1576,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("left", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left);
 				if (selected_ui == -1)

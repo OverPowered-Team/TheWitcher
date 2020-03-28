@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Panel.h"
+#include <string>
 #include <tuple>
 
 class ComponentCanvas;
 typedef uint64_t u64;
 class Component;
+enum class ComponentType;
 class ResourceModel;
 
 class PanelInspector : public Panel {
@@ -30,4 +32,6 @@ private:
 	int component = 0;
 	bool* delete_panel = nullptr;
 	Component* to_destroy = nullptr;
+	std::vector<std::pair<std::string, ComponentType>> components;
+	std::string combo_select;
 };
