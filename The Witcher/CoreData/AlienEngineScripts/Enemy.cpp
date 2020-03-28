@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "EnemyManager.h"
 
 Enemy::Enemy()
 {
@@ -8,9 +9,13 @@ Enemy::~Enemy()
 {
 }
 
+void Enemy::Awake()
+{
+	((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+}
+
 void Enemy::Start()
 {
-	LOG("oLE OEL ERNJF K");
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	state = EnemyState::IDLE;
@@ -21,13 +26,13 @@ void Enemy::Start()
 
 	switch (type)
 	{
-	case Enemy::EnemyType::NONE:
+	case EnemyType::NONE:
 		json_str = "None";
 		break;
-	case Enemy::EnemyType::GHOUL:
+	case EnemyType::GHOUL:
 		json_str = "ghoul";
 		break;
-	case Enemy::EnemyType::NILFGAARD_SOLDIER:
+	case EnemyType::NILFGAARD_SOLDIER:
 		json_str = "nilfgaardsoldier";
 		break;
 	default:

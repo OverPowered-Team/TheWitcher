@@ -3,7 +3,7 @@
 
 void NilfgaardSoldier::Start()
 {
-	type = Enemy::EnemyType::NILFGAARD_SOLDIER;
+	type = EnemyType::NILFGAARD_SOLDIER;
 
 	Enemy::Start();
 }
