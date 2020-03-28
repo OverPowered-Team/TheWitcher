@@ -1,6 +1,7 @@
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
 #include "RelicBehaviour.h"
+#include "Effect.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -330,12 +331,17 @@ void PlayerController::PlaySpell()
 	c_spell->Restart();
 }
 
-//void PlayerController::PickUpRelic(Relic* _relic)
-//{
-//	/*Debug.Log("Picked up relic " + new_relic.relic_name + ": " + new_relic.description);
-//	relics.Add(new_relic);
-//	foreach(Effect effect in new_relic.effects)
-//	{
-//		AddEffect(effect);
-//	}*/
-//}
+void PlayerController::PickUpRelic(Relic* _relic)
+{
+	relics.push_back(_relic);
+
+	for (int i = 0; i < _relic->effects.size(); i++)
+	{
+		AddEffect(_relic->effects.at(i));
+	}
+}
+
+void PlayerController::AddEffect(Effect* _effect)
+{
+
+}

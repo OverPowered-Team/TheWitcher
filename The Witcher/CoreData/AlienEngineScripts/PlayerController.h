@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 
 class PlayerAttacks;
+class Relic;
+class Effect;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 
@@ -40,7 +42,8 @@ public:
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
-	//void PickUpRelic(Relic* _relic);
+	void PickUpRelic(Relic* _relic);
+	void AddEffect(Effect* _effect);
 
 public:
 	int controller_index = 1;
@@ -73,6 +76,8 @@ public:
 	Input::CONTROLLER_BUTTONS controller_heavy_attack = Input::CONTROLLER_BUTTON_Y;
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
 
+	//Relics
+	std::vector<Relic*> relics;
 
 	//Particles
 	GameObject* p_run = nullptr;
