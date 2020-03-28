@@ -144,6 +144,15 @@ void PlayerAttacks::ReceiveInput(AttackType attack)
 	next_attack = attack;
 }
 
+void PlayerAttacks::CleanUp()
+{
+	for (auto item = attacks.begin(); item != attacks.end(); ++item) {
+		(*item)->CleanUp();
+		delete (*item);
+	}
+	attacks.clear();
+}
+
 float3 PlayerAttacks::CalculateSnapVelocity()
 {
 	float speed = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) / snap_time;
@@ -298,4 +307,9 @@ void PlayerAttacks::ConnectAttacks()
 			}
 		}
 	}
+}
+
+void Attack::CleanUp()
+{
+	delete base_damage;
 }

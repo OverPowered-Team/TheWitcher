@@ -23,6 +23,7 @@ public:
 		this->next_light = n_light;
 		this->next_heavy = n_heavy;
 	}
+	void CleanUp();
 
 	std::string name = "";
 	std::string input = "";
@@ -56,6 +57,7 @@ public:
 	void StartAttack(AttackType attack);
 	void UpdateCurrentAttack();
 	void ReceiveInput(AttackType attack);
+	void CleanUp();
 
 	std::vector<std::string> GetFinalAttacks();
 	void OnAddAttackEffect(std::string _attack_name);
