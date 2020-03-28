@@ -40,6 +40,7 @@ public:
 	virtual void Start();
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction) {}
+	virtual void Attack() {}
 	virtual void Update() {}
 	virtual void CleanUp() {}
 

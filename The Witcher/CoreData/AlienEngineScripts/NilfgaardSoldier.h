@@ -22,6 +22,8 @@ public:
 	void Update() override;
 	void SetStats(const char* json) override;
 	void Move(float3 direction) override;
+	void Attack() override;
+	void ShootAttack();
 	void CleanUp() override;
 
 	void OnAnimationEnd(const char* name) override;
@@ -30,19 +32,22 @@ public:
 
 public:
 	GameObject* weapon = nullptr;
+	Prefab arrow;
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	float distance = 0.0F;
+	float3 direction;
 };
 
 ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
-	NilfgaardSoldier* alien = new NilfgaardSoldier();
+	NilfgaardSoldier* nilfgaard = new NilfgaardSoldier();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, alien->state);
-	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, alien->nilf_type);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->weapon);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->player_1);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->player_2);
-	return alien;
+	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, nilfgaard->state);
+	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->weapon);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->player_1);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->player_2);
+	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
+	return nilfgaard;
 }
 
 
