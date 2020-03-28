@@ -203,7 +203,7 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_heavy_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
-		attacks->ComboAttack();
+		attacks->UpdateCurrentAttack();
 
 		if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
