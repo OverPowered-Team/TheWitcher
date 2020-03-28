@@ -125,8 +125,8 @@ public:
 	static void SetComponent(Component* component, CompZ* compZ);
 	static void AttachCompZToGameObject(CompZ* compZ);
 
-	ComponentType type = ComponentType::UNKNOWN;
-	ComponentType ui_type = ComponentType::UNKNOWN;
+	ComponentType type = ComponentType::MAX;
+	ComponentType ui_type = ComponentType::MAX;
 	u64 objectID = 0;
 	u64 compID = 0;
 	bool enabled = true;

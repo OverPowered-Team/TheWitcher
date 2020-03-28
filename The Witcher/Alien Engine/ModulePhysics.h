@@ -54,6 +54,10 @@ public:
 
 	bool CleanUp();
 
+	std::vector<ComponentCollider*> RayCastAll(math::Ray ray);
+
+	ComponentCollider* RayCastClosest(math::Ray ray);
+
 	void DrawCollider(ComponentCollider* collider);
 
 	void DrawConvexCollider(ComponentCollider* collider);

@@ -41,6 +41,7 @@ public:
 	virtual void ChangeVertex(float width, float height);
 	void UpdateVertex();
 
+	virtual bool OnIdle() { return true; };
 	virtual bool OnHover() { return true; };
 	virtual bool OnClick() { return true; };
 	virtual bool OnPressed() { return true; };
