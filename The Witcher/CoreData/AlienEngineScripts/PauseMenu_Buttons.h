@@ -10,6 +10,8 @@ public:
 	PauseMenu_Buttons();
 	virtual ~PauseMenu_Buttons();
 	
+	void Update();
+
 	void Resume();
 	void Leaderboard();
 	void Controls();

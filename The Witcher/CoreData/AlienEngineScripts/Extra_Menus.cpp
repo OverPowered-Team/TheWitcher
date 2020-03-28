@@ -8,6 +8,14 @@ Extra_Menus::~Extra_Menus()
 {
 }
 
+void Extra_Menus::Update()
+{
+	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) || Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B))
+	{
+		GameObject::FindWithName("Extra_Menus")->SetEnable(false);
+	}
+}
+
 void Extra_Menus::MenuSpawn(MENU menu_type)
 {
 	extramenus_canvas = GameObject::FindWithName("Extra_Menus");

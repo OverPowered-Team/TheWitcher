@@ -16,6 +16,8 @@ public:
 	Extra_Menus();
 	virtual ~Extra_Menus();
 
+	void Update();
+
 	void MenuSpawn(MENU menu_type);
 
 	GameObject* extramenus_canvas = nullptr;
