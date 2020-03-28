@@ -24,6 +24,7 @@ public:
 	void Draw(bool isGame) override;
 	void DrawTexture(bool isGame, ResourceTexture* tex, bool background = true);
 
+	bool OnIdle();
 	bool OnHover();
 	bool OnClick();
 	bool OnPressed();

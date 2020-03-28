@@ -844,6 +844,15 @@ void ComponentCheckbox::DrawTexture(bool isGame, ResourceTexture* tex, bool back
 	glEnable(GL_CULL_FACE);
 }
 
+bool ComponentCheckbox::OnIdle()
+{
+	if (active) {
+		current_color = idle_color;
+		checkbox_current_color = checkbox_idle_color;
+	}
+	return true;
+}
+
 bool ComponentCheckbox::OnHover()
 {
 	if (active)
@@ -883,8 +892,8 @@ bool ComponentCheckbox::OnRelease()
 {
 	if (active)
 	{ 
-		current_color = idle_color;
-		checkbox_current_color = checkbox_idle_color;
+		current_color = hover_color;
+		checkbox_current_color = checkbox_hover_color;
 		CallListeners(&listenersOnRelease);
 	}
 	return true;
