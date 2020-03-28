@@ -126,6 +126,8 @@ public:
 
 private:
 
+	virtual bool IsAlien() { return true; }
+
 	bool* enabled = nullptr;
 	char data_name[260];
 };

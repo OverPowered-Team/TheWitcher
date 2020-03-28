@@ -6,43 +6,41 @@
 class PlayerController;
 class Effect;
 
-enum Relic_Type
-{
+enum (Relic_Type,
 	BASE,
 	ATTACK,
 	DASH,
-	COMPANION
-};
-
-enum Relic_Effect
-{
+	COMPANION,
+	NONE_TYPE
+	);
+enum (Relic_Effect,
 	FIRE,
 	POISON,
 	EARTH,
 	RANGE,
-	NONE
-};
+	NONE_EFFECT
+	);
 
 class Relic {
 public:
 	Relic();
 	virtual ~Relic();
 
-	void OnPickUp(PlayerController* player);
+	virtual void OnPickUp(PlayerController* player);
 
 	std::string name = "";
 	std::string description = "";
-	std::vector<Relic_Effect> relic_effects;
+	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	std::vector<Effect*> effects;
 
 };
 
-class AttackRelic {
+class AttackRelic : public Relic {
 public:
 	AttackRelic();
 	virtual ~AttackRelic();
 
-	void OnPickUp(PlayerController* player);
+	void OnPickUp(PlayerController* player) override;
 
 	std::string attack_name = "";
 
@@ -50,6 +48,8 @@ public:
 
 class ALIEN_ENGINE_API RelicBehaviour : public Alien {
 
+public:
+	
 public:
 
 	RelicBehaviour();
@@ -60,18 +60,24 @@ public:
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
+public:
+
 	std::string name = "";
 	std::string description = "";
-	Relic_Type relic_type;
-	std::vector<Relic_Effect> relic_effects;
+	Relic_Type relic_type = Relic_Type::NONE_TYPE;
+	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
 
 };
 
-ALIEN_FACTORY RelicBehaviour* CreatePlayerTest() {
+ALIEN_FACTORY RelicBehaviour* CreateRelicBehaviour() {
 	RelicBehaviour* relic_behaviour = new RelicBehaviour();
 	// To show in inspector here
-	//SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(relic_behaviour->speed);
+	SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->name);
+	SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->description);
+	SHOW_IN_INSPECTOR_AS_ENUM(Relic_Type, relic_behaviour->relic_type);
+	SHOW_IN_INSPECTOR_AS_ENUM(Relic_Effect, relic_behaviour->relic_effect);
+	
 
 	return relic_behaviour;
 }
