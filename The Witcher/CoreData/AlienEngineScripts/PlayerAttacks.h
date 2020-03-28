@@ -1,6 +1,7 @@
 #pragma once
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "Stat.h"
 
 class PlayerController;
 class EnemyManager;
@@ -16,7 +17,7 @@ public:
 		this->input = input;
 		this->collider_position = coll_pos;
 		this->collider_size = coll_size;
-		this->base_damage = mult;
+		this->base_damage = new Stat("Attack_Damage",mult);
 		this->movement_strength = m_strgth;
 		this->activation_frame = a_frame;
 		this->next_light = n_light;
@@ -27,7 +28,7 @@ public:
 	std::string input = "";
 	float3 collider_position;
 	float3 collider_size;
-	float base_damage = 0.0f;
+	Stat* base_damage = nullptr;
 	float movement_strength = 0.0f;
 	int activation_frame = 0;
 
@@ -56,8 +57,11 @@ public:
 	void UpdateCurrentAttack();
 	void ReceiveInput(AttackType attack);
 
+	std::vector<std::string> GetFinalAttacks();
+	void OnAddAttackEffect(std::string _attack_name);
 	void ActivateCollider();
 	void DeactivateCollider();
+
 	void AllowCombo();
 	void OnDrawGizmos();
 	bool CanBeInterrupted();

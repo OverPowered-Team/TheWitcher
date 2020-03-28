@@ -344,4 +344,12 @@ void PlayerController::PickUpRelic(Relic* _relic)
 void PlayerController::AddEffect(Effect* _effect)
 {
 
+	effects.push_back(_effect);
+
+	//RecalculateStats(); 
+
+	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
+	{
+		attacks->OnAddAttackEffect(((AttackEffect*)_effect)->GetAttackIdentifier());
+	}
 }
