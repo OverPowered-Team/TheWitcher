@@ -43,7 +43,6 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 void NilfgaardSoldier::Move(float3 direction)
 {
-	ComponentCharacterController
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
@@ -82,15 +81,11 @@ void NilfgaardSoldier::Attack()
 
 void NilfgaardSoldier::ShootAttack()
 {
-	float3 arrow_pos = float3(0.0F,0.0F,0.0F);
+	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
-
-
 
 	ArrowMovement* arrow_mov = (ArrowMovement*)arrow_go->GetComponentScript("ArrowMovement");
 	arrow_mov->direction = direction;
-
-	//arrow_go->SetWalkDirection(direction.Mul(0.01).Normalized());
 }
 
 void NilfgaardSoldier::Update()

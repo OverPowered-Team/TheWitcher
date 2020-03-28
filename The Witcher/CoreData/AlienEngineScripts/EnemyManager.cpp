@@ -4,11 +4,11 @@
 
 void EnemyManager::Start()
 {
-	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
+	/*for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->StartEnemy();
 	}
 	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::SPEAR);
-	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::LARGE_SWORD);
+	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::LARGE_SWORD);*/
 }
 
 void EnemyManager::Update()

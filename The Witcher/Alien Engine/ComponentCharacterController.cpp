@@ -82,6 +82,22 @@ void ComponentCharacterController::SetRotation(const Quat rotation)
 	transform->SetGlobalRotation(math::Quat(rotation));
 }
 
+Quat ComponentCharacterController::GetRotation() const
+{
+	return transform->GetGlobalRotation();
+}
+
+void ComponentCharacterController::SetPosition(const float3 pos)
+{
+	body->setWorldTransform(ToBtTransform(pos + character_offset, transform->GetGlobalRotation()));
+	transform->SetGlobalPosition(pos);
+}
+
+float3 ComponentCharacterController::GetPosition() const
+{
+	return transform->GetGlobalPosition();
+}
+
 void ComponentCharacterController::SetCharacterOffset(const float3 offset)
 {
 	character_offset = offset;

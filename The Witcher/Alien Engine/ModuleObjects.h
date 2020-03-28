@@ -180,6 +180,8 @@ public:
 
 	static bool SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last);
 
+	static bool SortUIToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last);
+
 	void AddScriptObject(const u64& ID, GameObject** object);
 
 	void DuplicateObjects();

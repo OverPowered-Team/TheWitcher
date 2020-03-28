@@ -296,6 +296,20 @@ void ComponentRigidBody::SetAngularDrag(const float value)
 	body->setDamping(drag, angular_drag);
 }
 
+void ComponentRigidBody::SetPosition(float3 pos)
+{
+	btTransform trans = body->getCenterOfMassTransform();
+	trans.setOrigin(btVector3(pos.x, pos.y, pos.z));
+	body->setCenterOfMassTransform(trans);
+}
+
+float3 ComponentRigidBody::GetPosition() const
+{
+	btTransform trans = body->getCenterOfMassTransform();
+	btVector3 pos = trans.getOrigin();
+	return float3(pos.x(), pos.y(), pos.z());
+}
+
 void ComponentRigidBody::SetVelocity(float3 velocity)
 {
 	body->setLinearVelocity(ToBtVector3(velocity));

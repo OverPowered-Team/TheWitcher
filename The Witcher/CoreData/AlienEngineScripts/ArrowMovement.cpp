@@ -15,5 +15,5 @@ void ArrowMovement::Start()
 
 void ArrowMovement::Update()
 {
-	//rb->AddForce(direction.Mul(1));
+	rb->AddForce(direction.Mul(1));
 }
