@@ -2,19 +2,31 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
-#include "Enemy.h"
+
+class Enemy;
+enum class EnemyType;
+typedef int ExtraEnumType;
 
 class ALIEN_ENGINE_API EnemyManager : public Alien {
 
 public:
 
-	EnemyManager();
-	virtual ~EnemyManager();
+	EnemyManager() {}
+	virtual ~EnemyManager() {}
 	
 	void Start();
 	void Update();
+	void CleanUp();
+
+	void CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type = -1);
+
+	void AddEnemy(Enemy* enemy);
+	void DeleteEnemy(Enemy* enemy);
 
 public:
+
+private:
+
 	std::vector<Enemy*> enemies;
 
 };
