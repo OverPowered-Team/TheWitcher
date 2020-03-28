@@ -72,6 +72,7 @@ public:
 	GameObject* collider_go = nullptr;
 	float snap_range = 0.0f;
 	float max_snap_angle = 0.0f;
+	float min_snap_range = 0.0f;
 
 protected:
 	void CreateAttacks();
@@ -82,7 +83,6 @@ protected:
 	float3 CalculateSnapVelocity();
 	bool FindSnapTarget();
 	float3 GetMovementVector();
-	float3 GetAttackImpulse();
 
 protected:
 	Attack* current_attack = nullptr;
@@ -110,6 +110,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->collider_go);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_range);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->max_snap_angle);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->min_snap_range);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);

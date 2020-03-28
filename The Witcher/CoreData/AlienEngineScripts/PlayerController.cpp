@@ -104,6 +104,12 @@ void PlayerController::Update()
 		can_move = true;
 		c_run->GetSystem()->StopEmmitter();
 
+		if (!controller->CanJump()) {
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			animator->SetBool("air", true);
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
@@ -140,12 +146,17 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
-
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
 		c_run->GetSystem()->StartEmmitter();
 		can_move = true;
+		if (!controller->CanJump()) {
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			animator->SetBool("air", true);
+		}
+
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
 			audio->StartSound();
@@ -189,7 +200,6 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
-
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();

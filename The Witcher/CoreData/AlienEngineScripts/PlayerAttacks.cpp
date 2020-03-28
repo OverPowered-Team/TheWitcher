@@ -28,7 +28,7 @@ void PlayerAttacks::StartAttack(AttackType attack)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (current_target && transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) > 0.2f)
+	if (current_target && transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) > min_snap_range)
 		player_controller->controller->SetWalkDirection(CalculateSnapVelocity());
 	else
 		player_controller->controller->SetWalkDirection(float3::zero());
@@ -166,7 +166,13 @@ void PlayerAttacks::AttackMovement()
 	}
 	else
 	{
-		player_controller->controller->ApplyImpulse(GetAttackImpulse());
+		float3 direction = GetMovementVector();
+		float angle = atan2f(direction.z, direction.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+
+		float3 impulse = direction * current_attack->movement_strength;
+		player_controller->controller->ApplyImpulse(impulse);
+		player_controller->controller->SetRotation(rot);
 	}	
 }
 
@@ -204,14 +210,6 @@ bool PlayerAttacks::CanBeInterrupted()
 		return !collider->IsEnabled();
 	else
 		return true;
-}
-
-float3 PlayerAttacks::GetAttackImpulse()
-{
-	float3 vector = GetMovementVector();
-	vector *= current_attack->movement_strength;
-
-	return vector;
 }
 
 float3 PlayerAttacks::GetMovementVector()

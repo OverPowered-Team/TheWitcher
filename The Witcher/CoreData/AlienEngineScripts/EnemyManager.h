@@ -24,10 +24,10 @@ public:
 	void DeleteEnemy(Enemy* enemy);
 
 public:
-
+	std::vector<Enemy*> enemies;
 private:
 
-	std::vector<Enemy*> enemies;
+
 
 };
 
