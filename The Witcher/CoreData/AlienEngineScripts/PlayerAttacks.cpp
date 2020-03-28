@@ -50,6 +50,7 @@ void PlayerAttacks::DoAttack()
 
 	float start_time = Time::GetGameTime();
 	float animation_duration = player_controller->animator->GetCurrentStateDuration();
+	LOG("ANIM DURATION IS %f", animation_duration);
 	finish_attack_time = start_time + animation_duration;
 }
 
@@ -197,12 +198,14 @@ float3 PlayerAttacks::GetAttackImpulse()
 
 	if (vector.Length() < player_controller->stick_threshold)
 		vector = player_controller->transform->forward;
+	else
+	{
+		vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
+		vector.y = 0.f;
+		vector.Normalize();
+	}
 
-	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
-	vector.y = 0.f;
-	vector.Normalize();
 	vector *= current_attack->movement_strength;
-
 	//raycast here
 
 
