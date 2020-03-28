@@ -3,6 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class PlayerAttacks;
 class Relic;
 class Effect;
 
@@ -49,7 +50,9 @@ public:
 public:
 	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
+	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
+
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	bool can_move = false;
@@ -65,12 +68,14 @@ public:
 	SDL_Scancode keyboard_jump;
 	SDL_Scancode keyboard_dash;
 	SDL_Scancode keyboard_light_attack;
+	SDL_Scancode keyboard_heavy_attack;
 	SDL_Scancode keyboard_spell;
 
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
-	Input::CONTROLLER_BUTTONS controller_attack = Input::CONTROLLER_BUTTON_X;
+	Input::CONTROLLER_BUTTONS controller_light_attack = Input::CONTROLLER_BUTTON_X;
+	Input::CONTROLLER_BUTTONS controller_heavy_attack = Input::CONTROLLER_BUTTON_Y;
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
 
 	//Relics
@@ -78,7 +83,6 @@ public:
 	std::vector<Relic*> relics;
 
 	//Particles
-	
 	GameObject* p_run = nullptr;
 	ComponentParticleSystem* c_run = nullptr;
 
