@@ -201,7 +201,6 @@ update_status ModuleInput::PreUpdate(float dt)
 	mouse_pressed = false;
 	first_key_pressed = SDL_SCANCODE_UNKNOWN;
 	bool quit = false;
-	static bool controller_first_time = true;
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
@@ -242,42 +241,40 @@ update_status ModuleInput::PreUpdate(float dt)
 				App->renderer3D->OnResize(e.window.data1, e.window.data2);
 			break; }
 		case SDL_CONTROLLERDEVICEADDED: {
-			if (!controller_first_time) {
-				SDL_GameController* controller = SDL_GameControllerOpen(e.cdevice.which);
-				if (controller != nullptr) {
-					if (SDL_JoystickIsHaptic(SDL_GameControllerGetJoystick(controller)) > 0)
-					{
-						SDL_Haptic* haptic = SDL_HapticOpenFromJoystick(SDL_GameControllerGetJoystick(controller));
+			SDL_GameController* controller = SDL_GameControllerOpen(e.cdevice.which);
+			if (controller != nullptr) {
+				if (SDL_JoystickIsHaptic(SDL_GameControllerGetJoystick(controller)) > 0)
+				{
+					SDL_Haptic* haptic = SDL_HapticOpenFromJoystick(SDL_GameControllerGetJoystick(controller));
 
-						if (haptic != nullptr)
+					if (haptic != nullptr)
+					{
+						if (SDL_HapticRumbleInit(haptic) < 0)
 						{
-							if (SDL_HapticRumbleInit(haptic) < 0)
-							{
-								LOG_ENGINE("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
-							}
-
-							if (SDL_HapticRumblePlay(haptic, 0.3f, 1000) < 0)
-							{
-								LOG_ENGINE("Error when rumbing the controller number %i", e.cdevice.which);
-							}
+							LOG_ENGINE("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
 						}
-						GamePad* pad = new GamePad();
-						pad->controller = controller;
-						pad->haptic = haptic;
-						pad->number = e.cdevice.which + 1;
-						memset(pad->controller_buttons, KEY_IDLE, sizeof(KEY_STATE) * SDL_CONTROLLER_BUTTON_MAX);
-						game_pads.emplace(pad->number, pad);
-						LOG_ENGINE("Controller %i loaded correctly", pad->number);
+
+						if (SDL_HapticRumblePlay(haptic, 0.3f, 1000) < 0)
+						{
+							LOG_ENGINE("Error when rumbing the controller number %i", e.cdevice.which);
+						}
 					}
-					else
-					{
-						LOG_ENGINE("haptic error! SDL_Error: %s\n", SDL_GetError());
-						LOG_ENGINE("haptic error! SDL_Error: %i\n", SDL_JoystickIsHaptic(SDL_GameControllerGetJoystick(controller)));
-					}
+					GamePad* pad = new GamePad();
+					pad->controller = controller;
+					pad->haptic = haptic;
+					pad->number = e.cdevice.which + 1;
+					memset(pad->controller_buttons, KEY_IDLE, sizeof(KEY_STATE) * SDL_CONTROLLER_BUTTON_MAX);
+					game_pads.emplace(pad->number, pad);
+					LOG_ENGINE("Controller %i loaded correctly", pad->number);
 				}
-				else {
-					LOG_ENGINE("Error when trying to open the controller number %i", e.cdevice.which);
+				else
+				{
+					LOG_ENGINE("haptic error! SDL_Error: %s\n", SDL_GetError());
+					LOG_ENGINE("haptic error! SDL_Error: %i\n", SDL_JoystickIsHaptic(SDL_GameControllerGetJoystick(controller)));
 				}
+			}
+			else {
+				LOG_ENGINE("Error when trying to open the controller number %i", e.cdevice.which);
 			}
 			break; }
 		case SDL_CONTROLLERDEVICEREMOVED: {
@@ -298,8 +295,6 @@ update_status ModuleInput::PreUpdate(float dt)
 			break; }
 		}
 	}
-
-	controller_first_time = false;
 
 	for (; item != game_pads.end(); ++item) {
 		if ((*item).second != nullptr) {

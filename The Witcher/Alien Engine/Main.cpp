@@ -14,6 +14,9 @@
 #pragma comment(lib, "Optick/libx86/releasex86/OptickCore.lib")
 #endif
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 enum main_states
 {
 	MAIN_CREATION,

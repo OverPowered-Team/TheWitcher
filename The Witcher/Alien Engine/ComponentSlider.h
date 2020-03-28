@@ -29,6 +29,7 @@ public:
 	void LoadComponent(JSONArraypack* to_load);
 
 public:
+	bool OnIdle();
 	bool OnHover();
 	bool OnClick();
 	bool OnPressed();

@@ -22,12 +22,11 @@ public:
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
 
-	//delegate void OnHit(GameObject enemy);
-	//OnHit on_hit_delegate;
+	void (*OnHit)(GameObject enemy);
 
 };
 
-class AttackEffect : Effect {
+class AttackEffect : public Effect {
 public:
 	AttackEffect();
 	virtual ~AttackEffect();

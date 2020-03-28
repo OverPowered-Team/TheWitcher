@@ -3,6 +3,9 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class Relic;
+class Effect;
+
 class ALIEN_ENGINE_API PlayerController : public Alien {
 
 public:
@@ -38,7 +41,10 @@ public:
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
-	//void PickUpRelic(Relic* _relic);
+
+	//Relics
+	void PickUpRelic(Relic* _relic);
+	void AddEffect(Effect* _effect);
 
 public:
 	int controller_index = 1;
@@ -67,6 +73,9 @@ public:
 	Input::CONTROLLER_BUTTONS controller_attack = Input::CONTROLLER_BUTTON_X;
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
 
+	//Relics
+	std::vector<Effect*> effects;
+	std::vector<Relic*> relics;
 
 	//Particles
 	

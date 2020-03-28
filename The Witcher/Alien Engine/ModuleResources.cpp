@@ -1088,8 +1088,9 @@ void ModuleResources::ReadScripts()
 
 void ModuleResources::GetAllScriptsPath(std::vector<std::string> directories, std::vector<std::string> files, std::string current_folder, std::vector<std::string>* scripts)
 {
-	if (!files.empty())
-		scripts->assign(files.begin(), files.end());
+	if (!files.empty()) {
+		scripts->insert(scripts->end(), files.begin(), files.end());
+	}
 	if (!directories.empty()) {
 		std::vector<std::string> new_files;
 		std::vector<std::string> new_directories;
