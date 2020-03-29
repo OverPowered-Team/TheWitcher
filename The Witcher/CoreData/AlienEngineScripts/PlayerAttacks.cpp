@@ -26,12 +26,14 @@ void PlayerAttacks::StartAttack(AttackType attack)
 {
 	SelectAttack(attack);
 	DoAttack();
+	AttackMovement();
 }
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (current_target && transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) > min_snap_range)
-		player_controller->controller->SetWalkDirection(CalculateSnapVelocity());
+	if (current_target && (transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) > min_snap_range 
+		&& Time::GetGameTime() < start_attack_time + snap_time))
+		SnapToTarget();
 	else
 		player_controller->controller->SetWalkDirection(float3::zero());
 
@@ -54,9 +56,9 @@ void PlayerAttacks::DoAttack()
 	can_execute_input = false;
 	next_attack = AttackType::NONE;
 	current_target = nullptr;
+	distance_snapped = 0.0f;
 
-	player_controller->animator->PlayState(current_attack->name.c_str());
-	AttackMovement();
+	player_controller->animator->PlayState(current_attack->info.name.c_str());
 
 	//calculate end of attack
 	start_attack_time = Time::GetGameTime();
@@ -99,7 +101,7 @@ std::vector<std::string> PlayerAttacks::GetFinalAttacks()
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
 		if ((*it)->heavy_attack_link == nullptr && (*it)->light_attack_link == nullptr)
-			final_attacks.push_back((*it)->name);
+			final_attacks.push_back((*it)->info.name);
 	}
 	return final_attacks;
 }
@@ -108,34 +110,60 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 {
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->name == _attack_name)
+		if ((*it)->info.name == _attack_name)
 		{
-			(*it)->base_damage->CalculateStat(player_controller->effects);
+			(*it)->info.base_damage->CalculateStat(player_controller->effects);
 			//(*it)->base_range.CalculateStat(player_controller->effects);
 		}
 	}
 }
 
+void PlayerAttacks::SnapToTarget()
+{
+	float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+
+
+	float speed = 0.0f;
+	float distance = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition());
+	if (distance < current_attack->info.max_snap_distance)
+		speed = distance / snap_time;
+	else
+		speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+
+	float3 velocity = transform->forward * speed * Time::GetDT();
+	distance_snapped += velocity.Length();
+
+	player_controller->controller->SetRotation(rot);
+	player_controller->controller->SetWalkDirection(velocity);
+}
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	std::vector<GameObject*> possible_targets;
+	float3 vector = GetMovementVector();
+	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 100.0f);
+
 	for(uint i = 0; i < enemies_size; ++i)
 	{
 		float distance = enemies[i]->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
-		if (distance <= snap_range)
-			possible_targets.push_back(enemies[i]);
+		float angle = math::RadToDeg(vector.AngleBetweenNorm((enemies[i]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
+
+		if (distance <= snap_range && angle <= max_snap_angle)
+		{
+			float snap_value = (angle * 0.1f * snap_angle_value) + (distance * snap_distance_value);
+			if (snap_candidate.second > snap_value)
+			{
+				snap_candidate.first = enemies[i];
+				snap_candidate.second = snap_value;
+			}
+		}		
 	}
 
-	float3 vector = GetMovementVector();
-	for (std::vector<GameObject*>::iterator it = possible_targets.begin(); it != possible_targets.end(); ++it)
+	if (snap_candidate.first)
 	{
-		float angle = vector.AngleBetween((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition());
-		if (angle <= math::DegToRad(max_snap_angle))
-		{
-			current_target = (*it);
-			return true;
-		}		
+		current_target = snap_candidate.first;
+		return true;
 	}
 
 	return false;
@@ -156,25 +184,12 @@ void PlayerAttacks::CleanUp()
 	//GameObject::FreeArrayMemory((void***)&enemies);
 }
 
-float3 PlayerAttacks::CalculateSnapVelocity()
-{
-	float speed = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) / snap_time;
-	float3 velocity = transform->forward * speed * Time::GetDT();
-
-	return velocity;
-}
-
 void PlayerAttacks::AttackMovement()
 {
 	if (FindSnapTarget())
 	{
-		float frame_time = (float)current_attack->activation_frame / (float)player_controller->animator->GetCurrentAnimTPS();
+		float frame_time = (float)current_attack->info.activation_frame / (float)player_controller->animator->GetCurrentAnimTPS();
 		snap_time = frame_time / player_controller->animator->GetCurrentStateSpeed();
-
-		float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-		float angle = atan2f(direction.z, direction.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-		player_controller->controller->SetRotation(rot);
 	}
 	else
 	{
@@ -182,7 +197,7 @@ void PlayerAttacks::AttackMovement()
 		float angle = atan2f(direction.z, direction.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
-		float3 impulse = direction * current_attack->movement_strength;
+		float3 impulse = direction * current_attack->info.movement_strength;
 		player_controller->controller->ApplyImpulse(impulse);
 		player_controller->controller->SetRotation(rot);
 	}	
@@ -192,8 +207,8 @@ void PlayerAttacks::ActivateCollider()
 {
 	if (collider && current_attack)
 	{
-		collider->SetCenter(current_attack->collider_position);
-		collider->SetSize(current_attack->collider_size);
+		collider->SetCenter(current_attack->info.collider_position);
+		collider->SetSize(current_attack->info.collider_size);
 		collider->SetEnable(true);
 	}
 }
@@ -256,22 +271,24 @@ void PlayerAttacks::CreateAttacks()
 		attack_combo->GetFirstNode();
 		for (uint i = 0; i < attack_combo->GetArraySize(); i++)
 		{
-			std::string attack_name = attack_combo->GetString("name");
-			std::string button_name = attack_combo->GetString("button");
+			Attack::AttackInfo info;
 
-			float3 pos = float3(attack_combo->GetNumber("collider.pos_x"),
+			info.name = attack_combo->GetString("name");
+			info.input = attack_combo->GetString("button");
+			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
 				attack_combo->GetNumber("collider.pos_y"),
 				attack_combo->GetNumber("collider.pos_z"));
-			float3 size = float3(attack_combo->GetNumber("collider.width"),
+			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			float multiplier = attack_combo->GetNumber("multiplier");
-			float movement_strength = attack_combo->GetNumber("movement_strength");
-			int activation_frame = attack_combo->GetNumber("activation_frame");
-			std::string n_light = attack_combo->GetString("next_attack_light");
-			std::string n_heavy = attack_combo->GetString("next_attack_heavy");
+			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("multiplier"));
+			info.movement_strength = attack_combo->GetNumber("movement_strength");
+			info.activation_frame = attack_combo->GetNumber("activation_frame");
+			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
+			info.next_light = attack_combo->GetString("next_attack_light");
+			info.next_heavy = attack_combo->GetString("next_attack_heavy");
 
-			Attack* attack = new Attack(attack_name.data(), button_name.data(), pos, size, multiplier, activation_frame, movement_strength, n_light.data(), n_heavy.data());
+			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 
 			attack_combo->GetAnotherNode();
@@ -285,24 +302,24 @@ void PlayerAttacks::ConnectAttacks()
 {
 	for (auto it_attack = attacks.begin(); it_attack != attacks.end(); it_attack++)
 	{
-		if ((*it_attack)->name == "H")
+		if ((*it_attack)->info.name == "H")
 			base_heavy_attack = (*it_attack);
-		else if ((*it_attack)->name == "L")
+		else if ((*it_attack)->info.name == "L")
 			base_light_attack = (*it_attack);
 
-		std::string n_light = (*it_attack)->next_light.c_str();
-		std::string n_heavy = (*it_attack)->next_heavy.c_str();
+		std::string n_light = (*it_attack)->info.next_light.c_str();
+		std::string n_heavy = (*it_attack)->info.next_heavy.c_str();
 
 		if (n_light == "End" && n_heavy == "End")
 			continue;
 
 		for (auto it_next = attacks.begin(); it_next != attacks.end(); it_next++)
 		{
-			if (n_light == (*it_next)->name)
+			if (n_light == (*it_next)->info.name)
 			{
 				(*it_attack)->light_attack_link = (*it_next);
 			}
-			if (n_heavy == (*it_next)->name)
+			if (n_heavy == (*it_next)->info.name)
 			{
 				(*it_attack)->heavy_attack_link = (*it_next);
 			}
@@ -312,5 +329,5 @@ void PlayerAttacks::ConnectAttacks()
 
 void Attack::CleanUp()
 {
-	delete base_damage;
+	delete info.base_damage;
 }
