@@ -267,12 +267,6 @@ bool PlayerController::AnyKeyboardInput()
 		|| Input::GetKeyDown(keyboard_jump);
 }
 
-void PlayerController::OnDrawGizmos()
-{
-	Gizmos::DrawCube(float3::zero(), float3::one(), Color::Purple());
-	Gizmos::DrawCube(transform->GetGlobalPosition(), float3::one(), Color::Purple());
-}
-
 void PlayerController::HandleMovement(const float2& joystickInput)
 {
 	float joystickIntensity = joystickInput.Length();
@@ -381,9 +375,6 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 
 	AABB aabb = AABB(next_pos, next_pos + float3(1, 1, 1));
-	if (cube_test != nullptr)
-		cube_test->transform->SetGlobalPosition(next_pos);
-
 	if (frustum->Contains(aabb)) {
 		return true;
 	}
