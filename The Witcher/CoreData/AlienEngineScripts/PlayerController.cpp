@@ -140,12 +140,12 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
-
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
 		c_run->GetSystem()->StartEmmitter();
 		can_move = true;
+
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
 			audio->StartSound();
@@ -189,7 +189,6 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
-
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
@@ -203,7 +202,7 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_heavy_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
-		attacks->ComboAttack();
+		attacks->UpdateCurrentAttack();
 
 		if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
@@ -302,15 +301,6 @@ void PlayerController::OnAttackEffect()
 }
 
 void PlayerController::OnAnimationEnd(const char* name) {
-
-	LOG("entro acabar %s", name);
-	if (strcmp(name, "Attack") == 0) {
-		if (abs(player_data.currentSpeed) < 0.01F)
-			state = PlayerState::IDLE;
-		if (abs(player_data.currentSpeed) > 0.01F)
-			state = PlayerState::RUNNING;
-	}
-
 	if (strcmp(name, "Roll") == 0) {
 		if(abs(player_data.currentSpeed) < 0.01F)
 			state = PlayerState::IDLE;
@@ -343,7 +333,6 @@ void PlayerController::PickUpRelic(Relic* _relic)
 
 void PlayerController::AddEffect(Effect* _effect)
 {
-
 	effects.push_back(_effect);
 
 	//RecalculateStats(); 

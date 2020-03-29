@@ -18,6 +18,10 @@ void EnemyManager::Update()
 
 void EnemyManager::CleanUp()
 {
+	/*for (auto it_enemy = enemies.begin(); it_enemy != enemies.end(); it_enemy++)
+	{
+		(*it_enemy)->StartEnemy();
+	}*/
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->CleanUpEnemy();
 		(*item)->game_object->ToDelete();

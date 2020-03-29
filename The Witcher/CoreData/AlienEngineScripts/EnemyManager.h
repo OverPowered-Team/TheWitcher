@@ -28,9 +28,10 @@ public:
 	GameObject* player1 = nullptr;
 	GameObject* player2 = nullptr;
 
-private:
 
+private:
 	std::vector<Enemy*> enemies;
+
 
 };
 

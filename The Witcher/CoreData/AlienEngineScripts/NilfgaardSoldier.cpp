@@ -1,5 +1,4 @@
 #include "NilfgaardSoldier.h"
-#include "ArrowMovement.h"
 
 void NilfgaardSoldier::StartEnemy()
 {
@@ -82,10 +81,8 @@ void NilfgaardSoldier::Attack()
 void NilfgaardSoldier::ShootAttack()
 {
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
-	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
-
-	ArrowMovement* arrow_mov = (ArrowMovement*)arrow_go->GetComponentScript("ArrowMovement");
-	arrow_mov->direction = direction;
+	ComponentRigidBody* arrow_go = (ComponentRigidBody*)GameObject::Instantiate(arrow, arrow_pos)->GetComponent(ComponentType::RIGID_BODY);
+	arrow_go->AddForce(direction.Mul(20));
 }
 
 void NilfgaardSoldier::UpdateEnemy()

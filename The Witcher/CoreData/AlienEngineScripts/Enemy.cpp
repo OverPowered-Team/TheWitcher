@@ -3,7 +3,7 @@
 
 void Enemy::Awake()
 {
-	((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	//((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
 }
 
 void Enemy::StartEnemy()

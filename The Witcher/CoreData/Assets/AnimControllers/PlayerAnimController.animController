@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "PlayerAnimController",
         "NumStates": 10,
-        "NumTransitions": 14,
+        "NumTransitions": 18,
         "States": [
             {
                 "Name": "Idle",
@@ -31,7 +31,7 @@
             },
             {
                 "Name": "L",
-                "Speed": 2,
+                "Speed": 4,
                 "Clip": "17156228017399226362"
             },
             {
@@ -46,7 +46,7 @@
             },
             {
                 "Name": "LLLL",
-                "Speed": 2,
+                "Speed": 3,
                 "Clip": "16819087015883391959"
             },
             {
@@ -203,7 +203,13 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             },
             {
                 "Source": "LLL",
@@ -212,7 +218,13 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             },
             {
                 "Source": "LLLLL",
@@ -221,7 +233,13 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             },
             {
                 "Source": "LLLL",
@@ -230,7 +248,13 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             },
             {
                 "Source": "L",
@@ -261,6 +285,66 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "LL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLLLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -282,63 +366,112 @@
         ],
         "Events": [
             {
-                "Event_Id": "2453392179",
-                "Animation_Id": "6946917102901728312",
-                "Frame": 7,
-                "Type": 0
-            },
-            {
-                "Event_Id": "2453392179",
-                "Animation_Id": "6946917102901728312",
-                "Frame": 14,
-                "Type": 0
-            },
-            {
-                "Event_Id": "PlayerAttacks::DesactiveCollider",
-                "Animation_Id": "4871813718953062991",
-                "Frame": 22,
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 29,
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::DesactiveCollider",
-                "Animation_Id": "8264459782882532946",
-                "Frame": 32,
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 25,
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::DesactiveCollider",
-                "Animation_Id": "7930577302406065666",
-                "Frame": 49,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DesactiveCollider",
-                "Animation_Id": "16304126710174412820",
-                "Frame": 26,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DesactiveCollider",
-                "Animation_Id": "16819087015883391959",
-                "Frame": 56,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DesactiveCollider",
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "17156228017399226362",
                 "Frame": 28,
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::ActiveCollider",
-                "Animation_Id": "17156228017399226362",
-                "Frame": 25,
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 26,
                 "Type": 2
-            }
-        ],
-        "Objects": [
+            },
             {
-                "Id": "11618135046122023756"
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 49,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 35,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 35,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "17588914217724974085",
+                "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "17588914217724974085",
+                "Frame": 36,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 30,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 50,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 27,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 57,
+                "Type": 2
             }
         ]
     }
