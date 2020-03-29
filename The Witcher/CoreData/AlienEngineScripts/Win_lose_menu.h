@@ -25,6 +25,7 @@ ALIEN_FACTORY Win_lose_menu* CreateWin_lose_menu() {
 	Win_lose_menu* alien = new Win_lose_menu();
 	// To show in inspector here
 
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->have_won);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->win_panel);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->defeat_panel);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->win_icon);
