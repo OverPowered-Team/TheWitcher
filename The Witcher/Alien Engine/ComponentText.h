@@ -6,6 +6,14 @@
 class ResourceFont;
 struct Character;
 
+enum TextAlign {
+	NONE = -1,
+	LEFT,
+	MIDDLE,
+	RIGHT
+
+};
+
 class __declspec(dllexport) ComponentText :public ComponentUI
 {
 public:
@@ -32,6 +40,7 @@ public:
 	std::string		text = "Non-Text";
 
 private:
+	TextAlign align = TextAlign::LEFT;
 	ResourceFont*	font = nullptr;
 	uint VAO;
 	int width = 200;

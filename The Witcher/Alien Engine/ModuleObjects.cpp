@@ -1928,7 +1928,7 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	object->AddComponent(mesh);
 	object->AddComponent(material);
 	mesh->SetResourceMesh(resource);
-
+	
 	// Add collider --------------------------------------------
 
 	switch (type) {

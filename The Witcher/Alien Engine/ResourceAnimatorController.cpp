@@ -386,7 +386,10 @@ void ResourceAnimatorController::UpdateState(State* state)
 				}
 			}
 			if (state->GetClip()->loops)
+			{
 				state->time = 0;
+				previous_key_time = current_state->GetClip()->start_tick;
+			}
 			else
 				state->time = animation->GetDuration();
 		}
@@ -431,6 +434,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			state->fade_time = 0;
 			state->fade_duration = 0;
 			transitioning = false;
+			previous_key_time = current_state->GetClip()->start_tick;
 		}
 	}
 }
@@ -1413,6 +1417,7 @@ void ResourceAnimatorController::Play()
 	if (default_state)
 	{
 		current_state = default_state;
+		previous_key_time = current_state->GetClip()->start_tick;
 	}
 }
 
@@ -1431,6 +1436,7 @@ void ResourceAnimatorController::Play(std::string state_name)
 			current_state->fade_time = 0;
 			current_state->fade_duration = 0;
 			transitioning = false;
+			previous_key_time = current_state->GetClip()->start_tick;
 			break;
 		}
 	}
@@ -1537,12 +1543,20 @@ bool ResourceAnimatorController::GetTransformState(State* state, std::string cha
 
 			if (next_key_time != previous_key_time)
 			{
-				previous_key_time = next_key_time;
-				if(!transitioning)
-					ActiveEvent(animation, next_key_time);
-				//LOG_ENGINE("THIS FRAME IS %s", std::to_string(next_key_time).c_str())
+				if (next_key_time > previous_key_time + 1 && !transitioning)
+				{
+					for (int i = previous_key_time; i < next_key_time; ++i)
+					{
+						ActiveEvent(animation, i);
+					}
+					previous_key_time = next_key_time;
+				}
+				else if (next_key_time == previous_key_time + 1 && !transitioning)
+				{
+					ActiveEvent(animation, previous_key_time);
+					previous_key_time = next_key_time;
+				}
 			}
-
 			return true;
 		}
 		else

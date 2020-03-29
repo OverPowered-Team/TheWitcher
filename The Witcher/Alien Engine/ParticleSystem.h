@@ -134,6 +134,7 @@ private:
 public:
 	ResourceTexture* texture = nullptr;
 	ResourceMaterial* material = nullptr;
+	ResourceMaterial* default_material = nullptr;
 	EquationBlendType eqBlend = EquationBlendType::FUNC_ADD;
 	FunctionBlendType funcBlendSource = FunctionBlendType::SRC_ALPHA;
 	FunctionBlendType funcBlendDest = FunctionBlendType::ONE_MINUS_SRC_ALPHA;

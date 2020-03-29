@@ -884,6 +884,11 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		skybox->ChangeNegativeZ(skybox_texture_id, tex_neg_z->id, tex_neg_z->width, tex_neg_z->height);
 	}
 
+#ifdef GAME_VERSION
+	auto faces = cubemap->ToVector();
+	skybox_texture_id = skybox->LoadCubeMapFromLibraryFiles(faces);
+#endif
+
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = vertical_fov * Maths::Deg2Rad();
