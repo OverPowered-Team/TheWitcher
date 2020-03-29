@@ -38,6 +38,7 @@ public:
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	float distance = 0.0F;
 	float3 direction;
+	float time_to_rotate = 0.5F;
 };
 
 ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {

@@ -42,13 +42,12 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 void NilfgaardSoldier::Move(float3 direction)
 {
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-
-	//Quat current_rot = math::Slerp() TODO: Slerp between char current rot and desired rot
-	character_ctrl->SetRotation(rot);
 	character_ctrl->SetWalkDirection(direction * stats.agility);
 	animator->SetFloat("speed", stats.agility);
+
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	character_ctrl->SetRotation(rot);
 
 	if (distance < stats.attack_range)
 	{
@@ -81,8 +80,9 @@ void NilfgaardSoldier::Attack()
 void NilfgaardSoldier::ShootAttack()
 {
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
-	//ComponentRigidBody* arrow_go = (ComponentRigidBody*)GameObject::Instantiate(arrow, arrow_pos)->GetComponent(ComponentType::RIGID_BODY);
-	/*arrow_go->AddForce(direction.Mul(20));*/
+	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
+	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
+	arrow_rb->AddForce(direction.Mul(20));
 }
 
 void NilfgaardSoldier::UpdateEnemy()
@@ -106,6 +106,14 @@ void NilfgaardSoldier::UpdateEnemy()
 		Move(direction);
 		break;
 	case Enemy::EnemyState::ATTACK:
+		switch (nilf_type)
+		{
+		case NilfgaardSoldier::NilfgaardType::ARCHER:
+			float angle = atan2f(direction.z, direction.x);
+			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+			character_ctrl->SetRotation(rot);
+			break;
+		}
 		break;
 	case Enemy::EnemyState::DEAD:
 		break;
