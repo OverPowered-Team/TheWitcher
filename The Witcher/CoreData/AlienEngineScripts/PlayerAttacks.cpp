@@ -190,7 +190,7 @@ void PlayerAttacks::AttackMovement()
 
 void PlayerAttacks::ActivateCollider()
 {
-	if (collider)
+	if (collider && current_attack)
 	{
 		collider->SetCenter(current_attack->collider_position);
 		collider->SetSize(current_attack->collider_size);
