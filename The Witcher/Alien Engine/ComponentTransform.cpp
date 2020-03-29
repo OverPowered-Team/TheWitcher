@@ -138,12 +138,7 @@ const float3 ComponentTransform::GetLocalPosition() const
 
 const float3 ComponentTransform::GetGlobalPosition() const
 {
-	float3 pos, scale;
-	Quat rot;
-
-	global_transformation.Decompose(pos, rot, scale);
-
-	return pos;
+	return global_transformation.Float3x4Part().Col(3);
 }
 
 void ComponentTransform::SetLocalScale(const float3& new_local_scale)
@@ -195,11 +190,12 @@ const float3 ComponentTransform::GetLocalScale() const
 
 const float3 ComponentTransform::GetGlobalScale() const
 {
-	float3 pos, scale;
-	Quat rot;
-
-	global_transformation.Decompose(pos, rot, scale);
-
+	float3 scale;
+	float3x3 rotate;
+	rotate = global_transformation.RotatePart();
+	scale.x = rotate.Col(0).Length();
+	scale.y = rotate.Col(1).Length();
+	scale.z = rotate.Col(2).Length();
 	return scale;
 }
 
