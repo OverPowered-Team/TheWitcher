@@ -15,7 +15,9 @@ void PlayerAttacks::Start()
 {
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
 	collider = (ComponentBoxCollider*)collider_go->GetComponent(ComponentType::BOX_COLLIDER);
-	enemy_manager = (EnemyManager*)GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager");
+
+	//temporary
+	enemies_size = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
 
 	CreateAttacks();
 }
@@ -117,16 +119,16 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	std::vector<Enemy*> possible_targets;
-	for(std::vector<Enemy*>::iterator it = enemy_manager->enemies.begin(); it != enemy_manager->enemies.end(); ++it)
+	std::vector<GameObject*> possible_targets;
+	for(uint i = 0; i < enemies_size; ++i)
 	{
-		float distance = (*it)->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
+		float distance = enemies[i]->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
 		if (distance <= snap_range)
-			possible_targets.push_back((*it));
+			possible_targets.push_back(enemies[i]);
 	}
 
 	float3 vector = GetMovementVector();
-	for (std::vector<Enemy*>::iterator it = possible_targets.begin(); it != possible_targets.end(); ++it)
+	for (std::vector<GameObject*>::iterator it = possible_targets.begin(); it != possible_targets.end(); ++it)
 	{
 		float angle = vector.AngleBetween((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition());
 		if (angle <= math::DegToRad(max_snap_angle))
@@ -151,6 +153,8 @@ void PlayerAttacks::CleanUp()
 		delete (*item);
 	}
 	attacks.clear();
+
+	//GameObject::FreeArrayMemory((void***)&enemies);
 }
 
 float3 PlayerAttacks::CalculateSnapVelocity()

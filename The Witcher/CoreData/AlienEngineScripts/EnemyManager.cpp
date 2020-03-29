@@ -9,17 +9,6 @@ void EnemyManager::Start()
 	}
 	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::SPEAR);
 	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::LARGE_SWORD);*/
-
-
-	//this is temporary for attack snap to enemy.
-	GameObject** get_enemies = nullptr;
-	uint size;
-	size = GameObject::FindGameObjectsWithTag("Enemy", &get_enemies);
-	for (int i = 0; i < size; i++) {
-		GameObject* g = get_enemies[i];
-		enemies.push_back((Enemy*)g->GetComponentScript("NilfgaardSoldier"));
-	}
-	GameObject::FreeArrayMemory((void***)&get_enemies);
 }
 
 void EnemyManager::Update()
