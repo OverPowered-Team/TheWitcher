@@ -10,6 +10,7 @@
 
 #include "Time.h"
 #include "ModuleInput.h"
+#include "mmgr/mmgr.h"
 
 ComponentCharacterController::ComponentCharacterController(GameObject* go) : Component(go)
 {
@@ -74,6 +75,11 @@ void ComponentCharacterController::Jump(float3 direction)
 bool ComponentCharacterController::CanJump()
 {
 	return controller->canJump();
+}
+
+bool ComponentCharacterController::OnGround()
+{
+	return controller->onGround();
 }
 
 void ComponentCharacterController::SetRotation(const Quat rotation)

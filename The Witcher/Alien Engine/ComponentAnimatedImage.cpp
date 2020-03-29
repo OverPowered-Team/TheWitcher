@@ -8,6 +8,7 @@
 #include "ResourceTexture.h"
 #include "ModuleWindow.h"
 #include "PanelGame.h"
+#include "mmgr/mmgr.h"
 
 
 ComponentAnimatedImage::ComponentAnimatedImage(GameObject* obj): ComponentUI(obj)

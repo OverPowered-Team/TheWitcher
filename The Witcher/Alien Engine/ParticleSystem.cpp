@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "GL/gl.h"
+#include "mmgr/mmgr.h"
 
 ParticleSystem::ParticleSystem()
 {

@@ -44,6 +44,9 @@ public:
 	void SetPosition(const float3 pos);
 	float3 GetPosition() const;
 
+	void SetRotation(const Quat rot);
+	Quat GetRotation() const;
+
 	float3 GetVelocity();
 	void SetVelocity(const float3 velocity);
 	float3 GetAngularVelocity();

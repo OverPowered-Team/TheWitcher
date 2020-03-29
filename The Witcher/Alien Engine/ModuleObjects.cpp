@@ -197,12 +197,6 @@ update_status ModuleObjects::Update(float dt)
 {
 	OPTICK_EVENT();
 	base_game_object->Update();
-	if (!functions_to_call.empty()) {
-		for (auto item = functions_to_call.begin(); item != functions_to_call.end(); ++item) {
-			(*item)();
-		}
-		functions_to_call.clear();
-	}
 	UpdateGamePadInput();
 	ScriptsUpdate();
 	return UPDATE_CONTINUE;
@@ -516,7 +510,11 @@ void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 	App->renderer3D->selected_game_camera = (ComponentCamera*)object_selected->GetComponent(ComponentType::CAMERA);
 
 	#ifndef GAME_VERSION
+	if (App->ui->panel_project->selected_resource != nullptr)
+	{
 		App->SendAlienEvent(App->ui->panel_project->selected_resource, AlienEventType::RESOURCE_DESELECTED);
+		App->ui->panel_project->selected_resource = nullptr;
+	}
 	#endif // !GAME_VERSION
 
 	App->CastEvent(EventType::ON_GO_SELECT);
@@ -980,6 +978,8 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_with_path)
 {
 	OPTICK_EVENT();
+	App->CastEvent(EventType::ON_SAVE);
+
 	if (to_load_scene == nullptr && force_with_path == nullptr) {
 		LOG_ENGINE("Scene to load was nullptr");
 		return;

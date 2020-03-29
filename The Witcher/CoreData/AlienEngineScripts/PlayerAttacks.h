@@ -7,33 +7,27 @@ class PlayerController;
 
 class Attack {
 public:
+	struct AttackInfo {
+		std::string name = "";
+		std::string input = "";
+		float3 collider_position;
+		float3 collider_size;
+		Stat* base_damage = nullptr;
+		float movement_strength = 0.0f;
+		float max_snap_distance = 0.0f;
+		int activation_frame = 0;
+		std::string next_light = "";
+		std::string next_heavy = "";
+	};
+
 	Attack() {};
-	Attack(const char* name, const char* input, float3 coll_pos, float3 coll_size, float mult, int a_frame,
-		float m_strgth, const char* n_light, const char* n_heavy)
+	Attack(AttackInfo info)
 	{
-		this->name = name;
-		this->input = input;
-		this->collider_position = coll_pos;
-		this->collider_size = coll_size;
-		this->base_damage = new Stat("Attack_Damage",mult);
-		this->movement_strength = m_strgth;
-		this->activation_frame = a_frame;
-		this->next_light = n_light;
-		this->next_heavy = n_heavy;
+		this->info = info;
 	}
 	void CleanUp();
 
-	std::string name = "";
-	std::string input = "";
-	float3 collider_position;
-	float3 collider_size;
-	Stat* base_damage = nullptr;
-	float movement_strength = 0.0f;
-	int activation_frame = 0;
-
-	std::string next_light = "";
-	std::string next_heavy = "";
-
+	AttackInfo info;
 	Attack* light_attack_link = nullptr;
 	Attack* heavy_attack_link = nullptr;
 };
@@ -72,7 +66,9 @@ public:
 	GameObject* collider_go = nullptr;
 	float snap_range = 0.0f;
 	float max_snap_angle = 0.0f;
-	float min_snap_range = 0.0f;
+
+	float snap_angle_value = 0.0f;
+	float snap_distance_value = 0.0f;
 
 protected:
 	void CreateAttacks();
@@ -80,7 +76,7 @@ protected:
 	void DoAttack();
 	void AttackMovement();
 	void SelectAttack(AttackType attack);
-	float3 CalculateSnapVelocity();
+	void SnapToTarget();
 	bool FindSnapTarget();
 	float3 GetMovementVector();
 
@@ -100,6 +96,8 @@ protected:
 	float finish_attack_time = 0.0f;
 	float start_attack_time = 0.0f;
 	float snap_time = 0.0f;
+	float min_snap_range = 1.0f;
+	float distance_snapped = 0.0f;
 
 	bool can_execute_input = false;
 	AttackType next_attack = AttackType::NONE;
@@ -112,7 +110,8 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->collider_go);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_range);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->max_snap_angle);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->min_snap_range);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);

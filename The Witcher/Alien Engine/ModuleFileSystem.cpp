@@ -817,6 +817,23 @@ std::string ModuleFileSystem::GetCurrentHolePathFolder(const std::string& path)
 	return folder_name;
 }
 
+bool ModuleFileSystem::IsPathInsideOtherPath(const std::string& path, const std::string& folder)
+{
+	std::string checking;
+	std::string::const_iterator item = path.cbegin(); 
+	for (; item != path.cend(); ++item)
+	{
+		checking += *item;
+		if (*item == '/')
+		{
+			if (checking == folder)
+				return true; 
+		}
+	}
+
+	return false;
+}
+
 // -----------------------------------------------------
 // ASSIMP IO
 // -----------------------------------------------------

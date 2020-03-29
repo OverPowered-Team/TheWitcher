@@ -13,6 +13,7 @@
 #include "ComponentLightDirectional.h"
 #include "ComponentLightSpot.h"
 #include "ComponentLightPoint.h"
+#include "mmgr/mmgr.h"
 
 ResourceShader::ResourceShader()
 {

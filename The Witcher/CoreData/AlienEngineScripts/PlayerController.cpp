@@ -1,5 +1,6 @@
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
+#include "EventManager.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
 
@@ -21,6 +22,8 @@ void PlayerController::Start()
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
 	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
+	s_event_manager = (EventManager*)event_manager->GetComponentScript("EventManager");
+
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 	
 	c_run->GetSystem()->StopEmmitter();
@@ -36,6 +39,7 @@ void PlayerController::Start()
 		keyboard_dash = SDL_SCANCODE_LALT;
 		keyboard_light_attack = SDL_SCANCODE_V;
 		keyboard_heavy_attack = SDL_SCANCODE_B;
+		keyboard_revive = SDL_SCANCODE_C;
 	}
 	else if (controller_index == 2) {
 		keyboard_move_up = SDL_SCANCODE_I;
@@ -46,6 +50,7 @@ void PlayerController::Start()
 		keyboard_dash = SDL_SCANCODE_RALT;
 		keyboard_light_attack = SDL_SCANCODE_RCTRL;
 		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
+		keyboard_revive = SDL_SCANCODE_M;
 	}
 }
 
@@ -126,15 +131,18 @@ void PlayerController::Update()
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_UP)) {
-			animator->PlayState("Death");
-			state = PlayerState::DEAD;
-			animator->SetBool("dead", true);
+			Die();
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
 			state = PlayerState::DASHING;
+		}
+
+		if (Input::GetControllerButtonDown(controller_index, controller_revive)
+			|| Input::GetKeyDown(keyboard_revive)) {
+			CheckForPossibleRevive();
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
@@ -146,6 +154,8 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
+
+
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
@@ -184,6 +194,10 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_spell)) {
 			animator->PlayState("Spell");
 			state = PlayerState::CASTING;
+		}
+
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_UP)) {
+			Die();
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
@@ -245,10 +259,8 @@ void PlayerController::Update()
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::DEAD:
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_DOWN)) {
-			state = PlayerState::IDLE;
-			animator->SetBool("dead", false);
-		}
+		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_DOWN))
+			Revive();
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
@@ -334,6 +346,22 @@ void PlayerController::PlaySpell()
 	c_spell->Restart();
 }
 
+void PlayerController::Die()
+{
+	animator->PlayState("Death");
+	state = PlayerState::DEAD;
+	animator->SetBool("dead", true);
+	s_event_manager->OnPlayerDead(this);
+	LOG("SALGO DE DIE");
+}
+
+void PlayerController::Revive()
+{
+	state = PlayerState::IDLE;
+	animator->SetBool("dead", false);
+	s_event_manager->OnPlayerRevive(this);
+}
+
 void PlayerController::PickUpRelic(Relic* _relic)
 {
 	relics.push_back(_relic);
@@ -353,5 +381,36 @@ void PlayerController::AddEffect(Effect* _effect)
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
 		attacks->OnAddAttackEffect(((AttackEffect*)_effect)->GetAttackIdentifier());
+	}
+}
+
+void PlayerController::OnDrawGizmos()
+{
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), revive_range, Color::Cyan()); //snap_range
+}
+
+void PlayerController::OnPlayerDead(PlayerController* player_dead)
+{
+	players_dead.push_back(player_dead);
+}
+
+void PlayerController::OnPlayerRevived(PlayerController* player_dead)
+{
+	for (std::vector<PlayerController*>::iterator it = players_dead.begin(); it != players_dead.end(); ++it) {
+		if ((*it) == player_dead) {
+			players_dead.erase(it);
+			break;
+		}
+	}
+}
+
+void PlayerController::CheckForPossibleRevive()
+{
+	for (int i = 0; i < players_dead.size(); ++i) {
+		float distance = this->transform->GetGlobalPosition().Distance(players_dead[i]->transform->GetGlobalPosition());
+		if (distance <= revive_range) {
+			players_dead[i]->Revive();
+			break;
+		}
 	}
 }

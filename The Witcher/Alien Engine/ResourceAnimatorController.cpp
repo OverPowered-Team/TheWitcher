@@ -19,8 +19,6 @@
 #include "ResourceAnimatorController.h"
 #include "mmgr/mmgr.h"
 
-
-
 ResourceAnimatorController::ResourceAnimatorController() : Resource()
 {
 	type = ResourceType::RESOURCE_ANIMATOR_CONTROLLER;
@@ -60,6 +58,7 @@ ResourceAnimatorController::ResourceAnimatorController(ResourceAnimatorControlle
 
 ResourceAnimatorController::~ResourceAnimatorController()
 {
+	FreeMemory();
 	ax::NodeEditor::DestroyEditor(ed_context);
 }
 
@@ -197,6 +196,7 @@ void ResourceAnimatorController::ReImport(const u64& force_id)
 
 		CreateMetaData(ID);
 		FreeMemory();
+		delete asset;
 	}
 }
 
@@ -591,6 +591,7 @@ bool ResourceAnimatorController::SaveAsset(const u64& force_id)
 
 	asset->FinishSave();
 	CreateMetaData(ID);
+	delete asset;
 
 	return true;
 }
@@ -601,6 +602,7 @@ void ResourceAnimatorController::FreeMemory()
 	{
 		if ((*it)->GetClip())
 			(*it)->GetClip()->DecreaseReferences();
+
 		delete (*it);
 	}
 	states.clear();
@@ -627,6 +629,11 @@ void ResourceAnimatorController::FreeMemory()
 	bool_parameters.clear();
 	float_parameters.clear();
 	int_parameters.clear();
+
+	for (std::vector<AnimEvent*>::iterator it_anim = anim_events.begin(); it_anim != anim_events.end(); ++it_anim)
+	{
+		delete (*it_anim);
+	}
 
 	anim_events.clear();
 
@@ -1076,6 +1083,7 @@ bool ResourceAnimatorController::CreateMetaData(const u64& force_id)
 		meta->StartSave();
 		meta->SetString("Meta.ID", std::to_string(ID).data());
 		meta->FinishSave();
+		delete meta;
 	}
 
 	//SAVE LIBRARY FILE
@@ -1709,7 +1717,7 @@ void ResourceAnimatorController::ActiveEvent(ResourceAnimation* _animation, uint
 							if (strcmp((*j).first.data(), (*it)->event_id.c_str()) == 0)
 							{
 								std::function<void()> functEvent = (*j).second;
-								App->objects->functions_to_call.push_back(functEvent);
+								functEvent();
 							}
 						}
 					}

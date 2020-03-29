@@ -10,6 +10,7 @@
 #include "GameObject.h"
 #include "ReturnZ.h"
 #include "Alien.h"
+#include "mmgr/mmgr.h"
 
 ComponentCollider::ComponentCollider(GameObject* go) : Component(go)
 {
