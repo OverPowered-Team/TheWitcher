@@ -370,11 +370,11 @@ void ResourceAnimatorController::UpdateState(State* state)
 
 	if (!transitioning)CheckTriggers();
 
-	if (animation && (animation->GetDuration() / current_state->GetSpeed()) > 0) {
+	if (animation && (animation->GetDuration()) > 0) {
 
 		state->time += (Time::GetDT() * current_state->GetSpeed());
 
-		if (state->time >= animation->GetDuration() / current_state->GetSpeed()) {
+		if (state->time >= animation->GetDuration()) {
 			if (!state->next_state) {
 				std::vector<Transition*> possible_transitions = FindTransitionsFromSourceState(state);
 				for (std::vector<Transition*>::iterator it = possible_transitions.begin(); it != possible_transitions.end(); ++it) {
@@ -388,7 +388,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			if (state->GetClip()->loops)
 				state->time = 0;
 			else
-				state->time = animation->GetDuration() / current_state->GetSpeed();
+				state->time = animation->GetDuration();
 		}
 
 	}

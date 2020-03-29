@@ -38,7 +38,7 @@ public:
 
 	virtual ~ComponentUI();
 
-	virtual void ChangeVertex(float width, float height);
+	
 	void UpdateVertex();
 
 	virtual bool OnIdle() { return true; };
@@ -65,6 +65,7 @@ public:
 
 	//Script
 	void SetBackgroundColor(float r, float g, float b, float a);
+	UIState GetActualState();
 
 
 private:
@@ -94,6 +95,7 @@ protected:
 
 	float2 size = { 10,10 };
 
+	float depth = 0.0f;
 	//UI FOCUS
 	
 	bool tabbable			= false;
