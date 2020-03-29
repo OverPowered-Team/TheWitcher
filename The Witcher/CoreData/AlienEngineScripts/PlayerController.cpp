@@ -66,26 +66,27 @@ void PlayerController::Update()
 	}
 	else
 	{
-		if (can_move) {
-			float2 keyboardInput = float2(0.f, 0.f);
-			if (Input::GetKeyRepeat(keyboard_move_left)) {
-				keyboardInput.x += 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			if (Input::GetKeyRepeat(keyboard_move_right)) {
-				keyboardInput.x -= 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			if (Input::GetKeyRepeat(keyboard_move_up)) {
-				keyboardInput.y += 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			if (Input::GetKeyRepeat(keyboard_move_down)) {
-				keyboardInput.y -= 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			if (CheckBoundaries(keyboardInput))
+		float2 keyboardInput = float2(0.f, 0.f);
+		if (Input::GetKeyRepeat(keyboard_move_left)) {
+			keyboardInput.x += 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (Input::GetKeyRepeat(keyboard_move_right)) {
+			keyboardInput.x -= 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (Input::GetKeyRepeat(keyboard_move_up)) {
+			keyboardInput.y += 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (Input::GetKeyRepeat(keyboard_move_down)) {
+			keyboardInput.y -= 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (CheckBoundaries(keyboardInput)) {
+			if (can_move) {
 				HandleMovement(keyboardInput);
+			}
 		}
 	}
 
@@ -373,27 +374,21 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	if (state == PlayerState::DASHING)
 	{
 		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT();
-		animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
 	}
 	else
 	{
 		next_pos = transform->GetGlobalPosition() + vector * speed * 2.f;
-		LOG("vector %.2f, %.2f, %.2f", vector.x, vector.y, vector.z);
 	}
 
 	AABB aabb = AABB(next_pos, next_pos + float3(1, 1, 1));
 	if (cube_test != nullptr)
 		cube_test->transform->SetGlobalPosition(next_pos);
 
-	LOG("NEXT POS %.2f, %.2f, %.2f", next_pos.x, next_pos.y, next_pos.z);
-	LOG("%.2f, %.2f, %.2f", aabb.CenterPoint().x, aabb.CenterPoint().y, aabb.CenterPoint().z);
-
 	if (frustum->Contains(aabb)) {
 		return true;
 	}
 	else {
 		controller->SetWalkDirection(float3::zero());
-		LOG("Player %i is not inside camera frustum", controller_index);
 		return false;
 	}
 }
