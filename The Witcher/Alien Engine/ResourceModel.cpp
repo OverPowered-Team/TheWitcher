@@ -155,7 +155,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 
 				materials_attached[i]->SetName(materialName.c_str());
 				materials_attached[i]->SetAssetsPath(std::string(MATERIALS_FOLDER + materialName + ".material").data());
-				materials_attached[i]->SaveMaterialFiles();
+				materials_attached[i]->SaveResource();
 			}
 
 			materials_path[i] = materials_attached[i]->GetLibraryPath();

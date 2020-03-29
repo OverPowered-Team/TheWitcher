@@ -129,7 +129,7 @@ void ResourceAnimation::FreeMemory()
 		delete[] channels[i].rotation_keys;
 	}
 
-	channels = nullptr;
+	delete[] channels;
 }
 
 bool ResourceAnimation::ReadBaseInfo(const char* meta_file_path)

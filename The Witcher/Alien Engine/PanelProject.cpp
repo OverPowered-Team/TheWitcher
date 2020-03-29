@@ -181,8 +181,11 @@ void PanelProject::SeeFiles()
 			// go back a folder
 			if (ImGui::IsItemClicked()) {
 
-				App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_DESELECTED);
-				selected_resource = nullptr; 
+				if (selected_resource != nullptr)
+				{
+					App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_DESELECTED);
+					selected_resource = nullptr; 
+				}
 
 				current_active_file = &go_back_folder;
 				current_active_folder = current_active_folder->parent;
@@ -264,16 +267,22 @@ void PanelProject::SeeFiles()
 				if (ImGui::IsMouseReleased(0) || ImGui::IsMouseClicked(1))
 				{
 					App->objects->DeselectObjects();
-
-					App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_DESELECTED);
+					
+					if (selected_resource != nullptr)
+					{
+						App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_DESELECTED);
+						selected_resource = nullptr;
+					}
 
 					// Cast Events of selected file
 					App->CastEvent(EventType::ON_ASSET_SELECT);
+
 					std::string path = App->file_system->GetPathWithoutExtension(current_active_file->path + current_active_file->name) + "_meta.alien";
 					u64 ID = App->resources->GetIDFromAlienPath(path.data());
 					selected_resource = App->resources->GetResourceWithID(ID);
 
-					App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_SELECTED);
+					if(selected_resource != nullptr)
+						App->SendAlienEvent(selected_resource, AlienEventType::RESOURCE_SELECTED);
 				}
 			}
 			// right click in file/folder
@@ -464,7 +473,7 @@ void PanelProject::RightClickToWindow(bool pop_up_item)
 			App->ui->creating_script = true;
 		}
 		if (ImGui::MenuItem("Create New Material")) {
-			App->resources->CreateMaterial("New Material");
+			App->resources->CreateMaterial("New Material", current_active_folder->path.c_str());
 		}
 		if (ImGui::MenuItem("Create New Animator Controller")) {
 			App->resources->CreateAsset(FileDropType::ANIM_CONTROLLER);

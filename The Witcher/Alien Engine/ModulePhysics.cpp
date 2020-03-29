@@ -10,6 +10,7 @@
 #include "Time.h"
 #include "Alien.h"
 #include "Optick/include/optick.h"
+#include "mmgr/mmgr.h"
 
 ModulePhysics::ModulePhysics(bool start_enabled) : Module(start_enabled)
 {
@@ -91,6 +92,7 @@ update_status ModulePhysics::PostUpdate(float dt)
 
 bool ModulePhysics::CleanUp()
 {
+
 	return true;
 }
 

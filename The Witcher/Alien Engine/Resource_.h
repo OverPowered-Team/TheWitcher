@@ -56,6 +56,9 @@ public:
 
 	virtual void OnSelected() {};
 	virtual void OnDeselected() {};
+
+	virtual void SaveResource() {};
+
 	const u64& GetID() const;
 
 	const bool NeedToLoad() const;

@@ -9,6 +9,7 @@
 #include "ComponentCamera.h"
 #include "ModuleObjects.h"
 #include "Viewport.h"
+#include "mmgr/mmgr.h"
 
 Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo endInfo) : owner(owner), particleInfo(info), startInfo(info), endInfo(endInfo)
 {

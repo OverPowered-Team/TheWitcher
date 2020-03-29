@@ -143,6 +143,7 @@ public:
 	std::string GetBaseFileNameWithExtension(const char* file_name);
 	std::string GetCurrentFolder(const std::string & path);
 	std::string GetCurrentHolePathFolder(const std::string& path);
+	bool IsPathInsideOtherPath(const std::string& path, const std::string& folder);
 	void GetPreviousNames(std::string& previous, FileNode* node);
 	std::string GetPathWithoutExtension(const std::string& path);
 private:
