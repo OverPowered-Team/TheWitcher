@@ -3,7 +3,7 @@
 
 void Enemy::Awake()
 {
-	//((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
 }
 
 void Enemy::StartEnemy()
@@ -12,9 +12,6 @@ void Enemy::StartEnemy()
 	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	state = EnemyState::IDLE;
 	std::string json_str;
-
-	//player_1 = TODO: Find gameObject of player 1
-	//player_2 = TODO: Find gameObject of player 2
 
 	switch (type)
 	{
