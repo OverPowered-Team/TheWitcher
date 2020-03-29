@@ -53,52 +53,41 @@ void PlayerController::Update()
 		Input::GetControllerHoritzontalLeftAxis(controller_index),
 		Input::GetControllerVerticalLeftAxis(controller_index));
 
-	float2 keyboardInput = float2(0.f, 0.f);
-
+	LOG("JOYSTICK %.3f, %.3f", joystickInput.x, joystickInput.y);
+	
 	if (joystickInput.Length() > 0) {
-		keyboard_input = false;
-	}
-	else if (AnyKeyboardInput())
-	{
-		if (Input::GetKeyRepeat(keyboard_move_left)) {
-			keyboardInput.x += 1.f;
-		}
-		if (Input::GetKeyRepeat(keyboard_move_right)) {
-			keyboardInput.x -= 1.f;
-		}
-		if (Input::GetKeyRepeat(keyboard_move_up)) {
-			keyboardInput.y += 1.f;
-		}
-		if (Input::GetKeyRepeat(keyboard_move_down)) {
-			keyboardInput.y -= 1.f;
-		}
-
-		keyboard_input = true;
-	}
-
-	bool out = false;
-	if (keyboard_input) {
-		if (CheckBoundaries(keyboardInput)) {
-			if (can_move) {
-				HandleMovement(keyboardInput);
-			}
-		}
-		else {
-			out = true;
-		}
-	}
-	else {
 		if (CheckBoundaries(joystickInput)) {
 			if (can_move) {
 				HandleMovement(joystickInput);
 			}
 		}
-		else {
-			out = true;
+	}
+	else if (AnyKeyboardInput())
+	{
+		if (can_move) {
+			float2 keyboardInput = float2(0.f, 0.f);
+			if (Input::GetKeyRepeat(keyboard_move_left)) {
+				keyboardInput.x += 1.f;
+			}
+			if (Input::GetKeyRepeat(keyboard_move_right)) {
+				keyboardInput.x += -1.f;
+			}
+			if (Input::GetKeyRepeat(keyboard_move_up)) {
+				keyboardInput.y += 1.f;
+			}
+			if (Input::GetKeyRepeat(keyboard_move_down)) {
+				keyboardInput.y += -1.f;
+			}
+			LOG("KEYBOARD %.3f, %.3f", keyboardInput.x, keyboardInput.y);
+
+			if (CheckBoundaries(keyboardInput)) {
+				if (can_move) {
+					HandleMovement(keyboardInput);
+				}
+			}
 		}
 	}
 
-	LOG("%f", player_data.currentSpeed);
 	switch (state)
 	{
 	case PlayerController::PlayerState::IDLE: {

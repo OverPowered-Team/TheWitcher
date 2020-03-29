@@ -58,8 +58,6 @@ public:
 	ComponentCharacterController* controller = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
-	
-	bool keyboard_input = false;
 
 	//Keyboard input
 	SDL_Scancode keyboard_move_up;
