@@ -151,7 +151,7 @@ bool PlayerAttacks::FindSnapTarget()
 
 		if (distance <= snap_range && angle <= max_snap_angle)
 		{
-			float snap_value = (angle * 0.1f * snap_angle_value) + (distance * snap_distance_value);
+			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
 			{
 				snap_candidate.first = enemies[i];
