@@ -18,13 +18,14 @@ public:
 	NilfgaardSoldier() {}
 	virtual ~NilfgaardSoldier() {}
 
-	void Start() override;
-	void Update() override;
+	void StartEnemy() override;
+	void UpdateEnemy() override;
+
 	void SetStats(const char* json) override;
 	void Move(float3 direction) override;
 	void Attack() override;
 	void ShootAttack();
-	void CleanUp() override;
+	void CleanUpEnemy() override;
 
 	void OnAnimationEnd(const char* name) override;
 
@@ -44,8 +45,6 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->weapon);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->player_1);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->player_2);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
 	return nilfgaard;
 }

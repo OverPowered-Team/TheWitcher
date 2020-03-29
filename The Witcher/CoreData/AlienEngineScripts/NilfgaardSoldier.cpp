@@ -1,11 +1,11 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowMovement.h"
 
-void NilfgaardSoldier::Start()
+void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
 
-	Enemy::Start();
+	Enemy::StartEnemy();
 }
 
 void NilfgaardSoldier::SetStats(const char* json)
@@ -88,7 +88,7 @@ void NilfgaardSoldier::ShootAttack()
 	arrow_mov->direction = direction;
 }
 
-void NilfgaardSoldier::Update()
+void NilfgaardSoldier::UpdateEnemy()
 {
 	float distance_1 = player_1->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_1 = player_1->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
@@ -120,7 +120,7 @@ void NilfgaardSoldier::Update()
 
 }
 
-void NilfgaardSoldier::CleanUp()
+void NilfgaardSoldier::CleanUpEnemy()
 {
 }
 
