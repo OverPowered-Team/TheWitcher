@@ -153,7 +153,6 @@ void PlayerAttacks::CleanUp()
 		delete (*item);
 	}
 	attacks.clear();
-
 	//GameObject::FreeArrayMemory((void***)&enemies);
 }
 
