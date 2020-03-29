@@ -486,6 +486,11 @@ const AABB ComponentMesh::GetGlobalAABB() const
 	return global_aabb;
 }
 
+const AABB ComponentMesh::GetLocalAABB() const
+{
+	return local_aabb;
+}
+
 const OBB ComponentMesh::GetOBB() const
 {
 	return obb;

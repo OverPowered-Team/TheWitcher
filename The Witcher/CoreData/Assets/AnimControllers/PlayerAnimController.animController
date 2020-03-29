@@ -53,6 +53,11 @@
                 "Name": "LLLLL",
                 "Speed": 2,
                 "Clip": "17588914217724974085"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "11063703462969190022"
             }
         ],
         "Transitions": [
@@ -197,6 +202,21 @@
                 "BoolConditions": []
             },
             {
+                "Source": "L",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
                 "Source": "LL",
                 "Target": "Idle",
                 "Blend": 0.25,
@@ -242,21 +262,6 @@
                 ]
             },
             {
-                "Source": "LLLL",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
                 "Source": "L",
                 "Target": "Run",
                 "Blend": 0.20000000298023224,
@@ -272,7 +277,7 @@
                 ]
             },
             {
-                "Source": "L",
+                "Source": "Death",
                 "Target": "Idle",
                 "Blend": 0.20000000298023224,
                 "End": true,
