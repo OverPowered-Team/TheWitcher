@@ -3,6 +3,8 @@
 #include "RelicBehaviour.h"
 #include "Effect.h"
 
+#include "../../ComponentDeformableMesh.h"
+
 PlayerController::PlayerController() : Alien()
 {
 }
@@ -24,6 +26,8 @@ void PlayerController::Start()
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
 	frustum = &Camera::GetCurrentCamera()->frustum;
+	player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+	fake_aabb = AABB(*player_aabb);
 	
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
@@ -384,11 +388,18 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * speed * 2.f;
+		next_pos = transform->GetGlobalPosition() + vector * speed * 4.f;
 	}
 
-	AABB aabb = AABB(next_pos, next_pos + float3(1, 1, 1));
-	if (frustum->Contains(aabb)) {
+	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
+	// player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+
+	auto aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+
+	fake_aabb.maxPoint = aabb->maxPoint + next_pos - transform->GetGlobalPosition();
+	fake_aabb.minPoint = aabb->minPoint + next_pos - transform->GetGlobalPosition();
+	
+	if (frustum->Contains(fake_aabb)) {
 		return true;
 	}
 	else {

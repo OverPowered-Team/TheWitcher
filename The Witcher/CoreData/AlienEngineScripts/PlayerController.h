@@ -117,6 +117,8 @@ private:
 	ComponentAudioEmitter* audio = nullptr;
 
 	Frustum* frustum = nullptr;
+	const AABB* player_aabb = nullptr;
+	AABB fake_aabb;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
