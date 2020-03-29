@@ -55,7 +55,6 @@ void NilfgaardSoldier::Move(float3 direction)
 		state = Enemy::EnemyState::ATTACK;
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
-		animator->PlayState("Attack");
 		Attack();
 	}
 	if (distance > stats.vision_range)
@@ -71,9 +70,10 @@ void NilfgaardSoldier::Attack()
 	switch (nilf_type)
 	{
 	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
+		animator->PlayState("Attack");
 		break;
 	case NilfgaardSoldier::NilfgaardType::ARCHER:
-		ShootAttack();
+		animator->PlayState("Shoot");
 		break;
 	}
 }
@@ -123,7 +123,7 @@ void NilfgaardSoldier::CleanUpEnemy()
 
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
-	if (strcmp(name, "Attack") == 0) {
+	if (strcmp(name, "Shoot") == 0) {
 		if (distance < stats.vision_range)
 		{
 			state = Enemy::EnemyState::MOVE;

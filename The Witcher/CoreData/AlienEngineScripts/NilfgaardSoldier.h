@@ -24,6 +24,7 @@ public:
 	void SetStats(const char* json) override;
 	void Move(float3 direction) override;
 	void Attack() override;
+
 	void ShootAttack();
 	void CleanUpEnemy() override;
 
