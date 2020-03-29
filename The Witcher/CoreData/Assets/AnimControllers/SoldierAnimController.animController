@@ -21,8 +21,8 @@
             },
             {
                 "Name": "Shoot",
-                "Speed": 1,
-                "Clip": "18334403075031078023"
+                "Speed": 2,
+                "Clip": "3929158865692189345"
             }
         ],
         "Transitions": [
@@ -94,7 +94,7 @@
                 "Source": "Shoot",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -110,7 +110,7 @@
                 "Source": "Shoot",
                 "Target": "Walk",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [
                     {
@@ -131,6 +131,13 @@
             }
         ],
         "BoolParameters": [],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "NilfgaardSoldier::ShootAttack",
+                "Animation_Id": "3929158865692189345",
+                "Frame": 115,
+                "Type": 2
+            }
+        ]
     }
 }

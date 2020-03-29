@@ -47,6 +47,7 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->weapon);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::ShootAttack, nilfgaard);
 	return nilfgaard;
 }
 

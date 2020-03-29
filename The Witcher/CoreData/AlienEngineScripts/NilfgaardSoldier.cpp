@@ -81,8 +81,8 @@ void NilfgaardSoldier::Attack()
 void NilfgaardSoldier::ShootAttack()
 {
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
-	ComponentRigidBody* arrow_go = (ComponentRigidBody*)GameObject::Instantiate(arrow, arrow_pos)->GetComponent(ComponentType::RIGID_BODY);
-	arrow_go->AddForce(direction.Mul(20));
+	//ComponentRigidBody* arrow_go = (ComponentRigidBody*)GameObject::Instantiate(arrow, arrow_pos)->GetComponent(ComponentType::RIGID_BODY);
+	/*arrow_go->AddForce(direction.Mul(20));*/
 }
 
 void NilfgaardSoldier::UpdateEnemy()
@@ -123,7 +123,7 @@ void NilfgaardSoldier::CleanUpEnemy()
 
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
-	if (strcmp(name, "Shoot") == 0) {
+	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
 		if (distance < stats.vision_range)
 		{
 			state = Enemy::EnemyState::MOVE;
