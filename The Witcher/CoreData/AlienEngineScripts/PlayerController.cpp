@@ -53,16 +53,12 @@ void PlayerController::Update()
 		Input::GetControllerHoritzontalLeftAxis(controller_index),
 		Input::GetControllerVerticalLeftAxis(controller_index));
 
-	LOG("JOYSTICK %.3f, %.3f", joystickInput.x, joystickInput.y);
-	
 	if (joystickInput.Length() > 0) {
-		if (CheckBoundaries(joystickInput)) {
-			if (can_move) {
+		if (CheckBoundaries(joystickInput))
+			if (can_move)
 				HandleMovement(joystickInput);
-			}
-		}
 	}
-	else if (AnyKeyboardInput())
+	else
 	{
 		if (can_move) {
 			float2 keyboardInput = float2(0.f, 0.f);
@@ -70,21 +66,16 @@ void PlayerController::Update()
 				keyboardInput.x += 1.f;
 			}
 			if (Input::GetKeyRepeat(keyboard_move_right)) {
-				keyboardInput.x += -1.f;
+				keyboardInput.x -= 1.f;
 			}
 			if (Input::GetKeyRepeat(keyboard_move_up)) {
 				keyboardInput.y += 1.f;
 			}
 			if (Input::GetKeyRepeat(keyboard_move_down)) {
-				keyboardInput.y += -1.f;
+				keyboardInput.y -= 1.f;
 			}
-			LOG("KEYBOARD %.3f, %.3f", keyboardInput.x, keyboardInput.y);
-
-			if (CheckBoundaries(keyboardInput)) {
-				if (can_move) {
-					HandleMovement(keyboardInput);
-				}
-			}
+			if (CheckBoundaries(keyboardInput))
+				HandleMovement(keyboardInput);
 		}
 	}
 
@@ -230,7 +221,7 @@ void PlayerController::OnDrawGizmos()
 	Gizmos::DrawCube(transform->GetGlobalPosition(), float3::one(), Color::Purple());
 }
 
-void PlayerController::HandleMovement(float2 joystickInput)
+void PlayerController::HandleMovement(const float2& joystickInput)
 {
 	float joystickIntensity = joystickInput.Length();
 

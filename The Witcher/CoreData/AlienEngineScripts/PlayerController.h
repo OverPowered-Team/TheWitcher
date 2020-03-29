@@ -41,7 +41,7 @@ public:
 
 	void OnDrawGizmos() override;
 
-	void HandleMovement(float2 joystickInput);
+	void HandleMovement(const float2& joystickInput);
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
