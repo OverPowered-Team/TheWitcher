@@ -58,12 +58,7 @@ void PlayerController::Update()
 	if (joystickInput.Length() > 0) {
 		keyboard_input = false;
 	}
-	else if (Input::GetKeyDown(keyboard_move_up)
-		|| Input::GetKeyDown(keyboard_move_down)
-		|| Input::GetKeyDown(keyboard_move_left)
-		|| Input::GetKeyDown(keyboard_move_right)
-		|| Input::GetKeyDown(keyboard_dash)
-		|| Input::GetKeyDown(keyboard_jump))
+	else if (AnyKeyboardInput())
 	{
 		if (Input::GetKeyRepeat(keyboard_move_left)) {
 			keyboardInput.x += 1.f;
@@ -84,8 +79,7 @@ void PlayerController::Update()
 	bool out = false;
 	if (keyboard_input) {
 		if (CheckBoundaries(keyboardInput)) {
-			if (can_move)
-			{
+			if (can_move) {
 				HandleMovement(keyboardInput);
 			}
 		}
@@ -104,134 +98,141 @@ void PlayerController::Update()
 		}
 	}
 
-	if (!out) {
-		LOG("%f", player_data.currentSpeed);
-		switch (state)
-		{
-		case PlayerController::PlayerState::IDLE: {
+	LOG("%f", player_data.currentSpeed);
+	switch (state)
+	{
+	case PlayerController::PlayerState::IDLE: {
 
-			can_move = true;
-			c_run->GetSystem()->StopEmmitter();
-			if (Input::GetControllerButtonDown(controller_index, controller_attack)
-				|| Input::GetKeyDown(keyboard_light_attack)) {
-				animator->PlayState("Attack");
-				state = PlayerState::BASIC_ATTACK;
-				audio->StartSound("Hit_Sword");
-				can_move = false;
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_dash)
-				|| Input::GetKeyDown(keyboard_dash)) {
-				animator->PlayState("Roll");
-				state = PlayerState::DASHING;
-				//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_spell)
-				|| Input::GetKeyDown(keyboard_spell)) {
-				animator->PlayState("Spell");
-				state = PlayerState::CASTING;
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_jump)
-				|| Input::GetKeyDown(keyboard_jump)) {
-				state = PlayerState::JUMPING;
-				animator->PlayState("Air");
-				if (controller->CanJump()) {
-					controller->Jump(transform->up * player_data.jump_power);
-					animator->SetBool("air", true);
-				}
-			}
-
-		} break;
-		case PlayerController::PlayerState::RUNNING:
-		{
-			c_run->GetSystem()->StartEmmitter();
-			can_move = true;
-
-			if (Time::GetGameTime() - timer >= delay_footsteps) {
-				timer = Time::GetGameTime();
-				audio->StartSound();
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_attack)
-				|| Input::GetKeyDown(keyboard_light_attack)) {
-				animator->PlayState("Attack");
-				state = PlayerState::BASIC_ATTACK;
-				audio->StartSound("Hit_Sword");
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_dash)
-				|| Input::GetKeyDown(keyboard_dash)) {
-				animator->PlayState("Roll");
-				state = PlayerState::DASHING;
-				//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_spell)
-				|| Input::GetKeyDown(keyboard_spell)) {
-				animator->PlayState("Spell");
-				state = PlayerState::CASTING;
-			}
-
-			if (Input::GetControllerButtonDown(controller_index, controller_jump)
-				|| Input::GetKeyDown(keyboard_jump)) {
-				state = PlayerState::JUMPING;
-				animator->PlayState("Air");
-				if (controller->CanJump()) {
-					controller->Jump(transform->up * player_data.jump_power);
-					animator->SetBool("air", true);
-				}
-			}
-
-		} break;
-		case PlayerController::PlayerState::BASIC_ATTACK:
-			c_run->GetSystem()->StopEmmitter();
-			c_attack->GetSystem()->Restart();
-			controller->SetWalkDirection(float3::zero());
+		can_move = true;
+		c_run->GetSystem()->StopEmmitter();
+		if (Input::GetControllerButtonDown(controller_index, controller_attack)
+			|| Input::GetKeyDown(keyboard_light_attack)) {
+			animator->PlayState("Attack");
+			state = PlayerState::BASIC_ATTACK;
+			audio->StartSound("Hit_Sword");
 			can_move = false;
-			break;
-		case PlayerController::PlayerState::JUMPING:
-			c_run->GetSystem()->StopEmmitter();
-			can_move = true;
-			if (controller->CanJump())
-				animator->SetBool("air", false);
-			break;
-		case PlayerController::PlayerState::DASHING:
-			c_run->GetSystem()->StopEmmitter();
-			can_move = false;
-			break;
-		case PlayerController::PlayerState::CASTING:
-			c_run->GetSystem()->StopEmmitter();
-			controller->SetWalkDirection(float3::zero());
-			can_move = false;
-			break;
-		case PlayerController::PlayerState::MAX:
-			break;
-		default:
-			break;
 		}
 
-		/*---------------KEYBOARD-----------------------*/
+		if (Input::GetControllerButtonDown(controller_index, controller_dash)
+			|| Input::GetKeyDown(keyboard_dash)) {
+			animator->PlayState("Roll");
+			state = PlayerState::DASHING;
+			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
+		}
 
-		if (state == PlayerState::RUNNING && abs(player_data.currentSpeed) < 0.05F)
-			state = PlayerState::IDLE;
+		if (Input::GetControllerButtonDown(controller_index, controller_spell)
+			|| Input::GetKeyDown(keyboard_spell)) {
+			animator->PlayState("Spell");
+			state = PlayerState::CASTING;
+		}
 
-		if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.05F) {
-			state = PlayerState::RUNNING;
-			audio->StartSound();
+		if (Input::GetControllerButtonDown(controller_index, controller_jump)
+			|| Input::GetKeyDown(keyboard_jump)) {
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			if (controller->CanJump()) {
+				controller->Jump(transform->up * player_data.jump_power);
+				animator->SetBool("air", true);
+			}
+		}
+
+	} break;
+	case PlayerController::PlayerState::RUNNING:
+	{
+		c_run->GetSystem()->StartEmmitter();
+		can_move = true;
+
+		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
+			audio->StartSound();
 		}
 
-		if (state == PlayerState::JUMPING && controller->CanJump()) {
-			if (abs(player_data.currentSpeed) < 0.1F)
-				state = PlayerState::IDLE;
-			if (abs(player_data.currentSpeed) > 0.1F)
-				state = PlayerState::RUNNING;
+		if (Input::GetControllerButtonDown(controller_index, controller_attack)
+			|| Input::GetKeyDown(keyboard_light_attack)) {
+			animator->PlayState("Attack");
+			state = PlayerState::BASIC_ATTACK;
+			audio->StartSound("Hit_Sword");
 		}
 
+		if (Input::GetControllerButtonDown(controller_index, controller_dash)
+			|| Input::GetKeyDown(keyboard_dash)) {
+			animator->PlayState("Roll");
+			state = PlayerState::DASHING;
+			//ccontroller->ApplyImpulse(transform->forward.Normalized() * 20);
+		}
+
+		if (Input::GetControllerButtonDown(controller_index, controller_spell)
+			|| Input::GetKeyDown(keyboard_spell)) {
+			animator->PlayState("Spell");
+			state = PlayerState::CASTING;
+		}
+
+		if (Input::GetControllerButtonDown(controller_index, controller_jump)
+			|| Input::GetKeyDown(keyboard_jump)) {
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			if (controller->CanJump()) {
+				controller->Jump(transform->up * player_data.jump_power);
+				animator->SetBool("air", true);
+			}
+		}
+
+	} break;
+	case PlayerController::PlayerState::BASIC_ATTACK:
+		c_run->GetSystem()->StopEmmitter();
+		c_attack->GetSystem()->Restart();
+		controller->SetWalkDirection(float3::zero());
+		can_move = false;
+		break;
+	case PlayerController::PlayerState::JUMPING:
+		c_run->GetSystem()->StopEmmitter();
+		can_move = true;
+		if (controller->CanJump())
+			animator->SetBool("air", false);
+		break;
+	case PlayerController::PlayerState::DASHING:
+		c_run->GetSystem()->StopEmmitter();
+		can_move = false;
+		break;
+	case PlayerController::PlayerState::CASTING:
+		c_run->GetSystem()->StopEmmitter();
+		controller->SetWalkDirection(float3::zero());
+		can_move = false;
+		break;
+	case PlayerController::PlayerState::MAX:
+		break;
+	default:
+		break;
 	}
-		player_data.currentSpeed = 0;
+
+	/*---------------KEYBOARD-----------------------*/
+
+	if (state == PlayerState::RUNNING && abs(player_data.currentSpeed) < 0.05F)
+		state = PlayerState::IDLE;
+
+	if (state == PlayerState::IDLE && abs(player_data.currentSpeed) > 0.05F) {
+		state = PlayerState::RUNNING;
+		audio->StartSound();
+		timer = Time::GetGameTime();
+	}
+
+	if (state == PlayerState::JUMPING && controller->CanJump()) {
+		if (abs(player_data.currentSpeed) < 0.1F)
+			state = PlayerState::IDLE;
+		if (abs(player_data.currentSpeed) > 0.1F)
+			state = PlayerState::RUNNING;
+	}
+	player_data.currentSpeed = 0;
+}
+
+bool PlayerController::AnyKeyboardInput()
+{
+	return Input::GetKeyDown(keyboard_move_up)
+		|| Input::GetKeyDown(keyboard_move_down)
+		|| Input::GetKeyDown(keyboard_move_left)
+		|| Input::GetKeyDown(keyboard_move_right)
+		|| Input::GetKeyDown(keyboard_dash)
+		|| Input::GetKeyDown(keyboard_jump);
 }
 
 void PlayerController::OnDrawGizmos()
@@ -342,31 +343,27 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 
 	if (state == PlayerState::DASHING)
 	{
-		next_pos = transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT();
+		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT();
+		animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * player_data.currentSpeed;
+		next_pos = transform->GetGlobalPosition() + vector * speed * 2.f;
+		LOG("vector %.2f, %.2f, %.2f", vector.x, vector.y, vector.z);
 	}
 
 	AABB aabb = AABB(next_pos, next_pos + float3(1, 1, 1));
+	if (cube_test != nullptr)
+		cube_test->transform->SetGlobalPosition(next_pos);
+
 	LOG("NEXT POS %.2f, %.2f, %.2f", next_pos.x, next_pos.y, next_pos.z);
 	LOG("%.2f, %.2f, %.2f", aabb.CenterPoint().x, aabb.CenterPoint().y, aabb.CenterPoint().z);
 
 	if (frustum->Contains(aabb)) {
-		if (frustum->Intersects(aabb)) {
-			LOG("CANNOT MOVE");
-			return true;
-		}
-		else {
-			LOG("IM COOL");
-			return false;
-			//player_data.currentSpeed = 0.f;
-		}
+		return true;
 	}
 	else {
-		//player_data.movementSpeed = 0.f;
-		player_data.currentSpeed = 0.f;
+		controller->SetWalkDirection(float3::zero());
 		LOG("Player %i is not inside camera frustum", controller_index);
 		return false;
 	}

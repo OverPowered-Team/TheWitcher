@@ -37,6 +37,8 @@ public:
 	void Start();
 	void Update();
 
+	bool AnyKeyboardInput();
+
 	void OnDrawGizmos() override;
 
 	void HandleMovement(float2 joystickInput);
@@ -91,6 +93,8 @@ public:
 
 	float delay_footsteps = 0.5f;
 
+	GameObject* cube_test = nullptr;
+
 private:
 	float angle = 0.0f;
 	float timer = 0.f;
@@ -117,6 +121,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::PlaySpell, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
+
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->cube_test);
 
 	return player;
 }
