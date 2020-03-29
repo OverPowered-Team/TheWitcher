@@ -94,6 +94,52 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
+std::vector<ComponentCollider*> ModulePhysics::RayCastAll( math::Ray ray)
+{
+	std::vector<ComponentCollider*> return_vector;
+	btCollisionWorld::AllHitsRayResultCallback results(ToBtVector3(ray.pos), ToBtVector3(ray.dir));
+	world->rayTest(ToBtVector3(ray.pos), ToBtVector3(ray.dir), results);
+	int size = results.m_collisionObjects.size();
+
+	for (int i = 0; i < size; ++i)
+	{
+		const btCollisionObject* obj = results.m_collisionObjects.at(i);
+		const btGhostObject* ghost = btGhostObject::upcast(obj);
+		if (ghost != nullptr)
+		{
+			ComponentCollider* collider = (ComponentCollider*) ghost->getUserPointer();
+
+			if (collider != nullptr)
+			{
+				return_vector.push_back(collider);
+			}
+		}
+	}
+	
+	return return_vector;
+}
+
+ComponentCollider* ModulePhysics::RayCastClosest(math::Ray ray)
+{
+	btCollisionWorld::ClosestRayResultCallback results(ToBtVector3(ray.pos), ToBtVector3(ray.dir));
+	world->rayTest(ToBtVector3(ray.pos), ToBtVector3(ray.dir), results);
+	const btCollisionObject* obj = results.m_collisionObject;
+	const btGhostObject* ghost = btGhostObject::upcast(obj);
+
+	if (ghost != nullptr)
+	{
+		ComponentCollider* collider = (ComponentCollider*)ghost->getUserPointer();
+
+		if (collider != nullptr)
+		{
+			return collider;
+		}
+	}
+
+	return nullptr;
+}
+
+
 void ModulePhysics::DrawCollider(ComponentCollider* collider)
 {
 	debug_renderer->setDebugMode(btIDebugDraw::DBG_FastWireframe);

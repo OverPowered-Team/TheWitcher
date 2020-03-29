@@ -10,6 +10,7 @@
 #include "ModuleWindow.h"
 #include "ResourceScene.h"
 #include "ComponentMesh.h"
+#include "ComponentUI.h"
 #include "ComponentCanvas.h"
 #include "ComponentImage.h"
 #include "ComponentBar.h"
@@ -174,6 +175,21 @@ update_status ModuleObjects::PreUpdate(float dt)
 	}
 	base_game_object->PreUpdate();
 	ScriptsPreUpdate();
+
+#ifndef GAME_VERSION
+	for (Viewport* viewport : viewports)
+	{
+		if (!viewport->active || !viewport->CanRender() || (App->renderer3D->selected_game_camera == nullptr) && viewport == App->camera->selected_viewport)
+			continue;
+
+		viewport->BeginViewport();
+		printing_scene = (viewport == App->camera->scene_viewport) ? true : false;
+		bool isGameCamera = (viewport == game_viewport) ? true : false;
+
+		viewport->EndViewport();
+	}
+#endif
+
 	return UPDATE_CONTINUE;
 }
 
@@ -229,6 +245,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			}
 
 			std::vector<std::pair<float, GameObject*>> to_draw;
+			std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
 			ComponentCamera* frustum_camera = viewport->GetCamera();
 
@@ -242,7 +259,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 			for (; item != base_game_object->children.end(); ++item) {
 				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, frustum_camera);
+					(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
 				}
 			}
 
@@ -260,6 +277,24 @@ update_status ModuleObjects::PostUpdate(float dt)
 						(*it).second->DrawGame(viewport->GetCamera());
 				}
 			}
+
+
+			std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortUIToDraw);
+			if (!printing_scene) {
+				std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
+			}
+			std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
+			for (; it_ui != to_draw_ui.end(); ++it_ui) {
+				if ((*it_ui).second != nullptr) {
+					ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+					if (ui != nullptr && ui->IsEnabled())
+					{			
+						ui->Draw(!printing_scene);
+
+					}
+				}
+			}
+
 			if (printing_scene)
 				OnDrawGizmos();
 			if (isGameCamera) {
@@ -281,6 +316,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		OnPreCull(game_viewport->GetCamera());
 
 		std::vector<std::pair<float, GameObject*>> to_draw;
+		std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
 		ComponentCamera* frustum_camera = game_viewport->GetCamera();
 
@@ -289,7 +325,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr && (*item)->IsEnabled()) {
-				(*item)->SetDrawList(&to_draw, frustum_camera);
+				(*item)->SetDrawList(&to_draw,&to_draw_ui, frustum_camera);
 			}
 		}
 
@@ -305,6 +341,19 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 		OnPostRender(game_viewport->GetCamera());
+
+		std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
+		for (; it_ui != to_draw_ui.end(); ++it_ui) {
+			if ((*it_ui).second != nullptr) {
+				ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+				if (ui != nullptr && ui->IsEnabled())
+				{
+					ui->Draw(!printing_scene);
+
+				}
+			}
+		}
 	}
 
 	game_viewport->EndViewport();
@@ -1224,6 +1273,11 @@ bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, st
 	return first.first > last.first;
 }
 
+bool ModuleObjects::SortUIToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
+{
+	return first.first < last.first;
+}
+
 void ModuleObjects::AddScriptObject(const u64& ID, GameObject** object)
 {
 	to_add.push_back({ ID, object });
@@ -1525,7 +1579,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("up", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up);
 				if (selected_ui == -1)
@@ -1537,7 +1591,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("down", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down);
 				if (selected_ui == -1)
@@ -1549,7 +1603,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("right", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right);
 				if (selected_ui == -1)
@@ -1561,7 +1615,7 @@ void ModuleObjects::UpdateGamePadInput()
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
+				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
 				u64 safe_selected = selected_ui;
 				selected_ui = SetNewSelected("left", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left);
 				if (selected_ui == -1)

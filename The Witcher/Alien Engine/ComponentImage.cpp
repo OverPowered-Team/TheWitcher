@@ -13,6 +13,7 @@ ComponentImage::ComponentImage(GameObject* obj) : ComponentUI(obj)
 {
 	ui_type = ComponentType::UI_IMAGE;
 	tabbable = false;
+
 }
 
 bool ComponentImage::DrawInspector()

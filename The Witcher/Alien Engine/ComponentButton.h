@@ -38,6 +38,7 @@ protected:
 private:
 	bool DrawInspector();
 
+	bool OnIdle();
 	bool OnHover();
 	bool OnClick();
 	bool OnPressed();

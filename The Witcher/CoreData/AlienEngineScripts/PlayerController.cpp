@@ -1,6 +1,7 @@
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
 #include "RelicBehaviour.h"
+#include "Effect.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -54,6 +55,8 @@ void PlayerController::Update()
 		Input::GetControllerHoritzontalLeftAxis(controller_index),
 		Input::GetControllerVerticalLeftAxis(controller_index));
 
+	animator->SetBool("movement_input", joystickInput.Length() > stick_threshold ? true : false);
+
 	if (joystickInput.Length() > 0) {
 		keyboard_input = false;
 	}
@@ -76,15 +79,19 @@ void PlayerController::Update()
 			float2 keyboardInput = float2(0.f, 0.f);
 			if (Input::GetKeyRepeat(keyboard_move_left)) {
 				keyboardInput.x += 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			if (Input::GetKeyRepeat(keyboard_move_right)) {
 				keyboardInput.x -= 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			if (Input::GetKeyRepeat(keyboard_move_up)) {
 				keyboardInput.y += 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			if (Input::GetKeyRepeat(keyboard_move_down)) {
 				keyboardInput.y -= 1.f;
+				animator->SetBool("movement_input", true);
 			}
 			HandleMovement(keyboardInput);
 		}
@@ -139,12 +146,12 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
-
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
 		c_run->GetSystem()->StartEmmitter();
 		can_move = true;
+
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
 			audio->StartSound();
@@ -155,6 +162,7 @@ void PlayerController::Update()
 			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
+			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}
 		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
@@ -162,6 +170,7 @@ void PlayerController::Update()
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
+			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}
 
@@ -186,12 +195,10 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
-
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
 		c_attack->GetSystem()->Restart();
-		controller->SetWalkDirection(float3::zero());
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -201,7 +208,7 @@ void PlayerController::Update()
 			|| Input::GetKeyDown(keyboard_heavy_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
-		attacks->ComboAttack();
+		attacks->UpdateCurrentAttack();
 
 		if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
@@ -307,15 +314,6 @@ void PlayerController::OnAttackEffect()
 }
 
 void PlayerController::OnAnimationEnd(const char* name) {
-
-	LOG("entro acabar %s", name);
-	if (strcmp(name, "Attack") == 0) {
-		if (abs(player_data.currentSpeed) < 0.01F)
-			state = PlayerState::IDLE;
-		if (abs(player_data.currentSpeed) > 0.01F)
-			state = PlayerState::RUNNING;
-	}
-
 	if (strcmp(name, "Roll") == 0) {
 		if(abs(player_data.currentSpeed) < 0.01F)
 			state = PlayerState::IDLE;
@@ -336,27 +334,24 @@ void PlayerController::PlaySpell()
 	c_spell->Restart();
 }
 
-void PlayerController::Stat::IncreaseStat(float value)
+void PlayerController::PickUpRelic(Relic* _relic)
 {
-	if (current_value + value <= max_value)
-		current_value += value;
-	else
-		current_value = max_value;
+	relics.push_back(_relic);
+
+	for (int i = 0; i < _relic->effects.size(); i++)
+	{
+		AddEffect(_relic->effects.at(i));
+	}
 }
 
-void PlayerController::Stat::DecreaseStat(float value)
+void PlayerController::AddEffect(Effect* _effect)
 {
-	if (current_value - value >= 0)
-		current_value -= value;
-	else
-		current_value = 0;
+	effects.push_back(_effect);
+
+	//RecalculateStats(); 
+
+	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
+	{
+		attacks->OnAddAttackEffect(((AttackEffect*)_effect)->GetAttackIdentifier());
+	}
 }
-//void PlayerController::PickUpRelic(Relic* _relic)
-//{
-//	/*Debug.Log("Picked up relic " + new_relic.relic_name + ": " + new_relic.description);
-//	relics.Add(new_relic);
-//	foreach(Effect effect in new_relic.effects)
-//	{
-//		AddEffect(effect);
-//	}*/
-//}
