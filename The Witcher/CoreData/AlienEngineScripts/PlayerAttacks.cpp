@@ -202,8 +202,6 @@ void PlayerAttacks::DeactivateCollider()
 {
 	if(collider)
 		collider->SetEnable(false);
-
-	can_execute_input = true;
 }
 
 void PlayerAttacks::AllowCombo()
