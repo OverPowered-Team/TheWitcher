@@ -197,6 +197,12 @@ update_status ModuleObjects::Update(float dt)
 {
 	OPTICK_EVENT();
 	base_game_object->Update();
+	if (!functions_to_call.empty()) {
+		for (auto item = functions_to_call.begin(); item != functions_to_call.end(); ++item) {
+			(*item)();
+		}
+		functions_to_call.clear();
+	}
 	UpdateGamePadInput();
 	ScriptsUpdate();
 	return UPDATE_CONTINUE;

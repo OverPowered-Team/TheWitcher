@@ -304,6 +304,7 @@ public:
 	std::list<SpotLightProperties*> spot_light_properites;
 
 	std::vector<std::pair<u64, GameObject**>> to_add;
+	std::vector<std::function<void()>> functions_to_call;
 
 private:
 	// root
