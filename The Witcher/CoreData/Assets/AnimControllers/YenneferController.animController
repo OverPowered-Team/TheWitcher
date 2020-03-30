@@ -1,7 +1,7 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 10,
+        "NumStates": 12,
         "NumTransitions": 17,
         "States": [
             {
@@ -47,12 +47,22 @@
             {
                 "Name": "Air",
                 "Speed": 1,
-                "Clip": "6736882138115004092"
+                "Clip": "15931133566543471317"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
-                "Clip": "8255381012714291661"
+                "Clip": "5434931430886810763"
+            },
+            {
+                "Name": "Revive",
+                "Speed": 1,
+                "Clip": "15733179780109180651"
+            },
+            {
+                "Name": "RCP",
+                "Speed": 1,
+                "Clip": "4619227199824952727"
             }
         ],
         "Transitions": [
@@ -420,13 +430,13 @@
             {
                 "Event_Id": "PlayerAttacks::ActivateCollider",
                 "Animation_Id": "4908746278255016155",
-                "Frame": 31,
+                "Frame": 39,
                 "Type": 2
             },
             {
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "4908746278255016155",
-                "Frame": 39,
+                "Frame": 42,
                 "Type": 2
             }
         ]
