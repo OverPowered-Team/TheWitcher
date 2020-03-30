@@ -12,9 +12,13 @@ PauseMenu_Buttons::~PauseMenu_Buttons()
 
 void PauseMenu_Buttons::Update()
 {
-	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) || Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B) && GameObject::FindWithName("Menu")->IsEnabled())
+	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) 
+		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
 	{
-		((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
+		if (GameObject::FindWithName("Menu")->IsEnabled())
+		{
+			((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
+		}
 	}
 }
 

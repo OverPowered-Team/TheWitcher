@@ -16,7 +16,7 @@ public:
 	Extra_Menus();
 	virtual ~Extra_Menus();
 
-	void Update();
+	void PostUpdate();
 
 	void MenuSpawn(MENU menu_type);
 

@@ -8,12 +8,16 @@ Extra_Menus::~Extra_Menus()
 {
 }
 
-void Extra_Menus::Update()
+void Extra_Menus::PostUpdate()
 {
-	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) || Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B))&&GameObject::FindWithName("Extra_Menus")->IsEnabled())
+	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) 
+		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
 	{
-		previous_menu->SetEnable(true);
-		game_object->SetEnable(false);
+		if (game_object->IsEnabled())
+		{
+			previous_menu->SetEnable(true);
+				game_object->SetEnable(false);
+		}
 	}
 }
 
