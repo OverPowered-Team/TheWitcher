@@ -8,6 +8,14 @@ Extra_Menus::~Extra_Menus()
 {
 }
 
+void Extra_Menus::Start()
+{
+	GameObject::FindWithName("Leaderboard")->SetEnable(false);
+	GameObject::FindWithName("Settings")->SetEnable(false);
+	GameObject::FindWithName("B")->SetEnable(false);
+	GameObject::FindWithName("Controls")->SetEnable(false);
+}
+
 void Extra_Menus::PostUpdate()
 {
 	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) 
@@ -28,6 +36,7 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 	case MENU::CONTROLS:
 		GameObject::FindWithName("Leaderboard")->SetEnable(false);
 		GameObject::FindWithName("Settings")->SetEnable(false);
+		GameObject::FindWithName("B")->SetEnable(true);
 		GameObject::FindWithName("Controls")->SetEnable(true);
 		break;
 	case MENU::SETTINGS:
@@ -38,6 +47,7 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 	case MENU::LEADERBOARD:
 		GameObject::FindWithName("Controls")->SetEnable(false);
 		GameObject::FindWithName("Settings")->SetEnable(false);
+		GameObject::FindWithName("B")->SetEnable(true);
 		GameObject::FindWithName("Leaderboard")->SetEnable(true);
 		break;
 	}

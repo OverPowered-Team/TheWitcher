@@ -1,6 +1,7 @@
 #include "PauseMenu_Buttons.h"
 #include "InGame_UI.h"
 #include "Extra_Menus.h"
+#include "..\..\ComponentText.h"
 
 PauseMenu_Buttons::PauseMenu_Buttons() : Alien()
 {

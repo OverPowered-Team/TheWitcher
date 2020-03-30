@@ -11,6 +11,7 @@ InGame_UI::~InGame_UI()
 void InGame_UI::Start()
 {
 	pause_menu->SetEnable(false);
+	GameObject::FindWithName("Menu")->SetEnable(true);
 	in_game->SetEnable(true);
 }
 
