@@ -5,6 +5,7 @@ Stat::Stat(std::string _name, float _base_value)
 {
 	name = _name;
 	base_value = _base_value;
+    current_value = _base_value;
 }
 
 Stat::~Stat()

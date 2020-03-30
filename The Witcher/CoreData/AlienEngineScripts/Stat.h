@@ -18,6 +18,4 @@ public:
 	std::string name;
 	float base_value;
 	float current_value;
-
-
 };
