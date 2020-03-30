@@ -2,7 +2,7 @@
 #include "PlayerController.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
-
+#include "CameraMovement.h"
 #include "../../ComponentDeformableMesh.h"
 
 PlayerController::PlayerController() : Alien()
@@ -398,7 +398,33 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 
 	fake_aabb.maxPoint = aabb->maxPoint + next_pos - transform->GetGlobalPosition();
 	fake_aabb.minPoint = aabb->minPoint + next_pos - transform->GetGlobalPosition();
+
+	Frustum fake_frustum = *frustum;
+	GameObject* camera = Camera::GetCurrentCamera()->game_object_attached;
+	float3 next_cam_pos = next_pos - transform->GetGlobalPosition() + camera->transform->GetGlobalPosition();
+	fake_frustum.pos = next_cam_pos;
+	CameraMovement* cam = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+	for (int i = 0; i < cam->players.size(); ++i)
+	{
+		if (cam->players[i]->parent != this->game_object)
+		{			
+			ComponentDeformableMesh* defo = nullptr;
+			defo = (ComponentDeformableMesh*)cam->players[i]->parent->GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false);
+			if (defo != nullptr)
+			{
+				AABB p_aabb = defo->GetGlobalAABB();
+				if (!fake_frustum.Contains(p_aabb))
+				{
+					LOG("LEAVING BUDDY BEHIND");
+					controller->SetWalkDirection(float3::zero());
+					return false;
+				}
+			}
+		}
+		
+	}
 	
+
 	if (frustum->Contains(fake_aabb)) {
 		return true;
 	}
