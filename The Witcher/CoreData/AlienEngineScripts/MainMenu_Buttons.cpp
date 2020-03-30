@@ -10,7 +10,7 @@ MainMenu_Buttons::~MainMenu_Buttons()
 
 void MainMenu_Buttons::NewGame()
 {
-	//SceneManager::LoadScene("newTRIGGER");
+	SceneManager::LoadScene("Win_Lose");
 }
 
 void MainMenu_Buttons::ExitGame()
