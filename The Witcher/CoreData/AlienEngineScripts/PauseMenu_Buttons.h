@@ -27,6 +27,8 @@ ALIEN_FACTORY PauseMenu_Buttons* CreatePauseMenu_Buttons() {
 	// To show in inspector here
 
 	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Resume, alien);
+	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Leaderboard, alien);
+	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Controls, alien);
 
 	return alien;
 } 

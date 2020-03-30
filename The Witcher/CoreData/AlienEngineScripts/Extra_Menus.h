@@ -21,15 +21,14 @@ public:
 	void MenuSpawn(MENU menu_type);
 
 	GameObject* extramenus_canvas = nullptr;
+	GameObject* previous_menu = nullptr;
 };
 
 ALIEN_FACTORY Extra_Menus* CreateExtra_Menus() {
 	Extra_Menus* alien = new Extra_Menus();
 	// To show in inspector here
 
-	SHOW_LAMBDA_FUNCTION(alien->MenuSpawn,"MenuControls",alien,Extra_Menus::MENU::CONTROLS);
-	SHOW_LAMBDA_FUNCTION(alien->MenuSpawn,"MenuSettings",alien,Extra_Menus::MENU::SETTINGS);
-	SHOW_LAMBDA_FUNCTION(alien->MenuSpawn,"MenuLeaderboard",alien,Extra_Menus::MENU::LEADERBOARD);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->previous_menu);
 
 	return alien;
 } 

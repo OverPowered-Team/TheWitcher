@@ -12,23 +12,13 @@ void Extra_Menus::Update()
 {
 	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) || Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B))&&GameObject::FindWithName("Extra_Menus")->IsEnabled())
 	{
-		GameObject::FindWithName("Extra_Menus")->SetEnable(false);
+		previous_menu->SetEnable(true);
+		game_object->SetEnable(false);
 	}
 }
 
 void Extra_Menus::MenuSpawn(MENU menu_type)
 {
-	extramenus_canvas = GameObject::FindWithName("Extra_Menus");
-	if (!extramenus_canvas)
-	{
-		// CREATE EXTRA_MENUS PREFAB
-		// AND MOVE IT ON TOP (NEW RELEASE AND FEATURE REQUEST #87 DEPENDENT)
-	}
-	if (!extramenus_canvas->IsEnabled())
-	{
-		extramenus_canvas->SetEnable(true);
-	}
-
 	switch (menu_type) 
 	{
 	case MENU::CONTROLS:
