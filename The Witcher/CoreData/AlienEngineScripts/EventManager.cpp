@@ -34,3 +34,12 @@ void EventManager::OnPlayerRevive(PlayerController* player_revived)
 		players[i]->OnPlayerRevived(player_revived);
 	}
 }
+
+void EventManager::ReceiveDialogueEvent(const char* audioName, unsigned int priority, bool PauseContinue, const char* entityName, float delay) const
+{
+	// TODO: send this to the dialogue script
+	/*if (delay == 0.f)
+
+	else
+		Invoke();*/ 
+}

@@ -22,6 +22,8 @@ public:
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevive(PlayerController* player_revived);
 
+    // Audio name in the dialogue object's emitter bank, priority, can it be stopped and then continued?, entity name, delay to invoke the audio
+	void ReceiveDialogueEvent(const char* audioName, unsigned int priority, bool PauseContinue = true, const char* entityName = "noName", float delay = 0.f) const;
 };
 
 ALIEN_FACTORY EventManager* CreateEventManager() {
