@@ -30,6 +30,7 @@ public:
 
 	void Jump(float3 direction= float3::zero());
 	bool CanJump();
+	bool OnGround();
 
 	float GetJumpSpeed() { return jump_speed; }
 	void SetJumpSpeed(const float jump_speed);
@@ -38,7 +39,12 @@ public:
 
 	void ApplyImpulse(float3 direction = float3::zero());
 	void SetWalkDirection(float3 direction);
+
 	void SetRotation(const Quat rotation);
+	Quat GetRotation() const;
+
+	void SetPosition(const float3 pos);
+	float3 GetPosition() const;
 
 	void SetCharacterOffset(const float3 offset);
 	float GetCharacterHeight() { return character_height; }
@@ -72,7 +78,6 @@ protected:
 
 	float jump_speed = 0.f;
 	float gravity = 80.f;
-
 
 	bool test = false;
 };

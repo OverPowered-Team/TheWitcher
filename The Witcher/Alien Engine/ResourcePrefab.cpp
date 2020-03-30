@@ -11,6 +11,8 @@
 #include "ModuleCamera3D.h"
 #include "Time.h"
 #include "ComponentDeformableMesh.h"
+#include "ComponentRigidBody.h"
+#include "ComponentCharacterController.h"
 
 #include "mmgr/mmgr.h"
 
@@ -301,13 +303,20 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
 		obj->SetPrefab(ID);
-		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
-		transform->SetLocalPosition(pos.x, pos.y, pos.z);
+		obj->transform->SetLocalPosition(pos.x, pos.y, pos.z);
 		if (set_selected) {
 			App->objects->SetNewSelectedObject(obj);
 			App->camera->fake_camera->Look(parent->children.back()->GetBB().CenterPoint());
 			App->camera->reference = parent->children.back()->GetBB().CenterPoint();
 		}
+
+		ComponentRigidBody* rb = (ComponentRigidBody*)(obj)->GetComponent(ComponentType::RIGID_BODY);
+		if (rb)
+			rb->SetPosition(pos);
+
+		ComponentCharacterController* character_controller = (ComponentCharacterController*)(obj)->GetComponent(ComponentType::CHARACTER_CONTROLLER);
+		if (character_controller)
+			character_controller->SetPosition(pos);
 
 		delete prefab;
 

@@ -19,8 +19,6 @@
 #include "ResourceAnimatorController.h"
 #include "mmgr/mmgr.h"
 
-
-
 ResourceAnimatorController::ResourceAnimatorController() : Resource()
 {
 	type = ResourceType::RESOURCE_ANIMATOR_CONTROLLER;
@@ -60,6 +58,7 @@ ResourceAnimatorController::ResourceAnimatorController(ResourceAnimatorControlle
 
 ResourceAnimatorController::~ResourceAnimatorController()
 {
+	FreeMemory();
 	ax::NodeEditor::DestroyEditor(ed_context);
 }
 
@@ -197,6 +196,7 @@ void ResourceAnimatorController::ReImport(const u64& force_id)
 
 		CreateMetaData(ID);
 		FreeMemory();
+		delete asset;
 	}
 }
 
@@ -370,11 +370,11 @@ void ResourceAnimatorController::UpdateState(State* state)
 
 	if (!transitioning)CheckTriggers();
 
-	if (animation && (animation->GetDuration() / current_state->GetSpeed()) > 0) {
+	if (animation && (animation->GetDuration()) > 0) {
 
 		state->time += (Time::GetDT() * current_state->GetSpeed());
 
-		if (state->time >= animation->GetDuration() / current_state->GetSpeed()) {
+		if (state->time >= animation->GetDuration()) {
 			if (!state->next_state) {
 				std::vector<Transition*> possible_transitions = FindTransitionsFromSourceState(state);
 				for (std::vector<Transition*>::iterator it = possible_transitions.begin(); it != possible_transitions.end(); ++it) {
@@ -386,9 +386,12 @@ void ResourceAnimatorController::UpdateState(State* state)
 				}
 			}
 			if (state->GetClip()->loops)
+			{
 				state->time = 0;
+				previous_key_time = current_state->GetClip()->start_tick;
+			}
 			else
-				state->time = animation->GetDuration() / current_state->GetSpeed();
+				state->time = animation->GetDuration();
 		}
 
 	}
@@ -431,6 +434,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			state->fade_time = 0;
 			state->fade_duration = 0;
 			transitioning = false;
+			previous_key_time = current_state->GetClip()->start_tick;
 		}
 	}
 }
@@ -587,6 +591,7 @@ bool ResourceAnimatorController::SaveAsset(const u64& force_id)
 
 	asset->FinishSave();
 	CreateMetaData(ID);
+	delete asset;
 
 	return true;
 }
@@ -597,6 +602,7 @@ void ResourceAnimatorController::FreeMemory()
 	{
 		if ((*it)->GetClip())
 			(*it)->GetClip()->DecreaseReferences();
+
 		delete (*it);
 	}
 	states.clear();
@@ -623,6 +629,11 @@ void ResourceAnimatorController::FreeMemory()
 	bool_parameters.clear();
 	float_parameters.clear();
 	int_parameters.clear();
+
+	for (std::vector<AnimEvent*>::iterator it_anim = anim_events.begin(); it_anim != anim_events.end(); ++it_anim)
+	{
+		delete (*it_anim);
+	}
 
 	anim_events.clear();
 
@@ -1072,6 +1083,7 @@ bool ResourceAnimatorController::CreateMetaData(const u64& force_id)
 		meta->StartSave();
 		meta->SetString("Meta.ID", std::to_string(ID).data());
 		meta->FinishSave();
+		delete meta;
 	}
 
 	//SAVE LIBRARY FILE
@@ -1413,6 +1425,7 @@ void ResourceAnimatorController::Play()
 	if (default_state)
 	{
 		current_state = default_state;
+		previous_key_time = current_state->GetClip()->start_tick;
 	}
 }
 
@@ -1431,6 +1444,7 @@ void ResourceAnimatorController::Play(std::string state_name)
 			current_state->fade_time = 0;
 			current_state->fade_duration = 0;
 			transitioning = false;
+			previous_key_time = current_state->GetClip()->start_tick;
 			break;
 		}
 	}
@@ -1537,12 +1551,20 @@ bool ResourceAnimatorController::GetTransformState(State* state, std::string cha
 
 			if (next_key_time != previous_key_time)
 			{
-				previous_key_time = next_key_time;
-				if(!transitioning)
-					ActiveEvent(animation, next_key_time);
-				//LOG_ENGINE("THIS FRAME IS %s", std::to_string(next_key_time).c_str())
+				if (next_key_time > previous_key_time + 1 && !transitioning)
+				{
+					for (int i = previous_key_time; i < next_key_time; ++i)
+					{
+						ActiveEvent(animation, i);
+					}
+					previous_key_time = next_key_time;
+				}
+				else if (next_key_time == previous_key_time + 1 && !transitioning)
+				{
+					ActiveEvent(animation, previous_key_time);
+					previous_key_time = next_key_time;
+				}
 			}
-
 			return true;
 		}
 		else
@@ -1695,7 +1717,7 @@ void ResourceAnimatorController::ActiveEvent(ResourceAnimation* _animation, uint
 							if (strcmp((*j).first.data(), (*it)->event_id.c_str()) == 0)
 							{
 								std::function<void()> functEvent = (*j).second;
-								functEvent();
+								App->objects->functions_to_call.push_back(functEvent);
 							}
 						}
 					}

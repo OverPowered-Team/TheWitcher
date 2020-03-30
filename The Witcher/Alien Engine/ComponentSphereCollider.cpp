@@ -4,7 +4,7 @@
 #include "ComponentMesh.h"
 #include "GameObject.h"
 #include "imgui/imgui.h"
-
+#include "mmgr/mmgr.h"
 
 ComponentSphereCollider::ComponentSphereCollider(GameObject* go) :ComponentCollider(go)
 {

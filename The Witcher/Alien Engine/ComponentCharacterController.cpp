@@ -10,6 +10,7 @@
 
 #include "Time.h"
 #include "ModuleInput.h"
+#include "mmgr/mmgr.h"
 
 ComponentCharacterController::ComponentCharacterController(GameObject* go) : Component(go)
 {
@@ -76,10 +77,31 @@ bool ComponentCharacterController::CanJump()
 	return controller->canJump();
 }
 
+bool ComponentCharacterController::OnGround()
+{
+	return controller->onGround();
+}
+
 void ComponentCharacterController::SetRotation(const Quat rotation)
 {
 	body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, rotation));
 	transform->SetGlobalRotation(math::Quat(rotation));
+}
+
+Quat ComponentCharacterController::GetRotation() const
+{
+	return transform->GetGlobalRotation();
+}
+
+void ComponentCharacterController::SetPosition(const float3 pos)
+{
+	body->setWorldTransform(ToBtTransform(pos + character_offset, transform->GetGlobalRotation()));
+	transform->SetGlobalPosition(pos);
+}
+
+float3 ComponentCharacterController::GetPosition() const
+{
+	return transform->GetGlobalPosition();
 }
 
 void ComponentCharacterController::SetCharacterOffset(const float3 offset)

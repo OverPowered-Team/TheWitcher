@@ -13,6 +13,7 @@
 #include "ResourceMaterial.h"
 #include "Optick/include/optick.h"
 #include "ComponentMaterial.h"
+#include "mmgr/mmgr.h"
 
 ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component(parent)
 {

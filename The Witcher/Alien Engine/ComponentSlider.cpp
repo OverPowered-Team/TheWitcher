@@ -597,10 +597,14 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex, bool backgr
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-	glDrawElements(GL_TRIANGLES, 6 * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);

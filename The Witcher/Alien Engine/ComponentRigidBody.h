@@ -19,6 +19,7 @@ class __declspec(dllexport) ComponentRigidBody : public Component
 	friend class ComponentSphereCollider;
 	friend class ComponentCapsuleCollider;
 	friend class ComponentConvexHullCollider;
+	friend class ResourcePrefab;
 
 public:
 
@@ -39,6 +40,12 @@ public:
 	void SetDrag(const float drag);
 	float GetDrag() { return drag; }
 	void SetAngularDrag(const float angular_drag);
+
+	void SetPosition(const float3 pos);
+	float3 GetPosition() const;
+
+	void SetRotation(const Quat rot);
+	Quat GetRotation() const;
 
 	float3 GetVelocity();
 	void SetVelocity(const float3 velocity);

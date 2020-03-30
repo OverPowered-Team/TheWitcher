@@ -9,6 +9,7 @@
 #include "ModuleResources.h"
 
 #include "Optick/include/optick.h"
+#include "mmgr/mmgr.h"
 
 Skybox::Skybox()
 {

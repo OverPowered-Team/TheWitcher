@@ -2,7 +2,10 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "Stat.h"
 
+class PlayerAttacks;
+class EventManager;
 class Relic;
 class Effect;
 
@@ -17,9 +20,11 @@ public:
 		JUMPING,
 		DASHING,
 		CASTING,
+		DEAD,
 
 		MAX
 		);
+
 
 	struct PlayerData {
 		float movementSpeed = 200.0F;
@@ -27,7 +32,11 @@ public:
 		float currentSpeed = 0.f;
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
-		// dmg, deff, lvl bla bla
+		Stat health = Stat("Health", 100.0f);
+		Stat power = Stat("Strength", 10.0f);
+		Stat chaos = Stat("Chaos", 150.0f);
+		Stat attack_speed = Stat("Attack Speed", 1.0f);
+		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
 public:
@@ -41,21 +50,33 @@ public:
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
+	void Die();
+	void Revive();
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
+	void OnDrawGizmos();
+	void OnPlayerDead(PlayerController* player_dead);
+	void OnPlayerRevived(PlayerController* player_dead);
+	void CheckForPossibleRevive();
+
 public:
 	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
+	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
+	std::vector<PlayerController*> players_dead;
+
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
 	
 	bool keyboard_input = false;
+
+	float revive_range = 5.0f;
 
 	//Keyboard input
 	SDL_Scancode keyboard_move_up;
@@ -65,20 +86,23 @@ public:
 	SDL_Scancode keyboard_jump;
 	SDL_Scancode keyboard_dash;
 	SDL_Scancode keyboard_light_attack;
+	SDL_Scancode keyboard_heavy_attack;
 	SDL_Scancode keyboard_spell;
+	SDL_Scancode keyboard_revive;
 
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
-	Input::CONTROLLER_BUTTONS controller_attack = Input::CONTROLLER_BUTTON_X;
-	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_B;
+	Input::CONTROLLER_BUTTONS controller_light_attack = Input::CONTROLLER_BUTTON_X;
+	Input::CONTROLLER_BUTTONS controller_heavy_attack = Input::CONTROLLER_BUTTON_Y;
+	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
+	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
 	//Relics
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
 
 	//Particles
-	
 	GameObject* p_run = nullptr;
 	ComponentParticleSystem* c_run = nullptr;
 
@@ -87,6 +111,9 @@ public:
 
 	GameObject* p_spell = nullptr;
 	ComponentParticleSystem* c_spell = nullptr;
+
+	GameObject* event_manager = nullptr;
+	EventManager* s_event_manager = nullptr;
 
 	float delay_footsteps = 0.5f;
 private:
@@ -106,10 +133,12 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_run);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_attack);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_spell);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->event_manager);
 	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlaySpell, player);
 

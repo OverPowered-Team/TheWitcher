@@ -430,7 +430,7 @@ void PanelInspector::ButtonAddComponent()
 				case ComponentType::MATERIAL: {
 
 					if ((!selected->HasComponent(ComponentType::MATERIAL)) &&
-						selected->HasComponent(ComponentType::MESH))
+						(selected->HasComponent(ComponentType::MESH) || selected->HasComponent(ComponentType::DEFORMABLE_MESH)))
 					{
 						comp = new ComponentMaterial(selected);
 						selected->AddComponent(comp);
