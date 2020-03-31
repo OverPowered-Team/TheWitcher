@@ -21,6 +21,7 @@ public:
 	bool pauseContinue = true;
 	bool paused = false;
 	const char* entityName = "noName"; //Author
+	const char* subtitles = "";
 };
 
 class ALIEN_ENGINE_API DialogueManager : public Alien {

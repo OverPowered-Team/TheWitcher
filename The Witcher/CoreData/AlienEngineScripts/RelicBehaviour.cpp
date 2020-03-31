@@ -4,7 +4,6 @@
 #include "Effect.h"
 #include "EffectsFunctions.h"
 #include "EventManager.h"
-#include "DialogueManager.h"
 
 // Relic
 Relic::Relic()

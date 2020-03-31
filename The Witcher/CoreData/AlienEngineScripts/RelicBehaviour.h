@@ -2,11 +2,13 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "DialogueManager.h"
 
 
 class PlayerController;
 class Effect;
-struct Dialogue;
+class EventManager;
+
 
 enum (Relic_Type,
 	BASE,
