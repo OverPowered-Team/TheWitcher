@@ -116,9 +116,8 @@ private:
 	float timer = 0.f;
 	ComponentAudioEmitter* audio = nullptr;
 
-	Frustum* frustum = nullptr;
-	const AABB* player_aabb = nullptr;
-	AABB fake_aabb;
+	ComponentCamera* camera = nullptr;
+	GameObject* obj_aabb = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
