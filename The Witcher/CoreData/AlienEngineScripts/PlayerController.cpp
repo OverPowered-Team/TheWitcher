@@ -387,7 +387,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * speed * 4.f;
+		next_pos = transform->GetGlobalPosition() + vector * speed * 2.f;
 	}
 
 	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
