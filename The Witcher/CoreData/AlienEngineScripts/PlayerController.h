@@ -57,6 +57,7 @@ public:
 	void PlaySpell();
 	void Die();
 	void Revive();
+	void ReceiveDamage(float value);
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
@@ -67,6 +68,8 @@ public:
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevived(PlayerController* player_dead);
 	void CheckForPossibleRevive();
+
+	void OnTriggerEnter(ComponentCollider* col);
 
 public:
 	int controller_index = 1;

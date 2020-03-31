@@ -4,6 +4,7 @@
 #include "RelicBehaviour.h"
 #include "Effect.h"
 #include "CameraMovement.h"
+#include "Enemy.h"
 #include "../../ComponentDeformableMesh.h"
 
 PlayerController::PlayerController() : Alien()
@@ -367,6 +368,13 @@ void PlayerController::Revive()
 	s_event_manager->OnPlayerRevive(this);
 }
 
+void PlayerController::ReceiveDamage(float value)
+{
+	player_data.health.DecreaseStat(value);
+	if (player_data.health.current_value == 0)
+		Die();
+}
+
 void PlayerController::PickUpRelic(Relic* _relic)
 {
 	relics.push_back(_relic);
@@ -486,6 +494,21 @@ void PlayerController::CheckForPossibleRevive()
 		if (distance <= revive_range) {
 			players_dead[i]->Revive();
 			break;
+		}
+	}
+}
+
+void PlayerController::OnTriggerEnter(ComponentCollider* col)
+{
+	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
+		Alien** alien = nullptr;
+		uint size = col->game_object_attached->parent->GetAllComponentsScript(&alien);
+		for (int i = 0; i < size; ++i) {
+			Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
+			if (enemy) {
+				ReceiveDamage(enemy->stats.damage);
+				break;
+			}
 		}
 	}
 }
