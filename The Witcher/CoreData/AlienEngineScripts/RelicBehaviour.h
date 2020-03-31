@@ -10,13 +10,19 @@ enum (Relic_Type,
 	BASE,
 	ATTACK,
 	DASH,
-	COMPANION,
 	NONE_TYPE
 	);
 enum (Relic_Effect,
 	FIRE,
-	POISON,
+	ICE,
 	EARTH,
+	LIGHTNING,
+	POISON,
+	NATURE,
+	SEA,
+	DJINN,
+	STRIGAS,
+	RAGE,
 	RANGE,
 	NONE_EFFECT
 	);
@@ -43,6 +49,15 @@ public:
 	void OnPickUp(PlayerController* player) override;
 
 	std::string attack_name = "";
+
+};
+
+class DashRelic : public Relic {
+public:
+	DashRelic();
+	virtual ~DashRelic();
+
+	void OnPickUp(PlayerController* player) override;
 
 };
 

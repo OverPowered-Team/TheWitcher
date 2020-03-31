@@ -23,6 +23,7 @@ public:
 	std::vector<Modifier> multiplicative_modifiers;
 
 	void (*OnHit)(GameObject enemy);
+	void (*OnDash)(GameObject player);
 
 };
 
