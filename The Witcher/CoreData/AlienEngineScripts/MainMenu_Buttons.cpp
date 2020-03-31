@@ -1,4 +1,5 @@
 #include "MainMenu_Buttons.h"
+#include "Extra_Menus.h"
 
 MainMenu_Buttons::MainMenu_Buttons() : Alien()
 {
@@ -20,6 +21,9 @@ void MainMenu_Buttons::ExitGame()
 
 void MainMenu_Buttons::Controls()
 {
+	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
+	((Extra_Menus*)GameObject::FindWithName("Extra_Menus")->GetComponentScript("Extra_Menus"))->MenuSpawn(Extra_Menus::MENU::CONTROLS);
+	GameObject::FindWithName("Main_Menu")->SetEnable(false);
 }
 
 void MainMenu_Buttons::Settings()
