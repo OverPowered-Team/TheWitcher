@@ -79,11 +79,13 @@ void NilfgaardSoldier::Attack()
 
 void NilfgaardSoldier::ShootAttack()
 {
-	/*float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
+	float3 arrow_pos = transform->GetGlobalPosition() + float3(0.0F, 10.5F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
 
-	float angle = atan2f(direction.z, direction.x);
+	arrow_rb->SetPosition(arrow_pos);
+
+	/*float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	arrow_rb->SetRotation(rot);
 	arrow_rb->AddForce(direction.Mul(20));*/

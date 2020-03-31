@@ -286,7 +286,7 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("multiplier"));
+			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("multiplier"), attack_combo->GetNumber("multiplier"));
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
