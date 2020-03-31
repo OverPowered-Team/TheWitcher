@@ -62,6 +62,8 @@ public:
 
 	void OnAnimationEnd(const char* name);
 
+	float GetCurrentDMG();
+
 public:
 	GameObject* collider_go = nullptr;
 	float snap_range = 0.0f;

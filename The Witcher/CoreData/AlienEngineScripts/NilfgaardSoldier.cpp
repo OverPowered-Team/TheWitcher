@@ -27,7 +27,7 @@ void NilfgaardSoldier::SetStats(const char* json)
 			else
 				break;
 
-		stats.health = stat_weapon->GetNumber("Health");
+		stats.max_health = stats.current_health = stat_weapon->GetNumber("Health");
 		stats.agility = stat_weapon->GetNumber("Agility");
 		stats.damage = stat_weapon->GetNumber("Damage");
 		stats.attack_speed = stat_weapon->GetNumber("AttackSpeed");
@@ -79,14 +79,14 @@ void NilfgaardSoldier::Attack()
 
 void NilfgaardSoldier::ShootAttack()
 {
-	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
+	/*float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	arrow_rb->SetRotation(rot);
-	arrow_rb->AddForce(direction.Mul(20));
+	arrow_rb->AddForce(direction.Mul(20));*/
 }
 
 void NilfgaardSoldier::UpdateEnemy()
