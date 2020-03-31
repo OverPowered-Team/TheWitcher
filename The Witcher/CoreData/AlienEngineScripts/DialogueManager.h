@@ -5,6 +5,7 @@
 
 class EventManager;
 class ComponentAudioEmitter; 
+class ComponentText; 
 
 struct AudioData
 {
@@ -17,17 +18,23 @@ struct Dialogue
 {
 public: 
 	AudioData audioData; 
+	const char* subtitlesText = "None";
 	const char* priority = "None";
 	bool pauseContinue = true;
 	bool paused = false;
 	const char* entityName = "noName"; //Author
 };
 
+// TODO: Delete this when we know when an audio finishes:
+struct SubtitlesTime
+{
+	float currentTime = 0.0f; 
+	float totalTime = 5.0f; 
+};
+
 class ALIEN_ENGINE_API DialogueManager : public Alien {
 
 public:
-
-
 	DialogueManager();
 	virtual ~DialogueManager();
 	void Start();
@@ -44,6 +51,10 @@ private:
 
 	EventManager* eventManager = nullptr;
 	ComponentAudioEmitter* audioEmitter = nullptr; 
+	ComponentText* text = nullptr; 
+
+	// TODO
+	SubtitlesTime subtitlesTime; 
 };
 
 ALIEN_FACTORY DialogueManager* CreateDialogueManager() {
