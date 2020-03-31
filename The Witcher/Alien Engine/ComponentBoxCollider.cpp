@@ -69,7 +69,7 @@ void ComponentBoxCollider::UpdateShape()
 	}
 
 	final_size = size.Mul(transform->GetGlobalScale());
-	final_center = center.Mul(final_size);
+	final_center = transform->GetGlobalMatrix().MulPos(center);
 
 	shape = new btBoxShape(ToBtVector3(final_size.Abs() * 0.5f));
 

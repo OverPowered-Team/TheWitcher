@@ -690,7 +690,22 @@ bool ComponentParticleSystem::DrawInspector()
 		ImGui::Spacing();
 
 		if (particleSystem->material != nullptr) {
+
+			if (particleSystem->material == particleSystem->default_material)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+
 			particleSystem->material->DisplayMaterialOnInspector();
+
+
+			if (particleSystem->material == particleSystem->default_material)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
 		}
 		
 	}
@@ -957,9 +972,9 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("HasMaterial", (particleSystem->material != nullptr) ? true : false);
 	if (particleSystem->material != nullptr) {
 		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()).data());
-		to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
-		to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
-		to_save->SetFloat4("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
+		to_save->SetFloat3("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
+		to_save->SetFloat3("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
+		to_save->SetFloat3("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
 	}
 
 
@@ -1107,9 +1122,9 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	if (to_load->GetBoolean("HasMaterial")) {
 		u64 ID = std::stoull(to_load->GetString("MaterialID"));
 		particleSystem->SetMaterial((ResourceMaterial*)App->resources->GetResourceWithID(ID));
-		particleSystem->material->shaderInputs.particleShaderProperties.start_color = to_load->GetFloat4("Start.Color");
-		particleSystem->material->shaderInputs.particleShaderProperties.color = to_load->GetFloat4("Start.Color");
-		particleSystem->material->shaderInputs.particleShaderProperties.end_color = to_load->GetFloat4("End.Color");
+		particleSystem->material->shaderInputs.particleShaderProperties.start_color = to_load->GetFloat3("Start.Color");
+		particleSystem->material->shaderInputs.particleShaderProperties.color = to_load->GetFloat3("Start.Color");
+		particleSystem->material->shaderInputs.particleShaderProperties.end_color = to_load->GetFloat3("End.Color");
 	}
 	ID = std::stoull(to_load->GetString("ID"));
 	

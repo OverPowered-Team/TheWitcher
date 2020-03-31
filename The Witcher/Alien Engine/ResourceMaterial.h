@@ -50,9 +50,9 @@ struct ShaderInputs
 	} iluminatedShaderProperties;
 
 	struct ParticleShaderProperties {
-		float4 color = float4(1.f, 0.f, 0.8f, 1.f);
-		float4 start_color = float4(1.f, 0.f, 0.8f, 1.f);
-		float4 end_color = float4(1.f, 1.f, 1.f, 1.f);
+		float3 color = float3(1.f, 0.f, 0.8f);
+		float3 start_color = float3(1.f, 0.f, 0.8f);
+		float3 end_color = float3(1.f, 1.f, 1.f);
 	} particleShaderProperties;
 };
 
@@ -86,6 +86,7 @@ public:
 
 	// Functionality
 	void ApplyMaterial();
+	void UnbindMaterial();
 
 	void SetTexture(ResourceTexture* texture, TextureType texType = TextureType::DIFFUSE);
 	const ResourceTexture* GetTexture(TextureType texType = TextureType::DIFFUSE) const;
@@ -108,7 +109,7 @@ public:
 
 public:
 
-	float4 color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	float4 color = float4::one;
 
 	bool textureActivated = true;
 	u64 texturesID[(uint)TextureType::MAX];

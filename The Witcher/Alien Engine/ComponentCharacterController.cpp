@@ -4,6 +4,7 @@
 #include "ModulePhysics.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentCharacterController.h"
+#include "ComponentCollider.h"
 #include "ComponentTransform.h"
 #include "GameObject.h"
 #include "ReturnZ.h"
@@ -17,6 +18,7 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	type = ComponentType::CHARACTER_CONTROLLER;
 	// GameObject Components 
 	transform = game_object_attached->GetComponent<ComponentTransform>();
+
 	shape = new btCapsuleShape(character_radius, character_height);
 
 	body = new btPairCachingGhostObject();
@@ -32,14 +34,31 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 
 	App->physics->world->addCollisionObject(body, btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::StaticFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter);
 	App->physics->AddAction(controller);
+
+	detector = new btPairCachingGhostObject();
+	detector->setUserPointer(this);
+	detector->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
+	detector->setCollisionFlags(detector->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	detector->setCollisionShape(shape);
+	App->physics->AddDetector(detector);
+
+	collider = new ComponentCollider(game_object_attached);
+	collider->internal_collider = true;
+	collider->detector = detector;
+
+
 }
 
 ComponentCharacterController::~ComponentCharacterController()
 {
 	App->physics->RemoveAction(controller);
-	App->physics->world->removeCollisionObject(body);
+	App->physics->RemoveDetector(body);
+	App->physics->RemoveDetector(detector);
 
 	delete shape;
+	delete body;
+	delete detector;
+	delete collider;
 }
 
 // Movement Functions -----------------------------------------
@@ -157,6 +176,8 @@ bool ComponentCharacterController::DrawInspector()
 	float current_jump_speed = jump_speed;
 	float current_gravity = gravity;
 
+	ImGui::PushID(this);
+
 	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
@@ -167,14 +188,20 @@ bool ComponentCharacterController::DrawInspector()
 		ImGui::Title("Gravity", 1);				if (ImGui::DragFloat("##gravity", &current_gravity, 0.01f, 0.00f, FLT_MAX)) { SetGravity(current_gravity); }
 		ImGui::Spacing();
 	}
+
+	ImGui::PopID();
+
 	return true;
 }
 
 void ComponentCharacterController::Update()
 {
+
+	collider->Update();
+
 	if (Time::IsPlaying())
 	{
-	/*	float3 movement = float3::zero();
+		float3 movement = float3::zero();
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT)
 			movement.x -= 1;
@@ -189,7 +216,7 @@ void ComponentCharacterController::Update()
 		controller->setWalkDirection(ToBtVector3(movement.Normalized() * speed * Time::GetDT()));
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_REPEAT && CanJump())
-			Jump();*/
+			Jump();
 
 		btTransform bt_transform = body->getWorldTransform();
 		btQuaternion rotation = bt_transform.getRotation();
@@ -211,6 +238,14 @@ void ComponentCharacterController::DrawScene()
 		App->physics->DrawCharacterController(this);
 	}
 }
+
+
+
+void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
+{
+	collider->HandleAlienEvent(e);
+}
+
 
 void ComponentCharacterController::Reset()
 {

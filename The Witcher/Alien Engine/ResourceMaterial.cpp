@@ -277,9 +277,42 @@ void ResourceMaterial::ApplyMaterial()
 	else	
 		used_shader->SetUniform1i("objectMaterial.hasSpecularMap", 0);
 
+	if (texturesID[(uint)TextureType::NORMALS] != NO_TEXTURE_ID)
+	{
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, App->resources->GetTextureidByID(texturesID[(uint)TextureType::NORMALS]));
+		used_shader->SetUniform1i("objectMaterial.normalMap", 2);
+		used_shader->SetUniform1i("objectMaterial.hasNormalMap", 1);
+	}
+	else
+		used_shader->SetUniform1i("objectMaterial.hasNormalMap", 0);
+
 	// Update uniforms
 	shaderInputs.standardShaderProperties.diffuse_color = float3(color.x, color.y, color.z);
+	shaderInputs.particleShaderProperties.color = float3(color.x, color.y, color.z);
 	used_shader->UpdateUniforms(shaderInputs);
+
+}
+
+void ResourceMaterial::UnbindMaterial()
+{
+	used_shader->Unbind();
+	
+	if (texturesID[(uint)TextureType::SPECULAR] != NO_TEXTURE_ID)
+	{	
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	if (texturesID[(uint)TextureType::NORMALS] != NO_TEXTURE_ID)
+	{
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	// Leave active texture 0 by default, unbinded
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 }
 
@@ -482,7 +515,7 @@ void ResourceMaterial::ShaderInputsSegment()
 
 		ImGui::SameLine(120,15);
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
-		ImGui::ColorEdit3("Albedo", shaderInputs.particleShaderProperties.start_color.ptr(), ImGuiColorEditFlags_Float);
+		ImGui::ColorEdit3("Albedo",color.ptr(), ImGuiColorEditFlags_Float);
 		break; }
 
 	default:
@@ -519,7 +552,7 @@ void ResourceMaterial::InputTexture(TextureType texType)
 	ImGui::SameLine();
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
 	ImGui::PushID((int)texType);
-	if (ImGui::RadioButton("", false))
+	if (ImGui::RadioButton("###", false))
 	{
 		RemoveTexture(texType);
 
