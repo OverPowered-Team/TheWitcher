@@ -70,15 +70,6 @@ bool ModuleObjects::Init()
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
 
-	return true;
-}
-
-bool ModuleObjects::Start()
-{
-	OPTICK_EVENT();
-	LOG_ENGINE("Starting Module Objects");
-	bool ret = true;
-
 	if (App->file_system->Exists(FILE_TAGS)) {
 		JSON_Value* value = json_parse_file(FILE_TAGS);
 		JSON_Object* object = json_value_get_object(value);
@@ -94,6 +85,17 @@ bool ModuleObjects::Start()
 			delete json_tags;
 		}
 	}
+
+	return true;
+}
+
+bool ModuleObjects::Start()
+{
+	OPTICK_EVENT();
+	LOG_ENGINE("Starting Module Objects");
+	bool ret = true;
+
+
 	game_viewport = new Viewport(nullptr);
 #ifndef GAME_VERSION
 	GameObject* camera = new GameObject(base_game_object);
@@ -136,6 +138,12 @@ bool ModuleObjects::Start()
 update_status ModuleObjects::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
+	
+	if (!sceneNameToChange.empty()) {
+		LoadScene(sceneNameToChange.data());
+		sceneNameToChange.clear();
+	}
+	
 	// delete objects
 	if (need_to_delete_objects) { 
 		need_to_delete_objects = false;
@@ -1391,6 +1399,16 @@ void ModuleObjects::ReAttachUIScriptEvents()
 	}
 }
 
+void ModuleObjects::ResetUIFocus()
+{
+	if (GetGameObjectByID(selected_ui) != nullptr && selected_ui != -1) {
+		GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
+		selected_ui = -1;
+	}
+
+	first_assigned_selected = false;
+}
+
 
 //bool ModuleObjects::IsInvoking(std::function<void()> void_no_params_function)
 //{
@@ -1585,7 +1603,7 @@ void ModuleObjects::DeleteReturns()
 
 void ModuleObjects::UpdateGamePadInput()
 {
-	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed)
+	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed && (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas->allow_navigation))
 	{
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_UP) || App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || Input::GetControllerVerticalLeftAxis(1) > 0.2f)
 		{

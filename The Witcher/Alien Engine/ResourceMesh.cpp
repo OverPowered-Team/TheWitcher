@@ -55,6 +55,19 @@ ResourceMesh::ResourceMesh(ResourceMesh* r_mesh)
 		memcpy(uv_cords, r_mesh->uv_cords, bytes);
 	}
 
+	// Tangents and bitangents 
+	if (r_mesh->tangents) {
+		bytes = sizeof(float) * num_vertex * 3;
+		tangents = new float[num_vertex * 3];
+		memcpy(tangents, r_mesh->tangents, bytes);
+	}
+
+	if (r_mesh->biTangents) {
+		bytes = sizeof(float) * num_vertex * 3;
+		biTangents = new float[num_vertex * 3];
+		memcpy(biTangents, r_mesh->biTangents, bytes);
+	}
+
 	if (num_vertex != 0) {
 		InitBuffers();
 	}
@@ -76,18 +89,20 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 
 	meta_data_path = std::string(LIBRARY_MESHES_FOLDER + std::to_string(ID) + ".alienMesh");
 
-	uint ranges[6] = { num_index, num_vertex, num_faces, (normals != nullptr) ? true : false, 
-		(uv_cords != nullptr) ? true : false, name.size() };
+	uint ranges[8] = { num_index, num_vertex, num_faces, (normals != nullptr) ? true : false, 
+		(uv_cords != nullptr) ? true : false, name.size(), (tangents != nullptr) ? true : false,  (biTangents != nullptr) ? true : false };
 
 	uint uv_size = (uv_cords != nullptr) ? sizeof(float) * num_vertex * 3 : 0;
 	uint normals_size = (normals != nullptr) ? sizeof(float) * num_vertex * 3 + sizeof(float) * num_faces * 3 +
 		sizeof(float) * num_faces * 3 : 0;
 	uint vertex_size = sizeof(float) * num_vertex * 3;
 	uint index_size = sizeof(uint) * num_index;
+	uint tangents_size = sizeof(float) * num_vertex * 3;
+	uint biTangents_size = sizeof(float) * num_vertex * 3;
 
 	uint size = sizeof(ranges) + name.size() +
 		sizeof(float) * 4 + sizeof(float) * 3 + sizeof(float) * 4 + sizeof(float) * 3 + vertex_size +
-		index_size + normals_size + uv_size + sizeof(bool);
+		index_size + normals_size + uv_size + sizeof(bool) + tangents_size + biTangents_size;
 
 	char* data = new char[size]; 
 	char* cursor = data;
@@ -136,6 +151,20 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 	if (uv_cords != nullptr) {
 		bytes = sizeof(float) * num_vertex * 3;
 		memcpy(cursor, uv_cords, bytes);
+		cursor += bytes;
+	}
+
+	if (tangents != nullptr)
+	{
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, tangents, bytes);
+		cursor += bytes;
+	}
+
+	if (biTangents != nullptr)
+	{
+		bytes = sizeof(float) * num_vertex * 3;
+		memcpy(cursor, biTangents, bytes);
 	}
 
 	App->file_system->Save(meta_data_path.data(), data, size);
@@ -157,7 +186,7 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 		char* cursor = data;
 		bytes_moved = 0;
 
-		uint ranges[6];
+		uint ranges[8];
 		uint bytes = sizeof(ranges);
 		memcpy(ranges, cursor, bytes);
 		cursor += bytes;
@@ -201,6 +230,10 @@ void ResourceMesh::FreeMemory()
 		glDeleteBuffers(1, &id_weights);
 	if (id_bones != 0)
 		glDeleteBuffers(1, &id_bones);
+	if (id_tangents != 0)
+		glDeleteBuffers(1, &id_tangents);
+	if (id_biTangents != 0)
+		glDeleteBuffers(1, &id_biTangents);
 
 	id_vertex = 0;
 	id_index = 0;
@@ -208,6 +241,8 @@ void ResourceMesh::FreeMemory()
 	id_uv = 0;
 	id_weights = 0;
 	id_bones = 0;
+	id_tangents = 0;
+	id_biTangents = 0;
 	references = 0;
 
 	num_vertex = 0;
@@ -249,7 +284,16 @@ void ResourceMesh::FreeMemory()
 		delete[] bones_ID;
 		bones_ID = nullptr;
 	}
-
+	if (tangents != nullptr)
+	{
+		delete[] tangents;
+		tangents = nullptr;
+	}
+	if (biTangents != nullptr)
+	{
+		delete[] biTangents;
+		biTangents = nullptr;
+	}
 
 }
 
@@ -311,6 +355,24 @@ bool ResourceMesh::LoadMemory()
 			bytes = sizeof(float) * num_vertex * 3;
 			uv_cords = new float[num_vertex * 3];
 			memcpy(uv_cords, cursor, bytes);
+			cursor += bytes;
+		}
+
+		// Tangents 
+		if (ranges[6])
+		{
+			bytes = sizeof(float) * num_vertex * 3;
+			tangents = new float[num_vertex * 3];
+			memcpy(tangents, cursor, bytes);
+			cursor += bytes;
+		}
+
+		// Bitangents 
+		if (ranges[7])
+		{
+			bytes = sizeof(float) * num_vertex * 3;
+			biTangents = new float[num_vertex * 3];
+			memcpy(biTangents, cursor, bytes);
 		}
 
 		if (num_vertex != 0) {
@@ -379,6 +441,28 @@ void ResourceMesh::InitBuffers()
 		glEnableVertexAttribArray(2);
 	}
 
+	// Tangents
+	if (tangents != nullptr)
+	{
+		glGenBuffers(1, &id_tangents);
+		glBindBuffer(GL_ARRAY_BUFFER, id_tangents);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3, tangents, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(5);
+	}
+
+	// Bitangents
+	if (biTangents != nullptr)
+	{
+		glGenBuffers(1, &id_biTangents);
+		glBindBuffer(GL_ARRAY_BUFFER, id_biTangents);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3, biTangents, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(6);
+	}
+
 	// index
 	glGenBuffers(1, &id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
@@ -386,7 +470,7 @@ void ResourceMesh::InitBuffers()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void ResourceMesh::Reset()

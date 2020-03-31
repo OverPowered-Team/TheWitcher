@@ -32,6 +32,8 @@ bool Component::IsEnabled()
 void Component::SetEnable(bool enable)
 {
 	enabled = enable;
+
+	(enabled) ? OnEnable() : OnDisable();
 }
 
 void Component::ResetIDs()

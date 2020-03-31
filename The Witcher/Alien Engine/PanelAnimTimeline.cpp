@@ -353,7 +353,7 @@ void PanelAnimTimeline::PanelLogic()
 										if (strcmp((*j).first.data(),(*it)->event_id.c_str()) == 0)
 										{
 											std::function<void()> functEvent = (*j).second;
-											functEvent();
+											App->objects->functions_to_call.push_back(functEvent);
 										}
 									}
 								}

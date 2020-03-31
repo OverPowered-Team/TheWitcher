@@ -124,7 +124,7 @@ void Gizmos::DrawPoly(const ResourceMesh * mesh, const float4x4& matrix, const C
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
-	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, 0);
 
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -153,7 +153,7 @@ void Gizmos::DrawWire(const ResourceMesh * mesh, const float4x4& matrix, const C
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 	glLineWidth(1);
 	glDisableClientState(GL_VERTEX_ARRAY);

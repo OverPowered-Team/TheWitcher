@@ -24,7 +24,8 @@
 ComponentText::ComponentText(GameObject* obj) : ComponentUI(obj)
 {
 	text = "Hola";
-	font = App->resources->default_font;
+	if(!font)
+		font = App->resources->default_font;
 
 	GenerateVAOVBO();
 
@@ -444,6 +445,7 @@ void ComponentText::LoadComponent(JSONArraypack* to_load)
 	u64 fontID = std::stoull(to_load->GetString("FontID"));
 	if (fontID != 0) {
 		font = (ResourceFont*)App->resources->GetResourceWithID(fontID);
+		font->IncreaseReferences();
 		LOG_ENGINE("Loaded font with ID %u", fontID);
 	}
 	else {
