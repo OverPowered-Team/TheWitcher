@@ -36,15 +36,20 @@ void DialogueManager::Update()
 
 		InputNewDialogue(dialogue);
 	};
+
+
 }
 
 bool DialogueManager::InputNewDialogue(Dialogue& dialogue)
 {
-	if ((currentDialogue.audioData.eventName != "noName") && (eventManager->eventPriorities.at(currentDialogue.priority) < eventManager->eventPriorities.at(dialogue.priority)))
+	// TODO: We don't have a way of knowing the sound's duration, so we won't take into account the priority
+	// since we don't know when to reset the current dialogue
+	
+	/*if ((currentDialogue.audioData.eventName != "noName") && (eventManager->eventPriorities.at(currentDialogue.priority) < eventManager->eventPriorities.at(dialogue.priority)))
 	{
 		LOG("Dialogue with less priority than the current one will be discarded...");
 		return false;
-	}; 
+	}; */
 
 	
 	OverrideDialogue(dialogue); 
