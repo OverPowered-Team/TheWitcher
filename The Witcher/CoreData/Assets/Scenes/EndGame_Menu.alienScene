@@ -3,9 +3,9 @@
         "Name": "EndGame_Menu",
         "GameObjects": [
             {
-                "Name": "Menu",
+                "Name": "Camera",
                 "FamilyNumber": 1,
-                "ID": "2282392158162726572",
+                "ID": "10255769193364639821",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -35,7 +35,75 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12932928092576872744"
+                        "ID": "4721006352133702717"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 92.754890441894531,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "8229025573561551201",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Skybox_PositiveX": "Library\/Textures\/575523041464209442.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/2272049821688510999.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/8243941029542624066.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13353609087236361933.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/14034231489549923375.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/10216792741298181251.dds"
+                    }
+                ]
+            },
+            {
+                "Name": "Menu",
+                "FamilyNumber": 1,
+                "ID": "15562508679490046878",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8608369603251386349"
                     },
                     {
                         "Enabled": true,
@@ -44,10 +112,64 @@
                 ]
             },
             {
+                "Name": "Text",
+                "FamilyNumber": 2,
+                "ID": "5294216998685841082",
+                "ParentID": "15562508679490046878",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            12.161270141601563,
+                            -16.226161956787109,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.029999999329447746,
+                            0.029999999329447746,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11442039599089626838"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "459379080438111925",
+                        "Text": "Total",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 1085,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
                 "Name": "Damage",
                 "FamilyNumber": 2,
-                "ID": "13228505944927119141",
-                "ParentID": "2282392158162726572",
+                "ID": "2486526766507268197",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -76,7 +198,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7078457708138295862"
+                        "ID": "10137853857807330692"
                     },
                     {
                         "Width": 2.9500000476837158,
@@ -126,12 +248,7 @@
                             0.30000001192092896,
                             1
                         ],
-                        "HasListenersOnClick": true,
-                        "ListenersOnClick": [
-                            {
-                                "0": "Damage"
-                            }
-                        ],
+                        "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
@@ -139,14 +256,75 @@
                         "SelectOnDown": "18336637630664635367",
                         "SelectOnRight": "18336637630664635367",
                         "SelectOnLeft": "2391248775900546767"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1494492165238222855",
+                        "ResourceID": "4952310541272313885",
+                        "DataName": "UI_EndMenu",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "2253802440545451124",
+                "ParentID": "2486526766507268197",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.806121826171875,
+                            -0.12707901000976563,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.001500000013038516,
+                            0.001500000013038516,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6519407964321754107"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "7476605193493467397",
+                        "Text": "Damage",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.87745100259780884,
+                            0.87744224071502686,
+                            0.87744224071502686,
+                            1
+                        ],
+                        "Width": 1010,
+                        "Interlineal": 1.5,
+                        "Align": 0
                     }
                 ]
             },
             {
                 "Name": "Kills",
                 "FamilyNumber": 2,
-                "ID": "18336637630664635367",
-                "ParentID": "2282392158162726572",
+                "ID": "8461816289496963253",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -175,7 +353,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8603251698849538142"
+                        "ID": "378529829870889563"
                     },
                     {
                         "Width": 2.9500000476837158,
@@ -225,12 +403,7 @@
                             0.30000001192092896,
                             1
                         ],
-                        "HasListenersOnClick": true,
-                        "ListenersOnClick": [
-                            {
-                                "0": "Kills"
-                            }
-                        ],
+                        "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
@@ -238,14 +411,75 @@
                         "SelectOnDown": "4329264765106266347",
                         "SelectOnRight": "4329264765106266347",
                         "SelectOnLeft": "13228505944927119141"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16043491167504759386",
+                        "ResourceID": "4952310541272313885",
+                        "DataName": "UI_EndMenu",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "4263315378310320021",
+                "ParentID": "8461816289496963253",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.36680364608764648,
+                            -0.17513372004032135,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.001500000013038516,
+                            0.001500000013038516,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14617998643579619921"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "5777579280088680267",
+                        "Text": "Kills",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 480,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
             {
                 "Name": "Relics",
                 "FamilyNumber": 2,
-                "ID": "4329264765106266347",
-                "ParentID": "2282392158162726572",
+                "ID": "1638204052206641576",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -274,7 +508,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "513295586228961552"
+                        "ID": "13878671636631849023"
                     },
                     {
                         "Width": 2.9500000476837158,
@@ -324,12 +558,7 @@
                             0.30000001192092896,
                             1
                         ],
-                        "HasListenersOnClick": true,
-                        "ListenersOnClick": [
-                            {
-                                "0": "Relics"
-                            }
-                        ],
+                        "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
@@ -337,14 +566,75 @@
                         "SelectOnDown": "9081695661250977580",
                         "SelectOnRight": "9081695661250977580",
                         "SelectOnLeft": "18336637630664635367"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9346216024750830055",
+                        "ResourceID": "4952310541272313885",
+                        "DataName": "UI_EndMenu",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "16854080271862741408",
+                "ParentID": "1638204052206641576",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.50569438934326172,
+                            -0.17513376474380493,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.001500000013038516,
+                            0.001500000013038516,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4643838506145597841"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "16026949309824536170",
+                        "Text": "Relics",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 690,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
             {
                 "Name": "Gold",
                 "FamilyNumber": 2,
-                "ID": "9081695661250977580",
-                "ParentID": "2282392158162726572",
+                "ID": "6984974021122114550",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -373,7 +663,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17592424799694943313"
+                        "ID": "11148644904437704466"
                     },
                     {
                         "Width": 2.9500000476837158,
@@ -423,12 +713,7 @@
                             0.30000001192092896,
                             1
                         ],
-                        "HasListenersOnClick": true,
-                        "ListenersOnClick": [
-                            {
-                                "0": "Gold"
-                            }
-                        ],
+                        "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
@@ -436,14 +721,75 @@
                         "SelectOnDown": "2391248775900546767",
                         "SelectOnRight": "2391248775900546767",
                         "SelectOnLeft": "4329264765106266347"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "12315827153812887397",
+                        "ResourceID": "4952310541272313885",
+                        "DataName": "UI_EndMenu",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "11951224637135206260",
+                "ParentID": "6984974021122114550",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.51875114440917969,
+                            -0.17513346672058105,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.001500000013038516,
+                            0.001500000013038516,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "461563272108886398"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "15588098392594793825",
+                        "Text": "Gold",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 675,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
             {
                 "Name": "XP",
                 "FamilyNumber": 2,
-                "ID": "2391248775900546767",
-                "ParentID": "2282392158162726572",
+                "ID": "17251137696549823984",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -472,7 +818,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "599851946780538702"
+                        "ID": "8555196754735783795"
                     },
                     {
                         "Width": 2.9500000476837158,
@@ -522,12 +868,7 @@
                             0.30000001192092896,
                             1
                         ],
-                        "HasListenersOnClick": true,
-                        "ListenersOnClick": [
-                            {
-                                "0": "XP"
-                            }
-                        ],
+                        "HasListenersOnClick": false,
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
@@ -535,14 +876,21 @@
                         "SelectOnDown": "13228505944927119141",
                         "SelectOnRight": "13228505944927119141",
                         "SelectOnLeft": "9081695661250977580"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4076060382288433183",
+                        "ResourceID": "4952310541272313885",
+                        "DataName": "UI_EndMenu",
+                        "HasInspector": false
                     }
                 ]
             },
             {
-                "Name": "Logo",
-                "FamilyNumber": 2,
-                "ID": "12569032865272138301",
-                "ParentID": "2282392158162726572",
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "15786006183608694625",
+                "ParentID": "17251137696549823984",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -555,8 +903,62 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -50,
-                            30,
+                            -0.36403703689575195,
+                            -0.17513370513916016,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.001500000013038516,
+                            0.001500000013038516,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14532153461496278485"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "5566945178780747066",
+                        "Text": "XP",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 485,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "IconWin",
+                "FamilyNumber": 2,
+                "ID": "6947828918011552641",
+                "ParentID": "15562508679490046878",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -49.535148620605469,
+                            28.915428161621094,
                             0
                         ],
                         "Rotation": [
@@ -571,7 +973,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12900488499026694606"
+                        "ID": "10495713593229260271"
                     },
                     {
                         "Width": 8.7899999618530273,
@@ -592,8 +994,8 @@
             {
                 "Name": "Geralt",
                 "FamilyNumber": 2,
-                "ID": "8718852725075859191",
-                "ParentID": "2282392158162726572",
+                "ID": "17454687465248526693",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -606,7 +1008,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -6.5,
+                            0,
                             18,
                             0
                         ],
@@ -617,24 +1019,24 @@
                             1
                         ],
                         "Scale": [
-                            10,
-                            10,
+                            11,
+                            11,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9789658803721710943"
+                        "ID": "14824535594225159952"
                     },
                     {
-                        "Width": 1.3300000429153442,
-                        "Height": 1.5099999904632568,
+                        "Width": 1.4199999570846558,
+                        "Height": 1.4199999570846558,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "12263066251381558302",
+                        "TextureID": "6927210463734118838",
                         "Color": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0.80000001192092896,
+                            0.94607841968536377,
+                            0.94606894254684448,
+                            0.94606894254684448,
                             1
                         ]
                     }
@@ -643,8 +1045,8 @@
             {
                 "Name": "Yennefer",
                 "FamilyNumber": 2,
-                "ID": "3709270179857398587",
-                "ParentID": "2282392158162726572",
+                "ID": "7983284164961095025",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -657,7 +1059,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            53.5,
+                            46,
                             18.5,
                             0
                         ],
@@ -673,7 +1075,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17287298525873593930"
+                        "ID": "14141092585598036256"
                     },
                     {
                         "Width": 1.2599999904632568,
@@ -682,6 +1084,148 @@
                         "Type": 30,
                         "UIType": 20,
                         "TextureID": "16340084652049381067",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "DamageInfo",
+                "FamilyNumber": 2,
+                "ID": "10868956731760677388",
+                "ParentID": "15562508679490046878",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            23.5,
+                            2,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1288587545937622271"
+                    }
+                ]
+            },
+            {
+                "Name": "dmg_1",
+                "FamilyNumber": 3,
+                "ID": "5593486576148695133",
+                "ParentID": "10868956731760677388",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -35.75,
+                            -5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10109949668325573660"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "14053072163561685587",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "Image",
+                "FamilyNumber": 3,
+                "ID": "12205328551995348493",
+                "ParentID": "10868956731760677388",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -3,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            7,
+                            7,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1498132429143798965"
+                    },
+                    {
+                        "Width": 5.119999885559082,
+                        "Height": 5.119999885559082,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "11685140271066806504",
                         "Color": [
                             0.80000001192092896,
                             0.80000001192092896,
@@ -692,49 +1236,12 @@
                 ]
             },
             {
-                "Name": "DamageInfo",
-                "FamilyNumber": 2,
-                "ID": "4572337290375499147",
-                "ParentID": "2282392158162726572",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            8,
-                            -1.8999999761581421,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "16949190225193871111"
-                    }
-                ]
-            },
-            {
-                "Name": "Text",
+                "Name": "dmg_2",
                 "FamilyNumber": 3,
-                "ID": "10440924424455488",
-                "ParentID": "4572337290375499147",
+                "ID": "8085559547066653721",
+                "ParentID": "10868956731760677388",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -745,8 +1252,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            3.8231382369995117,
-                            -1.7757511138916016,
+                            10,
+                            -5,
                             0
                         ],
                         "Rotation": [
@@ -756,17 +1263,17 @@
                             1
                         ],
                         "Scale": [
-                            0.029999999329447746,
-                            0.029999999329447746,
+                            0.05000000074505806,
+                            0.05000000074505806,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17721265419223666947"
+                        "ID": "9815690770266595310"
                     },
                     {
                         "Type": 30,
-                        "ID": "16570626034059388696",
-                        "Text": "Damage",
+                        "ID": "14538168111390929399",
+                        "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
                         "Enabled": true,
@@ -776,17 +1283,71 @@
                             0.80000001192092896,
                             1
                         ],
-                        "Width": 1280,
+                        "Width": 500,
                         "Interlineal": 1.5,
-                        "Align": 0
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "dmg_total",
+                "FamilyNumber": 3,
+                "ID": "18336499602958653390",
+                "ParentID": "10868956731760677388",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -12.943086624145508,
+                            -30.113563537597656,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4458784093307781734"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "1178345302099322762",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
             {
                 "Name": "KillsInfo",
                 "FamilyNumber": 2,
-                "ID": "7054102256810493884",
-                "ParentID": "2282392158162726572",
+                "ID": "12902879776932476604",
+                "ParentID": "15562508679490046878",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -799,9 +1360,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            37.098091125488281,
-                            -7.6066665649414063,
-                            1
+                            23.5,
+                            2,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -810,22 +1371,22 @@
                             1
                         ],
                         "Scale": [
-                            0.32000002264976501,
-                            0.42666670680046082,
+                            1,
+                            1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7210238016068171535"
+                        "ID": "10510866582803937892"
                     }
                 ]
             },
             {
-                "Name": "Text",
+                "Name": "kills_1",
                 "FamilyNumber": 3,
-                "ID": "11534392836803431333",
-                "ParentID": "7054102256810493884",
+                "ID": "7130285934686032983",
+                "ParentID": "12902879776932476604",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -836,8 +1397,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            3.3222322463989258,
-                            -5.4340972900390625,
+                            -35.75,
+                            -5,
                             0
                         ],
                         "Rotation": [
@@ -847,19 +1408,19 @@
                             1
                         ],
                         "Scale": [
-                            0.029999999329447746,
-                            0.029999999329447746,
+                            0.05000000074505806,
+                            0.05000000074505806,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6292293857705167014"
+                        "ID": "6084101757805858222"
                     },
                     {
                         "Type": 30,
-                        "ID": "15244225874408270205",
-                        "Text": "Kills",
+                        "ID": "4233969018501781712",
+                        "Text": "0",
                         "UIType": 22,
-                        "FontID": "6090935666492539845",
+                        "FontID": "16371028872590582604",
                         "Enabled": true,
                         "Color": [
                             0.80000001192092896,
@@ -867,17 +1428,176 @@
                             0.80000001192092896,
                             1
                         ],
-                        "Width": 200,
+                        "Width": 500,
                         "Interlineal": 1.5,
-                        "Align": 0
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "Image",
+                "FamilyNumber": 3,
+                "ID": "16594082895373654328",
+                "ParentID": "12902879776932476604",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -1.581534743309021,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5,
+                            5,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17788511876216053415"
+                    },
+                    {
+                        "Width": 5.119999885559082,
+                        "Height": 5.119999885559082,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "3897743240112617327",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "kills_2",
+                "FamilyNumber": 3,
+                "ID": "7465884661228042469",
+                "ParentID": "12902879776932476604",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10,
+                            -5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9596606211548515315"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "4053217894526464453",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "kills_total",
+                "FamilyNumber": 3,
+                "ID": "11813717524300867631",
+                "ParentID": "12902879776932476604",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -12.943086624145508,
+                            -30.113563537597656,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "119535762220549028"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "6460737582056921744",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
             {
                 "Name": "RelicsInfo",
                 "FamilyNumber": 2,
-                "ID": "3092146857235487391",
-                "ParentID": "2282392158162726572",
+                "ID": "12960363675167701153",
+                "ParentID": "15562508679490046878",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -890,9 +1610,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            37.098091125488281,
-                            -7.6066665649414063,
-                            1
+                            23.5,
+                            2,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -901,22 +1621,22 @@
                             1
                         ],
                         "Scale": [
-                            0.32000002264976501,
-                            0.42666670680046082,
+                            1,
+                            1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7809294116806762524"
+                        "ID": "4617608755924977278"
                     }
                 ]
             },
             {
-                "Name": "Text",
+                "Name": "relics_1",
                 "FamilyNumber": 3,
-                "ID": "12155972225684350535",
-                "ParentID": "3092146857235487391",
+                "ID": "5871087569170510360",
+                "ParentID": "12960363675167701153",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -927,8 +1647,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -5.077054500579834,
-                            -5.4340972900390625,
+                            -35.75,
+                            -5,
                             0
                         ],
                         "Rotation": [
@@ -938,19 +1658,19 @@
                             1
                         ],
                         "Scale": [
-                            0.029999999329447746,
-                            0.029999999329447746,
+                            0.05000000074505806,
+                            0.05000000074505806,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14907491161310108355"
+                        "ID": "7541325469578006811"
                     },
                     {
                         "Type": 30,
-                        "ID": "14046752322273890054",
-                        "Text": "Relics",
+                        "ID": "9031611192176638831",
+                        "Text": "0",
                         "UIType": 22,
-                        "FontID": "6090935666492539845",
+                        "FontID": "16371028872590582604",
                         "Enabled": true,
                         "Color": [
                             0.80000001192092896,
@@ -958,17 +1678,176 @@
                             0.80000001192092896,
                             1
                         ],
-                        "Width": 200,
+                        "Width": 500,
                         "Interlineal": 1.5,
-                        "Align": 0
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "relics_2",
+                "FamilyNumber": 3,
+                "ID": "2188409773856304724",
+                "ParentID": "12960363675167701153",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10,
+                            -5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2405334826718248183"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "8990100179395446538",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "relics_total",
+                "FamilyNumber": 3,
+                "ID": "9783302679469717649",
+                "ParentID": "12960363675167701153",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -12.943086624145508,
+                            -30.113563537597656,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8623597881697950096"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "14191363969293254690",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "logo",
+                "FamilyNumber": 3,
+                "ID": "9149017934436171574",
+                "ParentID": "12960363675167701153",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -1.748603343963623,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            3,
+                            3,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10187215527106139504"
+                    },
+                    {
+                        "Width": 7.2800002098083496,
+                        "Height": 5.119999885559082,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "5534395715674132295",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
                     }
                 ]
             },
             {
                 "Name": "GoldInfo",
                 "FamilyNumber": 2,
-                "ID": "8886529005498103745",
-                "ParentID": "2282392158162726572",
+                "ID": "17102384187887359337",
+                "ParentID": "15562508679490046878",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -981,9 +1860,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            37.098091125488281,
-                            -7.6066665649414063,
-                            1
+                            23.5,
+                            2,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -992,22 +1871,22 @@
                             1
                         ],
                         "Scale": [
-                            0.32000002264976501,
-                            0.42666670680046082,
+                            1,
+                            1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14921856258752004657"
+                        "ID": "9374808509583683022"
                     }
                 ]
             },
             {
-                "Name": "Gold",
+                "Name": "gold_1",
                 "FamilyNumber": 3,
-                "ID": "14752213018664852987",
-                "ParentID": "8886529005498103745",
+                "ID": "264102280308336300",
+                "ParentID": "17102384187887359337",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -1018,8 +1897,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            1.9525089263916016,
-                            -5.4340972900390625,
+                            -35.75,
+                            -5,
                             0
                         ],
                         "Rotation": [
@@ -1029,19 +1908,19 @@
                             1
                         ],
                         "Scale": [
-                            0.029999999329447746,
-                            0.029999999329447746,
+                            0.05000000074505806,
+                            0.05000000074505806,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8718280604536361557"
+                        "ID": "10593673524945640674"
                     },
                     {
                         "Type": 30,
-                        "ID": "16349033464842086028",
-                        "Text": "Gold",
+                        "ID": "10974651104372498448",
+                        "Text": "0",
                         "UIType": 22,
-                        "FontID": "6090935666492539845",
+                        "FontID": "16371028872590582604",
                         "Enabled": true,
                         "Color": [
                             0.80000001192092896,
@@ -1049,17 +1928,176 @@
                             0.80000001192092896,
                             1
                         ],
-                        "Width": 200,
+                        "Width": 500,
                         "Interlineal": 1.5,
-                        "Align": 0
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "Image",
+                "FamilyNumber": 3,
+                "ID": "2402569373766471846",
+                "ParentID": "17102384187887359337",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            3,
+                            3,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5500113210223768108"
+                    },
+                    {
+                        "Width": 3.559999942779541,
+                        "Height": 3.559999942779541,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "14729648653546308958",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "gold_2",
+                "FamilyNumber": 3,
+                "ID": "965709508433479819",
+                "ParentID": "17102384187887359337",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10,
+                            -5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10008888571344038759"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "16584106392582076549",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "gold_total",
+                "FamilyNumber": 3,
+                "ID": "9201985873129590411",
+                "ParentID": "17102384187887359337",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -12.943086624145508,
+                            -30.113563537597656,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8344908040564088898"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "5945266121280427302",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
             {
                 "Name": "XPInfo",
                 "FamilyNumber": 2,
-                "ID": "14858920444705695537",
-                "ParentID": "2282392158162726572",
+                "ID": "8137230843353610406",
+                "ParentID": "15562508679490046878",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1072,9 +2110,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            37.098091125488281,
-                            -7.6066665649414063,
-                            1
+                            23.5,
+                            2,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -1083,22 +2121,22 @@
                             1
                         ],
                         "Scale": [
-                            0.32000002264976501,
-                            0.42666670680046082,
+                            1,
+                            1,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13072728874898885079"
+                        "ID": "1174252458986320241"
                     }
                 ]
             },
             {
-                "Name": "Text",
+                "Name": "xp_1",
                 "FamilyNumber": 3,
-                "ID": "6677464577115445534",
-                "ParentID": "14858920444705695537",
+                "ID": "3436114073221849514",
+                "ParentID": "8137230843353610406",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -1109,8 +2147,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            6.2438368797302246,
-                            -5.4340972900390625,
+                            -35.75,
+                            -5,
                             0
                         ],
                         "Rotation": [
@@ -1120,19 +2158,19 @@
                             1
                         ],
                         "Scale": [
-                            0.029999999329447746,
-                            0.029999999329447746,
+                            0.05000000074505806,
+                            0.05000000074505806,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18396265053253281361"
+                        "ID": "16942657501850139"
                     },
                     {
                         "Type": 30,
-                        "ID": "9699577491445340370",
-                        "Text": "XP",
+                        "ID": "14439458379318627777",
+                        "Text": "0",
                         "UIType": 22,
-                        "FontID": "6090935666492539845",
+                        "FontID": "16371028872590582604",
                         "Enabled": true,
                         "Color": [
                             0.80000001192092896,
@@ -1140,17 +2178,125 @@
                             0.80000001192092896,
                             1
                         ],
-                        "Width": 200,
+                        "Width": 500,
                         "Interlineal": 1.5,
-                        "Align": 0
+                        "Align": 1
                     }
                 ]
             },
             {
-                "Name": "WinPanel",
+                "Name": "xp_2",
+                "FamilyNumber": 3,
+                "ID": "10468033099465539393",
+                "ParentID": "8137230843353610406",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10,
+                            -5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18213770127908637491"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "10796741781166137052",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "xp_total",
+                "FamilyNumber": 3,
+                "ID": "8398969681430065461",
+                "ParentID": "8137230843353610406",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -12.943086624145508,
+                            -30.113563537597656,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16202487062455358516"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "16674398304587421666",
+                        "Text": "0",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 500,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "PanelWin",
                 "FamilyNumber": 2,
-                "ID": "6355394446020308259",
-                "ParentID": "2282392158162726572",
+                "ID": "15710933358700432819",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1163,8 +2309,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            23.532339096069336,
-                            0,
+                            23.5,
+                            -2,
                             0
                         ],
                         "Rotation": [
@@ -1179,7 +2325,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7783241963514974504"
+                        "ID": "7477076632006014120"
                     },
                     {
                         "Width": 11.340000152587891,
@@ -1198,13 +2344,13 @@
                 ]
             },
             {
-                "Name": "Background",
+                "Name": "Animated Image",
                 "FamilyNumber": 2,
-                "ID": "551249706737460892",
-                "ParentID": "2282392158162726572",
+                "ID": "9415165822880204998",
+                "ParentID": "15562508679490046878",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -1226,11 +2372,11 @@
                         ],
                         "Scale": [
                             8.3500003814697266,
-                            8.3500003814697266,
+                            8.3999996185302734,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9188908837179626577"
+                        "ID": "17883542238971328011"
                     },
                     {
                         "Width": 19.200000762939453,
@@ -1315,74 +2461,6 @@
                                 "21": "9009360667676570957"
                             }
                         ]
-                    }
-                ]
-            },
-            {
-                "Name": "Camera",
-                "FamilyNumber": 1,
-                "ID": "10255769193364639821",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "4721006352133702717"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 6,
-                        "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 92.754890441894531,
-                        "BackCol": [
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            1
-                        ],
-                        "FarPlane": 200,
-                        "NearPlane": 0.10000000149011612,
-                        "isFovHori": 0,
-                        "ID": "8229025573561551201",
-                        "IsGameCamera": true,
-                        "IsSelectedCamera": false,
-                        "PrintIcon": true,
-                        "IconColor": [
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            1
-                        ],
-                        "Skybox_PositiveX": "Library\/Textures\/575523041464209442.dds",
-                        "Skybox_NegativeX": "Library\/Textures\/2272049821688510999.dds",
-                        "Skybox_PositiveY": "Library\/Textures\/8243941029542624066.dds",
-                        "Skybox_NegativeY": "Library\/Textures\/13353609087236361933.dds",
-                        "Skybox_PositiveZ": "Library\/Textures\/14034231489549923375.dds",
-                        "Skybox_NegativeZ": "Library\/Textures\/10216792741298181251.dds"
                     }
                 ]
             }
