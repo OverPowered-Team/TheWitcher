@@ -42,6 +42,7 @@
 
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
+#include "Alien.h"
 #include "ComponentCapsuleCollider.h"
 #include "ComponentConvexHullCollider.h"
 #include "ComponentRigidBody.h"
@@ -412,6 +413,23 @@ const uint GameObject::GetComponentsScriptInParent(const char* script_class_name
 		return found.size();
 	}
 	return 0u;
+}
+
+uint GameObject::GetAllComponentsScript(Alien*** aliens)
+{
+	std::vector<Alien*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == ComponentType::SCRIPT) {
+			found.push_back(static_cast<Alien*>(static_cast<ComponentScript*>(components[i])->data_ptr));
+		}
+	}
+	if (!found.empty()) {
+		(*aliens) = new Alien* [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*aliens)[i] = found[i];
+		}
+	}
+	return found.size();
 }
 
 void* GameObject::GetComponentScriptInParent(const char* script_class_name)

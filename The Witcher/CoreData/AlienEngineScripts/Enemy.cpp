@@ -5,6 +5,7 @@
 void Enemy::Awake()
 {
 	((EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
 }
 
 void Enemy::StartEnemy()
@@ -66,6 +67,22 @@ void Enemy::GetDamaged(float dmg)
 	if (stats.current_health <= 0.0F) {
 		stats.current_health = 0.0F;
 		state = EnemyState::DEAD;
+	}
+}
+
+void Enemy::ActivateCollider()
+{
+	if (collider)
+	{
+		collider->SetEnable(true);
+	}
+}
+
+void Enemy::DeactivateCollider()
+{
+	if (collider)
+	{
+		collider->SetEnable(false);
 	}
 }
 
