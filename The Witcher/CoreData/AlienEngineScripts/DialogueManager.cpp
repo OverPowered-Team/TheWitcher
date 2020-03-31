@@ -82,10 +82,12 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 	currentDialogue.priority = newDialogue.priority;
 
 	LOG("About to change subtitles...");
-	// Set Subtitles
-	if(text->IsEnabled() == false)
+
+	// Set Subtitles --> // TODO: CRASH
+	/*if(text->IsEnabled() == false)
 		text->SetEnable(true);
-	text->text = std::string(newDialogue.subtitlesText); 
+	text->text = std::string(newDialogue.subtitlesText); */
+
 	LOG("After changing subtitles...");
 
 	// Play new
