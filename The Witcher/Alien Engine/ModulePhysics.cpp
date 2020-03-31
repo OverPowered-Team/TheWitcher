@@ -407,36 +407,14 @@ bool MyOwnFilterCallback::needBroadphaseCollision(btBroadphaseProxy* proxy0, btB
 {
 	btCollisionObject* obj_0 = (btCollisionObject*)proxy0->m_clientObject;
 	btCollisionObject* obj_1 = (btCollisionObject*)proxy1->m_clientObject;
+	ComponentCollider* coll_0 = (ComponentCollider * )obj_0->getUserPointer();
+	ComponentCollider* coll_1 = (ComponentCollider * )obj_1->getUserPointer();
 
-
-	int layer0  = 0, layer1 = 0;
-
-	Component* comp_0 = (Component*)obj_0->getUserPointer();
-	Component* comp_1 = (Component*)obj_1->getUserPointer();
-
-	if (comp_0 == nullptr || comp_1 == nullptr)
+	if (coll_0 == nullptr || coll_1 == nullptr) 
 		return true;
-
-	if (comp_0->GetType() == ComponentType::CHARACTER_CONTROLLER)
-	{
-		layer0 = ((ComponentCharacterController*)comp_0)->GetColliderLayer();
-	}
-	else
-	{
-		layer0 = ((ComponentCollider*)comp_0)->layer;
-	}
-
-	if (comp_1->GetType() == ComponentType::CHARACTER_CONTROLLER)
-	{
-		layer1 = ((ComponentCharacterController*)comp_1)->GetColliderLayer();
-	}
-	else
-	{
-		layer1 = ((ComponentCollider*)comp_1)->layer;
-	}
-
+	
 	//add some additional logic here that modified 'collides'
-	if (ModulePhysics::CanCollide(layer0, layer1))
+	if (ModulePhysics::CanCollide(coll_0->layer, coll_1->layer))
 	{
 		return true;
 	}

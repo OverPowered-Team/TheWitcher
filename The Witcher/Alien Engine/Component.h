@@ -79,7 +79,7 @@ public:
 	void SetEnable(bool enable);
 public:
 	GameObject* game_object_attached = nullptr;
-	const ComponentType& GetType() const;
+
 protected:
 
 	virtual void Reset() {}
@@ -101,7 +101,7 @@ protected:
 
 	void ResetIDs();
 
-	
+	const ComponentType& GetType() const;
 
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
