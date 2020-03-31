@@ -23,6 +23,7 @@ public:
 	bool pauseContinue = true;
 	bool paused = false;
 	const char* entityName = "noName"; //Author
+	const char* subtitles = "";
 };
 
 // TODO: Delete this when we know when an audio finishes:
