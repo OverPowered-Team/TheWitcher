@@ -141,6 +141,14 @@ void ComponentCharacterController::SetCharacterRadius(const float radius)
 	character_radius = Clamp(radius, min, max);
 	RecreateCapusle();
 }
+int ComponentCharacterController::GetColliderLayer()
+{
+	if (collider)
+	{
+		return collider->layer;
+	}
+	return 0;
+}
 // -------------------------------------------------------------
 
 void ComponentCharacterController::RecreateCapusle()

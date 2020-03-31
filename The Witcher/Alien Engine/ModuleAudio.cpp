@@ -34,7 +34,10 @@ bool ModuleAudio::Start()
 void ModuleAudio::LoadBanksInfo()
 {
 	auto j = App->LoadJSONFile("Assets/AudioBanks/SoundbanksInfo.json");
+	if (j == nullptr)
+		return;
 	auto bank_arr = j->GetArray("SoundBanksInfo.SoundBanks");
+
 	bank_arr->GetFirstNode();
 	for (uint i = 0; i < bank_arr->GetArraySize(); ++i, bank_arr->GetAnotherNode()) {
 		if (strcmp(bank_arr->GetString("ShortName"), "Init") != 0) {

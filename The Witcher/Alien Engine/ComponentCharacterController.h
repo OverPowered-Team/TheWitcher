@@ -51,7 +51,7 @@ public:
 	void SetCharacterHeight(const float height);
 	float GetCharacterRadius() { return character_radius; }
 	void SetCharacterRadius(const float radius);
-
+	int GetColliderLayer();
 protected:
 
 	void RecreateCapusle();

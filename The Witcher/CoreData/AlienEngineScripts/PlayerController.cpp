@@ -61,6 +61,8 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
+	if(controller==nullptr)
+		return;
 	float2 joystickInput = float2(
 		Input::GetControllerHoritzontalLeftAxis(controller_index),
 		Input::GetControllerVerticalLeftAxis(controller_index));
