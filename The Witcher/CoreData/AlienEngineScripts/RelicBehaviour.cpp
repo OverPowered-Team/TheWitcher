@@ -4,6 +4,7 @@
 #include "Effect.h"
 #include "EffectsFunctions.h"
 #include "EventManager.h"
+#include "DialogueManager.h"
 
 // Relic
 Relic::Relic()
@@ -94,9 +95,19 @@ void RelicBehaviour::Start()
 		relic->relic_effect = relic_effect;
 	}
 
+	
 	eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
+
+	//Geralt dialogue
 	geraltDialogue.audioData.eventName = "Hit_Sword";
 	geraltDialogue.priority = "Relics";
+	geraltDialogue.entityName = "Geralt";
+
+	//Yennefer dialogue
+	YenneferDialogue.audioData.eventName = "Hit_Sword";
+	YenneferDialogue.priority = "Relics";
+	YenneferDialogue.entityName = "Yennefer";
+
 }
 
 void RelicBehaviour::Update()
@@ -114,6 +125,7 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
 			Destroy(this->game_object);
 
+			//it remains to be determined if it is Geralt's audio or Yennefer's.
 			eventManager->ReceiveDialogueEvent(geraltDialogue);
 		}
 	}

@@ -3,6 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+
 class PlayerController;
 class Effect;
 struct Dialogue;
@@ -71,6 +72,7 @@ public:
 
 	EventManager* eventManager = nullptr;
 	Dialogue geraltDialogue;
+	Dialogue YenneferDialogue;
 
 };
 
