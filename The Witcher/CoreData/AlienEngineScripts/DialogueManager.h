@@ -4,11 +4,20 @@
 #include "Macros/AlienScripts.h"
 
 class EventManager;
+class ComponentAudioEmitter; 
+
+struct AudioData
+{
+	const char* eventName = "noName";
+	const char* groupID = "noName";
+	const char* stateID = "noName";
+};
 
 struct Dialogue
 {
-	const char* audioName = "noName";
-	const char* priority;
+public: 
+	AudioData audioData; 
+	const char* priority = "None";
 	bool pauseContinue = true;
 	bool paused = false;
 	const char* entityName = "noName"; //Author
@@ -24,15 +33,18 @@ public:
 	void Start();
 	void Update();
 
-	bool InputNewDialogue(Dialogue &dialogue) const;
+	bool InputNewDialogue(Dialogue &dialogue);
+
+private: 
+	void OverrideDialogue(Dialogue& newDialogue); 
 
 private:
-	Dialogue* currentDialogue = nullptr; 
-	Dialogue* pausedDialogue = nullptr; 
+	Dialogue currentDialogue; 
+	Dialogue pausedDialogue; 
 
 
 	EventManager* eventManager = nullptr;
-
+	ComponentAudioEmitter* audioEmitter = nullptr; 
 };
 
 ALIEN_FACTORY DialogueManager* CreateDialogueManager() {
