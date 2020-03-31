@@ -32,15 +32,11 @@ public:
 private:
 	std::vector<Enemy*> enemies;
 
-
 };
 
 ALIEN_FACTORY EnemyManager* CreateEnemyManager() {
 	EnemyManager* manager = new EnemyManager();
 	// To show in inspector here
-
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(manager->player1);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(manager->player2);
 
 	return manager;
 } 

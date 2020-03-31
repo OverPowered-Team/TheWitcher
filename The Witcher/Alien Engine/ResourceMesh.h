@@ -41,17 +41,23 @@ public:
 	uint id_uv = 0;
 	uint id_weights = 0;
 	uint id_bones = 0;
+	uint id_tangents = 0;
+	uint id_biTangents = 0;
+
 	// buffers size
 	uint num_index = 0;
 	uint num_vertex = 0;
 	uint num_faces = 0;
 	// buffers
 	uint* index = nullptr;
+
 	float* vertex = nullptr;
 	float* normals = nullptr;
 	float* uv_cords = nullptr;
 	float* center_point_normal = nullptr;
 	float* center_point = nullptr;
+	float* tangents = nullptr;
+	float* biTangents = nullptr; 
 
 	bool is_primitive = false;
 	bool is_custom = true;

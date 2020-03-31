@@ -4,7 +4,17 @@
 
 void EnemyManager::Start()
 {
+	GameObject** players = nullptr;
+	uint size = GameObject::FindGameObjectsWithTag("Player", &players);
+	if (size == 2) {
+		player1 = players[0];
+		player2 = players[1];
+	}
+	GameObject::FreeArrayMemory((void***)&players);
+
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
+		(*item)->player_1 = player1;
+		(*item)->player_2 = player2;
 		(*item)->StartEnemy();
 	}
 }
