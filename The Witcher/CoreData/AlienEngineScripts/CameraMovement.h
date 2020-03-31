@@ -12,15 +12,14 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, MOVING_TO_DYNAMIC
+		DYNAMIC, MOVING_TO_DYNAMIC,
+		STATIC, MOVING_TO_STATIC,
+		AXIS, MOVING_TO_AXIS
 		);
 	enum (
 		CameraAxis,
-		X,Y,Z
+		NONE,X,Y,Z
 	);
-	enum (PlayerState,
-		NONE, ENTER_FIRST, ENTER_FIRST_MIDDLE, ENTER_LAST, EXIT_FIRST, EXIT_FIRST_MIDDLE, EXIT_LAST, ON_EXIT
-		);
 
 	CameraMovement();
 	virtual ~CameraMovement();
@@ -30,17 +29,17 @@ public:
 	void OnDrawGizmos();
 	void SearchAndAssignPlayers();
 	float3 CalculateMidPoint();
+	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
 	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
 	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
 	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
-	std::map<GameObject*, PlayerState> players;
+	std::vector<GameObject*> players;
 	uint num_curr_players = 0u;
 	float3 trg_offset;
-	//float3 start_transition_pos;
-
+	CameraAxis axis = CameraAxis::NONE;
 	float current_transition_time = 0.f;
 
 	float distance = 0.f;
@@ -57,6 +56,6 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->distance, 0, 100);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->hor_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->vert_angle, -360.f, 360.f);
-
+	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
 	return alien;
 }

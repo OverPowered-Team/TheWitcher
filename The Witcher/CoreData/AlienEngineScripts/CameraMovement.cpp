@@ -18,10 +18,50 @@ void CameraMovement::Start()
 }
 
 void CameraMovement::Update()
-{    
+{   
     switch (state) {
     case CameraState::DYNAMIC: {
         transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        break;
+    }
+    case CameraState::STATIC:
+        LookAtMidPoint();
+        break;
+    case CameraState::AXIS:
+        transform->SetGlobalPosition(CalculateAxisMidPoint() + trg_offset);
+        break;
+    case CameraState::MOVING_TO_AXIS: {
+        current_transition_time += Time::GetDT();
+        float3 trg_pos = CalculateMidPoint() + trg_offset;
+        float3 curr_pos = transform->GetGlobalPosition();
+        float min_dist = 0.1f;
+        if ((trg_pos - curr_pos).Length() < min_dist) {
+            LOG("Finished transition");
+            transform->SetGlobalPosition(trg_pos);
+            state = CameraState::AXIS;
+        }
+        else {
+            //INFO: This is more like an accelerated movement than a lerp since we're using the current position as the starting point
+
+            float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
+
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
+
+            //TODO: We could add the option to configure smoothness (cuadratic t, cubic t, etc.)
+            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent));//Less fast on the beggining
+            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent * time_percent));//Even less fast on the beggining
+        }
+        LookAtMidPoint();
+        break;
+    }
+    case CameraState::MOVING_TO_STATIC: {
+        float min_dist = 0.1f;
+        if (trg_offset.Distance(transform->GetGlobalPosition()) < min_dist) {
+            LOG("Finished transition");
+            transform->SetGlobalPosition(trg_offset);
+            state = CameraState::STATIC;
+        }
+        LookAtMidPoint();
         break;
     }
     case CameraState::MOVING_TO_DYNAMIC:
@@ -33,7 +73,6 @@ void CameraMovement::Update()
         if ((trg_pos - curr_pos).Length() < min_dist) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
-            LookAtMidPoint();
             state = CameraState::DYNAMIC;
         }
         else {
@@ -46,9 +85,8 @@ void CameraMovement::Update()
             //TODO: We could add the option to configure smoothness (cuadratic t, cubic t, etc.)
             //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent));//Less fast on the beggining
 			//transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent * time_percent));//Even less fast on the beggining
-
-            LookAtMidPoint();
         }
+            LookAtMidPoint();
         break;
     }
     }
@@ -77,17 +115,19 @@ float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, 
 {
     float angle1 = math::DegToRad(ang1);
     float angle2 = math::DegToRad(ang2);
-    
+
     return float3(cos(angle1) * cos(angle2), sin(angle2), sin(angle1) * cos(angle2)) * dst;
 }
 
 void CameraMovement::OnDrawGizmos()
 {
+    float3 mid_point = float3::zero();
     if (players.size() < 2) {
         SearchAndAssignPlayers();
     }
-
-    float3 mid_point = CalculateMidPoint();
+    else {
+         mid_point = CalculateMidPoint();
+    }
     Gizmos::DrawWireSphere(mid_point, .15f, Color::Cyan(), 0.5F); // mid point
 
     float3 cam_pos = mid_point + CalculateCameraPos(hor_angle, vert_angle, distance);
@@ -102,9 +142,8 @@ void CameraMovement::SearchAndAssignPlayers()
     uint size;
     size = GameObject::FindGameObjectsWithTag("Player", &get_players);
     for (int i = 0; i < size; i++) {
-        GameObject* g = get_players[i];
-        std::pair<GameObject*, PlayerState> p(g, PlayerState::NONE);
-        players.insert(p);
+        if (std::find(players.begin(), players.end(), get_players[i]) == players.end())
+            players.push_back(get_players[i]);
     }
     GameObject::FreeArrayMemory((void***)&get_players);
     num_curr_players = size;
@@ -114,15 +153,34 @@ void CameraMovement::SearchAndAssignPlayers()
 float3 CameraMovement::CalculateMidPoint()
 {
     float3 mid_pos(0,0,0);
-    for (std::map<GameObject*, PlayerState>::iterator it = players.begin(); it != players.end(); ++it)
+    for (std::vector<GameObject*>::iterator it = players.begin(); it != players.end(); ++it)
     {
-        mid_pos += it->first->transform->GetGlobalPosition();
+        mid_pos += (*it)->transform->GetGlobalPosition();
     }
     if (players.size() == 0)
         return mid_pos;
     return mid_pos / players.size();
 }
-
+float3 CameraMovement::CalculateAxisMidPoint()
+{
+    float3 mid_pos(0, 0, 0);
+    for (std::vector<GameObject*>::iterator it = players.begin(); it != players.end(); ++it)
+    {
+        mid_pos += (*it)->transform->GetGlobalPosition();
+    }
+    switch ((CameraAxis)axis)
+    {
+    case CameraAxis::X://X
+        return float3((mid_pos.x) * 0.5f, 0, 0);
+        break;
+    case CameraAxis::Y://Y
+        return float3(0, (mid_pos.y) * 0.5f, 0);
+        break;
+    case CameraAxis::Z://Z
+        return float3(0, 0, (mid_pos.z) * 0.5f);
+        break;
+    }
+}
 Quat CameraMovement::RotationBetweenVectors(math::float3& start, math::float3& dest) // Include in MathGeoLib
 {
     start.Normalize();

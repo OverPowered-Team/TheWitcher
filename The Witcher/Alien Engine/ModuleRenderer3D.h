@@ -34,7 +34,10 @@ public:
 	void RenderCircleAroundZ(const float& x, const float& y, const float& z, const float& radius, const float& line_width = 2.0f, const int& segments = 50);
 	void RenderCircleAroundX(const float& x, const float& y, const float& z, const float& radius, const float& line_width = 2.0f, const int& segments = 50);
 
+	
+
 	ComponentCamera* GetCurrentMainCamera();
+	
 
 public:
 
@@ -51,4 +54,6 @@ public:
 	Color grid_color{ 1,1,1 };
 	float grid_spacing = 1.f;
 	int line_grid_width = 1;
+
+	bool render_skybox = true;
 };

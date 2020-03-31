@@ -1,26 +1,5 @@
 #include "Effect.h"
 
-// AttackEffect
-AttackEffect::AttackEffect()
-{
-	
-}
-
-AttackEffect::~AttackEffect()
-{
-
-}
-
-void AttackEffect::SetAttackIdentifier(std::string identifier)
-{
-	attack_name = identifier;
-}
-
-std::string AttackEffect::GetAttackIdentifier()
-{
-	return attack_name;
-}
-
 // Effect
 Effect::Effect()
 {
@@ -79,3 +58,26 @@ float Effect::GetMultiplicativeAmount(std::string identifier)
 
     return final_value;
 }
+
+// AttackEffect
+AttackEffect::AttackEffect()
+{
+
+}
+
+AttackEffect::~AttackEffect()
+{
+
+}
+
+void AttackEffect::SetAttackIdentifier(std::string identifier)
+{
+    attack_name = identifier;
+}
+
+std::string AttackEffect::GetAttackIdentifier()
+{
+    return attack_name;
+}
+
+

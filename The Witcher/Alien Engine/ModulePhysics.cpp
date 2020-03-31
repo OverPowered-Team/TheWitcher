@@ -11,6 +11,7 @@
 #include "Alien.h"
 #include "Optick/include/optick.h"
 #include "mmgr/mmgr.h"
+#include "ModuleInput.h"
 
 ModulePhysics::ModulePhysics(bool start_enabled) : Module(start_enabled)
 {
@@ -67,11 +68,10 @@ bool ModulePhysics::Init()
 
 	debug_renderer = new DebugRenderer();
 	collision_config = new btDefaultCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collision_config);
+	dispatcher = new MyDispatcher(collision_config);
 	broad_phase = new btDbvtBroadphase();
 	broad_phase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 	solver = new btSequentialImpulseConstraintSolver();
-
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_config);
 
 	gravity = float3(0.f, -9.8f, 0.f);
@@ -80,8 +80,8 @@ bool ModulePhysics::Init()
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 
-	btOverlapFilterCallback* filterCallback = new MyOwnFilterCallback();
-	world->getPairCache()->setOverlapFilterCallback(filterCallback);
+	//btOverlapFilterCallback* filterCallback = new MyOwnFilterCallback();
+	//world->getPairCache()->setOverlapFilterCallback(filterCallback);
 
 	return ret;
 }
@@ -122,13 +122,13 @@ update_status ModulePhysics::PreUpdate(float dt)
 
 update_status ModulePhysics::PostUpdate(float dt)
 {
-	//if (App->input->GetKey(SDL_Scancode::SDL_SCANCODE_SPACE) == KEY_DOWN)
-	//{
-	//	SphereCast(float3(0.f, 0.f, 0.f), 0.5f);
-	//	RayCastAll(Ray(float3(0.f, 0.f, 0.f), float3(0.f, 10.f, 0.f)));
-	//	RayCastClosest(Ray(float3(0.f, 0.f, 0.f), float3(0.f, 10.f, 0.f)));
+	if (App->input->GetKey(SDL_Scancode::SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		SphereCast(float3(0.f, 0.f, 0.f), 0.5f);
+		RayCastAll(Ray(float3(0.f, 0.f, 0.f), float3(0.f, 10.f, 0.f)));
+		RayCastClosest(Ray(float3(0.f, 0.f, 0.f), float3(0.f, 10.f, 0.f)));
 
-	//}
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -187,11 +187,10 @@ std::vector<ComponentCollider*> ModulePhysics::SphereCast(float3 position, float
 {
 	btSphereShape* shape = new btSphereShape(radius);
 	btGhostObject* ghost = new btGhostObject();
-	btTransform transform(btQuaternion::getIdentity(), ToBtVector3(position));
 	CastResult result;
 
+	ghost->setWorldTransform(btTransform(btQuaternion::getIdentity(), ToBtVector3(position)));
 	ghost->setCollisionShape(shape);
-	ghost->setWorldTransform(transform);
 	world->contactTest(ghost, result);
 
 	delete ghost;
@@ -200,6 +199,21 @@ std::vector<ComponentCollider*> ModulePhysics::SphereCast(float3 position, float
 	return result.hit_colliders;
 }
 
+std::vector<ComponentCollider*> ModulePhysics::BoxCast(float3 size ,float3 position, Quat rotation)
+{
+	btBoxShape* shape = new btBoxShape(ToBtVector3(size * 0.5f));
+	btGhostObject* ghost = new btGhostObject();
+	CastResult result;
+
+	ghost->setWorldTransform(btTransform(ToBtQuaternion(rotation), ToBtVector3(position)));
+	ghost->setCollisionShape(shape);
+	world->contactTest(ghost, result);
+
+	delete ghost;
+	delete shape;
+
+	return result.hit_colliders;
+}
 
 void ModulePhysics::DrawCollider(ComponentCollider* collider)
 {
@@ -403,23 +417,16 @@ btScalar CastResult::addSingleResult(btManifoldPoint& cp, const btCollisionObjec
 	return 1;
 }
 
-bool MyOwnFilterCallback::needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
-{
-	btCollisionObject* obj_0 = (btCollisionObject*)proxy0->m_clientObject;
-	btCollisionObject* obj_1 = (btCollisionObject*)proxy1->m_clientObject;
-	ComponentCollider* coll_0 = (ComponentCollider * )obj_0->getUserPointer();
-	ComponentCollider* coll_1 = (ComponentCollider * )obj_1->getUserPointer();
+MyDispatcher::MyDispatcher(btCollisionConfiguration* collisionConfiguration) : btCollisionDispatcher(collisionConfiguration){}
 
-	if (coll_0 == nullptr || coll_1 == nullptr) 
+bool MyDispatcher::needsCollision(const btCollisionObject* obj_0, const btCollisionObject* obj_1)
+{
+	ComponentCollider* coll_0 = (ComponentCollider*)obj_0->getUserPointer();
+	ComponentCollider* coll_1 = (ComponentCollider*)obj_1->getUserPointer();
+
+	if (coll_0 == nullptr || coll_1 == nullptr)
 		return true;
-	
-	//add some additional logic here that modified 'collides'
-	if (ModulePhysics::CanCollide(coll_0->layer, coll_1->layer))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+
+	return ModulePhysics::CanCollide(coll_0->layer, coll_1->layer);
+
 }

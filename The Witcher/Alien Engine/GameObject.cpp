@@ -520,6 +520,7 @@ void GameObject::SetEnable(bool enable)
 		else {
 			OnDisable();
 		}
+		SayChildrenParentIsEnabled(enabled);
 	}
 }
 

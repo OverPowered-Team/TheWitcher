@@ -273,6 +273,10 @@ void PanelConfig::PanelLogic()
 
 		ImGui::Spacing();
 	}
+	if (ImGui::CollapsingHeader("View"))
+	{
+		App->camera->PanelConfigOption();
+	}
 	ImGui::Spacing();
 	if (ImGui::Button("Save Configuration", { 150,30 })) {
 		App->SaveCustomConfig();
@@ -281,6 +285,7 @@ void PanelConfig::PanelLogic()
 	if (ImGui::Button("Load Default Configuration", { 200,30 })) {
 		App->LoadDefaultConfig();
 	}
+
 	ImGui::End();
 }
 

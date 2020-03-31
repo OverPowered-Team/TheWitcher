@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 93.38616943359375,
+                        "HoritzontalFov": 91.492843627929688,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -51,7 +51,7 @@
                         "FarPlane": 200,
                         "NearPlane": 0.10000000149011612,
                         "isFovHori": 0,
-                        "ID": "7037431714273020087",
+                        "ID": "13092214689245132551",
                         "IsGameCamera": true,
                         "IsSelectedCamera": false,
                         "PrintIcon": true,
@@ -61,12 +61,50 @@
                             0.85000002384185791,
                             1
                         ],
-                        "Skybox_NegativeZ": "Assets\/Textures\/Skybox\/negz.jpg",
-                        "Skybox_PositiveZ": "Assets\/Textures\/Skybox\/posz.jpg",
-                        "Skybox_PositiveY": "Assets\/Textures\/Skybox\/posy.jpg",
-                        "Skybox_NegativeY": "Assets\/Textures\/Skybox\/negy.jpg",
-                        "Skybox_PositiveX": "Assets\/Textures\/Skybox\/posx.jpg",
-                        "Skybox_NegativeX": "Assets\/Textures\/Skybox\/negx.jpg"
+                        "Skybox_PositiveX": "Library\/Textures\/575523041464209442.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/2272049821688510999.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/8243941029542624066.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13353609087236361933.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/14034231489549923375.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/10216792741298181251.dds"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2621087963051513711",
+                        "ResourceID": "5217879656618584496",
+                        "DataName": "CameraMovement",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "First parameters"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "distance",
+                                "float": 6.7529997825622559
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "hor_angle",
+                                "float": 161.76600646972656
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vert_angle",
+                                "float": 53.298999786376953
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "axis",
+                                "enumInt": 0
+                            }
+                        ]
                     }
                 ]
             },
@@ -69061,23 +69099,6 @@
                         "HasMaterial": true,
                         "MaterialID": "15957651887050720089",
                         "Enabled": true
-                    },
-                    {
-                        "Type": 10,
-                        "IsTrigger": false,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
@@ -69136,23 +69157,6 @@
                         "HasMaterial": true,
                         "MaterialID": "16081711489616074316",
                         "Enabled": true
-                    },
-                    {
-                        "Type": 10,
-                        "IsTrigger": false,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
@@ -80024,6 +80028,70 @@
                         "Bank": "393239870",
                         "Event": "2453392179",
                         "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13867373244573083592",
+                        "ResourceID": "7419212300060188559",
+                        "DataName": "PlayerController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "controller_index",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.movementSpeed",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.rotationSpeed",
+                                "float": 120
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "stick_threshold",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.dash_power",
+                                "float": 1.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.jump_power",
+                                "float": 25
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "p_run",
+                                "gameobject": "7773207501356864108"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "p_attack",
+                                "gameobject": "7773207501356864108"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "p_spell",
+                                "gameobject": "7773207501356864108"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "delay_footsteps",
+                                "float": 0.5
+                            }
+                        ]
                     }
                 ]
             },
@@ -80842,9 +80910,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -2.1875855922698975,
-                                -4.4724063873291016,
-                                -0.46048906445503235
+                                -4.5375175476074219,
+                                -1.1751245260238647,
+                                -1.7406938076019287
                             ],
                             "Force": [
                                 0,
@@ -80917,7 +80985,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 5.1539998054504395,
+                            "CurrentLife": 1.2130000591278076,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -81944,9 +82012,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -1.7408683300018311,
-                                -1.9322543144226074,
-                                -4.2703361511230469
+                                3.6827826499938965,
+                                -0.79466456174850464,
+                                3.2871899604797363
                             ],
                             "Force": [
                                 0,
@@ -82019,7 +82087,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 5.1539998054504395,
+                            "CurrentLife": 2.0119998455047607,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -82120,9 +82188,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.4644079208374023,
-                                -1.189166784286499,
-                                -0.66437327861785889
+                                0.57803469896316528,
+                                0.37130624055862427,
+                                1.8782989978790283
                             ],
                             "Force": [
                                 0,
@@ -82195,7 +82263,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 3.9460005760192871,
+                            "CurrentLife": 4.9430055618286133,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -82301,6 +82369,70 @@
                         "Bank": "393239870",
                         "Event": "2453392179",
                         "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6967423813061167614",
+                        "ResourceID": "7419212300060188559",
+                        "DataName": "PlayerController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "controller_index",
+                                "int": 2
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.movementSpeed",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.rotationSpeed",
+                                "float": 120
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "stick_threshold",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.dash_power",
+                                "float": 1.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.jump_power",
+                                "float": 25
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "p_run",
+                                "gameobject": "9656120598598033366"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "p_attack",
+                                "gameobject": "9656120598598033366"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "p_spell",
+                                "gameobject": "9656120598598033366"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "delay_footsteps",
+                                "float": 0.5
+                            }
+                        ]
                     }
                 ]
             },
@@ -83119,9 +83251,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.88043212890625,
-                                -0.98371684551239014,
-                                -0.46226030588150024
+                                -4.2971124649047852,
+                                1.701812744140625,
+                                -1.9075279235839844
                             ],
                             "Force": [
                                 0,
@@ -83194,7 +83326,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 5.1539998054504395,
+                            "CurrentLife": 1.2130000591278076,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -84221,9 +84353,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                2.6168177127838135,
-                                -4.1741609573364258,
-                                -0.8536067008972168
+                                -4.0095024108886719,
+                                2.5135097503662109,
+                                1.6143615245819092
                             ],
                             "Force": [
                                 0,
@@ -84296,7 +84428,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 5.1539998054504395,
+                            "CurrentLife": 2.0119998455047607,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -84397,9 +84529,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.1821257621049881,
-                                1.8865342140197754,
-                                -0.6386067271232605
+                                -1.4770889282226563,
+                                -1.0534744262695313,
+                                -0.84166526794433594
                             ],
                             "Force": [
                                 0,
@@ -84472,7 +84604,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 3.9460005760192871,
+                            "CurrentLife": 4.9430055618286133,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -87862,6 +87994,125 @@
                         ],
                         "ScaleNegative": false,
                         "ID": "8597045317593627951"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6528195590463305816",
+                        "ResourceID": "1150593167430491262",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Previous camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.distance",
+                                "float": 9.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.hor_angle",
+                                "float": 180.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.vert_angle",
+                                "float": 39
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Next camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.distance",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.hor_angle",
+                                "float": -84.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.vert_angle",
+                                "float": 31.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            }
+                        ]
                     }
                 ]
             },
@@ -87916,6 +88167,20 @@
                             10,
                             10,
                             2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9663695001424013098",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 0
+                            }
                         ]
                     }
                 ]
@@ -88089,6 +88354,20 @@
                             10,
                             10,
                             5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4022332374049024595",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
                         ]
                     }
                 ]
@@ -88301,6 +88580,125 @@
                         ],
                         "ScaleNegative": false,
                         "ID": "839272753272612438"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "10449991798761962673",
+                        "ResourceID": "1150593167430491262",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Previous camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.distance",
+                                "float": 12
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.hor_angle",
+                                "float": -91
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.vert_angle",
+                                "float": 29.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Next camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.distance",
+                                "float": 15.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.hor_angle",
+                                "float": 90.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.vert_angle",
+                                "float": 19
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            }
+                        ]
                     }
                 ]
             },
@@ -88355,6 +88753,20 @@
                             31.299999237060547,
                             10.699999809265137,
                             2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "14729876884138714692",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 0
+                            }
                         ]
                     }
                 ]
@@ -88529,6 +88941,20 @@
                             9.6999998092651367,
                             5
                         ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2823906495885762358",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
+                        ]
                     }
                 ]
             },
@@ -88583,6 +89009,20 @@
                             31,
                             10.699999809265137,
                             2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17591313675916101585",
+                        "ResourceID": "7753277895768345165",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 2
+                            }
                         ]
                     }
                 ]
@@ -89590,7 +90030,7 @@
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -89638,20 +90078,84 @@
                         "HasMaterial": true,
                         "MaterialID": "15068483807303977470",
                         "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Empty GameObject",
+                "FamilyNumber": 1,
+                "ID": "12285325497453283682",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -172.10568237304688,
+                            18.038324356079102,
+                            -11.091245651245117
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12384292645154314058"
                     },
                     {
                         "Type": 29,
-                        "ID": "15786668491467523077",
-                        "ResourceID": "3406985155436570250",
-                        "DataName": "NilfgaardSoldier",
+                        "ID": "7743621152653482522",
+                        "ResourceID": "13074601890386913779",
+                        "DataName": "TriggerEnvironment",
                         "HasInspector": true,
                         "Inspector": [
                             {
                                 "VarType": 14,
-                                "Name": "state",
-                                "enumInt": -1
+                                "Name": "environment",
+                                "enumInt": 1
                             }
                         ]
+                    },
+                    {
+                        "Type": 7,
+                        "IsTrigger": true,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "ID": "7171122299272529384",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "393239870",
+                        "Event": "34621475",
+                        "PlayOnAwake": false
                     }
                 ]
             }

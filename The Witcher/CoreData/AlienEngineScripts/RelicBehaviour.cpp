@@ -43,13 +43,54 @@ void AttackRelic::OnPickUp(PlayerController* _player)
 	case Relic_Effect::FIRE:
 		test_effect->OnHit = &ApplyBurnOnHit;
 		break;
-	case Relic_Effect::POISON:
+	case Relic_Effect::ICE:
+		test_effect->OnHit = &ApplyIceOnHit;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->AddFlatModifier(0.1f, "Attack_Damage");
+		test_effect->AddMultiplicativeModifier(2.0f, "Attack_Damage");
+		break;
+	case Relic_Effect::LIGHTNING:
+		test_effect->OnHit = &ApplyLightningOnHit;
+		break;
+	case Relic_Effect::POISON:
+		test_effect->OnHit = &ApplyPoisonOnHit;
 		break;
 	case Relic_Effect::RANGE:
 		test_effect->AddFlatModifier(1.5f, "Attack_Damage");
+		break;
+	}
+
+	effects.push_back(test_effect);
+
+	Relic::OnPickUp(_player);
+}
+
+// DashRelic
+DashRelic::DashRelic() : Relic()
+{
+}
+
+DashRelic::~DashRelic()
+{
+}
+
+void DashRelic::OnPickUp(PlayerController* _player)
+{
+	Effect* test_effect = new Effect();
+
+	switch (relic_effect)
+	{
+	case Relic_Effect::FIRE:
+		test_effect->OnDash = &ApplyBurnOnDash;
+		break;
+	case Relic_Effect::ICE:
+		test_effect->OnDash = &ApplyIceOnDash;
+		break;
+	case Relic_Effect::EARTH:
+		test_effect->OnDash = &ApplyEarthOnDash;
+		break;
+	case Relic_Effect::POISON:
+		test_effect->OnDash = &ApplyPoisonOnDash;
 		break;
 	}
 
@@ -79,6 +120,7 @@ void RelicBehaviour::Start()
 		relic = new AttackRelic();
 		break;
 	case Relic_Type::DASH:
+		relic = new DashRelic();
 		break;
 	case Relic_Type::COMPANION:
 		break;
