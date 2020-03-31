@@ -10,9 +10,10 @@ public:
 
 	static void SetGravity(const float3 gravity);
 	static float3 GetGravity();
-	static std::vector<ComponentCollider*> RayCastAll(Ray ray);
-	static ComponentCollider* RayCastClosest(math::Ray ray);
-	static std::vector<ComponentCollider*>  SphereCast(float3 position, float radius);
 
+	static ComponentCollider*			   RayCastClosest(math::Ray ray);
+	static std::vector<ComponentCollider*> RayCastAll(Ray ray);
+	static std::vector<ComponentCollider*> SphereCast(float3 position, float radius);
+	static std::vector<ComponentCollider*> BoxCast(float3 size, float3 position, Quat rotation);
 };
 

@@ -17,23 +17,30 @@ void TriggerCamera::Start()
 	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 }
 
-void TriggerCamera::Update()
-{
-	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
-		StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_2)) {
-		StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
-	}
-}
-
 void TriggerCamera::StartTransition(TransitionInfo transition_info)
 {
 	if (cam_script != nullptr) {
 		cam_script->current_transition_time = 0.f;
-		cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+		switch (transition_info.type)
+		{
+		case TransitionInfo::ToTransitionType::DYNAMIC:
+			cam_script->state = CameraMovement::CameraState::MOVING_TO_DYNAMIC;
+			cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+			break;
+		case TransitionInfo::ToTransitionType::STATIC:
+			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
+			cam_script->trg_offset = transition_info.to_move->transform->GetGlobalPosition();
+			Tween::TweenMoveTo(camera, cam_script->trg_offset, transition_info.transition_time);
+			break;
+		case TransitionInfo::ToTransitionType::AXIS:
+			cam_script->state = CameraMovement::CameraState::MOVING_TO_AXIS;
+			cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+			cam_script->axis = (CameraMovement::CameraAxis)transition_info.axis_type;
+			break;
+		default:
+			break;
+		}
 		cam_script->curr_transition = transition_info;
-		cam_script->trg_offset = cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
 		//cam_script->start_transition_pos = camera->transform->GetGlobalPosition();
 		LOG("Started transition");
 	}
@@ -51,14 +58,64 @@ void TriggerCamera::OnDrawGizmos()
 		camera = Camera::GetCurrentCamera()->game_object_attached;
 		cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
 	}
-	VisualizeCameraTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time), Color::Red());
-	VisualizeCameraTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time), Color::Green());
+
+	switch (prev_camera.type)
+	{
+	case TransitionInfo::ToTransitionType::DYNAMIC: {
+		TransitionInfo transition = TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time);
+		VisualizeCameraTransition(transition, Color::Red());
+		break;
+	}
+	case TransitionInfo::ToTransitionType::STATIC:
+		VisualizeCameraTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time), Color::Green());
+		break;
+	case TransitionInfo::ToTransitionType::AXIS:
+		VisualizeCameraTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.axis_type), Color::Green());
+		break;
+	}
+
+	switch (next_camera.type)
+	{
+	case TransitionInfo::ToTransitionType::DYNAMIC: {
+		TransitionInfo transition = TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time);
+		VisualizeCameraTransition(transition, Color::Green());
+		break;
+	}
+	case TransitionInfo::ToTransitionType::STATIC: {
+		VisualizeCameraTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time), Color::Green());
+		break;
+	}
+	case TransitionInfo::ToTransitionType::AXIS: {
+		TransitionInfo transition = TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.axis_type);
+		VisualizeCameraTransition(transition, Color::Green());
+		break;
+	}
+	}
 }
 
 void TriggerCamera::VisualizeCameraTransition (TransitionInfo transition_info, Color color) {
-	float3 camera_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
-	Gizmos::DrawLine(transform->GetGlobalPosition(), camera_pos, color); // line mid -> future camera pos
-	Gizmos::DrawSphere(camera_pos, 0.15f, color);
+	switch (transition_info.type)
+	{
+	case TransitionInfo::ToTransitionType::DYNAMIC: {
+		float3 camera_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+		Gizmos::DrawLine(transform->GetGlobalPosition(), camera_pos, color); // line mid -> future camera pos
+		Gizmos::DrawSphere(camera_pos, 0.15f, color);
+		break;
+	}
+	case TransitionInfo::ToTransitionType::STATIC:
+		Gizmos::DrawSphere(transition_info.to_move->transform->GetGlobalPosition(), 0.3f, Color::Purple());
+		Gizmos::DrawLine(transform->GetGlobalPosition(), transition_info.to_move->transform->GetGlobalPosition(), Color::Black());
+		break;
+	case TransitionInfo::ToTransitionType::AXIS: {
+		float3 camera_pos = transform->GetGlobalPosition() + cam_script->CalculateCameraPos(transition_info.hor_angle, transition_info.vert_angle, transition_info.distance);
+		Gizmos::DrawLine(transform->GetGlobalPosition(), camera_pos, color); // line mid -> future camera pos
+		Gizmos::DrawSphere(camera_pos, 0.15f, color);
+		break;
+	}
+	default:
+		break;
+	}
+	
 }
 
 void TriggerCamera::RegisterMovement(int player_num, int collider_position)
@@ -75,11 +132,37 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 		//TODO: Create a for that checks for all players
 		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
 			LOG("All players moved forward - Transition to next camera");
-			StartTransition(TransitionInfo(next_camera_distance, next_camera_hor_angle, next_camera_vert_angle, next_camera_transition_time));
+			switch (next_camera.type)
+			{
+			case TransitionInfo::ToTransitionType::DYNAMIC:
+				StartTransition(TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time));
+				break;
+			case TransitionInfo::ToTransitionType::STATIC:
+				StartTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time));
+				break;
+			case TransitionInfo::ToTransitionType::AXIS:
+				StartTransition(TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.axis_type));
+				break;
+			default:
+				break;
+			}
 		}
 		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
 			LOG("All players moved back - Transition to prev camera");
-			StartTransition(TransitionInfo(prev_camera_distance, prev_camera_hor_angle, prev_camera_vert_angle, prev_camera_transition_time));
+			switch (prev_camera.type)
+			{
+			case TransitionInfo::ToTransitionType::DYNAMIC:
+				StartTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time));
+				break;
+			case TransitionInfo::ToTransitionType::STATIC:
+				StartTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time));
+				break;
+			case TransitionInfo::ToTransitionType::AXIS:
+				StartTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.axis_type));
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

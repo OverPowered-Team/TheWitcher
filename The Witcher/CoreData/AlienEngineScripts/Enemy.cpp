@@ -1,9 +1,10 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "PlayerAttacks.h"
 
 void Enemy::Awake()
 {
-	((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	((EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
 }
 
 void Enemy::StartEnemy()
@@ -39,7 +40,7 @@ void Enemy::SetStats(const char* json)
 	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
 	if (stat)
 	{
-		stats.health = stat->GetNumber("Health");
+		stats.max_health = stats.current_health = stat->GetNumber("Health");
 		stats.agility = stat->GetNumber("Agility");
 		stats.damage = stat->GetNumber("Damage");
 		stats.attack_speed = stat->GetNumber("AttackSpeed");
@@ -48,5 +49,23 @@ void Enemy::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
+}
+
+void Enemy::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
+		float dmg_recieved = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"))->GetCurrentDMG();
+		GetDamaged(dmg_recieved);
+	}
+}
+
+void Enemy::GetDamaged(float dmg)
+{
+	LOG("%f", dmg);
+	stats.current_health -= dmg;
+	if (stats.current_health <= 0.0F) {
+		stats.current_health = 0.0F;
+		state = EnemyState::DEAD;
+	}
 }
 

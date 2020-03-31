@@ -3,6 +3,8 @@
 #include "EventManager.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
+#include "CameraMovement.h"
+#include "../../ComponentDeformableMesh.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -25,6 +27,9 @@ void PlayerController::Start()
 	s_event_manager = (EventManager*)event_manager->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+
+	camera = Camera::GetCurrentCamera();
+	obj_aabb = ((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->game_object_attached;
 	
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
@@ -63,42 +68,33 @@ void PlayerController::Update()
 	animator->SetBool("movement_input", joystickInput.Length() > stick_threshold ? true : false);
 
 	if (joystickInput.Length() > 0) {
-		keyboard_input = false;
+		if (CheckBoundaries(joystickInput))
+			if (can_move)
+				HandleMovement(joystickInput);
 	}
-	else if (Input::GetKeyDown(keyboard_move_up)
-		|| Input::GetKeyDown(keyboard_move_down)
-		|| Input::GetKeyDown(keyboard_move_left)
-		|| Input::GetKeyDown(keyboard_move_right)
-		|| Input::GetKeyDown(keyboard_dash)
-		|| Input::GetKeyDown(keyboard_jump))
+	else
 	{
-		keyboard_input = true;
-	}
-
-	if (can_move)
-	{
-		if (!keyboard_input) {
-			HandleMovement(joystickInput);
+		float2 keyboardInput = float2(0.f, 0.f);
+		if (Input::GetKeyRepeat(keyboard_move_left)) {
+			keyboardInput.x += 1.f;
+			animator->SetBool("movement_input", true);
 		}
-		else {
-			float2 keyboardInput = float2(0.f, 0.f);
-			if (Input::GetKeyRepeat(keyboard_move_left)) {
-				keyboardInput.x += 1.f;
-				animator->SetBool("movement_input", true);
+		if (Input::GetKeyRepeat(keyboard_move_right)) {
+			keyboardInput.x -= 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (Input::GetKeyRepeat(keyboard_move_up)) {
+			keyboardInput.y += 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (Input::GetKeyRepeat(keyboard_move_down)) {
+			keyboardInput.y -= 1.f;
+			animator->SetBool("movement_input", true);
+		}
+		if (CheckBoundaries(keyboardInput)) {
+			if (can_move) {
+				HandleMovement(keyboardInput);
 			}
-			if (Input::GetKeyRepeat(keyboard_move_right)) {
-				keyboardInput.x -= 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			if (Input::GetKeyRepeat(keyboard_move_up)) {
-				keyboardInput.y += 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			if (Input::GetKeyRepeat(keyboard_move_down)) {
-				keyboardInput.y -= 1.f;
-				animator->SetBool("movement_input", true);
-			}
-			HandleMovement(keyboardInput);
 		}
 	}
 
@@ -286,11 +282,20 @@ void PlayerController::Update()
 		if (abs(player_data.currentSpeed) > 0.1F)
 			state = PlayerState::RUNNING;
 	}
-
 	player_data.currentSpeed = 0;
 }
 
-void PlayerController::HandleMovement(float2 joystickInput)
+bool PlayerController::AnyKeyboardInput()
+{
+	return Input::GetKeyDown(keyboard_move_up)
+		|| Input::GetKeyDown(keyboard_move_down)
+		|| Input::GetKeyDown(keyboard_move_left)
+		|| Input::GetKeyDown(keyboard_move_right)
+		|| Input::GetKeyDown(keyboard_dash)
+		|| Input::GetKeyDown(keyboard_jump);
+}
+
+void PlayerController::HandleMovement(const float2& joystickInput)
 {
 	float joystickIntensity = joystickInput.Length();
 
@@ -381,6 +386,76 @@ void PlayerController::AddEffect(Effect* _effect)
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
 		attacks->OnAddAttackEffect(((AttackEffect*)_effect)->GetAttackIdentifier());
+	}
+}
+
+bool PlayerController::CheckBoundaries(const float2& joystickInput)
+{
+	float3 next_pos = float3::zero();
+	float joystickIntensity = joystickInput.Length();
+
+	float3 vector = float3(joystickInput.x, 0.f, joystickInput.y);
+	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
+	vector.y = 0.f;
+	vector.Normalize();
+
+	float angle = atan2f(vector.z, vector.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+
+	float speed = 0.f;
+
+	if (abs(joystickInput.x) >= stick_threshold || abs(joystickInput.y) >= stick_threshold)
+	{
+		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT());
+	}
+
+	if (state == PlayerState::DASHING)
+	{
+		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT();
+	}
+	else
+	{
+		next_pos = transform->GetGlobalPosition() + vector * speed * 3.f;
+	}
+
+	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
+	// player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+
+	auto aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+
+	float3 moved = (next_pos - transform->GetGlobalPosition());
+	AABB fake_aabb(aabb->minPoint + moved, aabb->maxPoint + moved);
+
+	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
+
+	Frustum fake_frustum = camera->frustum;
+	fake_frustum.pos = next_cam_pos;
+
+	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponentScript("CameraMovement");
+	for (int i = 0; i < cam->players.size(); ++i)
+	{
+		if (cam->players[i] != this->game_object)
+		{			
+			ComponentDeformableMesh* defo = (ComponentDeformableMesh*)cam->players[i]->GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false);
+			if (defo != nullptr)
+			{
+				if (!fake_frustum.Contains(defo->GetGlobalAABB()))
+				{
+					LOG("LEAVING BUDDY BEHIND");
+					controller->SetWalkDirection(float3::zero());
+					return false;
+				}
+			}
+		}
+		
+	}
+
+	if (camera->frustum.Contains(fake_aabb)) {
+		return true;
+	}
+	else {
+		controller->SetWalkDirection(float3::zero());
+		return false;
 	}
 }
 

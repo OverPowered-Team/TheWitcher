@@ -376,3 +376,12 @@ bool ModuleCamera3D::SortByDistance(const std::pair<float, GameObject*> pair1, c
 	return pair1.first < pair2.first;
 }
 
+void ModuleCamera3D::PanelConfigOption()
+{
+	if (fake_camera)
+	{
+		
+		ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
+	}
+}
+

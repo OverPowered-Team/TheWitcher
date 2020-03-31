@@ -15,6 +15,8 @@ public:
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
+	void OnDrawGizmos() override;
+
 	int collider_position = 0;//The position of the collider, can be 0 for first and 1 for second
 
 	TriggerCamera* script_parent = nullptr;

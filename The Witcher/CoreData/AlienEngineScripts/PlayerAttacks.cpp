@@ -261,6 +261,11 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	}
 }
 
+float PlayerAttacks::GetCurrentDMG()
+{
+	return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+}
+
 void PlayerAttacks::CreateAttacks()
 {
 	JSONfilepack* combo = JSONfilepack::GetJSON("Configuration/GeraltCombos.json");

@@ -74,6 +74,10 @@ void PanelRender::PanelLogic()
 			ImGui::ColorEdit3("Scene Background Color", (float*)&App->camera->fake_camera->camera_color_background, ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_Float);
 		}
 		ImGui::Spacing();
+
+		ImGui::Checkbox("Skybox", &App->renderer3D->render_skybox);
+
+		ImGui::Spacing();
 	}
 	if (ImGui::CollapsingHeader("Personalize Grid")) 
 	{

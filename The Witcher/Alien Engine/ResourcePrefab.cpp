@@ -268,39 +268,28 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 			game_objects->GetAnotherNode();
 		}
 		GameObject* obj = parent->children.back();
-		parent->children.pop_back();
-		App->objects->GetRoot(true)->children.insert(App->objects->GetRoot(true)->children.begin(), obj);
 
 		if (!App->objects->to_add.empty()) {
 			auto item = App->objects->to_add.begin();
 			for (; item != App->objects->to_add.end(); ++item) {
-				GameObject* found = App->objects->GetGameObjectByID((*item).first);
+				GameObject* found = obj->GetGameObjectByID(((*item).first));
 				if (found != nullptr) {
 					*(*item).second = found;
 				}
 			}
 		}
 
-		App->objects->GetRoot(true)->children.erase(App->objects->GetRoot(true)->children.begin());
-
 		if (list_num != -1) {
+			parent->children.pop_back();
 			parent->children.insert(parent->children.begin() + list_num, obj);
 		}
-		else {
-			parent->children.push_back(obj);
-		}
 
-		for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+		for each (GameObject * obj2 in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
 		{
-			ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
+			ComponentDeformableMesh* def_mesh = obj2->GetComponent<ComponentDeformableMesh>();
 			if (def_mesh) {
 				if (def_mesh->rootID != 0) {
-					if (list_num != -1) {
-						def_mesh->root_bone = parent->children[list_num]->GetGameObjectByID(def_mesh->rootID);
-					}
-					else {
-						def_mesh->root_bone = parent->children.back()->GetGameObjectByID(def_mesh->rootID);
-					}
+					def_mesh->root_bone = obj->GetGameObjectByID(def_mesh->rootID);
 					if (def_mesh->root_bone != nullptr)
 						def_mesh->AttachSkeleton(def_mesh->root_bone->transform);
 				}

@@ -32,10 +32,13 @@ public:
 		float currentSpeed = 0.f;
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
-		Stat health = Stat("Health", 100.0f);
-		Stat power = Stat("Strength", 10.0f);
-		Stat chaos = Stat("Chaos", 150.0f);
-		Stat attack_speed = Stat("Attack Speed", 1.0f);
+		Stat health = Stat("Health", 100.0f, 100.0f);
+		Stat power = Stat("Strength", 10.0f, 10.0f);
+		Stat chaos = Stat("Chaos", 150.0f, 150.0f);
+		Stat attack_speed = Stat("Attack Speed", 1.0f, 1.0f);
+
+		float total_damage_dealt = 0.0f;
+		uint total_kills = 0;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
@@ -46,7 +49,9 @@ public:
 	void Start();
 	void Update();
 
-	void HandleMovement(float2 joystickInput);
+	bool AnyKeyboardInput();
+
+	void HandleMovement(const float2& joystickInput);
 	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
 	void PlaySpell();
@@ -57,6 +62,7 @@ public:
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
+	bool CheckBoundaries(const float2& joystickInput);
 	void OnDrawGizmos();
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevived(PlayerController* player_dead);
@@ -73,8 +79,6 @@ public:
 	ComponentCharacterController* controller = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
-	
-	bool keyboard_input = false;
 
 	float revive_range = 5.0f;
 
@@ -116,11 +120,14 @@ public:
 	EventManager* s_event_manager = nullptr;
 
 	float delay_footsteps = 0.5f;
-private:
 
+private:
 	float angle = 0.0f;
 	float timer = 0.f;
 	ComponentAudioEmitter* audio = nullptr;
+
+	ComponentCamera* camera = nullptr;
+	GameObject* obj_aabb = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
