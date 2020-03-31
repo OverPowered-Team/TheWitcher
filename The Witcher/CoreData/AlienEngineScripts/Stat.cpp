@@ -1,11 +1,12 @@
 #include "Stat.h"
 #include "Effect.h"
 
-Stat::Stat(std::string _name, float _base_value)
+Stat::Stat(std::string name, float base_value, float max_value)
 {
-	name = _name;
-	base_value = _base_value;
-    current_value = _base_value;
+    this->name = name;
+    this->base_value = base_value;
+    this->current_value = base_value;
+    this->max_value = max_value;
 }
 
 Stat::~Stat()
@@ -23,13 +24,35 @@ void Stat::CalculateStat(std::vector<Effect*> _effects)
         mult_value += (*it)->GetMultiplicativeAmount(name);
     }
 
-    current_value = base_value;
-    current_value += additive_value;
-    current_value += current_value * mult_value;
+    float old_max = max_value;
+    max_value = base_value;
+    max_value += additive_value;
+    max_value += max_value * mult_value;
+    current_value = (current_value * max_value) / old_max;
 }
 
 void Stat::SetBaseStat(float _value)
 {
 	base_value = _value;
 	current_value = base_value;
+}
+
+void Stat::IncreaseStat(float value)
+{
+    if (current_value + value < max_value) {
+        current_value += value;
+    }
+    else {
+        current_value = max_value;
+    }
+}
+
+void Stat::DecreaseStat(float value)
+{
+    if (current_value - value > 0) {
+        current_value -= value;
+    }
+    else {
+        current_value = 0;
+    }
 }
