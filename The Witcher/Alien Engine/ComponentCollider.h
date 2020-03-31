@@ -27,6 +27,8 @@ class __declspec(dllexport) ComponentCollider : public Component
 	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
 
+	friend struct MyOwnFilterCallback;
+
 public:
 
 	ComponentCollider(GameObject* go);
@@ -49,9 +51,14 @@ protected:
 
 	float3 GetWorldCenter();
 
+	void AddToWorld();
+	void RemoveFromWorld();
+
 	void Init();
 	void Update();
-	
+	void OnEnable();
+	void OnDisable();
+
 	bool DrawInspector();
 	void HandleAlienEvent(const AlienEvent& e);
 
@@ -63,7 +70,7 @@ protected:
 	virtual void SaveComponent(JSONArraypack* to_save);
 	virtual void LoadComponent(JSONArraypack* to_load);
 
-	virtual void CreateDefaultShape() = 0;
+	virtual void CreateDefaultShape() {};
 	virtual void UpdateShape() {} 	// Adjust shape to scale and other factors
 	virtual void SetScale(float3 scale);
 
@@ -75,7 +82,7 @@ protected:
 
 	float3 center = float3::zero();
 	float3 final_center = float3::zero();
-
+	float3 last_scale = float3::zero();
 	bool is_trigger = false;
 	float bouncing = 0.f;
 	float friction = 0.f;
@@ -86,7 +93,7 @@ protected:
 	// Used when GameObject has notrigid body in run time
 	btRigidBody* aux_body = nullptr;
 	// Detection body 
-	btGhostObject* detector = nullptr;
+	btPairCachingGhostObject* detector = nullptr;
 
 	// Alien Script 
 	std::list<ComponentScript*> alien_scripts;
@@ -94,4 +101,7 @@ protected:
 	std::map<ComponentCollider*, bool> collisions;
 
 	bool first_frame = false;
+	bool internal_collider = false;
+	bool added_to_world = false;
+	int  layer = 0;
 };

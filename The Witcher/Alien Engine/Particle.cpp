@@ -22,6 +22,7 @@ Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo
 		p_material = new ResourceMaterial();
 		p_material->SetShader(owner->material->used_shader);
 		p_material->SetTexture(owner->material->GetTexture(TextureType::DIFFUSE));
+		p_material->color = owner->material->color;
 
 		p_material->shaderInputs.particleShaderProperties.color = owner->material->shaderInputs.particleShaderProperties.color;
 		p_material->shaderInputs.particleShaderProperties.start_color = owner->material->shaderInputs.particleShaderProperties.color;
@@ -187,7 +188,7 @@ void Particle::Draw()
 	
 	// --------- COLOR --------- //
 	if (p_material == nullptr)
-		glColor4f(particleInfo.color.x, particleInfo.color.y, particleInfo.color.z, particleInfo.color.w);
+	   glColor4f(particleInfo.color.x, particleInfo.color.y, particleInfo.color.z, particleInfo.color.w);
 
 	
 	// ------ VAO BUFFER ------ //
@@ -200,10 +201,11 @@ void Particle::Draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->id_index);
 
 
+
 	if (owner->material != nullptr && p_material != nullptr)
 	{
 
-		owner->DeactivateLight();
+		//owner->DeactivateLight();
 
 		// ---- TEXTCOORD BUFFER ----- //
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -301,7 +303,7 @@ void Particle::InterpolateValues(float dt)
 		t += rateToLerp * dt;
 
 		if(owner->material != nullptr && p_material != nullptr)
-			p_material->shaderInputs.particleShaderProperties.color = float4::Lerp(p_material->shaderInputs.particleShaderProperties.start_color, p_material->shaderInputs.particleShaderProperties.end_color, t);
+			p_material->shaderInputs.particleShaderProperties.color = float3::Lerp(p_material->shaderInputs.particleShaderProperties.start_color, p_material->shaderInputs.particleShaderProperties.end_color, t);
 		else
 			particleInfo.color = float4::Lerp(startInfo.color, endInfo.color, t);
 

@@ -130,6 +130,7 @@ void ResourceAnimation::FreeMemory()
 	}
 
 	delete[] channels;
+	channels = nullptr;
 }
 
 bool ResourceAnimation::ReadBaseInfo(const char* meta_file_path)

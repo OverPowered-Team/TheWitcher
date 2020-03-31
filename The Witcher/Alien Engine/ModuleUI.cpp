@@ -72,7 +72,7 @@ bool ModuleUI::Start()
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	style.MaxColumnSeparation= 10;
-	style.TitleSeparation = 10;
+	style.TitleSeparation = 20;
 	style.SubTitleSeparation = 3;
 	style.SeparationType = ImGuiSeparationType::ImGui_WindowSeparation;
 
