@@ -25,9 +25,8 @@ void PlayerController::Start()
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
-	frustum = &Camera::GetCurrentCamera()->frustum;
-	player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
-	fake_aabb = AABB(*player_aabb);
+	camera = Camera::GetCurrentCamera();
+	obj_aabb = ((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->game_object_attached;
 	
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
@@ -388,7 +387,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * speed * 4.f;
+		next_pos = transform->GetGlobalPosition() + vector * speed * 2.f;
 	}
 
 	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
@@ -396,14 +395,15 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 
 	auto aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
 
-	fake_aabb.maxPoint = aabb->maxPoint + next_pos - transform->GetGlobalPosition();
-	fake_aabb.minPoint = aabb->minPoint + next_pos - transform->GetGlobalPosition();
+	float3 moved = next_pos - transform->GetGlobalPosition();
+	AABB fake_aabb(aabb->minPoint + moved, aabb->maxPoint + moved);
 
-	Frustum fake_frustum = *frustum;
-	GameObject* camera = Camera::GetCurrentCamera()->game_object_attached;
-	float3 next_cam_pos = next_pos - transform->GetGlobalPosition() + camera->transform->GetGlobalPosition();
+	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
+
+	Frustum fake_frustum = camera->frustum;
 	fake_frustum.pos = next_cam_pos;
-	CameraMovement* cam = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+
+	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponentScript("CameraMovement");
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
 		if (cam->players[i]->parent != this->game_object)
@@ -412,8 +412,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 			defo = (ComponentDeformableMesh*)cam->players[i]->parent->GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false);
 			if (defo != nullptr)
 			{
-				AABB p_aabb = defo->GetGlobalAABB();
-				if (!fake_frustum.Contains(p_aabb))
+				if (!fake_frustum.Contains(defo->GetGlobalAABB()))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					controller->SetWalkDirection(float3::zero());
@@ -425,7 +424,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 	
 
-	if (frustum->Contains(fake_aabb)) {
+	if (camera->frustum.Contains(fake_aabb)) {
 		return true;
 	}
 	else {
