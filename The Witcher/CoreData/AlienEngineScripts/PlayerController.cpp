@@ -415,7 +415,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * speed * 2.f;
+		next_pos = transform->GetGlobalPosition() + vector * speed * 3.f;
 	}
 
 	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
@@ -423,7 +423,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 
 	auto aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
 
-	float3 moved = next_pos - transform->GetGlobalPosition();
+	float3 moved = (next_pos - transform->GetGlobalPosition());
 	AABB fake_aabb(aabb->minPoint + moved, aabb->maxPoint + moved);
 
 	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
@@ -434,10 +434,9 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponentScript("CameraMovement");
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
-		if (cam->players[i]->parent != this->game_object)
+		if (cam->players[i] != this->game_object)
 		{			
-			ComponentDeformableMesh* defo = nullptr;
-			defo = (ComponentDeformableMesh*)cam->players[i]->parent->GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false);
+			ComponentDeformableMesh* defo = (ComponentDeformableMesh*)cam->players[i]->GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false);
 			if (defo != nullptr)
 			{
 				if (!fake_frustum.Contains(defo->GetGlobalAABB()))
@@ -450,7 +449,6 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 		}
 		
 	}
-	
 
 	if (camera->frustum.Contains(fake_aabb)) {
 		return true;
