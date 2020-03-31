@@ -62,8 +62,7 @@ void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 	//eventPriorities.at(dialogue.priority)
 
 	// TODO: send this to the dialogue script
-	if (delay == 0.f)
-		dialogueManager->InputNewDialogue(dialogue);
+	dialogueManager->InputNewDialogue(dialogue);
 
 }
 
