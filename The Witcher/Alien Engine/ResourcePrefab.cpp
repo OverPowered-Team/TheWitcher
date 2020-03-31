@@ -28,6 +28,7 @@ ResourcePrefab::~ResourcePrefab()
 
 bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 force_id)
 {
+	App->objects->is_saving_prefab = true;
 	std::vector<std::string> files;
 	std::vector<std::string> dir;
 	if (folder == nullptr) {
@@ -108,7 +109,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 
 	else {
 		LOG_ENGINE("Could not load scene, fail when creating the file");
 	}
-
+	App->objects->is_saving_prefab = false;
 	return true;
 }
 
@@ -184,6 +185,7 @@ bool ResourcePrefab::DeleteMetaData()
 
 void ResourcePrefab::Save(GameObject* prefab_root)
 {
+	App->objects->is_saving_prefab = true;
 	remove(meta_data_path.data());
 	remove(path.data());
 	JSON_Value* prefab_value = json_value_init_object();
@@ -212,6 +214,7 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 		App->objects->enable_instancies = true;
 		remove("Library/save_prefab_scene.alienScene");
 	}
+	App->objects->is_saving_prefab = false;
 }
 
 void ResourcePrefab::OpenPrefabScene()
@@ -265,10 +268,28 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 			game_objects->GetAnotherNode();
 		}
 		GameObject* obj = parent->children.back();
+		parent->children.pop_back();
+		App->objects->GetRoot(true)->children.insert(App->objects->GetRoot(true)->children.begin(), obj);
+
+		if (!App->objects->to_add.empty()) {
+			auto item = App->objects->to_add.begin();
+			for (; item != App->objects->to_add.end(); ++item) {
+				GameObject* found = App->objects->GetGameObjectByID((*item).first);
+				if (found != nullptr) {
+					*(*item).second = found;
+				}
+			}
+		}
+
+		App->objects->GetRoot(true)->children.erase(App->objects->GetRoot(true)->children.begin());
+
 		if (list_num != -1) {
-			parent->children.pop_back();
 			parent->children.insert(parent->children.begin() + list_num, obj);
 		}
+		else {
+			parent->children.push_back(obj);
+		}
+
 		for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
 		{
 			ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
@@ -282,16 +303,6 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 					}
 					if (def_mesh->root_bone != nullptr)
 						def_mesh->AttachSkeleton(def_mesh->root_bone->transform);
-				}
-			}
-		}
-
-		if (!App->objects->to_add.empty()) {
-			auto item = App->objects->to_add.begin();
-			for (; item != App->objects->to_add.end(); ++item) {
-				GameObject* found = App->objects->GetGameObjectByID((*item).first);
-				if (found != nullptr) {
-					*(*item).second = found;
 				}
 			}
 		}

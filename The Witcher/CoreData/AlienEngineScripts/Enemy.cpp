@@ -1,28 +1,17 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
 
-Enemy::Enemy()
-{
-}
-
-Enemy::~Enemy()
-{
-}
-
 void Enemy::Awake()
 {
-	//((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	((EnemyManager*)(GameObject::FindWithName("EnemyManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
 }
 
-void Enemy::Start()
+void Enemy::StartEnemy()
 {
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	state = EnemyState::IDLE;
 	std::string json_str;
-
-	//player_1 = TODO: Find gameObject of player 1
-	//player_2 = TODO: Find gameObject of player 2
 
 	switch (type)
 	{

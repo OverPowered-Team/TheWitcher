@@ -4,11 +4,19 @@
 
 void EnemyManager::Start()
 {
-	/*for (auto item = enemies.begin(); item != enemies.end(); ++item) {
+	GameObject** players = nullptr;
+	uint size = GameObject::FindGameObjectsWithTag("Player", &players);
+	if (size == 2) {
+		player1 = players[0];
+		player2 = players[1];
+	}
+	GameObject::FreeArrayMemory((void***)&players);
+
+	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
+		(*item)->player_1 = player1;
+		(*item)->player_2 = player2;
 		(*item)->StartEnemy();
 	}
-	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::SPEAR);
-	CreateEnemy(EnemyType::NILFGAARD_SOLDIER, { 0,0,0 }, (ExtraEnumType)NilfgaardSoldier::NilfgaardType::LARGE_SWORD);*/
 }
 
 void EnemyManager::Update()
@@ -20,10 +28,6 @@ void EnemyManager::Update()
 
 void EnemyManager::CleanUp()
 {
-	/*for (auto it_enemy = enemies.begin(); it_enemy != enemies.end(); it_enemy++)
-	{
-		(*it_enemy)->StartEnemy();
-	}*/
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->CleanUpEnemy();
 		(*item)->game_object->ToDelete();
@@ -31,8 +35,9 @@ void EnemyManager::CleanUp()
 	enemies.clear();
 }
 
-void EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type)
+Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type)
 {
+	Enemy* enemy = nullptr;
 	switch (type)
 	{
 	case EnemyType::GHOUL: {
@@ -60,13 +65,20 @@ void EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEnum
 	default:
 		break;
 	}
+
+	if (enemy != nullptr) {
+		AddEnemy(enemy);
+		enemy->StartEnemy();
+	}
+
+	return enemy;
 }
 
 void EnemyManager::AddEnemy(Enemy* enemy)
 {
-	if (enemy != nullptr) {
-		enemies.push_back(enemy);
-	}
+	enemies.push_back(enemy);
+	enemy->player_1 = player1;
+	enemy->player_2 = player2;
 }
 
 void EnemyManager::DeleteEnemy(Enemy* enemy)

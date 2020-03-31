@@ -39,10 +39,7 @@ ModuleResources::~ModuleResources()
 		if (*item != nullptr) {
 			if ((*item)->GetType() == ResourceType::RESOURCE_MODEL)
 				static_cast<ResourceModel*>(*item)->meshes_attached.clear();
-#ifndef GAME_VERSION
-			if ((*item)->GetType() == ResourceType::RESOURCE_MATERIAL)
-				static_cast<ResourceMaterial*>(*item)->SaveMaterialFiles();
-#endif
+
 			delete* item;
 			*item = nullptr;
 		}
@@ -1134,6 +1131,21 @@ void ModuleResources::CreateAnimatorController()
 	new_controller->SaveAsset();
 }
 
+void ModuleResources::HandleEvent(EventType eventType)
+{
+	switch (eventType)
+	{
+	case EventType::ON_SAVE:
+		for (std::vector<Resource*>::iterator iter = resources.begin(); iter != resources.end(); ++iter) {
+			(*iter)->SaveResource();
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
 void ModuleResources::HandleAlienEvent(const AlienEvent& alienEvent)
 {
 
@@ -1158,15 +1170,18 @@ void ModuleResources::HandleAlienEvent(const AlienEvent& alienEvent)
 	}
 }
 
-ResourceMaterial* ModuleResources::CreateMaterial(const char* name)
+ResourceMaterial* ModuleResources::CreateMaterial(const char* name, const char* folderPath)
 {
+	if (!App->file_system->IsPathInsideOtherPath(folderPath, MATERIALS_FOLDER))
+		folderPath = MATERIALS_FOLDER;
+
 	std::string materialName = name;
-	App->ui->panel_project->GetUniqueFileName(materialName, MATERIALS_FOLDER);
+	App->ui->panel_project->GetUniqueFileName(materialName, folderPath);
 	
 	ResourceMaterial* new_material = new ResourceMaterial();
 	new_material->SetName(materialName.c_str());
-	new_material->SetAssetsPath(std::string(MATERIALS_FOLDER + materialName + ".material").data());
-	new_material->SaveMaterialFiles();
+	new_material->SetAssetsPath(std::string(folderPath + materialName + ".material").data());
+	new_material->SaveResource();
 	App->ui->panel_project->RefreshAllNodes();
 
 	return new_material;

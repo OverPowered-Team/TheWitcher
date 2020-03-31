@@ -1,10 +1,10 @@
 #include "NilfgaardSoldier.h"
 
-void NilfgaardSoldier::Start()
+void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
 
-	Enemy::Start();
+	Enemy::StartEnemy();
 }
 
 void NilfgaardSoldier::SetStats(const char* json)
@@ -42,20 +42,18 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 void NilfgaardSoldier::Move(float3 direction)
 {
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-
-	//Quat current_rot = math::Slerp() TODO: Slerp between char current rot and desired rot
-	character_ctrl->SetRotation(rot);
 	character_ctrl->SetWalkDirection(direction * stats.agility);
 	animator->SetFloat("speed", stats.agility);
+
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	character_ctrl->SetRotation(rot);
 
 	if (distance < stats.attack_range)
 	{
 		state = Enemy::EnemyState::ATTACK;
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
-		animator->PlayState("Attack");
 		Attack();
 	}
 	if (distance > stats.vision_range)
@@ -71,9 +69,10 @@ void NilfgaardSoldier::Attack()
 	switch (nilf_type)
 	{
 	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
+		animator->PlayState("Attack");
 		break;
 	case NilfgaardSoldier::NilfgaardType::ARCHER:
-		ShootAttack();
+		animator->PlayState("Shoot");
 		break;
 	}
 }
@@ -81,11 +80,12 @@ void NilfgaardSoldier::Attack()
 void NilfgaardSoldier::ShootAttack()
 {
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
-	ComponentRigidBody* arrow_go = (ComponentRigidBody*)GameObject::Instantiate(arrow, arrow_pos)->GetComponent(ComponentType::RIGID_BODY);
-	arrow_go->AddForce(direction.Mul(20));
+	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
+	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
+	arrow_rb->AddForce(direction.Mul(20));
 }
 
-void NilfgaardSoldier::Update()
+void NilfgaardSoldier::UpdateEnemy()
 {
 	float distance_1 = player_1->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_1 = player_1->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
@@ -106,6 +106,14 @@ void NilfgaardSoldier::Update()
 		Move(direction);
 		break;
 	case Enemy::EnemyState::ATTACK:
+		switch (nilf_type)
+		{
+		case NilfgaardSoldier::NilfgaardType::ARCHER:
+			float angle = atan2f(direction.z, direction.x);
+			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+			character_ctrl->SetRotation(rot);
+			break;
+		}
 		break;
 	case Enemy::EnemyState::DEAD:
 		break;
@@ -117,13 +125,13 @@ void NilfgaardSoldier::Update()
 
 }
 
-void NilfgaardSoldier::CleanUp()
+void NilfgaardSoldier::CleanUpEnemy()
 {
 }
 
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
-	if (strcmp(name, "Attack") == 0) {
+	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
 		if (distance < stats.vision_range)
 		{
 			state = Enemy::EnemyState::MOVE;

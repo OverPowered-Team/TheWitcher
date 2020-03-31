@@ -30,6 +30,7 @@ public:
 
 	void Jump(float3 direction= float3::zero());
 	bool CanJump();
+	bool OnGround();
 
 	float GetJumpSpeed() { return jump_speed; }
 	void SetJumpSpeed(const float jump_speed);
@@ -59,6 +60,8 @@ protected:
 	void DrawScene();
 	bool DrawInspector();
 
+	void HandleAlienEvent(const AlienEvent& e);
+
 	void Reset();
 	void Clone(Component* clone) {}
 	void SetComponent(Component* component) {}
@@ -67,8 +70,10 @@ protected:
 
 protected:
 	ComponentTransform* transform = nullptr;
+	ComponentCollider* collider = nullptr;
 	btKinematicCharacterController* controller = nullptr;
 	btPairCachingGhostObject* body = nullptr;
+	btPairCachingGhostObject* detector = nullptr;
 	btCapsuleShape* shape = nullptr;
 
 	float3 character_offset = float3::zero();

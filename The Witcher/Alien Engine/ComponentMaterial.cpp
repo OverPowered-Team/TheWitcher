@@ -258,14 +258,19 @@ void ComponentMaterial::SetTexture(ResourceTexture* tex, TextureType texType = T
 		return;
 
 	// Look for an already created material (with the same name as the texture) that has the same texture
-	ResourceMaterial* foundMaterial = App->resources->GetMaterialByName(tex->GetName());
-	if (foundMaterial != nullptr && foundMaterial->GetTexture(texType) == tex)
+	//ResourceMaterial* foundMaterial = App->resources->GetMaterialByName(tex->GetName());
+	//if (foundMaterial != nullptr && foundMaterial->GetTexture(texType) == tex)
+	//{
+	//	SetMaterial(foundMaterial);
+	//}
+	//else // Create a new material
+	//{
+	//	//if(!(App->StringCmp(material->GetName(),tex->GetName()) && !material->HasTexture())) // TODO: Should discuss this
+	//	SetMaterial(App->resources->CreateMaterial(tex->GetName()));
+	//}
+
+	if (material == App->resources->default_material)
 	{
-		SetMaterial(foundMaterial);
-	}
-	else // Create a new material
-	{
-		//if(!(App->StringCmp(material->GetName(),tex->GetName()) && !material->HasTexture())) // TODO: Should discuss this
 		SetMaterial(App->resources->CreateMaterial(tex->GetName()));
 	}
 

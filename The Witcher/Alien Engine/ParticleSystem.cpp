@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "GL/gl.h"
+#include "mmgr/mmgr.h"
 
 ParticleSystem::ParticleSystem()
 {
@@ -17,9 +18,10 @@ ParticleSystem::ParticleSystem()
 	
 	default_material = new ResourceMaterial();
 	default_material->SetName("Particle Material");
+	default_material->color = float4(1.0f, 0.0f, 0.8f, 1.0f);
 	SetMaterial(default_material);
 	material->SetShader(App->resources->default_particle_shader);
-
+	//material->color = float4(1.0f, 0.0f, 0.8f, 1.0f);
 	
 	float vertex[] =
 	{

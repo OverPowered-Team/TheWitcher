@@ -6,6 +6,7 @@
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "GameObject.h"
+#include "mmgr/mmgr.h"
 
 ComponentConvexHullCollider::ComponentConvexHullCollider(GameObject* go) : ComponentCollider(go)
 {

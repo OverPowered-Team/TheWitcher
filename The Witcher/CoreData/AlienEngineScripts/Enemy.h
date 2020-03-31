@@ -35,25 +35,22 @@ public:
 
 public:
 
-	Enemy();
-	virtual ~Enemy();
+	Enemy() {}
+	virtual ~Enemy() {}
 
 	void Awake();
 
 	/*-------CALLED BY ENEMY MANAGER--------*/
-	virtual void StartEnemy() {}
+	virtual void StartEnemy();
 	virtual void UpdateEnemy() {}
 	virtual void CleanUpEnemy() {}
 	/*-------CALLED BY ENEMY MANAGER--------*/
 
-	virtual void Start();
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction) {}
 	virtual void Attack() {}
-	virtual void Update() {}
-	virtual void CleanUp() {}
-
 public:
+
 	EnemyType type = EnemyType::NONE;
 	EnemyStats stats;
 	EnemyState state = EnemyState::NONE;

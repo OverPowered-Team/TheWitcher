@@ -24,6 +24,8 @@ public:
 	ResourceTexture* ClearTextureArray(ResourceTexture* item);
 	ResourceTexture* SetTextureArray(ResourceTexture* tex, ResourceTexture* item);
 
+	void SetAnimSpeed(float speed);
+	float GetAnimSpeed();
 private:
 	ResourceTexture* GetCurrentFrame(float dt);
 	bool Finished() const;

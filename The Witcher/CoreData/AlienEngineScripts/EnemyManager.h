@@ -18,20 +18,25 @@ public:
 	void Update();
 	void CleanUp();
 
-	void CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type = -1);
+	Enemy* CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type = -1);
 
 	void AddEnemy(Enemy* enemy);
 	void DeleteEnemy(Enemy* enemy);
 
+public:
+
+	GameObject* player1 = nullptr;
+	GameObject* player2 = nullptr;
+
+
 private:
 	std::vector<Enemy*> enemies;
-
 
 };
 
 ALIEN_FACTORY EnemyManager* CreateEnemyManager() {
-	EnemyManager* alien = new EnemyManager();
+	EnemyManager* manager = new EnemyManager();
 	// To show in inspector here
 
-	return alien;
+	return manager;
 } 
