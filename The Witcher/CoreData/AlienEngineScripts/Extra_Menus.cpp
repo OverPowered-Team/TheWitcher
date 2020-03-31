@@ -24,7 +24,7 @@ void Extra_Menus::PostUpdate()
 		if (game_object->IsEnabled())
 		{
 			previous_menu->SetEnable(true);
-				game_object->SetEnable(false);
+			game_object->SetEnable(false);
 		}
 	}
 }

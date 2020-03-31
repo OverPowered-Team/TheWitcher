@@ -52,9 +52,11 @@ void PauseMenu_Buttons::RetryLevel()
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
+	SceneManager::LoadScene("Main_Menu");
 }
 
 void PauseMenu_Buttons::Exit_Menu()
 {
+	AlienEngine::QuitApp();
 }
 
