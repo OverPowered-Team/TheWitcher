@@ -10,6 +10,7 @@ enum (Relic_Type,
 	BASE,
 	ATTACK,
 	DASH,
+	COMPANION,
 	NONE_TYPE
 	);
 enum (Relic_Effect,
