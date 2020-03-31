@@ -366,6 +366,7 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	s_event_manager->OnPlayerRevive(this);
+	player_data.health.current_value = player_data.health.max_value * 0.5f;
 }
 
 void PlayerController::ReceiveDamage(float value)
@@ -500,7 +501,7 @@ void PlayerController::CheckForPossibleRevive()
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
-	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
+	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
 		Alien** alien = nullptr;
 		uint size = col->game_object_attached->parent->GetAllComponentsScript(&alien);
 		for (int i = 0; i < size; ++i) {
