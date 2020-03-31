@@ -25,6 +25,9 @@ void EventManager::Start()
 	for (int i = 0; i < players_size; ++i) {
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
+
+	dialogueManager = (DialogueManager*)GameObject::FindWithName("DialogueManager")->GetComponentScript("DialogueManager");
+
 }
 
 void EventManager::Update()
@@ -58,11 +61,9 @@ void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 
 	//eventPriorities.at(dialogue.priority)
 
-
 	// TODO: send this to the dialogue script
-	/*if (delay == 0.f)
-		
-	else
-		Invoke();*/ 
+	if (delay == 0.f)
+		dialogueManager->InputNewDialogue(dialogue);
+
 }
 

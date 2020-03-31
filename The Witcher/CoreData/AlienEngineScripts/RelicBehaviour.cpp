@@ -3,6 +3,7 @@
 #include "PlayerAttacks.h"
 #include "Effect.h"
 #include "EffectsFunctions.h"
+#include "EventManager.h"
 
 // Relic
 Relic::Relic()
@@ -92,6 +93,10 @@ void RelicBehaviour::Start()
 		relic->description = description;
 		relic->relic_effect = relic_effect;
 	}
+
+	eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
+	geraltDialogue.audioData.eventName = "Hit_Sword";
+	geraltDialogue.priority = "Relics";
 }
 
 void RelicBehaviour::Update()
@@ -108,6 +113,8 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 			relic->OnPickUp((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"));
 			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
 			Destroy(this->game_object);
+
+			eventManager->ReceiveDialogueEvent(geraltDialogue);
 		}
 	}
 }
