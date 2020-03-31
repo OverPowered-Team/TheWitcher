@@ -36,7 +36,7 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	App->physics->AddAction(controller);
 
 	detector = new btPairCachingGhostObject();
-	detector->setUserPointer(this);
+	
 	detector->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
 	detector->setCollisionFlags(detector->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	detector->setCollisionShape(shape);
@@ -45,7 +45,8 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	collider = new ComponentCollider(game_object_attached);
 	collider->internal_collider = true;
 	collider->detector = detector;
-
+	
+	detector->setUserPointer(collider);
 
 }
 
