@@ -490,6 +490,7 @@ public:
 	/// @note This function assumes that this matrix does not contain projection (the fourth row of this matrix is [0 0 0 1]).
 	/// @note This function does not remove reflection (-1 scale along some axis).
 	void RemoveScale();
+	float3x3 RemoveScale2() const;
 
 	/// Transforms the given 3-vector by this matrix M, i.e. returns M * (x, y, z).
 	float3 Transform(const float3 &vector) const;
@@ -610,6 +611,8 @@ public:
 
 	/// Returns true if this float3x3 is equal to the given float3x3, up to given per-element epsilon.
 	bool Equals(const float3x3 &other, float epsilon = 1e-3f) const;
+
+
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 	/// Returns "(m00, m01, m02; m10, m11, m12; m20, m21, m22)".

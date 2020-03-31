@@ -26,3 +26,8 @@ std::vector<ComponentCollider*> Physics::SphereCast(float3 position, float radiu
 {
 	return App->physics->SphereCast(position, radius);
 }
+
+std::vector<ComponentCollider*> Physics::BoxCast(float3 size, float3 position, Quat rotation)
+{
+	return App->physics->BoxCast(size, position, rotation);
+}

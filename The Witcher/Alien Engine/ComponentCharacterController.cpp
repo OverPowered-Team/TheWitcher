@@ -17,7 +17,7 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 {
 	type = ComponentType::CHARACTER_CONTROLLER;
 	// GameObject Components 
-	transform = game_object_attached->GetComponent<ComponentTransform>();
+	transform = go->GetComponent<ComponentTransform>();
 
 	shape = new btCapsuleShape(character_radius, character_height);
 
@@ -36,18 +36,16 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	App->physics->AddAction(controller);
 
 	detector = new btPairCachingGhostObject();
-	
 	detector->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
 	detector->setCollisionFlags(detector->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	detector->setCollisionShape(shape);
 	App->physics->AddDetector(detector);
 
-	collider = new ComponentCollider(game_object_attached);
+	collider = new ComponentCollider(go);
 	collider->internal_collider = true;
 	collider->detector = detector;
-	
 	detector->setUserPointer(collider);
-
+	body->setUserPointer(collider);
 }
 
 ComponentCharacterController::~ComponentCharacterController()
@@ -182,6 +180,28 @@ bool ComponentCharacterController::DrawInspector()
 	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
+
+		ImGui::Title("Layer");
+
+		if (ImGui::BeginComboEx(std::string("##layers").c_str(), std::string(" " + App->physics->layers.at(collider->layer)).c_str(), 200, ImGuiComboFlags_NoArrowButton))
+		{
+			for (int n = 0; n < App->physics->layers.size(); ++n)
+			{
+				bool is_selected = (collider->layer == n);
+
+				if (ImGui::Selectable(std::string("   " + App->physics->layers.at(n)).c_str(), is_selected))
+				{
+					collider->layer = n;
+				}
+
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+
+			ImGui::EndCombo();
+		}
 		ImGui::Title("Offset", 1);				if (ImGui::DragFloat3("##center", current_character_offset.ptr(), 0.05f)) { SetCharacterOffset(current_character_offset); }
 		ImGui::Title("Radius", 1);				if (ImGui::DragFloat("##radius", &current_character_radius, 0.05f, 0.1f, FLT_MAX)) { SetCharacterRadius(current_character_radius); }
 		ImGui::Title("Height", 1);				if (ImGui::DragFloat("##height", &current_character_height, 0.05f, 0.1f, FLT_MAX)) { SetCharacterHeight(current_character_height); }
@@ -197,12 +217,11 @@ bool ComponentCharacterController::DrawInspector()
 
 void ComponentCharacterController::Update()
 {
-
 	collider->Update();
 
 	if (Time::IsPlaying())
 	{
-		float3 movement = float3::zero();
+	/*	float3 movement = float3::zero();
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT)
 			movement.x -= 1;
@@ -217,7 +236,7 @@ void ComponentCharacterController::Update()
 		controller->setWalkDirection(ToBtVector3(movement.Normalized() * speed * Time::GetDT()));
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_REPEAT && CanJump())
-			Jump();
+			Jump();*/
 
 		btTransform bt_transform = body->getWorldTransform();
 		btQuaternion rotation = bt_transform.getRotation();

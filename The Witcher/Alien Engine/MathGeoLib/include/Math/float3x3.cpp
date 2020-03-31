@@ -1133,6 +1133,15 @@ void float3x3::RemoveScale()
 	MARK_UNUSED(z);
 }
 
+float3x3 float3x3::RemoveScale2() const
+{
+	float3x3 ret = *this;
+	ret.SetCol(0, (float3)Col(0) / Col(0).Length());
+	ret.SetCol(1, (float3)Col(1) / Col(1).Length());
+	ret.SetCol(2, (float3)Col(2) /Col(2).Length());
+	return ret;
+}
+
 float3 float3x3::Transform(const float3 &vector) const
 {
 	return Transform(vector.x, vector.y, vector.z);

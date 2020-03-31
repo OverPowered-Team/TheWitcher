@@ -600,7 +600,7 @@ void ResourceAnimatorController::FreeMemory()
 {
 	for (std::vector<State*>::iterator it = states.begin(); it != states.end(); ++it)
 	{
-		if ((*it)->GetClip())
+		if ((*it)->GetClip() && !App->IsQuiting())
 			(*it)->GetClip()->DecreaseReferences();
 
 		delete (*it);

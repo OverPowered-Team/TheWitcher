@@ -662,27 +662,30 @@ float3 ComponentCamera::GetCameraPosition() const
 
 void ComponentCamera::DrawSkybox()
 {
-	glDepthFunc(GL_LEQUAL);
-	skybox_shader->Bind();
+	if (App->renderer3D->render_skybox)
+	{
+		glDepthFunc(GL_LEQUAL);
+		skybox_shader->Bind();
 
-	float4x4 view_m = this->GetViewMatrix4x4();
-	// Theoretically this should remove the translation [x, y, z] of the matrix,
-	// but because it is relative to the camera it has no effect.
-	view_m[0][3] = 0;
-	view_m[1][3] = 0;
-	view_m[2][3] = 0;
-	skybox_shader->SetUniformMat4f("view", view_m);
-	float4x4 projection = this->GetProjectionMatrix4f4();
-	skybox_shader->SetUniformMat4f("projection", projection);
+		float4x4 view_m = this->GetViewMatrix4x4();
+		// Theoretically this should remove the translation [x, y, z] of the matrix,
+		// but because it is relative to the camera it has no effect.
+		view_m[0][3] = 0;
+		view_m[1][3] = 0;
+		view_m[2][3] = 0;
+		skybox_shader->SetUniformMat4f("view", view_m);
+		float4x4 projection = this->GetProjectionMatrix4f4();
+		skybox_shader->SetUniformMat4f("projection", projection);
 
-	glBindVertexArray(skybox->vao);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox_texture_id);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindVertexArray(0);
-	glDepthFunc(GL_LESS);
-	glBindVertexArray(0);
-	skybox_shader->Unbind();
+		glBindVertexArray(skybox->vao);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox_texture_id);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS);
+		glBindVertexArray(0);
+		skybox_shader->Unbind();
+	}
 }
 
 void ComponentCamera::DrawFrustum()

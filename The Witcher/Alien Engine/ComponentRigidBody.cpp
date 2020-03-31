@@ -92,7 +92,8 @@ void ComponentRigidBody::Update()
 	{
 		btTransform bt_transform = body->getCenterOfMassTransform();
 		btQuaternion rotation = bt_transform.getRotation();
-		btVector3 position = (collider) ? bt_transform.getOrigin() - ToBtVector3(collider->center) : bt_transform.getOrigin() ;
+		btVector3 center = quatRotate(rotation, ToBtVector3(collider->center));
+		btVector3 position = (collider) ? bt_transform.getOrigin() - center : bt_transform.getOrigin() ;
 
 		transform->SetGlobalPosition(float3(position));
 		transform->SetGlobalRotation(math::Quat(rotation));
@@ -102,7 +103,8 @@ void ComponentRigidBody::Update()
 	{
 		btTransform go_bullet_transform = ToBtTransform((collider)
 			? collider->GetWorldCenter()
-			: transform->GetGlobalPosition(), transform->GetGlobalMatrix().RotatePart());
+			: transform->GetGlobalPosition(), transform->GetGlobalMatrix().RotatePart().RemoveScale2());
+
 		body->setWorldTransform(go_bullet_transform);
 		
 	}
