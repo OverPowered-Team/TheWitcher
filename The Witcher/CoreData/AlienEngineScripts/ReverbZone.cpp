@@ -25,6 +25,7 @@ void ReverbZone::OnTriggerEnter(ComponentCollider* collider)
 {
 	ComponentAudioEmitter* emitter = (ComponentAudioEmitter*)collider->game_object_attached->GetComponent(ComponentType::A_EMITTER);
 
+
 	if (emitter != nullptr)
 		emitter->SetReverb(strength, zone_name.c_str());
 }

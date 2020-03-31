@@ -3,8 +3,10 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include <tuple>
+#include <map>
 
 class PlayerController;
+struct Dialogue;
 
 class ALIEN_ENGINE_API EventManager : public Alien {
 
@@ -23,9 +25,10 @@ public:
 	void OnPlayerRevive(PlayerController* player_revived);
 
     // Audio name in the dialogue object's emitter bank, priority (use event map), can it be stopped and then continued?, entity name, delay to invoke the audio
-	void ReceiveDialogueEvent(const char* audioName, unsigned int priority, bool pauseContinue = true, const char* entityName = "noName", float delay = 0.f) const;
+	void ReceiveDialogueEvent(Dialogue &dialogue, float delay = 0.f) const;
+
 	
-private: 
+public: 
 	std::map<const char*, uint> eventPriorities; // event and priority
 
 };

@@ -1,5 +1,6 @@
 #include "EventManager.h"
 #include "PlayerController.h"
+#include "DialogueManager.h"
 
 EventManager::EventManager() : Alien()
 {
@@ -18,6 +19,7 @@ void EventManager::Start()
 	    {"Narrative", 0},
 		{"Enemies", 7}
 	}; 
+	
 
 	players_size = GameObject::FindGameObjectsWithTag("Player", &players_go);
 	for (int i = 0; i < players_size; ++i) {
@@ -43,11 +45,23 @@ void EventManager::OnPlayerRevive(PlayerController* player_revived)
 	}
 }
 
-void EventManager::ReceiveDialogueEvent(const char* audioName, unsigned int priority, bool pauseContinue, const char* entityName, float delay) const
+void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 {
+	bool c = (eventPriorities.find(dialogue.priority) == eventPriorities.end());
+	assert(!c && "Priority not valid");
+
+	if (!c)
+	{
+		LOG("Priority not valid");
+		return;
+	}
+
+	//eventPriorities.at(dialogue.priority)
+
+
 	// TODO: send this to the dialogue script
 	/*if (delay == 0.f)
-
+		
 	else
 		Invoke();*/ 
 }
