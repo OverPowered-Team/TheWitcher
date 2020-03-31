@@ -2,6 +2,7 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include <tuple>
 
 class PlayerController;
 
@@ -11,7 +12,6 @@ public:
 
 	EventManager();
 	virtual ~EventManager();
-	
 	void Start();
 	void Update();
 
@@ -22,8 +22,12 @@ public:
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevive(PlayerController* player_revived);
 
-    // Audio name in the dialogue object's emitter bank, priority, can it be stopped and then continued?, entity name, delay to invoke the audio
-	void ReceiveDialogueEvent(const char* audioName, unsigned int priority, bool PauseContinue = true, const char* entityName = "noName", float delay = 0.f) const;
+    // Audio name in the dialogue object's emitter bank, priority (use event map), can it be stopped and then continued?, entity name, delay to invoke the audio
+	void ReceiveDialogueEvent(const char* audioName, unsigned int priority, bool pauseContinue = true, const char* entityName = "noName", float delay = 0.f) const;
+	
+private: 
+	std::map<const char*, uint> eventPriorities; // event and priority
+
 };
 
 ALIEN_FACTORY EventManager* CreateEventManager() {
