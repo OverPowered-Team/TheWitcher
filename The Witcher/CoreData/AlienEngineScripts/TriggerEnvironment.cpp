@@ -1,7 +1,6 @@
 #include "TriggerEnvironment.h"
 #include "PlayerController.h"
 #include "CameraMovement.h"
-#include "PlayerTest.h"
 
 TriggerEnvironment::TriggerEnvironment() : Alien()
 {
