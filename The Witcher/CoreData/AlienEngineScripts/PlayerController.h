@@ -8,6 +8,7 @@ class PlayerAttacks;
 class EventManager;
 class Relic;
 class Effect;
+class ComponentDeformableMesh;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 
@@ -139,7 +140,7 @@ private:
 	ComponentAudioEmitter* audio = nullptr;
 
 	ComponentCamera* camera = nullptr;
-	GameObject* obj_aabb = nullptr;
+	std::vector<ComponentDeformableMesh*> deformable_meshes;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
