@@ -13,6 +13,9 @@ void Subtitle::Start()
 	text = (ComponentText*)GetComponent(ComponentType::UI_TEXT);
 	if (!text)
 		return;
+	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+	if (!audio)
+		return;
 
 	std::string json_path = std::string("Configuration/Subtitles/Project_1.json");
 	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
@@ -38,19 +41,25 @@ void Subtitle::Start()
 
 void Subtitle::Update()
 {
-	if (!text)
+	if (!text || !audio)
 		return;
-	current_time += Time::GetDT();
+	
+	current_time = Time::GetGameTime();
 	if (subtitles.size() > 0 && subtitles.size() > current_sub)
 	{
-		if (current_time > subtitles[current_sub].start && current_time < subtitles[current_sub].end)
+		if (current_time >= subtitles[current_sub].start)
 		{
-			text->SetText(subtitles[current_sub].text.c_str());
-		}
-		else if (current_time > subtitles[current_sub].end)
-		{
-			++current_sub;
-			text->SetText("");
+			if (first_entered)
+			{
+				text->SetText(subtitles[current_sub].text.c_str());
+				first_entered = false;
+			}
+			else if (current_time > subtitles[current_sub].end && !first_entered)
+			{
+				text->SetText("");
+				first_entered = true;
+				++current_sub;
+			}
 		}
 	}
 }
