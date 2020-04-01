@@ -49,6 +49,9 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->weapon);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ShootAttack, nilfgaard);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
+
 	return nilfgaard;
 }
 
