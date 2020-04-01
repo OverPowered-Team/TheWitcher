@@ -118,6 +118,11 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 	}
 }
 
+void PlayerAttacks::CancelAttack()
+{
+	current_attack = nullptr;
+}
+
 void PlayerAttacks::SnapToTarget()
 {
 	float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
