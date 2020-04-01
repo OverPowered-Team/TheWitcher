@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 12,
-        "NumTransitions": 17,
+        "NumStates": 13,
+        "NumTransitions": 18,
         "States": [
             {
                 "Name": "L",
@@ -63,6 +63,11 @@
                 "Name": "RCP",
                 "Speed": 1,
                 "Clip": "4619227199824952727"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 3,
+                "Clip": "10546380727138208159"
             }
         ],
         "Transitions": [
@@ -331,6 +336,15 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
