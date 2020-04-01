@@ -373,6 +373,7 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
+	controller->SetWalkDirection(float3::zero());
 	hurt_box->SetEnable(false);
 }
 

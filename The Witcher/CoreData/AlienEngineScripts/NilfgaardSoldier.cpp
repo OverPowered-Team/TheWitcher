@@ -1,6 +1,7 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowScript.h"
 #include "PlayerController.h"
+#include "EnemyManager.h"
 
 void NilfgaardSoldier::StartEnemy()
 {
@@ -104,7 +105,7 @@ Quat NilfgaardSoldier::RotateArrow()
 }
 
 void NilfgaardSoldier::UpdateEnemy()
-{
+{	
 	float distance_1 = player_1->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_1 = player_1->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
@@ -146,9 +147,18 @@ void NilfgaardSoldier::UpdateEnemy()
 			break;
 		}
 		break;
-	case Enemy::EnemyState::DEAD:
+	case Enemy::EnemyState::HIT:
+
 		break;
-	case Enemy::EnemyState::FLEE:
+	case Enemy::EnemyState::DYING:
+	{
+		EnemyManager* enemy_manager = (EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager"));
+		//Ori Ori function sintaxis
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		state = EnemyState::DEAD;
+		break;
+	}
+	case Enemy::EnemyState::DEAD:
 		break;
 	default:
 		break;
@@ -171,5 +181,9 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			state = Enemy::EnemyState::IDLE;
 		}
+	}
+
+	if (strcmp(name, "Hit") == 0) {
+		state = Enemy::EnemyState::IDLE;
 	}
 }
