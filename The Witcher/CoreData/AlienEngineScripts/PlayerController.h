@@ -25,6 +25,13 @@ public:
 		MAX
 		);
 
+	enum (PlayerType,
+		GERALT,
+		YENNEFER,
+
+		MAX
+		);
+
 
 	struct PlayerData {
 		float movementSpeed = 200.0F;
@@ -37,6 +44,7 @@ public:
 		Stat chaos = Stat("Chaos", 150.0f, 150.0f);
 		Stat attack_speed = Stat("Attack Speed", 1.0f, 1.0f);
 
+		PlayerType player_type = PlayerType::GERALT;
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
@@ -137,6 +145,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
+	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.player_type);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
