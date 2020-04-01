@@ -50,7 +50,7 @@ void EventManager::OnPlayerRevive(PlayerController* player_revived)
 
 void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 {
-	bool c = (eventPriorities.find(dialogue.priority) == eventPriorities.end());
+	bool c = (eventPriorities.find(dialogue.priority.c_str()) == eventPriorities.end());
 	assert(!c && "Priority not valid");
 
 	if (!c)

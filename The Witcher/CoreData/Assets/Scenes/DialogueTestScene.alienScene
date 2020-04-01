@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 64.992866516113281,
+                        "HoritzontalFov": 82.715972900390625,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -146,7 +146,7 @@
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -175,21 +175,21 @@
                         "ID": "15468204528839553415"
                     },
                     {
-                        "Type": 29,
-                        "ID": "13595289738946801235",
-                        "ResourceID": "10454231044988625899",
-                        "DataName": "DialogueManager",
-                        "HasInspector": false
-                    },
-                    {
                         "ID": "13001552526207142392",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
                         "Mute": false,
-                        "Bank": "393239870",
-                        "Event": "2480223178",
-                        "PlayOnAwake": true
+                        "Bank": "1669749310",
+                        "Event": "4285197669",
+                        "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13595289738946801235",
+                        "ResourceID": "10454231044988625899",
+                        "DataName": "DialogueManager",
+                        "HasInspector": false
                     }
                 ]
             },
@@ -234,6 +234,121 @@
                         "ResourceID": "12931529595659776773",
                         "DataName": "EventManager",
                         "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Dialogue Trigger",
+                "FamilyNumber": 1,
+                "ID": "4517713684323182790",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6483841581966398546"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "17283236942382204685",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "5398417439842060080",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3959698711138156346",
+                        "ResourceID": "3745314682883431344",
+                        "DataName": "DialogueTriggerSimple",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 7,
+                                "Name": "once",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "dialogue.audioData.eventName",
+                                "string": "noName"
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "dialogue.entityName",
+                                "string": "noName"
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "dialogue.priority",
+                                "string": "None"
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "dialogue.subtitlesText",
+                                "string": "None"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "hitToPlay",
+                                "bool": 1
+                            }
+                        ]
                     }
                 ]
             }

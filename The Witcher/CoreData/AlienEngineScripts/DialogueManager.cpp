@@ -72,7 +72,7 @@ bool DialogueManager::InputNewDialogue(Dialogue& dialogue)
 void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 {
 	// Stop playing 
-	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName); 
+	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName.c_str()); 
 
 	// Set Data
 	currentDialogue.audioData = newDialogue.audioData;
@@ -84,13 +84,13 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 	LOG("About to change subtitles...");
 
 	// Set Subtitles --> // TODO: CRASH
-	/*if(text->IsEnabled() == false)
+	if(text->IsEnabled() == false)
 		text->SetEnable(true);
-	text->text = std::string(newDialogue.subtitlesText); */
+	text->text = newDialogue.subtitlesText; 
 
 	LOG("After changing subtitles...");
 
 	// Play new
 	//audioEmitter->SetSwitchState(currentDialogue.audioData.groupID, currentDialogue.audioData.stateID); 
-	audioEmitter->StartSound(currentDialogue.audioData.eventName); 
+	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str()); 
 }

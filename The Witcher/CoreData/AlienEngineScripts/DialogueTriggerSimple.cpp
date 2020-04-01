@@ -16,15 +16,27 @@ void DialogueTriggerSimple::Start()
 
 }
 
+void DialogueTriggerSimple::Update()
+{
+	static bool lastHitToPlay = hitToPlay; 
+
+	if (lastHitToPlay != hitToPlay)
+		EmitDialogue(); 
+	lastHitToPlay = hitToPlay; 
+
+}
 void DialogueTriggerSimple::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
-	{
-		Dialogue dialogue;
-		dialogue.audioData.eventName = "Hit_Sword";
-		dialogue.priority = "Boss";
+		EmitDialogue(); 
+}
 
-		eventManager->ReceiveDialogueEvent(dialogue);
-	}; 
+void  DialogueTriggerSimple::EmitDialogue()
+{
+	LOG("Dialogue trigger activated"); 
+	eventManager->ReceiveDialogueEvent(this->dialogue);
+
+	if (once)
+		game_object->ToDelete();
 }
 

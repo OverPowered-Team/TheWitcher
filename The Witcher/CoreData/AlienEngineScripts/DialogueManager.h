@@ -9,21 +9,20 @@ class ComponentText;
 
 struct AudioData
 {
-	const char* eventName = "noName";
-	const char* groupID = "noName";
-	const char* stateID = "noName";
+	std::string eventName = "noName";
+	std::string groupID = "noName";
+	std::string stateID = "noName";
 };
 
 struct Dialogue
 {
 public: 
 	AudioData audioData; 
-	const char* subtitlesText = "None";
-	const char* priority = "None";
+	std::string subtitlesText = "None";
+	std::string priority = "None";
 	bool pauseContinue = true;
 	bool paused = false;
-	const char* entityName = "noName"; //Author
-	const char* subtitles = "";
+	std::string entityName = "noName"; //Author
 };
 
 // TODO: Delete this when we know when an audio finishes:
