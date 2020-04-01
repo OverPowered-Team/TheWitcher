@@ -25,7 +25,7 @@ void PlayerController::Start()
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
 	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
-	s_event_manager = (EventManager*)event_manager->GetComponentScript("EventManager");
+	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
