@@ -137,6 +137,9 @@ public:
 	GameObject* event_manager = nullptr;
 	EventManager* s_event_manager = nullptr;
 
+	// UI 
+	GameObject* HUD = nullptr;
+
 	float delay_footsteps = 0.5f;
 
 private:
@@ -167,6 +170,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlaySpell, player);
 
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->HUD);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 
 	return player;
