@@ -53,6 +53,7 @@ public:
 
 	std::vector<std::string> GetFinalAttacks();
 	void OnAddAttackEffect(std::string _attack_name);
+	void CancelAttack();
 	void ActivateCollider();
 	void DeactivateCollider();
 
@@ -63,6 +64,7 @@ public:
 	void OnAnimationEnd(const char* name);
 
 	float GetCurrentDMG();
+	Attack* GetCurrentAttack();
 
 public:
 	GameObject* collider_go = nullptr;
@@ -86,9 +88,6 @@ protected:
 	Attack* current_attack = nullptr;
 	Attack* base_light_attack = nullptr;
 	Attack* base_heavy_attack = nullptr;
-
-	GameObject** enemies = nullptr; //this is temporary
-	uint enemies_size = 0; //this is temporary
 
 	GameObject* current_target = nullptr;
 	PlayerController* player_controller = nullptr;

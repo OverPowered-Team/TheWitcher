@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "PlayerAttacks.h"
@@ -15,9 +16,6 @@ void PlayerAttacks::Start()
 {
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
 	collider = (ComponentBoxCollider*)collider_go->GetComponent(ComponentType::BOX_COLLIDER);
-
-	//temporary
-	enemies_size = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
 
 	CreateAttacks();
 }
@@ -117,6 +115,11 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 	}
 }
 
+void PlayerAttacks::CancelAttack()
+{
+	current_attack = nullptr;
+}
+
 void PlayerAttacks::SnapToTarget()
 {
 	float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
@@ -147,20 +150,32 @@ void PlayerAttacks::SnapToTarget()
 
 bool PlayerAttacks::FindSnapTarget()
 {
+	ComponentCollider** colliders_in_range;
+	uint size = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range, &colliders_in_range);
+	std::vector<GameObject*> enemies_in_range;
+	for (uint i = 0u; i < size; ++i)
+	{
+		if (std::strcmp(colliders_in_range[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		{
+			enemies_in_range.push_back(colliders_in_range[i]->game_object_attached);
+		}
+	}
+	Physics::FreeArray(&colliders_in_range);
+
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 100.0f);
 
-	for(uint i = 0; i < enemies_size; ++i)
+	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = enemies[i]->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
-		float angle = math::RadToDeg(vector.AngleBetweenNorm((enemies[i]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
+		float distance = (*it)->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
+		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
 		if (distance <= snap_detection_range && angle <= max_snap_angle)
 		{
 			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
 			{
-				snap_candidate.first = enemies[i];
+				snap_candidate.first = (*it);
 				snap_candidate.second = snap_value;
 			}
 		}		
@@ -270,6 +285,11 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 float PlayerAttacks::GetCurrentDMG()
 {
 	return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+}
+
+Attack* PlayerAttacks::GetCurrentAttack()
+{
+	return current_attack;
 }
 
 void PlayerAttacks::CreateAttacks()

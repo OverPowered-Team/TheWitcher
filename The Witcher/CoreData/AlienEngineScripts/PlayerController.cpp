@@ -25,6 +25,8 @@ void PlayerController::Start()
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
 	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
+	hurt_box = (ComponentCollider*)GetComponent(ComponentType::BOX_COLLIDER);
+
 	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
@@ -371,6 +373,8 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
+	controller->SetWalkDirection(float3::zero());
+	hurt_box->SetEnable(false);
 }
 
 void PlayerController::Revive()
@@ -379,18 +383,22 @@ void PlayerController::Revive()
 	animator->SetBool("dead", false);
 	s_event_manager->OnPlayerRevive(this);
 	player_data.health.current_value = player_data.health.max_value * 0.5f;
+	hurt_box->SetEnable(true);
 }
 
 void PlayerController::ReceiveDamage(float value)
 {
-	if (state != PlayerState::HIT && state != PlayerState::DASHING) {
-		animator->PlayState("Hit");
-		state = PlayerState::HIT;
-		controller->SetWalkDirection(float3::zero());
-	}
 	player_data.health.DecreaseStat(value);
 	if (player_data.health.current_value == 0)
 		Die();
+
+	if (state != PlayerState::HIT && state != PlayerState::DASHING && state != PlayerState::DEAD) {
+		animator->PlayState("Hit");
+		attacks->CancelAttack();
+		state = PlayerState::HIT;
+		controller->SetWalkDirection(float3::zero());
+	}
+	
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -523,6 +531,30 @@ void PlayerController::CheckForPossibleRevive()
 			break;
 		}
 	}
+}
+
+void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
+{
+	player_data.total_damage_dealt += dmg_dealt;
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
+		{
+			AttackEffect* a_effect = (AttackEffect*)(*it);
+			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
+			{
+				a_effect->OnHit(enemy);
+			}
+		}
+	}
+
+	LOG("TOTAL DMG DEALT IS %f", player_data.total_damage_dealt);
+}
+
+void PlayerController::OnEnemyKill()
+{
+	player_data.total_kills++;
+	LOG("TOTAL KILLS IS %i", player_data.total_kills);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
