@@ -55,14 +55,15 @@ void Enemy::SetStats(const char* json)
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
-		float dmg_recieved = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"))->GetCurrentDMG();
+		PlayerAttacks* player_attacks = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"));
+		float dmg_recieved = player_attacks->GetCurrentDMG();
+		player_attacks->OnHit(this);
 		GetDamaged(dmg_recieved);
 	}
 }
 
 void Enemy::GetDamaged(float dmg)
 {
-	LOG("%f", dmg);
 	stats.current_health -= dmg;
 	if (stats.current_health <= 0.0F) {
 		stats.current_health = 0.0F;

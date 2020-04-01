@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "PlayerAttacks.h"
@@ -241,6 +242,21 @@ bool PlayerAttacks::CanBeInterrupted()
 		return !collider->IsEnabled();
 	else
 		return true;
+}
+
+void PlayerAttacks::OnHit(Enemy* enemy)
+{
+	for (auto it = player_controller->effects.begin(); it != player_controller->effects.end(); ++it)
+	{
+		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
+		{
+			AttackEffect* a_effect = (AttackEffect*)(*it);
+			if (a_effect->GetAttackIdentifier() == current_attack->info.name)
+			{
+				a_effect->OnHit(enemy);
+			}
+		}
+	}
 }
 
 float3 PlayerAttacks::GetMovementVector()

@@ -4,6 +4,7 @@
 #include "Stat.h"
 
 class PlayerController;
+class Enemy;
 
 class Attack {
 public:
@@ -59,6 +60,7 @@ public:
 	void AllowCombo();
 	void OnDrawGizmos();
 	bool CanBeInterrupted();
+	void OnHit(Enemy* enemy);
 
 	void OnAnimationEnd(const char* name);
 
