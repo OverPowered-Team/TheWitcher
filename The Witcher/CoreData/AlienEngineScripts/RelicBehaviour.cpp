@@ -31,13 +31,13 @@ AttackRelic::~AttackRelic()
 
 void AttackRelic::OnPickUp(PlayerController* _player)
 {
-	std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
+	/*std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
 
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
-	attack_name = attack_pool[random_index];
+	attack_name = attack_pool[random_index];*/
 
 	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier(attack_name);
+	test_effect->SetAttackIdentifier("LLLLL");
 
 	switch (relic_effect)
 	{
@@ -137,17 +137,17 @@ void RelicBehaviour::Start()
 	}
 
 	
-	eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
+	//eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
 
-	//Geralt dialogue
-	geraltDialogue.audioData.eventName = "Hit_Sword";
-	geraltDialogue.priority = "Relics";
-	geraltDialogue.entityName = "Geralt";
+	////Geralt dialogue
+	//geraltDialogue.audioData.eventName = "Hit_Sword";
+	//geraltDialogue.priority = "Relics";
+	//geraltDialogue.entityName = "Geralt";
 
-	//Yennefer dialogue
-	YenneferDialogue.audioData.eventName = "Hit_Sword";
-	YenneferDialogue.priority = "Relics";
-	YenneferDialogue.entityName = "Yennefer";
+	////Yennefer dialogue
+	//YenneferDialogue.audioData.eventName = "Hit_Sword";
+	//YenneferDialogue.priority = "Relics";
+	//YenneferDialogue.entityName = "Yennefer";
 
 }
 
@@ -167,7 +167,7 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 			Destroy(this->game_object);
 
 			//it remains to be determined if it is Geralt's audio or Yennefer's.
-			eventManager->ReceiveDialogueEvent(geraltDialogue);
+			/*eventManager->ReceiveDialogueEvent(geraltDialogue);*/
 		}
 	}
 }

@@ -4,6 +4,7 @@
 #include "Stat.h"
 
 class PlayerController;
+class Enemy;
 
 class Attack {
 public:
@@ -53,12 +54,14 @@ public:
 
 	std::vector<std::string> GetFinalAttacks();
 	void OnAddAttackEffect(std::string _attack_name);
+	void CancelAttack();
 	void ActivateCollider();
 	void DeactivateCollider();
 
 	void AllowCombo();
 	void OnDrawGizmos();
 	bool CanBeInterrupted();
+	void OnHit(Enemy* enemy);
 
 	void OnAnimationEnd(const char* name);
 

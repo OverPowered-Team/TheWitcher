@@ -10,7 +10,7 @@ CameraLimits::~CameraLimits()
 
 void CameraLimits::Start()
 {
-
+    subtitles.push_back(0);
 }
 
 void CameraLimits::Update()

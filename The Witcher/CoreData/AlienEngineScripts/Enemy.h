@@ -10,6 +10,8 @@ enum (EnemyType,
 	NILFGAARD_SOLDIER
 	);
 
+class PlayerController;
+
 class Enemy : public Alien {
 
 public: 
@@ -29,9 +31,11 @@ public:
 		IDLE,
 		MOVE,
 		ATTACK,
+		HIT,
 		BLOCK,
-		DEAD,
 		FLEE,
+		DYING,
+		DEAD,
 		);
 
 public:
@@ -44,7 +48,7 @@ public:
 	/*-------CALLED BY ENEMY MANAGER--------*/
 	virtual void StartEnemy();
 	virtual void UpdateEnemy() {}
-	virtual void CleanUpEnemy() {}
+	virtual void CleanUpEnemy();
 	/*-------CALLED BY ENEMY MANAGER--------*/
 
 	virtual void SetStats(const char* json);
@@ -55,9 +59,6 @@ public:
 
 	void GetDamaged(float dmg);
 
-	void ActivateCollider();
-	void DeactivateCollider();
-
 public:
 
 	EnemyType type = EnemyType::NONE;
@@ -66,9 +67,8 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 
-	ComponentCollider* collider = nullptr;
+	std::vector<PlayerController*> player_controllers;
 
 	GameObject* player_1 = nullptr;
 	GameObject* player_2 = nullptr;
-
 };
