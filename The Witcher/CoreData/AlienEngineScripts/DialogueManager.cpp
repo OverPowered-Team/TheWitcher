@@ -12,8 +12,8 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
-	audioEmitter = (ComponentAudioEmitter*)game_object->GetComponent(ComponentType::A_EMITTER); 
+	eventManager = (EventManager*)GetComponentScript("EventManager");
+	audioEmitter = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 	text = (ComponentText*)GameObject::FindWithName("SubtitlesText")->GetComponent(ComponentType::UI_TEXT);
  
 }
@@ -80,13 +80,14 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 	currentDialogue.priority = std::string(newDialogue.priority.c_str());
 	currentDialogue.subtitlesText = std::string(newDialogue.subtitlesText.c_str());
 
-	/*
+
+
 	// Set Subtitles --> TODO: crashes
 	if(text->IsEnabled() == false)
 		text->SetEnable(true);
-	text->Reset(); 
-	text->text = std::string(newDialogue.subtitlesText); 
-	*/
+	//text->Reset(); 
+	text->SetText(newDialogue.subtitlesText.c_str()); 
+	
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 

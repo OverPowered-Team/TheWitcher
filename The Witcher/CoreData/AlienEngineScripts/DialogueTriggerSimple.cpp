@@ -12,7 +12,7 @@ DialogueTriggerSimple::~DialogueTriggerSimple()
 
 void DialogueTriggerSimple::Start()
 {
-	eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
+	eventManager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 }
 
