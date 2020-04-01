@@ -23,7 +23,5 @@ void ArrowScript::Update()
 void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
-		float dmg_recieved = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"))->GetCurrentDMG();
-		GetDamaged(dmg_recieved);
 	}
 }
