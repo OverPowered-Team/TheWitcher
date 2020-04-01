@@ -10,6 +10,8 @@ enum (EnemyType,
 	NILFGAARD_SOLDIER
 	);
 
+class PlayerController;
+
 class Enemy : public Alien {
 
 public: 
@@ -67,6 +69,7 @@ public:
 	ComponentCharacterController* character_ctrl = nullptr;
 
 	ComponentCollider* collider = nullptr;
+	std::vector<PlayerController*> player_controllers;
 
 	GameObject* player_1 = nullptr;
 	GameObject* player_2 = nullptr;

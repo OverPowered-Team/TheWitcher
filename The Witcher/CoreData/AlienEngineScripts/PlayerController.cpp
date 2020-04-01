@@ -25,6 +25,8 @@ void PlayerController::Start()
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
 	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
+	hurt_box = (ComponentCollider*)GetComponent(ComponentType::BOX_COLLIDER);
+
 	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
@@ -371,6 +373,7 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
+	hurt_box->SetEnable(false);
 }
 
 void PlayerController::Revive()
@@ -379,18 +382,21 @@ void PlayerController::Revive()
 	animator->SetBool("dead", false);
 	s_event_manager->OnPlayerRevive(this);
 	player_data.health.current_value = player_data.health.max_value * 0.5f;
+	hurt_box->SetEnable(true);
 }
 
 void PlayerController::ReceiveDamage(float value)
 {
-	if (state != PlayerState::HIT && state != PlayerState::DASHING) {
+	player_data.health.DecreaseStat(value);
+	if (player_data.health.current_value == 0)
+		Die();
+
+	if (state != PlayerState::HIT && state != PlayerState::DASHING && state != PlayerState::DEAD) {
 		animator->PlayState("Hit");
 		state = PlayerState::HIT;
 		controller->SetWalkDirection(float3::zero());
 	}
-	player_data.health.DecreaseStat(value);
-	if (player_data.health.current_value == 0)
-		Die();
+	
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)

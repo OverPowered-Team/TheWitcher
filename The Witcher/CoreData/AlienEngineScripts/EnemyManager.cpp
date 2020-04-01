@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "NilfgaardSoldier.h"
+#include "PlayerController.h"
 
 void EnemyManager::Start()
 {
@@ -14,7 +15,9 @@ void EnemyManager::Start()
 
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->player_1 = player1;
+		(*item)->player_controllers.push_back(static_cast<PlayerController*>((*item)->player_1->GetComponentScript("PlayerController")));
 		(*item)->player_2 = player2;
+		(*item)->player_controllers.push_back(static_cast<PlayerController*>((*item)->player_2->GetComponentScript("PlayerController")));
 		(*item)->StartEnemy();
 	}
 }
