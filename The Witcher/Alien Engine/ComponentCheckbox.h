@@ -29,6 +29,7 @@ public:
 	bool OnClick();
 	bool OnPressed();
 	bool OnRelease();
+	bool OnExit();
 
 	Color idle_color = { 0.8f,0.8f,0.8f,1.0f };
 	Color hover_color = { 1.0f,1.0f,1.0f,1.0f };
