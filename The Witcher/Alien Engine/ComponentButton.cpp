@@ -79,6 +79,16 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 			onReleaseArray->SetString(std::to_string(item - listenersOnRelease.begin()).data(), (*item).first.data());
 		}
 	}
+
+	to_save->SetBoolean("HasListenersOnExit", !listenersOnExit.empty());
+	if (!listenersOnExit.empty()) {
+		JSONArraypack* onExitArray = to_save->InitNewArray("ListenersOnExit");
+		auto item = listenersOnExit.begin();
+		for (; item != listenersOnExit.end(); ++item) {
+			onExitArray->SetAnotherNode();
+			onExitArray->SetString(std::to_string(item - listenersOnExit.begin()).data(), (*item).first.data());
+		}
+	}
 	//---------------------------------------------------------------
 	to_save->SetString("SelectOnUp", std::to_string(select_on_up).data());
 	to_save->SetString("SelectOnDown", std::to_string(select_on_down).data());
@@ -138,6 +148,15 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 			std::pair<std::string, std::function<void()>> pair = { onReleaseListeners->GetString(std::to_string(i).data()), std::function<void()>() };
 			listenersOnRelease.push_back(pair);
 			onReleaseListeners->GetAnotherNode();
+		}
+	}
+
+	if (to_load->GetBoolean("HasListenersOnExit")) {
+		JSONArraypack* onExitListeners = to_load->GetArray("ListenersOnExit");
+		for (int i = 0; i < onExitListeners->GetArraySize(); ++i) {
+			std::pair<std::string, std::function<void()>> pair = { onExitListeners->GetString(std::to_string(i).data()), std::function<void()>() };
+			listenersOnExit.push_back(pair);
+			onExitListeners->GetAnotherNode();
 		}
 	}
 	//-------------------------------------------------------------
@@ -265,6 +284,18 @@ void ComponentButton::HandleAlienEvent(const AlienEvent& e)
 					if ((*item).first == (*functs).first)
 					{
 						listenersOnRelease.erase(item);
+						break;
+					}
+				}
+			}
+
+			//delete on exit
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnExit.begin(); item != listenersOnExit.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnExit.erase(item);
 						break;
 					}
 				}
@@ -650,6 +681,31 @@ bool ComponentButton::DrawInspector()
 
 					ImGui::TreePop();
 				}
+				ImGui::Spacing();
+				if (ImGui::TreeNode("On Exit Added")) {
+					for (auto item = listenersOnExit.begin(); item != listenersOnExit.end(); ++item) {
+
+						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnExit.begin(), item) + 381267);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnExit.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
+					}
+
+					ImGui::TreePop();
+				}
 				ImGui::TreePop();
 			}
 			//--------------
@@ -733,6 +789,28 @@ bool ComponentButton::DrawInspector()
 										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
 											if (ImGui::MenuItem((*functs).first.data())) {
 												AddListenerOnRelease((*functs).first, (*functs).second);
+											}
+										}
+									}
+									else {
+										ImGui::Text("No exported functions");
+									}
+									ImGui::EndMenu();
+								}
+							}
+						}
+						ImGui::TreePop();
+					}
+					ImGui::Spacing();
+					//-----------------------------
+					if (ImGui::TreeNode("On Exit To Add")) {
+						for (auto item = scripts.begin(); item != scripts.end(); ++item) {
+							if (*item != nullptr && (*item)->data_ptr != nullptr) {
+								if (ImGui::BeginMenu((*item)->data_name.data())) {
+									if (!(*item)->functionMap.empty()) {
+										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
+											if (ImGui::MenuItem((*functs).first.data())) {
+												AddListenerOnExit((*functs).first, (*functs).second);
 											}
 										}
 									}
@@ -1055,6 +1133,16 @@ bool ComponentButton::OnRelease()
 	return true;
 }
 
+bool ComponentButton::OnExit()
+{
+	if (active) 
+	{
+		//baina loka
+		CallListeners(&listenersOnExit);
+	}
+	return true;
+}
+
 void ComponentButton::CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners)
 {
 	if (listeners != nullptr) {
@@ -1227,6 +1315,15 @@ void ComponentButton::AddListenerOnRelease(std::string name, std::function<void(
 	if (!CheckIfScriptIsAlreadyAdded(&listenersOnRelease, name))
 	{
 		listenersOnRelease.push_back(pair);
+	}
+}
+
+void ComponentButton::AddListenerOnExit(std::string name, std::function<void()> funct)
+{
+	std::pair<std::string, std::function<void()>> pair = { name, funct };
+	if (!CheckIfScriptIsAlreadyAdded(&listenersOnExit, name))
+	{
+		listenersOnExit.push_back(pair);
 	}
 }
 

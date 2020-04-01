@@ -406,26 +406,22 @@ void ResourceAnimatorController::UpdateState(State* state)
 			UpdateState(state->next_state);
 		}
 		else {
-
 			if (Time::IsPlaying()) {
-				for (auto item = App->objects->current_scripts.begin(); item != App->objects->current_scripts.end(); ++item) {
-					try {
-						if ((*item)->game_object->HasComponent(ComponentType::ANIMATOR))(*item)->OnAnimationEnd(state->GetName().c_str());
-					}
-					catch (...)
+				auto scripts = mycomponent->game_object_attached->GetComponents<ComponentScript>();
+				for (auto item = scripts.begin(); item != scripts.end(); ++item)
+				{
+					if ((*item)->need_alien)
 					{
+						Alien* alien = (Alien*)(*item)->data_ptr;
 						try {
-							LOG_ENGINE("CODE ERROR IN THE ONANIMATIONEND OF THE SCRIPT: %s", (*item)->data_name);
+							alien->OnAnimationEnd(state->GetName().c_str());
 						}
-						catch (...) {
-							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONANIMATIONEND");
+						catch (...)
+						{
+							LOG_ENGINE("ERROR TRYING TO CALL ANIMATION END OF SCRIPT %s", (*item)->data_name.c_str());
 						}
-#ifndef GAME_VERSION
-						App->ui->SetError();
-#endif
 					}
 				}
-
 			}
 
 			current_state = state->next_state;

@@ -175,9 +175,15 @@ void ComponentMesh::SetUniform(ResourceMaterial* resource_material, ComponentCam
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 	resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());
 	resource_material->used_shader->SetUniform1i("animate", animate);
+	
+	resource_material->used_shader->SetUniform1i("activeFog", camera->activeFog);
+	if (camera->activeFog)
+	{
+		resource_material->used_shader->SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+		resource_material->used_shader->SetUniform1f("density", camera->fogDensity);
+		resource_material->used_shader->SetUniform1f("gradient", camera->fogGradient);
+	}
 }
-
-
 
 void ComponentMesh::DrawVertexNormals()
 {

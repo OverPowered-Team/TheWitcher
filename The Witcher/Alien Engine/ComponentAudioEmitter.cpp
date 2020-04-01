@@ -229,7 +229,9 @@ WwiseT::AudioSource* ComponentAudioEmitter::GetSource() const
 
 void ComponentAudioEmitter::OnEnable()
 {
-	audio_name = App->audio->GetBankByID(current_bank)->events.at(current_event);
+	Bank* bank = App->audio->GetBankByID(current_bank);
+	if (bank != nullptr)
+		audio_name = bank->events.at(current_event);
 }
 
 void ComponentAudioEmitter::OnDisable()
