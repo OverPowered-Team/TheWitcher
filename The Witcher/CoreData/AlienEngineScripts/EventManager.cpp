@@ -26,7 +26,7 @@ void EventManager::Start()
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
 
-	//dialogueManager = (DialogueManager*)GameObject::FindWithName("DialogueManager")->GetComponentScript("DialogueManager");
+	dialogueManager = (DialogueManager*)GameObject::FindWithName("DialogueManager")->GetComponentScript("DialogueManager");
 
 }
 

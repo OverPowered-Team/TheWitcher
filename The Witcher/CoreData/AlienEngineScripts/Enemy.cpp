@@ -56,9 +56,9 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
 		PlayerAttacks* player_attacks = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"));
-		float dmg_recieved = player_attacks->GetCurrentDMG();
+		float dmg_received = player_attacks->GetCurrentDMG();
 		player_attacks->OnHit(this);
-		GetDamaged(dmg_recieved);
+		GetDamaged(dmg_received);
 	}
 }
 
