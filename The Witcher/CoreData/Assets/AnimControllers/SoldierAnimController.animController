@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "SoldierAnimController",
-        "NumStates": 4,
-        "NumTransitions": 6,
+        "NumStates": 6,
+        "NumTransitions": 7,
         "States": [
             {
                 "Name": "Idle",
@@ -23,6 +23,16 @@
                 "Name": "Shoot",
                 "Speed": 2,
                 "Clip": "3929158865692189345"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 1,
+                "Clip": "11741496038493933494"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "10865260987023624693"
             }
         ],
         "Transitions": [
@@ -120,6 +130,15 @@
                         "CompValue": 0.0099999997764825821
                     }
                 ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
                 "BoolConditions": []
             }
         ],

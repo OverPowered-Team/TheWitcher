@@ -1,4 +1,7 @@
 #include "NilfgaardSoldier.h"
+#include "ArrowScript.h"
+#include "PlayerController.h"
+#include "EnemyManager.h"
 
 void NilfgaardSoldier::StartEnemy()
 {
@@ -79,26 +82,51 @@ void NilfgaardSoldier::Attack()
 
 void NilfgaardSoldier::ShootAttack()
 {
-	/*float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
+	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
+	static_cast<ArrowScript*>(arrow_go->GetChild("Point")->GetComponentScript("ArrowScript"))->damage = stats.damage;
+	arrow_rb->SetRotation(RotateArrow());
+	arrow_rb->AddForce(direction.Mul(20));
+}
 
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	arrow_rb->SetRotation(rot);
-	arrow_rb->AddForce(direction.Mul(20));*/
+Quat NilfgaardSoldier::RotateArrow()
+{
+	float3 front = float3::unitZ(); //front of the object
+	Quat rot1 = Quat::RotateFromTo(front, direction);
+
+	float3 desiredUp = float3::unitY();
+	float3 right = Cross(direction, desiredUp);
+	desiredUp = Cross(right, direction);
+
+	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
+	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
+	return rot2 * rot1;
 }
 
 void NilfgaardSoldier::UpdateEnemy()
-{
+{	
 	float distance_1 = player_1->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_1 = player_1->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	float distance_2 = player_2->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_2 = player_2->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-	direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
+	{
+		distance = distance_2;
+		direction = direction_2.Normalized();
+	}
+	else if (player_controllers[1]->state == PlayerController::PlayerState::DEAD)
+	{
+		distance = distance_1;
+		direction = direction_1.Normalized();
+	}
+	else
+	{
+		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+	}
 
 	switch (state)
 	{
@@ -119,9 +147,18 @@ void NilfgaardSoldier::UpdateEnemy()
 			break;
 		}
 		break;
-	case Enemy::EnemyState::DEAD:
+	case Enemy::EnemyState::HIT:
+
 		break;
-	case Enemy::EnemyState::FLEE:
+	case Enemy::EnemyState::DYING:
+	{
+		EnemyManager* enemy_manager = (EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager"));
+		//Ori Ori function sintaxis
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		state = EnemyState::DEAD;
+		break;
+	}
+	case Enemy::EnemyState::DEAD:
 		break;
 	default:
 		break;
@@ -144,5 +181,9 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			state = Enemy::EnemyState::IDLE;
 		}
+	}
+
+	if (strcmp(name, "Hit") == 0) {
+		state = Enemy::EnemyState::IDLE;
 	}
 }

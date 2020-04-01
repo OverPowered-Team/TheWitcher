@@ -15,6 +15,8 @@ public:
 
 	void OnDrawGizmos() override;
 
+	std::vector<int> subtitles;
+
 };
 
 ALIEN_FACTORY CameraLimits* CreateCameraLimits() {

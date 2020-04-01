@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "PlayerAttacks.h"
@@ -115,6 +116,11 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 			//(*it)->base_range.CalculateStat(player_controller->effects);
 		}
 	}
+}
+
+void PlayerAttacks::CancelAttack()
+{
+	current_attack = nullptr;
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -241,6 +247,21 @@ bool PlayerAttacks::CanBeInterrupted()
 		return !collider->IsEnabled();
 	else
 		return true;
+}
+
+void PlayerAttacks::OnHit(Enemy* enemy)
+{
+	for (auto it = player_controller->effects.begin(); it != player_controller->effects.end(); ++it)
+	{
+		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
+		{
+			AttackEffect* a_effect = (AttackEffect*)(*it);
+			if (a_effect->GetAttackIdentifier() == current_attack->info.name)
+			{
+				a_effect->OnHit(enemy);
+			}
+		}
+	}
 }
 
 float3 PlayerAttacks::GetMovementVector()
