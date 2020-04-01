@@ -501,6 +501,16 @@ void ComponentText::GenerateVAOVBO()
 	glBindVertexArray(0);
 }
 
+void ComponentText::SetText(const char* newText)
+{
+	text = text.assign(newText);
+}
+
+const char* ComponentText::GetText()
+{
+	return text.data();
+}
+
 
 
 
