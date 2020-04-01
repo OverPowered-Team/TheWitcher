@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 13,
-        "NumTransitions": 18,
+        "NumStates": 14,
+        "NumTransitions": 20,
         "States": [
             {
                 "Name": "L",
@@ -68,6 +68,11 @@
                 "Name": "Hit",
                 "Speed": 3,
                 "Clip": "10546380727138208159"
+            },
+            {
+                "Name": "Fire Tower",
+                "Speed": 2,
+                "Clip": "11452384421895114614"
             }
         ],
         "Transitions": [
@@ -345,6 +350,36 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Fire Tower",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Fire Tower",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -451,6 +486,24 @@
                 "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "16806086598256069524",
                 "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 46,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlaySpell",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 47,
                 "Type": 2
             }
         ]

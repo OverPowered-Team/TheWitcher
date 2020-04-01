@@ -11,7 +11,7 @@
         "height": 9.400,
         "depth": 6.000
       },
-      "multiplier": 0.5,
+      "base_damage": 0.5,
 	    "activation_frame": 25,
       "movement_strength": 3.0,
       "max_snap_distance": 4.5,
@@ -29,7 +29,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 5,
+      "base_damage": 5,
       "activation_frame": 25,
       "movement_strength": 10.0,
       "max_snap_distance": 4.5,
@@ -48,7 +48,7 @@
         "height": 9.400,
         "depth": 6.000
       },
-      "multiplier": 5,
+      "base_damage": 5,
       "activation_frame": 11,
       "movement_strength": 3.0,
       "max_snap_distance": 4.5,
@@ -67,7 +67,7 @@
         "height": 7.600,
         "depth": 8.100
       },
-      "multiplier": 5,
+      "base_damage": 5,
       "activation_frame": 17,
       "movement_strength": 4.0,
       "max_snap_distance": 4.5,
@@ -85,7 +85,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 1.0,
+      "base_damage": 1.0,
       "activation_frame": 25,
       "max_snap_distance": 3.0,
       "movement_strength": 10.0,
@@ -103,7 +103,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.7,
+      "base_damage": 0.7,
       "activation_frame": 25,
       "max_snap_distance": 3.0,
       "movement_strength": 10.0,
@@ -121,7 +121,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 1.5,
+      "base_damage": 1.5,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -139,7 +139,7 @@
         "height": 19.000,
         "depth": 8.100
       },
-      "multiplier": 5,
+      "base_damage": 5,
       "activation_frame": 31,
       "max_snap_distance": 4.5,
       "movement_strength": 5.0,
@@ -157,7 +157,7 @@
         "height": 13.100,
         "depth": 9.500
       },
-      "multiplier": 5,
+      "base_damage": 5,
       "activation_frame": 17,
       "max_snap_distance": 3.0,
       "movement_strength": 10.0,
@@ -175,7 +175,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.7,
+      "base_damage": 0.7,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -193,7 +193,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 1.0,
+      "base_damage": 1.0,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -212,7 +212,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 5,
+      "base_damage": 5,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -230,7 +230,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.5,
+      "base_damage": 0.5,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -248,7 +248,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.8,
+      "base_damage": 0.8,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -266,7 +266,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.7,
+      "base_damage": 0.7,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -284,7 +284,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.8,
+      "base_damage": 0.8,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -302,7 +302,7 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 0.7,
+      "base_damage": 0.7,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
@@ -320,12 +320,78 @@
         "height": 200,
         "depth": 200
       },
-      "multiplier": 1.4,
+      "base_damage": 1.4,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
       "movement_strength": 10.0,
       "next_attack_light": "End",
       "next_attack_heavy": "End"
+    }
+  ],
+  "Spells": [
+    {
+      "name": "Igni",
+      "cost": 85,
+      "base_damage": 30,
+      "activation_frame": 13,
+      "movement_strength": 3.0,
+      "max_snap_distance": 1,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0.8,
+        "pos_z": 1.3,
+        "width": 2.3,
+        "height": 1.5,
+        "depth": 2.1
+      }
+    },
+    {
+      "name": "Aard",
+      "cost": 85,
+      "base_damage": 30,
+      "activation_frame": 25,
+      "movement_strength": 3.0,
+      "max_snap_distance": 3,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      }
+    },
+    {
+      "name": "Yrden",
+      "cost": 150,
+      "base_damage": 0,
+      "activation_frame": 25,
+      "movement_strength": 3.0,
+      "max_snap_distance": 3,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 0,
+        "height": 0,
+        "depth": 0
+      }
+    },
+    {
+      "name": "Quen",
+      "cost": 100,
+      "base_damage": 0,
+      "activation_frame": 25,
+      "movement_strength": 3.0,
+      "max_snap_distance": 3,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 0,
+        "height": 0,
+        "depth": 0
+      }
     }
   ]
 }

@@ -133,7 +133,7 @@ void PlayerController::Update()
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
-			animator->PlayState("Spell");
+			attacks->StartSpell(0);
 			state = PlayerState::CASTING;
 		}
 
@@ -199,7 +199,7 @@ void PlayerController::Update()
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
-			animator->PlayState("Spell");
+			attacks->StartSpell(0);
 			state = PlayerState::CASTING;
 		}
 
@@ -261,8 +261,7 @@ void PlayerController::Update()
 		break;
 	case PlayerController::PlayerState::CASTING:
 		c_run->GetSystem()->StopEmmitter();
-		controller->SetWalkDirection(float3::zero());
-		can_move = false;
+		attacks->UpdateCurrentAttack();
 		break;
 	case PlayerController::PlayerState::DEAD:
 		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_DOWN))
@@ -549,14 +548,11 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 			}
 		}
 	}
-
-	LOG("TOTAL DMG DEALT IS %f", player_data.total_damage_dealt);
 }
 
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
-	LOG("TOTAL KILLS IS %i", player_data.total_kills);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
@@ -568,8 +564,10 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
 			if (enemy) {
 				ReceiveDamage(enemy->stats.damage);
+				GameObject::FreeArrayMemory((void***)&alien);
 				break;
 			}
 		}
+		GameObject::FreeArrayMemory((void***)&alien);
 	}
 }

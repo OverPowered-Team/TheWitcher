@@ -12,11 +12,11 @@
         "depth": 306.000
       },
       "multiplier": 0,
-	    "activation_frame": 25,
+      "activation_frame": 25,
       "movement_strength": 3.0,
       "max_snap_distance": 4.5,
       "next_attack_light": "LL",
-      "next_attack_heavy": "End" 
+      "next_attack_heavy": "End"
     },
     {
       "name": "LH",
@@ -326,6 +326,72 @@
       "movement_strength": 10.0,
       "next_attack_light": "End",
       "next_attack_heavy": "End"
+    }
+  ],
+  "Spells": [
+    {
+      "name": "Fire Tower",
+      "cost": 85,
+      "base_damage": 30,
+      "activation_frame": 13,
+      "movement_strength": 3.0,
+      "max_snap_distance": 1,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 2.8,
+        "width": 1,
+        "height": 1,
+        "depth": 4.5
+      }
+    },
+    {
+      "name": "Earth Projectile",
+      "cost": 85,
+      "base_damage": 30,
+      "activation_frame": 25,
+      "movement_strength": 3.0,
+      "max_snap_distance": 3,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      }
+    },
+    {
+      "name": "Lightning Chain",
+      "cost": 150,
+      "base_damage": 0,
+      "activation_frame": 25,
+      "movement_strength": 3.0,
+      "max_snap_distance": 3,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 0,
+        "height": 0,
+        "depth": 0
+      }
+    },
+    {
+      "name": "Ice Area",
+      "cost": 100,
+      "base_damage": 0,
+      "activation_frame": 25,
+      "movement_strength": 3.0,
+      "max_snap_distance": 3,
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 0,
+        "height": 0,
+        "depth": 0
+      }
     }
   ]
 }

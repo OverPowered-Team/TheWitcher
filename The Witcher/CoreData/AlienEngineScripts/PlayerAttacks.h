@@ -47,6 +47,7 @@ public:
 	
 	void Start();
 	void StartAttack(AttackType attack);
+	void StartSpell(uint spell_index); //maybe have enum for spells?
 	void UpdateCurrentAttack();
 	void ReceiveInput(AttackType attack);
 	void CleanUp();
@@ -94,6 +95,8 @@ protected:
 	ComponentBoxCollider* collider = nullptr;
 
 	std::vector<Attack*> attacks;
+	std::vector<Attack*> spells;
+
 	float finish_attack_time = 0.0f;
 	float start_attack_time = 0.0f;
 	float snap_time = 0.0f;

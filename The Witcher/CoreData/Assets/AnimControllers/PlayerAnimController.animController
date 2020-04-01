@@ -25,7 +25,7 @@
                 "Clip": "9449538334584208347"
             },
             {
-                "Name": "Spell",
+                "Name": "Igni",
                 "Speed": 1,
                 "Clip": "7211782662776671787"
             },
@@ -175,36 +175,34 @@
                 ]
             },
             {
-                "Source": "Spell",
+                "Source": "Igni",
                 "Target": "Idle",
                 "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
-                "FloatConditions": [
+                "FloatConditions": [],
+                "BoolConditions": [
                     {
-                        "Type": "float",
-                        "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
                     }
-                ],
-                "BoolConditions": []
+                ]
             },
             {
-                "Source": "Spell",
+                "Source": "Igni",
                 "Target": "Run",
                 "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
-                "FloatConditions": [
+                "FloatConditions": [],
+                "BoolConditions": [
                     {
-                        "Type": "float",
-                        "CompText": "Greater",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
                     }
-                ],
-                "BoolConditions": []
+                ]
             },
             {
                 "Source": "L",
@@ -470,6 +468,24 @@
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "17156228017399226362",
                 "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 13,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 15,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlaySpell",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 12,
                 "Type": 2
             }
         ]

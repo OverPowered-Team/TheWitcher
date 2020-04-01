@@ -27,6 +27,16 @@ void PlayerAttacks::StartAttack(AttackType attack)
 	AttackMovement();
 }
 
+void PlayerAttacks::StartSpell(uint spell_index)
+{
+	if (spell_index < spells.size())
+	{
+		current_attack = spells[spell_index];
+		DoAttack();
+		AttackMovement();
+	}
+}
+
 void PlayerAttacks::UpdateCurrentAttack()
 {
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
@@ -284,7 +294,10 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
+		return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+	else
+		return current_attack->info.base_damage->GetValue();
 }
 
 Attack* PlayerAttacks::GetCurrentAttack()
@@ -318,7 +331,7 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("multiplier"), attack_combo->GetNumber("multiplier"));
+			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("base_damage"), attack_combo->GetNumber("base_damage"));
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
@@ -331,6 +344,28 @@ void PlayerAttacks::CreateAttacks()
 			attack_combo->GetAnotherNode();
 		}
 		ConnectAttacks();
+	}
+	JSONArraypack* spells_json = combo->GetArray("Spells");
+	if (spells_json)
+	{
+		Attack::AttackInfo info;
+
+		info.name = spells_json->GetString("name");
+		info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
+			spells_json->GetNumber("collider.pos_y"),
+			spells_json->GetNumber("collider.pos_z"));
+		info.collider_size = float3(spells_json->GetNumber("collider.width"),
+			spells_json->GetNumber("collider.height"),
+			spells_json->GetNumber("collider.depth"));
+		info.base_damage = new Stat("Attack_Damage", spells_json->GetNumber("base_damage"), spells_json->GetNumber("base_damage"));
+		info.movement_strength = spells_json->GetNumber("movement_strength");
+		info.activation_frame = spells_json->GetNumber("activation_frame");
+		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
+
+		Attack* attack = new Attack(info);
+		spells.push_back(attack);
+
+		spells_json->GetAnotherNode();
 	}
 	JSONfilepack::FreeJSON(combo);
 }
