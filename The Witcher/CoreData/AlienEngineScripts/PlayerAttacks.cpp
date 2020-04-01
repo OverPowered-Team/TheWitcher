@@ -123,14 +123,21 @@ void PlayerAttacks::SnapToTarget()
 	float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-
-
 	float speed = 0.0f;
 	float distance = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition());
-	if (distance < current_attack->info.max_snap_distance)
-		speed = distance / snap_time;
+
+	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
+	{
+		if (distance < current_attack->info.max_snap_distance)
+			speed = distance / snap_time;
+		else
+			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+	}
 	else
-		speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+	{
+		if (distance > current_attack->info.max_snap_distance)
+			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+	}
 
 	float3 velocity = transform->forward * speed * Time::GetDT();
 	distance_snapped += velocity.Length();
