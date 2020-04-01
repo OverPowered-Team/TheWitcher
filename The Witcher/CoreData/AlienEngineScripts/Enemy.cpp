@@ -79,7 +79,7 @@ void Enemy::GetDamaged(float dmg)
 {
 	if (stats.current_health <= 0.0F) {
 		stats.current_health = 0.0F;
-		state = EnemyState::DEAD;
+		state = EnemyState::DYING;
 		animator->PlayState("Death");
 	}
 	else
