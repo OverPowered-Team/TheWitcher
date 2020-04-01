@@ -1,5 +1,5 @@
 #include "ArrowScript.h"
-#include "PlayerAttacks.h"
+#include "PlayerController.h"
 
 ArrowScript::ArrowScript() : Alien()
 {
@@ -23,5 +23,6 @@ void ArrowScript::Update()
 void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
+		static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"))->ReceiveDamage(damage);
 	}
 }
