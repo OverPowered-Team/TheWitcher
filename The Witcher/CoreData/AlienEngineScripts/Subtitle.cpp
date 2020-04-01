@@ -25,8 +25,8 @@ void Subtitle::Start()
 		do 
 		{
 			subtitle new_subtitle;
-			new_subtitle.start = titles->GetNumber("s");
-			new_subtitle.end = titles->GetNumber("e");
+			new_subtitle.start = titles->GetNumber("s")/1000;
+			new_subtitle.end = titles->GetNumber("e")/1000;
 			new_subtitle.text = titles->GetString("t");
 			subtitles.push_back(new_subtitle);
 			
@@ -41,16 +41,16 @@ void Subtitle::Update()
 	if (!text)
 		return;
 	current_time += Time::GetDT();
-	//if (subtitles.size() > 0 && subtitles.size() > current_sub)
-	//{
-	//	if (current_time > subtitles[current_sub].start && current_time < subtitles[current_sub].end)
-	//	{
-	//		text->text = "Hey";
-	//	}
-	//	else if (current_time > subtitles[current_sub].end)
-	//	{
-	//		++current_sub;
-	//		text->text = "Holaaaaa";
-	//	}
-	//}
+	if (subtitles.size() > 0 && subtitles.size() > current_sub)
+	{
+		if (current_time > subtitles[current_sub].start && current_time < subtitles[current_sub].end)
+		{
+			text->SetText(subtitles[current_sub].text.c_str());
+		}
+		else if (current_time > subtitles[current_sub].end)
+		{
+			++current_sub;
+			text->SetText("");
+		}
+	}
 }
