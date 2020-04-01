@@ -258,21 +258,6 @@ bool PlayerAttacks::CanBeInterrupted()
 		return true;
 }
 
-void PlayerAttacks::OnHit(Enemy* enemy)
-{
-	for (auto it = player_controller->effects.begin(); it != player_controller->effects.end(); ++it)
-	{
-		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
-		{
-			AttackEffect* a_effect = (AttackEffect*)(*it);
-			if (a_effect->GetAttackIdentifier() == current_attack->info.name)
-			{
-				a_effect->OnHit(enemy);
-			}
-		}
-	}
-}
-
 float3 PlayerAttacks::GetMovementVector()
 {
 	float3 vector = float3(Input::GetControllerHoritzontalLeftAxis(player_controller->controller_index), 0.f,
@@ -300,6 +285,11 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 float PlayerAttacks::GetCurrentDMG()
 {
 	return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+}
+
+Attack* PlayerAttacks::GetCurrentAttack()
+{
+	return current_attack;
 }
 
 void PlayerAttacks::CreateAttacks()

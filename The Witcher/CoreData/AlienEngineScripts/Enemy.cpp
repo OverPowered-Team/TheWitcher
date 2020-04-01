@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "PlayerController.h"
 #include "PlayerAttacks.h"
 
 void Enemy::Awake()
@@ -68,15 +69,20 @@ void Enemy::SetStats(const char* json)
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerAttacks* player_attacks = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"));
-		float dmg_received = player_attacks->GetCurrentDMG();
-		player_attacks->OnHit(this);
-		GetDamaged(dmg_received);
+		PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
+		float dmg_received = player->attacks->GetCurrentDMG();
+		player->OnHit(this, GetDamaged(dmg_received));		
+
+		if (state == EnemyState::DYING)
+			player->OnEnemyKill();
 	}
 }
 
-void Enemy::GetDamaged(float dmg)
+float Enemy::GetDamaged(float dmg)
 {
+	float aux_health = stats.current_health;
+	stats.current_health -= dmg;
+
 	if (stats.current_health <= 0.0F) {
 		stats.current_health = 0.0F;
 		state = EnemyState::DYING;
@@ -84,9 +90,10 @@ void Enemy::GetDamaged(float dmg)
 	}
 	else
 	{
-		stats.current_health -= dmg;
 		state = EnemyState::HIT;
 		animator->PlayState("Hit");
 		character_ctrl->SetWalkDirection(float3::zero());
 	}
+
+	return aux_health - stats.current_health;
 }

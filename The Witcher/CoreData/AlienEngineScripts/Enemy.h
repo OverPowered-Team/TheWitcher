@@ -57,7 +57,7 @@ public:
 
 	void OnTriggerEnter(ComponentCollider* collider);
 
-	void GetDamaged(float dmg);
+	float GetDamaged(float dmg);
 
 public:
 

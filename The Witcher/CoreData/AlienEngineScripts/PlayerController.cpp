@@ -533,6 +533,30 @@ void PlayerController::CheckForPossibleRevive()
 	}
 }
 
+void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
+{
+	player_data.total_damage_dealt += dmg_dealt;
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
+		{
+			AttackEffect* a_effect = (AttackEffect*)(*it);
+			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
+			{
+				a_effect->OnHit(enemy);
+			}
+		}
+	}
+
+	LOG("TOTAL DMG DEALT IS %f", player_data.total_damage_dealt);
+}
+
+void PlayerController::OnEnemyKill()
+{
+	player_data.total_kills++;
+	LOG("TOTAL KILLS IS %i", player_data.total_kills);
+}
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {

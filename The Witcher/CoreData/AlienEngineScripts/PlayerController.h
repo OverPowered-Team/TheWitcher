@@ -8,6 +8,7 @@ class PlayerAttacks;
 class EventManager;
 class Relic;
 class Effect;
+class Enemy;
 class ComponentDeformableMesh;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
@@ -78,6 +79,9 @@ public:
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevived(PlayerController* player_dead);
 	void CheckForPossibleRevive();
+
+	void OnHit(Enemy* enemy, float dmg_dealt);
+	void OnEnemyKill();
 
 	void OnTriggerEnter(ComponentCollider* col);
 
