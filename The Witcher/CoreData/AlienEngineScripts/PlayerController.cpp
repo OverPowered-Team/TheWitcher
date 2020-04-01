@@ -4,6 +4,7 @@
 #include "RelicBehaviour.h"
 #include "Effect.h"
 #include "CameraMovement.h"
+#include "Enemy.h"
 #include "../../ComponentDeformableMesh.h"
 
 PlayerController::PlayerController() : Alien()
@@ -208,7 +209,6 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
-		c_attack->GetSystem()->Restart();
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -260,6 +260,9 @@ void PlayerController::Update()
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
+		break;
+	case PlayerController::PlayerState::HIT:
+		can_move = false;
 		break;
 	default:
 		break;
@@ -344,6 +347,10 @@ void PlayerController::OnAnimationEnd(const char* name) {
 		if (abs(player_data.currentSpeed) > 0.01F)
 			state = PlayerState::RUNNING;
 	}
+
+	if (strcmp(name, "Hit") == 0) {
+		state = PlayerState::IDLE;
+	}
 }
 
 void PlayerController::PlaySpell()
@@ -357,7 +364,6 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
-	LOG("SALGO DE DIE");
 }
 
 void PlayerController::Revive()
@@ -365,6 +371,19 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	s_event_manager->OnPlayerRevive(this);
+	player_data.health.current_value = player_data.health.max_value * 0.5f;
+}
+
+void PlayerController::ReceiveDamage(float value)
+{
+	if (state != PlayerState::HIT && state != PlayerState::DASHING) {
+		animator->PlayState("Hit");
+		state = PlayerState::HIT;
+		controller->SetWalkDirection(float3::zero());
+	}
+	player_data.health.DecreaseStat(value);
+	if (player_data.health.current_value == 0)
+		Die();
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -486,6 +505,21 @@ void PlayerController::CheckForPossibleRevive()
 		if (distance <= revive_range) {
 			players_dead[i]->Revive();
 			break;
+		}
+	}
+}
+
+void PlayerController::OnTriggerEnter(ComponentCollider* col)
+{
+	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
+		Alien** alien = nullptr;
+		uint size = col->game_object_attached->parent->GetAllComponentsScript(&alien);
+		for (int i = 0; i < size; ++i) {
+			Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
+			if (enemy) {
+				ReceiveDamage(enemy->stats.damage);
+				break;
+			}
 		}
 	}
 }
