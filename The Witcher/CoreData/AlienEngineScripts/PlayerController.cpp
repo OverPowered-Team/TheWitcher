@@ -385,6 +385,7 @@ void PlayerController::ReceiveDamage(float value)
 {
 	if (state != PlayerState::HIT && state != PlayerState::DASHING) {
 		animator->PlayState("Hit");
+		attacks->CancelAttack();
 		state = PlayerState::HIT;
 		controller->SetWalkDirection(float3::zero());
 	}

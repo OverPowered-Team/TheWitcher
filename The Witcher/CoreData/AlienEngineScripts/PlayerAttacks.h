@@ -54,6 +54,7 @@ public:
 
 	std::vector<std::string> GetFinalAttacks();
 	void OnAddAttackEffect(std::string _attack_name);
+	void CancelAttack();
 	void ActivateCollider();
 	void DeactivateCollider();
 
