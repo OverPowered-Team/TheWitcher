@@ -2,9 +2,13 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "DialogueManager.h"
+
 
 class PlayerController;
 class Effect;
+class EventManager;
+
 
 enum (Relic_Type,
 	BASE,
@@ -83,6 +87,10 @@ public:
 	Relic_Type relic_type = Relic_Type::NONE_TYPE;
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
+
+	EventManager* eventManager = nullptr;
+	Dialogue geraltDialogue;
+	Dialogue YenneferDialogue;
 
 };
 

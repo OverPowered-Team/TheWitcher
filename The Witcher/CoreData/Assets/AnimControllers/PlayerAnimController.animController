@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 11,
-        "NumTransitions": 18,
+        "NumStates": 12,
+        "NumTransitions": 19,
         "States": [
             {
                 "Name": "Idle",
@@ -58,6 +58,11 @@
                 "Name": "Death",
                 "Speed": 1,
                 "Clip": "11063703462969190022"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 3,
+                "Clip": "6366989855699185652"
             }
         ],
         "Transitions": [
@@ -350,6 +355,15 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
