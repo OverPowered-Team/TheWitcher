@@ -12,9 +12,16 @@ float3 Physics::GetGravity()
 	return App->physics->GetGravity();
 }
 
-std::vector<ComponentCollider*> Physics::RayCastAll(Ray ray)
+uint Physics::RayCastAll(Ray ray, ComponentCollider*** comp_array)
 {
-	return App->physics->RayCastAll(ray);
+	std::vector<ComponentCollider*> found = App->physics->RayCastAll(ray);
+	if (!found.empty()) {
+		(*comp_array) = new ComponentCollider * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
 }
 
 ComponentCollider* Physics::RayCastClosest(math::Ray ray)
@@ -22,12 +29,31 @@ ComponentCollider* Physics::RayCastClosest(math::Ray ray)
 	return App->physics->RayCastClosest(ray);
 }
 
-std::vector<ComponentCollider*> Physics::SphereCast(float3 position, float radius)
+uint Physics::SphereCast(float3 position, float radius, ComponentCollider*** comp_array)
 {
-	return App->physics->SphereCast(position, radius);
+	std::vector<ComponentCollider*> found = App->physics->SphereCast(position, radius);
+	if (!found.empty()) {
+		(*comp_array) = new ComponentCollider *[found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
 }
 
-std::vector<ComponentCollider*> Physics::BoxCast(float3 size, float3 position, Quat rotation)
+uint Physics::BoxCast(float3 size, float3 position, Quat rotation, ComponentCollider*** comp_array)
 {
-	return App->physics->BoxCast(size, position, rotation);
+	auto found = App->physics->BoxCast(size, position, rotation);
+	if (!found.empty()) {
+		(*comp_array) = new ComponentCollider * [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*comp_array)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
+void Physics::FreeArray(ComponentCollider*** comp_array)
+{
+	delete[] * comp_array;
 }
