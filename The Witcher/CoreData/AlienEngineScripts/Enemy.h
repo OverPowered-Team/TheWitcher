@@ -15,7 +15,8 @@ class Enemy : public Alien {
 public: 
 
 	struct EnemyStats {
-		float health = 0.0F;
+		float max_health = 0.0F;
+		float current_health = 0.0F;
 		float agility = 0.0F;
 		float damage = 0.0F;
 		float attack_speed = 0.0F;
@@ -49,6 +50,14 @@ public:
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction) {}
 	virtual void Attack() {}
+
+	void OnTriggerEnter(ComponentCollider* collider);
+
+	void GetDamaged(float dmg);
+
+	void ActivateCollider();
+	void DeactivateCollider();
+
 public:
 
 	EnemyType type = EnemyType::NONE;
@@ -57,6 +66,9 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 
+	ComponentCollider* collider = nullptr;
+
 	GameObject* player_1 = nullptr;
 	GameObject* player_2 = nullptr;
+
 };

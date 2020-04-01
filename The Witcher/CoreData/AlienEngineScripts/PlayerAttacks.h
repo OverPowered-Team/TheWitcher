@@ -62,9 +62,11 @@ public:
 
 	void OnAnimationEnd(const char* name);
 
+	float GetCurrentDMG();
+
 public:
 	GameObject* collider_go = nullptr;
-	float snap_range = 0.0f;
+	float snap_detection_range = 5.0f;
 	float max_snap_angle = 0.0f;
 
 	float snap_angle_value = 0.0f;
@@ -96,7 +98,6 @@ protected:
 	float finish_attack_time = 0.0f;
 	float start_attack_time = 0.0f;
 	float snap_time = 0.0f;
-	float min_snap_range = 1.0f;
 	float distance_snapped = 0.0f;
 
 	bool can_execute_input = false;
@@ -108,7 +109,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	// To show in inspector here
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->collider_go);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_range);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_detection_range);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->max_snap_angle);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);

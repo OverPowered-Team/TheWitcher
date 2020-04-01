@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 12,
-        "NumTransitions": 17,
+        "NumStates": 13,
+        "NumTransitions": 18,
         "States": [
             {
                 "Name": "L",
@@ -63,6 +63,11 @@
                 "Name": "RCP",
                 "Speed": 1,
                 "Clip": "4619227199824952727"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 3,
+                "Clip": "10546380727138208159"
             }
         ],
         "Transitions": [
@@ -185,7 +190,7 @@
             {
                 "Source": "L",
                 "Target": "Idle",
-                "Blend": 0.20000000298023224,
+                "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
@@ -331,6 +336,15 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -357,78 +371,6 @@
         "Events": [
             {
                 "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "9412677902632991369",
-                "Frame": 24,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "9412677902632991369",
-                "Frame": 46,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "9412677902632991369",
-                "Frame": 70,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "440478480670926422",
-                "Frame": 7,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "440478480670926422",
-                "Frame": 20,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "440478480670926422",
-                "Frame": 29,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "15038005924165173360",
-                "Frame": 12,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "15038005924165173360",
-                "Frame": 24,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "15038005924165173360",
-                "Frame": 42,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "16806086598256069524",
-                "Frame": 34,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "16806086598256069524",
-                "Frame": 48,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "16806086598256069524",
-                "Frame": 62,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
                 "Animation_Id": "4908746278255016155",
                 "Frame": 39,
                 "Type": 2
@@ -437,6 +379,78 @@
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "4908746278255016155",
                 "Frame": 42,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 30,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 52,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "440478480670926422",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "440478480670926422",
+                "Frame": 13,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "440478480670926422",
+                "Frame": 24,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 18,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 22,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 37,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 41,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 56,
                 "Type": 2
             }
         ]

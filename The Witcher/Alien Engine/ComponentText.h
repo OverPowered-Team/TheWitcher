@@ -36,8 +36,8 @@ public:
 
 	void GenerateVAOVBO();
 
-public:
-	std::string		text = "Non-Text";
+	void SetText(const char* newText);
+	const char* GetText();
 
 private:
 	TextAlign align = TextAlign::LEFT;
@@ -45,6 +45,7 @@ private:
 	uint VAO;
 	int width = 200;
 	float interlineal = 1.5;
+	std::string	text = "Non-Text";
 };
 
 #endif // !_COMPONENT_TEXT_H_

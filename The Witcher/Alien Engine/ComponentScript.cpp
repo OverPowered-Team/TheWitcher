@@ -886,7 +886,7 @@ std::string ComponentScript::GetVariableName(const char* ptr_name)
 			variable_name = variable_name + ptr_strg[i];
 		}
 	}
-	return variable_name;
+	return (!variable_name.empty()) ? variable_name : std::string(ptr_name);
 }
 
 const char* ComponentScript::GetCurrentEnumName(int value, const std::vector<std::string>& enumNames)

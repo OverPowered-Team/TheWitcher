@@ -34,6 +34,7 @@ public:
 	bool OnClick();
 	bool OnPressed();
 	bool OnRelease();
+	bool OnExit();
 
 	void SetValue(float factor);
 	float GetValue();

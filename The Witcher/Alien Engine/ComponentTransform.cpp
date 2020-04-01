@@ -351,7 +351,7 @@ bool ComponentTransform::DrawInspector()
 	ImGui::Separator();
 	ImGui::Spacing();
 
-	if (game_object_attached->IsPrefab() && !App->objects->prefab_scene)
+	if (game_object_attached->IsPrefab() && !App->objects->prefab_scene && game_object_attached->FindPrefabRoot() == game_object_attached)
 	{
 		if (ImGui::CollapsingHeader("Prefab Options", ImGuiTreeNodeFlags_DefaultOpen))
 		{

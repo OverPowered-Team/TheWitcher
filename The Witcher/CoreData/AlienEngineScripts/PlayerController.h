@@ -8,6 +8,7 @@ class PlayerAttacks;
 class EventManager;
 class Relic;
 class Effect;
+class ComponentDeformableMesh;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 
@@ -21,6 +22,14 @@ public:
 		DASHING,
 		CASTING,
 		DEAD,
+		HIT,
+
+		MAX
+		);
+
+	enum (PlayerType,
+		GERALT,
+		YENNEFER,
 
 		MAX
 		);
@@ -32,10 +41,14 @@ public:
 		float currentSpeed = 0.f;
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
-		Stat health = Stat("Health", 100.0f);
-		Stat power = Stat("Strength", 10.0f);
-		Stat chaos = Stat("Chaos", 150.0f);
-		Stat attack_speed = Stat("Attack Speed", 1.0f);
+		Stat health = Stat("Health", 100.0f, 100.0f);
+		Stat power = Stat("Strength", 10.0f, 10.0f);
+		Stat chaos = Stat("Chaos", 150.0f, 150.0f);
+		Stat attack_speed = Stat("Attack Speed", 1.0f, 1.0f);
+
+		PlayerType player_type = PlayerType::GERALT;
+		float total_damage_dealt = 0.0f;
+		uint total_kills = 0;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
@@ -54,6 +67,7 @@ public:
 	void PlaySpell();
 	void Die();
 	void Revive();
+	void ReceiveDamage(float value);
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
@@ -64,6 +78,8 @@ public:
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevived(PlayerController* player_dead);
 	void CheckForPossibleRevive();
+
+	void OnTriggerEnter(ComponentCollider* col);
 
 public:
 	int controller_index = 1;
@@ -124,13 +140,14 @@ private:
 	ComponentAudioEmitter* audio = nullptr;
 
 	ComponentCamera* camera = nullptr;
-	GameObject* obj_aabb = nullptr;
+	std::vector<ComponentDeformableMesh*> deformable_meshes;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
+	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.player_type);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);

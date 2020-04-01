@@ -510,6 +510,9 @@ void ComponentSlider::Update()
 		case Release:
 			OnRelease();
 			break;
+		case Exit:
+			OnExit();
+			break;
 		default:
 			break;
 		}
@@ -818,6 +821,11 @@ bool ComponentSlider::OnRelease()
 {
 	current_color = hover_color;
 	slider_current_color = slider_hover_color;
+	return true;
+}
+
+bool ComponentSlider::OnExit()
+{
 	return true;
 }
 

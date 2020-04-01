@@ -13,6 +13,7 @@ class Resource;
 class Prefab;
 class ComponentCanvas;
 class ComponentCamera;
+class Alien;
 
 class __declspec(dllexport) GameObject
 {
@@ -141,6 +142,8 @@ public:
 	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
 	uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array);
 	const uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array) const;
+
+	uint GetAllComponentsScript(Alien*** aliens);
 
 	// children
 	bool HasChildren() const;

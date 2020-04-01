@@ -229,7 +229,18 @@ void ComponentCollider::Update()
 						for (ComponentScript* script : alien_scripts)
 						{
 							Alien* alien = (Alien*)script->data_ptr;
-							alien->OnTrigger(coll);
+							try {
+								alien->OnTrigger(coll);
+							}
+							catch (...)
+							{
+								try {
+									LOG_ENGINE("ERROR IN THE SCRIPT %s WHEN CALLING ON TRIGGER", alien->data_name);
+								}
+								catch (...) {
+									LOG_ENGINE("UNKNOWN ERROR IN SCRIPT WHEN CALLING ON TRIGGER");
+								}
+							}
 						}
 					}
 					else
@@ -239,7 +250,18 @@ void ComponentCollider::Update()
 						for (ComponentScript* script : alien_scripts)
 						{
 							Alien* alien = (Alien*)script->data_ptr;
-							alien->OnTriggerEnter(coll);
+							try {
+								alien->OnTriggerEnter(coll);
+							}
+							catch (...)
+							{
+								try {
+									LOG_ENGINE("ERROR IN THE SCRIPT %s WHEN CALLING ON TRIGGER ENTER", alien->data_name);
+								}
+								catch (...) {
+									LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS WHEN CALLING ON TRIGGER ENTER");
+								}
+							}
 						}
 					}
 
@@ -256,7 +278,18 @@ void ComponentCollider::Update()
 					for (ComponentScript* script : alien_scripts)
 					{
 						Alien* alien = (Alien*)script->data_ptr;
-						alien->OnTriggerExit(itr->first);
+						try {
+							alien->OnTriggerExit(itr->first);
+						}
+						catch (...)
+						{
+							try {
+								LOG_ENGINE("ERROR IN THE SCRIPT %s WHEN CALLING ON TRIGGER EXIT", alien->data_name);
+							}
+							catch (...) {
+								LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS WHEN CALLING ON TRIGGER EXIT");
+							}
+						}
 					}
 
 					itr = collisions.erase(itr);
