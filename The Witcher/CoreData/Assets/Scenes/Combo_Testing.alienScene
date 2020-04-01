@@ -245,24 +245,6 @@
                         "PlayOnAwake": false
                     },
                     {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            6,
-                            0
-                        ],
-                        "IsTrigger": true,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            6,
-                            13,
-                            6
-                        ]
-                    },
-                    {
                         "Type": 29,
                         "ID": "17438156958097785219",
                         "ResourceID": "7419212300060188559",
@@ -272,7 +254,7 @@
                             {
                                 "VarType": 0,
                                 "Name": "controller_index",
-                                "int": 2
+                                "int": 1
                             },
                             {
                                 "VarType": 14,
@@ -9950,6 +9932,196 @@
                             70.800003051757813,
                             75.410003662109375,
                             69.099998474121094
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Fire_Runestone",
+                "FamilyNumber": 1,
+                "ID": "3928837528244633363",
+                "ParentID": "0",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14628905210895205241",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "170436697827094436"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "13804272423988082120",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 1,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "2605606797925747774",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6799336177838842392",
+                        "ResourceID": "14917809848631228412",
+                        "DataName": "RelicBehaviour",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 6,
+                                "Name": "name",
+                                "string": "Fire Runestone"
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "description",
+                                "string": "Does fire damage"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "relic_type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "relic_effect",
+                                "enumInt": 0
+                            }
+                        ]
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 8,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Radius": 1
+                    }
+                ]
+            },
+            {
+                "Name": "Earth_Runestone",
+                "FamilyNumber": 2,
+                "ID": "7053651109466627970",
+                "ParentID": "3928837528244633363",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14628905210895205241",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7758948893339322657"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "18169622672640620451",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 1,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "13029327450179990225",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11637027197249508791",
+                        "ResourceID": "14917809848631228412",
+                        "DataName": "RelicBehaviour",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 6,
+                                "Name": "name",
+                                "string": "Earth Runestone"
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "description",
+                                "string": "Does double damage"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "relic_type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "relic_effect",
+                                "enumInt": 2
+                            }
                         ]
                     }
                 ]

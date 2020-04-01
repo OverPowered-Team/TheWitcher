@@ -28,6 +28,7 @@ void Floating::Update()
 		if (Time::GetTimeSinceStart() > time + float(time_r/10))
 		{
 			LOG("%i", time_r);
+			time = Time::GetTimeSinceStart();
 			random_start = true;
 		}
 	}
