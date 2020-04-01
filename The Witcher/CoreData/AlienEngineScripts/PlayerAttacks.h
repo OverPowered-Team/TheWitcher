@@ -90,9 +90,6 @@ protected:
 	Attack* base_light_attack = nullptr;
 	Attack* base_heavy_attack = nullptr;
 
-	GameObject** enemies = nullptr; //this is temporary
-	uint enemies_size = 0; //this is temporary
-
 	GameObject* current_target = nullptr;
 	PlayerController* player_controller = nullptr;
 	ComponentBoxCollider* collider = nullptr;

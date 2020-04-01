@@ -160,7 +160,6 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_run);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_attack);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_spell);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->event_manager);
 	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlaySpell, player);
 
