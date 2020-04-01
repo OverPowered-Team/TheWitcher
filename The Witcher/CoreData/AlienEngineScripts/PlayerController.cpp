@@ -216,7 +216,6 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
-		c_attack->GetSystem()->Restart();
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -268,6 +267,9 @@ void PlayerController::Update()
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
+		break;
+	case PlayerController::PlayerState::HIT:
+		can_move = false;
 		break;
 	default:
 		break;
@@ -352,6 +354,10 @@ void PlayerController::OnAnimationEnd(const char* name) {
 		if (abs(player_data.currentSpeed) > 0.01F)
 			state = PlayerState::RUNNING;
 	}
+
+	if (strcmp(name, "Hit") == 0) {
+		state = PlayerState::IDLE;
+	}
 }
 
 void PlayerController::PlaySpell()
@@ -365,7 +371,6 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
-	LOG("SALGO DE DIE");
 }
 
 void PlayerController::Revive()
@@ -378,6 +383,11 @@ void PlayerController::Revive()
 
 void PlayerController::ReceiveDamage(float value)
 {
+	if (state != PlayerState::HIT && state != PlayerState::DASHING) {
+		animator->PlayState("Hit");
+		state = PlayerState::HIT;
+		controller->SetWalkDirection(float3::zero());
+	}
 	player_data.health.DecreaseStat(value);
 	if (player_data.health.current_value == 0)
 		Die();

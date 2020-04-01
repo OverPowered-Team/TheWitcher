@@ -22,6 +22,7 @@ public:
 		DASHING,
 		CASTING,
 		DEAD,
+		HIT,
 
 		MAX
 		);
