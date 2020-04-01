@@ -73,24 +73,23 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 {
 	// Stop playing 
 	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName.c_str()); 
+	LOG("Stopped playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str()); 
 
-	// Set Data
-	currentDialogue.audioData = newDialogue.audioData;
-	currentDialogue.entityName = newDialogue.entityName;
-	currentDialogue.pauseContinue = newDialogue.pauseContinue;
-	currentDialogue.paused = false;
-	currentDialogue.priority = newDialogue.priority;
+	// Set Data --> TODO: other members in "audioData"
+	currentDialogue.audioData.eventName = std::string(newDialogue.audioData.eventName.c_str()); 
+	currentDialogue.priority = std::string(newDialogue.priority.c_str());
+	currentDialogue.subtitlesText = std::string(newDialogue.subtitlesText.c_str());
 
-	LOG("About to change subtitles...");
-
-	// Set Subtitles --> // TODO: CRASH
+	/*
+	// Set Subtitles --> TODO: crashes
 	if(text->IsEnabled() == false)
 		text->SetEnable(true);
-	text->text = newDialogue.subtitlesText; 
-
-	LOG("After changing subtitles...");
+	text->Reset(); 
+	text->text = std::string(newDialogue.subtitlesText); 
+	*/
 
 	// Play new
-	//audioEmitter->SetSwitchState(currentDialogue.audioData.groupID, currentDialogue.audioData.stateID); 
-	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str()); 
+	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
+	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str());
+	LOG("Started playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());
 }

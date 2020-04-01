@@ -34,7 +34,7 @@ ALIEN_FACTORY DialogueTriggerSimple* CreateDialogueTriggerSimple() {
 	DialogueTriggerSimple* alien = new DialogueTriggerSimple();
 	// To show in inspector here
 
-	// TODO: proper names
+	// TODO: with proper names (won't work)
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->once);
 	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.audioData.eventName);
 	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.entityName);

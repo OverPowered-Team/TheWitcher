@@ -19,7 +19,7 @@ struct Dialogue
 public: 
 	AudioData audioData; 
 	std::string subtitlesText = "None";
-	std::string priority = "None";
+	std::string  priority = "Default";
 	bool pauseContinue = true;
 	bool paused = false;
 	std::string entityName = "noName"; //Author

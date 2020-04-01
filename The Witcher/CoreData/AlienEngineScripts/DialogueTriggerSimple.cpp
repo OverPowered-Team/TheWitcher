@@ -33,9 +33,10 @@ void DialogueTriggerSimple::OnTriggerEnter(ComponentCollider* collider)
 
 void  DialogueTriggerSimple::EmitDialogue()
 {
-	LOG("Dialogue trigger activated"); 
+	LOG("Dialogue trigger activated, dialogue audio event name: %s", dialogue.audioData.eventName.c_str()); 
 	eventManager->ReceiveDialogueEvent(this->dialogue);
 
+	// TODO: we can't delete this, won't play sound? The object is unrelated with the emitter (XD)
 	if (once)
 		game_object->ToDelete();
 }
