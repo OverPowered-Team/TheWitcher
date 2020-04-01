@@ -55,6 +55,9 @@ public:
 
 	void GetDamaged(float dmg);
 
+	void ActivateCollider();
+	void DeactivateCollider();
+
 public:
 
 	EnemyType type = EnemyType::NONE;
@@ -63,6 +66,9 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 
+	ComponentCollider* collider = nullptr;
+
 	GameObject* player_1 = nullptr;
 	GameObject* player_2 = nullptr;
+
 };

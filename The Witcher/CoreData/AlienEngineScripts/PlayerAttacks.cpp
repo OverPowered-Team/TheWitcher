@@ -268,7 +268,13 @@ float PlayerAttacks::GetCurrentDMG()
 
 void PlayerAttacks::CreateAttacks()
 {
-	JSONfilepack* combo = JSONfilepack::GetJSON("Configuration/GeraltCombos.json");
+	std::string json;
+	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
+		json = "Configuration/GeraltCombos.json";
+	else
+		json = "Configuration/YenneferCombos.json";
+
+	JSONfilepack* combo = JSONfilepack::GetJSON(json.c_str());
 
 	JSONArraypack* attack_combo = combo->GetArray("Combos");
 	if (attack_combo)

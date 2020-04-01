@@ -92,8 +92,7 @@ void ComponentRigidBody::Update()
 	{
 		btTransform bt_transform = body->getCenterOfMassTransform();
 		btQuaternion rotation = bt_transform.getRotation();
-		btVector3 center = quatRotate(rotation, ToBtVector3(collider->center));
-		btVector3 position = (collider) ? bt_transform.getOrigin() - center : bt_transform.getOrigin() ;
+		btVector3 position = (collider) ? bt_transform.getOrigin() - quatRotate(rotation, ToBtVector3(collider->center)) : bt_transform.getOrigin() ;
 
 		transform->SetGlobalPosition(float3(position));
 		transform->SetGlobalRotation(math::Quat(rotation));
