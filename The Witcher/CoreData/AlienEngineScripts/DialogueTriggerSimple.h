@@ -22,7 +22,7 @@ public:
 private: 
 	void EmitDialogue(); 
 public: 
-	bool once = true;
+	bool once = false;
 	bool hitToPlay = false; 
 	Dialogue dialogue; 
 private:
