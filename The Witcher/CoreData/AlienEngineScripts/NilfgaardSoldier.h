@@ -26,11 +26,10 @@ public:
 	void Attack() override;
 
 	void ShootAttack();
+	Quat RotateArrow();
 	void CleanUpEnemy() override;
 
 	void OnAnimationEnd(const char* name) override;
-
-
 
 public:
 	GameObject* weapon = nullptr;

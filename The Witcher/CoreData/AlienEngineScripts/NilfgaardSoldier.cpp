@@ -1,4 +1,5 @@
 #include "NilfgaardSoldier.h"
+#include "ArrowScript.h"
 
 void NilfgaardSoldier::StartEnemy()
 {
@@ -82,11 +83,23 @@ void NilfgaardSoldier::ShootAttack()
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.5F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
-
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	arrow_rb->SetRotation(rot);
+	static_cast<ArrowScript*>(arrow_go->GetChild("Point")->GetComponentScript("ArrowScript"))->damage = stats.damage;
+	arrow_rb->SetRotation(RotateArrow());
 	arrow_rb->AddForce(direction.Mul(20));
+}
+
+Quat NilfgaardSoldier::RotateArrow()
+{
+	float3 front = float3::unitZ(); //front of the object
+	Quat rot1 = Quat::RotateFromTo(front, direction);
+
+	float3 desiredUp = float3::unitY();
+	float3 right = Cross(direction, desiredUp);
+	desiredUp = Cross(right, direction);
+
+	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
+	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
+	return rot2 * rot1;
 }
 
 void NilfgaardSoldier::UpdateEnemy()
