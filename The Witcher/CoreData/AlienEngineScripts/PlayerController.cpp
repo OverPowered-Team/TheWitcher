@@ -25,12 +25,19 @@ void PlayerController::Start()
 	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
 	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
 
-	s_event_manager = (EventManager*)event_manager->GetComponentScript("EventManager");
+	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
 	camera = Camera::GetCurrentCamera();
-	obj_aabb = ((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->game_object_attached;
+	ComponentDeformableMesh** vec = nullptr;
+	uint size = game_object->GetChild("group1")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
+
+	for (uint i = 0u; i < size; ++i) {
+		deformable_meshes.push_back(vec[i]);
+	}
+
+	GameObject::FreeArrayMemory((void***)&vec);
 	
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
@@ -440,10 +447,19 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
 	// player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
 
-	auto aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+	AABB aabb;
+	AABB new_section;
+	aabb.SetNegativeInfinity();
+	new_section.SetNegativeInfinity();
+
+	for (auto i = deformable_meshes.begin(); i != deformable_meshes.end(); ++i) {
+		new_section = (*i)->GetGlobalAABB();
+		aabb.minPoint = { Maths::Min(new_section.minPoint.x, aabb.minPoint.x), Maths::Min(new_section.minPoint.y, aabb.minPoint.y),Maths::Min(new_section.minPoint.z, aabb.minPoint.z) };
+		aabb.maxPoint = { Maths::Max(new_section.maxPoint.x, aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, aabb.maxPoint.z) };
+	}
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
-	AABB fake_aabb(aabb->minPoint + moved, aabb->maxPoint + moved);
+	AABB fake_aabb(aabb.minPoint + moved, aabb.maxPoint + moved);
 
 	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
 

@@ -902,6 +902,11 @@ bool ComponentCheckbox::OnRelease()
 	return true;
 }
 
+bool ComponentCheckbox::OnExit()
+{
+	return true;
+}
+
 void ComponentCheckbox::SetActive(bool active)
 {
 	this->active = active;

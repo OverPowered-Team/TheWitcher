@@ -31,8 +31,7 @@ void PlayerAttacks::StartAttack(AttackType attack)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (current_target && (transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()) > min_snap_range 
-		&& Time::GetGameTime() < start_attack_time + snap_time))
+	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
 	else
 		player_controller->controller->SetWalkDirection(float3::zero());
@@ -123,14 +122,21 @@ void PlayerAttacks::SnapToTarget()
 	float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-
-
 	float speed = 0.0f;
 	float distance = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition());
-	if (distance < current_attack->info.max_snap_distance)
-		speed = distance / snap_time;
+
+	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
+	{
+		if (distance < current_attack->info.max_snap_distance && distance > 1.0)
+			speed = distance / snap_time;
+		else
+			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+	}
 	else
-		speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+	{
+		if (distance > current_attack->info.max_snap_distance)
+			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
+	}
 
 	float3 velocity = transform->forward * speed * Time::GetDT();
 	distance_snapped += velocity.Length();
@@ -149,7 +155,7 @@ bool PlayerAttacks::FindSnapTarget()
 		float distance = enemies[i]->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
 		float angle = math::RadToDeg(vector.AngleBetweenNorm((enemies[i]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
-		if (distance <= snap_range && angle <= max_snap_angle)
+		if (distance <= snap_detection_range && angle <= max_snap_angle)
 		{
 			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
@@ -226,7 +232,7 @@ void PlayerAttacks::AllowCombo()
 
 void PlayerAttacks::OnDrawGizmos()
 {
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), snap_range, Color::Cyan()); //snap_range
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), snap_detection_range, Color::Cyan()); //snap_range
 }
 
 bool PlayerAttacks::CanBeInterrupted()

@@ -207,7 +207,13 @@ update_status ModuleObjects::Update(float dt)
 	base_game_object->Update();
 	if (!functions_to_call.empty()) {
 		for (auto item = functions_to_call.begin(); item != functions_to_call.end(); ++item) {
-			(*item)();
+			try {
+				(*item)();
+			}
+			catch (...)
+			{
+				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS WHEN CALLING A FUNTION IN TIMELINE");
+			}	
 		}
 		functions_to_call.clear();
 	}
@@ -1142,7 +1148,9 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 					OnPlay();
 				}
 			}
-			current_scene = to_load;
+			if (change_scene) {
+				current_scene = to_load;
+			}
 		}
 		else {
 			LOG_ENGINE("Error loading scene %s", path.data());
@@ -1612,7 +1620,7 @@ void ModuleObjects::UpdateGamePadInput()
 				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up;
 				if (GetGameObjectByID(neightbour_temp) != nullptr)
 				{
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit; //put state exit
 					u64 safe_selected = selected_ui;
 					selected_ui = SetNewSelected("up", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up);
 					if (selected_ui == -1)
@@ -1628,7 +1636,7 @@ void ModuleObjects::UpdateGamePadInput()
 				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down;
 				if (GetGameObjectByID(neightbour_temp) != nullptr)
 				{
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit;
 					u64 safe_selected = selected_ui;
 					selected_ui = SetNewSelected("down", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down);
 					if (selected_ui == -1)
@@ -1644,7 +1652,7 @@ void ModuleObjects::UpdateGamePadInput()
 				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right;
 				if (GetGameObjectByID(neightbour_temp) != nullptr)
 				{
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit;
 					u64 safe_selected = selected_ui;
 					selected_ui = SetNewSelected("right", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right);
 					if (selected_ui == -1)
@@ -1660,7 +1668,7 @@ void ModuleObjects::UpdateGamePadInput()
 				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left;
 				if (GetGameObjectByID(neightbour_temp) != nullptr)
 				{
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit;
 					u64 safe_selected = selected_ui;
 					selected_ui = SetNewSelected("left", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left);
 					if (selected_ui == -1)

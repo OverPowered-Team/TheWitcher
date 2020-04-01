@@ -249,6 +249,21 @@ bool ComponentCamera::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+		
+		ImGui::Checkbox("Active Fog", &activeFog);
+		if (activeFog)
+		{
+			ImGui::DragFloat("Density", &fogDensity, 0.001f, 0.0f, 10.f);
+			ImGui::DragFloat("Gradient", &fogGradient, 0.02f, 0.0f, 10.f);
+		}
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
 		ImGui::PushID("vcnsdbiobsdifnidsofnionew");
 		ImGui::Checkbox("Print Icon", &print_icon);
 		ImGui::PopID();
@@ -538,6 +553,7 @@ void ComponentCamera::Reset()
 	AspectRatio(16, 9);
 	horizontal_fov = frustum.horizontalFov * Maths::Rad2Deg();
 	print_icon = true;
+	activeFog = false;
 }
 
 void ComponentCamera::SetComponent(Component* component)
@@ -660,9 +676,49 @@ float3 ComponentCamera::GetCameraPosition() const
 	return frustum.pos;
 }
 
+void ComponentCamera::EnableFog()
+{
+	activeFog = true;
+}
+
+void ComponentCamera::DisableFog()
+{
+	activeFog = false;
+}
+
+void ComponentCamera::SetFogDensity(const float& density)
+{
+	fogDensity = density;
+}
+
+void ComponentCamera::SetFogGradient(const float& gradient)
+{
+	fogGradient = gradient;
+}
+
+float ComponentCamera::GetFogDensity() const
+{
+	return fogDensity;
+}
+
+float ComponentCamera::GetFogGradient() const
+{
+	return fogGradient;
+}
+
+void ComponentCamera::SetBackgroundColor(const float3& color)
+{
+	camera_color_background = { color.x, color.y, color.z };
+}
+
+float3 ComponentCamera::GetBackgroundColor() const
+{
+	return float3(camera_color_background.r, camera_color_background.g, camera_color_background.b);
+}
+
 void ComponentCamera::DrawSkybox()
 {
-	if (App->renderer3D->render_skybox)
+	if (App->renderer3D->render_skybox && !activeFog)
 	{
 		glDepthFunc(GL_LEQUAL);
 		skybox_shader->Bind();
@@ -676,7 +732,7 @@ void ComponentCamera::DrawSkybox()
 		skybox_shader->SetUniformMat4f("view", view_m);
 		float4x4 projection = this->GetProjectionMatrix4f4();
 		skybox_shader->SetUniformMat4f("projection", projection);
-
+	
 		glBindVertexArray(skybox->vao);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox_texture_id);
@@ -770,6 +826,9 @@ void ComponentCamera::Clone(Component* clone)
 	camera->ViewMatrix = ViewMatrix;
 	camera->ViewMatrixInverse = ViewMatrixInverse;
 	camera->cubemap = cubemap;
+	camera->activeFog = activeFog;
+	camera->fogDensity = fogDensity;
+	camera->fogGradient = fogGradient;
 }
 
 void ComponentCamera::SaveComponent(JSONArraypack* to_save)
@@ -787,6 +846,9 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("IsSelectedCamera", (game_object_attached->IsSelected()) ? true : false);
 	to_save->SetBoolean("PrintIcon", print_icon);
 	to_save->SetColor("IconColor", camera_icon_color);
+	to_save->SetBoolean("Fog", activeFog);
+	to_save->SetNumber("Density", fogDensity);
+	to_save->SetNumber("Gradient", fogGradient);
 
 	/* Save skybox (Library File) */
 	std::string path1 = cubemap->pos_x;
@@ -826,6 +888,11 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	if (to_load->GetBoolean("IsSelectedCamera")) {
 		App->renderer3D->selected_game_camera = this;
 	}
+
+	activeFog = to_load->GetBoolean("Fog");
+	fogDensity = (float)to_load->GetNumber("Density");
+	fogGradient = (float)to_load->GetNumber("Gradient");
+
 
 	cubemap->pos_x.assign(to_load->GetString("Skybox_PositiveX"));
 	std::string path_pos_x = App->file_system->GetBaseFileName(cubemap->pos_x.c_str());

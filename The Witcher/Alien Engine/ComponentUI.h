@@ -16,6 +16,7 @@ enum UIState {
 	Click,
 	Pressed,
 	Release,
+	Exit,
 	Disabled
 };
 
@@ -46,6 +47,7 @@ public:
 	virtual bool OnClick() { return true; };
 	virtual bool OnPressed() { return true; };
 	virtual bool OnRelease() { return true; };
+	virtual bool OnExit() { return true; };
 
 	void SetCanvas(ComponentCanvas* canvas_);
 
