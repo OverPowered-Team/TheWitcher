@@ -30,7 +30,14 @@ void PlayerController::Start()
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
 	camera = Camera::GetCurrentCamera();
-	obj_aabb = ((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->game_object_attached;
+	ComponentDeformableMesh** vec = nullptr;
+	uint size = game_object->GetChild("group1")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
+
+	for (uint i = 0u; i < size; ++i) {
+		deformable_meshes.push_back(vec[i]);
+	}
+
+	GameObject::FreeArrayMemory((void***)&vec);
 	
 	c_run->GetSystem()->StopEmmitter();
 	c_attack->GetSystem()->Stop();
@@ -209,7 +216,6 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		c_run->GetSystem()->StopEmmitter();
-		c_attack->GetSystem()->Restart();
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -261,6 +267,9 @@ void PlayerController::Update()
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
+		break;
+	case PlayerController::PlayerState::HIT:
+		can_move = false;
 		break;
 	default:
 		break;
@@ -345,6 +354,10 @@ void PlayerController::OnAnimationEnd(const char* name) {
 		if (abs(player_data.currentSpeed) > 0.01F)
 			state = PlayerState::RUNNING;
 	}
+
+	if (strcmp(name, "Hit") == 0) {
+		state = PlayerState::IDLE;
+	}
 }
 
 void PlayerController::PlaySpell()
@@ -358,7 +371,6 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
-	LOG("SALGO DE DIE");
 }
 
 void PlayerController::Revive()
@@ -371,6 +383,11 @@ void PlayerController::Revive()
 
 void PlayerController::ReceiveDamage(float value)
 {
+	if (state != PlayerState::HIT && state != PlayerState::DASHING) {
+		animator->PlayState("Hit");
+		state = PlayerState::HIT;
+		controller->SetWalkDirection(float3::zero());
+	}
 	player_data.health.DecreaseStat(value);
 	if (player_data.health.current_value == 0)
 		Die();
@@ -430,10 +447,19 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
 	// player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
 
-	auto aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
+	AABB aabb;
+	AABB new_section;
+	aabb.SetNegativeInfinity();
+	new_section.SetNegativeInfinity();
+
+	for (auto i = deformable_meshes.begin(); i != deformable_meshes.end(); ++i) {
+		new_section = (*i)->GetGlobalAABB();
+		aabb.minPoint = { Maths::Min(new_section.minPoint.x, aabb.minPoint.x), Maths::Min(new_section.minPoint.y, aabb.minPoint.y),Maths::Min(new_section.minPoint.z, aabb.minPoint.z) };
+		aabb.maxPoint = { Maths::Max(new_section.maxPoint.x, aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, aabb.maxPoint.z) };
+	}
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
-	AABB fake_aabb(aabb->minPoint + moved, aabb->maxPoint + moved);
+	AABB fake_aabb(aabb.minPoint + moved, aabb.maxPoint + moved);
 
 	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
 
