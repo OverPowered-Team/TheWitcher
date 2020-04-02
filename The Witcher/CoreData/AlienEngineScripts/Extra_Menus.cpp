@@ -23,7 +23,7 @@ void Extra_Menus::Start()
 	settings->SetEnable(false);
 
 
-	Geralt_data = (PlayerController*)Geralt->GetComponentScript("PlayerController");
+	/*Geralt_data = (PlayerController*)Geralt->GetComponentScript("PlayerController");
 	damage1=(ComponentText*)game_object->GetChildRecursive("Damage_t1");
 	kills1=(ComponentText*)game_object->GetChildRecursive("Kills_t1");
 	score1=(ComponentText*)game_object->GetChildRecursive("Score_t1");
@@ -33,7 +33,7 @@ void Extra_Menus::Start()
 	damage2 = (ComponentText*)game_object->GetChildRecursive("Damage_t2");
 	kills2 = (ComponentText*)game_object->GetChildRecursive("Kills_t2");
 	score2 = (ComponentText*)game_object->GetChildRecursive("Score_t2");
-	relics2 = (ComponentText*)game_object->GetChildRecursive("Relics2");
+	relics2 = (ComponentText*)game_object->GetChildRecursive("Relics2");*/
 }
 
 void Extra_Menus::PostUpdate()
