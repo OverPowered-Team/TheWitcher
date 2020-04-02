@@ -28,6 +28,10 @@ void DebugManager::Update()
 		{
 			SceneManager::LoadScene("Lose");
 		}
+		if (Input::GetKeyDown(SDL_SCANCODE_D))
+		{
+			
+		}
 	}
 
 }
