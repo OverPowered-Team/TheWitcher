@@ -25,9 +25,7 @@ public:
 	std::vector<subtitle> subtitles;
 	double current_time = 0;
 	int current_sub = 0;
-	ComponentText* text = nullptr;
-	ComponentAudioEmitter* audio = nullptr;
-	bool first_entered  =true;
+	ComponentText* text;
 };
 
 ALIEN_FACTORY Subtitle* CreateSubtitle() {
