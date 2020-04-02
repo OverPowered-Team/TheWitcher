@@ -11,7 +11,7 @@ MainMenu_Buttons::~MainMenu_Buttons()
 
 void MainMenu_Buttons::NewGame()
 {
-	SceneManager::LoadScene("newTRIGGER");
+	SceneManager::LoadScene("Intro");
 }
 
 void MainMenu_Buttons::ExitGame()
