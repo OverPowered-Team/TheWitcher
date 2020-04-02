@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "YenneferController",
         "NumStates": 14,
-        "NumTransitions": 20,
+        "NumTransitions": 23,
         "States": [
             {
                 "Name": "L",
@@ -380,6 +380,39 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "Idle",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Revive",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "RCP",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -400,6 +433,10 @@
             },
             {
                 "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "reviving",
                 "Value": false
             }
         ],
@@ -507,9 +544,15 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerController::OnAttackEffect",
+                "Event_Id": "PlayerController::ActionRevive",
+                "Animation_Id": "4619227199824952727",
+                "Frame": 42,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "9412677902632991369",
-                "Frame": 29,
+                "Frame": 17,
                 "Type": 2
             }
         ]

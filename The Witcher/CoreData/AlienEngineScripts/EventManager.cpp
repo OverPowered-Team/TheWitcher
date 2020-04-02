@@ -17,8 +17,7 @@ void EventManager::Start()
 	{
 		{"Boss", 0},
 	    {"Narrative", 0},
-		{"Enemies", 7},
-	    {"Default", 666}
+		{"Enemies", 7}
 	}; 
 	
 
@@ -27,7 +26,7 @@ void EventManager::Start()
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
 
-	dialogueManager = (DialogueManager*)GameObject::FindWithName("GameManager")->GetComponentScript("DialogueManager");
+	//dialogueManager = (DialogueManager*)GameObject::FindWithName("DialogueManager")->GetComponentScript("DialogueManager");
 
 }
 
@@ -51,29 +50,19 @@ void EventManager::OnPlayerRevive(PlayerController* player_revived)
 
 void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 {
-	/*bool c = (eventPriorities.find(dialogue.priority.c_str()) == eventPriorities.end());
+	bool c = (eventPriorities.find(dialogue.priority) == eventPriorities.end());
 	assert(!c && "Priority not valid");
 
 	if (!c)
 	{
 		LOG("Priority not valid");
 		return;
-	}*/
+	}
 
 	//eventPriorities.at(dialogue.priority)
 
 	// TODO: send this to the dialogue script
-	dialogueManager->InputNewDialogue(dialogue);
+	//dialogueManager->InputNewDialogue(dialogue);
 
-}
-
-void EventManager::ReceiveDialogueEvent(int index, float volume) const
-{
-	if (volume < 0.0f)
-		volume = 0.0f;
-	else if (volume > 1.0f)
-		volume = 1.0f; 
-
-	dialogueManager->InputNewDialogue(index, volume);
 }
 

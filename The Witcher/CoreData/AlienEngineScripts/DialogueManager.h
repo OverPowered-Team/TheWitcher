@@ -9,55 +9,29 @@ class ComponentText;
 
 struct AudioData
 {
-	std::string eventName = "noName";
-	std::string groupID = "noName";
-	std::string stateID = "noName";
-
-	void Reset()
-	{
-		eventName = "None"; 
-		groupID = "None";
-		stateID = "None";
-	}
-};
-
-struct SubtitlesTime
-{
-	float currentTime = 0.0f;
-	float totalTime = 5.0f;
-
-	void Reset()
-	{
-		currentTime = 0.0f; 
-		totalTime = 5.0f; 
-	}
+	const char* eventName = "noName";
+	const char* groupID = "noName";
+	const char* stateID = "noName";
 };
 
 struct Dialogue
 {
 public: 
 	AudioData audioData; 
-	SubtitlesTime subtitlesTime;
-	std::string subtitlesText = "None";
-	std::string  priority = "Default";
+	const char* subtitlesText = "None";
+	const char* priority = "None";
 	bool pauseContinue = true;
 	bool paused = false;
-	std::string entityName = "noName"; //Author
-
-public: 
-	void Reset()
-	{
-		audioData.Reset(); 
-		subtitlesTime.Reset(); 
-		subtitlesText = "None"; 
-		priority = "Default"; 
-		pauseContinue = true; 
-		paused = false; 
-		entityName = "noName"; 
-	}
+	const char* entityName = "noName"; //Author
+	const char* subtitles = "";
 };
 
-
+// TODO: Delete this when we know when an audio finishes:
+struct SubtitlesTime
+{
+	float currentTime = 0.0f; 
+	float totalTime = 5.0f; 
+};
 
 class ALIEN_ENGINE_API DialogueManager : public Alien {
 
@@ -67,25 +41,21 @@ public:
 	void Start();
 	void Update();
 
-	bool InputNewDialogue(Dialogue &dialogue, float volume = 0.5f);
-	bool InputNewDialogue(int index, float volume = 0.5f);
+	bool InputNewDialogue(Dialogue &dialogue);
 
 private: 
-	void OverrideDialogue(Dialogue& newDialogue, float volume = 0.5f); 
-	void LoadJSONDialogues();
+	void OverrideDialogue(Dialogue& newDialogue); 
 
 private:
 	Dialogue currentDialogue; 
 	Dialogue pausedDialogue; 
-	bool playing = false; 
 
 	EventManager* eventManager = nullptr;
 	ComponentAudioEmitter* audioEmitter = nullptr; 
 	ComponentText* text = nullptr; 
 
-	// to read from JSON
-	std::vector <std::tuple<std::string, std::string, float>> dialogueData; // event name, subtitles and subtitle time 
-
+	// TODO
+	SubtitlesTime subtitlesTime; 
 };
 
 ALIEN_FACTORY DialogueManager* CreateDialogueManager() {
