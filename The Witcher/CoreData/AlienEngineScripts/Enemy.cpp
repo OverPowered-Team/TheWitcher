@@ -6,6 +6,7 @@
 void Enemy::Awake()
 {
 	((EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	attack_collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
 }
 
 void Enemy::StartEnemy()
@@ -64,6 +65,22 @@ void Enemy::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
+}
+
+void Enemy::ActivateCollider()
+{
+	if (attack_collider)
+	{
+		attack_collider->SetEnable(true);
+	}
+}
+
+void Enemy::DeactivateCollider()
+{
+	if (attack_collider)
+	{
+		attack_collider->SetEnable(false);
+	}
 }
 
 void Enemy::OnTriggerEnter(ComponentCollider* collider)

@@ -10,6 +10,7 @@ public:
 	struct AttackInfo {
 		std::string name = "";
 		std::string input = "";
+		std::string particle_name = "";
 		float3 collider_position;
 		float3 collider_size;
 		Stat* base_damage = nullptr;
