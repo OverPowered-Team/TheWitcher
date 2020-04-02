@@ -28,6 +28,7 @@ public:
 	ComponentText* text = nullptr;
 	ComponentAudioEmitter* audio = nullptr;
 	bool first_entered = true;
+	float end_seconds = 69;
 	
 
 };

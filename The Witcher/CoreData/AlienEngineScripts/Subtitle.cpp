@@ -62,4 +62,8 @@ void Subtitle::Update()
 			}
 		}
 	}
+	if (current_time > end_seconds)
+	{
+		SceneManager::LoadScene("newTRIGGER");
+	}
 }
