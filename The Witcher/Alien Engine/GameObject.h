@@ -90,7 +90,7 @@ public:
 	static uint FindGameObjectsWithTag(const char* tag_to_find, GameObject*** objects);
 	static void FreeArrayMemory(void*** array_);
 	// parent = nullptr is root
-	static GameObject* Instantiate(const Prefab& prefab, const float3& position, GameObject* parent = nullptr);
+	static GameObject* Instantiate(const Prefab& prefab, const float3& position, bool check_child = false, GameObject* parent = nullptr);
 	static GameObject* CloneObject(GameObject* to_clone, GameObject* parent = nullptr);
 	// TODO:
 	/*
