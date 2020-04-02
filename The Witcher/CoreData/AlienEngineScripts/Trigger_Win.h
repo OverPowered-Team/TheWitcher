@@ -12,7 +12,10 @@ public:
 	
 	void Start();
 	void Update();
+	void OnTriggerEnter(ComponentCollider* collider);
 
+	bool first = false;
+	float timer = 0.f;
 };
 
 ALIEN_FACTORY Trigger_Win* CreateTrigger_Win() {
