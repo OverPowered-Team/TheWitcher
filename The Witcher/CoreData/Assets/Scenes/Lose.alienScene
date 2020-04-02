@@ -75,6 +75,16 @@
                                 "gameobject": "9215414965995711833"
                             }
                         ]
+                    },
+                    {
+                        "ID": "11171820012215424404",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 0.19900000095367432,
+                        "Mute": false,
+                        "Bank": "3991942870",
+                        "Event": "3241038393",
+                        "PlayOnAwake": true
                     }
                 ]
             },
@@ -116,7 +126,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13671321625291858462",
+                        "ID": "10444594932256081222",
                         "Text": "Total",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -218,10 +228,20 @@
                             1
                         ],
                         "HasListenersOnClick": false,
-                        "HasListenersOnHover": false,
+                        "HasListenersOnHover": true,
+                        "ListenersOnHover": [
+                            {
+                                "0": "Damage"
+                            }
+                        ],
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
-                        "HasListenersOnExit": false,
+                        "HasListenersOnExit": true,
+                        "ListenersOnExit": [
+                            {
+                                "0": "UI_EndMenu::ExitButton"
+                            }
+                        ],
                         "SelectOnUp": "2391248775900546767",
                         "SelectOnDown": "18336637630664635367",
                         "SelectOnRight": "18336637630664635367",
@@ -274,7 +294,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13140421443052107873",
+                        "ID": "5347342451117038882",
                         "Text": "Damage",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -376,10 +396,20 @@
                             1
                         ],
                         "HasListenersOnClick": false,
-                        "HasListenersOnHover": false,
+                        "HasListenersOnHover": true,
+                        "ListenersOnHover": [
+                            {
+                                "0": "Kills"
+                            }
+                        ],
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
-                        "HasListenersOnExit": false,
+                        "HasListenersOnExit": true,
+                        "ListenersOnExit": [
+                            {
+                                "0": "UI_EndMenu::ExitButton"
+                            }
+                        ],
                         "SelectOnUp": "13228505944927119141",
                         "SelectOnDown": "4329264765106266347",
                         "SelectOnRight": "4329264765106266347",
@@ -432,7 +462,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6282508247521303172",
+                        "ID": "17363866677942835338",
                         "Text": "Kills",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -534,10 +564,20 @@
                             1
                         ],
                         "HasListenersOnClick": false,
-                        "HasListenersOnHover": false,
+                        "HasListenersOnHover": true,
+                        "ListenersOnHover": [
+                            {
+                                "0": "Relics"
+                            }
+                        ],
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
-                        "HasListenersOnExit": false,
+                        "HasListenersOnExit": true,
+                        "ListenersOnExit": [
+                            {
+                                "0": "UI_EndMenu::ExitButton"
+                            }
+                        ],
                         "SelectOnUp": "18336637630664635367",
                         "SelectOnDown": "9081695661250977580",
                         "SelectOnRight": "9081695661250977580",
@@ -590,7 +630,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6242896609238060891",
+                        "ID": "2888888276789320907",
                         "Text": "Relics",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -692,10 +732,20 @@
                             1
                         ],
                         "HasListenersOnClick": false,
-                        "HasListenersOnHover": false,
+                        "HasListenersOnHover": true,
+                        "ListenersOnHover": [
+                            {
+                                "0": "Gold"
+                            }
+                        ],
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
-                        "HasListenersOnExit": false,
+                        "HasListenersOnExit": true,
+                        "ListenersOnExit": [
+                            {
+                                "0": "UI_EndMenu::ExitButton"
+                            }
+                        ],
                         "SelectOnUp": "4329264765106266347",
                         "SelectOnDown": "2391248775900546767",
                         "SelectOnRight": "2391248775900546767",
@@ -748,7 +798,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15136862983855640448",
+                        "ID": "467700931142927742",
                         "Text": "Gold",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -850,10 +900,20 @@
                             1
                         ],
                         "HasListenersOnClick": false,
-                        "HasListenersOnHover": false,
+                        "HasListenersOnHover": true,
+                        "ListenersOnHover": [
+                            {
+                                "0": "XP"
+                            }
+                        ],
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": false,
-                        "HasListenersOnExit": false,
+                        "HasListenersOnExit": true,
+                        "ListenersOnExit": [
+                            {
+                                "0": "UI_EndMenu::ExitButton"
+                            }
+                        ],
                         "SelectOnUp": "9081695661250977580",
                         "SelectOnDown": "13228505944927119141",
                         "SelectOnRight": "13228505944927119141",
@@ -906,7 +966,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18350545104792962888",
+                        "ID": "658173288765762789",
                         "Text": "XP",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1155,7 +1215,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "14001437151849465082",
+                        "ID": "8509534124501664834",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1262,7 +1322,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "991888791373796288",
+                        "ID": "13475757080121915673",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1317,7 +1377,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1045776570996189703",
+                        "ID": "12852290494962933809",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1410,7 +1470,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18073380871075690686",
+                        "ID": "7565082280841703714",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1517,7 +1577,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15715911195025188465",
+                        "ID": "11469475650523152328",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1572,7 +1632,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17317622858004943189",
+                        "ID": "16015477614935304196",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1665,7 +1725,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "151027820954076627",
+                        "ID": "17184288405953434939",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1720,7 +1780,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5893656966370732839",
+                        "ID": "10106087902961279353",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1775,7 +1835,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "842908096840676436",
+                        "ID": "18013966188798783796",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1920,7 +1980,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1102131861837743610",
+                        "ID": "14244737256894685118",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2027,7 +2087,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9825685906288898617",
+                        "ID": "3197559476450298769",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2082,7 +2142,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "8288344266688399304",
+                        "ID": "4325501314918078484",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2175,7 +2235,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13606858936513703692",
+                        "ID": "4278070353218856262",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2230,7 +2290,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17287939506842918213",
+                        "ID": "7433068997464724944",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2285,7 +2345,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1000680432329254402",
+                        "ID": "14981613105432955139",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2340,7 +2400,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1606904658493998008",
+                        "ID": "8428618242614813774",
                         "Text": "XP",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2601,7 +2661,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "3109025285295860171",
+                        "ID": "4474396323661480862",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
