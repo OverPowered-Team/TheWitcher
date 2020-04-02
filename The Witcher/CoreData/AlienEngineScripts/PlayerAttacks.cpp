@@ -325,6 +325,7 @@ void PlayerAttacks::CreateAttacks()
 
 			info.name = attack_combo->GetString("name");
 			info.input = attack_combo->GetString("button");
+			info.particle_name = attack_combo->GetString("particle_name");
 			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
 				attack_combo->GetNumber("collider.pos_y"),
 				attack_combo->GetNumber("collider.pos_z"));
@@ -351,6 +352,7 @@ void PlayerAttacks::CreateAttacks()
 		Attack::AttackInfo info;
 
 		info.name = spells_json->GetString("name");
+		info.particle_name = spells_json->GetString("particle_name");
 		info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
 			spells_json->GetNumber("collider.pos_y"),
 			spells_json->GetNumber("collider.pos_z"));
