@@ -122,6 +122,14 @@ void PlayerController::Update()
 		can_move = true;
 		particles["p_run"]->SetEnable(false);
 
+		if (!controller->OnGround())
+		{
+			can_move = true;
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			animator->SetBool("air", true);
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
@@ -168,12 +176,19 @@ void PlayerController::Update()
 			}
 		}
 
-
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
 		particles["p_run"]->SetEnable(true);
 		can_move = true;
+
+		if (!controller->OnGround())
+		{
+			can_move = true;
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			animator->SetBool("air", true);
+		}
 
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
@@ -227,6 +242,7 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
+
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		particles["p_run"]->SetEnable(false);
