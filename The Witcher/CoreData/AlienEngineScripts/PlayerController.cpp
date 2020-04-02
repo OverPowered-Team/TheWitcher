@@ -47,6 +47,8 @@ void PlayerController::Start()
 
 	GameObject::FreeArrayMemory((void***)&p_sys);
 
+	controller->SetRotation(Quat::identity());
+
 	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
@@ -293,9 +295,11 @@ void PlayerController::Update()
 		break;
 	case PlayerController::PlayerState::DEAD:
 		can_move = false;
+		controller->SetWalkDirection(float3::zero());
 		break;
 	case PlayerController::PlayerState::REVIVING:
 		can_move = false;
+		controller->SetWalkDirection(float3::zero());
 		break;
 	case PlayerController::PlayerState::MAX:
 		break;
@@ -384,6 +388,7 @@ void PlayerController::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Hit") == 0) {
 		state = PlayerState::IDLE;
+		animator->SetBool("reviving", false);
 	}
 
 	if (strcmp(name, "RCP") == 0) {
@@ -419,7 +424,8 @@ void PlayerController::Revive()
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	s_event_manager->OnPlayerRevive(this);
-	player_data.health.current_value = player_data.health.max_value * 0.5f;
+	player_data.health.IncreaseStat(player_data.health.max_value * 0.5);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 }
 
 void PlayerController::ActionRevive()
