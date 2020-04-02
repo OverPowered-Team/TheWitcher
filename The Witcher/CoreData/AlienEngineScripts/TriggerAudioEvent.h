@@ -15,13 +15,14 @@ public:
 public:
 	ComponentAudioEmitter* emitter = nullptr;
 	bool triggered = false;
-	std::string event_name;
+	float timer = 0.f;
+	//std::string event_name;
 };
 
 ALIEN_FACTORY TriggerAudioEvent* CreateTriggerAudioEvent() {
 	TriggerAudioEvent* alien = new TriggerAudioEvent();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_STRING(alien->event_name);
+	//SHOW_IN_INSPECTOR_AS_STRING(alien->event_name);
 
 	return alien;
 }

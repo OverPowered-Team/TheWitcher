@@ -10,7 +10,8 @@ public:
 	enum (Environment,
 		QUIET,
 		WIND,
-		FOREST
+		FOREST,
+		BIRDS_WIND
 		);
 	TriggerEnvironment();
 	virtual ~TriggerEnvironment();
