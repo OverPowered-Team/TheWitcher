@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 13,
-        "NumTransitions": 18,
+        "NumStates": 14,
+        "NumTransitions": 23,
         "States": [
             {
                 "Name": "L",
@@ -68,6 +68,11 @@
                 "Name": "Hit",
                 "Speed": 3,
                 "Clip": "10546380727138208159"
+            },
+            {
+                "Name": "Fthrower",
+                "Speed": 2,
+                "Clip": "11452384421895114614"
             }
         ],
         "Transitions": [
@@ -345,6 +350,69 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Fthrower",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Fthrower",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Idle",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Revive",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "RCP",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -365,6 +433,10 @@
             },
             {
                 "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "reviving",
                 "Value": false
             }
         ],
@@ -451,6 +523,60 @@
                 "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "16806086598256069524",
                 "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 46,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 47,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::ActionRevive",
+                "Animation_Id": "4619227199824952727",
+                "Frame": 42,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "440478480670926422",
+                "Frame": 12,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "4908746278255016155",
+                "Frame": 40,
                 "Type": 2
             }
         ]

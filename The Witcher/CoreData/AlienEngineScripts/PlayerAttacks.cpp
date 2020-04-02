@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "PlayerAttacks.h"
@@ -16,9 +17,6 @@ void PlayerAttacks::Start()
 	player_controller = (PlayerController*)GetComponentScript("PlayerController");
 	collider = (ComponentBoxCollider*)collider_go->GetComponent(ComponentType::BOX_COLLIDER);
 
-	//temporary
-	enemies_size = GameObject::FindGameObjectsWithTag("Enemy", &enemies);
-
 	CreateAttacks();
 }
 
@@ -27,6 +25,16 @@ void PlayerAttacks::StartAttack(AttackType attack)
 	SelectAttack(attack);
 	DoAttack();
 	AttackMovement();
+}
+
+void PlayerAttacks::StartSpell(uint spell_index)
+{
+	if (spell_index < spells.size())
+	{
+		current_attack = spells[spell_index];
+		DoAttack();
+		AttackMovement();
+	}
 }
 
 void PlayerAttacks::UpdateCurrentAttack()
@@ -117,6 +125,11 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 	}
 }
 
+void PlayerAttacks::CancelAttack()
+{
+	current_attack = nullptr;
+}
+
 void PlayerAttacks::SnapToTarget()
 {
 	float3 direction = (current_target->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
@@ -127,8 +140,11 @@ void PlayerAttacks::SnapToTarget()
 
 	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
 	{
-		if (distance < current_attack->info.max_snap_distance && distance > 1.0)
-			speed = distance / snap_time;
+		if (distance < current_attack->info.max_snap_distance)
+			if (distance < 1.0)
+				speed = 0;
+			else 
+				speed = distance / snap_time;
 		else
 			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
 	}
@@ -147,20 +163,32 @@ void PlayerAttacks::SnapToTarget()
 
 bool PlayerAttacks::FindSnapTarget()
 {
+	ComponentCollider** colliders_in_range;
+	uint size = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range, &colliders_in_range);
+	std::vector<GameObject*> enemies_in_range;
+	for (uint i = 0u; i < size; ++i)
+	{
+		if (std::strcmp(colliders_in_range[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		{
+			enemies_in_range.push_back(colliders_in_range[i]->game_object_attached);
+		}
+	}
+	Physics::FreeArray(&colliders_in_range);
+
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 100.0f);
 
-	for(uint i = 0; i < enemies_size; ++i)
+	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = enemies[i]->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
-		float angle = math::RadToDeg(vector.AngleBetweenNorm((enemies[i]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
+		float distance = (*it)->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
+		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
 		if (distance <= snap_detection_range && angle <= max_snap_angle)
 		{
 			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
 			{
-				snap_candidate.first = enemies[i];
+				snap_candidate.first = (*it);
 				snap_candidate.second = snap_value;
 			}
 		}		
@@ -187,7 +215,6 @@ void PlayerAttacks::CleanUp()
 		delete (*item);
 	}
 	attacks.clear();
-	//GameObject::FreeArrayMemory((void***)&enemies);
 }
 
 void PlayerAttacks::AttackMovement()
@@ -269,7 +296,15 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
+		return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+	else
+		return current_attack->info.base_damage->GetValue();
+}
+
+Attack* PlayerAttacks::GetCurrentAttack()
+{
+	return current_attack;
 }
 
 void PlayerAttacks::CreateAttacks()
@@ -292,13 +327,14 @@ void PlayerAttacks::CreateAttacks()
 
 			info.name = attack_combo->GetString("name");
 			info.input = attack_combo->GetString("button");
+			info.particle_name = attack_combo->GetString("particle_name");
 			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
 				attack_combo->GetNumber("collider.pos_y"),
 				attack_combo->GetNumber("collider.pos_z"));
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("multiplier"), attack_combo->GetNumber("multiplier"));
+			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("base_damage"), attack_combo->GetNumber("base_damage"));
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
@@ -311,6 +347,29 @@ void PlayerAttacks::CreateAttacks()
 			attack_combo->GetAnotherNode();
 		}
 		ConnectAttacks();
+	}
+	JSONArraypack* spells_json = combo->GetArray("Spells");
+	if (spells_json)
+	{
+		Attack::AttackInfo info;
+
+		info.name = spells_json->GetString("name");
+		info.particle_name = spells_json->GetString("particle_name");
+		info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
+			spells_json->GetNumber("collider.pos_y"),
+			spells_json->GetNumber("collider.pos_z"));
+		info.collider_size = float3(spells_json->GetNumber("collider.width"),
+			spells_json->GetNumber("collider.height"),
+			spells_json->GetNumber("collider.depth"));
+		info.base_damage = new Stat("Attack_Damage", spells_json->GetNumber("base_damage"), spells_json->GetNumber("base_damage"));
+		info.movement_strength = spells_json->GetNumber("movement_strength");
+		info.activation_frame = spells_json->GetNumber("activation_frame");
+		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
+
+		Attack* attack = new Attack(info);
+		spells.push_back(attack);
+
+		spells_json->GetAnotherNode();
 	}
 	JSONfilepack::FreeJSON(combo);
 }

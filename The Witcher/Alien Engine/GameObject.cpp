@@ -1244,13 +1244,13 @@ void GameObject::FreeArrayMemory(void*** array_)
 	delete[] * array_;
 }
 
-GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, GameObject* parent)
+GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, bool check_child, GameObject* parent)
 {
 	OPTICK_EVENT();
 	if (prefab.prefabID != 0) {
 		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab.prefabID);
 		if (r_prefab != nullptr && App->StringCmp(prefab.prefab_name.data(), r_prefab->GetName())) {
-			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, false);
+			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
 			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
 		}
 		else {

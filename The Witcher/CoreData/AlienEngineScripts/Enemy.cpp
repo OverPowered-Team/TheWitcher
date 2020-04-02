@@ -1,11 +1,12 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "PlayerController.h"
 #include "PlayerAttacks.h"
 
 void Enemy::Awake()
 {
 	((EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
-	collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
+	attack_collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
 }
 
 void Enemy::StartEnemy()
@@ -14,6 +15,8 @@ void Enemy::StartEnemy()
 	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	state = EnemyState::IDLE;
 	std::string json_str;
+
+	character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -31,6 +34,20 @@ void Enemy::StartEnemy()
 	}
 
 	SetStats(json_str.data());
+}
+
+void Enemy::CleanUpEnemy()
+{
+	delete animator;
+	animator = nullptr;
+	delete character_ctrl;
+	character_ctrl = nullptr;
+
+	for (auto it_pc = player_controllers.begin(); it_pc != player_controllers.end();)
+	{
+		delete (*it_pc);
+		it_pc = player_controllers.erase(it_pc);
+	}
 }
 
 void Enemy::SetStats(const char* json)
@@ -52,37 +69,50 @@ void Enemy::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-void Enemy::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
-		float dmg_recieved = static_cast<PlayerAttacks*>(collider->game_object_attached->GetComponentScriptInParent("PlayerAttacks"))->GetCurrentDMG();
-		GetDamaged(dmg_recieved);
-	}
-}
-
-void Enemy::GetDamaged(float dmg)
-{
-	LOG("%f", dmg);
-	stats.current_health -= dmg;
-	if (stats.current_health <= 0.0F) {
-		stats.current_health = 0.0F;
-		state = EnemyState::DEAD;
-	}
-}
-
 void Enemy::ActivateCollider()
 {
-	if (collider)
+	if (attack_collider)
 	{
-		collider->SetEnable(true);
+		attack_collider->SetEnable(true);
 	}
 }
 
 void Enemy::DeactivateCollider()
 {
-	if (collider)
+	if (attack_collider)
 	{
-		collider->SetEnable(false);
+		attack_collider->SetEnable(false);
 	}
 }
 
+void Enemy::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
+		PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
+		float dmg_received = player->attacks->GetCurrentDMG();
+		player->OnHit(this, GetDamaged(dmg_received));		
+
+		if (state == EnemyState::DYING)
+			player->OnEnemyKill();
+	}
+}
+
+float Enemy::GetDamaged(float dmg)
+{
+	float aux_health = stats.current_health;
+	stats.current_health -= dmg;
+
+	if (stats.current_health <= 0.0F) {
+		stats.current_health = 0.0F;
+		state = EnemyState::DYING;
+		animator->PlayState("Death");
+	}
+	else
+	{
+		state = EnemyState::HIT;
+		animator->PlayState("Hit");
+		character_ctrl->SetWalkDirection(float3::zero());
+	}
+
+	return aux_health - stats.current_health;
+}
