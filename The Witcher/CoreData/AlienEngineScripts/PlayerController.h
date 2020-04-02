@@ -96,7 +96,6 @@ public:
 
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
-	ComponentCollider* hurt_box = nullptr;
 	bool can_move = false;
 	float stick_threshold = 0.1f;
 
