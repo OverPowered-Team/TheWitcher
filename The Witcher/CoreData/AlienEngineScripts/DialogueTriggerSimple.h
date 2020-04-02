@@ -8,8 +8,6 @@ class ComponentCollider;
 class DialogueManager; 
 struct Dialogue; 
 
-#include "DialogueManager.h"
-
 class ALIEN_ENGINE_API DialogueTriggerSimple : public Alien {
 
 public:

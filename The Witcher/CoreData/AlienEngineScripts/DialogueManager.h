@@ -70,6 +70,8 @@ public:
 	bool InputNewDialogue(Dialogue &dialogue, float volume = 0.5f);
 	bool InputNewDialogue(int index, float volume = 0.5f);
 
+	Dialogue GetCurrentDialogue() const { return currentDialogue; };
+
 private: 
 	void OverrideDialogue(Dialogue& newDialogue, float volume = 0.5f); 
 	void LoadJSONDialogues();
