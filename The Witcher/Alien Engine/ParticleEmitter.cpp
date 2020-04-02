@@ -4,6 +4,7 @@
 
 #include "MathGeoLib/include/Geometry/Circle.h"
 #include "GL/gl.h"
+#include "mmgr/mmgr.h"
 
 ParticleEmmitter::ParticleEmmitter() : particleSystem()
 {

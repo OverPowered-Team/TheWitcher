@@ -5,67 +5,98 @@
   "SchemaVersion": "11",
   "SoundbankVersion": "128",
   "RootPaths": {
-   "ProjectRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\",
-   "SourceFilesRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
-   "SoundBanksRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
+   "ProjectRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\",
+   "SourceFilesRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
+   "SoundBanksRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
    "ExternalSourcesInputFile": "",
-   "ExternalSourcesOutputRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
+   "ExternalSourcesOutputRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
   },
   "DialogueEvents": [],
   "StreamedFiles": [],
   "MediaFilesNotInAnyBank": [],
   "SoundBanks": [
    {
-    "Id": "393239870",
+    "Id": "817096458",
     "Language": "SFX",
-    "ObjectPath": "\\SoundBanks\\Default Work Unit\\SFX",
-    "ShortName": "SFX",
-    "Path": "SFX.bnk",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Player_SFX",
+    "ShortName": "Player_SFX",
+    "Path": "Player_SFX.bnk",
     "IncludedEvents": [
      {
-      "Id": "2480223178",
-      "Name": "Hit_Sword",
-      "ObjectPath": "\\Events\\Default Work Unit\\Hit_Sword"
+      "Id": "2048623797",
+      "Name": "Play_GeraltDeath",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_GeraltDeath"
      },
      {
-      "Id": "34621475",
-      "Name": "Play_Environment_Lvl1",
-      "ObjectPath": "\\Events\\Default Work Unit\\Play_Environment_Lvl1"
+      "Id": "219750196",
+      "Name": "Play_GeraltGetDamaged",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_GeraltGetDamaged"
+     },
+     {
+      "Id": "3778904045",
+      "Name": "Play_GeraltJump",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_GeraltJump"
+     },
+     {
+      "Id": "511861945",
+      "Name": "Play_Igni",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_Igni"
+     },
+     {
+      "Id": "2719919427",
+      "Name": "Play_Roll",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_Roll"
+     },
+     {
+      "Id": "149154610",
+      "Name": "Play_YennDeath",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_YennDeath"
+     },
+     {
+      "Id": "831621349",
+      "Name": "Play_YennGetDamaged",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_YennGetDamaged"
+     },
+     {
+      "Id": "4258364352",
+      "Name": "Play_YennJump",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_YennJump"
      },
      {
       "Id": "2453392179",
       "Name": "Player_Footstep",
-      "ObjectPath": "\\Events\\Default Work Unit\\Player_Footstep"
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Player_Footstep"
      },
      {
-      "Id": "3184224717",
-      "Name": "PlayGhouls",
-      "ObjectPath": "\\Events\\Default Work Unit\\PlayGhouls"
-     },
-     {
-      "Id": "981299297",
-      "Name": "PlayPreviousBattleBoss",
-      "ObjectPath": "\\Events\\Default Work Unit\\PlayPreviousBattleBoss"
+      "Id": "3070097383",
+      "Name": "Player_SwordHit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Player_SwordHit"
      }
     ],
     "IncludedMemoryFiles": [
      {
-      "Id": "43775023",
+      "Id": "55246812",
       "Language": "SFX",
-      "ShortName": "Quiet.wav",
-      "Path": "SFX\\Quiet_F17FB28C.wem"
+      "ShortName": "COWBOY_VOICE_-_Grunt_-_Jump-_Fight-_Attack_or_Hurt_Shout_-_05_-003050-.wav",
+      "Path": "SFX\\COWBOY_VOICE_-_Grunt_-_Jump-_Fight-_Attack_or_Hurt_Shout_-_05_-003050-_1C9C67B2.wem"
+     },
+     {
+      "Id": "59931957",
+      "Language": "SFX",
+      "ShortName": "damage_received_noscream1.wav",
+      "Path": "SFX\\damage_received_noscream1_1C9C67B2.wem"
      },
      {
       "Id": "65317710",
       "Language": "SFX",
-      "ShortName": "walking_sand2.wav",
-      "Path": "SFX\\walking_sand2_1C9C67B2.wem"
+      "ShortName": "damage_received_noscream1.wav",
+      "Path": "SFX\\damage_received_noscream1_1C9C67B2.wem"
      },
      {
-      "Id": "93647279",
+      "Id": "69587374",
       "Language": "SFX",
-      "ShortName": "Wind.wav",
-      "Path": "SFX\\Wind_F17FB28C.wem"
+      "ShortName": "damage_received_scream3_yennefer.wav",
+      "Path": "SFX\\damage_received_scream3_yennefer_1C9C67B2.wem"
      },
      {
       "Id": "93995469",
@@ -74,10 +105,28 @@
       "Path": "SFX\\walking_sand1_1C9C67B2.wem"
      },
      {
-      "Id": "255918428",
+      "Id": "175002814",
       "Language": "SFX",
-      "ShortName": "Forest.wav",
-      "Path": "SFX\\Forest_F17FB28C.wem"
+      "ShortName": "damage_received_scream1_yennefer.wav",
+      "Path": "SFX\\damage_received_scream1_yennefer_1C9C67B2.wem"
+     },
+     {
+      "Id": "200899405",
+      "Language": "SFX",
+      "ShortName": "damage_received_scream1.wav",
+      "Path": "SFX\\damage_received_scream1_1C9C67B2.wem"
+     },
+     {
+      "Id": "247630571",
+      "Language": "SFX",
+      "ShortName": "swordsing2.wav",
+      "Path": "SFX\\swordsing2_1C9C67B2.wem"
+     },
+     {
+      "Id": "300773176",
+      "Language": "SFX",
+      "ShortName": "damage_received_scream2.wav",
+      "Path": "SFX\\damage_received_scream2_1C9C67B2.wem"
      },
      {
       "Id": "342699556",
@@ -92,10 +141,40 @@
       "Path": "SFX\\walking_stone2_1C9C67B2.wem"
      },
      {
+      "Id": "368010749",
+      "Language": "SFX",
+      "ShortName": "damage_received_noscream2.wav",
+      "Path": "SFX\\damage_received_noscream2_1C9C67B2.wem"
+     },
+     {
+      "Id": "377958498",
+      "Language": "SFX",
+      "ShortName": "damage_received_scream3.wav",
+      "Path": "SFX\\damage_received_scream3_1C9C67B2.wem"
+     },
+     {
+      "Id": "415642668",
+      "Language": "SFX",
+      "ShortName": "Vocalization_-_death_pain_-_grunting_1 (1).wav",
+      "Path": "SFX\\Vocalization_-_death_pain_-_grunting_1 (1)_1C9C67B2.wem"
+     },
+     {
       "Id": "418092558",
       "Language": "SFX",
       "ShortName": "walkig_mud1.wav",
       "Path": "SFX\\walkig_mud1_1C9C67B2.wem"
+     },
+     {
+      "Id": "426446581",
+      "Language": "SFX",
+      "ShortName": "Torch_single_pass_by_whoosh_07_SFXBible_ss007673.wav",
+      "Path": "SFX\\Torch_single_pass_by_whoosh_07_SFXBible_ss007673_1C9C67B2.wem"
+     },
+     {
+      "Id": "463432385",
+      "Language": "SFX",
+      "ShortName": "swordswing4.wav",
+      "Path": "SFX\\swordswing4_1C9C67B2.wem"
      },
      {
       "Id": "488418141",
@@ -104,10 +183,22 @@
       "Path": "SFX\\walking_stone3_1C9C67B2.wem"
      },
      {
+      "Id": "678904462",
+      "Language": "SFX",
+      "ShortName": "yenndeath.wav",
+      "Path": "SFX\\yenndeath_1C9C67B2.wem"
+     },
+     {
       "Id": "690941690",
       "Language": "SFX",
       "ShortName": "walking_mud3.wav",
       "Path": "SFX\\walking_mud3_1C9C67B2.wem"
+     },
+     {
+      "Id": "692348520",
+      "Language": "SFX",
+      "ShortName": "roll.wav",
+      "Path": "SFX\\roll_1C9C67B2.wem"
      },
      {
       "Id": "693467915",
@@ -116,16 +207,22 @@
       "Path": "SFX\\walking_sand3_1C9C67B2.wem"
      },
      {
+      "Id": "741369655",
+      "Language": "SFX",
+      "ShortName": "EMOTE_Chloe-_Teen-_Jump_01.wav",
+      "Path": "SFX\\EMOTE_Chloe-_Teen-_Jump_01_1C9C67B2.wem"
+     },
+     {
       "Id": "808237431",
       "Language": "SFX",
       "ShortName": "walking_mud2.wav",
       "Path": "SFX\\walking_mud2_1C9C67B2.wem"
      },
      {
-      "Id": "842888706",
+      "Id": "846556793",
       "Language": "SFX",
-      "ShortName": "Intense.wav",
-      "Path": "SFX\\Intense_1C9C67B2.wem"
+      "ShortName": "EMOTE_Nora-_Woman-_Jump.wav",
+      "Path": "SFX\\EMOTE_Nora-_Woman-_Jump_1C9C67B2.wem"
      },
      {
       "Id": "901267111",
@@ -134,10 +231,28 @@
       "Path": "SFX\\swordswip_1C9C67B2.wem"
      },
      {
-      "Id": "1056131618",
+      "Id": "906940100",
       "Language": "SFX",
-      "ShortName": "Ghoul2.wav",
-      "Path": "SFX\\Ghoul2_1C9C67B2.wem"
+      "ShortName": "EMOTE_Jane-_Woman-_Pain_Effort_Grunt_Jump_02.wav",
+      "Path": "SFX\\EMOTE_Jane-_Woman-_Pain_Effort_Grunt_Jump_02_1C9C67B2.wem"
+     },
+     {
+      "Id": "974381289",
+      "Language": "SFX",
+      "ShortName": "jumping_scream_female.wav",
+      "Path": "SFX\\jumping_scream_female_1C9C67B2.wem"
+     },
+     {
+      "Id": "1030992422",
+      "Language": "SFX",
+      "ShortName": "damage_received_scream2_yennefer.wav",
+      "Path": "SFX\\damage_received_scream2_yennefer_1C9C67B2.wem"
+     },
+     {
+      "Id": "1043047497",
+      "Language": "SFX",
+      "ShortName": "COWBOY_VOICE_-_Grunt_-_Jump-_Fight-_Attack_or_Hurt_Shout_-_02_-003047-.wav",
+      "Path": "SFX\\COWBOY_VOICE_-_Grunt_-_Jump-_Fight-_Attack_or_Hurt_Shout_-_02_-003047-_1C9C67B2.wem"
      }
     ]
    },
@@ -147,6 +262,550 @@
     "ObjectPath": "Init",
     "ShortName": "Init",
     "Path": "Init.bnk"
+   },
+   {
+    "Id": "1669749310",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Dialogues\\Dialogues",
+    "ShortName": "Dialogues",
+    "Path": "Dialogues.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "1909520851",
+      "Name": "IntroDialogue",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\IntroDialogue"
+     },
+     {
+      "Id": "4285197669",
+      "Name": "Play_Dialogue1",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1"
+     },
+     {
+      "Id": "740533569",
+      "Name": "Play_Dialogue1_01",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_01"
+     },
+     {
+      "Id": "740533570",
+      "Name": "Play_Dialogue1_02",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_02"
+     },
+     {
+      "Id": "740533571",
+      "Name": "Play_Dialogue1_03",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_03"
+     },
+     {
+      "Id": "740533572",
+      "Name": "Play_Dialogue1_04",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_04"
+     },
+     {
+      "Id": "740533573",
+      "Name": "Play_Dialogue1_05",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_05"
+     },
+     {
+      "Id": "740533574",
+      "Name": "Play_Dialogue1_06",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_06"
+     },
+     {
+      "Id": "740533575",
+      "Name": "Play_Dialogue1_07",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_07"
+     },
+     {
+      "Id": "740533576",
+      "Name": "Play_Dialogue1_08",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_08"
+     },
+     {
+      "Id": "740533577",
+      "Name": "Play_Dialogue1_09",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_09"
+     },
+     {
+      "Id": "757311283",
+      "Name": "Play_Dialogue1_10",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_10"
+     },
+     {
+      "Id": "757311282",
+      "Name": "Play_Dialogue1_11",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_11"
+     },
+     {
+      "Id": "757311281",
+      "Name": "Play_Dialogue1_12",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_12"
+     },
+     {
+      "Id": "757311280",
+      "Name": "Play_Dialogue1_13",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_13"
+     },
+     {
+      "Id": "757311287",
+      "Name": "Play_Dialogue1_14",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_14"
+     },
+     {
+      "Id": "757311286",
+      "Name": "Play_Dialogue1_15",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_15"
+     },
+     {
+      "Id": "757311285",
+      "Name": "Play_Dialogue1_16",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_16"
+     },
+     {
+      "Id": "757311284",
+      "Name": "Play_Dialogue1_17",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_17"
+     },
+     {
+      "Id": "757311291",
+      "Name": "Play_Dialogue1_18",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_18"
+     },
+     {
+      "Id": "757311290",
+      "Name": "Play_Dialogue1_19",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_19"
+     },
+     {
+      "Id": "774088870",
+      "Name": "Play_Dialogue1_20",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_20"
+     },
+     {
+      "Id": "774088871",
+      "Name": "Play_Dialogue1_21",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_21"
+     },
+     {
+      "Id": "774088868",
+      "Name": "Play_Dialogue1_22",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_22"
+     },
+     {
+      "Id": "774088869",
+      "Name": "Play_Dialogue1_23",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_23"
+     },
+     {
+      "Id": "774088866",
+      "Name": "Play_Dialogue1_24",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_24"
+     },
+     {
+      "Id": "774088867",
+      "Name": "Play_Dialogue1_25",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_25"
+     },
+     {
+      "Id": "774088864",
+      "Name": "Play_Dialogue1_26",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_26"
+     },
+     {
+      "Id": "774088865",
+      "Name": "Play_Dialogue1_27",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_27"
+     },
+     {
+      "Id": "774088878",
+      "Name": "Play_Dialogue1_28",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_28"
+     },
+     {
+      "Id": "774088879",
+      "Name": "Play_Dialogue1_29",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_29"
+     },
+     {
+      "Id": "790866457",
+      "Name": "Play_Dialogue1_30",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_30"
+     },
+     {
+      "Id": "790866456",
+      "Name": "Play_Dialogue1_31",
+      "ObjectPath": "\\Events\\Default Work Unit\\Dialogues\\Play_Dialogue1_31"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "44015497",
+      "Language": "SFX",
+      "ShortName": "GhoulE2.wav",
+      "Path": "SFX\\GhoulE2_1C9C67B2.wem"
+     },
+     {
+      "Id": "51578293",
+      "Language": "SFX",
+      "ShortName": "geralt1.wav",
+      "Path": "SFX\\geralt1_1C9C67B2.wem"
+     },
+     {
+      "Id": "80802263",
+      "Language": "SFX",
+      "ShortName": "Geralt4.wav",
+      "Path": "SFX\\Geralt4_1C9C67B2.wem"
+     },
+     {
+      "Id": "87767651",
+      "Language": "SFX",
+      "ShortName": "JaskierE2.wav",
+      "Path": "SFX\\JaskierE2_1C9C67B2.wem"
+     },
+     {
+      "Id": "101183812",
+      "Language": "SFX",
+      "ShortName": "JaskierF2.wav",
+      "Path": "SFX\\JaskierF2_1C9C67B2.wem"
+     },
+     {
+      "Id": "101439654",
+      "Language": "SFX",
+      "ShortName": "JaskierF5.wav",
+      "Path": "SFX\\JaskierF5_1C9C67B2.wem"
+     },
+     {
+      "Id": "151424605",
+      "Language": "SFX",
+      "ShortName": "JaskierE1.wav",
+      "Path": "SFX\\JaskierE1_1C9C67B2.wem"
+     },
+     {
+      "Id": "188857816",
+      "Language": "SFX",
+      "ShortName": "GhoulF1.wav",
+      "Path": "SFX\\GhoulF1_1C9C67B2.wem"
+     },
+     {
+      "Id": "244903945",
+      "Language": "SFX",
+      "ShortName": "Dialogue2.wav",
+      "Path": "SFX\\Dialogue2_1C9C67B2.wem"
+     },
+     {
+      "Id": "289269728",
+      "Language": "SFX",
+      "ShortName": "GeraltE5.wav",
+      "Path": "SFX\\GeraltE5_1C9C67B2.wem"
+     },
+     {
+      "Id": "298775742",
+      "Language": "SFX",
+      "ShortName": "JaskierE4.wav",
+      "Path": "SFX\\JaskierE4_1C9C67B2.wem"
+     },
+     {
+      "Id": "332273006",
+      "Language": "SFX",
+      "ShortName": "GhoulF2.wav",
+      "Path": "SFX\\GhoulF2_1C9C67B2.wem"
+     },
+     {
+      "Id": "356140367",
+      "Language": "SFX",
+      "ShortName": "JaskierF1.wav",
+      "Path": "SFX\\JaskierF1_1C9C67B2.wem"
+     },
+     {
+      "Id": "414717006",
+      "Language": "SFX",
+      "ShortName": "GeraltE3.wav",
+      "Path": "SFX\\GeraltE3_1C9C67B2.wem"
+     },
+     {
+      "Id": "463746369",
+      "Language": "SFX",
+      "ShortName": "GeraltE4.wav",
+      "Path": "SFX\\GeraltE4_1C9C67B2.wem"
+     },
+     {
+      "Id": "518694262",
+      "Language": "SFX",
+      "ShortName": "Dialogue1.wav",
+      "Path": "SFX\\Dialogue1_1C9C67B2.wem"
+     },
+     {
+      "Id": "578693712",
+      "Language": "SFX",
+      "ShortName": "JaskierF4.wav",
+      "Path": "SFX\\JaskierF4_1C9C67B2.wem"
+     },
+     {
+      "Id": "580894951",
+      "Language": "SFX",
+      "ShortName": "GeraltE7.wav",
+      "Path": "SFX\\GeraltE7_1C9C67B2.wem"
+     },
+     {
+      "Id": "647170871",
+      "Language": "SFX",
+      "ShortName": "Dialogue3.wav",
+      "Path": "SFX\\Dialogue3_1C9C67B2.wem"
+     },
+     {
+      "Id": "648558965",
+      "Language": "SFX",
+      "ShortName": "JaskierE3.wav",
+      "Path": "SFX\\JaskierE3_1C9C67B2.wem"
+     },
+     {
+      "Id": "657022928",
+      "Language": "SFX",
+      "ShortName": "JaskierE5.wav",
+      "Path": "SFX\\JaskierE5_1C9C67B2.wem"
+     },
+     {
+      "Id": "659969744",
+      "Language": "SFX",
+      "ShortName": "GeraltE1.wav",
+      "Path": "SFX\\GeraltE1_1C9C67B2.wem"
+     },
+     {
+      "Id": "723346425",
+      "Language": "SFX",
+      "ShortName": "Geralt3.wav",
+      "Path": "SFX\\Geralt3_1C9C67B2.wem"
+     },
+     {
+      "Id": "767292369",
+      "Language": "SFX",
+      "ShortName": "EmbellishInicio.wav",
+      "Path": "SFX\\EmbellishInicio_1C9C67B2.wem"
+     },
+     {
+      "Id": "783372539",
+      "Language": "SFX",
+      "ShortName": "Inicio.wav",
+      "Path": "SFX\\Inicio_1C9C67B2.wem"
+     },
+     {
+      "Id": "789110719",
+      "Language": "SFX",
+      "ShortName": "GhoulE1.wav",
+      "Path": "SFX\\GhoulE1_1C9C67B2.wem"
+     },
+     {
+      "Id": "804804872",
+      "Language": "SFX",
+      "ShortName": "GeraltE8.wav",
+      "Path": "SFX\\GeraltE8_1C9C67B2.wem"
+     },
+     {
+      "Id": "983592396",
+      "Language": "SFX",
+      "ShortName": "GeraltE2.wav",
+      "Path": "SFX\\GeraltE2_1C9C67B2.wem"
+     },
+     {
+      "Id": "1006814529",
+      "Language": "SFX",
+      "ShortName": "GeraltE6.wav",
+      "Path": "SFX\\GeraltE6_1C9C67B2.wem"
+     },
+     {
+      "Id": "1014146210",
+      "Language": "SFX",
+      "ShortName": "Jonied_Audios.wav",
+      "Path": "SFX\\Jonied_Audios_1C9C67B2.wem"
+     },
+     {
+      "Id": "1042751737",
+      "Language": "SFX",
+      "ShortName": "Geralt2.wav",
+      "Path": "SFX\\Geralt2_1C9C67B2.wem"
+     },
+     {
+      "Id": "1073114727",
+      "Language": "SFX",
+      "ShortName": "JaskierF3.wav",
+      "Path": "SFX\\JaskierF3_1C9C67B2.wem"
+     }
+    ]
+   },
+   {
+    "Id": "3529925883",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\UI_SXF",
+    "ShortName": "UI_SXF",
+    "Path": "UI_SXF.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "1291640088",
+      "Name": "Play_MenuMove",
+      "ObjectPath": "\\Events\\Default Work Unit\\UI\\Play_MenuMove"
+     },
+     {
+      "Id": "40516875",
+      "Name": "Play_MenuSelect",
+      "ObjectPath": "\\Events\\Default Work Unit\\UI\\Play_MenuSelect"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "806850413",
+      "Language": "SFX",
+      "ShortName": "menu_move.wav",
+      "Path": "SFX\\menu_move_1C9C67B2.wem"
+     },
+     {
+      "Id": "932025878",
+      "Language": "SFX",
+      "ShortName": "menu_select.wav",
+      "Path": "SFX\\menu_select_1C9C67B2.wem"
+     }
+    ]
+   },
+   {
+    "Id": "3698921875",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Objects_SFX",
+    "ShortName": "Objects_SFX",
+    "Path": "Objects_SFX.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "2372531077",
+      "Name": "Play_FenceDestroy",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_FenceDestroy"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "713490204",
+      "Language": "SFX",
+      "ShortName": "barrel_destroyed.wav",
+      "Path": "SFX\\barrel_destroyed_1C9C67B2.wem"
+     }
+    ]
+   },
+   {
+    "Id": "3991942870",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Music",
+    "ShortName": "Music",
+    "Path": "Music.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "3155474038",
+      "Name": "Play_Combat_Music",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Combat_Music"
+     },
+     {
+      "Id": "1635916389",
+      "Name": "Play_End_Music",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_End_Music"
+     },
+     {
+      "Id": "29834681",
+      "Name": "Play_Lvl1_Music",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Lvl1_Music"
+     },
+     {
+      "Id": "166541076",
+      "Name": "Play_MainMenu_Music",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_MainMenu_Music"
+     },
+     {
+      "Id": "3241038393",
+      "Name": "Play_WinMenu_Music",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_WinMenu_Music"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "45982187",
+      "Language": "SFX",
+      "ShortName": "music_calm_green_lake_serenade.wav",
+      "Path": "SFX\\music_calm_green_lake_serenade_F17FB28C.wem"
+     },
+     {
+      "Id": "214870564",
+      "Language": "SFX",
+      "ShortName": "songlvl1.wav",
+      "Path": "SFX\\songlvl1_F17FB28C.wem"
+     },
+     {
+      "Id": "247361237",
+      "Language": "SFX",
+      "ShortName": "music_harp_peaceful_loop.wav",
+      "Path": "SFX\\music_harp_peaceful_loop_F17FB28C.wem"
+     },
+     {
+      "Id": "775947196",
+      "Language": "SFX",
+      "ShortName": "music_misty_woods_calling.wav",
+      "Path": "SFX\\music_misty_woods_calling_F17FB28C.wem"
+     },
+     {
+      "Id": "1062980692",
+      "Language": "SFX",
+      "ShortName": "combatmusic.wav",
+      "Path": "SFX\\combatmusic_F17FB28C.wem"
+     }
+    ]
+   },
+   {
+    "Id": "4139483824",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Environment_Lvl1",
+    "ShortName": "Environment_Lvl1",
+    "Path": "Environment_Lvl1.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "1365115432",
+      "Name": "Play_Battle_Boss",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Battle_Boss"
+     },
+     {
+      "Id": "207755397",
+      "Name": "Play_Forest",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Forest"
+     },
+     {
+      "Id": "1020223172",
+      "Name": "Play_Wind",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Wind"
+     },
+     {
+      "Id": "3184224717",
+      "Name": "PlayGhouls",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\PlayGhouls"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "93647279",
+      "Language": "SFX",
+      "ShortName": "Wind.wav",
+      "Path": "SFX\\Wind_F17FB28C.wem"
+     },
+     {
+      "Id": "255918428",
+      "Language": "SFX",
+      "ShortName": "Forest.wav",
+      "Path": "SFX\\Forest_F17FB28C.wem"
+     },
+     {
+      "Id": "842888706",
+      "Language": "SFX",
+      "ShortName": "Intense.wav",
+      "Path": "SFX\\Intense_1C9C67B2.wem"
+     },
+     {
+      "Id": "1056131618",
+      "Language": "SFX",
+      "ShortName": "Ghoul2.wav",
+      "Path": "SFX\\Ghoul2_1C9C67B2.wem"
+     }
+    ]
    }
   ]
  }

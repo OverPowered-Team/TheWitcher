@@ -13,6 +13,7 @@ class Resource;
 class Prefab;
 class ComponentCanvas;
 class ComponentCamera;
+class Alien;
 
 class __declspec(dllexport) GameObject
 {
@@ -74,7 +75,7 @@ class __declspec(dllexport) GameObject
 	friend class AnimTween;
 	
 public:
-	GameObject(GameObject* parent);
+	GameObject(GameObject* parent, bool ignore_transform = false);
 	GameObject(GameObject* parent, const float3& pos, const Quat& rot, const float3& scale);
 	GameObject(bool ignore_transform = false); // just for loading objects, dont use it
 	virtual ~GameObject();
@@ -89,7 +90,7 @@ public:
 	static uint FindGameObjectsWithTag(const char* tag_to_find, GameObject*** objects);
 	static void FreeArrayMemory(void*** array_);
 	// parent = nullptr is root
-	static GameObject* Instantiate(const Prefab& prefab, const float3& position, GameObject* parent = nullptr);
+	static GameObject* Instantiate(const Prefab& prefab, const float3& position, bool check_child = false, GameObject* parent = nullptr);
 	static GameObject* CloneObject(GameObject* to_clone, GameObject* parent = nullptr);
 	// TODO:
 	/*
@@ -142,6 +143,8 @@ public:
 	uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array);
 	const uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array) const;
 
+	uint GetAllComponentsScript(Alien*** aliens);
+
 	// children
 	bool HasChildren() const;
 
@@ -169,7 +172,7 @@ private:
 	// here we call Component Mesh, Material & light
 	void DrawScene(ComponentCamera* camera);
 	void DrawGame(ComponentCamera* camera);
-	void SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
+	void SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera);
 
 	ComponentCanvas* GetCanvas();
 

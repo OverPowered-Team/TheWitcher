@@ -1,7 +1,6 @@
 #include "TriggerFootsteps.h"
 #include "PlayerController.h"
 #include "CameraMovement.h"
-#include "PlayerTest.h"
 
 TriggerFootsteps::TriggerFootsteps() : Alien()
 {

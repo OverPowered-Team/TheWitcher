@@ -15,7 +15,9 @@ enum UIState {
 	Hover,
 	Click,
 	Pressed,
-	Release
+	Release,
+	Exit,
+	Disabled
 };
 
 class __declspec(dllexport) ComponentUI :public Component {
@@ -37,13 +39,15 @@ public:
 
 	virtual ~ComponentUI();
 
-	virtual void ChangeVertex(float width, float height);
+	
 	void UpdateVertex();
 
+	virtual bool OnIdle() { return true; };
 	virtual bool OnHover() { return true; };
 	virtual bool OnClick() { return true; };
 	virtual bool OnPressed() { return true; };
 	virtual bool OnRelease() { return true; };
+	virtual bool OnExit() { return true; };
 
 	void SetCanvas(ComponentCanvas* canvas_);
 
@@ -63,6 +67,7 @@ public:
 
 	//Script
 	void SetBackgroundColor(float r, float g, float b, float a);
+	UIState GetActualState();
 
 
 private:
@@ -92,6 +97,7 @@ protected:
 
 	float2 size = { 10,10 };
 
+	float depth = 0.0f;
 	//UI FOCUS
 	
 	bool tabbable			= false;

@@ -118,6 +118,9 @@
     <Filter Include="Components\Scripting">
       <UniqueIdentifier>{cad274f0-ed77-48f0-b9a8-ceb3246c8743}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\FreeImage">
+      <UniqueIdentifier>{78bf3428-1a09-4931-84fd-d3b902f84b5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleWindow.h">
@@ -638,6 +641,15 @@
     </ClInclude>
     <ClInclude Include="Alien.h">
       <Filter>Components\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeImage\src\FreeImage.h">
+      <Filter>Tools\FreeImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>ScriptHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="String.h">
+      <Filter>Tools\OurClassHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2605,6 +2617,9 @@
     </ClCompile>
     <ClCompile Include="Alien.cpp">
       <Filter>Components\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>ScriptHelpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

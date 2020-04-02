@@ -15,15 +15,24 @@ out vec2 texCoords;
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(position, 1.0f);
+    vec4 pos = vec4(position, 1.0);
+    frag_pos = vec3(model * pos);
     texCoords = vec2(uvs.x, uvs.y);
+    gl_Position = projection * view * vec4(frag_pos, 1.0f); 
+    
 };
 
 #shader fragment
 #version 330 core
+struct Material {
+    vec3 diffuse_color;
 
-uniform sampler2D tex;
-uniform vec4 diffuse_color;
+    sampler2D diffuseTexture;
+    bool hasDiffuseTexture;
+
+    
+};
+uniform Material objectMaterial;
 // Ins
 in vec2 texCoords;
 // Outs
@@ -31,20 +40,16 @@ out vec4 FragColor;
 
 void main()
 {
-    vec4 textureColor = texture(tex, texCoords);
-    
+    vec4 objectColor = vec4(objectMaterial.diffuse_color, 1.0f);
 
-    if(textureColor.a < 0.001)
-         discard;
+    if(objectMaterial.hasDiffuseTexture == true)
+    {
+        objectColor = objectColor * vec4(texture(objectMaterial.diffuseTexture, texCoords));
 
-     if(textureColor == vec4(0,0,0,1))
-     {
-        FragColor = diffuse_color;
-     }
-    else
-     {
-        FragColor = textureColor * diffuse_color;
-     }
-   
-    
+        if (objectColor.w < 0.0001)
+            discard;
+    }
+
+    FragColor = objectColor;
+     
 }

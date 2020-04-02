@@ -9,6 +9,7 @@
 #include "ComponentCamera.h"
 #include "ModuleObjects.h"
 #include "Viewport.h"
+#include "mmgr/mmgr.h"
 
 Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo endInfo) : owner(owner), particleInfo(info), startInfo(info), endInfo(endInfo)
 {
@@ -21,6 +22,7 @@ Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo
 		p_material = new ResourceMaterial();
 		p_material->SetShader(owner->material->used_shader);
 		p_material->SetTexture(owner->material->GetTexture(TextureType::DIFFUSE));
+		p_material->color = owner->material->color;
 
 		p_material->shaderInputs.particleShaderProperties.color = owner->material->shaderInputs.particleShaderProperties.color;
 		p_material->shaderInputs.particleShaderProperties.start_color = owner->material->shaderInputs.particleShaderProperties.color;
@@ -186,7 +188,7 @@ void Particle::Draw()
 	
 	// --------- COLOR --------- //
 	if (p_material == nullptr)
-		glColor4f(particleInfo.color.x, particleInfo.color.y, particleInfo.color.z, particleInfo.color.w);
+	   glColor4f(particleInfo.color.x, particleInfo.color.y, particleInfo.color.z, particleInfo.color.w);
 
 	
 	// ------ VAO BUFFER ------ //
@@ -199,10 +201,11 @@ void Particle::Draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->id_index);
 
 
+
 	if (owner->material != nullptr && p_material != nullptr)
 	{
 
-		owner->DeactivateLight();
+		//owner->DeactivateLight();
 
 		// ---- TEXTCOORD BUFFER ----- //
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -300,7 +303,7 @@ void Particle::InterpolateValues(float dt)
 		t += rateToLerp * dt;
 
 		if(owner->material != nullptr && p_material != nullptr)
-			p_material->shaderInputs.particleShaderProperties.color = float4::Lerp(p_material->shaderInputs.particleShaderProperties.start_color, p_material->shaderInputs.particleShaderProperties.end_color, t);
+			p_material->shaderInputs.particleShaderProperties.color = float3::Lerp(p_material->shaderInputs.particleShaderProperties.start_color, p_material->shaderInputs.particleShaderProperties.end_color, t);
 		else
 			particleInfo.color = float4::Lerp(startInfo.color, endInfo.color, t);
 
@@ -334,6 +337,14 @@ void Particle::SetUniform(ResourceMaterial* resource_material, ComponentCamera* 
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 	/*resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());
 	resource_material->used_shader->SetUniform1i("animate", animate);*/
+
+	resource_material->used_shader->SetUniform1i("activeFog", camera->activeFog);
+	if (camera->activeFog)
+	{
+		resource_material->used_shader->SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+		resource_material->used_shader->SetUniform1f("density", camera->fogDensity);
+		resource_material->used_shader->SetUniform1f("gradient", camera->fogGradient);
+	}
 }
 
 void Particle::SetAnimation(std::vector<uint>& uvs, float speed)

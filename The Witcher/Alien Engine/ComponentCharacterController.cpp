@@ -4,18 +4,21 @@
 #include "ModulePhysics.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentCharacterController.h"
+#include "ComponentCollider.h"
 #include "ComponentTransform.h"
 #include "GameObject.h"
 #include "ReturnZ.h"
 
 #include "Time.h"
 #include "ModuleInput.h"
+#include "mmgr/mmgr.h"
 
 ComponentCharacterController::ComponentCharacterController(GameObject* go) : Component(go)
 {
 	type = ComponentType::CHARACTER_CONTROLLER;
 	// GameObject Components 
-	transform = game_object_attached->GetComponent<ComponentTransform>();
+	transform = go->GetComponent<ComponentTransform>();
+
 	shape = new btCapsuleShape(character_radius, character_height);
 
 	body = new btPairCachingGhostObject();
@@ -31,14 +34,30 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 
 	App->physics->world->addCollisionObject(body, btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::StaticFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter);
 	App->physics->AddAction(controller);
+
+	detector = new btPairCachingGhostObject();
+	detector->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
+	detector->setCollisionFlags(detector->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	detector->setCollisionShape(shape);
+	App->physics->AddDetector(detector);
+
+	collider = new ComponentCollider(go);
+	collider->internal_collider = true;
+	collider->detector = detector;
+	detector->setUserPointer(collider);
+	body->setUserPointer(collider);
 }
 
 ComponentCharacterController::~ComponentCharacterController()
 {
 	App->physics->RemoveAction(controller);
-	App->physics->world->removeCollisionObject(body);
+	App->physics->RemoveDetector(body);
+	App->physics->RemoveDetector(detector);
 
 	delete shape;
+	delete body;
+	delete detector;
+	delete collider;
 }
 
 // Movement Functions -----------------------------------------
@@ -76,10 +95,31 @@ bool ComponentCharacterController::CanJump()
 	return controller->canJump();
 }
 
+bool ComponentCharacterController::OnGround()
+{
+	return controller->onGround();
+}
+
 void ComponentCharacterController::SetRotation(const Quat rotation)
 {
 	body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, rotation));
 	transform->SetGlobalRotation(math::Quat(rotation));
+}
+
+Quat ComponentCharacterController::GetRotation() const
+{
+	return transform->GetGlobalRotation();
+}
+
+void ComponentCharacterController::SetPosition(const float3 pos)
+{
+	body->setWorldTransform(ToBtTransform(pos + character_offset, transform->GetGlobalRotation()));
+	transform->SetGlobalPosition(pos);
+}
+
+float3 ComponentCharacterController::GetPosition() const
+{
+	return transform->GetGlobalPosition();
 }
 
 void ComponentCharacterController::SetCharacterOffset(const float3 offset)
@@ -135,9 +175,33 @@ bool ComponentCharacterController::DrawInspector()
 	float current_jump_speed = jump_speed;
 	float current_gravity = gravity;
 
+	ImGui::PushID(this);
+
 	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Spacing();
+
+		ImGui::Title("Layer");
+
+		if (ImGui::BeginComboEx(std::string("##layers").c_str(), std::string(" " + App->physics->layers.at(collider->layer)).c_str(), 200, ImGuiComboFlags_NoArrowButton))
+		{
+			for (int n = 0; n < App->physics->layers.size(); ++n)
+			{
+				bool is_selected = (collider->layer == n);
+
+				if (ImGui::Selectable(std::string("   " + App->physics->layers.at(n)).c_str(), is_selected))
+				{
+					collider->layer = n;
+				}
+
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+
+			ImGui::EndCombo();
+		}
 		ImGui::Title("Offset", 1);				if (ImGui::DragFloat3("##center", current_character_offset.ptr(), 0.05f)) { SetCharacterOffset(current_character_offset); }
 		ImGui::Title("Radius", 1);				if (ImGui::DragFloat("##radius", &current_character_radius, 0.05f, 0.1f, FLT_MAX)) { SetCharacterRadius(current_character_radius); }
 		ImGui::Title("Height", 1);				if (ImGui::DragFloat("##height", &current_character_height, 0.05f, 0.1f, FLT_MAX)) { SetCharacterHeight(current_character_height); }
@@ -145,11 +209,16 @@ bool ComponentCharacterController::DrawInspector()
 		ImGui::Title("Gravity", 1);				if (ImGui::DragFloat("##gravity", &current_gravity, 0.01f, 0.00f, FLT_MAX)) { SetGravity(current_gravity); }
 		ImGui::Spacing();
 	}
+
+	ImGui::PopID();
+
 	return true;
 }
 
 void ComponentCharacterController::Update()
 {
+	collider->Update();
+
 	if (Time::IsPlaying())
 	{
 	/*	float3 movement = float3::zero();
@@ -189,6 +258,14 @@ void ComponentCharacterController::DrawScene()
 		App->physics->DrawCharacterController(this);
 	}
 }
+
+
+
+void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
+{
+	collider->HandleAlienEvent(e);
+}
+
 
 void ComponentCharacterController::Reset()
 {

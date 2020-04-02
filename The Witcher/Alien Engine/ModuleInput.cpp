@@ -249,7 +249,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 					if (haptic != nullptr)
 					{
-						if (SDL_HapticRumbleInit(haptic) < 0) 
+						if (SDL_HapticRumbleInit(haptic) < 0)
 						{
 							LOG_ENGINE("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
 						}
@@ -263,7 +263,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					pad->controller = controller;
 					pad->haptic = haptic;
 					pad->number = e.cdevice.which + 1;
-					memset(pad->controller_buttons, KEY_IDLE, sizeof(KEY_STATE)* SDL_CONTROLLER_BUTTON_MAX);
+					memset(pad->controller_buttons, KEY_IDLE, sizeof(KEY_STATE) * SDL_CONTROLLER_BUTTON_MAX);
 					game_pads.emplace(pad->number, pad);
 					LOG_ENGINE("Controller %i loaded correctly", pad->number);
 				}

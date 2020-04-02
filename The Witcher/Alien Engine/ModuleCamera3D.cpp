@@ -122,8 +122,6 @@ void ModuleCamera3D::Movement()
 	OPTICK_EVENT();
 	float3 movement(float3::zero());
 
-
-
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT) movement += float3::unitY();
@@ -142,23 +140,20 @@ void ModuleCamera3D::Movement()
 		}
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
 	{
 		movement = float3::zero();
-
+		
 		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 		SDL_SetCursor(cursor);
 
-		if (App->input->GetMouseXMotion() > -1) movement -= frustum->WorldRight();
-		if (App->input->GetMouseXMotion() < 1) movement += frustum->WorldRight();
-
-		if (App->input->GetMouseYMotion() < 1) movement -= float3::unitY() * 0.5f;
-		if (App->input->GetMouseYMotion() > -1) movement += float3::unitY() * 0.5f;
+		movement -= frustum->WorldRight() * App->input->GetMouseXMotion() * mouse_speed;
+		movement += frustum->up * App->input->GetMouseYMotion() * mouse_speed;
 
 		if (!movement.Equals(float3::zero()))
 		{
-			frustum->Translate(movement * mouse_speed);
-			reference += movement * mouse_speed;
+			frustum->pos += movement;
+			reference += movement;
 		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP)
@@ -358,7 +353,11 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 			triangle_to_check.Transform(transform->global_transformation);
 			if (ray.Intersects(triangle_to_check, nullptr, nullptr))
 			{
-				object->parent->open_node = true;
+				GameObject* obj = object->parent;
+				while (obj->parent != nullptr) {
+					obj->open_node = true;
+					obj = obj->parent;
+				}
 				App->objects->SetNewSelectedObject(object);
 				ret = true;
 				break;
@@ -375,5 +374,14 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 bool ModuleCamera3D::SortByDistance(const std::pair<float, GameObject*> pair1, const std::pair<float, GameObject*> pair2)
 {
 	return pair1.first < pair2.first;
+}
+
+void ModuleCamera3D::PanelConfigOption()
+{
+	if (fake_camera)
+	{
+		
+		ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
+	}
 }
 

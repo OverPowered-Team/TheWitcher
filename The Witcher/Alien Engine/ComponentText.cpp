@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleResources.h"
 #include "ModuleObjects.h"
+#include "ModuleFileSystem.h"
 #include "ModuleUI.h"
 #include "PanelGame.h"
 #include "ComponentTransform.h"
@@ -10,6 +11,7 @@
 #include "Viewport.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
+#include "FileNode.h"
 #include "ReturnZ.h"
 #include "glew/include/glew.h"
 #include "mmgr/mmgr.h"
@@ -22,12 +24,20 @@
 ComponentText::ComponentText(GameObject* obj) : ComponentUI(obj)
 {
 	text = "Hola";
-	font = App->resources->default_font;
+	if(!font)
+		font = App->resources->default_font;
 
 	GenerateVAOVBO();
 
 	ui_type = ComponentType::UI_TEXT;
 	tabbable = false;
+
+	font->IncreaseReferences();
+}
+
+ComponentText::~ComponentText()
+{
+	font->DecreaseReferences();
 }
 
 bool ComponentText::DrawInspector()
@@ -69,9 +79,38 @@ bool ComponentText::DrawInspector()
 			set_bg_Z = true;
 		}
 
-		ImGui::Spacing(); ImGui::Separator(); ImGui::SetNextItemWidth(150);
+		ImGui::Spacing(); ImGui::Separator();
 
-		ImGui::DragInt("Width", &width, 5.f); ImGui::SameLine(); ImGui::SetNextItemWidth(150);
+		ImGui::Text("Font");
+		ImGui::SameLine();
+		ImGui::Button(font ? font->name.data() : "No Font Assigned", { ImGui::GetWindowWidth() * 0.55F , 0 });
+		if (ImGui::BeginDragDropTarget()) {
+			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+			if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+				FileNode* node = *(FileNode**)payload->Data;
+				if (node != nullptr && node->type == FileDropType::FONT) {
+					std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+					path += "_meta.alien";
+					u64 ID = App->resources->GetIDFromAlienPath(path.data());
+					if (ID != 0) {
+						ResourceFont* fnt = (ResourceFont*)App->resources->GetResourceWithID(ID);
+						if (fnt != nullptr) {
+							font = fnt;
+						}
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		static int align_curr = (int)align;
+		if (ImGui::Combo("Text Align", &align_curr, "Left\0Middle\0Right"))
+		{
+			align = (TextAlign)align_curr;
+		}
+
+		ImGui::Separator();
+
+		ImGui::SetNextItemWidth(150); ImGui::DragInt("Width", &width, 5.f); ImGui::SameLine(); ImGui::SetNextItemWidth(150);
 		ImGui::DragFloat("Interlineal", &interlineal, 0.25f);
 
 		ImGui::Spacing();
@@ -84,31 +123,9 @@ bool ComponentText::DrawInspector()
 	return true;
 }
 
-bool ComponentText::DrawCharacter(Character ch)
-{
-	glBindTexture(GL_TEXTURE_2D, ch.textureID);
-
-	glBindBuffer(GL_ARRAY_BUFFER, verticesID);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, uvID);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	return true;
-}
-
 void ComponentText::Draw(bool isGame)
 {
-	if (canvas == nullptr || canvas_trans == nullptr) {
+	if (font == nullptr || canvas_trans == nullptr || canvas == nullptr) {
 		return;
 	}
 
@@ -119,12 +136,13 @@ void ComponentText::Draw(bool isGame)
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
 	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
-		canvas->text_ortho->SetUniformFloat3("textColor", float3(current_color.r, current_color.g, current_color.b));
-		canvas->text_ortho->Bind();
+		font->text_ortho->Bind();
+		font->text_ortho->SetUniformFloat3("textColor", float3(current_color.r, current_color.g, current_color.b));
 
 		glm::mat4 projection;
 		#ifndef GAME_VERSION
@@ -140,7 +158,7 @@ void ComponentText::Draw(bool isGame)
 
 		float3 canvas_pos = canvas_trans->GetGlobalPosition();
 		float3 object_pos = transform->GetGlobalPosition();
-		float3 canvasPivot = {	canvas_pos.x - font->fontData.charactersMap[text[0]].bearing.x * scale.x - canvas->width * 0.5F, 
+		float3 canvasPivot = {	canvas_pos.x - canvas->width * 0.5F, 
 								canvas_pos.y + canvas->height * 0.5F,
 								0 };
 
@@ -154,14 +172,14 @@ void ComponentText::Draw(bool isGame)
 		y = origin.y * App->window->height;
 		#endif
 
-		canvas->text_ortho->SetUniformMat4f("projection", proj_mat);
+		font->text_ortho->SetUniformMat4f("projection", proj_mat);
 	}
 	else
 	{
-		canvas->text_shader->SetUniformFloat3("textColor", float3(current_color.r, current_color.g, current_color.b));
-		canvas->text_shader->Bind();
-		canvas->text_shader->SetUniformMat4f("projection", App->renderer3D->scene_fake_camera->GetProjectionMatrix4f4());
-		canvas->text_shader->SetUniformMat4f("view", App->renderer3D->scene_fake_camera->GetViewMatrix4x4());
+		font->text_shader->Bind();
+		font->text_shader->SetUniformFloat3("textColor", float3(current_color.r, current_color.g, current_color.b));
+		font->text_shader->SetUniformMat4f("projection", App->renderer3D->scene_fake_camera->GetProjectionMatrix4f4());
+		font->text_shader->SetUniformMat4f("view", App->renderer3D->scene_fake_camera->GetViewMatrix4x4());
 	}
 
 	glActiveTexture(GL_TEXTURE0);
@@ -173,7 +191,6 @@ void ComponentText::Draw(bool isGame)
 	float line = 0;
 	// Divides the current panel width by the canvas width in order to set a relation between the elements in the canvas and the ones in the panel
 	// TODO2: Que cuando se este escribiendo no afecte al Gizmos
-	// TODO3: Mirar ResourceFont load Bug
 	// TODO4: Modo game la UI
 	float factor_x = 0;
 	float factor_y = 0;
@@ -185,25 +202,141 @@ void ComponentText::Draw(bool isGame)
 	factor_y = App->window->height / canvas->height;
 	#endif
 
-	for (c = text.begin(); c != text.end(); c++) {
-		Character ch = font->fontData.charactersMap[*c];
+	int current_line = 0;
+	// First text pos and second line size
+	std::vector<int> lines_current_size;
+	std::vector<int> current_line_pos;
+
+	for (int i = 0; i < text.size(); ++i) {
+		Character ch = font->fontData.charactersMap[text[i]];
 		static float xpos = 0;
 		static float ypos = 0;
 		static float w = 0;
 		static float h = 0;
-		if (isGame && App->renderer3D->actual_game_camera != nullptr) 
+
+		switch (align)
 		{
-			xpos = x + pos_x + ch.bearing.x * scale.x * factor_x;
-			ypos = y - pos_y - (ch.size.y - ch.bearing.y) * scale.y * factor_y;
-			w = ch.size.x * scale.x * factor_x;
-			h = ch.size.y * scale.y * factor_y;
-		}
-		else
-		{
-			xpos = matrix[0][3] + pos_x + ch.bearing.x * scale.x;
-			ypos = matrix[1][3] - pos_y - (ch.size.y - ch.bearing.y) * scale.y;
-			w = ch.size.x * scale.x;
-			h = ch.size.y * scale.y;
+		case LEFT:
+			if (isGame && App->renderer3D->actual_game_camera != nullptr)
+			{
+				xpos = x + pos_x + ch.bearing.x * scale.x * factor_x;
+				ypos = y - pos_y - (ch.size.y - ch.bearing.y) * scale.y * factor_y;
+				w = ch.size.x * scale.x * factor_x;
+				h = ch.size.y * scale.y * factor_y;
+			}
+			else
+			{
+				xpos = matrix[0][3] + pos_x + ch.bearing.x * scale.x;
+				ypos = matrix[1][3] - pos_y - (ch.size.y - ch.bearing.y) * scale.y;
+				w = ch.size.x * scale.x;
+				h = ch.size.y * scale.y;
+			}
+			break;
+		case MIDDLE:
+			if (i == 0)
+			{
+				int aux = 0;
+				int current_size = 0;
+				for (std::string::const_iterator aux_c = text.begin(); aux_c != text.end(); aux_c++)
+				{
+					current_size += font->fontData.charactersMap[*aux_c].advance;
+					if (current_size > width)
+					{
+						lines_current_size.push_back(current_size - font->fontData.charactersMap[*aux_c].advance);
+						current_line_pos.push_back(aux);
+						current_size = 0;
+					}
+					else if (aux_c != (text.end() - 1) && (*aux_c) == '/' && *(aux_c + 1) == 'n')
+					{
+						lines_current_size.push_back(current_size - font->fontData.charactersMap[*aux_c].advance - font->fontData.charactersMap[*(aux_c + 1)].advance);
+						current_line_pos.push_back(aux);
+						current_size = 0;
+					}
+					else if (aux_c != text.begin() && *(aux_c - 1) == '/' && *aux_c == 'n')
+					{
+						current_size -= (font->fontData.charactersMap[*aux_c].advance + font->fontData.charactersMap[*(aux_c - 1)].advance);
+					}
+					aux++;
+				}
+				lines_current_size.push_back(current_size);
+				current_line_pos.push_back(aux);
+			}
+
+			if (i == current_line_pos[current_line])
+			{
+				current_line++;
+				pos_x = 0;
+			}
+
+			if ((i < text.size() && (text[i]) == '/' && (text[i + 1]) == 'n') || (i != 0 && (text[i - 1]) == '/' && (text[i]) == 'n'))
+				continue;
+
+			if (isGame && App->renderer3D->actual_game_camera != nullptr)
+			{
+				xpos = x + pos_x + (ch.bearing.x + (width - lines_current_size[current_line]) * 0.5) * scale.x * factor_x;
+				ypos = y - pos_y - (ch.size.y - ch.bearing.y + (font->fontData.charactersMap['l'].size.y * current_line * interlineal)) * scale.y * factor_y;
+				w = ch.size.x * scale.x * factor_x;
+				h = ch.size.y * scale.y * factor_y;
+			}
+			else
+			{
+				xpos = matrix[0][3] + pos_x + (ch.bearing.x + (width - lines_current_size[current_line]) * 0.5) * scale.x;
+				ypos = matrix[1][3] - pos_y - (ch.size.y - ch.bearing.y + (font->fontData.charactersMap['l'].size.y * current_line * interlineal)) * scale.y;
+				w = ch.size.x * scale.x;
+				h = ch.size.y * scale.y;
+			}
+
+
+			break;
+
+		case RIGHT:
+			if (i == 0)
+			{
+				int aux = 0;
+				int current_size = 0;
+				for (std::string::const_iterator aux_c = text.begin(); aux_c != text.end(); aux_c++)
+				{
+					current_size += font->fontData.charactersMap[*aux_c].advance;
+					if (current_size > width)
+					{
+						lines_current_size.push_back(current_size - font->fontData.charactersMap[*aux_c].advance);
+						current_line_pos.push_back(aux);
+						current_size = 0;
+					}
+					if((*aux_c) == '/' && (*aux_c + 1) == '0')
+					{
+						lines_current_size.push_back(current_size);
+						current_line_pos.push_back(aux);
+						current_size = 0;
+					}
+					aux++;
+				}
+				lines_current_size.push_back(current_size);
+				current_line_pos.push_back(aux);
+			}
+
+
+			if (i == current_line_pos[current_line])
+			{
+				current_line++;
+				pos_x = 0;
+			}
+
+			if (isGame && App->renderer3D->actual_game_camera != nullptr)
+			{
+				xpos = x + pos_x + (ch.bearing.x + (width - lines_current_size[current_line])) * scale.x * factor_x;
+				ypos = y - pos_y - (ch.size.y - ch.bearing.y + (font->fontData.charactersMap['l'].size.y * current_line * interlineal)) * scale.y * factor_y;
+				w = ch.size.x * scale.x * factor_x;
+				h = ch.size.y * scale.y * factor_y;
+			}
+			else
+			{
+				xpos = matrix[0][3] + pos_x + (ch.bearing.x + (width - lines_current_size[current_line])) * scale.x;
+				ypos = matrix[1][3] - pos_y - (ch.size.y - ch.bearing.y + (font->fontData.charactersMap['l'].size.y * current_line * interlineal)) * scale.y;
+				w = ch.size.x * scale.x;
+				h = ch.size.y * scale.y;
+			}
+			break;
 		}
 		
 
@@ -229,19 +362,44 @@ void ComponentText::Draw(bool isGame)
 
 		// Render glyph texture over quad
 		glBindTexture(GL_TEXTURE_2D, ch.textureID);
+
 		// Update content of VBO memory
 		glBindBuffer(GL_ARRAY_BUFFER, verticesID);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertex), vertex);
 		glBindBuffer(GL_ARRAY_BUFFER, uvID);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(uvs), uvs);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		if (isGame && App->renderer3D->actual_game_camera != nullptr)
+		//Render loop line
+		float3 pos = transform->GetGlobalPosition();
+
+#ifndef GAME_VERSION
+		if (!isGame)
+		{
+			glBegin(GL_LINE_LOOP);
+			glVertex3f(pos.x, pos.y, pos.z);
+			glVertex3f(pos.x + width * scale.x, pos.y, pos.z);
+			glVertex3f(pos.x + width * scale.x, pos.y + font->fontData.charactersMap['l'].size.y * scale.y, pos.z);
+			glVertex3f(pos.x, pos.y + font->fontData.charactersMap['l'].size.y * scale.y, pos.z);
+			glEnd();
+		}
+#endif
+		if (isGame && App->renderer3D->actual_game_camera != nullptr && align != TextAlign::LEFT)
+		{
+			pos_x += ch.advance * scale.x * factor_x;
+		}
+		else if(align != TextAlign::LEFT)
+		{
+			pos_x += ch.advance * scale.x;
+		}
+			
+		if (isGame && App->renderer3D->actual_game_camera != nullptr && align == TextAlign::LEFT)
 		{
 			line = pos_x += ch.advance * scale.x * factor_x;
-			if (line > width* factor_x)
+			if (line > width * scale.x * factor_x)
 			{
 				if (isGame && App->renderer3D->actual_game_camera != nullptr)
 					pos_y += font->fontData.charactersMap['l'].size.y * scale.y * factor_y * interlineal;
@@ -251,13 +409,13 @@ void ComponentText::Draw(bool isGame)
 				pos_x = 0;
 			}
 		}
-		else
+		else if(align == TextAlign::LEFT)
 		{
 			line = pos_x += ch.advance * scale.x;
-			if (line > width)
+			if (line > width * scale.x)
 			{
 				if (isGame && App->renderer3D->actual_game_camera != nullptr)
-					pos_y += font->fontData.charactersMap['l'].size.y * scale.y * factor_y * interlineal;
+					pos_y += font->fontData.charactersMap['l'].size.y * scale.y * factor_y * interlineal ;
 				else
 					pos_y += font->fontData.charactersMap['l'].size.y * scale.y * interlineal;
 
@@ -266,13 +424,39 @@ void ComponentText::Draw(bool isGame)
 		}
 	}
 	
-	canvas->text_shader->Unbind();
+	font->text_shader->Unbind();
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glDisable(GL_BLEND);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_CULL_FACE);
+}
+
+void ComponentText::Reset()
+{
+	current_color = Color::White();
+	width = 200;
+	interlineal = 1.5f;
+	text = "Insert Text";
+	font = App->resources->default_font;
+}
+
+void ComponentText::SetComponent(Component* component)
+{
+	component->enabled = enabled;
+	ComponentUI* ui = (ComponentUI*)component;
+	ui->current_color = current_color;
+
+	dynamic_cast<ComponentText*>(component)->text = text;
+	dynamic_cast<ComponentText*>(component)->width = width;
+	dynamic_cast<ComponentText*>(component)->interlineal = interlineal;
+	if (font != nullptr) {
+		dynamic_cast<ComponentText*>(component)->font = font;
+	}
+	else {
+		LOG_ENGINE("There's no default font!");
+	}
 }
 
 void ComponentText::Clone(Component* clone)
@@ -320,18 +504,24 @@ void ComponentText::SaveComponent(JSONArraypack* to_save)
 	to_save->SetColor("Color", current_color);
 	to_save->SetNumber("Width", width);
 	to_save->SetNumber("Interlineal", interlineal);
+	to_save->SetNumber("Align", (int)align);
 }
 
 void ComponentText::LoadComponent(JSONArraypack* to_load)
 {
+	current_color = to_load->GetColor("Color");
 	enabled = to_load->GetBoolean("Enabled");
 	text = to_load->GetString("Text");
 	interlineal = to_load->GetNumber("Interlineal");
 	width = to_load->GetNumber("Width");
+	int aux_type = (int)to_load->GetNumber("Align");
+	align = (TextAlign)aux_type;
 
 	u64 fontID = std::stoull(to_load->GetString("FontID"));
 	if (fontID != 0) {
-		ResourceFont* font = (ResourceFont*)App->resources->GetResourceWithID(fontID);
+		font = (ResourceFont*)App->resources->GetResourceWithID(fontID);
+		font->IncreaseReferences();
+		LOG_ENGINE("Loaded font with ID %u", fontID);
 	}
 	else {
 		LOG_ENGINE("Font ID equals to 0! Font not founded");
@@ -384,6 +574,16 @@ void ComponentText::GenerateVAOVBO()
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+void ComponentText::SetText(const char* newText)
+{
+	text = text.assign(newText);
+}
+
+const char* ComponentText::GetText()
+{
+	return text.data();
 }
 
 

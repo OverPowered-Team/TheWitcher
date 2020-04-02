@@ -81,6 +81,7 @@ void ComponentAnimator::OnPlay()
 	{
 		source_animator_controller->SaveAsset(source_animator_controller->GetID());
 		animator_controller = new ResourceAnimatorController(source_animator_controller);
+		animator_controller->mycomponent = this;
 		source_animator_controller->DecreaseReferences();
 		animator_controller->Play();
 	}
@@ -143,7 +144,22 @@ void ComponentAnimator::SetInt(const char* parameter_name, int parameter_value)
 
 float ComponentAnimator::GetCurrentStateDuration()
 {
-	return animator_controller->GetCurrentNode()->GetClip()->GetDuration() * animator_controller->GetCurrentNode()->GetSpeed();
+	return animator_controller->GetCurrentNode()->GetClip()->GetDuration() / animator_controller->GetCurrentNode()->GetSpeed();
+}
+
+float ComponentAnimator::GetCurrentStateSpeed()
+{
+	return animator_controller->GetCurrentNode()->GetSpeed();
+}
+
+float ComponentAnimator::GetCurrentStateTime()
+{
+	return animator_controller->GetCurrentNode()->time;
+}
+
+uint ComponentAnimator::GetCurrentAnimTPS()
+{
+	return animator_controller->GetCurrentNode()->GetClip()->ticks_per_second;
 }
 
 bool ComponentAnimator::DrawInspector()

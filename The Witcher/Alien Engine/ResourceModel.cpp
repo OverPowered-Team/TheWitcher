@@ -155,7 +155,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 
 				materials_attached[i]->SetName(materialName.c_str());
 				materials_attached[i]->SetAssetsPath(std::string(MATERIALS_FOLDER + materialName + ".material").data());
-				materials_attached[i]->SaveMaterialFiles();
+				materials_attached[i]->SaveResource();
 			}
 
 			materials_path[i] = materials_attached[i]->GetLibraryPath();
@@ -736,12 +736,14 @@ GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<s
 
 				if (node.material >= 0)
 				{
-					ResourceMaterial* material = materials_attached[node.material];
-					if (material != nullptr) 
-					{
-						ComponentMaterial* Cmat = new ComponentMaterial(ret);
-						Cmat->SetMaterial(material);
-						ret->AddComponent(Cmat);
+					if (node.material < materials_attached.size()) {
+						ResourceMaterial* material = materials_attached[node.material];
+						if (material != nullptr)
+						{
+							ComponentMaterial* Cmat = new ComponentMaterial(ret);
+							Cmat->SetMaterial(material);
+							ret->AddComponent(Cmat);
+						}
 					}
 				}
 

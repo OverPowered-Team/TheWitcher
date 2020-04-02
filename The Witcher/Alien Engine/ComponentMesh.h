@@ -40,6 +40,9 @@ public:
 	ComponentMesh(GameObject* attach);
 	virtual ~ComponentMesh();
 
+	const AABB GetGlobalAABB() const;
+	const AABB GetLocalAABB() const;
+
 protected:
 
 	void SetResourceMesh(ResourceMesh* resource);
@@ -63,7 +66,6 @@ protected:
 	void GenerateLocalAABB();
 	void RecalculateAABB_OBB();
 
-	const AABB GetGlobalAABB() const;
 	const OBB GetOBB() const;
 
 	void SaveComponent(JSONArraypack* to_save);

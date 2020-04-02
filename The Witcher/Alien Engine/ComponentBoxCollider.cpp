@@ -5,6 +5,7 @@
 #include "ModulePhysics.h"
 #include "GameObject.h"
 #include "imgui/imgui.h"
+#include "mmgr/mmgr.h"
 
 ComponentBoxCollider::ComponentBoxCollider(GameObject* go) : ComponentCollider(go)
 {
@@ -68,7 +69,7 @@ void ComponentBoxCollider::UpdateShape()
 	}
 
 	final_size = size.Mul(transform->GetGlobalScale());
-	final_center = center.Mul(final_size);
+	final_center = transform->GetGlobalMatrix().MulPos(center);
 
 	shape = new btBoxShape(ToBtVector3(final_size.Abs() * 0.5f));
 

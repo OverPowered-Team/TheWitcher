@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class GameObject;
 struct AlienEvent;
 
@@ -8,38 +10,40 @@ class JSONArraypack;
 typedef unsigned long long u64;
 
 enum class ComponentType {
+	NONE = -1,
 	TRANSFORM = 0,
-	MESH,
-	MATERIAL,
-	LIGHT_DIRECTIONAL,
-	LIGHT_SPOT,
-	LIGHT_POINT,
-	CAMERA,
-	BOX_COLLIDER,
-	SPHERE_COLLIDER,
-	CAPSULE_COLLIDER,
-	CONVEX_HULL_COLLIDER,
-	RIGID_BODY,
-	POINT_CONSTRAINT,
-	CHARACTER_CONTROLLER,
-	ANIMATOR,
-	PARTICLES,
-	A_EMITTER,
-	A_LISTENER,
-	A_REVERB,
-	CANVAS,
-	UI_IMAGE,
-	UI_BUTTON,
-	UI_TEXT,
-	UI_CHECKBOX,
-	UI_SLIDER,
-	UI_BAR,
-	UI_ANIMATED_IMAGE,
-	DEFORMABLE_MESH,
-	BONE,
-	SCRIPT,
-	UI,// UI MUST BE THE LAST
-	UNKNOWN
+	MESH = 1,
+	MATERIAL = 2,
+	LIGHT_DIRECTIONAL = 3,
+	LIGHT_SPOT = 4,
+	LIGHT_POINT = 5,
+	CAMERA = 6,
+	BOX_COLLIDER = 7,
+	SPHERE_COLLIDER = 8,
+	CAPSULE_COLLIDER = 9,
+	CONVEX_HULL_COLLIDER = 10,
+	RIGID_BODY = 11,
+	POINT_CONSTRAINT = 12,
+	CHARACTER_CONTROLLER = 13,
+	ANIMATOR = 14,
+	PARTICLES = 15,
+	A_EMITTER = 16,
+	A_LISTENER = 17,
+
+	CANVAS = 19,
+	UI_IMAGE = 20,
+	UI_BUTTON = 21,
+	UI_TEXT = 22,
+	UI_CHECKBOX = 23,
+	UI_SLIDER = 24,
+	UI_BAR = 25,
+	UI_ANIMATED_IMAGE = 26,
+	DEFORMABLE_MESH = 27,
+	BONE = 28,
+	SCRIPT = 29,
+	UI = 30,
+
+	MAX //LAST LAST LAST
 };
 
 class __declspec(dllexport) Component {
@@ -105,13 +109,15 @@ protected:
 
 	virtual bool DrawInspector() { return true; }
 
+	static std::string EnumToString(ComponentType type);
+
 protected:
 
 	void RightClickMenu(const char* collapsing_header_name);
 
 protected:
 
-	ComponentType type = ComponentType::UNKNOWN;
+	ComponentType type = ComponentType::NONE;
 	bool enabled = true;
 	u64 ID = 0;
 	bool not_destroy = true;

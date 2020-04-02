@@ -201,14 +201,15 @@ bool ComponentScript::DrawInspector()
 				case InspectorScriptData::DataType::STRING: {
 					ImGui::PushID(inspector_variables[i].ptr);
 
-					char* ptr = (char*)inspector_variables[i].ptr;
+					std::string* ptr = (std::string*)inspector_variables[i].ptr;
 					static char name[MAX_PATH];
-					memcpy(name, ptr, MAX_PATH);
+					memcpy(name, ptr->data(), MAX_PATH);
 
 					ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.5F);
 
 					if (ImGui::InputText(inspector_variables[i].variable_name.data(), name, MAX_PATH, ImGuiInputTextFlags_AutoSelectAll)) {
-						memcpy(ptr, name, MAX_PATH);
+						void (*Add)(std::string* , const char*) = (void (*)(std::string*, const char*))GetProcAddress(App->scripts_dll, std::string("ChangeString").data());
+						Add(ptr, name);
 					}
 
 					ImGui::PopID();
@@ -356,8 +357,8 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 				inspector->SetNumber("enumInt", value);
 				break; }
 			case InspectorScriptData::DataType::STRING: {
-				char* value = (char*)inspector_variables[i].ptr;
-				inspector->SetString("string", value);
+				std::string* value = (std::string*)inspector_variables[i].ptr;
+				inspector->SetString("string", value->data());
 				break; }
 			case InspectorScriptData::DataType::FLOAT: {
 				float value = *(float*)inspector_variables[i].ptr;
@@ -372,11 +373,14 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 				inspector->SetString("prefab", std::to_string(value->prefabID).data());
 				break; }
 			case InspectorScriptData::DataType::GAMEOBJECT: {
-				if (inspector_variables[i].obj != nullptr && *inspector_variables[i].obj != nullptr) {
-					inspector->SetString("gameobject", std::to_string((*inspector_variables[i].obj)->ID).data());
-				}
-				else {
-					inspector->SetString("gameobject", "0");
+				if (inspector_variables[i].obj != nullptr) {
+					GameObject* obj = *inspector_variables[i].obj;
+					if (obj != nullptr && (!App->objects->is_saving_prefab || (game_object_attached->Exists(obj)))) {
+						inspector->SetString("gameobject", std::to_string((*inspector_variables[i].obj)->ID).data());
+					}
+					else {
+						inspector->SetString("gameobject", "0");
+					}
 				}
 				break; }
 			default:
@@ -417,8 +421,9 @@ void ComponentScript::LoadComponent(JSONArraypack* to_load)
 							*value = inspector->GetNumber("enumInt");
 							break; }
 						case InspectorScriptData::DataType::STRING: {
-							char* value = (char*)inspector_variables[i].ptr;
-							strcpy(value, inspector->GetString("string"));
+							std::string* value = (std::string*)inspector_variables[i].ptr;
+							void (*Add)(std::string*, const char*) = (void (*)(std::string*, const char*))GetProcAddress(App->scripts_dll, std::string("ChangeString").data());
+							Add(value, inspector->GetString("string"));
 							break; }
 						case InspectorScriptData::DataType::FLOAT: {
 							float* value = (float*)inspector_variables[i].ptr;
@@ -484,9 +489,9 @@ void ComponentScript::Clone(Component* clone)
 					*script_var = variable;
 					break; }
 				case InspectorScriptData::DataType::STRING: {
-					char* variable = (char*)inspector_variables[i].ptr;
+					/*char* variable = (char*)inspector_variables[i].ptr;
 					char* script_var = (char*)script->inspector_variables[i].ptr;
-					strcpy(script_var, variable);
+					strcpy(script_var, variable);*/
 					break; }
 				case InspectorScriptData::DataType::FLOAT: {
 					float variable = *(float*)inspector_variables[i].ptr;
@@ -663,7 +668,7 @@ void ComponentScript::InspectorBool(bool* ptr, const char* ptr_name)
 	}
 }
 
-void ComponentScript::InspectorString(const char* ptr, const char* ptr_name)
+void ComponentScript::InspectorString(std::string* ptr, const char* ptr_name)
 {
 	std::string variable_name = GetVariableName(ptr_name);
 
@@ -850,15 +855,20 @@ void ComponentScript::LoadData(const char* name, bool is_alien)
 			return;
 		}
 		game_object_attached->AddComponent(this);
-		if (need_alien) {
-			Alien* alien = (Alien*)data_ptr;
+		Alien* alien = (Alien*)data_ptr;
+		try {
+			alien->IsAlien();
+			need_alien = true;
 			App->objects->current_scripts.push_back(alien);
 			alien->game_object = game_object_attached;
 			alien->transform = game_object_attached->transform;
 			alien->enabled = &enabled;
-			strcpy(alien->data_name, name);
-		}
+			strcpy(alien->data_name, data_name.data());
 
+		}
+		catch (...) {
+
+		}
 		App->SendAlienEvent(this, AlienEventType::SCRIPT_ADDED);
 	}
 }
@@ -878,7 +888,7 @@ std::string ComponentScript::GetVariableName(const char* ptr_name)
 			variable_name = variable_name + ptr_strg[i];
 		}
 	}
-	return variable_name;
+	return (!variable_name.empty()) ? variable_name : std::string(ptr_name);
 }
 
 const char* ComponentScript::GetCurrentEnumName(int value, const std::vector<std::string>& enumNames)

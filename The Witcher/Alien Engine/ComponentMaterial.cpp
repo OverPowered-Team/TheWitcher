@@ -258,14 +258,19 @@ void ComponentMaterial::SetTexture(ResourceTexture* tex, TextureType texType = T
 		return;
 
 	// Look for an already created material (with the same name as the texture) that has the same texture
-	ResourceMaterial* foundMaterial = App->resources->GetMaterialByName(tex->GetName());
-	if (foundMaterial != nullptr && foundMaterial->GetTexture(texType) == tex)
+	//ResourceMaterial* foundMaterial = App->resources->GetMaterialByName(tex->GetName());
+	//if (foundMaterial != nullptr && foundMaterial->GetTexture(texType) == tex)
+	//{
+	//	SetMaterial(foundMaterial);
+	//}
+	//else // Create a new material
+	//{
+	//	//if(!(App->StringCmp(material->GetName(),tex->GetName()) && !material->HasTexture())) // TODO: Should discuss this
+	//	SetMaterial(App->resources->CreateMaterial(tex->GetName()));
+	//}
+
+	if (material == App->resources->default_material)
 	{
-		SetMaterial(foundMaterial);
-	}
-	else // Create a new material
-	{
-		//if(!(App->StringCmp(material->GetName(),tex->GetName()) && !material->HasTexture())) // TODO: Should discuss this
 		SetMaterial(App->resources->CreateMaterial(tex->GetName()));
 	}
 
@@ -304,79 +309,79 @@ const ResourceMaterial* ComponentMaterial::GetMaterial() const
 
 void ComponentMaterial::ShowShaderTextEditor()
 {
-	auto cpos = shader_editor.GetCursorPosition();
-	ImGui::SetNextWindowPosCenter(ImGuiCond_FirstUseEver);
-	ImGui::Begin("Shader Editor", &show_shader_text_editor, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
-	ImGui::SetWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);
+	//auto cpos = shader_editor.GetCursorPosition();
+	//ImGui::SetNextWindowPosCenter(ImGuiCond_FirstUseEver);
+	//ImGui::Begin("Shader Editor", &show_shader_text_editor, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
+	//ImGui::SetWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);
 
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Save"))
-			{
-				auto textToSave = shader_editor.GetText();
+	//if (ImGui::BeginMenuBar())
+	//{
+	//	if (ImGui::BeginMenu("File"))
+	//	{
+	//		if (ImGui::MenuItem("Save"))
+	//		{
+	//			auto textToSave = shader_editor.GetText();
 
-				// Save text assets folder
-				App->file_system->Save(file_to_edit.c_str(), textToSave.c_str(), textToSave.size());
+	//			// Save text assets folder
+	//			App->file_system->Save(file_to_edit.c_str(), textToSave.c_str(), textToSave.size());
 
-				// Save text library folder
-				App->file_system->Save(material->used_shader->GetLibraryPath(), textToSave.c_str(), textToSave.size());
-			}
+	//			// Save text library folder
+	//			App->file_system->Save(material->used_shader->GetLibraryPath(), textToSave.c_str(), textToSave.size());
+	//		}
 
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Edit"))
-		{
-			bool ro = shader_editor.IsReadOnly();
-			if (ImGui::MenuItem("Read-only mode", nullptr, &ro))
-				shader_editor.SetReadOnly(ro);
-			ImGui::Separator();
+	//		ImGui::EndMenu();
+	//	}
+	//	if (ImGui::BeginMenu("Edit"))
+	//	{
+	//		bool ro = shader_editor.IsReadOnly();
+	//		if (ImGui::MenuItem("Read-only mode", nullptr, &ro))
+	//			shader_editor.SetReadOnly(ro);
+	//		ImGui::Separator();
 
-			if (ImGui::MenuItem("Undo", "ALT-Backspace", nullptr, !ro && shader_editor.CanUndo()))
-				shader_editor.Undo();
-			if (ImGui::MenuItem("Redo", "Ctrl-Y", nullptr, !ro && shader_editor.CanRedo()))
-				shader_editor.Redo();
+	//		if (ImGui::MenuItem("Undo", "ALT-Backspace", nullptr, !ro && shader_editor.CanUndo()))
+	//			shader_editor.Undo();
+	//		if (ImGui::MenuItem("Redo", "Ctrl-Y", nullptr, !ro && shader_editor.CanRedo()))
+	//			shader_editor.Redo();
 
-			ImGui::Separator();
+	//		ImGui::Separator();
 
-			if (ImGui::MenuItem("Copy", "Ctrl-C", nullptr, shader_editor.HasSelection()))
-				shader_editor.Copy();
-			if (ImGui::MenuItem("Cut", "Ctrl-X", nullptr, !ro && shader_editor.HasSelection()))
-				shader_editor.Cut();
-			if (ImGui::MenuItem("Delete", "Del", nullptr, !ro && shader_editor.HasSelection()))
-				shader_editor.Delete();
-			if (ImGui::MenuItem("Paste", "Ctrl-V", nullptr, !ro && ImGui::GetClipboardText() != nullptr))
-				shader_editor.Paste();
+	//		if (ImGui::MenuItem("Copy", "Ctrl-C", nullptr, shader_editor.HasSelection()))
+	//			shader_editor.Copy();
+	//		if (ImGui::MenuItem("Cut", "Ctrl-X", nullptr, !ro && shader_editor.HasSelection()))
+	//			shader_editor.Cut();
+	//		if (ImGui::MenuItem("Delete", "Del", nullptr, !ro && shader_editor.HasSelection()))
+	//			shader_editor.Delete();
+	//		if (ImGui::MenuItem("Paste", "Ctrl-V", nullptr, !ro && ImGui::GetClipboardText() != nullptr))
+	//			shader_editor.Paste();
 
-			ImGui::Separator();
+	//		ImGui::Separator();
 
-			if (ImGui::MenuItem("Select all", nullptr, nullptr))
-				shader_editor.SetSelection(TextEditor::Coordinates(), TextEditor::Coordinates(shader_editor.GetTotalLines(), 0));
+	//		if (ImGui::MenuItem("Select all", nullptr, nullptr))
+	//			shader_editor.SetSelection(TextEditor::Coordinates(), TextEditor::Coordinates(shader_editor.GetTotalLines(), 0));
 
-			ImGui::EndMenu();
-		}
+	//		ImGui::EndMenu();
+	//	}
 
-		if (ImGui::BeginMenu("View"))
-		{
-			if (ImGui::MenuItem("Dark palette"))
-				shader_editor.SetPalette(TextEditor::GetDarkPalette());
-			if (ImGui::MenuItem("Light palette"))
-				shader_editor.SetPalette(TextEditor::GetLightPalette());
-			if (ImGui::MenuItem("Retro blue palette"))
-				shader_editor.SetPalette(TextEditor::GetRetroBluePalette());
-			ImGui::EndMenu();
-		}
+	//	if (ImGui::BeginMenu("View"))
+	//	{
+	//		if (ImGui::MenuItem("Dark palette"))
+	//			shader_editor.SetPalette(TextEditor::GetDarkPalette());
+	//		if (ImGui::MenuItem("Light palette"))
+	//			shader_editor.SetPalette(TextEditor::GetLightPalette());
+	//		if (ImGui::MenuItem("Retro blue palette"))
+	//			shader_editor.SetPalette(TextEditor::GetRetroBluePalette());
+	//		ImGui::EndMenu();
+	//	}
 
-		ImGui::EndMenuBar();
-	}
+	//	ImGui::EndMenuBar();
+	//}
 
-	ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s", cpos.mLine + 1, cpos.mColumn + 1, shader_editor.GetTotalLines(),
-		shader_editor.IsOverwrite() ? "Ovr" : "Ins",
-		shader_editor.CanUndo() ? "*" : " ",
-		shader_editor.GetLanguageDefinition().mName.c_str(), file_to_edit.c_str());
+	//ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s", cpos.mLine + 1, cpos.mColumn + 1, shader_editor.GetTotalLines(),
+	//	shader_editor.IsOverwrite() ? "Ovr" : "Ins",
+	//	shader_editor.CanUndo() ? "*" : " ",
+	//	shader_editor.GetLanguageDefinition().mName.c_str(), file_to_edit.c_str());
 
-	shader_editor.Render("TextEditor");
+	//shader_editor.Render("TextEditor");
 
-	ImGui::End();
+	//ImGui::End();
 }

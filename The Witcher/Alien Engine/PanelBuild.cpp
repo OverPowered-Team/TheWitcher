@@ -339,6 +339,7 @@ void PanelBuild::CreateBuild()
 		build->SetString("Build.GameName", game_name);
 
 		build->FinishSave();
+		delete build;
 	}
 
 

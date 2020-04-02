@@ -77,14 +77,15 @@ void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 	// Uniforms --------------
 	SetUniform(material, camera);
 
-	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 	// --------------------------------------------------------------------- 
 
 	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	material->used_shader->Unbind();
+
+	material->UnbindMaterial();
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
@@ -125,7 +126,7 @@ void ComponentMesh::DrawOutLine()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
-	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, 0);
 
 	glDisable(GL_STENCIL_TEST);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -158,7 +159,7 @@ void ComponentMesh::DrawMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glDrawElements(GL_TRIANGLES, mesh->num_index * 3, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 	glLineWidth(1);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -174,9 +175,15 @@ void ComponentMesh::SetUniform(ResourceMaterial* resource_material, ComponentCam
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 	resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());
 	resource_material->used_shader->SetUniform1i("animate", animate);
+	
+	resource_material->used_shader->SetUniform1i("activeFog", camera->activeFog);
+	if (camera->activeFog)
+	{
+		resource_material->used_shader->SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+		resource_material->used_shader->SetUniform1f("density", camera->fogDensity);
+		resource_material->used_shader->SetUniform1f("gradient", camera->fogGradient);
+	}
 }
-
-
 
 void ComponentMesh::DrawVertexNormals()
 {
@@ -484,6 +491,11 @@ void ComponentMesh::RecalculateAABB_OBB()
 const AABB ComponentMesh::GetGlobalAABB() const
 {
 	return global_aabb;
+}
+
+const AABB ComponentMesh::GetLocalAABB() const
+{
+	return local_aabb;
 }
 
 const OBB ComponentMesh::GetOBB() const

@@ -8,6 +8,7 @@
 #include "ResourceTexture.h"
 #include "ModuleWindow.h"
 #include "PanelGame.h"
+#include "mmgr/mmgr.h"
 
 
 ComponentAnimatedImage::ComponentAnimatedImage(GameObject* obj): ComponentUI(obj)
@@ -108,10 +109,12 @@ bool ComponentAnimatedImage::DrawInspector()
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+				ImGui::PushID(std::distance(images.begin(), item) + 964723);
 				if (ImGui::Button("X") && (*item) != nullptr) {
 					//ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 					(*item) = ClearTextureArray((*item));
 				}
+				ImGui::PopID();
 				ImGui::PopStyleColor(3);
 			}
 		}
@@ -232,7 +235,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-	glDrawElements(GL_TRIANGLES, 6 * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
@@ -343,6 +346,16 @@ ResourceTexture* ComponentAnimatedImage::SetTextureArray(ResourceTexture* tex, R
 		return tex;
 	}
 	return nullptr;
+}
+
+void ComponentAnimatedImage::SetAnimSpeed(float speed)
+{
+	this->speed = speed;
+}
+
+float ComponentAnimatedImage::GetAnimSpeed()
+{
+	return speed;
 }
 
 ResourceTexture* ComponentAnimatedImage::GetCurrentFrame(float dt)

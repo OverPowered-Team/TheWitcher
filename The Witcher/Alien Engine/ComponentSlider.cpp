@@ -140,7 +140,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X") && sliderTexture != nullptr) {
+			if (ImGui::Button("X##sliderTex") && sliderTexture != nullptr) {
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 				if (sliderTexture != nullptr) {
 					sliderTexture->DecreaseReferences();
@@ -313,7 +313,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectUPSlid")) {
 				if (select_on_up != -1) {
 					select_on_up = -1;
 				}
@@ -351,7 +351,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectDownSlid")) {
 				if (select_on_down != -1) {
 					select_on_down = -1;
 				}
@@ -393,7 +393,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectRightSlid")) {
 				if (select_on_right != -1) {
 					select_on_right = -1;
 				}
@@ -436,7 +436,7 @@ bool ComponentSlider::DrawInspector()
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
 			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
-			if (ImGui::Button("X")) {
+			if (ImGui::Button("X##selectLeftSlid")) {
 				if (select_on_left != -1) {
 					select_on_left = -1;
 				}
@@ -487,7 +487,7 @@ void ComponentSlider::Draw(bool isGame)
 void ComponentSlider::Update()
 {
 	if (Time::IsPlaying()) {
-		if (!App->objects->first_assigned_selected || !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled)
+		if (canvas->allow_navigation && (!App->objects->first_assigned_selected || (App->objects->GetGameObjectByID(App->objects->selected_ui) != nullptr && !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled)))
 			CheckFirstSelected();
 		//UILogicMouse();
 		
@@ -496,6 +496,7 @@ void ComponentSlider::Update()
 		switch (state)
 		{
 		case Idle:
+			OnIdle();
 			break;
 		case Hover:
 			OnHover();
@@ -509,10 +510,14 @@ void ComponentSlider::Update()
 		case Release:
 			OnRelease();
 			break;
+		case Exit:
+			OnExit();
+			break;
 		default:
 			break;
 		}
-		UILogicGamePad();
+		if (canvas->game_object_attached->enabled || canvas->allow_navigation)
+			UILogicGamePad();
 	}
 }
 
@@ -595,10 +600,14 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex, bool backgr
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexID);
-	glDrawElements(GL_TRIANGLES, 6 * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
@@ -739,6 +748,12 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 	}
 	App->objects->first_assigned_selected = false;
 }
+bool ComponentSlider::OnIdle()
+{
+	current_color = idle_color;
+	slider_current_color = slider_idle_color;
+	return true;
+}
 bool ComponentSlider::OnHover()
 {
 	current_color = hover_color;
@@ -804,8 +819,13 @@ bool ComponentSlider::OnPressed()
 
 bool ComponentSlider::OnRelease()
 {
-	current_color = idle_color;
-	slider_current_color = slider_idle_color;
+	current_color = hover_color;
+	slider_current_color = slider_hover_color;
+	return true;
+}
+
+bool ComponentSlider::OnExit()
+{
 	return true;
 }
 

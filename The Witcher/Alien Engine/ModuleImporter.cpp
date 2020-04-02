@@ -6,6 +6,11 @@
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
 
+#include "stb_image.h"
+#include "FreeImage/src/FreeImage.h"
+
+#pragma comment ( lib, "FreeImage/lib/FreeImage.lib ")
+
 #include "ModuleUI.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
@@ -331,6 +336,15 @@ void ModuleImporter::LoadMesh(const aiMesh *mesh)
 		memcpy(ret->uv_cords, (float *)mesh->mTextureCoords[0], sizeof(float) * mesh->mNumVertices * 3);
 	}
 
+	if (mesh->HasTangentsAndBitangents())
+	{
+		ret->tangents = new float[mesh->mNumVertices * 3];
+		memcpy(ret->tangents, (float*)mesh->mTangents, sizeof(float) * mesh->mNumVertices * 3);
+
+		ret->biTangents = new float[mesh->mNumVertices * 3];
+		memcpy(ret->biTangents, (float*)mesh->mBitangents, sizeof(float) * mesh->mNumVertices * 3);
+	}
+
 	ret->name = std::string(mesh->mName.C_Str());
 	ret->InitBuffers();
 	App->resources->AddResource(ret);
@@ -416,6 +430,9 @@ void ModuleImporter::LoadMaterials(aiMaterial *material, const char *extern_path
 	}
 
 	LoadModelTexture(material, mat, aiTextureType_DIFFUSE, TextureType::DIFFUSE, extern_path);
+	LoadModelTexture(material, mat, aiTextureType_SPECULAR, TextureType::SPECULAR, extern_path);
+	LoadModelTexture(material, mat, aiTextureType_NORMALS, TextureType::NORMALS, extern_path);
+
 	model->materials_attached.push_back(mat);
 }
 
@@ -562,7 +579,7 @@ void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *te
 
 	ilutRenderer(ILUT_OPENGL);
 
-	if (ilLoadImage(path))
+	if (ilutGLLoadImage((char*)path))
 	{
 		iluFlipImage();
 
@@ -579,11 +596,19 @@ void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *te
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
+		ilBindImage(0);
 
 		LOG_ENGINE("Texture successfully loaded: %s", path);
 	}
 	else
 	{
+		ILenum Error;
+		while ((Error = ilGetError()) != IL_NO_ERROR)
+		{
+			const char* txt = iluErrorString(Error);
+			LOG_ENGINE("%d: %s", Error, txt);
+		}
+
 		LOG_ENGINE("Error while loading image in %s", path);
 		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
 	}
@@ -752,7 +777,6 @@ void ModuleImporter::ApplyParticleSystemToSelectedObject(std::string path)
 		}
 	}
 }
-
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh *shape, ResourceMesh *mesh)
 {

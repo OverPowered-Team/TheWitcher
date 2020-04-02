@@ -129,6 +129,7 @@ void ResourceAnimation::FreeMemory()
 		delete[] channels[i].rotation_keys;
 	}
 
+	delete[] channels;
 	channels = nullptr;
 }
 

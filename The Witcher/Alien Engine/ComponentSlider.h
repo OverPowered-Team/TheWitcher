@@ -29,10 +29,12 @@ public:
 	void LoadComponent(JSONArraypack* to_load);
 
 public:
+	bool OnIdle();
 	bool OnHover();
 	bool OnClick();
 	bool OnPressed();
 	bool OnRelease();
+	bool OnExit();
 
 	void SetValue(float factor);
 	float GetValue();

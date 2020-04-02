@@ -2,63 +2,95 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
-#include "CameraMovement.h"
+#include "CameraEnterExit.h"
+
+struct TransitionInfo
+{
+	enum (ToTransitionType,
+		DYNAMIC, STATIC,
+		AXIS
+		);
+	enum(ToAxisType,
+		NONE, X, Y, Z);
+	TransitionInfo()
+	{};
+
+	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time)
+		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), type(ToTransitionType::DYNAMIC)
+	{};
+
+	TransitionInfo(GameObject* to_move, float transition_time)
+		: to_move(to_move), transition_time(transition_time), type(ToTransitionType::STATIC)
+	{}
+	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, ToAxisType type)
+		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), axis_type(type), type(ToTransitionType::AXIS)
+	{};
+
+	float distance = 0.f;
+	float hor_angle = 0.f;
+	float vert_angle = 0.f;
+
+	GameObject* to_move = nullptr;
+
+	float transition_time = 2.f;
+
+	TransitionInfo::ToTransitionType type = TransitionInfo::ToTransitionType::DYNAMIC;
+	TransitionInfo::ToAxisType axis_type = TransitionInfo::ToAxisType::NONE;
+};
+
+class CameraMovement;
 
 class ALIEN_ENGINE_API TriggerCamera : public Alien {
 public:
-	enum (ToState,
-		DYNAMIC,
-		STATIC,
-		AXIS_NOT_IMPLEMENTED
-	);
-
-	struct InfoCamera
-	{
-		GameObject* first_player = nullptr;
-		float distance = 0.f;
-		float hor_angle = 0.f;
-		float vert_angle = 0.f;
-		bool tp_players = true;
-		float tp_distance = 0.f;
-	};
-
+	
 	TriggerCamera();
 	virtual ~TriggerCamera();
-	void Start();
-	void Update();
-	void ManageTransition(bool normal_way);
-	void InterChangeInfoWithCamera();
-	void TeleportTheRestOfPlayers();
-	bool IsCameraDifferent();
+	void Start() override;
+	void StartTransition(TransitionInfo transition_info);
+	
+	void RegisterMovement(int playerNum, int collider_position);
+	bool PlayerMovedForward(int player_num);
+	bool PlayerMovedBackward(int player_num);
+	void VisualizeCameraTransition(TransitionInfo transition_info, Color color);
 
 	void OnDrawGizmos() override;
 
 public:
-	InfoCamera info_to_cam;
-	InfoCamera info_from_cam;
-	int player_counter = 0;
+	std::vector<std::vector<int>> registered_position = { {}, {} };
+	TransitionInfo prev_camera;
+	TransitionInfo next_camera;
 	GameObject* camera = nullptr;
 	CameraMovement* cam_script = nullptr;
-	GameObject* static_pos = nullptr;
-	ToState state = ToState::DYNAMIC;
-	bool ftime = true;
-	bool is_backing = false;
-	float t1 = 0.f;
 };
 
 ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	TriggerCamera* alien = new TriggerCamera();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(TriggerCamera::ToState, alien->state);
+	SHOW_TEXT("Previous camera");//The camera that will transition to when all players have moved back
+	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToTransitionType, alien->prev_camera.type);
+	SHOW_TEXT("If Dynamic");
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->prev_camera.distance);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->prev_camera.hor_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->prev_camera.vert_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->prev_camera.transition_time);
+	SHOW_TEXT("If Static");
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->prev_camera.to_move);
+	SHOW_TEXT("If Axis");
+	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->prev_camera.axis_type);
 	SHOW_SEPARATOR();
 
-	SHOW_TEXT("Dynamic");
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->info_to_cam.distance);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->info_to_cam.hor_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->info_to_cam.vert_angle, -360.f, 360.f);
+	SHOW_TEXT("Next camera");//The camera that will transition to when all players have moved forward
+	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToTransitionType, alien->next_camera.type);
+	SHOW_TEXT("If Dynamic");
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera.distance);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera.hor_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera.vert_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->next_camera.transition_time);
+	SHOW_TEXT("If Static");
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->next_camera.to_move);
+	SHOW_TEXT("If Axis");
+	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->next_camera.axis_type);
 	SHOW_SEPARATOR();
-	SHOW_TEXT("Static");
-	//SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->info_to_cam.tp_players);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->static_pos);
+
 	return alien;
 }

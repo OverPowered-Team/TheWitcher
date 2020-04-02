@@ -10,6 +10,8 @@
 #include "Assimp/include/cfileio.h"
 #include "Assimp/include/types.h"
 #include "Resource_.h"
+#include "ResourceScene.h"
+#include "ResourcePrefab.h"
 #include "FileNode.h"
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
@@ -611,21 +613,27 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 	FileDropType ext_type = SearchExtension(std::string(extern_path));
 
 	switch (ext_type) { // add location
-	case FileDropType::MODEL3D: 
+	case FileDropType::MODEL3D: {
 		final_path = MODELS_FOLDER + final_path;
-		break;
-	case FileDropType::TEXTURE:
+		break; }
+	case FileDropType::TEXTURE: {
 		final_path = TEXTURES_FOLDER + final_path;
-		break;
-	case FileDropType::SHADER:
+		break; }
+	case FileDropType::SHADER: {
 		final_path = SHADERS_FOLDER + final_path;
-		break;
-	case FileDropType::MATERIAL:
+		break; }
+	case FileDropType::MATERIAL: {
 		final_path = MATERIALS_FOLDER + final_path;
-		break;
-	case FileDropType::FONT:
+		break; }
+	case FileDropType::FONT: {
 		final_path = FONTS_FOLDER + final_path;
-		break;
+		break; }
+	case FileDropType::SCENE: {
+		final_path = SCENE_FOLDER + final_path;
+		break; }
+	case FileDropType::PREFAB: {
+		final_path = ASSETS_PREFAB_FOLDER + final_path;
+		break; }
 	}
 
 	std::string normalized = extern_path;
@@ -635,22 +643,42 @@ void ModuleFileSystem::ManageNewDropFile(const char* extern_path)
 	}
 
 	switch (ext_type) { // call the loader
-	case FileDropType::MODEL3D:
+	case FileDropType::MODEL3D: {
 		LOG_ENGINE("Start Loading Model");
 		App->importer->LoadModelFile(final_path.data(), extern_path);
-		break;
-	case FileDropType::TEXTURE:
+		break; }
+	case FileDropType::TEXTURE: {
 		LOG_ENGINE("Start Loading Texture");
 		App->importer->LoadTextureFile(final_path.data(), true);
-		break;
-	case FileDropType::SHADER:
+		break; }
+	case FileDropType::SHADER: {
 		LOG_ENGINE("Start Loading Shader");
 		App->importer->LoadShaderFile(final_path.data(), true);
-		break;
-	case FileDropType::FONT:
+		break; }
+	case FileDropType::FONT: {
 		LOG_ENGINE("Start Loading Font");
 		App->importer->LoadFontFile(final_path.data());
-		break;
+		break; }
+	case FileDropType::SCENE: {
+		LOG_ENGINE("Start Loading Scene");
+		ResourceScene* scene = new ResourceScene();
+		if (!scene->ReadBaseInfo(final_path.data())) {
+			delete scene;
+		}
+		else {
+			App->resources->AddNewFileNode(final_path.data(), true);
+		}
+		break; }
+	case FileDropType::PREFAB: {
+		LOG_ENGINE("Start Loading Scene");
+		ResourcePrefab* prefab = new ResourcePrefab();
+		if (!prefab->ReadBaseInfo(final_path.data())) {
+			delete prefab;
+		}
+		else {
+			App->resources->AddNewFileNode(final_path.data(), true);
+		}
+		break; }
 	}
 #endif
 }
@@ -661,24 +689,39 @@ FileDropType ModuleFileSystem::SearchExtension(const std::string& extern_path)
 	
 	FileDropType ext_type = FileDropType::UNKNOWN;
 
-	if (App->StringCmp(extension.data(), "fbx") || App->StringCmp(extension.data(), "dae"))
+	if (App->StringCmp(extension.data(), "fbx") || App->StringCmp(extension.data(), "dae")) {
 		ext_type = FileDropType::MODEL3D;
-	else if (App->StringCmp(extension.data(), "dds"))
+	}
+	else if (App->StringCmp(extension.data(), "dds")) {
 		ext_type = FileDropType::TEXTURE;
-	else if (App->StringCmp(extension.data(), "png"))
+	}
+	else if (App->StringCmp(extension.data(), "png")) {
 		ext_type = FileDropType::TEXTURE;
-	else if (App->StringCmp(extension.data(), "jpg"))
+	}
+	else if (App->StringCmp(extension.data(), "jpg")) {
 		ext_type = FileDropType::TEXTURE;
-	else if (App->StringCmp(extension.data(), "tga"))
+	}
+	else if (App->StringCmp(extension.data(), "tga")) {
 		ext_type = FileDropType::TEXTURE;
-	else if (App->StringCmp(extension.data(), "shader"))
+	}
+	else if (App->StringCmp(extension.data(), "shader")) {
 		ext_type = FileDropType::SHADER;
-	else if (App->StringCmp(extension.data(), "ttf"))
+	}
+	else if (App->StringCmp(extension.data(), "ttf")) {
 		ext_type = FileDropType::FONT;
-	else if (App->StringCmp(extension.data(), "otf"))
+	}
+	else if (App->StringCmp(extension.data(), "otf")) {
 		ext_type = FileDropType::FONT;
-	else if (App->StringCmp(extension.data(), "animController"))
+	}
+	else if (App->StringCmp(extension.data(), "animController")) {
 		ext_type = FileDropType::ANIM_CONTROLLER;
+	}
+	else if (App->StringCmp(extension.data(), "alienScene")) {
+		ext_type = FileDropType::SCENE;
+	}
+	else if (App->StringCmp(extension.data(), "alienPrefab")) {
+		ext_type = FileDropType::PREFAB;
+	}
 	else
 		LOG_ENGINE("Extension unknown!");
 
@@ -772,6 +815,23 @@ std::string ModuleFileSystem::GetCurrentHolePathFolder(const std::string& path)
 	}
 
 	return folder_name;
+}
+
+bool ModuleFileSystem::IsPathInsideOtherPath(const std::string& path, const std::string& folder)
+{
+	std::string checking;
+	std::string::const_iterator item = path.cbegin(); 
+	for (; item != path.cend(); ++item)
+	{
+		checking += *item;
+		if (*item == '/')
+		{
+			if (checking == folder)
+				return true; 
+		}
+	}
+
+	return false;
 }
 
 // -----------------------------------------------------

@@ -10,6 +10,7 @@
 #include "ModuleWindow.h"
 #include "ResourceScene.h"
 #include "ComponentMesh.h"
+#include "ComponentUI.h"
 #include "ComponentCanvas.h"
 #include "ComponentImage.h"
 #include "ComponentBar.h"
@@ -69,15 +70,6 @@ bool ModuleObjects::Init()
 	base_game_object->ID = 0;
 	base_game_object->is_static = true;
 
-	return true;
-}
-
-bool ModuleObjects::Start()
-{
-	OPTICK_EVENT();
-	LOG_ENGINE("Starting Module Objects");
-	bool ret = true;
-
 	if (App->file_system->Exists(FILE_TAGS)) {
 		JSON_Value* value = json_parse_file(FILE_TAGS);
 		JSON_Object* object = json_value_get_object(value);
@@ -93,6 +85,17 @@ bool ModuleObjects::Start()
 			delete json_tags;
 		}
 	}
+
+	return true;
+}
+
+bool ModuleObjects::Start()
+{
+	OPTICK_EVENT();
+	LOG_ENGINE("Starting Module Objects");
+	bool ret = true;
+
+
 	game_viewport = new Viewport(nullptr);
 #ifndef GAME_VERSION
 	GameObject* camera = new GameObject(base_game_object);
@@ -135,6 +138,12 @@ bool ModuleObjects::Start()
 update_status ModuleObjects::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
+	
+	if (!sceneNameToChange.empty()) {
+		LoadScene(sceneNameToChange.data());
+		sceneNameToChange.clear();
+	}
+	
 	// delete objects
 	if (need_to_delete_objects) { 
 		need_to_delete_objects = false;
@@ -174,6 +183,21 @@ update_status ModuleObjects::PreUpdate(float dt)
 	}
 	base_game_object->PreUpdate();
 	ScriptsPreUpdate();
+
+#ifndef GAME_VERSION
+	for (Viewport* viewport : viewports)
+	{
+		if (!viewport->active || !viewport->CanRender() || (App->renderer3D->selected_game_camera == nullptr) && viewport == App->camera->selected_viewport)
+			continue;
+
+		viewport->BeginViewport();
+		printing_scene = (viewport == App->camera->scene_viewport) ? true : false;
+		bool isGameCamera = (viewport == game_viewport) ? true : false;
+
+		viewport->EndViewport();
+	}
+#endif
+
 	return UPDATE_CONTINUE;
 }
 
@@ -181,6 +205,18 @@ update_status ModuleObjects::Update(float dt)
 {
 	OPTICK_EVENT();
 	base_game_object->Update();
+	if (!functions_to_call.empty()) {
+		for (auto item = functions_to_call.begin(); item != functions_to_call.end(); ++item) {
+			try {
+				(*item)();
+			}
+			catch (...)
+			{
+				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS WHEN CALLING A FUNTION IN TIMELINE");
+			}	
+		}
+		functions_to_call.clear();
+	}
 	UpdateGamePadInput();
 	ScriptsUpdate();
 	return UPDATE_CONTINUE;
@@ -229,6 +265,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			}
 
 			std::vector<std::pair<float, GameObject*>> to_draw;
+			std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
 			ComponentCamera* frustum_camera = viewport->GetCamera();
 
@@ -242,7 +279,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 			for (; item != base_game_object->children.end(); ++item) {
 				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, frustum_camera);
+					(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
 				}
 			}
 
@@ -260,6 +297,24 @@ update_status ModuleObjects::PostUpdate(float dt)
 						(*it).second->DrawGame(viewport->GetCamera());
 				}
 			}
+
+
+			std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortUIToDraw);
+			if (!printing_scene) {
+				std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
+			}
+			std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
+			for (; it_ui != to_draw_ui.end(); ++it_ui) {
+				if ((*it_ui).second != nullptr) {
+					ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+					if (ui != nullptr && ui->IsEnabled())
+					{			
+						ui->Draw(!printing_scene);
+
+					}
+				}
+			}
+
 			if (printing_scene)
 				OnDrawGizmos();
 			if (isGameCamera) {
@@ -281,6 +336,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		OnPreCull(game_viewport->GetCamera());
 
 		std::vector<std::pair<float, GameObject*>> to_draw;
+		std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
 		ComponentCamera* frustum_camera = game_viewport->GetCamera();
 
@@ -289,7 +345,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr && (*item)->IsEnabled()) {
-				(*item)->SetDrawList(&to_draw, frustum_camera);
+				(*item)->SetDrawList(&to_draw,&to_draw_ui, frustum_camera);
 			}
 		}
 
@@ -305,6 +361,19 @@ update_status ModuleObjects::PostUpdate(float dt)
 		}
 
 		OnPostRender(game_viewport->GetCamera());
+
+		std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
+		for (; it_ui != to_draw_ui.end(); ++it_ui) {
+			if ((*it_ui).second != nullptr) {
+				ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+				if (ui != nullptr && ui->IsEnabled())
+				{
+					ui->Draw(!printing_scene);
+
+				}
+			}
+		}
 	}
 
 	game_viewport->EndViewport();
@@ -461,7 +530,11 @@ void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 	App->renderer3D->selected_game_camera = (ComponentCamera*)object_selected->GetComponent(ComponentType::CAMERA);
 
 	#ifndef GAME_VERSION
+	if (App->ui->panel_project->selected_resource != nullptr)
+	{
 		App->SendAlienEvent(App->ui->panel_project->selected_resource, AlienEventType::RESOURCE_DESELECTED);
+		App->ui->panel_project->selected_resource = nullptr;
+	}
 	#endif // !GAME_VERSION
 
 	App->CastEvent(EventType::ON_GO_SELECT);
@@ -925,6 +998,8 @@ void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_pare
 void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_with_path)
 {
 	OPTICK_EVENT();
+	App->CastEvent(EventType::ON_SAVE);
+
 	if (to_load_scene == nullptr && force_with_path == nullptr) {
 		LOG_ENGINE("Scene to load was nullptr");
 		return;
@@ -1056,34 +1131,6 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 				delete scene;
 
 				if (change_scene) {
-					struct stat file;
-					stat(path.data(), &file);
-
-					// refresh prefabs if are not locked
-					std::vector<GameObject*> prefab_roots;
-					base_game_object->GetAllPrefabRoots(prefab_roots);
-
-					for (uint i = 0; i < prefab_roots.size(); ++i) {
-						if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
-							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
-							if (prefab != nullptr && prefab->GetID() != 0) {
-								struct stat prefab_file;
-								// TODO: when passing to library change
-								if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
-									if (prefab_file.st_mtime > file.st_mtime) {
-										auto find = prefab_roots[i]->parent->children.begin();
-										for (; find != prefab_roots[i]->parent->children.end(); ++find) {
-											if (*find == prefab_roots[i]) {
-												prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
-												prefab_roots[i]->ToDelete();
-												break;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
 					DeleteReturns();
 				}
 
@@ -1101,7 +1148,9 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 					OnPlay();
 				}
 			}
-			current_scene = to_load;
+			if (change_scene) {
+				current_scene = to_load;
+			}
 		}
 		else {
 			LOG_ENGINE("Error loading scene %s", path.data());
@@ -1252,6 +1301,11 @@ bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, st
 	return first.first > last.first;
 }
 
+bool ModuleObjects::SortUIToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
+{
+	return first.first < last.first;
+}
+
 void ModuleObjects::AddScriptObject(const u64& ID, GameObject** object)
 {
 	to_add.push_back({ ID, object });
@@ -1335,6 +1389,7 @@ void ModuleObjects::ReAttachUIScriptEvents()
 				CompareName(&button->listenersOnClickRepeat, scriptsVec);
 				CompareName(&button->listenersOnHover, scriptsVec);
 				CompareName(&button->listenersOnRelease, scriptsVec);
+				CompareName(&button->listenersOnExit, scriptsVec);
 			}
 			else {
 				ComponentCheckbox* checkbox = obj->GetComponent<ComponentCheckbox>();
@@ -1343,6 +1398,7 @@ void ModuleObjects::ReAttachUIScriptEvents()
 					CompareName(&checkbox->listenersOnClickRepeat, scriptsVec);
 					CompareName(&checkbox->listenersOnHover, scriptsVec);
 					CompareName(&checkbox->listenersOnRelease, scriptsVec);
+					//CompareName(&checkbox->listenersOnExit, scriptsVec);
 				}
 			}
 		}
@@ -1351,6 +1407,16 @@ void ModuleObjects::ReAttachUIScriptEvents()
 			objects.push(*item);
 		}
 	}
+}
+
+void ModuleObjects::ResetUIFocus()
+{
+	if (GetGameObjectByID(selected_ui) != nullptr && selected_ui != -1) {
+		GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Idle;
+		selected_ui = -1;
+	}
+
+	first_assigned_selected = false;
 }
 
 
@@ -1405,7 +1471,7 @@ void ModuleObjects::CreateJsonScript(GameObject* obj, JSONArraypack* to_save)
 										inspector->SetNumber("enumInt", (*(int*)((*script)->inspector_variables[i].ptr)));
 										break; }
 									case InspectorScriptData::DataType::STRING: {
-										inspector->SetString("string", ((char*)((*script)->inspector_variables[i].ptr)));
+										inspector->SetString("string", ((std::string*)((*script)->inspector_variables[i].ptr))->data());
 										break; }
 									case InspectorScriptData::DataType::FLOAT: {
 										inspector->SetNumber("float", (*(float*)((*script)->inspector_variables[i].ptr)));
@@ -1485,8 +1551,9 @@ void ModuleObjects::ReAssignScripts(JSONArraypack* to_load)
 										*(float*)(*item).ptr = inspector->GetNumber("float");
 										break; }
 									case InspectorScriptData::DataType::STRING: {
-										char* data = (char*)(*item).ptr;
-										strcpy(data, inspector->GetString("string"));
+										std::string* data = (std::string*)(*item).ptr;
+										void (*Add)(std::string*, const char*) = (void (*)(std::string*, const char*))GetProcAddress(App->scripts_dll, std::string("ChangeString").data());
+										Add(data, inspector->GetString("string"));
 										break; }
 									case InspectorScriptData::DataType::BOOL: {
 										*(bool*)(*item).ptr = inspector->GetNumber("bool");
@@ -1547,54 +1614,70 @@ void ModuleObjects::DeleteReturns()
 
 void ModuleObjects::UpdateGamePadInput()
 {
-	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed)
+	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed && (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas->allow_navigation))
 	{
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_UP) || App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || Input::GetControllerVerticalLeftAxis(1) > 0.2f)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
-				u64 safe_selected = selected_ui;
-				selected_ui = SetNewSelected("up", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up);
-				if (selected_ui == -1)
-					selected_ui = safe_selected;
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up;
+				if (GetGameObjectByID(neightbour_temp) != nullptr)
+				{
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit; //put state exit
+					u64 safe_selected = selected_ui;
+					selected_ui = SetNewSelected("up", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up);
+					if (selected_ui == -1)
+						selected_ui = safe_selected;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				}
 			}
 		}
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_DOWN) || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || Input::GetControllerVerticalLeftAxis(1) < -0.2f)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
-				u64 safe_selected = selected_ui;
-				selected_ui = SetNewSelected("down", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down);
-				if (selected_ui == -1)
-					selected_ui = safe_selected;
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down;
+				if (GetGameObjectByID(neightbour_temp) != nullptr)
+				{
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit;
+					u64 safe_selected = selected_ui;
+					selected_ui = SetNewSelected("down", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down);
+					if (selected_ui == -1)
+						selected_ui = safe_selected;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				}
 			}
 		}
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || Input::GetControllerHoritzontalLeftAxis(1) < -0.2f)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
-				u64 safe_selected = selected_ui;
-				selected_ui = SetNewSelected("right", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right);
-				if (selected_ui == -1)
-					selected_ui = safe_selected;
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right;
+				if (GetGameObjectByID(neightbour_temp) != nullptr)
+				{
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit;
+					u64 safe_selected = selected_ui;
+					selected_ui = SetNewSelected("right", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right);
+					if (selected_ui == -1)
+						selected_ui = safe_selected;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				}
 			}
 		}
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || Input::GetControllerHoritzontalLeftAxis(1) > 0.2f)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left != -1)
 			{
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Release;
-				u64 safe_selected = selected_ui;
-				selected_ui = SetNewSelected("left", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left);
-				if (selected_ui == -1)
-					selected_ui = safe_selected;
-				GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				u64 neightbour_temp = GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left;
+				if (GetGameObjectByID(neightbour_temp) != nullptr)
+				{
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Exit;
+					u64 safe_selected = selected_ui;
+					selected_ui = SetNewSelected("left", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left);
+					if (selected_ui == -1)
+						selected_ui = safe_selected;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+				}
 			}
 		}
 	}
@@ -1902,7 +1985,7 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	object->AddComponent(mesh);
 	object->AddComponent(material);
 	mesh->SetResourceMesh(resource);
-
+	
 	// Add collider --------------------------------------------
 
 	switch (type) {

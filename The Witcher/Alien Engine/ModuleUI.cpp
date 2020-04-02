@@ -72,7 +72,7 @@ bool ModuleUI::Start()
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	style.MaxColumnSeparation= 10;
-	style.TitleSeparation = 10;
+	style.TitleSeparation = 20;
 	style.SubTitleSeparation = 3;
 	style.SeparationType = ImGuiSeparationType::ImGui_WindowSeparation;
 
@@ -274,9 +274,6 @@ void ModuleUI::LoadLayouts()
 		}
 		arr_layouts->GetAnotherNode();
 	}
-
-	delete arr_layouts;
-	json_layout->ClearArrays();
 }
 
 void ModuleUI::SaveAllLayouts()
@@ -306,9 +303,7 @@ void ModuleUI::SaveAllLayouts()
 			}
 		}
 	}
-	delete arr_layouts;
 	json_layout->FinishSave();
-	json_layout->ClearArrays();
 }
 
 void ModuleUI::SaveLayout(Layout* layout, bool is_new)
@@ -344,11 +339,9 @@ void ModuleUI::SaveLayout(Layout* layout, bool is_new)
 	}
 
 	json_layout->FinishSave();
-	delete arr_layout;
 	if (!is_new) {
 		ImGui::SaveIniSettingsToDisk(layout->path.data());
 	}
-	json_layout->ClearArrays();
 }
 
 void ModuleUI::SaveLayoutsActive()
@@ -368,9 +361,7 @@ void ModuleUI::SaveLayoutsActive()
 			arr_layout->GetAnotherNode();
 		}
 	}
-	delete arr_layout;
 	json_layout->FinishSave();
-	json_layout->ClearArrays();
 }
 
 void ModuleUI::CreateScriptFile(const int& type, bool to_export, const char* name)

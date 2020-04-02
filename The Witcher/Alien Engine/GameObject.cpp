@@ -42,6 +42,7 @@
 
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
+#include "Alien.h"
 #include "ComponentCapsuleCollider.h"
 #include "ComponentConvexHullCollider.h"
 #include "ComponentRigidBody.h"
@@ -49,11 +50,14 @@
 
 #include "Optick/include/optick.h"
 
-GameObject::GameObject(GameObject* parent)
+GameObject::GameObject(GameObject* parent, bool ignore_transform)
 {
 	ID = App->resources->GetRandomID();
-	this->transform = new ComponentTransform(this, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
-	AddComponent(transform);
+	
+	if (!ignore_transform) {
+		this->transform = new ComponentTransform(this, { 0,0,0 }, { 0,0,0,0 }, { 1,1,1 });
+		AddComponent(transform);
+	}
 
 	if (parent != nullptr) {
 		this->parent = parent;
@@ -411,6 +415,23 @@ const uint GameObject::GetComponentsScriptInParent(const char* script_class_name
 	return 0u;
 }
 
+uint GameObject::GetAllComponentsScript(Alien*** aliens)
+{
+	std::vector<Alien*> found;
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i] != nullptr && components[i]->GetType() == ComponentType::SCRIPT) {
+			found.push_back(static_cast<Alien*>(static_cast<ComponentScript*>(components[i])->data_ptr));
+		}
+	}
+	if (!found.empty()) {
+		(*aliens) = new Alien* [found.size()];
+		for (uint i = 0; i < found.size(); ++i) {
+			(*aliens)[i] = found[i];
+		}
+	}
+	return found.size();
+}
+
 void* GameObject::GetComponentScriptInParent(const char* script_class_name)
 {
 	if (parent != nullptr && parent->parent != nullptr) { // parent->parent != nullptr to test is not root :)
@@ -517,6 +538,7 @@ void GameObject::SetEnable(bool enable)
 		else {
 			OnDisable();
 		}
+		SayChildrenParentIsEnabled(enabled);
 	}
 }
 
@@ -590,7 +612,7 @@ void GameObject::DrawGame(ComponentCamera* camera)
 	}
 }
 
-void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
+void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {
 
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -681,7 +703,7 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 	std::vector<GameObject*>::iterator child = children.begin();
 	for (; child != children.end(); ++child) {
 		if (*child != nullptr && (*child)->IsEnabled()) {
-			(*child)->SetDrawList(to_draw, camera);
+			(*child)->SetDrawList(to_draw, to_draw_ui, camera);
 		}
 	}
 
@@ -689,7 +711,10 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 
 	if (ui != nullptr && ui->IsEnabled())
 	{
-		ui->Draw(!App->objects->printing_scene);
+		float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+		float distance = obj_pos.z;
+		//ui->Draw(!App->objects->printing_scene);
+		to_draw_ui->push_back({distance, this });
 	}
 }
 
@@ -1219,13 +1244,13 @@ void GameObject::FreeArrayMemory(void*** array_)
 	delete[] * array_;
 }
 
-GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, GameObject* parent)
+GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position, bool check_child, GameObject* parent)
 {
 	OPTICK_EVENT();
 	if (prefab.prefabID != 0) {
 		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab.prefabID);
 		if (r_prefab != nullptr && App->StringCmp(prefab.prefab_name.data(), r_prefab->GetName())) {
-			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, false);
+			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
 			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
 		}
 		else {
@@ -1647,11 +1672,6 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				listener->LoadComponent(components_to_load);
 				AddComponent(listener);
 				break; }
-			case (int)ComponentType::A_REVERB: {
-				/*ComponentReverbZone* reverb = new ComponentReverbZone(this);
-				reverb->LoadComponent(components_to_load);
-				AddComponent(reverb);*/
-				break; }
 			case (int)ComponentType::PARTICLES: {
 				ComponentParticleSystem* particleSystem = new ComponentParticleSystem(this);
 				particleSystem->LoadComponent(components_to_load);
@@ -1765,7 +1785,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 GameObject* GameObject::Clone(GameObject* parent)
 {
 	OPTICK_EVENT();
-	GameObject* clone = new GameObject((parent == nullptr) ? this->parent : parent);
+	GameObject* clone = new GameObject((parent == nullptr) ? this->parent : parent, true);
 	CloningGameObject(clone);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, clone);
 	return clone;
@@ -1800,7 +1820,10 @@ void GameObject::CloningGameObject(GameObject* clone)
 			if (*item != nullptr) {
 				switch ((*item)->GetType()) {
 				case ComponentType::TRANSFORM: {
-					clone->transform->SetGlobalTransformation(transform->global_transformation);
+					ComponentTransform* trans = new ComponentTransform(clone);
+					(*item)->Clone(trans);
+					clone->AddComponent(trans);
+					clone->transform = trans;
 					break; }
 				case ComponentType::LIGHT_DIRECTIONAL: {
 					ComponentLightDirectional* light = new ComponentLightDirectional(clone);
@@ -1904,7 +1927,7 @@ void GameObject::CloningGameObject(GameObject* clone)
 		auto item = children.begin();
 		for (; item != children.end(); ++item) {
 			if (*item != nullptr) {
-				GameObject* child = new GameObject(clone);
+				GameObject* child = new GameObject(clone, true);
 				(*item)->CloningGameObject(child);
 			}
 		}

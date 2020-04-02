@@ -18,6 +18,10 @@ public:
 	void PlayState(const char* name);
 	bool IsPlaying(const char* name);
 	void UpdateAnimation(GameObject* go_to_update);
+	float GetCurrentStateSpeed();
+	float GetCurrentStateTime();
+	float GetCurrentStateDuration();
+	uint GetCurrentAnimTPS();
 	void OnPlay();
 
 	ResourceAnimatorController* GetResourceAnimatorController();
@@ -30,8 +34,6 @@ public:
 	void SetBool(const char* parameter_name, bool parameter_value);
 	void SetFloat(const char* parameter_name, float parameter_value);
 	void SetInt(const char* parameter_name, int parameter_value);
-
-	float GetCurrentStateDuration();
 
 private:
 	ResourceAnimatorController* animator_controller = nullptr;

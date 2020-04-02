@@ -3,6 +3,7 @@
 
 #include "ComponentUI.h"
 #include "Color.h"
+#include "Event.h"
 #include <functional>
 
 class ResourceTexture;
@@ -23,10 +24,12 @@ public:
 	void Draw(bool isGame) override;
 	void DrawTexture(bool isGame, ResourceTexture* tex, bool background = true);
 
+	bool OnIdle();
 	bool OnHover();
 	bool OnClick();
 	bool OnPressed();
 	bool OnRelease();
+	bool OnExit();
 
 	Color idle_color = { 0.8f,0.8f,0.8f,1.0f };
 	Color hover_color = { 1.0f,1.0f,1.0f,1.0f };
@@ -54,6 +57,8 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
+protected:
+	void HandleAlienEvent(const AlienEvent& e);
 private:
 	void CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners);
 

@@ -5,6 +5,8 @@ layout(location = 1) in vec3 uvs;
 layout(location = 2) in vec3 normals; 
 layout (location = 3) in ivec4 BoneIDs;
 layout (location = 4) in vec4 Weights;
+layout (location = 5) in vec3 tangents;
+layout (location = 6) in vec3 biTangents;
 
 const int MAX_BONES = 100;
 
@@ -18,6 +20,7 @@ uniform int animate;
 out vec3 frag_pos;
 out vec2 texCoords;
 out vec3 norms;
+out mat3 TBN; 
 
 void main()
 {
@@ -33,7 +36,14 @@ void main()
     }
     frag_pos = vec3(model * pos);
     texCoords = vec2(uvs.x, uvs.y);
+    
     norms = mat3(transpose(inverse(model))) * normals;
+
+    vec3 T = normalize(vec3(model * vec4(tangents,   0.0)));
+    vec3 B = normalize(vec3(model * vec4(biTangents, 0.0)));
+    vec3 N = normalize(vec3(model * vec4(normals,    0.0)));
+
+    TBN = mat3(T,B,N);
 
     gl_Position = projection * view * vec4(frag_pos, 1.0f); 
 };
@@ -85,6 +95,9 @@ struct Material {
     sampler2D specularMap;
     bool hasSpecularMap;
 
+    sampler2D normalMap;
+    bool hasNormalMap;
+
     float smoothness;
     float metalness;
 };
@@ -110,6 +123,7 @@ uniform SpotLight spot_light[MAX_LIGHTS_PER_TYPE];
 in vec2 texCoords;
 in vec3 frag_pos;
 in vec3 norms;
+in mat3 TBN;
 
 // Outs
 out vec4 FragColor;
@@ -120,25 +134,41 @@ void main()
     vec4 objectColor = vec4(objectMaterial.diffuse_color, 1.0f);
     if(objectMaterial.hasDiffuseTexture == true)
     {
-        objectColor = objectColor * vec4(texture(objectMaterial.diffuseTexture, texCoords).rgb, 1.0);
+        objectColor = objectColor * vec4(texture(objectMaterial.diffuseTexture, texCoords));
     }
 
-    // ----------------------------------------------------------
+    if(objectColor.w < 0.3)
+    {
+        discard;
+    }
+    // ------------------------ Normals --------------------------------
 
+    vec3 normal = vec3(0);
+    if(objectMaterial.hasNormalMap == true)
+    {
+        normal = texture(objectMaterial.normalMap, texCoords).rgb;
+        normal = normal * 2.0 - 1.0;
+        // normal = normal * vec3(-1, -1, 0);
+        normal = normalize(TBN * normal);
+    }
+    else 
+    {
+        normal = normalize(norms);
+    }
 
     // ------------------------- Light --------------------------
 
     vec3 result = vec3(0);
-    vec3 norm = normalize(norms);
     vec3 view_dir = normalize(view_pos - frag_pos);
 
     // Light calculations
+
     for(int i = 0; i < max_lights.x; i++)
-        result += CalculateDirectionalLight(dir_light[i], norm, view_dir, objectMaterial, texCoords);
+        result += CalculateDirectionalLight(dir_light[i], normal, view_dir, objectMaterial, texCoords);
     for(int i = 0; i < max_lights.y; i++)
-        result += CalculatePointLight(point_light[i], norm, frag_pos, view_dir, objectMaterial, texCoords);    
+        result += CalculatePointLight(point_light[i], normal, frag_pos, view_dir, objectMaterial, texCoords);    
     for(int i = 0; i < max_lights.z; i++)
-        result += CalculateSpotLight(spot_light[i], norm, frag_pos, view_dir, objectMaterial, texCoords);   
+        result += CalculateSpotLight(spot_light[i], normal, frag_pos, view_dir, objectMaterial, texCoords);   
 
     // ----------------------------------------------------------
 

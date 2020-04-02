@@ -4,12 +4,15 @@
 #include "ComponentLightDirectional.h"
 #include "ComponentTransform.h"
 #include "PanelHierarchy.h"
+#include "Prefab.h"
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
 #include "ModuleUI.h"
 #include "ModuleCamera3D.h"
 #include "Time.h"
 #include "ComponentDeformableMesh.h"
+#include "ComponentRigidBody.h"
+#include "ComponentCharacterController.h"
 
 #include "mmgr/mmgr.h"
 
@@ -25,6 +28,7 @@ ResourcePrefab::~ResourcePrefab()
 
 bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 force_id)
 {
+	App->objects->is_saving_prefab = true;
 	std::vector<std::string> files;
 	std::vector<std::string> dir;
 	if (folder == nullptr) {
@@ -105,7 +109,7 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 
 	else {
 		LOG_ENGINE("Could not load scene, fail when creating the file");
 	}
-
+	App->objects->is_saving_prefab = false;
 	return true;
 }
 
@@ -113,8 +117,25 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 {
 	path = std::string(assets_file_path);
 
-	// TODO: change when loading game
-	ID = App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data());
+	std::string meta_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien");
+	if (App->file_system->Exists(meta_path.data())) {
+		ID = App->resources->GetIDFromAlienPath(meta_path.data());
+	}
+	else {
+		ID = App->resources->GetRandomID();
+		JSON_Value* value2 = json_value_init_object();
+		JSON_Object* json_object2 = json_value_get_object(value2);
+		json_serialize_to_file_pretty(value2, meta_path.data());
+
+		if (value2 != nullptr && json_object2 != nullptr) {
+
+			JSONfilepack* file = new JSONfilepack(meta_path.data(), json_object2, value2);
+			file->StartSave();
+			file->SetString("Meta.ID", std::to_string(ID).data());
+			file->FinishSave();
+			delete file;
+		}
+	}
 
 	if (ID != 0) {
 		meta_data_path = LIBRARY_PREFABS_FOLDER + std::to_string(ID) + ".alienPrefab";
@@ -164,6 +185,7 @@ bool ResourcePrefab::DeleteMetaData()
 
 void ResourcePrefab::Save(GameObject* prefab_root)
 {
+	App->objects->is_saving_prefab = true;
 	remove(meta_data_path.data());
 	remove(path.data());
 	JSON_Value* prefab_value = json_value_init_object();
@@ -192,29 +214,7 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 		App->objects->enable_instancies = true;
 		remove("Library/save_prefab_scene.alienScene");
 	}
-	App->objects->ignore_cntrlZ = true;
-	App->objects->in_cntrl_Z = true;
-	std::vector<GameObject*> objs;
-	App->objects->GetRoot(true)->GetObjectWithPrefabID(ID, &objs);
-	if (!objs.empty()) {
-		std::vector<GameObject*>::iterator item = objs.begin();
-		for (; item != objs.end(); ++item) {
-			if (*item != nullptr && !(*item)->prefab_locked && (*item) != prefab_root) {
-				GameObject* parent = (*item)->parent;
-				std::vector<GameObject*>::iterator iter = parent->children.begin();
-				for (; iter != parent->children.end(); ++iter) {
-					if (*iter == (*item)) {
-						(*item)->ToDelete();
-						float3 pos = static_cast<ComponentTransform*>((*item)->GetComponent(ComponentType::TRANSFORM))->GetLocalPosition();
-						ConvertToGameObjects(parent, iter - parent->children.begin(), pos, false);
-						break;
-					}
-				}
-			}
-		}
-	}
-	App->objects->in_cntrl_Z = false;
-	App->objects->ignore_cntrlZ = false;
+	App->objects->is_saving_prefab = false;
 }
 
 void ResourcePrefab::OpenPrefabScene()
@@ -236,7 +236,7 @@ void ResourcePrefab::OpenPrefabScene()
 	ConvertToGameObjects(App->objects->GetRoot(true));
 }
 
-void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, float3 pos, bool set_selected)
+GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, float3 pos, bool check_childrens, bool set_selected)
 {
 	JSON_Value* value = json_parse_file(meta_data_path.data());
 	JSON_Object* object = json_value_get_object(value);
@@ -268,40 +268,100 @@ void ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, floa
 			game_objects->GetAnotherNode();
 		}
 		GameObject* obj = parent->children.back();
+
+		if (!App->objects->to_add.empty()) {
+			auto item = App->objects->to_add.begin();
+			for (; item != App->objects->to_add.end(); ++item) {
+				GameObject* found = obj->GetGameObjectByID(((*item).first));
+				if (found != nullptr) {
+					*(*item).second = found;
+				}
+			}
+		}
+
 		if (list_num != -1) {
 			parent->children.pop_back();
 			parent->children.insert(parent->children.begin() + list_num, obj);
 		}
-		for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+
+		for each (GameObject * obj2 in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
 		{
-			ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
+			ComponentDeformableMesh* def_mesh = obj2->GetComponent<ComponentDeformableMesh>();
 			if (def_mesh) {
 				if (def_mesh->rootID != 0) {
-					if (list_num != -1) {
-						def_mesh->root_bone = parent->children[list_num]->GetGameObjectByID(def_mesh->rootID);
-					}
-					else {
-						def_mesh->root_bone = parent->children.back()->GetGameObjectByID(def_mesh->rootID);
-					}
+					def_mesh->root_bone = obj->GetGameObjectByID(def_mesh->rootID);
 					if (def_mesh->root_bone != nullptr)
 						def_mesh->AttachSkeleton(def_mesh->root_bone->transform);
 				}
 			}
 		}
+
+		if (!App->objects->current_scripts.empty() && Time::IsInGameState()) {
+			Prefab::InitScripts(obj);
+		}
+
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
 		obj->SetPrefab(ID);
-		ComponentTransform* transform = (ComponentTransform*)(obj)->GetComponent(ComponentType::TRANSFORM);
-		transform->SetLocalPosition(pos.x, pos.y, pos.z);
+		obj->transform->SetLocalPosition(pos);
 		if (set_selected) {
 			App->objects->SetNewSelectedObject(obj);
 			App->camera->fake_camera->Look(parent->children.back()->GetBB().CenterPoint());
 			App->camera->reference = parent->children.back()->GetBB().CenterPoint();
 		}
 
+		ComponentRigidBody* rb = (ComponentRigidBody*)(obj)->GetComponent(ComponentType::RIGID_BODY);
+		if (rb)
+			rb->SetPosition(pos);
+
+		ComponentCharacterController* character_controller = (ComponentCharacterController*)(obj)->GetComponent(ComponentType::CHARACTER_CONTROLLER);
+		if (character_controller)
+			character_controller->SetPosition(pos);
+
+		if (check_childrens)
+		{
+			for (auto it_child = obj->children.begin(); it_child != obj->children.end(); ++it_child)
+			{
+				CheckChildren(*it_child, float3::zero());
+			}
+		}
+		
 		delete prefab;
+
+		return obj;
 	}
 	else {
 		LOG_ENGINE("Error loading prefab %s", path.data());
+	}
+	return nullptr;
+}
+
+void ResourcePrefab::CheckChildren(GameObject* game_object, float3 pos)
+{
+	ComponentRigidBody* rb = (ComponentRigidBody*)(game_object)->GetComponent(ComponentType::RIGID_BODY);
+	if (rb)
+	{
+		rb->SetPosition(pos);
+		for (auto it_child = game_object->children.begin(); it_child != game_object->children.end(); ++it_child)
+		{
+			CheckChildren(*it_child, rb->GetPosition());
+		}
+		return;
+	}
+
+	ComponentCharacterController* character_controller = (ComponentCharacterController*)(game_object)->GetComponent(ComponentType::CHARACTER_CONTROLLER);
+	if (character_controller)
+	{
+		character_controller->SetPosition(pos);
+		for (auto it_child = game_object->children.begin(); it_child != game_object->children.end(); ++it_child)
+		{
+			CheckChildren(*it_child, character_controller->GetPosition());
+		}
+		return;
+	}
+
+	for (auto it_child = game_object->children.begin(); it_child != game_object->children.end(); ++it_child)
+	{
+		CheckChildren(*it_child, pos);
 	}
 }

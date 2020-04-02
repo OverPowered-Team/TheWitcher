@@ -32,6 +32,8 @@ bool Component::IsEnabled()
 void Component::SetEnable(bool enable)
 {
 	enabled = enable;
+
+	(enabled) ? OnEnable() : OnDisable();
 }
 
 void Component::ResetIDs()
@@ -42,6 +44,112 @@ void Component::ResetIDs()
 const ComponentType& Component::GetType() const
 {
 	return type;
+}
+
+std::string Component::EnumToString(ComponentType type)
+{
+	switch (type)
+	{
+	case ComponentType::NONE:
+		return std::string("NONE");
+		break;
+	case ComponentType::TRANSFORM:
+		return std::string("Transform");
+		break;
+	case ComponentType::MESH:
+		return std::string("Mesh");
+		break;
+	case ComponentType::MATERIAL:
+		return std::string("Material");
+		break;
+	case ComponentType::LIGHT_DIRECTIONAL:
+		return std::string("Light directional");
+		break;
+	case ComponentType::LIGHT_SPOT:
+		return std::string("Light spot");
+		break;
+	case ComponentType::LIGHT_POINT:
+		return std::string("Light point");
+		break;
+	case ComponentType::CAMERA:
+		return std::string("Camera");
+		break;
+	case ComponentType::BOX_COLLIDER:
+		return std::string("Collider Box");
+		break;
+	case ComponentType::SPHERE_COLLIDER:
+		return std::string("Colliders Sphere");
+		break;
+	case ComponentType::CAPSULE_COLLIDER:
+		return std::string("Collider Capsule");
+		break;
+	case ComponentType::CONVEX_HULL_COLLIDER:
+		return std::string("Collider Convex Hull");
+		break;
+	case ComponentType::RIGID_BODY:
+		return std::string("Rigid Body");
+		break;
+	case ComponentType::POINT_CONSTRAINT:
+		return std::string("Point Constraint");
+		break;
+	case ComponentType::CHARACTER_CONTROLLER:
+		return std::string("Character Controller");
+		break;
+	case ComponentType::ANIMATOR:
+		return std::string("Animator");
+		break;
+	case ComponentType::PARTICLES:
+		return std::string("Particles");
+		break;
+	case ComponentType::A_EMITTER:
+		return std::string("Audio Emitter");
+		break;
+	case ComponentType::A_LISTENER:
+		return std::string("Audio Listener");
+		break;
+	case ComponentType::CANVAS:
+		return std::string("Canvas");
+		break;
+	case ComponentType::UI_IMAGE:
+		return std::string("UI Image");
+		break;
+	case ComponentType::UI_BUTTON:
+		return std::string("UI Button");
+		break;
+	case ComponentType::UI_TEXT:
+		return std::string("UI Text");
+		break;
+	case ComponentType::UI_CHECKBOX:
+		return std::string("UI Checkbox");
+		break;
+	case ComponentType::UI_SLIDER:
+		return std::string("UI Slider");
+		break;
+	case ComponentType::UI_BAR:
+		return std::string("UI Bar");
+		break;
+	case ComponentType::UI_ANIMATED_IMAGE:
+		return std::string("UI Animated Image");
+		break;
+	case ComponentType::DEFORMABLE_MESH:
+		return std::string("Deformable Mesh");
+		break;
+	case ComponentType::BONE:
+		return std::string("Bone");
+		break;
+	case ComponentType::SCRIPT:
+		return std::string("Script");
+		break;
+	case ComponentType::UI:
+		return std::string("UI");
+		break;
+	case ComponentType::MAX:
+		return std::string("MAX");
+		break;
+	default:
+		return std::string("Not valid");
+		break;
+	}
 }
 
 void Component::RightClickMenu(const char* collapsing_header_name)
@@ -56,7 +164,7 @@ void Component::RightClickMenu(const char* collapsing_header_name)
 		ImGui::Separator();
 		
 		if (ImGui::MenuItem("Copy Component")) {
-			SDL_assert((uint)ComponentType::UNKNOWN == 4); // add new case here
+			SDL_assert((uint)ComponentType::MAX == 4); // add new case here
 			if (App->objects->component_in_copy != nullptr) {
 				delete App->objects->component_in_copy;
 				App->objects->component_in_copy = nullptr;

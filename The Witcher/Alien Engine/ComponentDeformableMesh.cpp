@@ -42,7 +42,8 @@ ComponentDeformableMesh::~ComponentDeformableMesh()
 		mesh->DecreaseReferences();
 		mesh = nullptr;
 	}
-	//clear deformable mesh?
+	//clear bones matrix :)
+	delete[] bones_matrix;
 }
 
 void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)

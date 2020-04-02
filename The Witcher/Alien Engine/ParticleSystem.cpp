@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "GL/gl.h"
+#include "mmgr/mmgr.h"
 
 ParticleSystem::ParticleSystem()
 {
@@ -15,10 +16,12 @@ ParticleSystem::ParticleSystem()
 	emmitter.particleSystem = this;
 
 	
-	material = App->resources->default_material;
-	material->IncreaseReferences();
+	default_material = new ResourceMaterial();
+	default_material->SetName("Particle Material");
+	default_material->color = float4(1.0f, 0.0f, 0.8f, 1.0f);
+	SetMaterial(default_material);
 	material->SetShader(App->resources->default_particle_shader);
-
+	//material->color = float4(1.0f, 0.0f, 0.8f, 1.0f);
 	
 	float vertex[] =
 	{
@@ -108,8 +111,17 @@ ParticleSystem::~ParticleSystem()
 
 	particles.clear();
 
-	if (material != nullptr)
+	if (material != nullptr) {
+
+		material->DecreaseReferences();
 		material = nullptr;
+	}
+
+	if (default_material) {
+		default_material->DecreaseReferences();
+		delete default_material;
+		default_material = nullptr;
+	}
 
 	DeactivateLight();
 }
@@ -411,6 +423,7 @@ void ParticleSystem::SetMaterial(ResourceMaterial* mat)
 		material->DecreaseReferences();
 		//material = nullptr;
 	}
+
 
 	material = mat;
 	material->IncreaseReferences();
