@@ -25,3 +25,18 @@ void Win_lose_menu::Start()
 		win_icon->SetEnable(true);
 	}
 }
+
+void Win_lose_menu::Update()
+{
+	if ((Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_Y)) || (Input::GetControllerButtonUp(2, Input::CONTROLLER_BUTTON_Y)))
+	{
+		if (have_won)
+		{
+			SceneManager::LoadScene("EndGame_Menu");
+		}
+		else
+		{
+			SceneManager::LoadScene("newTRIGGER");
+		}
+	}
+}

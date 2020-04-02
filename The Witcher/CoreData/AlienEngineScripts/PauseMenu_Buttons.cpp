@@ -48,6 +48,7 @@ void PauseMenu_Buttons::Settings()
 
 void PauseMenu_Buttons::RetryLevel()
 {
+	SceneManager::LoadScene("newTRIGGER");
 }
 
 void PauseMenu_Buttons::Exit_to_Menu()

@@ -30,6 +30,7 @@ ALIEN_FACTORY PauseMenu_Buttons* CreatePauseMenu_Buttons() {
 	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Exit_to_Menu, alien);
 	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Exit_Menu, alien);
 	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Leaderboard, alien);
+	SHOW_VOID_FUNCTION(PauseMenu_Buttons::RetryLevel, alien);
 	SHOW_VOID_FUNCTION(PauseMenu_Buttons::Controls, alien);
 
 	return alien;
