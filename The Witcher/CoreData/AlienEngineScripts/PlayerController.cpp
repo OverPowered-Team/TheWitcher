@@ -286,6 +286,7 @@ void PlayerController::Update()
 		break;
 	case PlayerController::PlayerState::HIT:
 		can_move = false;
+		controller->SetWalkDirection(float3::zero());
 		break;
 	default:
 		break;
