@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "PlayerAnimController",
         "NumStates": 12,
-        "NumTransitions": 19,
+        "NumTransitions": 20,
         "States": [
             {
                 "Name": "Idle",
@@ -362,6 +362,21 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -483,7 +498,7 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerController::PlaySpell",
+                "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "7211782662776671787",
                 "Frame": 12,
                 "Type": 2
