@@ -145,10 +145,6 @@ void PlayerController::Update()
 			state = PlayerState::CASTING;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_UP)) {
-			Die();
-		}
-
 		if (Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) {
 			animator->PlayState("Roll");
@@ -157,7 +153,11 @@ void PlayerController::Update()
 
 		if (Input::GetControllerButtonDown(controller_index, controller_revive)
 			|| Input::GetKeyDown(keyboard_revive)) {
-			CheckForPossibleRevive();
+			if (CheckForPossibleRevive()) {
+				controller->SetWalkDirection(float3::zero());
+				animator->SetBool("reviving", true);
+				state = PlayerState::REVIVING;
+			}
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
@@ -205,14 +205,19 @@ void PlayerController::Update()
 			state = PlayerState::DASHING;
 		}
 
+		if (Input::GetControllerButtonDown(controller_index, controller_revive)
+			|| Input::GetKeyDown(keyboard_revive)) {
+			if (CheckForPossibleRevive()) {
+				controller->SetWalkDirection(float3::zero());
+				animator->SetBool("reviving", true);
+				state = PlayerState::REVIVING;
+			}
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
 			attacks->StartSpell(0);
 			state = PlayerState::CASTING;
-		}
-
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_UP)) {
-			Die();
 		}
 
 		if (Input::GetControllerButtonDown(controller_index, controller_jump)
@@ -272,8 +277,9 @@ void PlayerController::Update()
 		attacks->UpdateCurrentAttack();
 		break;
 	case PlayerController::PlayerState::DEAD:
-		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_DOWN))
-			Revive();
+		can_move = false;
+		break;
+	case PlayerController::PlayerState::REVIVING:
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::MAX:
@@ -363,6 +369,10 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Hit") == 0) {
 		state = PlayerState::IDLE;
 	}
+
+	if (strcmp(name, "RCP") == 0) {
+		ActionRevive();
+	}
 }
 
 void PlayerController::PlayAttackParticle()
@@ -392,9 +402,17 @@ void PlayerController::Revive()
 {
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
+	animator->PlayState("Revive");
 	s_event_manager->OnPlayerRevive(this);
 	player_data.health.current_value = player_data.health.max_value * 0.5f;
-	hurt_box->SetEnable(true);
+}
+
+void PlayerController::ActionRevive()
+{
+	player_being_revived->Revive();
+	state = PlayerState::IDLE;
+	animator->SetBool("reviving", false);
+	player_being_revived = nullptr;
 }
 
 void PlayerController::ReceiveDamage(float value)
@@ -534,13 +552,13 @@ void PlayerController::OnPlayerRevived(PlayerController* player_dead)
 	}
 }
 
-void PlayerController::CheckForPossibleRevive()
+bool PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < players_dead.size(); ++i) {
 		float distance = this->transform->GetGlobalPosition().Distance(players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= revive_range) {
-			players_dead[i]->Revive();
-			break;
+			player_being_revived = players_dead[i];
+			return true;
 		}
 	}
 }
