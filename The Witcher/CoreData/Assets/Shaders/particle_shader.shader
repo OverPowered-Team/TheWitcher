@@ -9,9 +9,12 @@ uniform mat4 view;
 uniform mat4 model;
 uniform mat4 projection;
 
+uniform float density = 0;
+uniform float gradient = 0;
 
 out vec3 frag_pos;
 out vec2 texCoords;
+out float visibility; 
 
 void main()
 {
@@ -20,6 +23,11 @@ void main()
     texCoords = vec2(uvs.x, uvs.y);
     gl_Position = projection * view * vec4(frag_pos, 1.0f); 
     
+    vec4 worldPos = model * pos;
+    vec4 positionRelativeToCam = view * worldPos;
+    float distance = length(positionRelativeToCam.xyz);
+    visibility = exp(-pow((distance * density), gradient));
+    visibility = clamp(visibility, 0.0, 1.0);
 };
 
 #shader fragment
@@ -33,8 +41,14 @@ struct Material {
     
 };
 uniform Material objectMaterial;
+
+uniform bool activeFog;
+uniform vec3 backgroundColor;
+
 // Ins
 in vec2 texCoords;
+in float visibility;
+
 // Outs
 out vec4 FragColor;
 
@@ -52,4 +66,8 @@ void main()
 
     FragColor = objectColor;
      
+    if(activeFog)
+    {
+        FragColor = mix(vec4(backgroundColor, 1.0), FragColor, visibility);
+    }
 }
