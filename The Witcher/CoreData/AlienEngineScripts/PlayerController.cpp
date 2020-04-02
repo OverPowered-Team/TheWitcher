@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "../../ComponentDeformableMesh.h"
 #include "UI_Char_Frame.h"
+#include "InGame_UI.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -375,6 +376,10 @@ void PlayerController::Die()
 	s_event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
 	hurt_box->SetEnable(false);
+	if (players_dead.size() == 2)
+	{
+		((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->YouDied();
+	}
 }
 
 void PlayerController::Revive()
