@@ -29,7 +29,7 @@ public:
 	ComponentAudioEmitter* audio = nullptr;
 	bool first_entered = true;
 	float end_seconds = 69;
-	
+	float start_time;
 
 };
 
