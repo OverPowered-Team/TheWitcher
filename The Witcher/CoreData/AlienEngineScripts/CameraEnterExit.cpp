@@ -17,7 +17,7 @@ void CameraEnterExit::Start()
 
 void CameraEnterExit::OnTriggerEnter(ComponentCollider* collider)
 {
-	PlayerController* player = (PlayerController*)collider->game_object_attached->GetComponentScriptInParent("PlayerController");
+	PlayerController* player = (PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController");
 	if (player != nullptr) {
 		script_parent->RegisterMovement(player->controller_index - 1, collider_position);//INFO: Controller index starts by 1
 	}
