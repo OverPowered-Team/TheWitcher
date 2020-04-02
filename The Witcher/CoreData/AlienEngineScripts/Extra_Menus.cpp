@@ -13,10 +13,10 @@ Extra_Menus::~Extra_Menus()
 void Extra_Menus::Start()
 {
 	// Menus
-	leaderboard = GameObject::FindWithName("Leaderboard");
-	controls = GameObject::FindWithName("Controls");
-	B = GameObject::FindWithName("B");
-	settings = GameObject::FindWithName("Settings");
+	leaderboard = game_object->GetChild("Leaderboard");
+	controls = game_object->GetChild("Controls");
+	B = game_object->GetChild("B");
+	settings = game_object->GetChild("Settings");
 	leaderboard->SetEnable(false);
 	controls->SetEnable(false);
 	B->SetEnable(false);
@@ -70,14 +70,14 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 		controls->SetEnable(false);
 		B->SetEnable(true);
 		settings->SetEnable(false);
-		score1->SetText(std::to_string((Geralt_data->player_data.total_kills * 150) + (Geralt_data->player_data.total_damage_dealt * 5) + (Geralt_data->relics.size() * 30)).data());
-		damage1->SetText(std::to_string(Geralt_data->player_data.total_damage_dealt).data());
+		//score1->SetText(std::to_string((Geralt_data->player_data.total_kills * 150) + (Geralt_data->player_data.total_damage_dealt * 5) + (Geralt_data->relics.size() * 30)).data());
+		/*damage1->SetText(std::to_string(Geralt_data->player_data.total_damage_dealt).data());
 		kills1->SetText(std::to_string(Geralt_data->player_data.total_kills).data());
 		relics1->SetText(std::to_string(Geralt_data->relics.size()).data());
 		damage2->SetText(std::to_string(Yennefer_data->player_data.total_damage_dealt).data());
 		kills2->SetText(std::to_string(Yennefer_data->player_data.total_kills).data());
 		relics2->SetText(std::to_string(Yennefer_data->relics.size()).data());
-		score2->SetText(std::to_string((Yennefer_data->player_data.total_kills * 150) + (Yennefer_data->player_data.total_damage_dealt * 5) + (Yennefer_data->relics.size() * 30)).data());
+		score2->SetText(std::to_string((Yennefer_data->player_data.total_kills * 150) + (Yennefer_data->player_data.total_damage_dealt * 5) + (Yennefer_data->relics.size() * 30)).data());*/
 		break;
 	}
 }
