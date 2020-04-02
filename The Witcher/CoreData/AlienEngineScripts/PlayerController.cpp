@@ -28,6 +28,7 @@ void PlayerController::Start()
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
 	camera = Camera::GetCurrentCamera();
+
 	ComponentDeformableMesh** vec = nullptr;
 	uint size = game_object->GetChild("Meshes")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
 
@@ -36,11 +37,16 @@ void PlayerController::Start()
 	for (uint i = 0u; i < size; ++i) {
 		new_section = vec[i]->GetGlobalAABB();
 		LOG("AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", new_section.minPoint.x, new_section.minPoint.y, new_section.minPoint.z, new_section.maxPoint.x, new_section.maxPoint.y, new_section.maxPoint.z);
-		max_aabb.minPoint = { Maths::Min(new_section.minPoint.x, max_aabb.minPoint.x), Maths::Min(new_section.minPoint.y, max_aabb.minPoint.y),Maths::Min(new_section.minPoint.z, max_aabb.minPoint.z) };
-		max_aabb.maxPoint = { Maths::Max(new_section.maxPoint.x, max_aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, max_aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, max_aabb.maxPoint.z) };
+		max_aabb.minPoint = { 
+			Maths::Min(new_section.minPoint.x, max_aabb.minPoint.x), Maths::Min(new_section.minPoint.y, max_aabb.minPoint.y),Maths::Min(new_section.minPoint.z, max_aabb.minPoint.z) 
+		};
+		max_aabb.maxPoint = { 
+			Maths::Max(new_section.maxPoint.x, max_aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, max_aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, max_aabb.maxPoint.z) 
+		};
 	}
+	max_aabb.minPoint -= transform->GetGlobalPosition();
+	max_aabb.maxPoint -= transform->GetGlobalPosition();
 	LOG("MAX AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", max_aabb.minPoint.x, max_aabb.minPoint.y, max_aabb.minPoint.z, max_aabb.maxPoint.x, max_aabb.maxPoint.y, max_aabb.maxPoint.z);
-
 	GameObject::FreeArrayMemory((void***)&vec);
 
 	ComponentParticleSystem** p_sys = nullptr;
@@ -503,13 +509,10 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 		next_pos = transform->GetGlobalPosition() + vector * speed * 3.f;
 	}
 
-	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
-	// player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
-
 	float3 moved = (next_pos - transform->GetGlobalPosition());
-	AABB fake_aabb(max_aabb.minPoint + moved, max_aabb.maxPoint + moved);
+	AABB fake_aabb(max_aabb.minPoint + moved + transform->GetGlobalPosition(), max_aabb.maxPoint + moved + transform->GetGlobalPosition());
 
-	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
+	float3 next_cam_pos = moved.Normalized() * 0.5 + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
 
 	Frustum fake_frustum = camera->frustum;
 	fake_frustum.pos = next_cam_pos;
@@ -521,7 +524,11 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 		{
 			PlayerController* p = (PlayerController*)cam->players[i]->GetComponentScript("PlayerController");
 			if (p != nullptr) {
-				if (!fake_frustum.Contains(p->max_aabb))
+				AABB p_tmp = p->max_aabb;
+				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
+				p_tmp.maxPoint += cam->players[i]->transform->GetGlobalPosition();
+
+				if (!fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					controller->SetWalkDirection(float3::zero());
