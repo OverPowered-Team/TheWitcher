@@ -16,6 +16,8 @@ void ExplodeChildren::Start()
 	for (auto i = 0u; i < size; ++i) {
 		rbs[i]->AddForce(float3(Random::GetRandomIntBetweenTwo(10, 100), Random::GetRandomIntBetweenTwo(10, 100), Random::GetRandomIntBetweenTwo(10, 100)).Normalized()*10);
 	}
+
+	GameObject::FreeArrayMemory((void***)&rbs);
 }
 
 void ExplodeChildren::Update()
