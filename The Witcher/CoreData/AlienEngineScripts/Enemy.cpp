@@ -16,6 +16,8 @@ void Enemy::StartEnemy()
 	state = EnemyState::IDLE;
 	std::string json_str;
 
+	character_ctrl->SetRotation(Quat::identity());
+
 	switch (type)
 	{
 	case EnemyType::NONE:
