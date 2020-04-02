@@ -13,6 +13,8 @@ public:
 	void Start();
 	void Update();
 
+	void DeleteMyself();
+
 };
 
 ALIEN_FACTORY ExplodeChildren* CreateExplodeChildren() {
