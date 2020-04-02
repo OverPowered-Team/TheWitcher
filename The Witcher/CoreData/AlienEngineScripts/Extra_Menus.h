@@ -53,8 +53,8 @@ ALIEN_FACTORY Extra_Menus* CreateExtra_Menus() {
 	// To show in inspector here
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->previous_menu);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->Geralt);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->Yennefer);
+	//SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->Geralt);
+	//SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->Yennefer);
 
 	return alien;
 } 
