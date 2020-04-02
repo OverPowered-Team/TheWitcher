@@ -29,26 +29,30 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 	Component* c = (Component*)collider;
 	if (Time::GetGameTime() - timer >= 3.f)
 	{
-		if (p1 == nullptr)
+		if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 		{
-			p1 = c->game_object_attached;
-			player_counter++;
-			LOG("ENTER p1");
-		}
-		else if (p2 == nullptr)
-		{
-			if (c->game_object_attached != p1)
+			if (p1 == nullptr)
 			{
-				p2 = c->game_object_attached;
+				p1 = c->game_object_attached;
 				player_counter++;
-				LOG("ENTER p2");
+				LOG("ENTER p1");
+			}
+			else if (p2 == nullptr)
+			{
+				if (c->game_object_attached != p1)
+				{
+					p2 = c->game_object_attached;
+					player_counter++;
+					LOG("ENTER p2");
+				}
+			}
+			if (emitter != nullptr && player_counter == 2) {
+				emitter->SetState("Env_Lvl1", GetNameByEnum(environment).c_str());
+
+				LOG("ENTER");
 			}
 		}
-		if (emitter != nullptr && player_counter == 2) {
-			emitter->SetState("Env_Lvl1", GetNameByEnum(environment).c_str());
-
-			LOG("ENTER");
-		}
+		
 	}	
 }
 
@@ -57,21 +61,23 @@ void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 	Component* c = (Component*)collider;
 	if (Time::GetGameTime() - timer >= 3.f)
 	{
-		if (c->game_object_attached == p1)
-		{
-			p1 = nullptr;
-			player_counter--;
-			LOG("EXIT p1");
-		}
-		else if (c->game_object_attached == p2)
-		{
-			p2 = nullptr;
-			player_counter--;
-			LOG("EXIT p2");
-		}
-		if (emitter != nullptr && player_counter == 0) {
-			emitter->SetState("Env_Lvl1", "Quiet");
-			LOG("EXIT");
+		if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
+			if (c->game_object_attached == p1)
+			{
+				p1 = nullptr;
+				player_counter--;
+				LOG("EXIT p1");
+			}
+			else if (c->game_object_attached == p2)
+			{
+				p2 = nullptr;
+				player_counter--;
+				LOG("EXIT p2");
+			}
+			if (emitter != nullptr && player_counter == 0) {
+				emitter->SetState("Env_Lvl1", "Quiet");
+				LOG("EXIT");
+			}
 		}
 	}
 }
@@ -86,6 +92,9 @@ std::string TriggerEnvironment::GetNameByEnum(Environment mat)
 		break;
 	case Environment::FOREST:
 		return name = "Forest";
+		break;
+	case Environment::BIRDS_WIND:
+		return name = "Birds_Wind";
 		break;
 	}
 }
