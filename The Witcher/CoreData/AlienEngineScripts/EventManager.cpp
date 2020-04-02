@@ -8,7 +8,7 @@ EventManager::EventManager() : Alien()
 
 EventManager::~EventManager()
 {
-	eventPriorities.clear(); 
+	eventPriorities.clear();
 }
 
 void EventManager::Start()
@@ -16,17 +16,18 @@ void EventManager::Start()
 	eventPriorities =
 	{
 		{"Boss", 0},
-	    {"Narrative", 0},
-		{"Enemies", 7}
-	}; 
-	
+		{"Narrative", 0},
+		{"Enemies", 7},
+		{"Default", 666}
+	};
+
 
 	players_size = GameObject::FindGameObjectsWithTag("Player", &players_go);
 	for (int i = 0; i < players_size; ++i) {
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
 
-	//dialogueManager = (DialogueManager*)GameObject::FindWithName("DialogueManager")->GetComponentScript("DialogueManager");
+	dialogueManager = (DialogueManager*)GameObject::FindWithName("GameManager")->GetComponentScript("DialogueManager");
 
 }
 
@@ -48,21 +49,30 @@ void EventManager::OnPlayerRevive(PlayerController* player_revived)
 	}
 }
 
-void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
+void EventManager::ReceiveDialogueEvent(Dialogue& dialogue, float delay) const
 {
-	bool c = (eventPriorities.find(dialogue.priority) == eventPriorities.end());
+	/*bool c = (eventPriorities.find(dialogue.priority.c_str()) == eventPriorities.end());
 	assert(!c && "Priority not valid");
 
 	if (!c)
 	{
 		LOG("Priority not valid");
 		return;
-	}
+	}*/
 
 	//eventPriorities.at(dialogue.priority)
 
 	// TODO: send this to the dialogue script
-	//dialogueManager->InputNewDialogue(dialogue);
+	dialogueManager->InputNewDialogue(dialogue);
 
 }
 
+void EventManager::ReceiveDialogueEvent(int index, float volume) const
+{
+	if (volume < 0.0f)
+		volume = 0.0f;
+	else if (volume > 1.0f)
+		volume = 1.0f;
+
+	dialogueManager->InputNewDialogue(index, volume);
+}
