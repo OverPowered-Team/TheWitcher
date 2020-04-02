@@ -26,4 +26,8 @@ void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 		static_cast<PlayerController*>(collider->game_object_attached->GetComponentScript("PlayerController"))->ReceiveDamage(damage);
 		GameObject::Destroy(game_object->parent);
 	}
+	else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
+	{
+		GameObject::Destroy(game_object->parent);
+	}
 }
