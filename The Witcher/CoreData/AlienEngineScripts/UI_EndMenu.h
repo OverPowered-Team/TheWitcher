@@ -19,6 +19,7 @@ public:
 		);
 
 	void Start();
+
 	bool first_time = true;
 
 	GameObject* damage_info = nullptr;
