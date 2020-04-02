@@ -77,6 +77,7 @@ private:
 private:
 	Dialogue currentDialogue; 
 	Dialogue pausedDialogue; 
+	bool playing = false; 
 
 	EventManager* eventManager = nullptr;
 	ComponentAudioEmitter* audioEmitter = nullptr; 

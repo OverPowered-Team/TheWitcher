@@ -54,34 +54,16 @@ void DialogueManager::LoadJSONDialogues()
 
 void DialogueManager::Update()
 {
-	if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
+	if (playing)
 	{
-		text->SetEnable(false); 
-		currentDialogue.Reset(); 
+		LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
+		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
+		{
+			playing = false;
+			text->SetEnable(false);
+			currentDialogue.Reset();
+		}
 	}
-
-	// Debug
-	if (Input::GetKeyDown(SDL_SCANCODE_1))
-	{
-		Dialogue dialogue; 
-		dialogue.audioData.eventName = "Hit_Sword"; 
-		dialogue.subtitlesText = "Subtitles subtitles a a a subtitles e e e"; 
-		dialogue.priority = "Boss"; 
-
-		InputNewDialogue(dialogue); 
-	}; 
-
-
-	if (Input::GetKeyDown(SDL_SCANCODE_2))
-	{
-		Dialogue dialogue;
-		dialogue.audioData.eventName = "PlayGhouls";
-		dialogue.subtitlesText = "Subtitlessssssssss 2 ANOTHER TEXT subtitles";
-		dialogue.priority = "Enemies";
-
-		InputNewDialogue(dialogue);
-	};
-
 
 }
 
@@ -98,6 +80,8 @@ bool DialogueManager::InputNewDialogue(Dialogue& dialogue)
 
 	
 	OverrideDialogue(dialogue); 
+
+	playing = true; 
 
 	return true;
 }
@@ -118,6 +102,9 @@ bool DialogueManager::InputNewDialogue(int index)
 	
 	OverrideDialogue(dialogue); 
 
+	playing = true;
+
+
 	return true;
 }
 
@@ -132,6 +119,7 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 	currentDialogue.audioData.eventName = std::string(newDialogue.audioData.eventName.c_str()); 
 	currentDialogue.priority = std::string(newDialogue.priority.c_str());
 	currentDialogue.subtitlesText = std::string(newDialogue.subtitlesText.c_str());
+	currentDialogue.subtitlesTime = newDialogue.subtitlesTime;
 
 	// Set Subtitles 
 	if(text->IsEnabled() == false)
