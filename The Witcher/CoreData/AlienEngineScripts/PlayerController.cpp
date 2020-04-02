@@ -23,8 +23,6 @@ void PlayerController::Start()
 	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
 
-	hurt_box = (ComponentCollider*)GetComponent(ComponentType::BOX_COLLIDER);
-
 	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
@@ -130,6 +128,14 @@ void PlayerController::Update()
 		can_move = true;
 		particles["p_run"]->SetEnable(false);
 
+		if (!controller->OnGround())
+		{
+			can_move = true;
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			animator->SetBool("air", true);
+		}
+
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
@@ -137,13 +143,13 @@ void PlayerController::Update()
 			audio->StartSound("Hit_Sword");
 			can_move = false;
 		}
-		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
 			state = PlayerState::BASIC_ATTACK;
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			audio->StartSound("Hit_Sword");
 			can_move = false;
-		}
+		}*/
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
@@ -176,12 +182,19 @@ void PlayerController::Update()
 			}
 		}
 
-
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
 		particles["p_run"]->SetEnable(true);
 		can_move = true;
+
+		if (!controller->OnGround())
+		{
+			can_move = true;
+			state = PlayerState::JUMPING;
+			animator->PlayState("Air");
+			animator->SetBool("air", true);
+		}
 
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
@@ -196,14 +209,14 @@ void PlayerController::Update()
 			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}
-		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
 			controller->SetWalkDirection(float3::zero());
 			can_move = false;
-		}
+		}*/
 
 		if (Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) {
@@ -235,6 +248,7 @@ void PlayerController::Update()
 				animator->SetBool("air", true);
 			}
 		}
+
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		particles["p_run"]->SetEnable(false);
@@ -243,9 +257,9 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 			|| Input::GetKeyDown(keyboard_light_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack))
-			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
+			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);*/
 
 		attacks->UpdateCurrentAttack();
 
@@ -279,6 +293,7 @@ void PlayerController::Update()
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::CASTING:
+		can_move = false;
 		particles["p_run"]->SetEnable(false);
 		attacks->UpdateCurrentAttack();
 		break;
@@ -398,8 +413,7 @@ void PlayerController::Die()
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
-	hurt_box->SetEnable(false);
-	if (players_dead.size() == 2)
+	if (players_dead.size() > 1)
 	{
 		((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->YouDied();
 	}
@@ -425,7 +439,7 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.health.DecreaseStat(value);
-	//((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 	if (player_data.health.current_value == 0)
 		Die();
 
