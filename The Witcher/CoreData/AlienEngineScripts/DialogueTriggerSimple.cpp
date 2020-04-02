@@ -43,7 +43,7 @@ void  DialogueTriggerSimple::EmitDialogue()
 {
 	/*LOG("Dialogue trigger activated, dialogue audio event name: %s", dialogue.audioData.eventName.c_str()); 
 	eventManager->ReceiveDialogueEvent(this->dialogue);*/
-	eventManager->ReceiveDialogueEvent(diaLogueIndex);
+	eventManager->ReceiveDialogueEvent(diaLogueIndex, volume);
 
 	// TODO: we can't delete this, won't play sound? The object is unrelated with the emitter (XD)
 	if (once)

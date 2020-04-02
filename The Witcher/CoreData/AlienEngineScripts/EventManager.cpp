@@ -67,8 +67,13 @@ void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 
 }
 
-void EventManager::ReceiveDialogueEvent(int index) const
+void EventManager::ReceiveDialogueEvent(int index, float volume) const
 {
-	dialogueManager->InputNewDialogue(index);
+	if (volume < 0.0f)
+		volume = 0.0f;
+	else if (volume > 1.0f)
+		volume = 1.0f; 
+
+	dialogueManager->InputNewDialogue(index, volume);
 }
 

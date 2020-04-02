@@ -67,11 +67,11 @@ public:
 	void Start();
 	void Update();
 
-	bool InputNewDialogue(Dialogue &dialogue);
-	bool InputNewDialogue(int index);
+	bool InputNewDialogue(Dialogue &dialogue, float volume = 0.5f);
+	bool InputNewDialogue(int index, float volume = 0.5f);
 
 private: 
-	void OverrideDialogue(Dialogue& newDialogue); 
+	void OverrideDialogue(Dialogue& newDialogue, float volume = 0.5f); 
 	void LoadJSONDialogues();
 
 private:

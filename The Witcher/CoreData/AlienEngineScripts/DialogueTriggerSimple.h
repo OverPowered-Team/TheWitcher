@@ -27,6 +27,7 @@ public:
 	
 	//Dialogue dialogue;
 	int diaLogueIndex = 0; 
+	float volume = 0.5f; 
 	bool specificEntity = false;
 	bool Geralt = false;  // we need to change this for an enity name (?)
 
@@ -49,7 +50,9 @@ ALIEN_FACTORY DialogueTriggerSimple* CreateDialogueTriggerSimple() {
 	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.subtitlesText);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->hitToPlay);*/
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->diaLogueIndex); 
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->volume);
 
+	
 	return alien;
 }
 

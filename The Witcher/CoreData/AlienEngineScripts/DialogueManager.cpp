@@ -16,6 +16,7 @@ void DialogueManager::Start()
 	audioEmitter = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 	text = (ComponentText*)GameObject::FindWithName("SubtitlesText")->GetComponent(ComponentType::UI_TEXT);
  
+	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
 	LoadJSONDialogues(); 
 }
 
@@ -62,12 +63,13 @@ void DialogueManager::Update()
 			playing = false;
 			text->SetEnable(false);
 			currentDialogue.Reset();
+			audioEmitter->ChangeVolume(0.5f); 
 		}
 	}
 
 }
 
-bool DialogueManager::InputNewDialogue(Dialogue& dialogue)
+bool DialogueManager::InputNewDialogue(Dialogue& dialogue, float volume)
 {
 	// TODO: We don't have a way of knowing the sound's duration, so we won't take into account the priority
 	// since we don't know when to reset the current dialogue
@@ -79,14 +81,14 @@ bool DialogueManager::InputNewDialogue(Dialogue& dialogue)
 	}; */
 
 	
-	OverrideDialogue(dialogue); 
+	OverrideDialogue(dialogue, volume); 
 
 	playing = true; 
 
 	return true;
 }
 
-bool DialogueManager::InputNewDialogue(int index)
+bool DialogueManager::InputNewDialogue(int index, float volume)
 {
 	assert((index <= (dialogueData.size() - 1)) && "Invalid dialogue index"); 
 	if (index > (dialogueData.size() - 1))
@@ -100,7 +102,7 @@ bool DialogueManager::InputNewDialogue(int index)
 	dialogue.subtitlesText = std::get<1>(dialogueData.at(index));
 	dialogue.subtitlesTime.totalTime = std::get<2>(dialogueData.at(index));
 	
-	OverrideDialogue(dialogue); 
+	OverrideDialogue(dialogue, volume); 
 
 	playing = true;
 
@@ -109,7 +111,7 @@ bool DialogueManager::InputNewDialogue(int index)
 }
 
 
-void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
+void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 {
 	// Stop playing 
 	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName.c_str()); 
@@ -130,6 +132,7 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue)
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
+	audioEmitter->ChangeVolume(volume); 
 	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str());
 	LOG("Started playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());
 }
