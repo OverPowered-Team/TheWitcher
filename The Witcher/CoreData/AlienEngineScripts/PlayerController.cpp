@@ -400,7 +400,7 @@ void PlayerController::Revive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.health.DecreaseStat(value);
-	//((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 	if (player_data.health.current_value == 0)
 		Die();
 
