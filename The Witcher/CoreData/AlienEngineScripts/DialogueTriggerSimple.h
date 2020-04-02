@@ -24,7 +24,12 @@ private:
 public: 
 	bool once = false;
 	bool hitToPlay = false; 
-	Dialogue dialogue; 
+	
+	//Dialogue dialogue;
+	int diaLogueIndex = 0; 
+	bool specificEntity = false;
+	bool Geralt = false;  // we need to change this for an enity name (?)
+
 private:
 	EventManager* eventManager = nullptr;
 	
@@ -36,11 +41,14 @@ ALIEN_FACTORY DialogueTriggerSimple* CreateDialogueTriggerSimple() {
 
 	// TODO: with proper names (won't work)
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->once);
-	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.audioData.eventName);
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->specificEntity);
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->Geralt);
+	/*SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.audioData.eventName);
 	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.entityName);
 	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.priority);
 	SHOW_IN_INSPECTOR_AS_STRING(alien->dialogue.subtitlesText);
-	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->hitToPlay);
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->hitToPlay);*/
+	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->diaLogueIndex); 
 
 	return alien;
 }

@@ -63,7 +63,12 @@ void EventManager::ReceiveDialogueEvent(Dialogue &dialogue, float delay) const
 	//eventPriorities.at(dialogue.priority)
 
 	// TODO: send this to the dialogue script
-	//dialogueManager->InputNewDialogue(dialogue);
+	dialogueManager->InputNewDialogue(dialogue);
 
+}
+
+void EventManager::ReceiveDialogueEvent(int index) const
+{
+	dialogueManager->InputNewDialogue(index);
 }
 
