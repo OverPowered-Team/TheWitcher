@@ -6,6 +6,8 @@
 #include "CameraMovement.h"
 #include "Enemy.h"
 #include "../../ComponentDeformableMesh.h"
+#include "UI_Char_Frame.h"
+#include "InGame_UI.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -21,10 +23,6 @@ void PlayerController::Start()
 	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
 
-	c_run = (ComponentParticleSystem*)p_run->GetComponent(ComponentType::PARTICLES);
-	c_attack = (ComponentParticleSystem*)p_attack->GetComponent(ComponentType::PARTICLES);
-	c_spell = (ComponentParticleSystem*)p_spell->GetComponent(ComponentType::PARTICLES);
-
 	hurt_box = (ComponentCollider*)GetComponent(ComponentType::BOX_COLLIDER);
 
 	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
@@ -33,17 +31,30 @@ void PlayerController::Start()
 
 	camera = Camera::GetCurrentCamera();
 	ComponentDeformableMesh** vec = nullptr;
-	uint size = game_object->GetChild("group1")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
+	uint size = game_object->GetChild("Meshes")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
 
 	for (uint i = 0u; i < size; ++i) {
 		deformable_meshes.push_back(vec[i]);
 	}
 
 	GameObject::FreeArrayMemory((void***)&vec);
-	
-	c_run->GetSystem()->StopEmmitter();
-	c_attack->GetSystem()->Stop();
-	c_spell->GetSystem()->StopEmmitter();
+
+	ComponentParticleSystem** p_sys = nullptr;
+	size = game_object->GetChild("Particles")->GetComponentsInChildren(ComponentType::PARTICLES, (Component***)&p_sys, false);
+
+	for (uint i = 0u; i < size; ++i) {
+		particles.insert(std::pair(p_sys[i]->game_object_attached->GetName(), p_sys[i]->game_object_attached));
+		p_sys[i]->game_object_attached->SetEnable(false);
+	}
+
+	GameObject::FreeArrayMemory((void***)&p_sys);
+
+	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
+
+	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+		particles.insert(std::pair((*it)->GetName(), (*it)));
+		(*it)->SetEnable(false);
+	}*/
 
 	if (controller_index == 1) {
 		keyboard_move_up = SDL_SCANCODE_W;
@@ -71,9 +82,7 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
-	float2 joystickInput = float2(
-		Input::GetControllerHoritzontalLeftAxis(controller_index),
-		Input::GetControllerVerticalLeftAxis(controller_index));
+	float2 joystickInput = float2(Input::GetControllerHoritzontalLeftAxis(controller_index), Input::GetControllerVerticalLeftAxis(controller_index));
 
 	animator->SetBool("movement_input", joystickInput.Length() > stick_threshold ? true : false);
 
@@ -113,7 +122,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::IDLE: {
 
 		can_move = true;
-		c_run->GetSystem()->StopEmmitter();
+		particles["p_run"]->SetEnable(false);
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack)) {
@@ -132,7 +141,7 @@ void PlayerController::Update()
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
-			animator->PlayState("Spell");
+			attacks->StartSpell(0);
 			state = PlayerState::CASTING;
 		}
 
@@ -165,7 +174,7 @@ void PlayerController::Update()
 	} break;
 	case PlayerController::PlayerState::RUNNING:
 	{
-		c_run->GetSystem()->StartEmmitter();
+		particles["p_run"]->SetEnable(true);
 		can_move = true;
 
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
@@ -198,7 +207,7 @@ void PlayerController::Update()
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
-			animator->PlayState("Spell");
+			attacks->StartSpell(0);
 			state = PlayerState::CASTING;
 		}
 
@@ -217,7 +226,7 @@ void PlayerController::Update()
 		}
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
-		c_run->GetSystem()->StopEmmitter();
+		particles["p_run"]->SetEnable(false);
 		can_move = false;
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -249,19 +258,18 @@ void PlayerController::Update()
 
 		break;
 	case PlayerController::PlayerState::JUMPING:
-		c_run->GetSystem()->StopEmmitter();
+		particles["p_run"]->SetEnable(false);
 		can_move = true;
 		if (controller->CanJump())
 			animator->SetBool("air", false);
 		break;
 	case PlayerController::PlayerState::DASHING:
-		c_run->GetSystem()->StopEmmitter();
+		particles["p_run"]->SetEnable(false);
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::CASTING:
-		c_run->GetSystem()->StopEmmitter();
-		controller->SetWalkDirection(float3::zero());
-		can_move = false;
+		particles["p_run"]->SetEnable(false);
+		attacks->UpdateCurrentAttack();
 		break;
 	case PlayerController::PlayerState::DEAD:
 		if (Input::GetControllerButtonDown(controller_index, Input::CONTROLLER_BUTTON_DPAD_DOWN))
@@ -337,11 +345,6 @@ void PlayerController::HandleMovement(const float2& joystickInput)
 	animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
 }
 
-void PlayerController::OnAttackEffect()
-{
-	c_attack->Restart();
-}
-
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
 		if(abs(player_data.currentSpeed) < 0.01F)
@@ -362,9 +365,13 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	}
 }
 
-void PlayerController::PlaySpell()
+void PlayerController::PlayAttackParticle()
 {
-	c_spell->Restart();
+	if (attacks->GetCurrentAttack())
+	{
+		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);
+	}
 }
 
 void PlayerController::Die()
@@ -375,6 +382,10 @@ void PlayerController::Die()
 	s_event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
 	hurt_box->SetEnable(false);
+	if (players_dead.size() == 2)
+	{
+		((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->YouDied();
+	}
 }
 
 void PlayerController::Revive()
@@ -389,6 +400,7 @@ void PlayerController::Revive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.health.DecreaseStat(value);
+	//((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 	if (player_data.health.current_value == 0)
 		Die();
 
@@ -533,6 +545,27 @@ void PlayerController::CheckForPossibleRevive()
 	}
 }
 
+void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
+{
+	player_data.total_damage_dealt += dmg_dealt;
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
+		{
+			AttackEffect* a_effect = (AttackEffect*)(*it);
+			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
+			{
+				a_effect->OnHit(enemy);
+			}
+		}
+	}
+}
+
+void PlayerController::OnEnemyKill()
+{
+	player_data.total_kills++;
+}
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
@@ -542,8 +575,10 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
 			if (enemy) {
 				ReceiveDamage(enemy->stats.damage);
-				break;
+				GameObject::FreeArrayMemory((void***)&alien);
+				return;
 			}
 		}
+		GameObject::FreeArrayMemory((void***)&alien);
 	}
 }

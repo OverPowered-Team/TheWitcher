@@ -11,6 +11,7 @@ public:
 	virtual ~Win_lose_menu();
 	
 	void Start();
+	void Update();
 
 	bool have_won = true;
 

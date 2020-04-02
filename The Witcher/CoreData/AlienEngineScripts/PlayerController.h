@@ -8,6 +8,7 @@ class PlayerAttacks;
 class EventManager;
 class Relic;
 class Effect;
+class Enemy;
 class ComponentDeformableMesh;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
@@ -62,9 +63,8 @@ public:
 	bool AnyKeyboardInput();
 
 	void HandleMovement(const float2& joystickInput);
-	void OnAttackEffect();
 	void OnAnimationEnd(const char* name);
-	void PlaySpell();
+	void PlayAttackParticle();
 	void Die();
 	void Revive();
 	void ReceiveDamage(float value);
@@ -78,6 +78,9 @@ public:
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevived(PlayerController* player_dead);
 	void CheckForPossibleRevive();
+
+	void OnHit(Enemy* enemy, float dmg_dealt);
+	void OnEnemyKill();
 
 	void OnTriggerEnter(ComponentCollider* col);
 
@@ -120,18 +123,10 @@ public:
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
 
-	//Particles
-	GameObject* p_run = nullptr;
-	ComponentParticleSystem* c_run = nullptr;
-
-	GameObject* p_attack = nullptr;
-	ComponentParticleSystem* c_attack = nullptr;
-
-	GameObject* p_spell = nullptr;
-	ComponentParticleSystem* c_spell = nullptr;
-
-	GameObject* event_manager = nullptr;
 	EventManager* s_event_manager = nullptr;
+
+	// UI 
+	GameObject* HUD = nullptr;
 
 	float delay_footsteps = 0.5f;
 
@@ -140,6 +135,7 @@ private:
 	float timer = 0.f;
 	ComponentAudioEmitter* audio = nullptr;
 
+	std::map<std::string, GameObject*> particles;
 	ComponentCamera* camera = nullptr;
 	std::vector<ComponentDeformableMesh*> deformable_meshes;
 };
@@ -157,13 +153,9 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_run);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_attack);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->p_spell);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->event_manager);
-	SHOW_VOID_FUNCTION(PlayerController::OnAttackEffect, player);
-	SHOW_VOID_FUNCTION(PlayerController::PlaySpell, player);
+	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->HUD);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 
 	return player;

@@ -396,9 +396,6 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 			if (ImGui::MenuItem("Rename")) {
 				current_active_folder->children[i]->changing_name = true;
 			}
-			if (current_active_folder->children[i]->type == FileDropType::SCENE && ImGui::MenuItem("Open as Co-Scene")) {
-
-			}
 		ImGui::EndPopup();
 	}
 }

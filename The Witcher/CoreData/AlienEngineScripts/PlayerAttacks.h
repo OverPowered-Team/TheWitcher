@@ -4,13 +4,13 @@
 #include "Stat.h"
 
 class PlayerController;
-class Enemy;
 
 class Attack {
 public:
 	struct AttackInfo {
 		std::string name = "";
 		std::string input = "";
+		std::string particle_name = "";
 		float3 collider_position;
 		float3 collider_size;
 		Stat* base_damage = nullptr;
@@ -48,6 +48,7 @@ public:
 	
 	void Start();
 	void StartAttack(AttackType attack);
+	void StartSpell(uint spell_index); //maybe have enum for spells?
 	void UpdateCurrentAttack();
 	void ReceiveInput(AttackType attack);
 	void CleanUp();
@@ -61,11 +62,11 @@ public:
 	void AllowCombo();
 	void OnDrawGizmos();
 	bool CanBeInterrupted();
-	void OnHit(Enemy* enemy);
 
 	void OnAnimationEnd(const char* name);
 
 	float GetCurrentDMG();
+	Attack* GetCurrentAttack();
 
 public:
 	GameObject* collider_go = nullptr;
@@ -90,14 +91,13 @@ protected:
 	Attack* base_light_attack = nullptr;
 	Attack* base_heavy_attack = nullptr;
 
-	GameObject** enemies = nullptr; //this is temporary
-	uint enemies_size = 0; //this is temporary
-
 	GameObject* current_target = nullptr;
 	PlayerController* player_controller = nullptr;
 	ComponentBoxCollider* collider = nullptr;
 
 	std::vector<Attack*> attacks;
+	std::vector<Attack*> spells;
+
 	float finish_attack_time = 0.0f;
 	float start_attack_time = 0.0f;
 	float snap_time = 0.0f;

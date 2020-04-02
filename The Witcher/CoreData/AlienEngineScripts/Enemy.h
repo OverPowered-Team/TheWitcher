@@ -54,10 +54,12 @@ public:
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction) {}
 	virtual void Attack() {}
+	void ActivateCollider();
+	void DeactivateCollider();
 
 	void OnTriggerEnter(ComponentCollider* collider);
 
-	void GetDamaged(float dmg);
+	float GetDamaged(float dmg);
 
 public:
 
@@ -66,6 +68,7 @@ public:
 	EnemyState state = EnemyState::NONE;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
+	ComponentCollider* attack_collider = nullptr;
 
 	std::vector<PlayerController*> player_controllers;
 
