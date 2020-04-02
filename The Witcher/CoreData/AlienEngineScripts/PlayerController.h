@@ -23,6 +23,7 @@ public:
 		DASHING,
 		CASTING,
 		DEAD,
+		REVIVING,
 		HIT,
 
 		MAX
@@ -67,6 +68,7 @@ public:
 	void PlayAttackParticle();
 	void Die();
 	void Revive();
+	void ActionRevive();
 	void ReceiveDamage(float value);
 
 	//Relics
@@ -77,7 +79,7 @@ public:
 	void OnDrawGizmos();
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevived(PlayerController* player_dead);
-	void CheckForPossibleRevive();
+	bool CheckForPossibleRevive();
 
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void OnEnemyKill();
@@ -90,6 +92,7 @@ public:
 	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
 	std::vector<PlayerController*> players_dead;
+	PlayerController* player_being_revived = nullptr;
 
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
@@ -154,6 +157,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
+	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->HUD);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);

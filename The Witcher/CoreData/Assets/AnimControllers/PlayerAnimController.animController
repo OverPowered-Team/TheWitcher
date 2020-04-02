@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 12,
-        "NumTransitions": 20,
+        "NumStates": 14,
+        "NumTransitions": 23,
         "States": [
             {
                 "Name": "Idle",
@@ -63,6 +63,16 @@
                 "Name": "Hit",
                 "Speed": 3,
                 "Clip": "6366989855699185652"
+            },
+            {
+                "Name": "RCP",
+                "Speed": 1,
+                "Clip": "11249509642733254706"
+            },
+            {
+                "Name": "Revive",
+                "Speed": 1,
+                "Clip": "1634045271620092584"
             }
         ],
         "Transitions": [
@@ -377,6 +387,39 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "RCP",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Idle",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Revive",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -397,6 +440,10 @@
             },
             {
                 "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "reviving",
                 "Value": false
             }
         ],
