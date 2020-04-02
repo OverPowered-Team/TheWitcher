@@ -271,6 +271,7 @@ void PlayerController::Update()
 		can_move = false;
 		break;
 	case PlayerController::PlayerState::CASTING:
+		can_move = false;
 		particles["p_run"]->SetEnable(false);
 		attacks->UpdateCurrentAttack();
 		break;

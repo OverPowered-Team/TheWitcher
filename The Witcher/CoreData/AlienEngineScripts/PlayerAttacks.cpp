@@ -140,8 +140,11 @@ void PlayerAttacks::SnapToTarget()
 
 	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
 	{
-		if (distance < current_attack->info.max_snap_distance && distance > 1.0)
-			speed = distance / snap_time;
+		if (distance < current_attack->info.max_snap_distance)
+			if (distance < 1.0)
+				speed = 0;
+			else 
+				speed = distance / snap_time;
 		else
 			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
 	}
