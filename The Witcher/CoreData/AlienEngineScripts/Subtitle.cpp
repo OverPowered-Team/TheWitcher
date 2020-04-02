@@ -18,10 +18,10 @@ void Subtitle::Start()
 		return;
 
 	std::string json_path = std::string("Configuration/Subtitles/Project_1.json");
-	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
 	if (jsonDoc)
 	{
+		LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
 		JSONArraypack* titles = jsonDoc->GetArray("titles");
 		if (titles == nullptr)
 			return;
