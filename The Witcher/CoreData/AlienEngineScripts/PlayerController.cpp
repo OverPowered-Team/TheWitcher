@@ -137,13 +137,13 @@ void PlayerController::Update()
 			audio->StartSound("Hit_Sword");
 			can_move = false;
 		}
-		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
 			state = PlayerState::BASIC_ATTACK;
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			audio->StartSound("Hit_Sword");
 			can_move = false;
-		}
+		}*/
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
@@ -203,14 +203,14 @@ void PlayerController::Update()
 			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}
-		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
 			controller->SetWalkDirection(float3::zero());
 			can_move = false;
-		}
+		}*/
 
 		if (Input::GetControllerButtonDown(controller_index, controller_dash)
 			|| Input::GetKeyDown(keyboard_dash)) {
@@ -251,9 +251,9 @@ void PlayerController::Update()
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 			|| Input::GetKeyDown(keyboard_light_attack))
 			attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-		else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack))
-			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
+			attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);*/
 
 		attacks->UpdateCurrentAttack();
 
