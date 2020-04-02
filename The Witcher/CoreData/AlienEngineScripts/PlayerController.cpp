@@ -23,8 +23,6 @@ void PlayerController::Start()
 	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
 
-	hurt_box = (ComponentCollider*)GetComponent(ComponentType::BOX_COLLIDER);
-
 	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
@@ -392,8 +390,7 @@ void PlayerController::Die()
 	animator->SetBool("dead", true);
 	s_event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
-	hurt_box->SetEnable(false);
-	if (players_dead.size() == 2)
+	if (players_dead.size() > 1)
 	{
 		((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->YouDied();
 	}
@@ -419,7 +416,7 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.health.DecreaseStat(value);
-	//((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 	if (player_data.health.current_value == 0)
 		Die();
 
