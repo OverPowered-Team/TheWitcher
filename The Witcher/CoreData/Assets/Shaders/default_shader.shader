@@ -16,33 +16,16 @@ uniform mat4 model;
 uniform mat4 projection;
 uniform int animate;
 
-uniform float density = 0;
-uniform float gradient = 0;
 
 out vec3 frag_pos;
 out vec2 texCoords;
 out vec3 norms;
 out mat3 TBN; 
-out float visibility; 
 
 void main()
 {
-    // --------------- OUTS ---------------
     vec4 pos = vec4(position, 1.0);
-    frag_pos = vec3(model * pos);
-    texCoords = vec2(uvs.x, uvs.y);
-
-    // --------- Fog ----------
-    vec4 worldPos = model * pos;
-    vec4 positionRelativeToCam = view * worldPos;
-    float distance = length(positionRelativeToCam.xyz);
-    visibility = exp(-pow((distance * density), gradient));
-    visibility = clamp(visibility, 0.0, 1.0);
-    // ------------------------
-
-    // --------------------------------------- 
-
-    // --------------- Animation -------------
+    vec4 normal4 = vec4(normals, 1.0);
     if(animate == 1)
     {
           mat4 BoneTransform = gBones[BoneIDs[0]] * Weights[0];
@@ -51,9 +34,9 @@ void main()
             BoneTransform += gBones[BoneIDs[3]] * Weights[3];
             pos = BoneTransform * pos;
     }
-    // --------------------------------------- 
-
-    // --------------- Normals ---------------
+    frag_pos = vec3(model * pos);
+    texCoords = vec2(uvs.x, uvs.y);
+    
     norms = mat3(transpose(inverse(model))) * normals;
 
     vec3 T = normalize(vec3(model * vec4(tangents,   0.0)));
@@ -61,7 +44,6 @@ void main()
     vec3 N = normalize(vec3(model * vec4(normals,    0.0)));
 
     TBN = mat3(T,B,N);
-    // ---------------------------------------
 
     gl_Position = projection * view * vec4(frag_pos, 1.0f); 
 };
@@ -132,9 +114,6 @@ uniform ivec3 max_lights;
 
 uniform vec3 view_pos;
 
-uniform bool activeFog;
-uniform vec3 backgroundColor;
-
 #define MAX_LIGHTS_PER_TYPE 10
 uniform DirectionalLight dir_light[MAX_LIGHTS_PER_TYPE];
 uniform PointLight point_light[MAX_LIGHTS_PER_TYPE];
@@ -145,7 +124,6 @@ in vec2 texCoords;
 in vec3 frag_pos;
 in vec3 norms;
 in mat3 TBN;
-in float visibility;
 
 // Outs
 out vec4 FragColor;
@@ -159,7 +137,7 @@ void main()
         objectColor = objectColor * vec4(texture(objectMaterial.diffuseTexture, texCoords));
     }
 
-    if(objectColor.w < 0.1)
+    if(objectColor.w < 0.3)
     {
         discard;
     }
@@ -195,11 +173,6 @@ void main()
     // ----------------------------------------------------------
 
     FragColor = vec4(result, 1.0) * objectColor;
-
-    if(activeFog == true)
-    {
-        FragColor = mix(vec4(backgroundColor, 1.0), FragColor, visibility);
-    }
 }
 
 // Function definitions
