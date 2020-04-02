@@ -140,7 +140,7 @@ private:
 
 	std::map<std::string, GameObject*> particles;
 	ComponentCamera* camera = nullptr;
-	std::vector<ComponentDeformableMesh*> deformable_meshes;
+	AABB max_aabb;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {

@@ -33,9 +33,15 @@ void PlayerController::Start()
 	ComponentDeformableMesh** vec = nullptr;
 	uint size = game_object->GetChild("Meshes")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
 
+	max_aabb.SetNegativeInfinity();
+	AABB new_section;
 	for (uint i = 0u; i < size; ++i) {
-		deformable_meshes.push_back(vec[i]);
+		new_section = vec[i]->GetGlobalAABB();
+		LOG("AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", new_section.minPoint.x, new_section.minPoint.y, new_section.minPoint.z, new_section.maxPoint.x, new_section.maxPoint.y, new_section.maxPoint.z);
+		max_aabb.minPoint = { Maths::Min(new_section.minPoint.x, max_aabb.minPoint.x), Maths::Min(new_section.minPoint.y, max_aabb.minPoint.y),Maths::Min(new_section.minPoint.z, max_aabb.minPoint.z) };
+		max_aabb.maxPoint = { Maths::Max(new_section.maxPoint.x, max_aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, max_aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, max_aabb.maxPoint.z) };
 	}
+	LOG("MAX AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", max_aabb.minPoint.x, max_aabb.minPoint.y, max_aabb.minPoint.z, max_aabb.maxPoint.x, max_aabb.maxPoint.y, max_aabb.maxPoint.z);
 
 	GameObject::FreeArrayMemory((void***)&vec);
 
@@ -486,19 +492,8 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	// There is an error: the player_aabb corrupts its values between inicialitzaion in Start() and when we use it here TODO correct this
 	// player_aabb = &((ComponentDeformableMesh*)(GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false)))->GetGlobalAABB();
 
-	AABB aabb;
-	AABB new_section;
-	aabb.SetNegativeInfinity();
-	new_section.SetNegativeInfinity();
-
-	for (auto i = deformable_meshes.begin(); i != deformable_meshes.end(); ++i) {
-		new_section = (*i)->GetGlobalAABB();
-		aabb.minPoint = { Maths::Min(new_section.minPoint.x, aabb.minPoint.x), Maths::Min(new_section.minPoint.y, aabb.minPoint.y),Maths::Min(new_section.minPoint.z, aabb.minPoint.z) };
-		aabb.maxPoint = { Maths::Max(new_section.maxPoint.x, aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, aabb.maxPoint.z) };
-	}
-
 	float3 moved = (next_pos - transform->GetGlobalPosition());
-	AABB fake_aabb(aabb.minPoint + moved, aabb.maxPoint + moved);
+	AABB fake_aabb(max_aabb.minPoint + moved, max_aabb.maxPoint + moved);
 
 	float3 next_cam_pos = moved.Normalized() * 0.5f + camera->game_object_attached->transform->GetGlobalPosition(); // * 0.5 for middle point in camera
 
@@ -509,11 +504,10 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
 		if (cam->players[i] != this->game_object)
-		{			
-			ComponentDeformableMesh* defo = (ComponentDeformableMesh*)cam->players[i]->GetComponentInChildren(ComponentType::DEFORMABLE_MESH, false);
-			if (defo != nullptr)
-			{
-				if (!fake_frustum.Contains(defo->GetGlobalAABB()))
+		{
+			PlayerController* p = (PlayerController*)cam->players[i]->GetComponentScript("PlayerController");
+			if (p != nullptr) {
+				if (!fake_frustum.Contains(p->max_aabb))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					controller->SetWalkDirection(float3::zero());
@@ -521,7 +515,6 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 				}
 			}
 		}
-		
 	}
 
 	if (camera->frustum.Contains(fake_aabb)) {
