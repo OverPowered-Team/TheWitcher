@@ -37,6 +37,7 @@ void Subtitle::Start()
 	}
 	
 	JSONfilepack::FreeJSON(jsonDoc);
+	start_time = Time::GetGameTime();
 }
 
 void Subtitle::Update()
@@ -44,7 +45,7 @@ void Subtitle::Update()
 	if (!text || !audio)
 		return;
 	
-	current_time = Time::GetGameTime();
+	current_time = Time::GetGameTime() - start_time;
 	if (subtitles.size() > 0 && subtitles.size() > current_sub)
 	{
 		if (current_time >= subtitles[current_sub].start)
@@ -61,5 +62,9 @@ void Subtitle::Update()
 				++current_sub;
 			}
 		}
+	}
+	if (current_time > end_seconds)
+	{
+		SceneManager::LoadScene("newTRIGGER");
 	}
 }

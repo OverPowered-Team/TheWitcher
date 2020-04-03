@@ -89,11 +89,14 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
 		PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
-		float dmg_received = player->attacks->GetCurrentDMG();
-		player->OnHit(this, GetDamaged(dmg_received));		
+		if (player)
+		{
+			float dmg_received = player->attacks->GetCurrentDMG();
+			player->OnHit(this, GetDamaged(dmg_received));
 
-		if (state == EnemyState::DYING)
-			player->OnEnemyKill();
+			if (state == EnemyState::DYING)
+				player->OnEnemyKill();
+		}
 	}
 }
 

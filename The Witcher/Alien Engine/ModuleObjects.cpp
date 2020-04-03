@@ -31,6 +31,7 @@
 #include "ModuleFileSystem.h"
 #include "ModulePhysics.h"
 #include "ComponentParticleSystem.h"
+#include "ComponentAnimator.h"
 #include "ReturnZ.h"
 #include "Time.h"
 #include "Prefab.h"
@@ -124,7 +125,6 @@ bool ModuleObjects::Start()
 		game_viewport->active = true;
 		App->renderer3D->OnResize(App->window->width, App->window->height);
 		Time::Play();
-
 		delete meta;
 	}
 	else {
@@ -1146,6 +1146,13 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 
 				if (!current_scripts.empty() && Time::IsInGameState()) {
 					OnPlay();
+					for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+					{
+						ComponentAnimator* anim = obj->GetComponent<ComponentAnimator>();
+						if (anim != nullptr) {
+							anim->OnPlay();
+						}
+					}
 				}
 			}
 			if (change_scene) {

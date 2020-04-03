@@ -97,8 +97,8 @@ public:
 ALIEN_FACTORY RelicBehaviour* CreateRelicBehaviour() {
 	RelicBehaviour* relic_behaviour = new RelicBehaviour();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->name);
-	SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->description);
+	/*SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->name);
+	SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->description);*/
 	SHOW_IN_INSPECTOR_AS_ENUM(Relic_Type, relic_behaviour->relic_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Relic_Effect, relic_behaviour->relic_effect);
 	
