@@ -2,9 +2,9 @@
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "Breakable_Fence1",
+                "Name": "FencesFinal",
                 "FamilyNumber": 1,
-                "ID": "3433649753984675585",
+                "ID": "13123906484303764495",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -14,7 +14,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
+                "PrefabID": "10104833490754883702",
                 "Components": [
                     {
                         "Type": 0,
@@ -22,6 +22,226 @@
                             0,
                             0,
                             0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15532993318993613520"
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence1_BreakableUnited",
+                "FamilyNumber": 2,
+                "ID": "1736695794979060965",
+                "ParentID": "13123906484303764495",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10104833490754883702",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            117.96030426025391,
+                            20.063100814819336,
+                            75.537239074707031
+                        ],
+                        "Rotation": [
+                            0,
+                            0.66973996162414551,
+                            0,
+                            0.74259573221206665
+                        ],
+                        "Scale": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3901109422638499599"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "6040571156289652353",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "281920166162972555",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "3454793182931907968",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0.77488517761230469,
+                            3.8478071689605713,
+                            -0.59077024459838867
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            18.206821441650391,
+                            8.6956710815429688,
+                            0.57485294342041016
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7967598771431046060",
+                        "ResourceID": "15754342856731289811",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "214403672112541714"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence1_BreakableUnited",
+                "FamilyNumber": 2,
+                "ID": "15835287905053012796",
+                "ParentID": "13123906484303764495",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10104833490754883702",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            118.16734313964844,
+                            20.063100814819336,
+                            73.246421813964844
+                        ],
+                        "Rotation": [
+                            0,
+                            0.66973996162414551,
+                            0,
+                            0.74259573221206665
+                        ],
+                        "Scale": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14082693215343133406"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "15998381288003245277",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "281920166162972555",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6261156342539674073",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0.77488517761230469,
+                            3.8478071689605713,
+                            -0.59077024459838867
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            18.206821441650391,
+                            8.6956710815429688,
+                            0.57485294342041016
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16165752169924280022",
+                        "ResourceID": "15754342856731289811",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "214403672112541714"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence1_BreakableUnited",
+                "FamilyNumber": 2,
+                "ID": "4868301458963387981",
+                "ParentID": "13123906484303764495",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10104833490754883702",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -79.298515319824219,
+                            14.01518440246582,
+                            3.741086483001709
                         ],
                         "Rotation": [
                             0,
@@ -35,113 +255,68 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "17702431284232852583"
+                        "ID": "17989028059910271716"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "50154551747785582",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "281920166162972555",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "10097743284306561608",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0.77488517761230469,
+                            3.8478071689605713,
+                            -0.59077024459838867
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            18.206821441650391,
+                            8.6956710815429688,
+                            0.57485294342041016
+                        ]
                     },
                     {
                         "Type": 29,
-                        "ID": "6577646778199726227",
-                        "ResourceID": "7432336530039813793",
-                        "DataName": "ExplodeChildren",
-                        "HasInspector": false
-                    }
-                ]
-            },
-            {
-                "Name": "BrokenFence13",
-                "FamilyNumber": 2,
-                "ID": "3820971981231719969",
-                "ParentID": "3433649753984675585",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "8306844436065553341"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "13701602975787073833",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "8246404764382411619",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "7490560967811139911",
-                        "HasMaterial": true,
-                        "MaterialID": "1008227401734361930",
-                        "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            0,
-                            0,
-                            0
+                        "ID": "13499923262482070256",
+                        "ResourceID": "15754342856731289811",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "214403672112541714"
+                            }
                         ]
                     }
                 ]
             },
             {
-                "Name": "BrokenFence15",
+                "Name": "BrokenFence1_BreakableUnited",
                 "FamilyNumber": 2,
-                "ID": "13045916393980266822",
-                "ParentID": "3433649753984675585",
+                "ID": "2524111597481787391",
+                "ParentID": "13123906484303764495",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -150,28 +325,28 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
+                "PrefabID": "10104833490754883702",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            118.36331176757813,
+                            20.063100814819336,
+                            70.983612060546875
                         ],
                         "Rotation": [
                             0,
+                            0.66973996162414551,
                             0,
-                            0,
-                            1
+                            0.74259573221206665
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "6141712534375963842"
+                        "ID": "15281079262120545227"
                     },
                     {
                         "Type": 1,
@@ -181,58 +356,58 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "163876635821099630",
+                        "ID": "6594290750331378307",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "17013935220940480206",
+                        "MeshID": "281920166162972555",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "4083463063448545504",
+                        "ID": "13233185037559701584",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
                     },
                     {
                         "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
                         "Type": 7,
                         "Center": [
-                            0,
-                            0,
-                            0
+                            0.77488517761230469,
+                            3.8478071689605713,
+                            -0.59077024459838867
                         ],
                         "IsTrigger": false,
                         "Bouncing": 0.10000000149011612,
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            0,
-                            0,
-                            0
+                            18.206821441650391,
+                            8.6956710815429688,
+                            0.57485294342041016
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9391996370631141897",
+                        "ResourceID": "15754342856731289811",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "214403672112541714"
+                            }
                         ]
                     }
                 ]
             },
             {
-                "Name": "BrokenFence14",
+                "Name": "BrokenFence1_BreakableUnited",
                 "FamilyNumber": 2,
-                "ID": "3426904796688029714",
-                "ParentID": "3433649753984675585",
+                "ID": "13321020552447061349",
+                "ParentID": "13123906484303764495",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -241,14 +416,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
+                "PrefabID": "10104833490754883702",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -174.29507446289063,
+                            19.821371078491211,
+                            -2.3220536708831787
                         ],
                         "Rotation": [
                             0,
@@ -257,12 +432,12 @@
                             1
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "16708615589123022757"
+                        "ID": "11476421262006345975"
                     },
                     {
                         "Type": 1,
@@ -272,58 +447,58 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2993729177554573600",
+                        "ID": "665311604412984437",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "18260426187548079908",
+                        "MeshID": "281920166162972555",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "2907120246514061513",
+                        "ID": "13469561708545831511",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
                     },
                     {
                         "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
                         "Type": 7,
                         "Center": [
-                            0,
-                            0,
-                            0
+                            0.77488517761230469,
+                            3.8478071689605713,
+                            -0.59077024459838867
                         ],
                         "IsTrigger": false,
                         "Bouncing": 0.10000000149011612,
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            0,
-                            0,
-                            0
+                            18.206821441650391,
+                            8.6956710815429688,
+                            0.57485294342041016
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "8901991804761002899",
+                        "ResourceID": "15754342856731289811",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "214403672112541714"
+                            }
                         ]
                     }
                 ]
             },
             {
-                "Name": "BrokenFence17",
+                "Name": "BrokenFence1_BreakableUnited",
                 "FamilyNumber": 2,
-                "ID": "14496769685774684828",
-                "ParentID": "3433649753984675585",
+                "ID": "9338447990706599233",
+                "ParentID": "13123906484303764495",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -332,14 +507,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
+                "PrefabID": "10104833490754883702",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -174.29507446289063,
+                            19.821371078491211,
+                            -2.3220536708831787
                         ],
                         "Rotation": [
                             0,
@@ -348,12 +523,12 @@
                             1
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "12925900774520994587"
+                        "ID": "12233898325859950502"
                     },
                     {
                         "Type": 1,
@@ -363,322 +538,49 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2227474055646798993",
+                        "ID": "1972989290500056558",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "9895886376575746660",
+                        "MeshID": "281920166162972555",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "3178046920237776476",
+                        "ID": "4849589911287989831",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
                     },
                     {
                         "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
                         "Type": 7,
                         "Center": [
-                            0,
-                            0,
-                            0
+                            0.77488517761230469,
+                            3.8478071689605713,
+                            -0.59077024459838867
                         ],
                         "IsTrigger": false,
                         "Bouncing": 0.10000000149011612,
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Size": [
-                            0,
-                            0,
-                            0
+                            18.206821441650391,
+                            8.6956710815429688,
+                            0.57485294342041016
                         ]
-                    }
-                ]
-            },
-            {
-                "Name": "BrokenFence16",
-                "FamilyNumber": 2,
-                "ID": "12875515296887144618",
-                "ParentID": "3433649753984675585",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "2111489936165875901"
                     },
                     {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "3607633231105596970",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "6019354998407727101",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "8354140685163913290",
-                        "HasMaterial": true,
-                        "MaterialID": "1008227401734361930",
-                        "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            0,
-                            0,
-                            0
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "BrokenFence20",
-                "FamilyNumber": 2,
-                "ID": "3657308663158230024",
-                "ParentID": "3433649753984675585",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "9602981873948166891"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "4572665998568334501",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "3038245360949837238",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "18212768679202353022",
-                        "HasMaterial": true,
-                        "MaterialID": "1008227401734361930",
-                        "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            0,
-                            0,
-                            0
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "BrokenFence19",
-                "FamilyNumber": 2,
-                "ID": "17136470799707831017",
-                "ParentID": "3433649753984675585",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "214403672112541714",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "7982758664884594641"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "14445579049221238072",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "11313098972482919753",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "5167407018248515117",
-                        "HasMaterial": true,
-                        "MaterialID": "1008227401734361930",
-                        "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            0,
-                            0,
-                            0
+                        "Type": 29,
+                        "ID": "17539300749453052800",
+                        "ResourceID": "15754342856731289811",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "214403672112541714"
+                            }
                         ]
                     }
                 ]
