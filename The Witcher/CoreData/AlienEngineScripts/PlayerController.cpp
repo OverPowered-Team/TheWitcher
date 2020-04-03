@@ -367,13 +367,13 @@ void PlayerController::HandleMovement(const float2& joystickInput)
 
 	if (abs(joystickInput.x) >= stick_threshold || abs(joystickInput.y) >= stick_threshold)
 	{
-		player_data.currentSpeed = (player_data.movementSpeed * joystickIntensity * Time::GetDT());
+		player_data.currentSpeed = (player_data.movementSpeed * joystickIntensity);
 		controller->SetRotation(rot);
 	}
 
 	if (state == PlayerState::DASHING)
 	{
-		controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT());
+		controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power);
 	}
 	else
 	{

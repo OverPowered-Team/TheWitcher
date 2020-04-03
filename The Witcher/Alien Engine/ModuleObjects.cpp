@@ -125,7 +125,6 @@ bool ModuleObjects::Start()
 		game_viewport->active = true;
 		App->renderer3D->OnResize(App->window->width, App->window->height);
 		Time::Play();
-
 		delete meta;
 	}
 	else {
