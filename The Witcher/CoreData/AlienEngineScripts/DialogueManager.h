@@ -81,7 +81,6 @@ private:
 	Dialogue pausedDialogue;
 	bool playing = false;
 
-	EventManager* eventManager = nullptr;
 	ComponentAudioEmitter* audioEmitter = nullptr;
 	ComponentText* text = nullptr;
 

@@ -1,3 +1,4 @@
+#include "GameManager.h"
 #include "DialogueTriggerSimple.h"
 #include "EventManager.h"
 #include "DialogueManager.h"
@@ -12,8 +13,6 @@ DialogueTriggerSimple::~DialogueTriggerSimple()
 
 void DialogueTriggerSimple::Start()
 {
-	eventManager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
-
 }
 
 void DialogueTriggerSimple::Update()
@@ -43,7 +42,7 @@ void  DialogueTriggerSimple::EmitDialogue()
 {
 	/*LOG("Dialogue trigger activated, dialogue audio event name: %s", dialogue.audioData.eventName.c_str());
 	eventManager->ReceiveDialogueEvent(this->dialogue);*/
-	eventManager->ReceiveDialogueEvent(diaLogueIndex, volume);
+	Game_Manager->event_manager->ReceiveDialogueEvent(diaLogueIndex, volume);
 
 	// TODO: we can't delete this, won't play sound? The object is unrelated with the emitter (XD)
 	if (once)

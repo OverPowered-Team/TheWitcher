@@ -1,3 +1,4 @@
+#include "GameManager.h"
 #include "EventManager.h"
 #include "PlayerController.h"
 #include "DialogueManager.h"
@@ -26,8 +27,6 @@ void EventManager::Start()
 	for (int i = 0; i < players_size; ++i) {
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
-
-	dialogueManager = (DialogueManager*)GameObject::FindWithName("GameManager")->GetComponentScript("DialogueManager");
 
 }
 
@@ -63,7 +62,7 @@ void EventManager::ReceiveDialogueEvent(Dialogue& dialogue, float delay) const
 	//eventPriorities.at(dialogue.priority)
 
 	// TODO: send this to the dialogue script
-	dialogueManager->InputNewDialogue(dialogue);
+	Game_Manager->dialogue_manager->InputNewDialogue(dialogue);
 
 }
 
@@ -74,5 +73,5 @@ void EventManager::ReceiveDialogueEvent(int index, float volume) const
 	else if (volume > 1.0f)
 		volume = 1.0f;
 
-	dialogueManager->InputNewDialogue(index, volume);
+	Game_Manager->dialogue_manager->InputNewDialogue(index, volume);
 }

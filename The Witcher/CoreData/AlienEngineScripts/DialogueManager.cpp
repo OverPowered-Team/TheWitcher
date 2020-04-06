@@ -1,3 +1,4 @@
+#include "GameManager.h"
 #include "DialogueManager.h"
 #include "EventManager.h"
 #include "..\..\ComponentText.h"
@@ -12,7 +13,6 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	eventManager = (EventManager*)GetComponentScript("EventManager");
 	audioEmitter = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 	text = (ComponentText*)GameObject::FindWithName("SubtitlesText")->GetComponent(ComponentType::UI_TEXT);
 

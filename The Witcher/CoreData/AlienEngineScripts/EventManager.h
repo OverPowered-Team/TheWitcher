@@ -31,7 +31,6 @@ public:
 
 public:
 	std::map<const char*, uint> eventPriorities; // event and priority
-	DialogueManager* dialogueManager = nullptr;
 };
 
 ALIEN_FACTORY EventManager* CreateEventManager() {

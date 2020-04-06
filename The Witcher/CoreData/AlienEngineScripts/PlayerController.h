@@ -125,8 +125,6 @@ public:
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
 
-	EventManager* s_event_manager = nullptr;
-
 	// UI 
 	GameObject* HUD = nullptr;
 

@@ -5,6 +5,7 @@
 #include "Effect.h"
 #include "CameraMovement.h"
 #include "Enemy.h"
+#include "GameManager.h"
 #include "../../ComponentDeformableMesh.h"
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
@@ -22,8 +23,6 @@ void PlayerController::Start()
 	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
 	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
 	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
-
-	s_event_manager = (EventManager*)GameObject::FindWithName("GameManager")->GetComponentScript("EventManager");
 
 	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 
@@ -422,7 +421,7 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
-	s_event_manager->OnPlayerDead(this);
+	Game_Manager->event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
 	if (players_dead.size() > 1)
 	{
@@ -435,7 +434,7 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	s_event_manager->OnPlayerRevive(this);
+	Game_Manager->event_manager->OnPlayerRevive(this);
 	player_data.health.IncreaseStat(player_data.health.max_value * 0.5);
 	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 }
