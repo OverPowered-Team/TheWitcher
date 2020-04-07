@@ -6,6 +6,7 @@
 class EventManager;
 class EnemyManager;
 class DialogueManager;
+class PlayerManager;
 
 class ALIEN_ENGINE_API GameManager : public Alien {
 
@@ -16,11 +17,11 @@ public:
 	EventManager* event_manager = nullptr;
 	EnemyManager* enemy_manager = nullptr;
 	DialogueManager* dialogue_manager = nullptr;
-	
+	PlayerManager* player_manager = nullptr;
+
 	void Awake();
 	void Start();
 	void Update();
-
 };
 extern GameManager* Game_Manager = nullptr;
 

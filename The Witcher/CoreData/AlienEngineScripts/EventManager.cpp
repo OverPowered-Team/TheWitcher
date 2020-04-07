@@ -1,6 +1,6 @@
 #include "GameManager.h"
 #include "EventManager.h"
-#include "PlayerController.h"
+#include "PlayerManager.h"
 #include "DialogueManager.h"
 
 EventManager::EventManager() : Alien()
@@ -21,13 +21,6 @@ void EventManager::Start()
 		{"Enemies", 7},
 		{"Default", 666}
 	};
-
-
-	players_size = GameObject::FindGameObjectsWithTag("Player", &players_go);
-	for (int i = 0; i < players_size; ++i) {
-		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
-	}
-
 }
 
 void EventManager::Update()
@@ -36,16 +29,12 @@ void EventManager::Update()
 
 void EventManager::OnPlayerDead(PlayerController* player_dead)
 {
-	for (int i = 0; i < players.size(); ++i) {
-		players[i]->OnPlayerDead(player_dead);
-	}
+	Game_Manager->player_manager->OnPlayerDead(player_dead);
 }
 
 void EventManager::OnPlayerRevive(PlayerController* player_revived)
 {
-	for (int i = 0; i < players.size(); ++i) {
-		players[i]->OnPlayerRevived(player_revived);
-	}
+	Game_Manager->player_manager->OnPlayerRevive(player_revived);
 }
 
 void EventManager::ReceiveDialogueEvent(Dialogue& dialogue, float delay) const

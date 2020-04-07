@@ -12,15 +12,10 @@ class DialogueManager;
 class ALIEN_ENGINE_API EventManager : public Alien {
 
 public:
-
 	EventManager();
 	virtual ~EventManager();
 	void Start();
 	void Update();
-
-	GameObject** players_go;
-	std::vector<PlayerController*> players;
-	uint players_size = 0;
 
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevive(PlayerController* player_revived);
