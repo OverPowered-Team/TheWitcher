@@ -48,11 +48,13 @@ void PauseMenu_Buttons::Settings()
 
 void PauseMenu_Buttons::RetryLevel()
 {
+	((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
 	SceneManager::LoadScene("newTRIGGER");
 }
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
+	((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
 	SceneManager::LoadScene("Main_Menu");
 }
 
