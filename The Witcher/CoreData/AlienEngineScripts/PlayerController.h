@@ -130,6 +130,8 @@ public:
 
 	float delay_footsteps = 0.5f;
 
+	bool godmode = false;
+
 private:
 	float angle = 0.0f;
 	float timer = 0.f;

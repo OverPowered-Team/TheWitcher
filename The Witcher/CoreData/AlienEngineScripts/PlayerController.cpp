@@ -606,17 +606,20 @@ void PlayerController::OnEnemyKill()
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
-	if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
-		Alien** alien = nullptr;
-		uint size = col->game_object_attached->parent->GetAllComponentsScript(&alien);
-		for (int i = 0; i < size; ++i) {
-			Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
-			if (enemy) {
-				ReceiveDamage(enemy->stats.damage);
-				GameObject::FreeArrayMemory((void***)&alien);
-				return;
+	if (!godmode)
+	{
+		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
+			Alien** alien = nullptr;
+			uint size = col->game_object_attached->parent->GetAllComponentsScript(&alien);
+			for (int i = 0; i < size; ++i) {
+				Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
+				if (enemy) {
+					ReceiveDamage(enemy->stats.damage);
+					GameObject::FreeArrayMemory((void***)&alien);
+					return;
+				}
 			}
+			GameObject::FreeArrayMemory((void***)&alien);
 		}
-		GameObject::FreeArrayMemory((void***)&alien);
 	}
 }
