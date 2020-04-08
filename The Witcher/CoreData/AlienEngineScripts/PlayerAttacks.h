@@ -59,7 +59,7 @@ public:
 	void DeactivateCollider();
 
 	void AllowCombo();
-	void OnDrawGizmos();
+	void OnDrawGizmosSelected();
 	bool CanBeInterrupted();
 
 	void OnAnimationEnd(const char* name);

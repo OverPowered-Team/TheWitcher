@@ -256,9 +256,9 @@ void PlayerAttacks::AllowCombo()
 	can_execute_input = true;
 }
 
-void PlayerAttacks::OnDrawGizmos()
+void PlayerAttacks::OnDrawGizmosSelected()
 {
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), snap_detection_range, Color::Cyan()); //snap_range
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), snap_detection_range, Color::Red()); //snap_range
 }
 
 bool PlayerAttacks::CanBeInterrupted()

@@ -1,14 +1,18 @@
+#include "GameManager.h"
+#include "PlayerManager.h"
 #include "PlayerAttacks.h"
-#include "PlayerController.h"
 #include "EventManager.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
 #include "CameraMovement.h"
 #include "Enemy.h"
-#include "GameManager.h"
+
 #include "../../ComponentDeformableMesh.h"
+#include "../../ResourceAnimatorController.h"
+
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
+#include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
 {
@@ -77,6 +81,7 @@ void PlayerController::Start()
 		keyboard_light_attack = SDL_SCANCODE_V;
 		keyboard_heavy_attack = SDL_SCANCODE_B;
 		keyboard_revive = SDL_SCANCODE_C;
+		keyboard_ultimate = SDL_SCANCODE_X;
 	}
 	else if (controller_index == 2) {
 		keyboard_move_up = SDL_SCANCODE_I;
@@ -88,6 +93,7 @@ void PlayerController::Start()
 		keyboard_light_attack = SDL_SCANCODE_RCTRL;
 		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
 		keyboard_revive = SDL_SCANCODE_M;
+		keyboard_ultimate = SDL_SCANCODE_COMMA;
 	}
 }
 
@@ -96,6 +102,15 @@ void PlayerController::Update()
 	float2 joystickInput = float2(Input::GetControllerHoritzontalLeftAxis(controller_index), Input::GetControllerVerticalLeftAxis(controller_index));
 
 	animator->SetBool("movement_input", joystickInput.Length() > stick_threshold ? true : false);
+
+	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
+		|| Input::GetKeyDown(keyboard_ultimate)) {
+		GameManager::manager->player_manager->ultimate_buttons_pressed++;
+	}
+	else if (Input::GetControllerButtonUp(controller_index, controller_ultimate)
+		|| Input::GetKeyUp(keyboard_ultimate)) {
+		GameManager::manager->player_manager->ultimate_buttons_pressed--;
+	}
 
 	if (joystickInput.Length() > 0) {
 		if (CheckBoundaries(joystickInput))
@@ -372,11 +387,11 @@ void PlayerController::HandleMovement(const float2& joystickInput)
 
 	if (state == PlayerState::DASHING)
 	{
-		controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power);
+		controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power / Time::GetScaleTime());
 	}
 	else
 	{
-		controller->SetWalkDirection(vector * player_data.currentSpeed);
+		controller->SetWalkDirection(vector * player_data.currentSpeed / Time::GetScaleTime());
 	}
 
 	animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
@@ -421,12 +436,8 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
-	Game_Manager->event_manager->OnPlayerDead(this);
+	GameManager::manager->event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
-	if (players_dead.size() > 1)
-	{
-		((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->YouDied();
-	}
 }
 
 void PlayerController::Revive()
@@ -434,7 +445,7 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	Game_Manager->event_manager->OnPlayerRevive(this);
+	GameManager::manager->event_manager->OnPlayerRevive(this);
 	player_data.health.IncreaseStat(player_data.health.max_value * 0.5);
 	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 }
@@ -502,12 +513,12 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 
 	if (abs(joystickInput.x) >= stick_threshold || abs(joystickInput.y) >= stick_threshold)
 	{
-		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT());
+		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT() / Time::GetScaleTime());
 	}
 
 	if (state == PlayerState::DASHING)
 	{
-		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT();
+		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT() / Time::GetScaleTime();
 	}
 	else
 	{
@@ -552,32 +563,17 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	}
 }
 
-void PlayerController::OnDrawGizmos()
+void PlayerController::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), revive_range, Color::Cyan()); //snap_range
 }
 
-void PlayerController::OnPlayerDead(PlayerController* player_dead)
-{
-	players_dead.push_back(player_dead);
-}
-
-void PlayerController::OnPlayerRevived(PlayerController* player_dead)
-{
-	for (std::vector<PlayerController*>::iterator it = players_dead.begin(); it != players_dead.end(); ++it) {
-		if ((*it) == player_dead) {
-			players_dead.erase(it);
-			break;
-		}
-	}
-}
-
 bool PlayerController::CheckForPossibleRevive()
 {
-	for (int i = 0; i < players_dead.size(); ++i) {
-		float distance = this->transform->GetGlobalPosition().Distance(players_dead[i]->transform->GetGlobalPosition());
+	for (int i = 0; i < GameManager::manager->player_manager->players_dead.size(); ++i) {
+		float distance = this->transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= revive_range) {
-			player_being_revived = players_dead[i];
+			player_being_revived = GameManager::manager->player_manager->players_dead[i];
 			return true;
 		}
 	}
@@ -623,3 +619,14 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 }
+
+void PlayerController::OnUltimateActivation()
+{
+	//animator->IncreaseAllStateSpeeds(2.0f);
+}
+
+void PlayerController::OnUltimateDeactivation()
+{
+
+	//animator->DecreaseAllStateSpeeds(2.0f);
+} 
