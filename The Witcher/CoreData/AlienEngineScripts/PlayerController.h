@@ -101,6 +101,8 @@ public:
 
 	float revive_range = 5.0f;
 
+	std::map<std::string, GameObject*> particles;
+
 	//Keyboard input
 	SDL_Scancode keyboard_move_up;
 	SDL_Scancode keyboard_move_left;
@@ -137,7 +139,6 @@ private:
 	float timer = 0.f;
 	ComponentAudioEmitter* audio = nullptr;
 
-	std::map<std::string, GameObject*> particles;
 	ComponentCamera* camera = nullptr;
 	AABB max_aabb;
 };

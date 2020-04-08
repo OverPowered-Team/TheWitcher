@@ -36,6 +36,12 @@ void Enemy::StartEnemy()
 	SetStats(json_str.data());
 }
 
+void Enemy::UpdateEnemy()
+{
+	if (affected)
+		ApplyEffects();
+}
+
 void Enemy::CleanUpEnemy()
 {
 	delete animator;
@@ -59,7 +65,7 @@ void Enemy::SetStats(const char* json)
 	if (stat)
 	{
 		stats.max_health = stats.current_health = stat->GetNumber("Health");
-		stats.agility = stat->GetNumber("Agility");
+		stats.max_agility = stats.current_agility = stat->GetNumber("Agility");
 		stats.damage = stat->GetNumber("Damage");
 		stats.attack_speed = stat->GetNumber("AttackSpeed");
 		stats.attack_range = stat->GetNumber("AttackRange");
@@ -118,4 +124,32 @@ float Enemy::GetDamaged(float dmg)
 	}
 
 	return aux_health - stats.current_health;
+}
+
+void Enemy::ApplyEffects()
+{
+	if (time_effect <= Time::GetGameTime() + 1)
+	{
+		time_effect = Time::GetGameTime() + 1;
+
+		for (std::map<std::string, GameObject*>::iterator it = particles.begin(); it != particles.end(); ++it)
+		{
+			if ((*it).second->IsEnabled())
+			{
+				if (strcmp((*it).first.c_str(), "p_burnonhit") == 0)
+					GetDamaged(5.0f);
+				
+				if (strcmp((*it).first.c_str(), "p_iceonhit") == 0)
+					stats.current_agility = stats.max_agility / 2;
+				else
+					stats.current_agility = stats.max_agility;
+
+				if (strcmp((*it).first.c_str(), "p_lightonhit") == 0)
+					stats.current_agility = 0;
+				else
+					stats.current_agility = stats.max_agility;
+				
+			}
+		}
+	}
 }

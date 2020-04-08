@@ -28,7 +28,6 @@ enum (Relic_Effect,
 	DJINN,
 	STRIGAS,
 	RAGE,
-	RANGE,
 	NONE_EFFECT
 	);
 

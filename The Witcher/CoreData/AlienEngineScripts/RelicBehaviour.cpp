@@ -32,13 +32,13 @@ AttackRelic::~AttackRelic()
 
 void AttackRelic::OnPickUp(PlayerController* _player)
 {
-	/*std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
+	std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
 
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
-	attack_name = attack_pool[random_index];*/
+	attack_name = attack_pool[random_index];
 
 	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier("LLLLL");
+	test_effect->SetAttackIdentifier(attack_name);
 
 	switch (relic_effect)
 	{
@@ -56,9 +56,6 @@ void AttackRelic::OnPickUp(PlayerController* _player)
 		break;
 	case Relic_Effect::POISON:
 		test_effect->OnHit = &ApplyPoisonOnHit;
-		break;
-	case Relic_Effect::RANGE:
-		test_effect->AddFlatModifier(1.5f, "Attack_Damage");
 		break;
 	}
 
