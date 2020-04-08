@@ -70,4 +70,8 @@ void PlayerManager::ActivateUltimate()
 void PlayerManager::CancelUltimate()
 {
 	LOG("ULTIMATE CANCELED");
+	Time::SetScaleTime(1.0f);
+	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
+		(*it)->OnUltimateDeactivation();
+	}
 }

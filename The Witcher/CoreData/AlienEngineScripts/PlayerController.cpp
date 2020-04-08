@@ -105,11 +105,11 @@ void PlayerController::Update()
 
 	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
 		|| Input::GetKeyDown(keyboard_ultimate)) {
-		Game_Manager->player_manager->ultimate_buttons_pressed++;
+		GameManager::manager->player_manager->ultimate_buttons_pressed++;
 	}
 	else if (Input::GetControllerButtonUp(controller_index, controller_ultimate)
 		|| Input::GetKeyUp(keyboard_ultimate)) {
-		Game_Manager->player_manager->ultimate_buttons_pressed--;
+		GameManager::manager->player_manager->ultimate_buttons_pressed--;
 	}
 
 	if (joystickInput.Length() > 0) {
@@ -436,7 +436,7 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
-	Game_Manager->event_manager->OnPlayerDead(this);
+	GameManager::manager->event_manager->OnPlayerDead(this);
 	controller->SetWalkDirection(float3::zero());
 }
 
@@ -445,7 +445,7 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	Game_Manager->event_manager->OnPlayerRevive(this);
+	GameManager::manager->event_manager->OnPlayerRevive(this);
 	player_data.health.IncreaseStat(player_data.health.max_value * 0.5);
 	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
 }
@@ -570,10 +570,10 @@ void PlayerController::OnDrawGizmosSelected()
 
 bool PlayerController::CheckForPossibleRevive()
 {
-	for (int i = 0; i < Game_Manager->player_manager->players_dead.size(); ++i) {
-		float distance = this->transform->GetGlobalPosition().Distance(Game_Manager->player_manager->players_dead[i]->transform->GetGlobalPosition());
+	for (int i = 0; i < GameManager::manager->player_manager->players_dead.size(); ++i) {
+		float distance = this->transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= revive_range) {
-			player_being_revived = Game_Manager->player_manager->players_dead[i];
+			player_being_revived = GameManager::manager->player_manager->players_dead[i];
 			return true;
 		}
 	}
@@ -619,18 +619,11 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 void PlayerController::OnUltimateActivation()
 {
-	std::vector<State*> states = animator->GetCurrentAnimatorController()->GetStates();
-	for (auto it = states.begin(); it != states.end(); ++it)
-	{
-		(*it)->SetSpeed((*it)->GetSpeed() * Time::GetScaleTime());
-	}
+	//animator->IncreaseAllStateSpeeds(2.0f);
 }
 
 void PlayerController::OnUltimateDeactivation()
 {
-	std::vector<State*> states = animator->GetCurrentAnimatorController()->GetStates();
-	for (auto it = states.begin(); it != states.end(); ++it)
-	{
-		(*it)->SetSpeed((*it)->GetSpeed() / 0.5f);
-	}
-}
+
+	//animator->DecreaseAllStateSpeeds(2.0f);
+} 
