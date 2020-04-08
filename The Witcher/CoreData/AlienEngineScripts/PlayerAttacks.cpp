@@ -119,7 +119,7 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 	{
 		if ((*it)->info.name == _attack_name)
 		{
-			(*it)->info.base_damage->CalculateStat(player_controller->effects);
+			(*it)->info.base_damage.CalculateStat(player_controller->effects);
 			//(*it)->base_range.CalculateStat(player_controller->effects);
 		}
 	}
@@ -211,7 +211,6 @@ void PlayerAttacks::ReceiveInput(AttackType attack)
 void PlayerAttacks::CleanUp()
 {
 	for (auto item = attacks.begin(); item != attacks.end(); ++item) {
-		(*item)->CleanUp();
 		delete (*item);
 	}
 	attacks.clear();
@@ -297,9 +296,9 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 float PlayerAttacks::GetCurrentDMG()
 {
 	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
-		return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+		return current_attack->info.base_damage.GetValue() * player_controller->player_data.power.GetValue();
 	else
-		return current_attack->info.base_damage->GetValue();
+		return current_attack->info.base_damage.GetValue();
 }
 
 Attack* PlayerAttacks::GetCurrentAttack()
@@ -334,7 +333,7 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("base_damage"), attack_combo->GetNumber("base_damage"));
+			info.base_damage = Stat("Attack_Damage", attack_combo->GetNumber("base_damage"));
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
@@ -361,7 +360,7 @@ void PlayerAttacks::CreateAttacks()
 		info.collider_size = float3(spells_json->GetNumber("collider.width"),
 			spells_json->GetNumber("collider.height"),
 			spells_json->GetNumber("collider.depth"));
-		info.base_damage = new Stat("Attack_Damage", spells_json->GetNumber("base_damage"), spells_json->GetNumber("base_damage"));
+		info.base_damage = Stat("Attack_Damage", spells_json->GetNumber("base_damage"));
 		info.movement_strength = spells_json->GetNumber("movement_strength");
 		info.activation_frame = spells_json->GetNumber("activation_frame");
 		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
@@ -403,7 +402,3 @@ void PlayerAttacks::ConnectAttacks()
 	}
 }
 
-void Attack::CleanUp()
-{
-	delete info.base_damage;
-}

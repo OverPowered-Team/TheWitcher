@@ -2,7 +2,7 @@
 
 #include "..\..\Alien.h"
 #include "Macros/AlienScripts.h"
-
+#include "Stat.h"
 
 enum (EnemyType,
 	NONE = -1,
@@ -19,8 +19,7 @@ public:
 	struct EnemyStats {
 		float max_health = 0.0F;
 		float current_health = 0.0F;
-		float max_agility = 0.0F;
-		float current_agility = 0.0f;
+		Stat agility;
 		float damage = 0.0F;
 		float attack_speed = 0.0F;
 		float attack_range = 0.0F;
@@ -78,6 +77,4 @@ public:
 	GameObject* player_2 = nullptr;
 
 	std::map<std::string, GameObject*> particles;
-	int time_effect = 0;
-	bool affected = false;
 };
