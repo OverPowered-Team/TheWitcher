@@ -63,8 +63,10 @@ void Subtitle::Update()
 			}
 		}
 	}
-	if (current_time > end_seconds)
+	if (current_time > end_seconds || Input::GetControllerButton(0,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A))
 	{
+		LOG("ENTERED");
+		//audio->StopOwnSound();
 		SceneManager::LoadScene("newTRIGGER");
 	}
 }
