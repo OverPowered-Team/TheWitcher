@@ -75,3 +75,24 @@ void EventManager::ReceiveDialogueEvent(int index, float volume) const
 
 	Game_Manager->dialogue_manager->InputNewDialogue(index, volume);
 }
+
+void EventManager::Rumbler(RumblerType type, int index_controller)
+{
+	if(index_controller > 0)
+		switch (type)
+		{
+		case RumblerType::HARD:
+			Input::DoRumble(index_controller, 1.f, 1000.0f);
+			break;
+		case RumblerType::LIGHT:
+			Input::DoRumble(index_controller, 0.1f, 1000.0f);
+			break;
+		default:
+			break;
+		}
+	else
+	{
+		Rumbler(type, 1);
+		Rumbler(type, 2);
+	}
+}
