@@ -5,11 +5,9 @@
 #include "Stat.h"
 
 class PlayerAttacks;
-class EventManager;
 class Relic;
 class Effect;
 class Enemy;
-class ComponentDeformableMesh;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 
@@ -76,14 +74,13 @@ public:
 	void AddEffect(Effect* _effect);
 
 	bool CheckBoundaries(const float2& joystickInput);
-	void OnDrawGizmos();
-	void OnPlayerDead(PlayerController* player_dead);
-	void OnPlayerRevived(PlayerController* player_dead);
+	void OnDrawGizmosSelected();
 	bool CheckForPossibleRevive();
 
+	void OnUltimateActivation();
+	void OnUltimateDeactivation();
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void OnEnemyKill();
-
 	void OnTriggerEnter(ComponentCollider* col);
 
 public:
@@ -91,7 +88,6 @@ public:
 	PlayerState state = PlayerState::IDLE;
 	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
-	std::vector<PlayerController*> players_dead;
 	PlayerController* player_being_revived = nullptr;
 
 	ComponentAnimator* animator = nullptr;
@@ -114,20 +110,22 @@ public:
 	SDL_Scancode keyboard_heavy_attack;
 	SDL_Scancode keyboard_spell;
 	SDL_Scancode keyboard_revive;
+	SDL_Scancode keyboard_ultimate;
 
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_light_attack = Input::CONTROLLER_BUTTON_X;
 	Input::CONTROLLER_BUTTONS controller_heavy_attack = Input::CONTROLLER_BUTTON_Y;
-	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
+	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_LEFT;
+	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
 	//Relics
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
 
-	// UI 
+	//UI 
 	GameObject* HUD = nullptr;
 
 	float delay_footsteps = 0.5f;
