@@ -36,6 +36,11 @@ void Enemy::StartEnemy()
 	SetStats(json_str.data());
 }
 
+void Enemy::UpdateEnemy()
+{
+	ApplyEffects();
+}
+
 void Enemy::CleanUpEnemy()
 {
 	delete animator;
@@ -59,7 +64,7 @@ void Enemy::SetStats(const char* json)
 	if (stat)
 	{
 		stats.max_health = stats.current_health = stat->GetNumber("Health");
-		stats.agility = stat->GetNumber("Agility");
+		stats.agility = Stat("Agility", stat->GetNumber("Agility"));
 		stats.damage = stat->GetNumber("Damage");
 		stats.attack_speed = stat->GetNumber("AttackSpeed");
 		stats.attack_range = stat->GetNumber("AttackRange");
@@ -118,4 +123,9 @@ float Enemy::GetDamaged(float dmg)
 	}
 
 	return aux_health - stats.current_health;
+}
+
+void Enemy::ApplyEffects()
+{
+	
 }

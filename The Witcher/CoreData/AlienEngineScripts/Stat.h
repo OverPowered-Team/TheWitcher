@@ -8,7 +8,8 @@ class Effect;
 class Stat {
 public:
 
-	Stat(std::string name, float base_value, float max_value);
+	Stat() {};
+	Stat(std::string name, float base_value);
 	~Stat();
 
 	void CalculateStat(std::vector<Effect*> _effects);

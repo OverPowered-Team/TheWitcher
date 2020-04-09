@@ -28,7 +28,6 @@ enum (Relic_Effect,
 	DJINN,
 	STRIGAS,
 	RAGE,
-	RANGE,
 	NONE_EFFECT
 	);
 
@@ -88,7 +87,6 @@ public:
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
 
-	EventManager* eventManager = nullptr;
 	Dialogue geraltDialogue;
 	Dialogue YenneferDialogue;
 

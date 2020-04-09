@@ -27,6 +27,8 @@ public:
 	int current_sub = 0;
 	ComponentText* text = nullptr;
 	ComponentAudioEmitter* audio = nullptr;
+	ComponentAudioEmitter* song = nullptr;
+	GameObject* songBard = nullptr;
 	bool first_entered = true;
 	float end_seconds = 69;
 	float start_time;
@@ -35,6 +37,8 @@ public:
 
 ALIEN_FACTORY Subtitle* CreateSubtitle() {
 	Subtitle* alien = new Subtitle();
+	
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->songBard, "Song gameobject");
 	// To show in inspector here
 	return alien;
 } 

@@ -13,7 +13,7 @@ public:
 		std::string particle_name = "";
 		float3 collider_position;
 		float3 collider_size;
-		Stat* base_damage = nullptr;
+		Stat base_damage;
 		float movement_strength = 0.0f;
 		float max_snap_distance = 0.0f;
 		int activation_frame = 0;
@@ -26,7 +26,6 @@ public:
 	{
 		this->info = info;
 	}
-	void CleanUp();
 
 	AttackInfo info;
 	Attack* light_attack_link = nullptr;
@@ -60,7 +59,7 @@ public:
 	void DeactivateCollider();
 
 	void AllowCombo();
-	void OnDrawGizmos();
+	void OnDrawGizmosSelected();
 	bool CanBeInterrupted();
 
 	void OnAnimationEnd(const char* name);

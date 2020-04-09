@@ -1,3 +1,4 @@
+#include "GameManager.h"
 #include "RelicBehaviour.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
@@ -31,13 +32,13 @@ AttackRelic::~AttackRelic()
 
 void AttackRelic::OnPickUp(PlayerController* _player)
 {
-	/*std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
+	std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
 
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
-	attack_name = attack_pool[random_index];*/
+	attack_name = attack_pool[random_index];
 
 	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier("LLLLL");
+	test_effect->SetAttackIdentifier(attack_name);
 
 	switch (relic_effect)
 	{
@@ -55,9 +56,6 @@ void AttackRelic::OnPickUp(PlayerController* _player)
 		break;
 	case Relic_Effect::POISON:
 		test_effect->OnHit = &ApplyPoisonOnHit;
-		break;
-	case Relic_Effect::RANGE:
-		test_effect->AddFlatModifier(1.5f, "Attack_Damage");
 		break;
 	}
 
@@ -136,9 +134,6 @@ void RelicBehaviour::Start()
 		relic->relic_effect = relic_effect;
 	}
 
-	
-	//eventManager = (EventManager*)GameObject::FindWithName("EventManager")->GetComponentScript("EventManager");
-
 	////Geralt dialogue
 	//geraltDialogue.audioData.eventName = "Hit_Sword";
 	//geraltDialogue.priority = "Relics";
@@ -164,10 +159,12 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 		{
 			relic->OnPickUp((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"));
 			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
-			Destroy(this->game_object);
 
-			//it remains to be determined if it is Geralt's audio or Yennefer's.
-			/*eventManager->ReceiveDialogueEvent(geraltDialogue);*/
+			//it remains to be determined if it is Geralt's audio or Yennefer's. 
+			//-> You can check if it's yen or geralt with variable (PlayerController)->player_data->player_type 
+			/*Game_Manager->event_manager->ReceiveDialogueEvent(geraltDialogue);*/
+
+			Destroy(this->game_object);		
 		}
 	}
 }

@@ -31,7 +31,7 @@ void NilfgaardSoldier::SetStats(const char* json)
 				break;
 
 		stats.max_health = stats.current_health = stat_weapon->GetNumber("Health");
-		stats.agility = stat_weapon->GetNumber("Agility");
+		stats.agility = Stat("Agility", stat_weapon->GetNumber("Agility"));
 		stats.damage = stat_weapon->GetNumber("Damage");
 		stats.attack_speed = stat_weapon->GetNumber("AttackSpeed");
 		stats.vision_range = stat_weapon->GetNumber("VisionRange");
@@ -45,8 +45,8 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 void NilfgaardSoldier::Move(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats.agility);
-	animator->SetFloat("speed", stats.agility);
+	character_ctrl->SetWalkDirection(direction * stats.agility.GetValue());
+	animator->SetFloat("speed", stats.agility.GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
@@ -163,6 +163,8 @@ void NilfgaardSoldier::UpdateEnemy()
 	default:
 		break;
 	}
+
+	Enemy::UpdateEnemy();
 
 }
 

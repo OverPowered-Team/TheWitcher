@@ -9,18 +9,19 @@ class PlayerController;
 struct Dialogue;
 class DialogueManager;
 
+enum (RumblerType,
+	HARD,
+	LIGHT,
+	NONE
+	);
+
 class ALIEN_ENGINE_API EventManager : public Alien {
 
 public:
-
 	EventManager();
 	virtual ~EventManager();
 	void Start();
 	void Update();
-
-	GameObject** players_go;
-	std::vector<PlayerController*> players;
-	uint players_size = 0;
 
 	void OnPlayerDead(PlayerController* player_dead);
 	void OnPlayerRevive(PlayerController* player_revived);
@@ -29,9 +30,10 @@ public:
 	void ReceiveDialogueEvent(Dialogue& dialogue, float delay = 0.f) const;
 	void ReceiveDialogueEvent(int index, float volume = 0.5f) const;
 
+	void Rumbler(RumblerType type, int index_controller = 0);
+
 public:
 	std::map<const char*, uint> eventPriorities; // event and priority
-	DialogueManager* dialogueManager = nullptr;
 };
 
 ALIEN_FACTORY EventManager* CreateEventManager() {

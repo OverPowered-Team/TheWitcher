@@ -11,8 +11,8 @@ UI_Char_Frame::~UI_Char_Frame()
 
 void UI_Char_Frame::Start()
 {
-	geralt_img = game_object->GetChild("Geralt");
-	yen_img = game_object->GetChild("Yennefer");
+	geralt_img = game_object->GetChild("Geralt_character_UI");
+	yen_img = game_object->GetChild("Yennefer_character_UI");
 
 	if (character == CHARACTER::YENNEFER)
 	{
