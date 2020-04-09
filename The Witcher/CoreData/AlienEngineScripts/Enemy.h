@@ -73,9 +73,6 @@ public:
 
 	std::vector<PlayerController*> player_controllers;
 
-	GameObject* player_1 = nullptr;
-	GameObject* player_2 = nullptr;
-
 	std::map<std::string, GameObject*> particles;
 	std::vector<Effect*> effects;
 };
