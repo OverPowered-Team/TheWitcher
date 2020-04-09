@@ -148,6 +148,8 @@ float Enemy::GetDamaged(float dmg)
 
 void Enemy::AddEffect(Effect* new_effect)
 {
+	effects.push_back(new_effect);
+
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
 		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
