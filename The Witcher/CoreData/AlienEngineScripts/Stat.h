@@ -12,7 +12,8 @@ public:
 	Stat(std::string name, float base_value);
 	~Stat();
 
-	void CalculateStat(std::vector<Effect*> _effects);
+	void ApplyEffect(Effect* effect);
+	void CalculateStat();
 	void ModifyCurrentStat(Effect* _effect);
 	float GetValue() { return current_value; }
 	float GetMaxValue() { return max_value; }
@@ -21,6 +22,7 @@ public:
 	void DecreaseStat(float value);
 
 	std::string name;
+	std::vector<Effect*> effects;
 
 private:
 	

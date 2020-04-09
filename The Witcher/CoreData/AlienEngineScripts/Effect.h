@@ -5,6 +5,7 @@
 
 class Enemy;
 class PlayerController;
+class Stat;
 
 struct Modifier
 {
@@ -22,6 +23,7 @@ public:
 	float GetMultiplicativeAmount(std::string identifier);
 
 	bool UpdateEffect();
+	bool AffectsStat(std::string stat_name);
 
 	std::string name = "";
 	std::vector<Modifier> additive_modifiers;

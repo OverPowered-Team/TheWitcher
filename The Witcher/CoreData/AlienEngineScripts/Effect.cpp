@@ -1,3 +1,4 @@
+#include "Stat.h"
 #include "Effect.h"
 
 // Effect
@@ -76,6 +77,24 @@ bool Effect::UpdateEffect()
     
     return false;
 }
+
+bool Effect::AffectsStat(std::string stat_name)
+{
+    for (auto it = additive_modifiers.begin(); it != additive_modifiers.end(); ++it)
+    {
+        if ((*it).identifier == stat_name)
+            return true;
+    }
+
+    for (auto it = multiplicative_modifiers.begin(); it != multiplicative_modifiers.end(); ++it)
+    {
+        if ((*it).identifier == stat_name)
+            return true;
+    }
+
+    return false;
+}
+
 
 // AttackEffect
 AttackEffect::AttackEffect()

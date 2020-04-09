@@ -32,6 +32,12 @@ void PlayerController::Start()
 
 	camera = Camera::GetCurrentCamera();
 
+	player_data.stats.insert(std::pair("Health", Stat("Health", 100.0f)));
+	player_data.stats.insert(std::pair("Strength", Stat("Strength", 10.0f)));
+	player_data.stats.insert(std::pair("Chaos", Stat("Chaos", 150.0f)));
+	player_data.stats.insert(std::pair("Attack_Speed", Stat("Attack_Speed", 1.0f)));
+
+
 	ComponentDeformableMesh** vec = nullptr;
 	uint size = game_object->GetChild("Meshes")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
 
@@ -372,9 +378,21 @@ void PlayerController::Update()
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
 		{
-			ReceiveDamage(std::abs((*it)->GetAdditiveAmount("Health")));
-		}
+			for (auto it_stats = player_data.stats.begin(); it_stats != player_data.stats.end(); ++it_stats)
+			{
+				it_stats->second.ModifyCurrentStat((*it));
 
+				//Temporal solution
+				if (it_stats->first == "Health")
+				{
+					((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+					if (player_data.stats["Health"].GetValue() == 0)
+						Die();
+				}
+			}
+			if (particles[(*it)->name])
+				particles[(*it)->name]->SetEnable(true);
+		}
 		if((*it)->to_delete)
 		{
 			delete (*it);
@@ -474,8 +492,8 @@ void PlayerController::Revive()
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	GameManager::manager->event_manager->OnPlayerRevive(this);
-	player_data.health.IncreaseStat(player_data.health.GetMaxValue() * 0.5);
-	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.GetValue(), player_data.health.GetMaxValue());
+	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 }
 
 void PlayerController::ActionRevive()
@@ -488,9 +506,9 @@ void PlayerController::ActionRevive()
 
 void PlayerController::ReceiveDamage(float value)
 {
-	player_data.health.DecreaseStat(value);
-	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.GetValue(), player_data.health.GetMaxValue());
-	if (player_data.health.GetValue() == 0)
+	player_data.stats["Health"].DecreaseStat(value);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 
 	if (state != PlayerState::HIT && state != PlayerState::DASHING && state != PlayerState::DEAD) {
@@ -498,8 +516,7 @@ void PlayerController::ReceiveDamage(float value)
 		attacks->CancelAttack();
 		state = PlayerState::HIT;
 		controller->SetWalkDirection(float3::zero());
-	}
-	
+	}	
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -516,11 +533,17 @@ void PlayerController::AddEffect(Effect* _effect)
 {
 	effects.push_back(_effect);
 
-	//RecalculateStats(); 
-
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
-		attacks->OnAddAttackEffect(((AttackEffect*)_effect)->GetAttackIdentifier());
+		attacks->OnAddAttackEffect(((AttackEffect*)_effect));
+	}
+	else
+	{
+		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
+		{
+			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time == 0)
+				it->second.ApplyEffect(_effect);
+		}
 	}
 }
 
