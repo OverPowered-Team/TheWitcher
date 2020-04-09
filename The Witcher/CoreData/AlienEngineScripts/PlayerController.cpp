@@ -164,6 +164,16 @@ void PlayerController::Update()
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
 			can_move = false;
+
+
+			Effect* effect = new Effect();
+			effect->AddFlatModifier(-5, "Health");
+			effect->time = 2.5;
+			effect->ticks_time = 1.0f;
+			effect->last_tick_time = Time::GetGameTime();
+			effect->start_time = Time::GetGameTime();
+			this->effects.push_back(effect);
+
 		}
 		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
@@ -355,6 +365,24 @@ void PlayerController::Update()
 			state = PlayerState::RUNNING;
 	}
 	player_data.currentSpeed = 0;
+
+
+	//Effects-----------------------------
+	for (auto it = effects.begin(); it != effects.end();)
+	{
+		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
+		{
+			ReceiveDamage(std::abs((*it)->GetAdditiveAmount("Health")));
+		}
+
+		if((*it)->to_delete)
+		{
+			delete (*it);
+			it = effects.erase(it);
+			continue;
+		}
+		++it;
+	}
 }
 
 bool PlayerController::AnyKeyboardInput()
@@ -446,8 +474,8 @@ void PlayerController::Revive()
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	GameManager::manager->event_manager->OnPlayerRevive(this);
-	player_data.health.IncreaseStat(player_data.health.max_value * 0.5);
-	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
+	player_data.health.IncreaseStat(player_data.health.GetMaxValue() * 0.5);
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.GetValue(), player_data.health.GetMaxValue());
 }
 
 void PlayerController::ActionRevive()
@@ -461,8 +489,8 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.health.DecreaseStat(value);
-	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.current_value, player_data.health.max_value);
-	if (player_data.health.current_value == 0)
+	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.health.GetValue(), player_data.health.GetMaxValue());
+	if (player_data.health.GetValue() == 0)
 		Die();
 
 	if (state != PlayerState::HIT && state != PlayerState::DASHING && state != PlayerState::DEAD) {
@@ -589,7 +617,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 			AttackEffect* a_effect = (AttackEffect*)(*it);
 			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
 			{
-				a_effect->OnHit(enemy);
+				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size());
 			}
 		}
 	}

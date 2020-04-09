@@ -30,7 +30,7 @@ void NilfgaardSoldier::SetStats(const char* json)
 			else
 				break;
 
-		stats.max_health = stats.current_health = stat_weapon->GetNumber("Health");
+		stats.health = Stat("Health", stat_weapon->GetNumber("Health"));
 		stats.agility = Stat("Agility", stat_weapon->GetNumber("Agility"));
 		stats.damage = stat_weapon->GetNumber("Damage");
 		stats.attack_speed = stat_weapon->GetNumber("AttackSpeed");

@@ -31,6 +31,14 @@ void Stat::CalculateStat(std::vector<Effect*> _effects)
     current_value = (current_value * max_value) / old_max;
 }
 
+void Stat::ModifyCurrentStat(Effect* _effect)
+{
+    float additive_value = _effect->GetAdditiveAmount(name);
+    float mult_value = _effect->GetMultiplicativeAmount(name);
+    
+    current_value = current_value + additive_value;
+}
+
 void Stat::SetBaseStat(float _value)
 {
 	base_value = _value;

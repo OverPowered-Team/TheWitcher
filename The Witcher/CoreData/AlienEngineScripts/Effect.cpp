@@ -59,6 +59,24 @@ float Effect::GetMultiplicativeAmount(std::string identifier)
     return final_value;
 }
 
+bool Effect::UpdateEffect()
+{
+    if (time > 0)
+    {
+        if (Time::GetGameTime() > start_time + time)
+        {
+            to_delete = true;
+        }
+        else if (ticks_time + last_tick_time < Time::GetGameTime())
+        {
+            last_tick_time = Time::GetGameTime();
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 // AttackEffect
 AttackEffect::AttackEffect()
 {

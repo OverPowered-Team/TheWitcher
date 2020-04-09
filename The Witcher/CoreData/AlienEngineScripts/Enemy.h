@@ -4,21 +4,21 @@
 #include "Macros/AlienScripts.h"
 #include "Stat.h"
 
+class PlayerController;
+class Effect;
+
 enum (EnemyType,
 	NONE = -1,
 	GHOUL,
 	NILFGAARD_SOLDIER
 	);
 
-class PlayerController;
-
 class Enemy : public Alien {
 
 public: 
 
 	struct EnemyStats {
-		float max_health = 0.0F;
-		float current_health = 0.0F;
+		Stat health;
 		Stat agility;
 		float damage = 0.0F;
 		float attack_speed = 0.0F;
@@ -60,7 +60,6 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 
 	float GetDamaged(float dmg);
-	void ApplyEffects();
 
 public:
 
@@ -77,4 +76,5 @@ public:
 	GameObject* player_2 = nullptr;
 
 	std::map<std::string, GameObject*> particles;
+	std::vector<Effect*> effects;
 };
