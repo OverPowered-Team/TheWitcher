@@ -51,8 +51,8 @@ void Enemy::UpdateEnemy()
 		{
 			if (particles[(*it)->name])
 				particles[(*it)->name]->SetEnable(true);
-			stats.health.ModifyCurrentStat((*it));
-			stats.agility.ModifyCurrentStat((*it));
+			stats["Health"].ModifyCurrentStat((*it));
+			stats["Agility"].ModifyCurrentStat((*it));
 		}
 		++it;
 	}
@@ -85,12 +85,12 @@ void Enemy::SetStats(const char* json)
 	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
 	if (stat)
 	{
-		stats.health = Stat( "Health", stat->GetNumber("Health"));
-		stats.agility = Stat("Agility", stat->GetNumber("Agility"));
-		stats.damage = stat->GetNumber("Damage");
-		stats.attack_speed = stat->GetNumber("AttackSpeed");
-		stats.attack_range = stat->GetNumber("AttackRange");
-		stats.vision_range = stat->GetNumber("VisionRange");
+		stats["Health"] = Stat( "Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
 	}
 
 	JSONfilepack::FreeJSON(stat);
@@ -129,10 +129,10 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 
 float Enemy::GetDamaged(float dmg)
 {
-	float aux_health = stats.health.GetValue();
-	stats.health.DecreaseStat(dmg);
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
 
-	if (stats.health.GetValue() == 0.0F) {
+	if (stats["Health"].GetValue() == 0.0F) {
 		state = EnemyState::DYING;
 		animator->PlayState("Death");
 	}
@@ -143,6 +143,14 @@ float Enemy::GetDamaged(float dmg)
 		character_ctrl->SetWalkDirection(float3::zero());
 	}
 
-	return aux_health - stats.health.GetValue();
+	return aux_health - stats["Health"].GetValue();
 }
 
+void Enemy::AddEffect(Effect* new_effect)
+{
+	for (auto it = stats.begin(); it != stats.end(); ++it)
+	{
+		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
+			it->second.ApplyEffect(new_effect);
+	}
+}
