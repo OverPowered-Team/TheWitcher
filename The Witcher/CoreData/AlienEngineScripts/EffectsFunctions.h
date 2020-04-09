@@ -16,7 +16,7 @@ static void ApplyBurnOnHit(Enemy* _enemy, uint size)
     effect->ticks_time = 1.0f;
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
-    _enemy->effects.push_back(effect);
+    _enemy->AddEffect(effect);
 }
 
 static void ApplyIceOnHit(Enemy* _enemy, uint size)
@@ -28,7 +28,7 @@ static void ApplyIceOnHit(Enemy* _enemy, uint size)
     effect->ticks_time = 0;
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
-    _enemy->effects.push_back(effect);
+    _enemy->AddEffect(effect);
 }
 
 static void ApplyLightningOnHit(Enemy* _enemy, uint size)
@@ -45,7 +45,7 @@ static void ApplyPoisonOnHit(Enemy* _enemy, uint size)
     effect->ticks_time = 1.0f;
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
-    _enemy->effects.push_back(effect);
+    _enemy->AddEffect(effect);
 }
 
 //ONDASH

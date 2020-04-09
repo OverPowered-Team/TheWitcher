@@ -16,16 +16,6 @@ enum (EnemyType,
 class Enemy : public Alien {
 
 public: 
-
-	struct EnemyStats {
-		Stat health;
-		Stat agility;
-		float damage = 0.0F;
-		float attack_speed = 0.0F;
-		float attack_range = 0.0F;
-		float vision_range = 0.0F;
-	};
-
 	enum (EnemyState,
 		NONE = -1,
 		IDLE,
@@ -61,11 +51,11 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 
 	float GetDamaged(float dmg);
+	void AddEffect(Effect* new_effect);
 
 public:
 
 	EnemyType type = EnemyType::NONE;
-	EnemyStats stats;
 	EnemyState state = EnemyState::NONE;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
@@ -74,5 +64,6 @@ public:
 	std::vector<PlayerController*> player_controllers;
 
 	std::map<std::string, GameObject*> particles;
+	std::map<std::string, Stat> stats;
 	std::vector<Effect*> effects;
 };

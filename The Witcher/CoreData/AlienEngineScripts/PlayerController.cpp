@@ -661,7 +661,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			for (int i = 0; i < size; ++i) {
 				Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
 				if (enemy) {
-					ReceiveDamage(enemy->stats.damage);
+					ReceiveDamage(enemy->stats["Damage"].GetValue());
 					GameObject::FreeArrayMemory((void***)&alien);
 					return;
 				}
