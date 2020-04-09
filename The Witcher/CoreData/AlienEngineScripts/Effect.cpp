@@ -67,7 +67,7 @@ bool Effect::UpdateEffect()
         {
             to_delete = true;
         }
-        else if (ticks_time + last_tick_time < Time::GetGameTime())
+        else if (ticks_time > 0 && ticks_time + last_tick_time < Time::GetGameTime())
         {
             last_tick_time = Time::GetGameTime();
             return true;

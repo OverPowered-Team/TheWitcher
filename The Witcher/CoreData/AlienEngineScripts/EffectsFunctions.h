@@ -10,22 +10,24 @@
 static void ApplyBurnOnHit(Enemy* _enemy, uint size)
 {
     Effect* effect = new Effect();
-    effect->AddFlatModifier(-5, "Health");
+    effect->AddFlatModifier(-5.0f, "Health");
     effect->name = "Burn On Hit";
     effect->time = size * 0.5;
     effect->ticks_time = 1.0f;
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
     _enemy->effects.push_back(effect);
-
 }
 
 static void ApplyIceOnHit(Enemy* _enemy, uint size)
 {
     Effect* effect = new Effect();
     effect->AddMultiplicativeModifier(0.5, "Agility");
+    effect->name = "Ice On Hit";
     effect->time = size * 0.2;
     effect->ticks_time = 0;
+    effect->last_tick_time = Time::GetGameTime();
+    effect->start_time = Time::GetGameTime();
     _enemy->effects.push_back(effect);
 }
 
@@ -36,7 +38,14 @@ static void ApplyLightningOnHit(Enemy* _enemy, uint size)
 
 static void ApplyPoisonOnHit(Enemy* _enemy, uint size)
 {
-
+    Effect* effect = new Effect();
+    effect->AddFlatModifier(size * 1.0f, "Health");
+    effect->name = "Poison On Hit";
+    effect->time = 5.0f;
+    effect->ticks_time = 1.0f;
+    effect->last_tick_time = Time::GetGameTime();
+    effect->start_time = Time::GetGameTime();
+    _enemy->effects.push_back(effect);
 }
 
 //ONDASH
