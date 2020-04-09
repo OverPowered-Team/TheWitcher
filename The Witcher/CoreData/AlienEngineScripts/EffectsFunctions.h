@@ -10,7 +10,7 @@
 static void ApplyBurnOnHit(Enemy* _enemy, uint size)
 {
     Effect* effect = new Effect();
-    effect->AddFlatModifier(-5.0f, "Health");
+    effect->AddFlatModifier(-20.0f, "Health");
     effect->name = "Burn On Hit";
     effect->time = size * 0.5;
     effect->ticks_time = 1.0f;
@@ -39,9 +39,9 @@ static void ApplyLightningOnHit(Enemy* _enemy, uint size)
 static void ApplyPoisonOnHit(Enemy* _enemy, uint size)
 {
     Effect* effect = new Effect();
-    effect->AddFlatModifier(size * 1.0f, "Health");
+    effect->AddFlatModifier(size * 10.0f, "Health");
     effect->name = "Poison On Hit";
-    effect->time = 5.0f;
+    effect->time = 8.0f;
     effect->ticks_time = 1.0f;
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
