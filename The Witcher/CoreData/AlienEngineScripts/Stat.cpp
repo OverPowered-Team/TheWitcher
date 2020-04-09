@@ -38,7 +38,7 @@ void Stat::CalculateStat()
 }
 
 void Stat::ModifyCurrentStat(Effect* _effect)
-{ 
+{
     current_value += _effect->GetAdditiveAmount(name);
 }
 
