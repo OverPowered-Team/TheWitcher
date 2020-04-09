@@ -33,10 +33,8 @@ void Stat::CalculateStat(std::vector<Effect*> _effects)
 
 void Stat::ModifyCurrentStat(Effect* _effect)
 {
-    float additive_value = _effect->GetAdditiveAmount(name);
-    float mult_value = _effect->GetMultiplicativeAmount(name);
-    
-    current_value = current_value + additive_value;
+    current_value += current_value + _effect->GetAdditiveAmount(name);
+    current_value += current_value * _effect->GetMultiplicativeAmount(name);
 }
 
 void Stat::SetBaseStat(float _value)

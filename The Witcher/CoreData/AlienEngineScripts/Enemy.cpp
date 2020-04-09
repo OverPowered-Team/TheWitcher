@@ -49,6 +49,8 @@ void Enemy::UpdateEnemy()
 		}
 		else if((*it)->ticks_time > 0)
 		{
+			if ( this->particles[(*it)->name])
+				particles[(*it)->name]->SetEnable(true);
 			stats.health.ModifyCurrentStat((*it));
 			stats.agility.ModifyCurrentStat((*it));
 		}

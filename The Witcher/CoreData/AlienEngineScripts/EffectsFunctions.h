@@ -17,8 +17,6 @@ static void ApplyBurnOnHit(Enemy* _enemy, uint size)
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
     _enemy->effects.push_back(effect);
-    /*if (enemy && enemy->particles["p_burnonhit"])
-        enemy->particles["p_burnonhit"]->SetEnable(true);*/
 
 }
 
@@ -33,7 +31,7 @@ static void ApplyIceOnHit(Enemy* _enemy, uint size)
 
 static void ApplyLightningOnHit(Enemy* _enemy, uint size)
 {
-
+    
 }
 
 static void ApplyPoisonOnHit(Enemy* _enemy, uint size)

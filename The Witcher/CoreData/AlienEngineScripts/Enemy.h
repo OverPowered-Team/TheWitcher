@@ -34,6 +34,7 @@ public:
 		HIT,
 		BLOCK,
 		FLEE,
+		STUNNED,
 		DYING,
 		DEAD,
 		);
