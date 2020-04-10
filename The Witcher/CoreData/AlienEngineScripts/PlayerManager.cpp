@@ -19,9 +19,6 @@ void PlayerManager::Start()
 	}
 
 	GameObject::FreeArrayMemory((void***)&players_go);
-
-	//testing
-	collective_ultimate_charge = max_ultimate_charge;
 }
 
 void PlayerManager::Update()
