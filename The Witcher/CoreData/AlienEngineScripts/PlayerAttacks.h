@@ -6,6 +6,7 @@
 class PlayerController;
 
 class Attack {
+	friend class PlayerAttacks;
 public:
 	struct AttackInfo {
 		std::string name = "";
@@ -20,14 +21,18 @@ public:
 		std::string next_light = "";
 		std::string next_heavy = "";
 	};
+public:
 
 	Attack() {};
 	Attack(AttackInfo info)
 	{
 		this->info = info;
 	}
-
+	bool IsLast() { return (light_attack_link == nullptr && heavy_attack_link == nullptr); }
+public:
 	AttackInfo info;
+
+private:
 	Attack* light_attack_link = nullptr;
 	Attack* heavy_attack_link = nullptr;
 };

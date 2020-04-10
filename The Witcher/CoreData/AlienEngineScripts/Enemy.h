@@ -58,8 +58,9 @@ public:
 	void DeactivateCollider();
 
 	void OnTriggerEnter(ComponentCollider* collider);
+	virtual void OnDeathHit() {}
 
-	float GetDamaged(float dmg);
+	float GetDamaged(float dmg, PlayerController* player);
 	void ApplyEffects();
 
 public:

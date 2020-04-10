@@ -102,7 +102,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
-	if(current_attack && (current_attack->heavy_attack_link == nullptr && current_attack->light_attack_link == nullptr))
+	if(current_attack && current_attack->IsLast())
 		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5 * current_attack->info.name.size());
 }
 
@@ -112,7 +112,7 @@ std::vector<std::string> PlayerAttacks::GetFinalAttacks()
 
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->heavy_attack_link == nullptr && (*it)->light_attack_link == nullptr)
+		if ((*it)->IsLast())
 			final_attacks.push_back((*it)->info.name);
 	}
 	return final_attacks;

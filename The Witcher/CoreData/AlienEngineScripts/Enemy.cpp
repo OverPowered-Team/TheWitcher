@@ -99,30 +99,32 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
-			player->OnHit(this, GetDamaged(dmg_received));
-
-			if (state == EnemyState::DYING)
-				player->OnEnemyKill();
+			player->OnHit(this, GetDamaged(dmg_received, player));
 		}
 	}
 }
 
-float Enemy::GetDamaged(float dmg)
+float Enemy::GetDamaged(float dmg, PlayerController* player)
 {
 	float aux_health = stats.current_health;
 	stats.current_health -= dmg;
 
 	if (stats.current_health <= 0.0F) {
 		stats.current_health = 0.0F;
+		animator->SetBool("dead", true);
+		OnDeathHit();
+	}
+	
+	state = EnemyState::HIT;
+	animator->PlayState("Hit");
+	character_ctrl->SetWalkDirection(float3::zero());
+
+	if (player->attacks->GetCurrentAttack()->IsLast())
+	{
 		state = EnemyState::DYING;
 		animator->PlayState("Death");
 		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
-	}
-	else
-	{
-		state = EnemyState::HIT;
-		animator->PlayState("Hit");
-		character_ctrl->SetWalkDirection(float3::zero());
+		player->OnEnemyKill();
 	}
 
 	return aux_health - stats.current_health;
