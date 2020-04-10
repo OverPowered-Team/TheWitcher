@@ -23,7 +23,12 @@ void ArrowScript::Update()
 void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
-		static_cast<PlayerController*>(collider->game_object_attached->GetComponentScript("PlayerController"))->ReceiveDamage(damage);
+		PlayerController* player_ctrl = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScript("PlayerController"));
+		if (player_ctrl)
+			player_ctrl->ReceiveDamage(damage);
+		else
+			LOG("There's no Player Controller in GO in ArrowScript!");
+
 		GameObject::Destroy(game_object->parent);
 	}
 	else if(strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)

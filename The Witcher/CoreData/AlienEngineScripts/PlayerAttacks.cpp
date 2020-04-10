@@ -113,14 +113,13 @@ std::vector<std::string> PlayerAttacks::GetFinalAttacks()
 	return final_attacks;
 }
 
-void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
+void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 {
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->info.name == _attack_name)
+		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
-			(*it)->info.base_damage.CalculateStat(player_controller->effects);
-			//(*it)->base_range.CalculateStat(player_controller->effects);
+			(*it)->info.base_damage.ApplyEffect(new_effect);
 		}
 	}
 }
@@ -296,7 +295,7 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 float PlayerAttacks::GetCurrentDMG()
 {
 	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
-		return current_attack->info.base_damage.GetValue() * player_controller->player_data.power.GetValue();
+		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
 		return current_attack->info.base_damage.GetValue();
 }

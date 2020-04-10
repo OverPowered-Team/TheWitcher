@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "Effect.h"
 
 void Enemy::Awake()
 {
@@ -38,7 +39,23 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	ApplyEffects();
+	for (auto it = effects.begin(); it != effects.end(); )
+	{
+		if (!(*it)->UpdateEffect())
+		{
+			delete (*it);
+			it = effects.erase(it);
+			continue;
+		}
+		else if((*it)->ticks_time > 0)
+		{
+			if (particles[(*it)->name])
+				particles[(*it)->name]->SetEnable(true);
+			stats["Health"].ModifyCurrentStat((*it));
+			stats["Agility"].ModifyCurrentStat((*it));
+		}
+		++it;
+	}
 }
 
 void Enemy::CleanUpEnemy()
@@ -53,6 +70,11 @@ void Enemy::CleanUpEnemy()
 		delete (*it_pc);
 		it_pc = player_controllers.erase(it_pc);
 	}
+	for (auto it_eff = effects.begin(); it_eff != effects.end();)
+	{
+		delete (*it_eff);
+		it_eff = effects.erase(it_eff);
+	}
 }
 
 void Enemy::SetStats(const char* json)
@@ -63,12 +85,12 @@ void Enemy::SetStats(const char* json)
 	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
 	if (stat)
 	{
-		stats.max_health = stats.current_health = stat->GetNumber("Health");
-		stats.agility = Stat("Agility", stat->GetNumber("Agility"));
-		stats.damage = stat->GetNumber("Damage");
-		stats.attack_speed = stat->GetNumber("AttackSpeed");
-		stats.attack_range = stat->GetNumber("AttackRange");
-		stats.vision_range = stat->GetNumber("VisionRange");
+		stats["Health"] = Stat( "Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
 	}
 
 	JSONfilepack::FreeJSON(stat);
@@ -107,11 +129,10 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 
 float Enemy::GetDamaged(float dmg)
 {
-	float aux_health = stats.current_health;
-	stats.current_health -= dmg;
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
 
-	if (stats.current_health <= 0.0F) {
-		stats.current_health = 0.0F;
+	if (stats["Health"].GetValue() == 0.0F) {
 		state = EnemyState::DYING;
 		animator->PlayState("Death");
 	}
@@ -122,10 +143,16 @@ float Enemy::GetDamaged(float dmg)
 		character_ctrl->SetWalkDirection(float3::zero());
 	}
 
-	return aux_health - stats.current_health;
+	return aux_health - stats["Health"].GetValue();
 }
 
-void Enemy::ApplyEffects()
+void Enemy::AddEffect(Effect* new_effect)
 {
-	
+	effects.push_back(new_effect);
+
+	for (auto it = stats.begin(); it != stats.end(); ++it)
+	{
+		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
+			it->second.ApplyEffect(new_effect);
+	}
 }

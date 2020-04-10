@@ -30,12 +30,12 @@ void NilfgaardSoldier::SetStats(const char* json)
 			else
 				break;
 
-		stats.max_health = stats.current_health = stat_weapon->GetNumber("Health");
-		stats.agility = Stat("Agility", stat_weapon->GetNumber("Agility"));
-		stats.damage = stat_weapon->GetNumber("Damage");
-		stats.attack_speed = stat_weapon->GetNumber("AttackSpeed");
-		stats.vision_range = stat_weapon->GetNumber("VisionRange");
-		stats.attack_range = stat_weapon->GetNumber("AttackRange");
+		stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
+		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 
 		stat_weapon->GetAnotherNode();
 	}
@@ -45,21 +45,21 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 void NilfgaardSoldier::Move(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats.agility.GetValue());
-	animator->SetFloat("speed", stats.agility.GetValue());
+	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	character_ctrl->SetRotation(rot);
 
-	if (distance < stats.attack_range)
+	if (distance < stats["AttackRange"].GetValue())
 	{
 		state = Enemy::EnemyState::ATTACK;
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
 		Attack();
 	}
-	if (distance > stats.vision_range)
+	if (distance > stats["VisionRange"].GetValue())
 	{
 		state = Enemy::EnemyState::IDLE;
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
@@ -85,7 +85,7 @@ void NilfgaardSoldier::ShootAttack()
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
-	static_cast<ArrowScript*>(arrow_go->GetChild("Point")->GetComponentScript("ArrowScript"))->damage = stats.damage;
+	static_cast<ArrowScript*>(arrow_go->GetChild("Point")->GetComponentScript("ArrowScript"))->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateArrow());
 	arrow_rb->AddForce(direction.Mul(20));
 }
@@ -106,11 +106,11 @@ Quat NilfgaardSoldier::RotateArrow()
 
 void NilfgaardSoldier::UpdateEnemy()
 {	
-	float distance_1 = player_1->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
-	float3 direction_1 = player_1->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
+	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance_2 = player_2->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
-	float3 direction_2 = player_2->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
+	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
 	{
@@ -131,7 +131,7 @@ void NilfgaardSoldier::UpdateEnemy()
 	switch (state)
 	{
 	case Enemy::EnemyState::IDLE:
-		if (distance < stats.vision_range)
+		if (distance < stats["VisionRange"].GetValue())
 			state = Enemy::EnemyState::MOVE;
 		break;
 	case Enemy::EnemyState::MOVE:
@@ -175,7 +175,7 @@ void NilfgaardSoldier::CleanUpEnemy()
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
-		if (distance < stats.vision_range)
+		if (distance < stats["VisionRange"].GetValue())
 		{
 			state = Enemy::EnemyState::MOVE;
 		}
