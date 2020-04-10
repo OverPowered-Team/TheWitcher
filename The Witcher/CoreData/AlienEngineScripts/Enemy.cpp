@@ -1,5 +1,7 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 
@@ -114,6 +116,7 @@ float Enemy::GetDamaged(float dmg)
 		stats.current_health = 0.0F;
 		state = EnemyState::DYING;
 		animator->PlayState("Death");
+		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 	}
 	else
 	{
