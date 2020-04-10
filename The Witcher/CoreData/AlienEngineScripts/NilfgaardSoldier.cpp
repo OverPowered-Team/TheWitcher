@@ -6,13 +6,11 @@
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
-
 	Enemy::StartEnemy();
 }
 
 void NilfgaardSoldier::SetStats(const char* json)
 {
-	//todo handfle array json
 	std::string json_path = std::string("Configuration/") + std::string(json) + std::string(".json");
 	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
 
@@ -35,36 +33,17 @@ void NilfgaardSoldier::SetStats(const char* json)
 		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		if (nilf_type == NilfgaardType::ARCHER)
+		{
+			stats["FleeRange"] = Stat("FleeRange", stat_weapon->GetNumber("FleeRange"));
+			stats["FleeRange"].SetMaxValue(stat_weapon->GetNumber("MaxFleeRange"));
+		}
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 
 		stat_weapon->GetAnotherNode();
 	}
 
 	JSONfilepack::FreeJSON(stat);
-}
-
-void NilfgaardSoldier::Move(float3 direction)
-{
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
-	animator->SetFloat("speed", stats["Agility"].GetValue());
-
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
-
-	if (distance < stats["AttackRange"].GetValue())
-	{
-		state = Enemy::EnemyState::ATTACK;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
-		animator->SetFloat("speed", 0.0F);
-		Attack();
-	}
-	if (distance > stats["VisionRange"].GetValue())
-	{
-		state = Enemy::EnemyState::IDLE;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
-		animator->SetFloat("speed", 0.0F);
-	}
 }
 
 void NilfgaardSoldier::Attack()
@@ -77,6 +56,24 @@ void NilfgaardSoldier::Attack()
 	case NilfgaardSoldier::NilfgaardType::ARCHER:
 		animator->PlayState("Shoot");
 		break;
+	}
+}
+
+void NilfgaardSoldier::Flee(float3 direction)
+{
+	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	animator->SetFloat("speed", stats["Agility"].GetValue());
+
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	character_ctrl->SetRotation(rot);
+
+	if (distance > stats["FleeRange"].GetMaxValue())
+	{
+		state = Enemy::EnemyState::ATTACK;
+		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		animator->SetFloat("speed", 0.0F);
+		Attack();
 	}
 }
 
@@ -106,38 +103,26 @@ Quat NilfgaardSoldier::RotateArrow()
 
 void NilfgaardSoldier::UpdateEnemy()
 {	
-	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
-	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
-
-	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
-	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
-
-	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
-	{
-		distance = distance_2;
-		direction = direction_2.Normalized();
-	}
-	else if (player_controllers[1]->state == PlayerController::PlayerState::DEAD)
-	{
-		distance = distance_1;
-		direction = direction_1.Normalized();
-	}
-	else
-	{
-		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
-	}
+	Enemy::UpdateEnemy();
 
 	switch (state)
 	{
 	case Enemy::EnemyState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue() && distance > stats["AttackRange"].GetValue())
 			state = Enemy::EnemyState::MOVE;
+		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
+			state = Enemy::EnemyState::FLEE;
 		break;
 	case Enemy::EnemyState::MOVE:
 		Move(direction);
 		break;
 	case Enemy::EnemyState::ATTACK:
+		if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
+		{
+			animator->PlayState("Walk");
+			state = Enemy::EnemyState::FLEE;
+		}
+
 		switch (nilf_type)
 		{
 		case NilfgaardSoldier::NilfgaardType::ARCHER:
@@ -147,8 +132,8 @@ void NilfgaardSoldier::UpdateEnemy()
 			break;
 		}
 		break;
-	case Enemy::EnemyState::HIT:
-
+	case Enemy::EnemyState::FLEE:
+		Flee(-direction);
 		break;
 	case Enemy::EnemyState::DYING:
 	{
@@ -163,8 +148,6 @@ void NilfgaardSoldier::UpdateEnemy()
 	default:
 		break;
 	}
-
-	Enemy::UpdateEnemy();
 
 }
 

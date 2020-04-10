@@ -43,7 +43,7 @@ public:
 	/*-------CALLED BY ENEMY MANAGER--------*/
 
 	virtual void SetStats(const char* json);
-	virtual void Move(float3 direction) {}
+	virtual void Move(float3 direction);
 	virtual void Attack() {}
 	void ActivateCollider();
 	void DeactivateCollider();
@@ -54,7 +54,8 @@ public:
 	void AddEffect(Effect* new_effect);
 
 public:
-
+	float distance = 0.0F;
+	float3 direction;
 	EnemyType type = EnemyType::NONE;
 	EnemyState state = EnemyState::NONE;
 	ComponentAnimator* animator = nullptr;

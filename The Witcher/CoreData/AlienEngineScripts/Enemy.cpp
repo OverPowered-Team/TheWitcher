@@ -39,6 +39,28 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
+	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
+
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
+	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
+
+	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
+	{
+		distance = distance_2;
+		direction = direction_2.Normalized();
+	}
+	else if (player_controllers[1]->state == PlayerController::PlayerState::DEAD)
+	{
+		distance = distance_1;
+		direction = direction_1.Normalized();
+	}
+	else
+	{
+		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+	}
+
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
 		if (!(*it)->UpdateEffect())
@@ -94,6 +116,31 @@ void Enemy::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
+}
+
+void Enemy::Move(float3 direction)
+{
+	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	animator->SetFloat("speed", stats["Agility"].GetValue());
+
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	character_ctrl->SetRotation(rot);
+
+	if (distance < stats["AttackRange"].GetValue())
+	{
+		state = Enemy::EnemyState::ATTACK;
+		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		animator->SetFloat("speed", 0.0F);
+		Attack();
+	}
+
+	if (distance > stats["VisionRange"].GetValue())
+	{
+		state = Enemy::EnemyState::IDLE;
+		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		animator->SetFloat("speed", 0.0F);
+	}
 }
 
 void Enemy::ActivateCollider()
