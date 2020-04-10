@@ -77,8 +77,8 @@ public:
 	void OnDrawGizmosSelected();
 	bool CheckForPossibleRevive();
 
-	void OnUltimateActivation();
-	void OnUltimateDeactivation();
+	void OnUltimateActivation(float value);
+	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);

@@ -8,7 +8,6 @@
 #include "Enemy.h"
 
 #include "../../ComponentDeformableMesh.h"
-#include "../../ResourceAnimatorController.h"
 
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
@@ -617,12 +616,12 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	}
 }
 
-void PlayerController::OnUltimateActivation()
+void PlayerController::OnUltimateActivation(float value)
 {
 	//animator->IncreaseAllStateSpeeds(2.0f);
 }
 
-void PlayerController::OnUltimateDeactivation()
+void PlayerController::OnUltimateDeactivation(float value)
 {
 
 	//animator->DecreaseAllStateSpeeds(2.0f);
