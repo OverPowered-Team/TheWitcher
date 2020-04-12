@@ -34,6 +34,12 @@ public:
 private:
 	void ActivateUltimate();
 	void CancelUltimate();
+
+private:
+
+	// UI ultibar
+	GameObject* ulti_bar = nullptr;
+
 };
 
 ALIEN_FACTORY PlayerManager* CreatePlayerManager() {

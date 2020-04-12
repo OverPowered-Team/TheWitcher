@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "PlayerManager.h"
+#include "UltiBar.h"
 
 PlayerManager::PlayerManager() : Alien()
 {
@@ -17,6 +18,8 @@ void PlayerManager::Start()
 	for (int i = 0; i < players_size; ++i) {
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
+
+	ulti_bar = GameObject::FindWithName("Ulti_bar");
 
 	GameObject::FreeArrayMemory((void***)&players_go);
 }
@@ -56,10 +59,18 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 		return;
 
 	collective_ultimate_charge += value;
-	//ui here?
 
-	if (collective_ultimate_charge > max_ultimate_charge)
+	if (collective_ultimate_charge >= max_ultimate_charge)
+	{
 		collective_ultimate_charge = max_ultimate_charge;
+		// UI
+		((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->MaxBar();
+	}
+	else
+	{
+		// UI
+		((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+	}
 }
 
 void PlayerManager::ActivateUltimate()
@@ -72,6 +83,9 @@ void PlayerManager::ActivateUltimate()
 	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
 		(*it)->OnUltimateActivation(1/ultimate_effect_value);
 	}
+
+	// UI
+	((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->UpdateBar(collective_ultimate_charge);
 }
 
 void PlayerManager::CancelUltimate()
