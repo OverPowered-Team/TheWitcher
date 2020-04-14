@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "Stat.h"
 
+#define ENEMY_JSON "Configuration/Enemies"
+
 class PlayerController;
 class Effect;
 

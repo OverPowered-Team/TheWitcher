@@ -101,7 +101,7 @@ void Enemy::CleanUpEnemy()
 
 void Enemy::SetStats(const char* json)
 {
-	std::string json_path = std::string("Configuration/") + std::string(json) + std::string(".json");
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
 	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
 
 	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
