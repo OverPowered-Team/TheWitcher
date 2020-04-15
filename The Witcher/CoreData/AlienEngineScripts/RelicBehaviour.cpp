@@ -5,6 +5,7 @@
 #include "Effect.h"
 #include "EffectsFunctions.h"
 #include "EventManager.h"
+#include "Relic_Notification.h"
 
 // Relic
 Relic::Relic()
@@ -19,6 +20,7 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player)
 {
 	player->PickUpRelic(this);
+	((Relic_Notification*)GameObject::FindWithName("InGame")->GetComponentScript("Relic_Notification"))->TriggerRelic(player, this->name);
 }
 
 // AttackRelic
