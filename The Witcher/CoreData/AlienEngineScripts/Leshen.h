@@ -26,6 +26,7 @@ public:
 	float time_to_action;
 	int times_hitted = 0;
 	int phase = 1;
+	float action_time = 0;
 	//-----------Data to set probabilities-----------//
 
 	struct LeshenAction {
@@ -58,6 +59,9 @@ public:
 	bool UpdateCrowsAction();
 	bool UpdateWhipAction();
 	bool UpdateCloudAction();
+
+	void SetActionVariables();
+	void ChangePhase();
 
 	//Phase 2 exclusive
 	void HandleHitCount();

@@ -173,6 +173,13 @@ bool Leshen::UpdateRootAction()
 
 	LOG("UPDATING ROOT ACTION");
 
+	action_time += Time::GetDT();
+
+	if (action_time >= 3.0f) {
+		updating = false;
+		action_time = 0.0f;
+	}
+
 	return updating;
 }
 
@@ -181,6 +188,13 @@ bool Leshen::UpdateMeleeAction()
 	bool updating = true;
 
 	LOG("UPDATING MELEE ACTION");
+
+	action_time += Time::GetDT();
+
+	if (action_time >= 3.0f) {
+		updating = false;
+		action_time = 0.0f;
+	}
 
 	return updating;
 }
@@ -191,12 +205,26 @@ bool Leshen::UpdateCrowsAction()
 
 	LOG("UPDATING MELEE ACTION");
 
+	action_time += Time::GetDT();
+
+	if (action_time >= 3.0f) {
+		updating = false;
+		action_time = 0.0f;
+	}
+
 	return updating;
 }
 
 bool Leshen::UpdateWhipAction()
 {
 	bool updating = true;
+
+	action_time += Time::GetDT();
+
+	if (action_time >= 3.0f) {
+		updating = false;
+		action_time = 0.0f;
+	}
 
 	return updating;
 }
@@ -205,7 +233,23 @@ bool Leshen::UpdateCloudAction()
 {
 	bool updating = true;
 
+	action_time += Time::GetDT();
+
+	if (action_time >= 3.0f) {
+		updating = false;
+		action_time = 0.0f;
+	}
+
 	return updating;
+}
+
+void Leshen::SetActionVariables()
+{
+}
+
+void Leshen::ChangePhase()
+{
+	phase = 2;
 }
 
 void Leshen::HandleHitCount()
