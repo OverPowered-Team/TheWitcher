@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 61.817722320556641,
+                        "HoritzontalFov": 96.099723815917969,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -375,7 +375,7 @@
                             {
                                 "VarType": 9,
                                 "Name": "HUD",
-                                "gameobject": "6991862411066241902"
+                                "gameobject": "5695338963699174698"
                             },
                             {
                                 "VarType": 3,
@@ -2242,9 +2242,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -1.2558470964431763,
-                                -1.2985063791275024,
-                                -0.858329176902771
+                                -0.6411779522895813,
+                                -0.88351905345916748,
+                                1.6757938861846924
                             ],
                             "Force": [
                                 0,
@@ -2315,7 +2315,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 0.4309999942779541,
+                            "CurrentLife": 1.3539992570877075,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -2412,9 +2412,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                3.8066854476928711,
-                                3.2382030487060547,
-                                0.15226373076438904
+                                4.7268557548522949,
+                                0.22839987277984619,
+                                1.6138982772827148
                             ],
                             "Force": [
                                 0,
@@ -2485,7 +2485,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0019998550415039,
+                            "CurrentLife": 2.0220000743865967,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -2586,9 +2586,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                2.3056344985961914,
-                                -0.95276808738708496,
-                                4.3331608772277832
+                                3.754216194152832,
+                                1.5248305797576904,
+                                2.9292917251586914
                             ],
                             "Force": [
                                 0,
@@ -2659,7 +2659,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 1.3689999580383301,
+                            "CurrentLife": 1.471000075340271,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -2705,12 +2705,12 @@
             {
                 "Name": "GameManager",
                 "FamilyNumber": 1,
-                "ID": "12067227047930188838",
+                "ID": "8382111968301271143",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
+                "Selected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2736,10 +2736,10 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9507523426466291296"
+                        "ID": "7593816589182059456"
                     },
                     {
-                        "ID": "4066485440911825189",
+                        "ID": "16352935738152484178",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -2750,35 +2750,121 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "3646715312546066390",
+                        "ID": "7513777475382254110",
                         "ResourceID": "17206304544927406460",
                         "DataName": "GameManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "12298897591784571786",
+                        "ID": "1657601971287345842",
                         "ResourceID": "10454231044988625899",
                         "DataName": "DialogueManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "17433323529492590829",
+                        "ID": "12250829984793988955",
                         "ResourceID": "12931529595659776773",
                         "DataName": "EventManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "7739638749651647795",
+                        "ID": "14254213452269049168",
                         "ResourceID": "6844781006917915906",
                         "DataName": "EnemyManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "8413646024466100950",
+                        "ID": "15891194930831722549",
+                        "ResourceID": "16300709835341546267",
+                        "DataName": "DebugManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15536290956958184005",
+                        "ResourceID": "10760642345188204179",
+                        "DataName": "RelicManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "fire_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_runestone",
+                                "prefab": "14345935870360924178"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_runestone",
+                                "prefab": "2289476701194859904"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "lightning_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "fire_oil",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_oil",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_oil",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_oil",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nature_soul",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "sea_soul",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "djinn_jar",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "strigas_claws",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "witcher_rage",
+                                "prefab": "9224451279124193605"
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17858921976687653154",
                         "ResourceID": "1616101574407180879",
                         "DataName": "PlayerManager",
                         "HasInspector": true,
@@ -2921,7 +3007,7 @@
                             {
                                 "VarType": 9,
                                 "Name": "HUD",
-                                "gameobject": "10474090026229147580"
+                                "gameobject": "8671213492070950900"
                             },
                             {
                                 "VarType": 3,
@@ -5436,9 +5522,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.037440598011016846,
-                                1.3950502872467041,
-                                1.4326313734054565
+                                1.2026101350784302,
+                                -1.4327774047851563,
+                                -0.70772749185562134
                             ],
                             "Force": [
                                 0,
@@ -5509,7 +5595,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 0.4309999942779541,
+                            "CurrentLife": 1.3539992570877075,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -5606,9 +5692,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.8872241973876953,
-                                0.4303203821182251,
-                                -0.96429294347763062
+                                1.2037153244018555,
+                                -4.0968208312988281,
+                                2.6013703346252441
                             ],
                             "Force": [
                                 0,
@@ -5679,7 +5765,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0019998550415039,
+                            "CurrentLife": 2.0220000743865967,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -5780,9 +5866,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.33330926299095154,
-                                -0.15598535537719727,
-                                -6.9903202056884766
+                                0.51570361852645874,
+                                -0.39809268712997437,
+                                -6.9696178436279297
                             ],
                             "Force": [
                                 0,
@@ -5853,7 +5939,7 @@
                                 2
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.3689999580383301,
+                            "CurrentLife": 1.471000075340271,
                             "SpawnRate": 300,
                             "Delay": 0,
                             "Loop": false,
@@ -5950,9 +6036,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.056840814650058746,
-                                -0.036063734441995621,
-                                -4.999547004699707
+                                -0.076546132564544678,
+                                0.080016694962978363,
+                                -4.9987735748291016
                             ],
                             "Force": [
                                 0,
@@ -6023,7 +6109,7 @@
                                 10
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.3689999580383301,
+                            "CurrentLife": 1.471000075340271,
                             "SpawnRate": 14.999999046325684,
                             "Delay": 0,
                             "Loop": false,
@@ -6120,9 +6206,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.055537872016429901,
-                                -0.028000185266137123,
-                                -4.9996132850646973
+                                0.052478305995464325,
+                                -0.074085451662540436,
+                                -4.9991755485534668
                             ],
                             "Force": [
                                 0,
@@ -6193,7 +6279,7 @@
                                 10
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.3689999580383301,
+                            "CurrentLife": 1.471000075340271,
                             "SpawnRate": 14.999999046325684,
                             "Delay": 0,
                             "Loop": false,
@@ -6278,9 +6364,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                2.6173396110534668,
-                                0.35629290342330933,
-                                4.283287525177002
+                                1.7116612195968628,
+                                0.69673687219619751,
+                                4.3728466033935547
                             ],
                             "Rotation": [
                                 0,
@@ -6363,7 +6449,7 @@
                                 0.5
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.3689999580383301,
+                            "CurrentLife": 1.471000075340271,
                             "SpawnRate": 14.999999046325684,
                             "Delay": 0,
                             "Loop": false,
@@ -6460,9 +6546,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.04671594500541687,
-                                0.054552800953388214,
-                                -2.9991402626037598
+                                0.002684496808797121,
+                                0.00016290837083943188,
+                                -2.9999990463256836
                             ],
                             "Force": [
                                 0,
@@ -6533,7 +6619,7 @@
                                 10
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 1.3689999580383301,
+                            "CurrentLife": 1.471000075340271,
                             "SpawnRate": 499.99996948242188,
                             "Delay": 0,
                             "Loop": false,
@@ -6630,9 +6716,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -8.0187768936157227,
-                                -2.3256967067718506,
-                                -5.5036659240722656
+                                4.3559746742248535,
+                                6.3843874931335449,
+                                -6.3454771041870117
                             ],
                             "Force": [
                                 0,
@@ -6703,7 +6789,7 @@
                                 10
                             ],
                             "MaxLife": 1.5,
-                            "CurrentLife": 1.5319998264312744,
+                            "CurrentLife": 1.5270000696182251,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -6755,7 +6841,7 @@
             {
                 "Name": "UI_InGame",
                 "FamilyNumber": 1,
-                "ID": "17967039509258719658",
+                "ID": "12620222272378061172",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -6786,7 +6872,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10417644780724382159"
+                        "ID": "1164346520823923397"
                     },
                     {
                         "Enabled": true,
@@ -6794,7 +6880,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "17066474849736356331",
+                        "ID": "845547185493138594",
                         "ResourceID": "12710574585551353167",
                         "DataName": "InGame_UI",
                         "HasInspector": true,
@@ -6802,12 +6888,12 @@
                             {
                                 "VarType": 9,
                                 "Name": "in_game",
-                                "gameobject": "7976836956971025278"
+                                "gameobject": "7572868816316699218"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "pause_menu",
-                                "gameobject": "16528080308103212295"
+                                "gameobject": "3197259704198656924"
                             }
                         ]
                     }
@@ -6816,8 +6902,8 @@
             {
                 "Name": "Pause_Menu",
                 "FamilyNumber": 2,
-                "ID": "16528080308103212295",
-                "ParentID": "17967039509258719658",
+                "ID": "3197259704198656924",
+                "ParentID": "12620222272378061172",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -6847,15 +6933,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "974401872283245503"
+                        "ID": "16761369802850982887"
                     }
                 ]
             },
             {
                 "Name": "Menu",
                 "FamilyNumber": 3,
-                "ID": "9236190566550964306",
-                "ParentID": "16528080308103212295",
+                "ID": "9391757670236846503",
+                "ParentID": "3197259704198656924",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -6885,15 +6971,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2171023101236719671"
+                        "ID": "14213919993360341875"
                     }
                 ]
             },
             {
                 "Name": "PauseMenu_Controls",
                 "FamilyNumber": 4,
-                "ID": "14321799142082993348",
-                "ParentID": "9236190566550964306",
+                "ID": "18392122514985315710",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -6923,15 +7009,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12255452340236423237"
+                        "ID": "13935080533641395520"
                     }
                 ]
             },
             {
                 "Name": "Image",
                 "FamilyNumber": 5,
-                "ID": "17631492840907428177",
-                "ParentID": "14321799142082993348",
+                "ID": "13109065210654474110",
+                "ParentID": "18392122514985315710",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -6961,7 +7047,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14509289462066121322"
+                        "ID": "7971969448668918862"
                     },
                     {
                         "Width": 1.2799999713897705,
@@ -6982,8 +7068,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 6,
-                "ID": "16291135380694346824",
-                "ParentID": "17631492840907428177",
+                "ID": "10729698032118424336",
+                "ParentID": "13109065210654474110",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7013,11 +7099,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9273039629840808882"
+                        "ID": "1056051498221506334"
                     },
                     {
                         "Type": 30,
-                        "ID": "7762104337072957226",
+                        "ID": "8820614852063345316",
                         "Text": "Select",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7037,8 +7123,8 @@
             {
                 "Name": "Image",
                 "FamilyNumber": 5,
-                "ID": "876431097231434525",
-                "ParentID": "14321799142082993348",
+                "ID": "515969713123191742",
+                "ParentID": "18392122514985315710",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7068,7 +7154,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3991520798144566842"
+                        "ID": "18422349222184951633"
                     },
                     {
                         "Width": 1.2799999713897705,
@@ -7089,8 +7175,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 6,
-                "ID": "4899118467774390669",
-                "ParentID": "876431097231434525",
+                "ID": "13114509511171837406",
+                "ParentID": "515969713123191742",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7120,11 +7206,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17818824371056858050"
+                        "ID": "2434638959780887310"
                     },
                     {
                         "Type": 30,
-                        "ID": "15416789531049004180",
+                        "ID": "11466721252905580922",
                         "Text": "Back",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7144,8 +7230,8 @@
             {
                 "Name": "Game_Logo",
                 "FamilyNumber": 4,
-                "ID": "10886338871752273074",
-                "ParentID": "9236190566550964306",
+                "ID": "1548899096307918156",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7175,7 +7261,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5901524617541663039"
+                        "ID": "14630050940534245445"
                     },
                     {
                         "Width": 8.7899999618530273,
@@ -7196,8 +7282,8 @@
             {
                 "Name": "Resume",
                 "FamilyNumber": 4,
-                "ID": "7827528551197852662",
-                "ParentID": "9236190566550964306",
+                "ID": "2643480121578579757",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7227,7 +7313,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "918027351624913562"
+                        "ID": "9783207786604011953"
                     },
                     {
                         "Width": 2.4800000190734863,
@@ -7289,7 +7375,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "8188747680009642570",
+                        "ID": "5327356728488832695",
                         "ResourceID": "923912234912981027",
                         "DataName": "PauseMenu_Buttons",
                         "HasInspector": false
@@ -7299,8 +7385,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "2833679706552218019",
-                "ParentID": "7827528551197852662",
+                "ID": "600262330077941126",
+                "ParentID": "2643480121578579757",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7330,11 +7416,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14402255956649695674"
+                        "ID": "16343067902655631962"
                     },
                     {
                         "Type": 30,
-                        "ID": "17966378730878943605",
+                        "ID": "10885413634918961415",
                         "Text": "Resume",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7354,8 +7440,8 @@
             {
                 "Name": "Leaderboard",
                 "FamilyNumber": 4,
-                "ID": "6489074199725056893",
-                "ParentID": "9236190566550964306",
+                "ID": "3510695184316918813",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7385,7 +7471,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12539542450177412459"
+                        "ID": "7074759728319806134"
                     },
                     {
                         "Width": 2.1800000667572021,
@@ -7447,7 +7533,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "11379100028735487813",
+                        "ID": "12369755188723082030",
                         "ResourceID": "923912234912981027",
                         "DataName": "PauseMenu_Buttons",
                         "HasInspector": false
@@ -7457,8 +7543,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "6971607085557862821",
-                "ParentID": "6489074199725056893",
+                "ID": "6933211221692772223",
+                "ParentID": "3510695184316918813",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7488,11 +7574,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18417661265789296163"
+                        "ID": "15839069115438190397"
                     },
                     {
                         "Type": 30,
-                        "ID": "783491231102502213",
+                        "ID": "4572692985848987963",
                         "Text": "Leaderboard",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7512,8 +7598,8 @@
             {
                 "Name": "Controls",
                 "FamilyNumber": 4,
-                "ID": "2558945895240268677",
-                "ParentID": "9236190566550964306",
+                "ID": "1018301391970626761",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7543,7 +7629,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10050432865969070187"
+                        "ID": "17771298777188710832"
                     },
                     {
                         "Width": 2.1800000667572021,
@@ -7605,7 +7691,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "14973698836654438822",
+                        "ID": "2644485489683735124",
                         "ResourceID": "923912234912981027",
                         "DataName": "PauseMenu_Buttons",
                         "HasInspector": false
@@ -7615,8 +7701,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "17806001948954407988",
-                "ParentID": "2558945895240268677",
+                "ID": "16011637244698865241",
+                "ParentID": "1018301391970626761",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7646,11 +7732,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5452433889064642400"
+                        "ID": "17321230111894214377"
                     },
                     {
                         "Type": 30,
-                        "ID": "17873974986671367741",
+                        "ID": "15984938971577797172",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7670,8 +7756,8 @@
             {
                 "Name": "Settings",
                 "FamilyNumber": 4,
-                "ID": "4711188354816475231",
-                "ParentID": "9236190566550964306",
+                "ID": "11708176643070548048",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7701,7 +7787,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5557081703065306390"
+                        "ID": "7537410942716032112"
                     },
                     {
                         "Width": 2.1800000667572021,
@@ -7766,8 +7852,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "6458019373739114833",
-                "ParentID": "4711188354816475231",
+                "ID": "11529851043463669758",
+                "ParentID": "11708176643070548048",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7797,11 +7883,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11089087884038252377"
+                        "ID": "4132901743594146373"
                     },
                     {
                         "Type": 30,
-                        "ID": "506096267050999561",
+                        "ID": "6450839600678797395",
                         "Text": "Settings",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7821,8 +7907,8 @@
             {
                 "Name": "Retry Level",
                 "FamilyNumber": 4,
-                "ID": "2653928615861726941",
-                "ParentID": "9236190566550964306",
+                "ID": "15883119124517581713",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7852,7 +7938,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13196433487221069159"
+                        "ID": "16065646904510667802"
                     },
                     {
                         "Width": 2.1800000667572021,
@@ -7914,7 +8000,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "86308750781427031",
+                        "ID": "4054420846969081035",
                         "ResourceID": "923912234912981027",
                         "DataName": "PauseMenu_Buttons",
                         "HasInspector": false
@@ -7924,8 +8010,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "10183299180794319041",
-                "ParentID": "2653928615861726941",
+                "ID": "533857284799310905",
+                "ParentID": "15883119124517581713",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -7950,16 +8036,16 @@
                             1
                         ],
                         "Scale": [
-                            3.3022197119981929e-23,
-                            3.3038554939712591e-23,
+                            0.0010000000474974513,
+                            0.0010000000474974513,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1585851923020934681"
+                        "ID": "14410227891204809069"
                     },
                     {
                         "Type": 30,
-                        "ID": "10765811298829224448",
+                        "ID": "9305038388594534663",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7979,8 +8065,8 @@
             {
                 "Name": "Exit_to_Menu",
                 "FamilyNumber": 4,
-                "ID": "5658510261825966836",
-                "ParentID": "9236190566550964306",
+                "ID": "14685368293664486777",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8010,7 +8096,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4347625020826483572"
+                        "ID": "8019318216339326291"
                     },
                     {
                         "Width": 2.1800000667572021,
@@ -8072,7 +8158,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "13160485628805057659",
+                        "ID": "15475400233041495867",
                         "ResourceID": "923912234912981027",
                         "DataName": "PauseMenu_Buttons",
                         "HasInspector": false
@@ -8082,8 +8168,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "4812126871023254833",
-                "ParentID": "5658510261825966836",
+                "ID": "737167987775643250",
+                "ParentID": "14685368293664486777",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8113,11 +8199,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9650247303703402977"
+                        "ID": "11434518597020466909"
                     },
                     {
                         "Type": 30,
-                        "ID": "15136304856342079194",
+                        "ID": "8449081822967973652",
                         "Text": "Main Menu",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8137,8 +8223,8 @@
             {
                 "Name": "Exit_Game",
                 "FamilyNumber": 4,
-                "ID": "6234900338867277332",
-                "ParentID": "9236190566550964306",
+                "ID": "3760069434381130265",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8168,7 +8254,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1576498158263802319"
+                        "ID": "11062104264747147808"
                     },
                     {
                         "Width": 2.1800000667572021,
@@ -8230,7 +8316,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "14051298483779016550",
+                        "ID": "8644246946171376693",
                         "ResourceID": "923912234912981027",
                         "DataName": "PauseMenu_Buttons",
                         "HasInspector": false
@@ -8240,8 +8326,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 5,
-                "ID": "4529775277174620713",
-                "ParentID": "6234900338867277332",
+                "ID": "7792653665211474348",
+                "ParentID": "3760069434381130265",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8271,11 +8357,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8320594880214759914"
+                        "ID": "12473976821779072272"
                     },
                     {
                         "Type": 30,
-                        "ID": "6763075438818532145",
+                        "ID": "1664509278256431558",
                         "Text": "Exit Game",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8295,8 +8381,8 @@
             {
                 "Name": "L_Char",
                 "FamilyNumber": 4,
-                "ID": "1541401310533745336",
-                "ParentID": "9236190566550964306",
+                "ID": "6791011742190696933",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8326,7 +8412,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17696739834807537019"
+                        "ID": "6228831763404623627"
                     },
                     {
                         "Width": 5.3899998664855957,
@@ -8347,8 +8433,8 @@
             {
                 "Name": "Image",
                 "FamilyNumber": 5,
-                "ID": "6774903837271771030",
-                "ParentID": "1541401310533745336",
+                "ID": "4660601344665913288",
+                "ParentID": "6791011742190696933",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8378,7 +8464,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14148262176183817001"
+                        "ID": "363560323790524585"
                     },
                     {
                         "Width": 1.4199999570846558,
@@ -8399,8 +8485,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 6,
-                "ID": "14757699081463903003",
-                "ParentID": "6774903837271771030",
+                "ID": "7541973010346647148",
+                "ParentID": "4660601344665913288",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8430,11 +8516,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4144725175302088123"
+                        "ID": "4549880067431365800"
                     },
                     {
                         "Type": 30,
-                        "ID": "8258136210676266460",
+                        "ID": "3182145266735421445",
                         "Text": "Geralt",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8454,8 +8540,8 @@
             {
                 "Name": "Controls",
                 "FamilyNumber": 5,
-                "ID": "5203966287717234386",
-                "ParentID": "1541401310533745336",
+                "ID": "17573843827760172598",
+                "ParentID": "6791011742190696933",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8485,7 +8571,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15307380832646776127"
+                        "ID": "17635227763701021612"
                     },
                     {
                         "Width": 5.3899998664855957,
@@ -8506,8 +8592,8 @@
             {
                 "Name": "R_Char",
                 "FamilyNumber": 4,
-                "ID": "16981795757434212822",
-                "ParentID": "9236190566550964306",
+                "ID": "18281533904938691307",
+                "ParentID": "9391757670236846503",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8537,7 +8623,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15015493776366441420"
+                        "ID": "15283212355382451876"
                     },
                     {
                         "Width": 5.3899998664855957,
@@ -8558,8 +8644,8 @@
             {
                 "Name": "Yenn",
                 "FamilyNumber": 5,
-                "ID": "17789501224452187289",
-                "ParentID": "16981795757434212822",
+                "ID": "4517927738950282077",
+                "ParentID": "18281533904938691307",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8589,7 +8675,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14544676212044094822"
+                        "ID": "13161338917246272853"
                     },
                     {
                         "Width": 1.2599999904632568,
@@ -8610,8 +8696,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 6,
-                "ID": "11225221973727915488",
-                "ParentID": "17789501224452187289",
+                "ID": "15876996944705492856",
+                "ParentID": "4517927738950282077",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8641,11 +8727,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11195761293615357847"
+                        "ID": "6802634913704453896"
                     },
                     {
                         "Type": 30,
-                        "ID": "13869968020911576087",
+                        "ID": "12180715745700823879",
                         "Text": "Yennefer",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8665,8 +8751,8 @@
             {
                 "Name": "Controls",
                 "FamilyNumber": 5,
-                "ID": "18029226325828438060",
-                "ParentID": "16981795757434212822",
+                "ID": "8918633069611692346",
+                "ParentID": "18281533904938691307",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8696,7 +8782,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4711153700781703581"
+                        "ID": "32426523666002228"
                     },
                     {
                         "Width": 5.3899998664855957,
@@ -8717,8 +8803,8 @@
             {
                 "Name": "BG",
                 "FamilyNumber": 3,
-                "ID": "7035451665131133374",
-                "ParentID": "16528080308103212295",
+                "ID": "7024927490095871307",
+                "ParentID": "3197259704198656924",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -8748,7 +8834,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5136710940307909961"
+                        "ID": "7028738085555329858"
                     },
                     {
                         "Width": 19.200000762939453,
@@ -8769,8 +8855,8 @@
             {
                 "Name": "InGame",
                 "FamilyNumber": 2,
-                "ID": "7976836956971025278",
-                "ParentID": "17967039509258719658",
+                "ID": "7572868816316699218",
+                "ParentID": "12620222272378061172",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -8800,15 +8886,29 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1356251991112850613"
+                        "ID": "2094267512874297772"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2109087175888087670",
+                        "ResourceID": "7306146484134420018",
+                        "DataName": "Relic_Notification",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_show",
+                                "float": 5
+                            }
+                        ]
                     }
                 ]
             },
             {
                 "Name": "Character2",
                 "FamilyNumber": 3,
-                "ID": "10474090026229147580",
-                "ParentID": "7976836956971025278",
+                "ID": "8671213492070950900",
+                "ParentID": "7572868816316699218",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -8838,7 +8938,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17592103876790036262"
+                        "ID": "9786600538633902907"
                     },
                     {
                         "Width": 4.4699997901916504,
@@ -8856,7 +8956,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "2408695477905366230",
+                        "ID": "3698227101301111401",
                         "ResourceID": "8670775058852752816",
                         "DataName": "UI_Char_Frame",
                         "HasInspector": true,
@@ -8871,10 +8971,10 @@
                 ]
             },
             {
-                "Name": "Geralt",
+                "Name": "Geralt_character_UI",
                 "FamilyNumber": 4,
-                "ID": "12663596344236974221",
-                "ParentID": "10474090026229147580",
+                "ID": "12892459831690595809",
+                "ParentID": "8671213492070950900",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -8904,7 +9004,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8057699968273445174"
+                        "ID": "13361693056651293881"
                     },
                     {
                         "Width": 1.4199999570846558,
@@ -8923,10 +9023,10 @@
                 ]
             },
             {
-                "Name": "Yennefer",
+                "Name": "Yennefer_character_UI",
                 "FamilyNumber": 4,
-                "ID": "9893000817567846692",
-                "ParentID": "10474090026229147580",
+                "ID": "7909355507207545267",
+                "ParentID": "8671213492070950900",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -8956,7 +9056,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7170765699883931261"
+                        "ID": "10735559538003591432"
                     },
                     {
                         "Width": 1.2599999904632568,
@@ -8977,8 +9077,8 @@
             {
                 "Name": "Mana",
                 "FamilyNumber": 4,
-                "ID": "5709938305444733869",
-                "ParentID": "10474090026229147580",
+                "ID": "4737835516401899960",
+                "ParentID": "8671213492070950900",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9008,11 +9108,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15492020720882733518"
+                        "ID": "8075519078860895648"
                     },
                     {
-                        "X": 457.33203125,
-                        "Y": 98.576667785644531,
+                        "X": 1089.6719970703125,
+                        "Y": 114.25552368164063,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9046,8 +9146,8 @@
             {
                 "Name": "Xp",
                 "FamilyNumber": 4,
-                "ID": "13406017284215454213",
-                "ParentID": "10474090026229147580",
+                "ID": "3815617921581696754",
+                "ParentID": "8671213492070950900",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9077,11 +9177,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1657754464577498805"
+                        "ID": "13347216817774386361"
                     },
                     {
-                        "X": 455.6767578125,
-                        "Y": 112.08802795410156,
+                        "X": 1085.72802734375,
+                        "Y": 129.91590881347656,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9107,16 +9207,16 @@
                         "factor": 1,
                         "barScaleX": 1,
                         "barScaleY": 0.80000001192092896,
-                        "offsetX": 8.9313917835364345e-30,
-                        "offsetY": 8.9231042662444932e-30
+                        "offsetX": 6.6161710422808897e-18,
+                        "offsetY": 6.6124189510223492e-18
                     }
                 ]
             },
             {
                 "Name": "Lifebar",
                 "FamilyNumber": 4,
-                "ID": "17868599743066570153",
-                "ParentID": "10474090026229147580",
+                "ID": "9730440705841778196",
+                "ParentID": "8671213492070950900",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9146,11 +9246,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17627181721915853034"
+                        "ID": "5047899741463433296"
                     },
                     {
-                        "X": 478.95364379882813,
-                        "Y": 81.110145568847656,
+                        "X": 1141.189208984375,
+                        "Y": 94.010917663574219,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9177,15 +9277,15 @@
                         "barScaleX": 1,
                         "barScaleY": 0.80000001192092896,
                         "offsetX": 1.9439650746102071e-29,
-                        "offsetY": 1.4352992910545875e-29
+                        "offsetY": 1.0668467444989488e-28
                     }
                 ]
             },
             {
                 "Name": "Ulti_Bar",
                 "FamilyNumber": 3,
-                "ID": "8473713391303019993",
-                "ParentID": "7976836956971025278",
+                "ID": "4457443684493932860",
+                "ParentID": "7572868816316699218",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9215,11 +9315,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10717091646763076060"
+                        "ID": "12076452638135626216"
                     },
                     {
                         "Type": 29,
-                        "ID": "10871341279826876003",
+                        "ID": "9885263926497591855",
                         "ResourceID": "10075916241046708009",
                         "DataName": "UltiBar",
                         "HasInspector": true,
@@ -9227,12 +9327,12 @@
                             {
                                 "VarType": 9,
                                 "Name": "ultibar",
-                                "gameobject": "10711948630156140837"
+                                "gameobject": "13880073121437955374"
                             },
                             {
                                 "VarType": 9,
                                 "Name": "ultibar_charged",
-                                "gameobject": "8552167997401609288"
+                                "gameobject": "14902774670658470142"
                             }
                         ]
                     }
@@ -9241,8 +9341,8 @@
             {
                 "Name": "Ultibar",
                 "FamilyNumber": 4,
-                "ID": "10711948630156140837",
-                "ParentID": "8473713391303019993",
+                "ID": "13880073121437955374",
+                "ParentID": "4457443684493932860",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9272,11 +9372,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3896093127257412039"
+                        "ID": "5607513911126354600"
                     },
                     {
-                        "X": 277,
-                        "Y": 545.0333251953125,
+                        "X": 660,
+                        "Y": 631.72222900390625,
                         "Width": 11.590000152587891,
                         "Height": 0.87999999523162842,
                         "Enabled": true,
@@ -9310,8 +9410,8 @@
             {
                 "Name": "Animated Image",
                 "FamilyNumber": 5,
-                "ID": "659564241320999088",
-                "ParentID": "10711948630156140837",
+                "ID": "4060426732148570812",
+                "ParentID": "13880073121437955374",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9341,7 +9441,7 @@
                             7
                         ],
                         "ScaleNegative": false,
-                        "ID": "10476951852099772618"
+                        "ID": "13591235699167174912"
                     },
                     {
                         "Width": 11.619999885559082,
@@ -9364,8 +9464,8 @@
             {
                 "Name": "Ultibar_Charged",
                 "FamilyNumber": 4,
-                "ID": "8552167997401609288",
-                "ParentID": "8473713391303019993",
+                "ID": "14902774670658470142",
+                "ParentID": "4457443684493932860",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9395,7 +9495,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5064492046388254823"
+                        "ID": "11891552279198996420"
                     },
                     {
                         "X": 543.5,
@@ -9433,8 +9533,8 @@
             {
                 "Name": "Character 1",
                 "FamilyNumber": 3,
-                "ID": "6991862411066241902",
-                "ParentID": "7976836956971025278",
+                "ID": "5695338963699174698",
+                "ParentID": "7572868816316699218",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9464,7 +9564,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11397592168019100602"
+                        "ID": "13738334016994740259"
                     },
                     {
                         "Width": 4.4699997901916504,
@@ -9482,7 +9582,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "5233133063971799492",
+                        "ID": "11625834286793109823",
                         "ResourceID": "8670775058852752816",
                         "DataName": "UI_Char_Frame",
                         "HasInspector": true,
@@ -9497,10 +9597,10 @@
                 ]
             },
             {
-                "Name": "Geralt",
+                "Name": "Geralt_character_UI",
                 "FamilyNumber": 4,
-                "ID": "8647205370580380900",
-                "ParentID": "6991862411066241902",
+                "ID": "8438501718296052045",
+                "ParentID": "5695338963699174698",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9530,7 +9630,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16576996229257362207"
+                        "ID": "6585598885805864272"
                     },
                     {
                         "Width": 1.4199999570846558,
@@ -9549,10 +9649,10 @@
                 ]
             },
             {
-                "Name": "Yennefer",
+                "Name": "Yennefer_character_UI",
                 "FamilyNumber": 4,
-                "ID": "11725989464330508117",
-                "ParentID": "6991862411066241902",
+                "ID": "8372188256600872100",
+                "ParentID": "5695338963699174698",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9582,7 +9682,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9705759649662800407"
+                        "ID": "13196001613416153982"
                     },
                     {
                         "Width": 1.2599999904632568,
@@ -9603,8 +9703,8 @@
             {
                 "Name": "Lifebar",
                 "FamilyNumber": 4,
-                "ID": "4262237035582126496",
-                "ParentID": "6991862411066241902",
+                "ID": "18323054481133890791",
+                "ParentID": "5695338963699174698",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9634,11 +9734,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16776828774774728279"
+                        "ID": "10652703570841556015"
                     },
                     {
-                        "X": 118.85366058349609,
-                        "Y": 81.110145568847656,
+                        "X": 283.18923950195313,
+                        "Y": 94.010917663574219,
                         "Width": 2.6099998950958252,
                         "Height": 0.18999999761581421,
                         "Enabled": true,
@@ -9672,8 +9772,8 @@
             {
                 "Name": "Mana",
                 "FamilyNumber": 4,
-                "ID": "14596969898491229982",
-                "ParentID": "6991862411066241902",
+                "ID": "18099875093572636560",
+                "ParentID": "5695338963699174698",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9703,11 +9803,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16823443443710498774"
+                        "ID": "18227140302659527229"
                     },
                     {
-                        "X": 97.2320556640625,
-                        "Y": 98.576667785644531,
+                        "X": 231.67204284667969,
+                        "Y": 114.25552368164063,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9741,8 +9841,8 @@
             {
                 "Name": "Xp",
                 "FamilyNumber": 4,
-                "ID": "3934292463845706078",
-                "ParentID": "6991862411066241902",
+                "ID": "13202183278514573503",
+                "ParentID": "5695338963699174698",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9772,11 +9872,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5021254597681197828"
+                        "ID": "15089977898200740527"
                     },
                     {
-                        "X": 95.576744079589844,
-                        "Y": 112.08802795410156,
+                        "X": 227.72798156738281,
+                        "Y": 129.91590881347656,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9808,10 +9908,377 @@
                 ]
             },
             {
+                "Name": "Godmode",
+                "FamilyNumber": 3,
+                "ID": "7207276612296588937",
+                "ParentID": "7572868816316699218",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            38.610557556152344,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            20,
+                            20,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7242541454898326628"
+                    },
+                    {
+                        "Width": 1.2100000381469727,
+                        "Height": 0.18000000715255737,
+                        "Speed": 4,
+                        "Loop": true,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 26,
+                        "ColorCurrent": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ],
+                        "HasAnimatedImages": true,
+                        "AnimatedImages": [
+                            {
+                                "0": "6733228750783860924"
+                            },
+                            {
+                                "1": "11429774772691322859"
+                            },
+                            {
+                                "2": "4676553964415144462"
+                            },
+                            {
+                                "3": "2597661788086884979"
+                            },
+                            {
+                                "4": "14905923462302449130"
+                            },
+                            {
+                                "5": "12516188805726062670"
+                            },
+                            {
+                                "6": "8610353150856702346"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Relics_Notification",
+                "FamilyNumber": 3,
+                "ID": "13332840884764209513",
+                "ParentID": "7572868816316699218",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.0571060180664063,
+                            32.305526733398438,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2182444444995630662"
+                    }
+                ]
+            },
+            {
+                "Name": "Portrait_Relics",
+                "FamilyNumber": 4,
+                "ID": "1273834734125564653",
+                "ParentID": "13332840884764209513",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -9.3467979431152344,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7259640324770002415"
+                    }
+                ]
+            },
+            {
+                "Name": "Geralt_Relics_Portrait",
+                "FamilyNumber": 5,
+                "ID": "13445225798357684599",
+                "ParentID": "1273834734125564653",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7795194589223349501"
+                    },
+                    {
+                        "Width": 1.4199999570846558,
+                        "Height": 1.4199999570846558,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "6927210463734118838",
+                        "Color": [
+                            0.95098036527633667,
+                            0.95097082853317261,
+                            0.95097082853317261,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Yennefer_Relics_Portrait",
+                "FamilyNumber": 5,
+                "ID": "18028816353002834896",
+                "ParentID": "1273834734125564653",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9490956461558782730"
+                    },
+                    {
+                        "Width": 1.2599999904632568,
+                        "Height": 1.3799999952316284,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "16340084652049381067",
+                        "Color": [
+                            0.95098036527633667,
+                            0.95097082853317261,
+                            0.95097082853317261,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Relic_Name",
+                "FamilyNumber": 4,
+                "ID": "16111101963965537841",
+                "ParentID": "13332840884764209513",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.67299997806549072,
+                            0.62900000810623169,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.014999999664723873,
+                            0.014999999664723873,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15498258395346863907"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "9707194475103205977",
+                        "Text": "Relic",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.92156863212585449,
+                            0.92155939340591431,
+                            0.92155939340591431,
+                            1
+                        ],
+                        "Width": 1385,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Relic_Description",
+                "FamilyNumber": 4,
+                "ID": "3537681262702310247",
+                "ParentID": "13332840884764209513",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8702339636161168084",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -2.5,
+                            -2.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.0099999997764825821,
+                            0.0099999997764825821,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3058148624349242604"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "15482973119459983160",
+                        "Text": "Description",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.91666668653488159,
+                            0.91665750741958618,
+                            0.91665750741958618,
+                            1
+                        ],
+                        "Width": 1340,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
                 "Name": "YouDied",
                 "FamilyNumber": 2,
-                "ID": "8238583866665849847",
-                "ParentID": "17967039509258719658",
+                "ID": "14503043842198735668",
+                "ParentID": "12620222272378061172",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -9841,7 +10308,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17937994092482294666"
+                        "ID": "53188978463351077"
                     },
                     {
                         "Width": 19.200000762939453,
@@ -9862,8 +10329,8 @@
             {
                 "Name": "You Died",
                 "FamilyNumber": 3,
-                "ID": "677252769033232439",
-                "ParentID": "8238583866665849847",
+                "ID": "17910963510714680350",
+                "ParentID": "14503043842198735668",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -9893,11 +10360,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10690369983067194116"
+                        "ID": "16870798101254248332"
                     },
                     {
                         "Type": 30,
-                        "ID": "9058784158282792498",
+                        "ID": "14510951445474033034",
                         "Text": "YOU DIED",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -9917,9 +10384,9 @@
             {
                 "Name": "SubtitlesText",
                 "FamilyNumber": 2,
-                "ID": "6651860426127367191",
-                "ParentID": "17967039509258719658",
-                "Enabled": false,
+                "ID": "1150606114827125579",
+                "ParentID": "12620222272378061172",
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -9947,11 +10414,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8256397476885425561"
+                        "ID": "8833353606373207382"
                     },
                     {
                         "Type": 30,
-                        "ID": "6900490783922967486",
+                        "ID": "1521795942935133604",
                         "Text": "Hola",
                         "UIType": 22,
                         "FontID": "6090935666492539845",
