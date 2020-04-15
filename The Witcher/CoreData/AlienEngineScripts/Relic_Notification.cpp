@@ -57,6 +57,7 @@ void Relic_Notification::ShowRelic(Notification* notification)
 	}
 
 	relic_title->SetText(notification->relic_name);
+	relic_title->SetText(notification->description);
 	active = notification;
 	notifications.pop();
 	time = Time::GetTimeSinceStart();

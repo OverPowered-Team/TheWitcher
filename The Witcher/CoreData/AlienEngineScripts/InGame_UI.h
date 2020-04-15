@@ -25,6 +25,7 @@ public:
 	GameObject* in_game = nullptr;
 	GameObject* pause_menu = nullptr;
 	GameObject* you_died = nullptr;
+	GameObject* relics_panel = nullptr;
 	bool pause_active = false;
 };
 
