@@ -199,7 +199,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 
 	if (strcmp(name, "Hit") == 0) {
-		if (stats.current_health == 0.0F) {
+		if (stats["Health"].GetValue() == 0.0F) {
 			state = EnemyState::HIT;
 		}
 		else

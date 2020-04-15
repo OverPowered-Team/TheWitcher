@@ -35,7 +35,7 @@ public:
 
 };
 
-ALIEN_FACTORY RelicManager* CreatePlayerManager() {
+ALIEN_FACTORY RelicManager* CreateRelicManager() {
 	RelicManager* relic = new RelicManager();
 	// To show in inspector here
 

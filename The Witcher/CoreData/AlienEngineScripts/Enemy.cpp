@@ -147,7 +147,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	if (stats["Health"].GetValue() == 0.0F) {
 		animator->SetBool("dead", true);
 		OnDeathHit();
-	
+	}
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
 	character_ctrl->SetWalkDirection(float3::zero());
