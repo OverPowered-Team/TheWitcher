@@ -14,21 +14,20 @@ enum (Relic_Type,
 	BASE,
 	ATTACK,
 	DASH,
-	COMPANION,
 	NONE_TYPE
 	);
 enum (Relic_Effect,
-	FIRE,
-	ICE,
-	EARTH,
-	LIGHTNING,
-	POISON,
-	NATURE,
-	SEA,
-	DJINN,
-	STRIGAS,
-	RAGE,
-	NONE_EFFECT
+	FIRE = 1,
+	ICE = 2,
+	EARTH = 3,
+	LIGHTNING = 4,
+	POISON = 5,
+	NATURE = 6,
+	SEA = 7,
+	DJINN = 8,
+	STRIGAS = 9,
+	RAGE = 10,
+	NONE_EFFECT = 0
 	);
 
 class Relic {
@@ -77,12 +76,11 @@ public:
 	void Start();
 	void Update();
 
+	void SetRelic(const char* json_array);
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
 public:
 
-	std::string name = "";
-	std::string description = "";
 	Relic_Type relic_type = Relic_Type::NONE_TYPE;
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
@@ -95,8 +93,6 @@ public:
 ALIEN_FACTORY RelicBehaviour* CreateRelicBehaviour() {
 	RelicBehaviour* relic_behaviour = new RelicBehaviour();
 	// To show in inspector here
-	/*SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->name);
-	SHOW_IN_INSPECTOR_AS_STRING(relic_behaviour->description);*/
 	SHOW_IN_INSPECTOR_AS_ENUM(Relic_Type, relic_behaviour->relic_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Relic_Effect, relic_behaviour->relic_effect);
 	

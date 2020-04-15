@@ -9,7 +9,6 @@
 // Relic
 Relic::Relic()
 {
-	// Inicialize effects with a json
 }
 
 Relic::~Relic()
@@ -110,18 +109,21 @@ RelicBehaviour::~RelicBehaviour()
 void RelicBehaviour::Start()
 {
 
+	std::string json_str;
+
 	switch (relic_type)
 	{
 	case Relic_Type::BASE:
 		relic = new Relic();
+		json_str = "BASE";
 		break;
 	case Relic_Type::ATTACK:
 		relic = new AttackRelic();
+		json_str = "ATTACK";
 		break;
 	case Relic_Type::DASH:
 		relic = new DashRelic();
-		break;
-	case Relic_Type::COMPANION:
+		json_str = "DASH";
 		break;
 	default:
 		break;
@@ -129,9 +131,8 @@ void RelicBehaviour::Start()
 
 	if (relic)
 	{
-		relic->name = name;
-		relic->description = description;
 		relic->relic_effect = relic_effect;
+		SetRelic(json_str.data());
 	}
 
 	////Geralt dialogue
@@ -149,6 +150,33 @@ void RelicBehaviour::Start()
 void RelicBehaviour::Update()
 {
 	
+}
+
+void RelicBehaviour::SetRelic(const char* json_array)
+{
+	std::string json_path = std::string("Configuration/Relics.json");
+
+	
+	JSONfilepack* relic_json = JSONfilepack::GetJSON(json_path.c_str());
+
+	JSONArraypack* type_array = relic_json->GetArray(json_array);
+
+	if (type_array)
+	{
+		type_array->GetFirstNode();
+
+		for (uint i = 0; i < type_array->GetArraySize(); i++)
+		{
+			if (type_array->GetNumber("effect") != (int)relic_effect)
+				type_array->GetAnotherNode();
+			else
+				break;
+		}
+		relic->name = type_array->GetString("name");
+		relic->name = type_array->GetString("description");
+	}
+
+	JSONfilepack::FreeJSON(relic_json);
 }
 
 void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)

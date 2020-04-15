@@ -494,6 +494,7 @@ void PlayerController::Revive()
 	GameManager::manager->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
 	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	GameManager::manager->Rumbler(RumblerType::REVIVE, controller_index);
 }
 
 void PlayerController::ActionRevive()
@@ -517,6 +518,8 @@ void PlayerController::ReceiveDamage(float value)
 		state = PlayerState::HIT;
 		controller->SetWalkDirection(float3::zero());
 	}	
+
+	GameManager::manager->Rumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)

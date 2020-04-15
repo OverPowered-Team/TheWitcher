@@ -39,23 +39,36 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	for (auto it = effects.begin(); it != effects.end(); )
+	for (auto it = effects.begin(); it != effects.end();)
 	{
-		if (!(*it)->UpdateEffect())
+		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
+		{
+			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
+			{
+				it_stats->second.ModifyCurrentStat((*it));
+
+				//Temporal solution
+				if (it_stats->first == "Health")
+				{
+					if (stats["Health"].GetValue() == 0)
+					{
+						state = EnemyState::DYING;
+						animator->PlayState("Death");
+					}
+				}
+			}
+			if (particles[(*it)->name])
+				particles[(*it)->name]->SetEnable(true);
+		}
+		if ((*it)->to_delete)
 		{
 			delete (*it);
 			it = effects.erase(it);
 			continue;
 		}
-		else if((*it)->ticks_time > 0)
-		{
-			if (particles[(*it)->name])
-				particles[(*it)->name]->SetEnable(true);
-			stats["Health"].ModifyCurrentStat((*it));
-			stats["Agility"].ModifyCurrentStat((*it));
-		}
 		++it;
 	}
+
 }
 
 void Enemy::CleanUpEnemy()
