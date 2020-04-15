@@ -48,6 +48,11 @@ void Stat::SetBaseStat(float _value)
 	current_value = base_value;
 }
 
+void Stat::SetMaxValue(float _value)
+{
+    max_value = _value;
+}
+
 void Stat::IncreaseStat(float value)
 {
     if (current_value + value < max_value) {
