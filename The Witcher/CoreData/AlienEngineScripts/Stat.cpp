@@ -13,12 +13,18 @@ Stat::~Stat()
 {
 }
 
-void Stat::CalculateStat(std::vector<Effect*> _effects)
+void Stat::ApplyEffect(Effect* effect)
+{
+    effects.push_back(effect);
+    CalculateStat();
+}
+
+void Stat::CalculateStat()
 {
     float additive_value = 0;
     float mult_value = 0;
 
-    for (std::vector<Effect*>::iterator it = _effects.begin(); it != _effects.end(); ++it)
+    for (std::vector<Effect*>::iterator it = effects.begin(); it != effects.end(); ++it)
     {
         additive_value += (*it)->GetAdditiveAmount(name);
         mult_value += (*it)->GetMultiplicativeAmount(name);
@@ -29,6 +35,11 @@ void Stat::CalculateStat(std::vector<Effect*> _effects)
     max_value += additive_value;
     max_value += max_value * mult_value;
     current_value = (current_value * max_value) / old_max;
+}
+
+void Stat::ModifyCurrentStat(Effect* _effect)
+{
+    current_value += _effect->GetAdditiveAmount(name);
 }
 
 void Stat::SetBaseStat(float _value)

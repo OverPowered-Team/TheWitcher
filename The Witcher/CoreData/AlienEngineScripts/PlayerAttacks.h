@@ -4,6 +4,7 @@
 #include "Stat.h"
 
 class PlayerController;
+class AttackEffect;
 
 class Attack {
 	friend class PlayerAttacks;
@@ -58,7 +59,7 @@ public:
 	void CleanUp();
 
 	std::vector<std::string> GetFinalAttacks();
-	void OnAddAttackEffect(std::string _attack_name);
+	void OnAddAttackEffect(AttackEffect* new_effect);
 	void CancelAttack();
 	void ActivateCollider();
 	void DeactivateCollider();
