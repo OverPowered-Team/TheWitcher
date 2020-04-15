@@ -210,7 +210,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 
 	if (strcmp(name, "Hit") == 0) {
-		if (stats.current_health == 0.0F) {
+		if (stats["Health"].GetValue() == 0.0F) {
 			state = EnemyState::HIT;
 		}
 		else
@@ -241,7 +241,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			if (player)
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received));
+				player->OnHit(this, GetDamaged(dmg_received, player));
 
 				if (state == EnemyState::DYING)
 					player->OnEnemyKill();
