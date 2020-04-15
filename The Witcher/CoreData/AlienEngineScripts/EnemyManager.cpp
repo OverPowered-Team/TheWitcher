@@ -52,13 +52,10 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 	case EnemyType::NILFGAARD_SOLDIER: {
 		switch ((NilfgaardSoldier::NilfgaardType)extra_type)
 		{
-		case NilfgaardSoldier::NilfgaardType::SPEAR: {
-			LOG("SPEAR");
-			break; }
 		case NilfgaardSoldier::NilfgaardType::ARCHER: {
 			LOG("ARCHER");
 			break; }
-		case NilfgaardSoldier::NilfgaardType::LARGE_SWORD: {
+		case NilfgaardSoldier::NilfgaardType::SWORD: {
 			LOG("LARGE_SWORD");
 			break; }
 		case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD: {

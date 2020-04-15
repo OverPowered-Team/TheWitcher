@@ -4,7 +4,7 @@
 #include "Macros/AlienScripts.h"
 #include "Stat.h"
 
-#define ENEMY_JSON "Configuration/Enemies"
+#define ENEMY_JSON "Configuration/Enemies/"
 
 class PlayerController;
 class Effect;
@@ -70,9 +70,9 @@ public:
 	std::vector<PlayerController*> player_controllers;
 
 	std::map<std::string, GameObject*> particles;
+	std::map<std::string, Stat> stats;
 
 protected:
 	GameObject* decapitated_head = nullptr;
-	std::map<std::string, Stat> stats;
 	std::vector<Effect*> effects;
 };

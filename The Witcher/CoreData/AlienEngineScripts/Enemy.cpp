@@ -99,6 +99,13 @@ void Enemy::CleanUpEnemy()
 		delete (*it_eff);
 		it_eff = effects.erase(it_eff);
 	}
+
+	if (decapitated_head)
+	{
+		decapitated_head->ToDelete();
+		decapitated_head = nullptr;
+	}
+
 }
 
 void Enemy::SetStats(const char* json)
@@ -176,22 +183,38 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-
-	if (stats["Health"].GetValue() == 0.0F) {
-		animator->SetBool("dead", true);
-		OnDeathHit();
-	}
 	
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
 	character_ctrl->SetWalkDirection(float3::zero());
 
-	if (player->attacks->GetCurrentAttack()->IsLast())
-	{
-		state = EnemyState::DYING;
-		animator->PlayState("Death");
-		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
-		player->OnEnemyKill();
+	if (stats["Health"].GetValue() == 0.0F) {
+		animator->SetBool("dead", true);
+		OnDeathHit();
+
+		if (player->attacks->GetCurrentAttack()->IsLast())
+		{
+			state = EnemyState::DYING;
+			animator->PlayState("Death");
+			GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+
+			decapitated_head = GameObject::Instantiate(head_prefab, game_object->transform->GetGlobalPosition());
+			if (decapitated_head)
+			{
+				game_object->GetChild("Head")->SetEnable(false); //disable old head
+
+				ComponentRigidBody* head_rb = (ComponentRigidBody*)decapitated_head->GetComponent(ComponentType::RIGID_BODY);
+				head_rb->SetRotation(transform->GetGlobalRotation());
+
+				float decapitation_force = 5;
+				float3 decapitation_vector = (transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized() * decapitation_force;
+	
+				head_rb->AddForce(decapitation_vector);
+				head_rb->AddTorque(transform->up * decapitation_force);
+			}
+
+			player->OnEnemyKill();
+		}
 	}
 
 	return aux_health - stats["Health"].GetValue();
