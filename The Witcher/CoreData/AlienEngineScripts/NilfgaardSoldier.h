@@ -37,6 +37,7 @@ public:
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	float block_time = 2.0f;
 	float block_attack_time = 3.0f;
+	int max_break_shield_attack = 5;
 
 private:
 	float current_time = 0.0f;
@@ -56,6 +57,8 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->block_time);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->block_attack_time);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_INT(nilfgaard->max_break_shield_attack);
+
 
 	return nilfgaard;
 }

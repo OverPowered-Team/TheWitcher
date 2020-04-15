@@ -74,6 +74,15 @@ void NilfgaardSoldier::Block()
 	{
 		state = EnemyState::ATTACK;
 		animator->PlayState("Attack");
+		has_been_attacked = false;
+		break_shield_attack = 0.0f;
+	}
+	else if (break_shield_attack >= max_break_shield_attack)
+	{
+		state = EnemyState::ATTACK;
+		animator->PlayState("Hit");
+		has_been_attacked = false;
+		break_shield_attack = 0.0f;
 	}
 }
 
@@ -199,6 +208,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 		if (is_blocked)
 		{
 			has_been_attacked = true;
+			current_time = Time::GetGameTime();
 			break_shield_attack++;
 		}
 		else
