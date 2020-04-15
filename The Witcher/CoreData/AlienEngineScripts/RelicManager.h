@@ -33,6 +33,8 @@ public:
 
 	Prefab witcher_rage;
 
+	GameObject* spawn = nullptr;
+
 };
 
 ALIEN_FACTORY RelicManager* CreateRelicManager() {

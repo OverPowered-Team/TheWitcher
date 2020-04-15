@@ -18,6 +18,7 @@ public:
 	float GetValue() { return current_value; }
 	float GetMaxValue() { return max_value; }
 	void SetBaseStat(float _value);
+	void SetMaxValue(float _value);
 	void IncreaseStat(float value);
 	void DecreaseStat(float value);
 

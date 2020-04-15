@@ -132,6 +132,7 @@ void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;
+	collider->SetEnable(false);
 }
 
 void PlayerAttacks::SnapToTarget()
