@@ -2,6 +2,8 @@
 #include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
 #include "PlayerAttacks.h"
 
 PlayerAttacks::PlayerAttacks() : Alien()
@@ -99,6 +101,9 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 				current_attack = base_heavy_attack;
 		}		
 	}
+
+	if(current_attack && current_attack->IsLast())
+		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5 * current_attack->info.name.size());
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -107,7 +112,7 @@ std::vector<std::string> PlayerAttacks::GetFinalAttacks()
 
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->heavy_attack_link == nullptr && (*it)->light_attack_link == nullptr)
+		if ((*it)->IsLast())
 			final_attacks.push_back((*it)->info.name);
 	}
 	return final_attacks;

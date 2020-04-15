@@ -27,12 +27,14 @@ public:
 
 	void ShootAttack();
 	Quat RotateArrow();
+	void OnDeathHit();
 	void CleanUpEnemy() override;
 
 	void OnAnimationEnd(const char* name) override;
 
 public:
 	Prefab arrow;
+	GameObject* weapon_go;
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	float distance = 0.0F;
 	float3 direction;
@@ -44,6 +46,7 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->weapon_go);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ShootAttack, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);

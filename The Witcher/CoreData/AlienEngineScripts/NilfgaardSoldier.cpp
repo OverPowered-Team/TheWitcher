@@ -1,5 +1,7 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowScript.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
 #include "PlayerController.h"
 #include "EnemyManager.h"
 
@@ -104,6 +106,17 @@ Quat NilfgaardSoldier::RotateArrow()
 	return rot2 * rot1;
 }
 
+void NilfgaardSoldier::OnDeathHit()
+{
+	/*LOG("PARENT IS %s  THIS GO IS %s",weapon_go->parent->GetName(), game_object->GetName())
+	if (weapon_go->parent != game_object->parent)
+	{
+		weapon_go->SetNewParent(this->game_object->parent);
+		weapon_go->GetComponent(ComponentType::RIGID_BODY)->SetEnable(true);
+		weapon_go->GetComponent(ComponentType::BOX_COLLIDER)->SetEnable(true);
+	}*/
+}
+
 void NilfgaardSoldier::UpdateEnemy()
 {	
 	float distance_1 = player_1->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
@@ -186,6 +199,17 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 
 	if (strcmp(name, "Hit") == 0) {
-		state = Enemy::EnemyState::IDLE;
+		if (stats.current_health == 0.0F) {
+			state = EnemyState::HIT;
+		}
+		else
+			state = Enemy::EnemyState::IDLE;
+	}
+
+	if (strcmp(name, "Dizzy") == 0)
+	{
+		state = EnemyState::DYING;
+		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+		//need to know last enemy who hit him to count kill?
 	}
 }

@@ -1,7 +1,6 @@
 #include "PlayerController.h"
 #include "PlayerManager.h"
-
-#define MAX_ULTIMATE_CHARGE 200
+#include "UltiBar.h"
 
 PlayerManager::PlayerManager() : Alien()
 {
@@ -20,15 +19,14 @@ void PlayerManager::Start()
 		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
 	}
 
-	GameObject::FreeArrayMemory((void***)&players_go);
+	ulti_bar = GameObject::FindWithName("Ulti_bar");
 
-	//testing
-	collective_ultimate_charge = MAX_ULTIMATE_CHARGE;
+	GameObject::FreeArrayMemory((void***)&players_go);
 }
 
 void PlayerManager::Update()
 {
-	if (ultimate_buttons_pressed == players.size() && collective_ultimate_charge == MAX_ULTIMATE_CHARGE)
+	if (ultimate_buttons_pressed == players.size() && collective_ultimate_charge == max_ultimate_charge)
 	{
 		ActivateUltimate();
 	}
@@ -55,23 +53,47 @@ void PlayerManager::OnPlayerRevive(PlayerController* revived_player)
 	}
 }
 
+void PlayerManager::IncreaseUltimateCharge(uint value)
+{
+	if (ultimate_is_active)
+		return;
+
+	collective_ultimate_charge += value;
+
+	if (collective_ultimate_charge >= max_ultimate_charge)
+	{
+		collective_ultimate_charge = max_ultimate_charge;
+		// UI
+		((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->MaxBar();
+	}
+	else
+	{
+		// UI
+		((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+	}
+}
+
 void PlayerManager::ActivateUltimate()
 {
-	LOG("ULTIMATE");
-	Invoke(std::bind(&PlayerManager::CancelUltimate, this), 5);
+	Invoke(std::bind(&PlayerManager::CancelUltimate, this), ultimate_time);
 	collective_ultimate_charge = 0;
+	ultimate_is_active = true;
 
-	Time::SetScaleTime(0.5f);
+	Time::SetScaleTime(ultimate_effect_value);
 	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
-		(*it)->OnUltimateActivation();
+		(*it)->OnUltimateActivation(1/ultimate_effect_value);
 	}
+
+	// UI
+	((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->UpdateBar(collective_ultimate_charge);
 }
 
 void PlayerManager::CancelUltimate()
 {
-	LOG("ULTIMATE CANCELED");
 	Time::SetScaleTime(1.0f);
+	ultimate_is_active = false;
+
 	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
-		(*it)->OnUltimateDeactivation();
+		(*it)->OnUltimateDeactivation(1/ultimate_effect_value);
 	}
 }
