@@ -71,6 +71,7 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
+	Prefab head_prefab;
 
 	std::vector<PlayerController*> player_controllers;
 
@@ -78,4 +79,7 @@ public:
 	GameObject* player_2 = nullptr;
 
 	std::map<std::string, GameObject*> particles;
+
+private:
+	GameObject* decapitated_head = nullptr;
 };
