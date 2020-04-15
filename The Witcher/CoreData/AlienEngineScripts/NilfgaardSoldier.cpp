@@ -1,6 +1,7 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowScript.h"
 #include "PlayerController.h"
+#include "PlayerAttacks.h"
 #include "EnemyManager.h"
 
 void NilfgaardSoldier::StartEnemy()
@@ -46,16 +47,33 @@ void NilfgaardSoldier::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-void NilfgaardSoldier::Attack()
+void NilfgaardSoldier::Action()
 {
 	switch (nilf_type)
 	{
-	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
+	case NilfgaardSoldier::NilfgaardType::SWORD:
 		animator->PlayState("Attack");
+		state = EnemyState::ATTACK;
 		break;
 	case NilfgaardSoldier::NilfgaardType::ARCHER:
 		animator->PlayState("Shoot");
+		state = EnemyState::ATTACK;
 		break;
+	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
+		animator->PlayState("Block");
+		current_time = Time::GetGameTime();
+		state = EnemyState::BLOCK;
+		break;
+	}
+}
+
+void NilfgaardSoldier::Block()
+{
+	float b_time = (has_been_attacked) ? block_attack_time : block_time;
+	if (Time::GetGameTime() - current_time > b_time)
+	{
+		state = EnemyState::ATTACK;
+		animator->PlayState("Attack");
 	}
 }
 
@@ -73,7 +91,7 @@ void NilfgaardSoldier::Flee(float3 direction)
 		state = Enemy::EnemyState::ATTACK;
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
-		Attack();
+		Action();
 	}
 }
 
@@ -117,20 +135,23 @@ void NilfgaardSoldier::UpdateEnemy()
 		Move(direction);
 		break;
 	case Enemy::EnemyState::ATTACK:
-		if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
-		{
-			animator->PlayState("Walk");
-			state = Enemy::EnemyState::FLEE;
-		}
-
 		switch (nilf_type)
 		{
 		case NilfgaardSoldier::NilfgaardType::ARCHER:
 			float angle = atan2f(direction.z, direction.x);
 			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 			character_ctrl->SetRotation(rot);
+
+			if (distance < stats["FleeRange"].GetValue())
+			{
+				animator->PlayState("Walk");
+				state = Enemy::EnemyState::FLEE;
+			}
 			break;
 		}
+		break;
+	case Enemy::EnemyState::BLOCK:
+		Block();
 		break;
 	case Enemy::EnemyState::FLEE:
 		Flee(-direction);
@@ -144,8 +165,6 @@ void NilfgaardSoldier::UpdateEnemy()
 		break;
 	}
 	case Enemy::EnemyState::DEAD:
-		break;
-	default:
 		break;
 	}
 
@@ -170,5 +189,29 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Hit") == 0) {
 		state = Enemy::EnemyState::IDLE;
+	}
+}
+
+void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
+
+		if (is_blocked)
+		{
+			has_been_attacked = true;
+			break_shield_attack++;
+		}
+		else
+		{
+			PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
+			if (player)
+			{
+				float dmg_received = player->attacks->GetCurrentDMG();
+				player->OnHit(this, GetDamaged(dmg_received));
+
+				if (state == EnemyState::DYING)
+					player->OnEnemyKill();
+			}
+		}
 	}
 }

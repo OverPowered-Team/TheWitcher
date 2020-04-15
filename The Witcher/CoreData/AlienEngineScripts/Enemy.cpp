@@ -129,10 +129,9 @@ void Enemy::Move(float3 direction)
 
 	if (distance < stats["AttackRange"].GetValue())
 	{
-		state = Enemy::EnemyState::ATTACK;
 		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
-		Attack();
+		Action();
 	}
 
 	if (distance > stats["VisionRange"].GetValue())

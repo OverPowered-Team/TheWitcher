@@ -47,6 +47,7 @@ public:
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction);
 	virtual void Attack() {}
+	virtual void Action() {}
 	void ActivateCollider();
 	void DeactivateCollider();
 
