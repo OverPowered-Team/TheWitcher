@@ -1,3 +1,6 @@
+#include "GameManager.h"
+#include "PlayerManager.h"
+#include "PlayerController.h"
 #include "Leshen.h"
 
 void Leshen::StartEnemy()
@@ -5,8 +8,9 @@ void Leshen::StartEnemy()
 	actions.emplace("Root", new LeshenAction(ActionType::ROOT, 33.0f));
 	actions.emplace("Melee", new LeshenAction(ActionType::MELEE, 33.0f));
 	actions.emplace("Crows", new LeshenAction(ActionType::CROWS, 34.0f));
-	actions.emplace("Whip", new LeshenAction(ActionType::WHIP, .0f));
 	actions.emplace("Cloud", new LeshenAction(ActionType::CLOUD, .0f));
+	
+	can_get_interrupted = false;
 
 	Enemy::StartEnemy();
 }
@@ -34,6 +38,10 @@ void Leshen::UpdateEnemy()
 			LOG("NO CURRENT ACTION DETECTED");
 		break;
 	case Enemy::EnemyState::HIT:
+		if (current_action)
+			state = EnemyState::ATTACK;
+		else
+			state = EnemyState::IDLE;
 		break;
 	case Enemy::EnemyState::DYING:
 		break;
@@ -54,8 +62,15 @@ void Leshen::CleanUpEnemy()
 	delete current_action;
 }
 
+float Leshen::GetDamaged(float dmg, PlayerController* player)
+{
+	times_hitted++;
+	return Enemy::GetDamaged(dmg, player);
+}
+
 void Leshen::SetStats(const char* json)
 {
+
 }
 
 void Leshen::SetActionProbabilities()
@@ -64,51 +79,42 @@ void Leshen::SetActionProbabilities()
 		(*it).second->probability = 0.f;
 	}
 
-	if (phase == 1) {
-		if (player_distance[0] <= melee_range || player_distance[1] <= melee_range) {
-			actions.find("Melee")->second->probability = 100.0f;
-			return;
-		}
-		else if (player_rooted[0] || player_rooted[1]) {
-			actions.find("Crows")->second->probability = 100.0f;
-			return;
-		}
-		else {
-			actions.find("Crows")->second->probability = 50.0f;
-			actions.find("Root")->second->probability = 50.0f;
-		}
+	if (times_hitted >= 5) {
+		actions.find("Cloud")->second->probability = 100.0f;
+		times_hitted = 0;
+		return;
 	}
-	else if (phase == 2) {
-		if (times_hitted == 3) {
-			actions.find("Cloud")->second->probability = 100.0f;
-			return;
-		}
-		else if (player_rooted[0] || player_rooted[1]) {
-			actions.find("Whip")->second->probability = 100.0f;
-			return;
-		}
-		else {
-			actions.find("Whip")->second->probability = 20.0f;
-			actions.find("Root")->second->probability = 80.0f;
-		}
+	else if (player_distance[0] <= melee_range || player_distance[1] <= melee_range) {
+		actions.find("Melee")->second->probability = 100.0f;
+		return;
 	}
+	else if (player_rooted[0] || player_rooted[1]) {
+		actions.find("Crows")->second->probability = 100.0f;
+		return;
+	}
+	else {
+		actions.find("Crows")->second->probability = 40.0f;
+		actions.find("Root")->second->probability = 60.0f;
+	}
+	
 
 }
 
 void Leshen::SelectAction()
 {
 
-	float rand_num = (float)rand() / RAND_MAX; // 0.4
+	float rand_num = rand() % 100 + 1;
 	float aux = 0.f;
 
+	current_action = actions["Root"];
+
 	for (auto it = actions.begin(); it != actions.end(); ++it) {
-		if (rand_num > aux&& rand_num <= (aux + (*it).second->probability) * 0.01) {
+		if (rand_num > aux && rand_num <= (aux + (*it).second->probability)) {
 			current_action = (*it).second;
 			break;
 		}
-		aux = (aux + (*it).second->probability * 0.01) + 0.01;
+		aux = (aux + (*it).second->probability);
 	}
-
 }
 
 bool Leshen::IsOnAction()
@@ -124,6 +130,7 @@ void Leshen::SetIdleState()
 
 void Leshen::SetAttackState()
 {
+	SetActionVariables();
 	SetActionProbabilities();
 	SelectAction();
 	time_to_action = 0.0f;
@@ -153,9 +160,6 @@ bool Leshen::UpdateAction()
 		break;
 	case Leshen::ActionType::CROWS:
 		updating = UpdateCrowsAction();
-		break;
-	case Leshen::ActionType::WHIP:
-		updating = UpdateWhipAction();
 		break;
 	case Leshen::ActionType::CLOUD:
 		updating = UpdateCloudAction();
@@ -203,21 +207,7 @@ bool Leshen::UpdateCrowsAction()
 {
 	bool updating = true;
 
-	LOG("UPDATING MELEE ACTION");
-
-	action_time += Time::GetDT();
-
-	if (action_time >= 3.0f) {
-		updating = false;
-		action_time = 0.0f;
-	}
-
-	return updating;
-}
-
-bool Leshen::UpdateWhipAction()
-{
-	bool updating = true;
+	LOG("UPDATING CROWS ACTION");
 
 	action_time += Time::GetDT();
 
@@ -233,6 +223,8 @@ bool Leshen::UpdateCloudAction()
 {
 	bool updating = true;
 
+	LOG("UPDATING CLOUD ACTION");
+
 	action_time += Time::GetDT();
 
 	if (action_time >= 3.0f) {
@@ -245,20 +237,30 @@ bool Leshen::UpdateCloudAction()
 
 void Leshen::SetActionVariables()
 {
+	player_distance[0] = 0;
+	player_distance[1] = 0;
+
+	player_distance[0] = transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players[0]->game_object->transform->GetGlobalPosition());
+	player_distance[1] = transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players[1]->game_object->transform->GetGlobalPosition());
+
+	player_rooted[0] = false;
+	player_rooted[1] = false;	
+	
+	if(GameManager::manager->player_manager->players[0]->state == PlayerController::PlayerState::ROOT)
+		player_rooted[0] = true;
+	else if(GameManager::manager->player_manager->players[1]->state == PlayerController::PlayerState::ROOT)
+		player_rooted[1] = true;
 }
 
-void Leshen::ChangePhase()
-{
-	phase = 2;
-}
+//void Leshen::ChangePhase()
+//{
+//	phase = 2;
+//}
 
 void Leshen::HandleHitCount()
 {
-	if (phase == 2)
-	{
-		if (times_hitted < 3)
-			times_hitted++;
-		else
-			times_hitted = 0;
-	}
+	if (times_hitted < 5)
+		times_hitted++;
+	else
+		times_hitted = 0;
 }

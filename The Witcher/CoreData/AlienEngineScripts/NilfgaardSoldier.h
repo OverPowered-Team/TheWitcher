@@ -24,6 +24,7 @@ public:
 	void SetStats(const char* json) override;
 	void Move(float3 direction) override;
 	void Attack() override;
+	float GetDamaged(float dmg, PlayerController* player) override;
 
 	void ShootAttack();
 	Quat RotateArrow();

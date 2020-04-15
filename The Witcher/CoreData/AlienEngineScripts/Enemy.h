@@ -7,7 +7,8 @@
 enum (EnemyType,
 	NONE = -1,
 	GHOUL,
-	NILFGAARD_SOLDIER
+	NILFGAARD_SOLDIER,
+	LESHEN
 	);
 
 class PlayerController;
@@ -60,7 +61,7 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 	virtual void OnDeathHit() {}
 
-	float GetDamaged(float dmg, PlayerController* player);
+	virtual float GetDamaged(float dmg, PlayerController* player);
 	void ApplyEffects();
 
 public:
@@ -71,6 +72,7 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
+	bool can_get_interrupted = true;
 
 	std::vector<PlayerController*> player_controllers;
 

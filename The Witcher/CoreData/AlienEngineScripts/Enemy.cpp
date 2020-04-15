@@ -31,6 +31,9 @@ void Enemy::StartEnemy()
 	case EnemyType::NILFGAARD_SOLDIER:
 		json_str = "nilfgaardsoldier";
 		break;
+	case EnemyType::LESHEN:
+		json_str = "leshen";
+		break;
 	default:
 		break;
 	}
@@ -115,17 +118,19 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		OnDeathHit();
 	}
 	
-	state = EnemyState::HIT;
-	animator->PlayState("Hit");
-	character_ctrl->SetWalkDirection(float3::zero());
-
-	if (player->attacks->GetCurrentAttack()->IsLast())
-	{
-		state = EnemyState::DYING;
-		animator->PlayState("Death");
-		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
-		player->OnEnemyKill();
+	if (can_get_interrupted) {
+		state = EnemyState::HIT;
+		animator->PlayState("Hit");
+		character_ctrl->SetWalkDirection(float3::zero());
 	}
+
+	//if (player->attacks->GetCurrentAttack()->IsLast())
+	//{
+	//	state = EnemyState::DYING;
+	//	animator->PlayState("Death");
+	//	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+	//	player->OnEnemyKill();
+	//}
 
 	return aux_health - stats.current_health;
 }

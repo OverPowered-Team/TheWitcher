@@ -23,6 +23,7 @@ public:
 		DEAD,
 		REVIVING,
 		HIT,
+		ROOT,
 
 		MAX
 		);

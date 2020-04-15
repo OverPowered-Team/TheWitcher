@@ -14,7 +14,6 @@ public:
 		ROOT,
 		MELEE,
 		CROWS,
-		WHIP,
 		CLOUD
 		);
 
@@ -25,13 +24,13 @@ public:
 	float action_cooldown = 3.0f;
 	float time_to_action;
 	int times_hitted = 0;
-	int phase = 1;
+	//int phase = 1;
 	float action_time = 0;
 	//-----------Data to set probabilities-----------//
 
 	struct LeshenAction {
 		LeshenAction(ActionType _type, float _probability);
-		float probability;
+		float probability = 0.0f;
 		ActionType type = ActionType::NONE;
 	};
 
@@ -42,6 +41,7 @@ public:
 	void StartEnemy() override;
 	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
+	float GetDamaged(float dmg, PlayerController* player) override;
 
 	void SetStats(const char* json) override;
 
@@ -57,11 +57,10 @@ public:
 	bool UpdateRootAction();
 	bool UpdateMeleeAction();
 	bool UpdateCrowsAction();
-	bool UpdateWhipAction();
 	bool UpdateCloudAction();
 
 	void SetActionVariables();
-	void ChangePhase();
+	//void ChangePhase();
 
 	//Phase 2 exclusive
 	void HandleHitCount();
