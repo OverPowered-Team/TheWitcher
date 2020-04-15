@@ -19,17 +19,38 @@ void Relic_Notification::Start()
 
 void Relic_Notification::Update()
 {
-	if (current_notification && (notification_time + 5 < Time::GetGameTime()))
+	if (!notifications.empty() && active == nullptr)
 	{
-		game_object->GetChild("Relics_Notification")->SetEnable(false);
-		current_notification = false;
+		static int counter = 0;
+		ShowRelic(notifications.front());
+		counter++;
+		LOG("Counter: %i", counter);
+	}
+
+	if ((time + time_to_show < Time::GetTimeSinceStart()) && active)
+	{
+		StopRelic();
 	}
 }
 
 void Relic_Notification::TriggerRelic(PlayerController* player, std::string relic_name)
 {
-	relic_notification->SetEnable(true);
+	Notification* new_relic = new Notification();
 	if (player->player_data.player_type == PlayerController::PlayerType::GERALT)
+	{
+		new_relic->is_geralt = true;
+	}
+	new_relic->relic_name = "Relic Name WIP";
+	//new_relic->relic_name = relic_name.c_str();
+	//new_relic->description
+	notifications.push(new_relic);
+}
+
+void Relic_Notification::ShowRelic(Notification* notification)
+{
+	relic_notification->SetEnable(true);
+
+	if (notification->is_geralt)
 	{
 		geralt_portrait->SetEnable(true);
 		yennefer_portrait->SetEnable(false);
@@ -39,8 +60,16 @@ void Relic_Notification::TriggerRelic(PlayerController* player, std::string reli
 		geralt_portrait->SetEnable(false);
 		yennefer_portrait->SetEnable(true);
 	}
-	relic_title->SetText(relic_name.c_str());
-	current_notification = true;
-	notification_time = Time::GetGameTime();
-	LOG("Trigger");
+
+	relic_title->SetText(notification->relic_name);
+	active = notification;
+	notifications.pop();
+	time = Time::GetTimeSinceStart();
+}
+
+void Relic_Notification::StopRelic()
+{
+	relic_notification->SetEnable(false);
+	delete active;
+	active = nullptr;
 }
