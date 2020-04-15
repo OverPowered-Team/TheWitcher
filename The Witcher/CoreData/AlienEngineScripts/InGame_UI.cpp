@@ -13,6 +13,8 @@ void InGame_UI::Start()
 	pause_menu->SetEnable(false);
 	GameObject::FindWithName("Menu")->SetEnable(true);
 	you_died = GameObject::FindWithName("YouDied");
+	relics_panel = GameObject::FindWithName("Relics_Notification");
+	relics_panel->SetEnable(false);
 	you_died->SetEnable(false);
 	in_game->SetEnable(true);
 }

@@ -9,12 +9,6 @@ class PlayerController;
 struct Dialogue;
 class DialogueManager;
 
-enum (RumblerType,
-	HARD,
-	LIGHT,
-	NONE
-	);
-
 class ALIEN_ENGINE_API EventManager : public Alien {
 
 public:
@@ -30,7 +24,8 @@ public:
 	void ReceiveDialogueEvent(Dialogue& dialogue, float delay = 0.f) const;
 	void ReceiveDialogueEvent(int index, float volume = 0.5f) const;
 
-	void Rumbler(RumblerType type, int index_controller = 0);
+	
+	
 
 public:
 	std::map<const char*, uint> eventPriorities; // event and priority

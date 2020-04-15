@@ -98,6 +98,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,6 +139,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -198,6 +200,8 @@
     <ClInclude Include="NilfgaardSoldier.h" />
     <ClInclude Include="PlayerAttacks.h" />
     <ClInclude Include="RelicBehaviour.h" />
+    <ClInclude Include="Relic_Notification.h" />
+    <ClInclude Include="RelicManager.h" />
     <ClInclude Include="ReverbZone.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
@@ -243,6 +247,8 @@
     <ClCompile Include="NilfgaardSoldier.cpp" />
     <ClCompile Include="PlayerAttacks.cpp" />
     <ClCompile Include="RelicBehaviour.cpp" />
+    <ClCompile Include="Relic_Notification.cpp" />
+    <ClCompile Include="RelicManager.cpp" />
     <ClCompile Include="ReverbZone.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
