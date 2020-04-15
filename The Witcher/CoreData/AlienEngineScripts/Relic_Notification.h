@@ -3,14 +3,13 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include <queue>
+#include "PlayerController.h"
 
-class PlayerController;
-
-class Notification : public Alien
+class Notification
 {
 public:
 
-	bool is_geralt = false;
+	PlayerController::PlayerType type;
 	const char* relic_name = "";
 	const char* description = "";
 
@@ -26,7 +25,7 @@ public:
 	void Start();
 	void Update();
 
-	void TriggerRelic(PlayerController* player, std::string relic_name);
+	void TriggerRelic(PlayerController* player, std::string relic_name, std::string description);
 	void ShowRelic(Notification* notification);
 	void StopRelic();
 

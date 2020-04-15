@@ -20,7 +20,7 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player)
 {
 	player->PickUpRelic(this);
-	((Relic_Notification*)GameObject::FindWithName("InGame")->GetComponentScript("Relic_Notification"))->TriggerRelic(player, this->name);
+	((Relic_Notification*)GameObject::FindWithName("InGame")->GetComponentScript("Relic_Notification"))->TriggerRelic(player, this->name, this->description);
 }
 
 // AttackRelic
