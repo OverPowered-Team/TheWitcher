@@ -35,7 +35,7 @@ public:
 	Relic();
 	virtual ~Relic();
 
-	virtual void OnPickUp(PlayerController* player);
+	virtual void OnPickUp(PlayerController* player, std::string attack = std::string());
 
 	std::string name = "";
 	std::string description = "";
@@ -49,7 +49,7 @@ public:
 	AttackRelic();
 	virtual ~AttackRelic();
 
-	void OnPickUp(PlayerController* player) override;
+	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
 	std::string attack_name = "";
 
@@ -60,7 +60,7 @@ public:
 	DashRelic();
 	virtual ~DashRelic();
 
-	void OnPickUp(PlayerController* player) override;
+	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
 };
 

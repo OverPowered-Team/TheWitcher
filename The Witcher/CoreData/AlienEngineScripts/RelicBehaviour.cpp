@@ -16,10 +16,10 @@ Relic::~Relic()
 {
 }
 
-void Relic::OnPickUp(PlayerController* player)
+void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	((Relic_Notification*)GameObject::FindWithName("InGame")->GetComponentScript("Relic_Notification"))->TriggerRelic(player, this->name, this->description);
+	((Relic_Notification*)GameObject::FindWithName("InGame")->GetComponentScript("Relic_Notification"))->TriggerRelic(player, this->name, this->description, attack);
 }
 
 // AttackRelic
@@ -31,7 +31,7 @@ AttackRelic::~AttackRelic()
 {
 }
 
-void AttackRelic::OnPickUp(PlayerController* _player)
+void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
 	std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
 
@@ -62,7 +62,7 @@ void AttackRelic::OnPickUp(PlayerController* _player)
 
 	effects.push_back(test_effect);
 
-	Relic::OnPickUp(_player);
+	Relic::OnPickUp(_player, attack_name);
 }
 
 // DashRelic
@@ -74,7 +74,7 @@ DashRelic::~DashRelic()
 {
 }
 
-void DashRelic::OnPickUp(PlayerController* _player)
+void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
 	Effect* test_effect = new Effect();
 

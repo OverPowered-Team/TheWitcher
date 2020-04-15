@@ -12,7 +12,7 @@ public:
 	PlayerController::PlayerType type;
 	const char* relic_name = "";
 	const char* description = "";
-
+	std::string* attack;
 };
 
 class ALIEN_ENGINE_API Relic_Notification : public Alien {
@@ -25,7 +25,7 @@ public:
 	void Start();
 	void Update();
 
-	void TriggerRelic(PlayerController* player, std::string relic_name, std::string description);
+	void TriggerRelic(PlayerController* player, std::string relic_name, std::string description, std::string attack_combo);
 	void ShowRelic(Notification* notification);
 	void StopRelic();
 
@@ -38,10 +38,14 @@ private:
 	GameObject* relic_notification = nullptr;
 	GameObject* geralt_portrait = nullptr;
 	GameObject* yennefer_portrait = nullptr;
+	GameObject* combo = nullptr;
 	ComponentText* relic_title = nullptr;
+	ComponentText* description = nullptr;
 
 	Notification* active = nullptr;
 	std::queue<Notification*> notifications;
+	std::vector<GameObject*> L_combo_images;
+	std::vector<GameObject*> H_combo_images;
 };
 
 ALIEN_FACTORY Relic_Notification* CreateRelic_Notification() {
