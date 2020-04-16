@@ -50,8 +50,8 @@ void Relic_Notification::TriggerRelic(PlayerController* player, std::string reli
 	new_relic->relic_name = "No Name";
 	new_relic->description = "Description";
 	new_relic->attack = &attack_combo;
-	//new_relic->relic_name = relic_name.c_str();
-	//new_relic->description = description.c_str();
+	new_relic->relic_name = relic_name.c_str();
+	new_relic->description = description.c_str();
 	notifications.push(new_relic);
 }
 

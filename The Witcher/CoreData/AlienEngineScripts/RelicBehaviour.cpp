@@ -156,10 +156,10 @@ void RelicBehaviour::Update()
 
 void RelicBehaviour::SetRelic(const char* json_array)
 {
-	std::string json_path = std::string("Configuration/Relics.json");
+	/*std::string json_path = std::string("Configuration/Relics.json");*/
 
 	
-	JSONfilepack* relic_json = JSONfilepack::GetJSON(json_path.c_str());
+	JSONfilepack* relic_json = JSONfilepack::GetJSON("Configuration/Relics.json");
 
 	JSONArraypack* type_array = relic_json->GetArray(json_array);
 
@@ -175,7 +175,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 				break;
 		}
 		relic->name = type_array->GetString("name");
-		relic->name = type_array->GetString("description");
+		relic->description = type_array->GetString("description");
 	}
 
 	JSONfilepack::FreeJSON(relic_json);

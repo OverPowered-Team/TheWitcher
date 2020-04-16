@@ -11,12 +11,20 @@ RelicManager::~RelicManager()
 void RelicManager::Start()
 {
 	spawn = GameObject::FindWithName("SpawnRelics");
-	/*std::vector<GameObject*> children = spawn->GetChildren();
-	for (auto it = children.begin(); it != children.end(); ++it) {
-		DropRelic((*it)->GetComponentTransform()->GetGlobalPosition());
-	}*/
-	if(spawn)
-		DropRelic(spawn->GetChild(0)->GetComponentTransform()->GetGlobalPosition());
+
+	if (spawn)
+	{
+		ComponentTransform** c_trans = nullptr;
+		int size = spawn->GetComponentsInChildren(ComponentType::TRANSFORM, (Component***)&c_trans, false);
+
+		for (uint i = 0u; i < size; ++i) {
+
+			DropRelic(c_trans[i]->GetGlobalPosition());
+		}
+
+		GameObject::FreeArrayMemory((void***)&c_trans);
+	}
+	
 }
 
 void RelicManager::Update()
