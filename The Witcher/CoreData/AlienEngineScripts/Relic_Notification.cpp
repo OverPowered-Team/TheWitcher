@@ -39,7 +39,7 @@ void Relic_Notification::Update()
 
 	if ((time + time_to_show < Time::GetTimeSinceStart()) && active)
 	{
-		//StopRelic();
+		StopRelic();
 	}
 }
 
