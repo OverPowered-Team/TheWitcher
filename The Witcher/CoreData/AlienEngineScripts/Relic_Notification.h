@@ -10,9 +10,9 @@ class Notification
 public:
 
 	PlayerController::PlayerType type;
-	const char* relic_name = "";
-	const char* description = "";
-	std::string* attack;
+	const char* relic_name = nullptr;
+	const char* description = nullptr;
+	std::string attack;
 };
 
 class ALIEN_ENGINE_API Relic_Notification : public Alien {
@@ -25,7 +25,7 @@ public:
 	void Start();
 	void Update();
 
-	void TriggerRelic(PlayerController* player, std::string relic_name, std::string description, std::string attack_combo);
+	void TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo);
 	void ShowRelic(Notification* notification);
 	void StopRelic();
 

@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 100.88283538818359,
+                        "HoritzontalFov": 97.819671630859375,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -62,7 +62,7 @@
                             1
                         ],
                         "Fog": true,
-                        "Density": 9.3253847641693384e-33,
+                        "Density": 6.4203109583466424e-21,
                         "Gradient": 1.3500000238418579,
                         "Skybox_PositiveX": "Library\/Textures\/575523041464209442.dds",
                         "Skybox_NegativeX": "Library\/Textures\/2272049821688510999.dds",
@@ -2242,9 +2242,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.29891926050186157,
-                                1.7837028503417969,
-                                0.85384505987167358
+                                -0.68353468179702759,
+                                0.086505033075809479,
+                                1.8775774240493774
                             ],
                             "Force": [
                                 0,
@@ -2315,7 +2315,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 4.1529998779296875,
+                            "CurrentLife": 1.2889996767044067,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -2412,9 +2412,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                3.4367718696594238,
-                                0.77769345045089722,
-                                -3.5473642349243164
+                                -3.3936879634857178,
+                                -3.6327955722808838,
+                                0.53448623418807983
                             ],
                             "Force": [
                                 0,
@@ -2485,7 +2485,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.004000186920166,
+                            "CurrentLife": 2.0010001659393311,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -2586,9 +2586,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -3.1933724880218506,
-                                0.62692040205001831,
-                                3.7959637641906738
+                                -1.5868878364562988,
+                                0.31600499153137207,
+                                4.730954647064209
                             ],
                             "Force": [
                                 0,
@@ -2659,7 +2659,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 1.0779999494552612,
+                            "CurrentLife": 1.0959999561309814,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -2705,7 +2705,7 @@
             {
                 "Name": "GameManager",
                 "FamilyNumber": 1,
-                "ID": "10673309749085161932",
+                "ID": "17682866984048911382",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -2736,10 +2736,10 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2091012765753228961"
+                        "ID": "5713291848003875098"
                     },
                     {
-                        "ID": "18063573967095782904",
+                        "ID": "3130910637740752189",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -2750,28 +2750,35 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "1889494176176291120",
+                        "ID": "17497791798096844937",
                         "ResourceID": "17206304544927406460",
                         "DataName": "GameManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "7868927755507292051",
+                        "ID": "5490146999927115873",
                         "ResourceID": "10454231044988625899",
                         "DataName": "DialogueManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "10290918722619551628",
+                        "ID": "7907222440761220019",
                         "ResourceID": "12931529595659776773",
                         "DataName": "EventManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "11504528473922115863",
+                        "ID": "12905602442363606010",
+                        "ResourceID": "16300709835341546267",
+                        "DataName": "DebugManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5275320380636281512",
                         "ResourceID": "1616101574407180879",
                         "DataName": "PlayerManager",
                         "HasInspector": true,
@@ -2792,6 +2799,161 @@
                                 "float": 0.5
                             }
                         ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "34914197490719291",
+                        "ResourceID": "10347121337452531063",
+                        "DataName": "RelicManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "fire_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_runestone",
+                                "prefab": "14345935870360924178"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_runestone",
+                                "prefab": "2289476701194859904"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "lightning_runestone",
+                                "prefab": "16448281988015221948"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_runestone",
+                                "prefab": "915245159270916750"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "fire_oil",
+                                "prefab": "4897692966543348103"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_oil",
+                                "prefab": "12016371024677234694"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_oil",
+                                "prefab": "6970049334727365231"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_oil",
+                                "prefab": "3987566163270230324"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nature_soul",
+                                "prefab": "6076778088024267194"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "sea_soul",
+                                "prefab": "8313000836464753319"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "djinn_jar",
+                                "prefab": "1853242969475161181"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "strigas_claws",
+                                "prefab": "5962552769781594257"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "witcher_rage",
+                                "prefab": "18026174053446935841"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "SpawnRelics",
+                "FamilyNumber": 2,
+                "ID": "13893559681347505083",
+                "ParentID": "17682866984048911382",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12922817184992308906",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11569991198289594484"
+                    }
+                ]
+            },
+            {
+                "Name": "Relic1",
+                "FamilyNumber": 3,
+                "ID": "5454280083172141725",
+                "ParentID": "13893559681347505083",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12922817184992308906",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -169.87033081054688,
+                            18.669029235839844,
+                            -6.4045705795288086
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1896744643801234006"
                     }
                 ]
             },
@@ -5429,9 +5591,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.0073752501048147678,
-                                1.9217454195022583,
-                                -0.55393123626708984
+                                -1.8879580497741699,
+                                -0.25142025947570801,
+                                0.61024725437164307
                             ],
                             "Force": [
                                 0,
@@ -5502,7 +5664,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 4.1529998779296875,
+                            "CurrentLife": 1.2889996767044067,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -5599,9 +5761,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -2.3205807209014893,
-                                2.4588968753814697,
-                                -3.6835761070251465
+                                -3.5099935531616211,
+                                2.3600099086761475,
+                                -2.6665141582489014
                             ],
                             "Force": [
                                 0,
@@ -5672,7 +5834,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.004000186920166,
+                            "CurrentLife": 2.0010001659393311,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -5773,9 +5935,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.10496139526367188,
-                                -0.38755571842193604,
-                                -6.9884743690490723
+                                -0.20064371824264526,
+                                -0.038464367389678955,
+                                -6.9970178604125977
                             ],
                             "Force": [
                                 0,
@@ -5846,7 +6008,7 @@
                                 2
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.0779999494552612,
+                            "CurrentLife": 1.0959999561309814,
                             "SpawnRate": 300,
                             "Delay": 0,
                             "Loop": false,
@@ -5943,9 +6105,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.043830610811710358,
-                                0.069533415138721466,
-                                -4.9993243217468262
+                                0.059821613132953644,
+                                -0.10465789586305618,
+                                -4.9985466003417969
                             ],
                             "Force": [
                                 0,
@@ -6016,7 +6178,7 @@
                                 10
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.0779999494552612,
+                            "CurrentLife": 1.0959999561309814,
                             "SpawnRate": 14.999999046325684,
                             "Delay": 0,
                             "Loop": false,
@@ -6113,9 +6275,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.030164625495672226,
-                                0.018127186223864555,
-                                -4.9998760223388672
+                                0.065810352563858032,
+                                -0.00077899510506540537,
+                                -4.9995670318603516
                             ],
                             "Force": [
                                 0,
@@ -6186,7 +6348,7 @@
                                 10
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.0779999494552612,
+                            "CurrentLife": 1.0959999561309814,
                             "SpawnRate": 14.999999046325684,
                             "Delay": 0,
                             "Loop": false,
@@ -6271,9 +6433,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                3.2503864765167236,
-                                0.63543134927749634,
-                                4.2540311813354492
+                                3.049933910369873,
+                                0.31130999326705933,
+                                4.3703069686889648
                             ],
                             "Rotation": [
                                 0,
@@ -6356,7 +6518,7 @@
                                 0.5
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 1.0779999494552612,
+                            "CurrentLife": 1.0959999561309814,
                             "SpawnRate": 14.999999046325684,
                             "Delay": 0,
                             "Loop": false,
@@ -6453,9 +6615,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.07528425008058548,
-                                0.010780060663819313,
-                                -2.9990358352661133
+                                0.093540340662002563,
+                                -0.068706631660461426,
+                                -2.9977540969848633
                             ],
                             "Force": [
                                 0,
@@ -6526,7 +6688,7 @@
                                 10
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 1.0779999494552612,
+                            "CurrentLife": 1.0959999561309814,
                             "SpawnRate": 499.99996948242188,
                             "Delay": 0,
                             "Loop": false,
@@ -6623,9 +6785,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -2.079960823059082,
-                                -6.077390193939209,
-                                -7.6641440391540527
+                                -4.1503901481628418,
+                                -8.2954130172729492,
+                                -3.7363579273223877
                             ],
                             "Force": [
                                 0,
@@ -6696,7 +6858,7 @@
                                 10
                             ],
                             "MaxLife": 1.5,
-                            "CurrentLife": 1.53600013256073,
+                            "CurrentLife": 1.5039999485015869,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -7010,7 +7172,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6968923890002280707",
+                        "ID": "15975808659031135757",
                         "Text": "Select",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7117,7 +7279,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "10837367029670017414",
+                        "ID": "1644661130482046888",
                         "Text": "Back",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7327,7 +7489,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15850483642728748992",
+                        "ID": "7859020256277056272",
                         "Text": "Resume",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7485,7 +7647,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "11988374054478609934",
+                        "ID": "15653924780601832840",
                         "Text": "Leaderboard",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7643,7 +7805,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "8367292975400792676",
+                        "ID": "10346376588806540765",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7794,7 +7956,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12267148094293444557",
+                        "ID": "14170597427448919430",
                         "Text": "Settings",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -7952,7 +8114,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "4812704498038916319",
+                        "ID": "14304246140768553286",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8110,7 +8272,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "3143932779841884971",
+                        "ID": "3539099415263736829",
                         "Text": "Main Menu",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8268,7 +8430,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "10729092099976306570",
+                        "ID": "4130221955709662643",
                         "Text": "Exit Game",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8427,7 +8589,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15042016221281518236",
+                        "ID": "74945461611304607",
                         "Text": "Geralt",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -8638,7 +8800,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15382164735529279626",
+                        "ID": "9859755613115951351",
                         "Text": "Yennefer",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -9019,7 +9181,7 @@
                     },
                     {
                         "X": 1067.3831787109375,
-                        "Y": 102.74657440185547,
+                        "Y": 118.25863647460938,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9088,7 +9250,7 @@
                     },
                     {
                         "X": 1063.5198974609375,
-                        "Y": 116.82948303222656,
+                        "Y": 134.46769714355469,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9157,7 +9319,7 @@
                     },
                     {
                         "X": 1117.8466796875,
-                        "Y": 84.541206359863281,
+                        "Y": 97.304725646972656,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9283,7 +9445,7 @@
                     },
                     {
                         "X": 646.5,
-                        "Y": 568.0888671875,
+                        "Y": 653.85552978515625,
                         "Width": 11.590000152587891,
                         "Height": 0.87999999523162842,
                         "Enabled": true,
@@ -9645,7 +9807,7 @@
                     },
                     {
                         "X": 277.396728515625,
-                        "Y": 84.541206359863281,
+                        "Y": 97.304725646972656,
                         "Width": 2.6099998950958252,
                         "Height": 0.18999999761581421,
                         "Enabled": true,
@@ -9714,7 +9876,7 @@
                     },
                     {
                         "X": 226.93330383300781,
-                        "Y": 102.74657440185547,
+                        "Y": 118.25863647460938,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -9783,7 +9945,7 @@
                     },
                     {
                         "X": 223.06991577148438,
-                        "Y": 116.82948303222656,
+                        "Y": 134.46769714355469,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
@@ -10109,7 +10271,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "7129132031462268414",
+                        "ID": "13623172996001790635",
                         "Text": "Relic",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -10164,7 +10326,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "7621918504823710615",
+                        "ID": "5349332183630061258",
                         "Text": "Description",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -10175,7 +10337,7 @@
                             0.91665750741958618,
                             1
                         ],
-                        "Width": 1340,
+                        "Width": 2815,
                         "Interlineal": 1.5,
                         "Align": 0
                     }
@@ -10905,7 +11067,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18410260144584377094",
+                        "ID": "2139238397587774160",
                         "Text": "YOU DIED",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -10923,9 +11085,9 @@
                 ]
             },
             {
-                "Name": "Ice_Runestone",
+                "Name": "Poison_Oil",
                 "FamilyNumber": 1,
-                "ID": "15479669543722451528",
+                "ID": "7466583135810969936",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -10935,14 +11097,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14345935870360924178",
+                "PrefabID": "3987566163270230324",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            2.2231926918029785,
-                            0,
-                            -7.8556146621704102
+                            2.5184261798858643,
+                            -3.8351226976374164e-06,
+                            -3.3215930461883545
                         ],
                         "Rotation": [
                             0,
@@ -10956,7 +11118,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3508897518168515574"
+                        "ID": "3505227920285114785"
                     },
                     {
                         "Type": 1,
@@ -10966,7 +11128,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2479476964838852081",
+                        "ID": "1636257424453831624",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -10974,7 +11136,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "2376792758325253969",
+                        "ID": "1712450704710480625",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -10992,79 +11154,25 @@
                         "Friction": 0.5,
                         "AngularFriction": 0.10000000149011612,
                         "Radius": 1
-                    }
-                ]
-            },
-            {
-                "Name": "Lightning_Runestone",
-                "FamilyNumber": 1,
-                "ID": "11408797972187543224",
-                "ParentID": "0",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "16448281988015221948",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -1.9939572811126709,
-                            0,
-                            -4.8211264610290527
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "16267563058199743679"
                     },
                     {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "13218464804495751166",
-                        "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 1,
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "5205225317511675501",
-                        "HasMaterial": true,
-                        "MaterialID": "0",
-                        "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 8,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": true,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Radius": 1
+                        "Type": 29,
+                        "ID": "18007541630084369685",
+                        "ResourceID": "4897385080197603127",
+                        "DataName": "RelicBehaviour",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "relic_type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "relic_effect",
+                                "enumInt": 5
+                            }
+                        ]
                     }
                 ]
             }

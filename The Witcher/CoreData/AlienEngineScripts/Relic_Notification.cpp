@@ -43,13 +43,11 @@ void Relic_Notification::Update()
 	}
 }
 
-void Relic_Notification::TriggerRelic(PlayerController* player, std::string relic_name, std::string description, std::string attack_combo)
+void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo)
 {
 	Notification* new_relic = new Notification();
 	new_relic->type = player->player_data.player_type;
-	new_relic->relic_name = "No Name";
-	new_relic->description = "Description";
-	new_relic->attack = &attack_combo;
+	new_relic->attack = attack_combo;
 	new_relic->relic_name = relic_name.c_str();
 	new_relic->description = description.c_str();
 	notifications.push(new_relic);
@@ -71,22 +69,22 @@ void Relic_Notification::ShowRelic(Notification* notification)
 	}
 
 	relic_title->SetText(notification->relic_name);
-	relic_title->SetText(notification->description);
-	  
+	description->SetText(notification->description);
+	
 	uint i = 0;
-	for (notification->attack->size() > 3 ? i = 0 : i = 1; i < 5; ++i)
+	for (notification->attack.size() > 3 ? i = 0 : i = 1; i < notification->attack.size(); ++i)
 	{
-		if (notification->attack[i] == "L")
+		if (notification->attack[i] == 'L')
 		{
 			L_combo_images[i]->SetEnable(true);
 			H_combo_images[i]->SetEnable(false);
 		}
-		else if (notification->attack[i] == "H")
+		else if (notification->attack[i] == 'H')
 		{
 			L_combo_images[i]->SetEnable(false);
 			H_combo_images[i]->SetEnable(true);
 		}
-		else if (notification->attack[i] == "")
+		else if (notification->attack[i] == ' ')
 		{
 			L_combo_images[i]->SetEnable(false);
 			H_combo_images[i]->SetEnable(false);
