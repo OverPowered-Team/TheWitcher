@@ -18,12 +18,15 @@ void Relic_Notification::Start()
 	description = (ComponentText*)game_object->GetChild("Relics_Notification")->GetChild("Relic_Description")->GetComponent(ComponentType::UI_TEXT);
 	combo = game_object->GetChild("Relics_Notification")->GetChild("Combo_Container");
 
+	L_combo_images.resize(5);
+	H_combo_images.resize(5);
+
 	for (uint i = 0; i < 5 ; ++i)
 	{
-		/*L_combo_images[i] = combo->GetChild("L_Buttons")->GetChild(i);
+		L_combo_images[i] = combo->GetChild("L_Buttons")->GetChild(i);
 		H_combo_images[i] = combo->GetChild("H_Buttons")->GetChild(i);
 		L_combo_images[i]->SetEnable(false);
-		H_combo_images[i]->SetEnable(false);*/
+		H_combo_images[i]->SetEnable(false);
 	}
 }
 
