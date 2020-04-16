@@ -39,7 +39,7 @@ void Relic_Notification::Update()
 
 	if ((time + time_to_show < Time::GetTimeSinceStart()) && active)
 	{
-		StopRelic();
+		//StopRelic();
 	}
 }
 
@@ -72,25 +72,28 @@ void Relic_Notification::ShowRelic(Notification* notification)
 	description->SetText(notification->description);
 	
 	uint i = 0;
-	for (notification->attack.size() > 3 ? i = 0 : i = 1; i < notification->attack.size(); ++i)
+	uint s = 0;
+	for (notification->attack.size() > 3 ? i = 0 : i = 1; s < notification->attack.size(); ++i)
 	{
-		if (notification->attack[i] == 'L')
+		if (notification->attack[s] == 'L')
 		{
 			L_combo_images[i]->SetEnable(true);
 			H_combo_images[i]->SetEnable(false);
 		}
-		else if (notification->attack[i] == 'H')
+		else if (notification->attack[s] == 'H')
 		{
 			L_combo_images[i]->SetEnable(false);
 			H_combo_images[i]->SetEnable(true);
 		}
-		else if (notification->attack[i] == ' ')
+		else if (notification->attack[s] == ' ')
 		{
 			L_combo_images[i]->SetEnable(false);
-			H_combo_images[i]->SetEnable(false);
+			H_combo_images[i]->SetEnable(false); 
 		}
+		++s;
 	}
-
+	LOG("Combo:");
+	LOG(notification->attack.c_str());
 	active = notification;
 	notifications.pop();
 	time = Time::GetTimeSinceStart();
