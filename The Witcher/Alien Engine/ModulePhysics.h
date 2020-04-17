@@ -7,6 +7,8 @@
 #include <list>
 #include <vector>
 
+class MyDispatcher;
+
 enum class Space
 {
 	Global,
