@@ -170,21 +170,14 @@ void PlayerController::Update()
 			audio->StartSound("Hit_Sword");
 			can_move = false;
 
-
-			Effect* effect = new Effect();
-			effect->AddFlatModifier(-5, "Health");
-			effect->time = 2.5;
-			effect->ticks_time = 1.0f;
-			effect->last_tick_time = Time::GetGameTime();
-			effect->start_time = Time::GetGameTime();
-			this->effects.push_back(effect);
-
+			//GameManager::manager->Rumbler(RumblerType::INCREASING, controller_index, 5);
 		}
 		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
 			state = PlayerState::BASIC_ATTACK;
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			audio->StartSound("Hit_Sword");
+			GameManager::manager->Rumbler(RumblerType::HEAVY_ATTACK, controller_index);
 			can_move = false;
 		}*/
 
@@ -251,6 +244,7 @@ void PlayerController::Update()
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
+			GameManager::manager->Rumbler(RumblerType::HEAVY_ATTACK, controller_index);
 			controller->SetWalkDirection(float3::zero());
 			can_move = false;
 		}*/
