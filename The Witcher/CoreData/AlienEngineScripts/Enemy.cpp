@@ -8,7 +8,7 @@
 
 void Enemy::Awake()
 {
-	((EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager")))->AddEnemy(this);
+	GameManager::manager->enemy_manager->AddEnemy(this);
 	attack_collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
 }
 

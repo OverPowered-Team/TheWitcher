@@ -181,14 +181,14 @@ bool PlayerAttacks::FindSnapTarget()
 	Physics::FreeArray(&colliders_in_range);
 
 	float3 vector = GetMovementVector();
-	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 100.0f);
+	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
 
 	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = (*it)->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
+		float distance = transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition());
 		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
-		if (distance <= snap_detection_range && angle <= max_snap_angle)
+		if (distance <= snap_detection_range && angle <= abs(max_snap_angle))
 		{
 			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
