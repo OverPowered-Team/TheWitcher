@@ -11,7 +11,9 @@ public:
 	virtual ~UltiBar();
 	
 	void Start();
-	void Update();
+
+	void UpdateBar(float actual_value);
+	void MaxBar();
 
 	GameObject* ultibar = nullptr;
 	GameObject* ultibar_charged = nullptr;

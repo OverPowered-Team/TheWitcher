@@ -4,7 +4,7 @@
             {
                 "Name": "GameManager",
                 "FamilyNumber": 1,
-                "ID": "9781651627360976723",
+                "ID": "12013523710404655450",
                 "ParentID": "0",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -35,21 +35,231 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14466904616194329481"
+                        "ID": "18246585421262903418"
+                    },
+                    {
+                        "ID": "753956981552469028",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "1669749310",
+                        "Event": "740533573",
+                        "PlayOnAwake": false
                     },
                     {
                         "Type": 29,
-                        "ID": "16808173118255781169",
+                        "ID": "10936870435855043587",
+                        "ResourceID": "17206304544927406460",
+                        "DataName": "GameManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1039408648800006046",
+                        "ResourceID": "10454231044988625899",
+                        "DataName": "DialogueManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2949449004619930903",
                         "ResourceID": "12931529595659776773",
                         "DataName": "EventManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "1135027946040866303",
-                        "ResourceID": "6844781006917915906",
+                        "ID": "10936664617920944065",
+                        "ResourceID": "16300709835341546267",
+                        "DataName": "DebugManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11196860551680650220",
+                        "ResourceID": "1616101574407180879",
+                        "DataName": "PlayerManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "max_ultimate_charge",
+                                "int": 200
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "ultimate_time",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "ultimate_effect_value",
+                                "float": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13800812959256554345",
+                        "ResourceID": "10347121337452531063",
+                        "DataName": "RelicManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "fire_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_runestone",
+                                "prefab": "14345935870360924178"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_runestone",
+                                "prefab": "2289476701194859904"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "lightning_runestone",
+                                "prefab": "16448281988015221948"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_runestone",
+                                "prefab": "915245159270916750"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "fire_oil",
+                                "prefab": "4897692966543348103"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_oil",
+                                "prefab": "12016371024677234694"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_oil",
+                                "prefab": "6970049334727365231"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_oil",
+                                "prefab": "3987566163270230324"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nature_soul",
+                                "prefab": "6076778088024267194"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "sea_soul",
+                                "prefab": "8313000836464753319"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "djinn_jar",
+                                "prefab": "1853242969475161181"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "strigas_claws",
+                                "prefab": "5962552769781594257"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "witcher_rage",
+                                "prefab": "18026174053446935841"
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13737486848933030139",
+                        "ResourceID": "9022960755365003618",
                         "DataName": "EnemyManager",
                         "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "SpawnRelics",
+                "FamilyNumber": 2,
+                "ID": "12375698478479880645",
+                "ParentID": "12013523710404655450",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12922817184992308906",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17822265375174977775"
+                    }
+                ]
+            },
+            {
+                "Name": "Relic1",
+                "FamilyNumber": 3,
+                "ID": "14261540007605076774",
+                "ParentID": "12375698478479880645",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12922817184992308906",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -169.87033081054688,
+                            18.669029235839844,
+                            -6.4045705795288086
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5716154993582703433"
                     }
                 ]
             }

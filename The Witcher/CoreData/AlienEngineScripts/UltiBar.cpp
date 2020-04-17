@@ -17,25 +17,19 @@ void UltiBar::Start()
 	ultibar_charged->SetEnable(false);
 }
 
-void UltiBar::Update()
+void UltiBar::UpdateBar(float actual_value)
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_7))
-	{
-		normal_ulti->SetBarValue(normal_ulti->GetBarValue() + 0.1f);
-	}
-
-	if (normal_ulti->GetBarValue() >= 1)
-	{
-		normal_ulti->SetBarValue(1);
-		ultibar->SetEnable(false);
-		ultibar_charged->SetEnable(true);
-	}
-
-	if (Input::GetKeyDown(SDL_SCANCODE_0))
+	normal_ulti->SetBarValue(actual_value);
+	if (actual_value == 0)
 	{
 		ultibar->SetEnable(true);
-		normal_ulti->SetBarValue(0);
 		ultibar_charged->SetEnable(false);
 	}
+}
 
+void UltiBar::MaxBar()
+{
+	normal_ulti->SetBarValue(1);
+	ultibar->SetEnable(false);
+	ultibar_charged->SetEnable(true);
 }

@@ -2,6 +2,8 @@
 #include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
 #include "PlayerAttacks.h"
 
 PlayerAttacks::PlayerAttacks() : Alien()
@@ -99,6 +101,9 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 				current_attack = base_heavy_attack;
 		}		
 	}
+
+	if(current_attack && current_attack->IsLast())
+		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5 * current_attack->info.name.size());
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -107,20 +112,19 @@ std::vector<std::string> PlayerAttacks::GetFinalAttacks()
 
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->heavy_attack_link == nullptr && (*it)->light_attack_link == nullptr)
+		if ((*it)->IsLast())
 			final_attacks.push_back((*it)->info.name);
 	}
 	return final_attacks;
 }
 
-void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
+void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 {
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->info.name == _attack_name)
+		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
-			(*it)->info.base_damage->CalculateStat(player_controller->effects);
-			//(*it)->base_range.CalculateStat(player_controller->effects);
+			(*it)->info.base_damage.ApplyEffect(new_effect);
 		}
 	}
 }
@@ -128,6 +132,7 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;
+	collider->SetEnable(false);
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -140,8 +145,11 @@ void PlayerAttacks::SnapToTarget()
 
 	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
 	{
-		if (distance < current_attack->info.max_snap_distance && distance > 1.0)
-			speed = distance / snap_time;
+		if (distance < current_attack->info.max_snap_distance)
+			if (distance < 1.0)
+				speed = 0;
+			else 
+				speed = distance / snap_time;
 		else
 			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
 	}
@@ -173,14 +181,14 @@ bool PlayerAttacks::FindSnapTarget()
 	Physics::FreeArray(&colliders_in_range);
 
 	float3 vector = GetMovementVector();
-	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 100.0f);
+	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
 
 	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = (*it)->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
+		float distance = transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition());
 		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
-		if (distance <= snap_detection_range && angle <= max_snap_angle)
+		if (distance <= snap_detection_range && angle <= abs(max_snap_angle))
 		{
 			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
@@ -208,11 +216,9 @@ void PlayerAttacks::ReceiveInput(AttackType attack)
 void PlayerAttacks::CleanUp()
 {
 	for (auto item = attacks.begin(); item != attacks.end(); ++item) {
-		(*item)->CleanUp();
 		delete (*item);
 	}
 	attacks.clear();
-	//GameObject::FreeArrayMemory((void***)&enemies);
 }
 
 void PlayerAttacks::AttackMovement()
@@ -255,9 +261,9 @@ void PlayerAttacks::AllowCombo()
 	can_execute_input = true;
 }
 
-void PlayerAttacks::OnDrawGizmos()
+void PlayerAttacks::OnDrawGizmosSelected()
 {
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), snap_detection_range, Color::Cyan()); //snap_range
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), snap_detection_range, Color::Red()); //snap_range
 }
 
 bool PlayerAttacks::CanBeInterrupted()
@@ -295,9 +301,9 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 float PlayerAttacks::GetCurrentDMG()
 {
 	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
-		return current_attack->info.base_damage->GetValue() * player_controller->player_data.power.GetValue();
+		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
-		return current_attack->info.base_damage->GetValue();
+		return current_attack->info.base_damage.GetValue();
 }
 
 Attack* PlayerAttacks::GetCurrentAttack()
@@ -332,7 +338,7 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = new Stat("Attack_Damage", attack_combo->GetNumber("base_damage"), attack_combo->GetNumber("base_damage"));
+			info.base_damage = Stat("Attack_Damage", attack_combo->GetNumber("base_damage"));
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
@@ -359,7 +365,7 @@ void PlayerAttacks::CreateAttacks()
 		info.collider_size = float3(spells_json->GetNumber("collider.width"),
 			spells_json->GetNumber("collider.height"),
 			spells_json->GetNumber("collider.depth"));
-		info.base_damage = new Stat("Attack_Damage", spells_json->GetNumber("base_damage"), spells_json->GetNumber("base_damage"));
+		info.base_damage = Stat("Attack_Damage", spells_json->GetNumber("base_damage"));
 		info.movement_strength = spells_json->GetNumber("movement_strength");
 		info.activation_frame = spells_json->GetNumber("activation_frame");
 		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
@@ -401,7 +407,3 @@ void PlayerAttacks::ConnectAttacks()
 	}
 }
 
-void Attack::CleanUp()
-{
-	delete info.base_damage;
-}

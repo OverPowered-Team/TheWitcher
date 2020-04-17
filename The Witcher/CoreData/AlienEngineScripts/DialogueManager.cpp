@@ -1,3 +1,4 @@
+#include "GameManager.h"
 #include "DialogueManager.h"
 #include "EventManager.h"
 #include "..\..\ComponentText.h"
@@ -12,12 +13,11 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	eventManager = (EventManager*)GetComponentScript("EventManager");
 	audioEmitter = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
 	text = (ComponentText*)GameObject::FindWithName("SubtitlesText")->GetComponent(ComponentType::UI_TEXT);
- 
+
 	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
-	LoadJSONDialogues(); 
+	LoadJSONDialogues();
 }
 
 void DialogueManager::LoadJSONDialogues()
@@ -31,13 +31,13 @@ void DialogueManager::LoadJSONDialogues()
 		JSONArraypack* dialogues = jsonDoc->GetArray("dialogues");
 		if (dialogues == nullptr)
 		{
-			LOG("No dialogues array in fucking dialogues JSON"); 
+			LOG("No dialogues array in fucking dialogues JSON");
 			return;
 		}
-		
+
 		do
 		{
-			LOG("Loading new dialogue data..."); 
+			LOG("Loading new dialogue data...");
 			std::string eventName = dialogues->GetString("eventName");
 			std::string subtitles = dialogues->GetString("subtitles");
 			float time = dialogues->GetNumber("time");
@@ -47,8 +47,8 @@ void DialogueManager::LoadJSONDialogues()
 		} while (dialogues->GetAnotherNode());
 	}
 	else
-		LOG("Couldn't open fucking dialogues JSON"); 
-	
+		LOG("Couldn't open fucking dialogues JSON");
+
 
 	JSONfilepack::FreeJSON(jsonDoc);
 }
@@ -63,7 +63,7 @@ void DialogueManager::Update()
 			playing = false;
 			text->SetEnable(false);
 			currentDialogue.Reset();
-			audioEmitter->ChangeVolume(0.5f); 
+			audioEmitter->ChangeVolume(0.5f);
 		}
 	}
 
@@ -73,36 +73,36 @@ bool DialogueManager::InputNewDialogue(Dialogue& dialogue, float volume)
 {
 	// TODO: We don't have a way of knowing the sound's duration, so we won't take into account the priority
 	// since we don't know when to reset the current dialogue
-	
+
 	/*if ((currentDialogue.audioData.eventName != "noName") && (eventManager->eventPriorities.at(currentDialogue.priority) < eventManager->eventPriorities.at(dialogue.priority)))
 	{
 		LOG("Dialogue with less priority than the current one will be discarded...");
 		return false;
 	}; */
 
-	
-	OverrideDialogue(dialogue, volume); 
 
-	playing = true; 
+	OverrideDialogue(dialogue, volume);
+
+	playing = true;
 
 	return true;
 }
 
 bool DialogueManager::InputNewDialogue(int index, float volume)
 {
-	assert((index <= (dialogueData.size() - 1)) && "Invalid dialogue index"); 
+	assert((index <= (dialogueData.size() - 1)) && "Invalid dialogue index");
 	if (index > (dialogueData.size() - 1))
 	{
-		LOG("Invalid dialogue index"); 
-		return false; 
+		LOG("Invalid dialogue index");
+		return false;
 	}
 
-	Dialogue dialogue; 
-	dialogue.audioData.eventName = std::get<0>(dialogueData.at(index)); 
+	Dialogue dialogue;
+	dialogue.audioData.eventName = std::get<0>(dialogueData.at(index));
 	dialogue.subtitlesText = std::get<1>(dialogueData.at(index));
 	dialogue.subtitlesTime.totalTime = std::get<2>(dialogueData.at(index));
-	
-	OverrideDialogue(dialogue, volume); 
+
+	OverrideDialogue(dialogue, volume);
 
 	playing = true;
 
@@ -114,25 +114,25 @@ bool DialogueManager::InputNewDialogue(int index, float volume)
 void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 {
 	// Stop playing 
-	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName.c_str()); 
-	LOG("Stopped playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str()); 
+	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName.c_str());
+	LOG("Stopped playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());
 
 	// Set Data --> TODO: other members in "audioData"
-	currentDialogue.audioData.eventName = std::string(newDialogue.audioData.eventName.c_str()); 
+	currentDialogue.audioData.eventName = std::string(newDialogue.audioData.eventName.c_str());
 	currentDialogue.priority = std::string(newDialogue.priority.c_str());
 	currentDialogue.subtitlesText = std::string(newDialogue.subtitlesText.c_str());
 	currentDialogue.subtitlesTime = newDialogue.subtitlesTime;
 
 	// Set Subtitles 
-	if(text->IsEnabled() == false)
+	if (text->IsEnabled() == false)
 		text->SetEnable(true);
 	//text->Reset(); 
-	text->SetText(newDialogue.subtitlesText.c_str()); 
-	
+	text->SetText(newDialogue.subtitlesText.c_str());
+
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
-	audioEmitter->ChangeVolume(volume); 
+	audioEmitter->ChangeVolume(volume);
 	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str());
 	LOG("Started playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());
 }

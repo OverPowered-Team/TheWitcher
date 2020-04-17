@@ -2,6 +2,7 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "PlayerController.h"
 
 class ALIEN_ENGINE_API DebugManager : public Alien {
 
@@ -13,6 +14,9 @@ public:
 	void Start();
 	void Update();
 
+	PlayerController* geralt_controller = nullptr;
+	PlayerController* yennefer_controller = nullptr;
+	ComponentCamera* main_camera = nullptr;
 };
 
 ALIEN_FACTORY DebugManager* CreateDebugManager() {

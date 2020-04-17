@@ -1,24 +1,30 @@
 #include "Stat.h"
 #include "Effect.h"
 
-Stat::Stat(std::string name, float base_value, float max_value)
+Stat::Stat(std::string name, float base_value)
 {
     this->name = name;
     this->base_value = base_value;
     this->current_value = base_value;
-    this->max_value = max_value;
+    this->max_value = base_value;
 }
 
 Stat::~Stat()
 {
 }
 
-void Stat::CalculateStat(std::vector<Effect*> _effects)
+void Stat::ApplyEffect(Effect* effect)
+{
+    effects.push_back(effect);
+    CalculateStat();
+}
+
+void Stat::CalculateStat()
 {
     float additive_value = 0;
     float mult_value = 0;
 
-    for (std::vector<Effect*>::iterator it = _effects.begin(); it != _effects.end(); ++it)
+    for (std::vector<Effect*>::iterator it = effects.begin(); it != effects.end(); ++it)
     {
         additive_value += (*it)->GetAdditiveAmount(name);
         mult_value += (*it)->GetMultiplicativeAmount(name);
@@ -31,10 +37,20 @@ void Stat::CalculateStat(std::vector<Effect*> _effects)
     current_value = (current_value * max_value) / old_max;
 }
 
+void Stat::ModifyCurrentStat(Effect* _effect)
+{
+    current_value += _effect->GetAdditiveAmount(name);
+}
+
 void Stat::SetBaseStat(float _value)
 {
 	base_value = _value;
 	current_value = base_value;
+}
+
+void Stat::SetMaxValue(float _value)
+{
+    max_value = _value;
 }
 
 void Stat::IncreaseStat(float value)

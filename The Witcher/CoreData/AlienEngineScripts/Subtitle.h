@@ -3,13 +3,13 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "..\..\ComponentText.h"
-
+#include "..\..\Timer.h"
 #include <vector>
 
 class subtitle
 {
 public:
-	int start = 0, end = 0;
+	float start = 0, end = 0;
 	std::string text;
 };
 class ALIEN_ENGINE_API Subtitle : public Alien {
@@ -25,11 +25,20 @@ public:
 	std::vector<subtitle> subtitles;
 	double current_time = 0;
 	int current_sub = 0;
-	ComponentText* text;
+	ComponentText* text = nullptr;
+	ComponentAudioEmitter* audio = nullptr;
+	ComponentAudioEmitter* song = nullptr;
+	GameObject* songBard = nullptr;
+	bool first_entered = true;
+	float end_seconds = 69;
+	float start_time;
+
 };
 
 ALIEN_FACTORY Subtitle* CreateSubtitle() {
 	Subtitle* alien = new Subtitle();
+	
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->songBard, "Song gameobject");
 	// To show in inspector here
 	return alien;
 } 

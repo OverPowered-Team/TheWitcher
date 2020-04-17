@@ -4,8 +4,10 @@
 #include "Stat.h"
 
 class PlayerController;
+class AttackEffect;
 
 class Attack {
+	friend class PlayerAttacks;
 public:
 	struct AttackInfo {
 		std::string name = "";
@@ -13,22 +15,25 @@ public:
 		std::string particle_name = "";
 		float3 collider_position;
 		float3 collider_size;
-		Stat* base_damage = nullptr;
+		Stat base_damage;
 		float movement_strength = 0.0f;
 		float max_snap_distance = 0.0f;
 		int activation_frame = 0;
 		std::string next_light = "";
 		std::string next_heavy = "";
 	};
+public:
 
 	Attack() {};
 	Attack(AttackInfo info)
 	{
 		this->info = info;
 	}
-	void CleanUp();
-
+	bool IsLast() { return (light_attack_link == nullptr && heavy_attack_link == nullptr); }
+public:
 	AttackInfo info;
+
+private:
 	Attack* light_attack_link = nullptr;
 	Attack* heavy_attack_link = nullptr;
 };
@@ -54,13 +59,13 @@ public:
 	void CleanUp();
 
 	std::vector<std::string> GetFinalAttacks();
-	void OnAddAttackEffect(std::string _attack_name);
+	void OnAddAttackEffect(AttackEffect* new_effect);
 	void CancelAttack();
 	void ActivateCollider();
 	void DeactivateCollider();
 
 	void AllowCombo();
-	void OnDrawGizmos();
+	void OnDrawGizmosSelected();
 	bool CanBeInterrupted();
 
 	void OnAnimationEnd(const char* name);

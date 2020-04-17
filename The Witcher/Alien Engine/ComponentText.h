@@ -3,6 +3,8 @@
 
 #include "ComponentUI.h"
 
+#define MAX_LINES 5
+
 class ResourceFont;
 struct Character;
 

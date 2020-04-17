@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 12,
-        "NumTransitions": 20,
+        "NumStates": 14,
+        "NumTransitions": 23,
         "States": [
             {
                 "Name": "Idle",
@@ -62,7 +62,17 @@
             {
                 "Name": "Hit",
                 "Speed": 3,
-                "Clip": "6366989855699185652"
+                "Clip": "15249942156982629435"
+            },
+            {
+                "Name": "RCP",
+                "Speed": 1,
+                "Clip": "11249509642733254706"
+            },
+            {
+                "Name": "Revive",
+                "Speed": 1,
+                "Clip": "1634045271620092584"
             }
         ],
         "Transitions": [
@@ -377,6 +387,39 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "RCP",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Idle",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Revive",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -397,6 +440,10 @@
             },
             {
                 "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "reviving",
                 "Value": false
             }
         ],
@@ -502,6 +549,30 @@
                 "Animation_Id": "7211782662776671787",
                 "Frame": 12,
                 "Type": 2
+            },
+            {
+                "Event_Id": "2719919427",
+                "Animation_Id": "4244113142840779604",
+                "Frame": 4,
+                "Type": 0
+            },
+            {
+                "Event_Id": "511861945",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 11,
+                "Type": 0
+            },
+            {
+                "Event_Id": "2048623797",
+                "Animation_Id": "11063703462969190022",
+                "Frame": 4,
+                "Type": 0
+            },
+            {
+                "Event_Id": "219750196",
+                "Animation_Id": "13193819018923853663",
+                "Frame": 4,
+                "Type": 0
             }
         ]
     }

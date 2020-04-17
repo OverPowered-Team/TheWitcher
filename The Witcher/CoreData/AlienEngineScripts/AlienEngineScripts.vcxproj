@@ -98,6 +98,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,6 +139,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,32 +174,44 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArrowScript.h" />
+    <ClInclude Include="Audio_Button.h" />
+    <ClInclude Include="BreakableObject.h" />
     <ClInclude Include="CameraEnterExit.h" />
     <ClInclude Include="CameraLimits.h" />
     <ClInclude Include="CameraMovement.h" />
+    <ClInclude Include="Ghoul.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Check_EndMenu.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="DialogueEventChecker.h" />
     <ClInclude Include="DialogueManager.h" />
     <ClInclude Include="DialogueTriggerSimple.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="ExplodeChildren.h" />
     <ClInclude Include="Extra_Menus.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EffectsFunctions.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Floating.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="InGame_UI.h" />
     <ClInclude Include="MainMenu_Buttons.h" />
     <ClInclude Include="PauseMenu_Buttons.h" />
     <ClInclude Include="NilfgaardSoldier.h" />
     <ClInclude Include="PlayerAttacks.h" />
     <ClInclude Include="RelicBehaviour.h" />
+    <ClInclude Include="Relic_Notification.h" />
+    <ClInclude Include="RelicManager.h" />
     <ClInclude Include="ReverbZone.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
+    <ClInclude Include="RockFall.h" />
     <ClInclude Include="Stat.h" />
     <ClInclude Include="Subtitle.h" />
+    <ClInclude Include="TeleportLevel.h" />
+    <ClInclude Include="TriggerMusicInteractive.h" />
+    <ClInclude Include="Trigger_Win.h" />
     <ClInclude Include="UI_Char_Frame.h" />
     <ClInclude Include="UI_EndMenu.h" />
     <ClInclude Include="UltiBar.h" />
@@ -209,17 +223,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrowScript.cpp" />
+    <ClCompile Include="Audio_Button.cpp" />
+    <ClCompile Include="BreakableObject.cpp" />
     <ClCompile Include="CameraEnterExit.cpp" />
     <ClCompile Include="CameraLimits.cpp" />
     <ClCompile Include="CameraMovement.cpp" />
+    <ClCompile Include="Ghoul.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Check_EndMenu.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="DialogueEventChecker.cpp" />
     <ClCompile Include="DialogueManager.cpp" />
     <ClCompile Include="DialogueTriggerSimple.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="ExplodeChildren.cpp" />
     <ClCompile Include="Extra_Menus.cpp" />
     <ClCompile Include="Floating.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InGame_UI.cpp" />
     <ClCompile Include="MainMenu_Buttons.cpp" />
     <ClCompile Include="PauseMenu_Buttons.cpp" />
@@ -229,11 +249,17 @@
     <ClCompile Include="NilfgaardSoldier.cpp" />
     <ClCompile Include="PlayerAttacks.cpp" />
     <ClCompile Include="RelicBehaviour.cpp" />
+    <ClCompile Include="Relic_Notification.cpp" />
+    <ClCompile Include="RelicManager.cpp" />
     <ClCompile Include="ReverbZone.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />
+    <ClCompile Include="RockFall.cpp" />
     <ClCompile Include="Stat.cpp" />
     <ClCompile Include="Subtitle.cpp" />
+    <ClCompile Include="TeleportLevel.cpp" />
+    <ClCompile Include="TriggerMusicInteractive.cpp" />
+    <ClCompile Include="Trigger_Win.cpp" />
     <ClCompile Include="UI_Char_Frame.cpp" />
     <ClCompile Include="UI_EndMenu.cpp" />
     <ClCompile Include="UltiBar.cpp" />
