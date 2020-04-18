@@ -15,7 +15,7 @@ public:
 	void Start();
 	void Update();
 
-	void TP(int i);
+	void TP(bool is_next);
 
 	static std::vector<CheckPoint*> checkpoints;
 	CheckPoint* last_checkpoint = nullptr;
