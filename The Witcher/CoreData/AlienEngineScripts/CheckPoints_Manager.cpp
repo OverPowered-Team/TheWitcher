@@ -38,8 +38,7 @@ void CheckPoints_Manager::TP(bool is_next)
 {
 	for (uint i = 0; i < 2; ++i)
 	{
-		((PlayerManager*)GameObject::FindWithName("GameManager")->
-			GetComponentScript("PlayerManager"))->players[i]->controller->SetPosition(last_checkpoint->transform->GetLocalPosition());
+		GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->controller->SetPosition(last_checkpoint->transform->GetLocalPosition());
 	}
 
 	std::vector<CheckPoint*>::iterator iter = checkpoints.begin();

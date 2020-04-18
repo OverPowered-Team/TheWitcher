@@ -18,27 +18,27 @@ void PauseMenu_Buttons::Update()
 	{
 		if (GameObject::FindWithName("Menu")->IsEnabled())
 		{
-			((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
+			GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
 		}
 	}
 }
 
 void PauseMenu_Buttons::Resume()
 {
-	((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
 }
 
 void PauseMenu_Buttons::Leaderboard()
 {
 	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
-	((Extra_Menus*)GameObject::FindWithName("Extra_Menus")->GetComponentScript("Extra_Menus"))->MenuSpawn(Extra_Menus::MENU::LEADERBOARD);
+	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::LEADERBOARD);
 	GameObject::FindWithName("Menu")->SetEnable(false);
 }
 
 void PauseMenu_Buttons::Controls()
 {
 	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
-	((Extra_Menus*)GameObject::FindWithName("Extra_Menus")->GetComponentScript("Extra_Menus"))->MenuSpawn(Extra_Menus::MENU::CONTROLS);
+	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::CONTROLS);
 	GameObject::FindWithName("Menu")->SetEnable(false);
 }
 
@@ -48,13 +48,13 @@ void PauseMenu_Buttons::Settings()
 
 void PauseMenu_Buttons::RetryLevel()
 {
-	((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
 	SceneManager::LoadScene("newTRIGGER");
 }
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
-	((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->PauseMenu(false);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
 	SceneManager::LoadScene("Main_Menu");
 }
 

@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 #include "PlayerManager.h"
 #include "UltiBar.h"
+#include "InGame_UI.h"
 
 PlayerManager::PlayerManager() : Alien()
 {
@@ -38,8 +39,7 @@ void PlayerManager::OnPlayerDead(PlayerController* dead_player)
 
 	if (players_dead.size() == players.size())
 	{
-		// Put this on a UI Manager so we can do Game_Manager->ui_manager->in_game->YouDied();
-		//((InGame_UI*)GameObject::FindWithName("UI_InGame")->GetComponentScript("InGame_UI"))->YouDied(); 
+		GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->YouDied(); 
 	}
 }
 
@@ -64,12 +64,12 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	{
 		collective_ultimate_charge = max_ultimate_charge;
 		// UI
-		((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->MaxBar();
+		ulti_bar->GetComponent<UltiBar>()->MaxBar();
 	}
 	else
 	{
 		// UI
-		((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+		ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
 	}
 }
 
@@ -85,7 +85,7 @@ void PlayerManager::ActivateUltimate()
 	}
 
 	// UI
-	((UltiBar*)ulti_bar->GetComponentScript("UltiBar"))->UpdateBar(collective_ultimate_charge);
+	ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge);
 }
 
 void PlayerManager::CancelUltimate()
