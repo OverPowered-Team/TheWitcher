@@ -10,15 +10,15 @@ Subtitle::~Subtitle()
 
 void Subtitle::Start()
 {
-	text = (ComponentText*)GetComponent(ComponentType::UI_TEXT);
+	text = GetComponent<ComponentText>();
 	if (!text)
 		return;
-	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+	audio = GetComponent<ComponentAudioEmitter>();
 	if (!audio)
 		return;
 	if (songBard)
 	{
-		song = (ComponentAudioEmitter*)songBard->GetComponent(ComponentType::A_EMITTER);
+		song = songBard->GetComponent<ComponentAudioEmitter>();
 	}
 
 

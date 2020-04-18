@@ -10,7 +10,7 @@ TriggerAudioEvent::~TriggerAudioEvent()
 
 void TriggerAudioEvent::Start()
 {
-	emitter = (ComponentAudioEmitter*)this->game_object->GetComponent(ComponentType::A_EMITTER);
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
 	timer = Time::GetGameTime();
 }
 

@@ -9,13 +9,13 @@
 void Enemy::Awake()
 {
 	GameManager::manager->enemy_manager->AddEnemy(this);
-	attack_collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
+	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 }
 
 void Enemy::StartEnemy()
 {
-	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
+	animator = GetComponent<ComponentAnimator>();
+	character_ctrl = GetComponent<ComponentCharacterController>();
 	state = EnemyState::IDLE;
 	std::string json_str;
 
@@ -183,7 +183,7 @@ void Enemy::DeactivateCollider()
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
+		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
@@ -216,7 +216,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
 
-				ComponentRigidBody* head_rb = (ComponentRigidBody*)decapitated_head->GetComponent(ComponentType::RIGID_BODY);
+				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
 
 				float decapitation_force = 5;

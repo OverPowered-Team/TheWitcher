@@ -23,11 +23,11 @@ PlayerController::~PlayerController()
 
 void PlayerController::Start()
 {
-	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	controller = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
-	attacks = (PlayerAttacks*)GetComponentScript("PlayerAttacks");
+	animator = GetComponent<ComponentAnimator>();
+	controller = GetComponent<ComponentCharacterController>();
+	attacks = GetComponent<PlayerAttacks>();
 
-	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+	audio = GetComponent<ComponentAudioEmitter>();
 
 	camera = Camera::GetCurrentCamera();
 
@@ -36,14 +36,12 @@ void PlayerController::Start()
 	player_data.stats.insert(std::pair("Chaos", Stat("Chaos", 150.0f)));
 	player_data.stats.insert(std::pair("Attack_Speed", Stat("Attack_Speed", 1.0f)));
 
-
-	ComponentDeformableMesh** vec = nullptr;
-	uint size = game_object->GetChild("Meshes")->GetComponentsInChildren(ComponentType::DEFORMABLE_MESH, (Component***)&vec, false);
+	auto meshes = game_object->GetChild("Meshes")->GetComponentsInChildren<ComponentDeformableMesh>();
 
 	max_aabb.SetNegativeInfinity();
 	AABB new_section;
-	for (uint i = 0u; i < size; ++i) {
-		new_section = vec[i]->GetGlobalAABB();
+	for (auto i = meshes.begin(); i != meshes.end(); ++i) {
+		new_section = (*i)->GetGlobalAABB();
 		LOG("AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", new_section.minPoint.x, new_section.minPoint.y, new_section.minPoint.z, new_section.maxPoint.x, new_section.maxPoint.y, new_section.maxPoint.z);
 		max_aabb.minPoint = { 
 			Maths::Min(new_section.minPoint.x, max_aabb.minPoint.x), Maths::Min(new_section.minPoint.y, max_aabb.minPoint.y),Maths::Min(new_section.minPoint.z, max_aabb.minPoint.z) 
@@ -55,17 +53,13 @@ void PlayerController::Start()
 	max_aabb.minPoint -= transform->GetGlobalPosition();
 	max_aabb.maxPoint -= transform->GetGlobalPosition();
 	LOG("MAX AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", max_aabb.minPoint.x, max_aabb.minPoint.y, max_aabb.minPoint.z, max_aabb.maxPoint.x, max_aabb.maxPoint.y, max_aabb.maxPoint.z);
-	GameObject::FreeArrayMemory((void***)&vec);
 
-	ComponentParticleSystem** p_sys = nullptr;
-	size = game_object->GetChild("Particles")->GetComponentsInChildren(ComponentType::PARTICLES, (Component***)&p_sys, false);
+	auto v_particles = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
 
-	for (uint i = 0u; i < size; ++i) {
-		particles.insert(std::pair(p_sys[i]->game_object_attached->GetName(), p_sys[i]->game_object_attached));
-		p_sys[i]->game_object_attached->SetEnable(false);
+	for (auto i = v_particles.begin(); i != v_particles.end(); ++i) {
+		particles.insert(std::pair((*i)->game_object_attached->GetName(), (*i)->game_object_attached));
+		(*i)->game_object_attached->SetEnable(false);
 	}
-
-	GameObject::FreeArrayMemory((void***)&p_sys);
 
 	controller->SetRotation(Quat::identity());
 
@@ -378,7 +372,7 @@ void PlayerController::Update()
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
-					((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 					if (player_data.stats["Health"].GetValue() == 0)
 						Die();
 				}
@@ -486,7 +480,7 @@ void PlayerController::Revive()
 	animator->PlayState("Revive");
 	GameManager::manager->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
-	((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 	GameManager::manager->Rumbler(RumblerType::REVIVE, controller_index);
 }
 
@@ -580,12 +574,12 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 	Frustum fake_frustum = camera->frustum;
 	fake_frustum.pos = next_cam_pos;
 
-	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponentScript("CameraMovement");
+	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponent<CameraMovement>();
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
 		if (cam->players[i] != this->game_object)
 		{
-			PlayerController* p = (PlayerController*)cam->players[i]->GetComponentScript("PlayerController");
+			PlayerController* p = cam->players[i]->GetComponent<PlayerController>();
 			if (p != nullptr) {
 				AABB p_tmp = p->max_aabb;
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
@@ -652,17 +646,16 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	if (!godmode)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
-			Alien** alien = nullptr;
-			uint size = col->game_object_attached->parent->GetAllComponentsScript(&alien);
-			for (int i = 0; i < size; ++i) {
-				Enemy* enemy = dynamic_cast<Enemy*>(alien[i]);
+
+			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
+
+			for (auto i = comps.begin(); i != comps.end(); ++i) {
+				Enemy* enemy = dynamic_cast<Enemy*>(*i);
 				if (enemy) {
 					ReceiveDamage(enemy->stats["Damage"].GetValue());
-					GameObject::FreeArrayMemory((void***)&alien);
 					return;
 				}
 			}
-			GameObject::FreeArrayMemory((void***)&alien);
 		}
 	}
 }

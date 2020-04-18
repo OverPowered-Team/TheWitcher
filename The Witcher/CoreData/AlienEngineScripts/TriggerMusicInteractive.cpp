@@ -13,9 +13,9 @@ TriggerMusicInteractive::~TriggerMusicInteractive()
 void TriggerMusicInteractive::Start()
 {	
 	camera = Camera::GetCurrentCamera()->game_object_attached;
-	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+	cam_script = camera->GetComponent<CameraMovement>();
 	timer = Time::GetGameTime();
-	emitter = (ComponentAudioEmitter*)this->game_object->GetComponent(ComponentType::A_EMITTER);
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
 	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
 	emitter->ChangeVolume(0.f);
 	emitter->StartSound();

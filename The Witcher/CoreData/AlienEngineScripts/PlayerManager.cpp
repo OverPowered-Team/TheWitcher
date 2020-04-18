@@ -13,16 +13,13 @@ PlayerManager::~PlayerManager()
 
 void PlayerManager::Start()
 {
-	GameObject** players_go;
-	uint players_size = GameObject::FindGameObjectsWithTag("Player", &players_go);
+	auto player_go = GameObject::FindGameObjectsWithTag("Player");
 
-	for (int i = 0; i < players_size; ++i) {
-		players.push_back((PlayerController*)players_go[i]->GetComponentScript("PlayerController"));
+	for (auto i = player_go.begin(); i != player_go.end(); ++i) {
+		players.push_back((*i)->GetComponent<PlayerController>());
 	}
 
 	ulti_bar = GameObject::FindWithName("Ulti_bar");
-
-	GameObject::FreeArrayMemory((void***)&players_go);
 }
 
 void PlayerManager::Update()

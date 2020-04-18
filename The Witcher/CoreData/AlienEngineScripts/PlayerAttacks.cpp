@@ -16,8 +16,8 @@ PlayerAttacks::~PlayerAttacks()
 
 void PlayerAttacks::Start()
 {
-	player_controller = (PlayerController*)GetComponentScript("PlayerController");
-	collider = (ComponentBoxCollider*)collider_go->GetComponent(ComponentType::BOX_COLLIDER);
+	player_controller = GetComponent<PlayerController>();
+	collider = collider_go->GetComponent<ComponentBoxCollider>();
 
 	CreateAttacks();
 }
@@ -168,17 +168,16 @@ void PlayerAttacks::SnapToTarget()
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	ComponentCollider** colliders_in_range;
-	uint size = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range, &colliders_in_range);
+	std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
 	std::vector<GameObject*> enemies_in_range;
-	for (uint i = 0u; i < size; ++i)
+
+	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp(colliders_in_range[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
-			enemies_in_range.push_back(colliders_in_range[i]->game_object_attached);
+			enemies_in_range.push_back((*i)->game_object_attached);
 		}
 	}
-	Physics::FreeArray(&colliders_in_range);
 
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);

@@ -42,8 +42,8 @@ void UI_Char_Frame::Start()
 	xp_bar = game_object->GetChild("Xp");
 
 	lifebar_comp = lifebar->GetComponent<ComponentBar>();
-	mana_bar_comp = mana_bar->GetComponent<ComponentBar>();;
-	xp_bar_comp = xp_bar->GetComponent<ComponentBar>();;
+	mana_bar_comp = mana_bar->GetComponent<ComponentBar>();
+	xp_bar_comp = xp_bar->GetComponent<ComponentBar>();
 
 }
 

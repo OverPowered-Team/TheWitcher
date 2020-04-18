@@ -11,11 +11,11 @@ GameManager::~GameManager()
 
 void GameManager::Awake()
 {
-	event_manager = (EventManager*)game_object->GetComponentScript("EventManager");
-	enemy_manager = (EnemyManager*)game_object->GetComponentScript("EnemyManager");
-	dialogue_manager = (DialogueManager*)game_object->GetComponentScript("DialogueManager");
-	player_manager = (PlayerManager*)game_object->GetComponentScript("PlayerManager");
-	relic_manager = (RelicManager*)game_object->GetComponentScript("RelicManager");
+	event_manager =		game_object->GetComponent<EventManager>();
+	enemy_manager =		game_object->GetComponent<EnemyManager>();
+	dialogue_manager =	game_object->GetComponent<DialogueManager>();
+	player_manager =	game_object->GetComponent<PlayerManager>();
+	relic_manager =		game_object->GetComponent<RelicManager>();
 }
 
 void GameManager::Start()

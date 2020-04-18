@@ -23,7 +23,7 @@ void ArrowScript::Update()
 void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
-		PlayerController* player_ctrl = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScript("PlayerController"));
+		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl)
 			player_ctrl->ReceiveDamage(damage);
 		else

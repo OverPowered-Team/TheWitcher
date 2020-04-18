@@ -10,7 +10,7 @@ Audio_Button::~Audio_Button()
 
 void Audio_Button::Start()
 {
-	audio = (ComponentAudioEmitter*)game_object->GetComponent(ComponentType::A_EMITTER);
+	audio = game_object->GetComponent<ComponentAudioEmitter>();
 }
 
 void Audio_Button::Click()

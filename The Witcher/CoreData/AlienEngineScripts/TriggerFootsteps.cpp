@@ -13,8 +13,8 @@ TriggerFootsteps::~TriggerFootsteps()
 void TriggerFootsteps::Start()
 {
 	camera = Camera::GetCurrentCamera()->game_object_attached;
-	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
-	emitter = (ComponentAudioEmitter*)this->game_object->GetComponent(ComponentType::A_EMITTER);
+	cam_script = camera->GetComponent<CameraMovement>();
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
 }
 
 void TriggerFootsteps::Update()
@@ -23,7 +23,7 @@ void TriggerFootsteps::Update()
 
 void TriggerFootsteps::OnTriggerEnter(ComponentCollider* collider)
 {
-	ComponentAudioEmitter* emitter = (ComponentAudioEmitter*)collider->game_object_attached->GetComponent(ComponentType::A_EMITTER);
+	ComponentAudioEmitter* emitter = collider->game_object_attached->GetComponent<ComponentAudioEmitter>();
 
 	if (emitter != nullptr)
 		emitter->SetSwitchState("Material", GetNameByEnum(material_1).c_str());

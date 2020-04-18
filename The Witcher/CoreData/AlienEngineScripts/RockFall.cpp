@@ -21,7 +21,7 @@ void RockFall::Update()
 		float range = Random::GetRandomFloatBetweenTwo(-rangeSpawn, rangeSpawn);
 		spawnTime = Random::GetRandomFloatBetweenTwo(minSpawnTime, maxSpawnTime);
 		currentTime = Time::GetGameTime();
-		ComponentRigidBody* rb = (ComponentRigidBody*)GameObject::Instantiate(rock, transform->GetGlobalPosition() + transform->forward * range)->GetComponent(ComponentType::RIGID_BODY);
+		ComponentRigidBody* rb = GameObject::Instantiate(rock, transform->GetGlobalPosition() + transform->forward * range)->GetComponent<ComponentRigidBody>();
 		rb->AddForce(-transform->right * force);
 	}
 }

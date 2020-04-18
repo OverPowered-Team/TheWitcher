@@ -110,8 +110,8 @@ void NilfgaardSoldier::ShootAttack()
 {
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
-	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
-	static_cast<ArrowScript*>(arrow_go->GetChild("Point")->GetComponentScript("ArrowScript"))->damage = stats["Damage"].GetValue();
+	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
+	arrow_go->GetChild("Point")->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateArrow());
 	arrow_rb->AddForce(direction.Mul(20));
 }
@@ -180,7 +180,7 @@ void NilfgaardSoldier::UpdateEnemy()
 		break;
 	case Enemy::EnemyState::DYING:
 	{
-		EnemyManager* enemy_manager = (EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager"));
+		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		//Ori Ori function sintaxis
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = EnemyState::DEAD;
@@ -237,7 +237,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 		}
 		else
 		{
-			PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
+			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
 			if (player)
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();

@@ -185,9 +185,9 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 	{
-		if ((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"))
+		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
-			relic->OnPickUp((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"));
+			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
 			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
 
 			//it remains to be determined if it is Geralt's audio or Yennefer's. 
