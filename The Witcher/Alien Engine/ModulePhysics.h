@@ -7,8 +7,6 @@
 #include <list>
 #include <vector>
 
-class MyDispatcher;
-
 enum class Space
 {
 	Global,
@@ -28,6 +26,7 @@ class ComponentCollider;
 class DebugRenderer;
 class btGhostObject;
 struct CastResult;
+class MyDispatcher;
 
 class ModulePhysics : public Module
 {

@@ -10,6 +10,7 @@
 #include "ComponentTransform.h"
 #include "ComponentUI.h"
 #include "ComponentImage.h"
+#include "GameObject.h"
 #include "ComponentCamera.h"
 #include "ReturnZ.h"
 #include "mmgr/mmgr.h"

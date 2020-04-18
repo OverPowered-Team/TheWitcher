@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "ComponentUI.h"
 #include "ComponentCanvas.h"
+#include "ComponentAudioEmitter.h"
 #include "ReturnZ.h"
 #include "ComponentScript.h"
 #include "ResourceTexture.h"
@@ -89,6 +90,16 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 			onExitArray->SetString(std::to_string(item - listenersOnExit.begin()).data(), (*item).first.data());
 		}
 	}
+
+	to_save->SetBoolean("HasListenersOnEnter", !listenersOnEnter.empty());
+	if (!listenersOnEnter.empty()) {
+		JSONArraypack* onEnterArray = to_save->InitNewArray("ListenersOnEnter");
+		auto item = listenersOnEnter.begin();
+		for (; item != listenersOnEnter.end(); ++item) {
+			onEnterArray->SetAnotherNode();
+			onEnterArray->SetString(std::to_string(item - listenersOnEnter.begin()).data(), (*item).first.data());
+		}
+	}
 	//---------------------------------------------------------------
 	to_save->SetString("SelectOnUp", std::to_string(select_on_up).data());
 	to_save->SetString("SelectOnDown", std::to_string(select_on_down).data());
@@ -157,6 +168,15 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 			std::pair<std::string, std::function<void()>> pair = { onExitListeners->GetString(std::to_string(i).data()), std::function<void()>() };
 			listenersOnExit.push_back(pair);
 			onExitListeners->GetAnotherNode();
+		}
+	}
+
+	if (to_load->GetBoolean("HasListenersOnEnter")) {
+		JSONArraypack* onEnterListeners = to_load->GetArray("ListenersOnEnter");
+		for (int i = 0; i < onEnterListeners->GetArraySize(); ++i) {
+			std::pair<std::string, std::function<void()>> pair = { onEnterListeners->GetString(std::to_string(i).data()), std::function<void()>() };
+			listenersOnEnter.push_back(pair);
+			onEnterListeners->GetAnotherNode();
 		}
 	}
 	//-------------------------------------------------------------
@@ -296,6 +316,18 @@ void ComponentButton::HandleAlienEvent(const AlienEvent& e)
 					if ((*item).first == (*functs).first)
 					{
 						listenersOnExit.erase(item);
+						break;
+					}
+				}
+			}
+
+			//delete on enter
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnEnter.begin(); item != listenersOnEnter.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnEnter.erase(item);
 						break;
 					}
 				}
@@ -706,6 +738,32 @@ bool ComponentButton::DrawInspector()
 
 					ImGui::TreePop();
 				}
+
+				ImGui::Spacing();
+				if (ImGui::TreeNode("On Enter Added")) {
+					for (auto item = listenersOnEnter.begin(); item != listenersOnEnter.end(); ++item) {
+
+						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnEnter.begin(), item) + 1919751);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnEnter.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
+					}
+
+					ImGui::TreePop();
+				}
 				ImGui::TreePop();
 			}
 			//--------------
@@ -811,6 +869,29 @@ bool ComponentButton::DrawInspector()
 										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
 											if (ImGui::MenuItem((*functs).first.data())) {
 												AddListenerOnExit((*functs).first, (*functs).second);
+											}
+										}
+									}
+									else {
+										ImGui::Text("No exported functions");
+									}
+									ImGui::EndMenu();
+								}
+							}
+						}
+						ImGui::TreePop();
+					}
+
+					ImGui::Spacing();
+					//-----------------------------
+					if (ImGui::TreeNode("On Enter To Add")) {
+						for (auto item = scripts.begin(); item != scripts.end(); ++item) {
+							if (*item != nullptr && (*item)->data_ptr != nullptr) {
+								if (ImGui::BeginMenu((*item)->data_name.data())) {
+									if (!(*item)->functionMap.empty()) {
+										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
+											if (ImGui::MenuItem((*functs).first.data())) {
+												AddListenerOnEnter((*functs).first, (*functs).second);
 											}
 										}
 									}
@@ -1069,6 +1150,21 @@ bool ComponentButton::DrawInspector()
 	return true;
 }
 
+bool ComponentButton::OnEnter()
+{
+	if (active)
+	{
+		//baina loka
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound("ENTER");
+		}
+		CallListeners(&listenersOnEnter);
+	}
+	return true;
+}
+
 bool ComponentButton::OnIdle()
 {
 	if (active) {
@@ -1084,6 +1180,7 @@ bool ComponentButton::OnIdle()
 bool ComponentButton::OnHover()
 {
 	if (active) {
+
 		current_color = hover_color;
 		if (hover_tex != nullptr){
 			SetTexture(hover_tex);
@@ -1097,6 +1194,13 @@ bool ComponentButton::OnHover()
 bool ComponentButton::OnClick()
 {
 	if (active) {
+
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound("CLICK");
+		}
+
 		current_color = clicked_color;
 		if (clicked_tex != nullptr) {
 			SetTexture(clicked_tex);
@@ -1110,6 +1214,7 @@ bool ComponentButton::OnClick()
 bool ComponentButton::OnPressed()
 {
 	if (active) {
+
 		current_color = pressed_color;
 		if (pressed_tex != nullptr) {
 			SetTexture(pressed_tex);
@@ -1123,6 +1228,7 @@ bool ComponentButton::OnPressed()
 bool ComponentButton::OnRelease()
 {
 	if (active) {
+	
 		current_color = hover_color;
 		if (hover_tex != nullptr) {
 			SetTexture(hover_tex);
@@ -1137,7 +1243,7 @@ bool ComponentButton::OnExit()
 {
 	if (active) 
 	{
-		//baina loka
+		
 		CallListeners(&listenersOnExit);
 	}
 	return true;
@@ -1324,6 +1430,15 @@ void ComponentButton::AddListenerOnExit(std::string name, std::function<void()> 
 	if (!CheckIfScriptIsAlreadyAdded(&listenersOnExit, name))
 	{
 		listenersOnExit.push_back(pair);
+	}
+}
+
+void ComponentButton::AddListenerOnEnter(std::string name, std::function<void()> funct)
+{
+	std::pair<std::string, std::function<void()>> pair = { name, funct };
+	if (!CheckIfScriptIsAlreadyAdded(&listenersOnEnter, name))
+	{
+		listenersOnEnter.push_back(pair);
 	}
 }
 

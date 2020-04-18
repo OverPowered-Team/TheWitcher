@@ -233,7 +233,7 @@ void ResourcePrefab::OpenPrefabScene()
 	App->objects->SaveScene(nullptr, "Library/save_prefab_scene.alienScene");
 	App->objects->DeselectObjects();
 	App->objects->CreateRoot();
-	ConvertToGameObjects(App->objects->GetRoot(true));
+	ConvertToGameObjects(App->objects->GetGlobalRoot());
 }
 
 GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, float3 pos, bool check_childrens, bool set_selected)
@@ -248,11 +248,11 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		JSONArraypack* game_objects = prefab->GetArray("Prefab.GameObjects");
 
 		std::vector<GameObject*> objects_created;
-
+		bool is_first = true;
 		for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
 			GameObject* obj = new GameObject(true);
 			u64 parentID = std::stoull(game_objects->GetString("ParentID"));
-			if (parentID != 0) {
+			if (!is_first) {
 				std::vector<GameObject*>::iterator objects = objects_created.begin();
 				for (; objects != objects_created.end(); ++objects) {
 					if ((*objects)->ID == parentID) {
@@ -262,7 +262,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 				}
 			}
 			else {
-				obj->LoadObject(game_objects, App->objects->GetRoot(false));
+				obj->LoadObject(game_objects, parent);
+				is_first = false;
 			}
 			objects_created.push_back(obj);
 			game_objects->GetAnotherNode();
@@ -305,7 +306,7 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		obj->SetPrefab(ID);
 		obj->transform->SetLocalPosition(pos);
 		if (set_selected) {
-			App->objects->SetNewSelectedObject(obj);
+			App->objects->SetNewSelectedObject(obj, false);
 			App->camera->fake_camera->Look(parent->children.back()->GetBB().CenterPoint());
 			App->camera->reference = parent->children.back()->GetBB().CenterPoint();
 		}

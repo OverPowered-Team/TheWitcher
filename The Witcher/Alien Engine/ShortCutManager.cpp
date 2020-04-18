@@ -108,36 +108,40 @@ void ShortCutManager::ChangeKey()
 
 void ShortCutManager::ShortCutClicked()
 {
-	std::vector<ShortCut*>::iterator item = shortcuts.begin();
-	for (; item != shortcuts.end(); ++item) {
-		if (*item != nullptr) {
-			if ((*item)->state == ShortCutStateChange::NONE) {
-				switch ((*item)->type) {
-				case ShortCutType::ONE_KEY: {
-					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN) {
-						(*item)->funct();
-						return;
+	if (App->ui->update_shortcut)
+	{
+		std::vector<ShortCut*>::iterator item = shortcuts.begin();
+		for (; item != shortcuts.end(); ++item) {
+			if (*item != nullptr) {
+				if ((*item)->state == ShortCutStateChange::NONE) {
+					switch ((*item)->type) {
+					case ShortCutType::ONE_KEY: {
+						if (App->input->GetKey((*item)->key1_down) == KEY_DOWN) {
+							(*item)->funct();
+							return;
+						}
+						break; }
+					case ShortCutType::TWO_KEYS: {
+						if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT) {
+							(*item)->funct();
+							return;
+						}
+						break; }
+					case ShortCutType::COMPLETE: {
+						if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && (App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT || App->input->GetKey((*item)->key3_repeat_extra) == KEY_REPEAT)) {
+							(*item)->funct();
+							return;
+						}
+						break; }
+					default: {
+						LOG_ENGINE("ShortCutTypeUnknown");
+						break; }
 					}
-					break; }
-				case ShortCutType::TWO_KEYS: {
-					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT) {
-						(*item)->funct();
-						return;
-					}
-					break; }
-				case ShortCutType::COMPLETE: {
-					if (App->input->GetKey((*item)->key1_down) == KEY_DOWN && (App->input->GetKey((*item)->key2_repeat) == KEY_REPEAT || App->input->GetKey((*item)->key3_repeat_extra) == KEY_REPEAT)) {
-						(*item)->funct();
-						return;
-					}
-					break; }
-				default: {
-					LOG_ENGINE("ShortCutTypeUnknown");
-					break; }
 				}
 			}
 		}
 	}
+	
 }
 
 const char* ShortCut::GetShortcutName()

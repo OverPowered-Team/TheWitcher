@@ -115,10 +115,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 	static bool first_frame_playing = true;
 	OPTICK_EVENT();
 
-	try {
-		world->stepSimulation(Time::GetDT(), 20);
-	}
-	catch (...) {}
+	world->stepSimulation(Time::GetDT(), 20);
 
 	return UPDATE_CONTINUE;
 }

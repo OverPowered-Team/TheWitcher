@@ -27,7 +27,7 @@ class ModuleFileSystem;
 class ModuleResources;
 class ModuleAudio;
 class AnimTween;
-
+class FadeToBlack;
 class JSONfilepack;
 
 struct LogInfo {
@@ -60,6 +60,7 @@ public:
 	ModuleAudio*		audio = nullptr;
 	ModulePhysics* 		physics = nullptr;
 	AnimTween*			tween = nullptr;
+	FadeToBlack*		fade_to_black = nullptr;
 
 	bool fps_cap = true;
 	uint16_t framerate_cap;

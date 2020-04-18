@@ -559,10 +559,27 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::UI))
 					{
 						ComponentCanvas* canvas = GetCanvas();
+						Component* comp_emitter = nullptr;
+						Component* comp_text = nullptr;
+
+						GameObject* object_text = App->objects->CreateEmptyGameObject(nullptr);
+
 						comp = new ComponentButton(selected);
+						comp_emitter = new ComponentAudioEmitter(selected);
+						comp_text = new ComponentText(object_text);
+
 						dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
+						dynamic_cast<ComponentUI*>(comp_text)->SetCanvas(canvas);
+
+						selected->SetName("Button");
 						selected->AddComponent(comp);
+						selected->AddComponent(comp_emitter);
+
+						object_text->SetName("Text");
+						object_text->AddComponent(comp_text);
+
 						App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
+						App->objects->ReparentGameObject(object_text, selected, false);
 					}
 
 					else
@@ -584,10 +601,12 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::UI))
 					{
 						ComponentCanvas* canvas = GetCanvas();
-
+						Component* comp_emitter = nullptr;	
 						comp = new ComponentCheckbox(selected);
+						comp_emitter = new ComponentAudioEmitter(selected);
 						dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 						selected->AddComponent(comp);
+						selected->AddComponent(comp_emitter);
 						App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
 					}
 					else
@@ -597,9 +616,12 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::UI))
 					{
 						ComponentCanvas* canvas = GetCanvas();
+						Component* comp_emitter = nullptr;
 						comp = new ComponentSlider(selected);
+						comp_emitter = new ComponentAudioEmitter(selected);
 						dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 						selected->AddComponent(comp);
+						selected->AddComponent(comp_emitter);
 						App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
 
 					}

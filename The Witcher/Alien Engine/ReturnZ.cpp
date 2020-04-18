@@ -498,7 +498,7 @@ void ReturnZ::CreateObject(ActionDeleteObject* obj)
 		new_obj->ID = obj->object->ID;
 		new_obj->SetName(obj->object->name.data());
 		if (obj->object->selected) {
-			App->objects->SetNewSelectedObject(new_obj);
+			App->objects->SetNewSelectedObject(new_obj, false);
 		}
 		new_obj->parent_enabled = obj->object->parent_enabled;
 		new_obj->parent_selected = obj->object->parent_selected;

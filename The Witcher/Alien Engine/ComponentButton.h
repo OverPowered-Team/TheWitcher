@@ -22,6 +22,8 @@ public:
 	void AddListenerOnClickRepeat(std::string name, std::function<void()> funct);
 	void AddListenerOnRelease(std::string name, std::function<void()> funct);
 	void AddListenerOnExit(std::string name, std::function<void()> funct);
+	void AddListenerOnEnter(std::string name, std::function<void()> funct);
+
 	bool CheckIfScriptIsAlreadyAdded(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::string& name);
 
 	//void RemoveListenerOnHover(std::function<void()> funct);
@@ -39,12 +41,14 @@ protected:
 private:
 	bool DrawInspector();
 
+	bool OnEnter();
 	bool OnIdle();
 	bool OnHover();
 	bool OnClick();
 	bool OnPressed();
 	bool OnRelease();
 	bool OnExit();
+	
 
 	void CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners);
 	void SetStateTexture(UIState state, ResourceTexture* tex);
@@ -73,6 +77,7 @@ private:
 	std::vector<std::pair<std::string, std::function<void()>>> listenersOnClickRepeat;
 	std::vector<std::pair<std::string, std::function<void()>>> listenersOnRelease;
 	std::vector<std::pair<std::string, std::function<void()>>> listenersOnExit;
+	std::vector<std::pair<std::string, std::function<void()>>> listenersOnEnter;
 
 	bool active = true;
 };

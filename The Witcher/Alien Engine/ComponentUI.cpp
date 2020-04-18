@@ -101,6 +101,9 @@ void ComponentUI::Update()
 		case Exit: {
 			OnExit();
 			break; }
+		case Enter: {
+			OnEnter();
+			break; }
 		default: {
 			break; }
 		}
@@ -349,6 +352,10 @@ void ComponentUI::UILogicGamePad()
 
 	case Exit: {
 		state = Idle;
+		break; }
+
+	case Enter: {
+		state = Hover;
 		break; }
 	}
 }

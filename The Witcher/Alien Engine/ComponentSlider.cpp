@@ -513,6 +513,9 @@ void ComponentSlider::Update()
 		case Exit:
 			OnExit();
 			break;
+		case Enter:
+			OnEnter();
+			break;
 		default:
 			break;
 		}
@@ -793,11 +796,11 @@ bool ComponentSlider::OnPressed()
 		factor = 0.0f;
 	}*/
 
-	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || Input::GetControllerHoritzontalLeftAxis(1) < -0.2f)
+	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT) == KEY_REPEAT)
 	{
 		factor += (0.01f);
 	}
-	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || Input::GetControllerHoritzontalLeftAxis(1) > 0.2f)
+	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT) == KEY_REPEAT)
 	{
 		factor -= (0.01f);
 	}
@@ -825,6 +828,11 @@ bool ComponentSlider::OnRelease()
 }
 
 bool ComponentSlider::OnExit()
+{
+	return true;
+}
+
+bool ComponentSlider::OnEnter()
 {
 	return true;
 }
@@ -875,6 +883,14 @@ void ComponentSlider::UILogicGamePad()
 		break; }
 	case Release: {
 		state = Idle;
+		break; }
+
+	case Exit: {
+		state = Idle;
+		break; }
+
+	case Enter: {
+		state = Hover;
 		break; }
 	}
 }

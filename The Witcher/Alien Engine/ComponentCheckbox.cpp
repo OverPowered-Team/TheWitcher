@@ -3,6 +3,7 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "ComponentImage.h"
 #include "ComponentTransform.h"
+#include "ComponentAudioEmitter.h"
 #include "GameObject.h"
 #include "imgui/imgui.h"
 #include "ComponentUI.h"
@@ -327,6 +328,58 @@ bool ComponentCheckbox::DrawInspector()
 
 					ImGui::TreePop();
 				}
+
+				ImGui::Spacing();
+				if (ImGui::TreeNode("On Exit Added")) {
+					for (auto item = listenersOnExit.begin(); item != listenersOnExit.end(); ++item) {
+
+						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnExit.begin(), item) + 700143);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnExit.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
+					}
+
+					ImGui::TreePop();
+				}
+
+				ImGui::Spacing();
+				if (ImGui::TreeNode("On Enter Added")) {
+					for (auto item = listenersOnEnter.begin(); item != listenersOnEnter.end(); ++item) {
+
+						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnEnter.begin(), item) + 1555722);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnEnter.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
+					}
+
+					ImGui::TreePop();
+				}
 				ImGui::TreePop();
 			}
 			//----------------------
@@ -410,6 +463,51 @@ bool ComponentCheckbox::DrawInspector()
 										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
 											if (ImGui::MenuItem((*functs).first.data())) {
 												AddListenerOnRelease((*functs).first, (*functs).second);
+											}
+										}
+									}
+									else {
+										ImGui::Text("No exported functions");
+									}
+									ImGui::EndMenu();
+								}
+							}
+						}
+						ImGui::TreePop();
+					}
+					ImGui::Spacing();
+					//-----------------------------
+					if (ImGui::TreeNode("On Exit To Add")) {
+						for (auto item = scripts.begin(); item != scripts.end(); ++item) {
+							if (*item != nullptr && (*item)->data_ptr != nullptr) {
+								if (ImGui::BeginMenu((*item)->data_name.data())) {
+									if (!(*item)->functionMap.empty()) {
+										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
+											if (ImGui::MenuItem((*functs).first.data())) {
+												AddListenerOnExit((*functs).first, (*functs).second);
+											}
+										}
+									}
+									else {
+										ImGui::Text("No exported functions");
+									}
+									ImGui::EndMenu();
+								}
+							}
+						}
+						ImGui::TreePop();
+					}
+
+					ImGui::Spacing();
+					//-----------------------------
+					if (ImGui::TreeNode("On Enter To Add")) {
+						for (auto item = scripts.begin(); item != scripts.end(); ++item) {
+							if (*item != nullptr && (*item)->data_ptr != nullptr) {
+								if (ImGui::BeginMenu((*item)->data_name.data())) {
+									if (!(*item)->functionMap.empty()) {
+										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
+											if (ImGui::MenuItem((*functs).first.data())) {
+												AddListenerOnEnter((*functs).first, (*functs).second);
 											}
 										}
 									}
@@ -870,8 +968,12 @@ bool ComponentCheckbox::OnClick()
 {
 	if (active)
 	{ 
-		clicked = !clicked;
-		
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound("CLICK");
+		}
+
 		current_color = clicked_color;
 		checkbox_current_color = checkbox_clicked_color;
 
@@ -895,6 +997,7 @@ bool ComponentCheckbox::OnRelease()
 {
 	if (active)
 	{ 
+		clicked = !clicked;
 		current_color = hover_color;
 		checkbox_current_color = checkbox_hover_color;
 		CallListeners(&listenersOnRelease);
@@ -904,6 +1007,25 @@ bool ComponentCheckbox::OnRelease()
 
 bool ComponentCheckbox::OnExit()
 {
+	if (active)
+	{
+		CallListeners(&listenersOnExit);
+	}
+	return true;
+}
+
+bool ComponentCheckbox::OnEnter()
+{
+	if (active)
+	{
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound("ENTER");
+		}
+
+		CallListeners(&listenersOnEnter);
+	}
 	return true;
 }
 
@@ -953,6 +1075,24 @@ void ComponentCheckbox::AddListenerOnRelease(std::string name, std::function<voi
 	if (!CheckIfScriptIsAlreadyAdded(&listenersOnRelease, name))
 	{
 		listenersOnRelease.push_back(pair);
+	}
+}
+
+void ComponentCheckbox::AddListenerOnExit(std::string name, std::function<void()> funct)
+{
+	std::pair<std::string, std::function<void()>> pair = { name, funct };
+	if (!CheckIfScriptIsAlreadyAdded(&listenersOnExit, name))
+	{
+		listenersOnExit.push_back(pair);
+	}
+}
+
+void ComponentCheckbox::AddListenerOnEnter(std::string name, std::function<void()> funct)
+{
+	std::pair<std::string, std::function<void()>> pair = { name, funct };
+	if (!CheckIfScriptIsAlreadyAdded(&listenersOnEnter, name))
+	{
+		listenersOnEnter.push_back(pair);
 	}
 }
 
@@ -1053,6 +1193,26 @@ void ComponentCheckbox::SaveComponent(JSONArraypack* to_save)
 			onReleaseArray->SetString(std::to_string(item - listenersOnRelease.begin()).data(), (*item).first.data());
 		}
 	}
+
+	to_save->SetBoolean("HasListenersOnExit", !listenersOnExit.empty());
+	if (!listenersOnExit.empty()) {
+		JSONArraypack* onExitArray = to_save->InitNewArray("ListenersOnExit");
+		auto item = listenersOnExit.begin();
+		for (; item != listenersOnExit.end(); ++item) {
+			onExitArray->SetAnotherNode();
+			onExitArray->SetString(std::to_string(item - listenersOnExit.begin()).data(), (*item).first.data());
+		}
+	}
+
+	to_save->SetBoolean("HasListenersOnEnter", !listenersOnEnter.empty());
+	if (!listenersOnEnter.empty()) {
+		JSONArraypack* onEnterArray = to_save->InitNewArray("ListenersOnEnter");
+		auto item = listenersOnEnter.begin();
+		for (; item != listenersOnEnter.end(); ++item) {
+			onEnterArray->SetAnotherNode();
+			onEnterArray->SetString(std::to_string(item - listenersOnEnter.begin()).data(), (*item).first.data());
+		}
+	}
 	//---------------------------------------------------------------
 }
 
@@ -1125,6 +1285,24 @@ void ComponentCheckbox::LoadComponent(JSONArraypack* to_load)
 			onReleaseListeners->GetAnotherNode();
 		}
 	}
+
+	if (to_load->GetBoolean("HasListenersOnExit")) {
+		JSONArraypack* onExitListeners = to_load->GetArray("ListenersOnExit");
+		for (int i = 0; i < onExitListeners->GetArraySize(); ++i) {
+			std::pair<std::string, std::function<void()>> pair = { onExitListeners->GetString(std::to_string(i).data()), std::function<void()>() };
+			listenersOnExit.push_back(pair);
+			onExitListeners->GetAnotherNode();
+		}
+	}
+
+	if (to_load->GetBoolean("HasListenersOnEnter")) {
+		JSONArraypack* onEnterListeners = to_load->GetArray("ListenersOnEnter");
+		for (int i = 0; i < onEnterListeners->GetArraySize(); ++i) {
+			std::pair<std::string, std::function<void()>> pair = { onEnterListeners->GetString(std::to_string(i).data()), std::function<void()>() };
+			listenersOnEnter.push_back(pair);
+			onEnterListeners->GetAnotherNode();
+		}
+	}
 	//-------------------------------------------------------------
 
 	u64 textureID = std::stoull(to_load->GetString("TextureID"));
@@ -1179,6 +1357,11 @@ void ComponentCheckbox::LoadComponent(JSONArraypack* to_load)
 		}
 	}
 	App->objects->first_assigned_selected = false;
+}
+
+bool ComponentCheckbox::GetStatus()
+{
+	return clicked;
 }
 
 void ComponentCheckbox::HandleAlienEvent(const AlienEvent& e)
@@ -1238,6 +1421,30 @@ void ComponentCheckbox::HandleAlienEvent(const AlienEvent& e)
 					if ((*item).first == (*functs).first)
 					{
 						listenersOnRelease.erase(item);
+						break;
+					}
+				}
+			}
+
+			//delete on exit
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnExit.begin(); item != listenersOnExit.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnExit.erase(item);
+						break;
+					}
+				}
+			}
+
+			//delete on enter
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnEnter.begin(); item != listenersOnEnter.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnEnter.erase(item);
 						break;
 					}
 				}

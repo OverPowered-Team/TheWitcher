@@ -516,11 +516,11 @@ void ModuleUI::MainMenuBar()
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::SAVE_SCENE);
 		}	
-		if (ImGui::MenuItem("Save Scene As", shortcut_save_scene_as_new->GetNameScancodes()))
+		if (ImGui::MenuItem("Save Scene As", shortcut_save_scene_as_new->GetNameScancodes(), nullptr, App->objects->GetGlobalRoot()->children.size() < 2))
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::SAVE_AS_NEW);
 		}
-		if (ImGui::MenuItem("Load Scene", shortcut_load_scene->GetNameScancodes()))
+		if (ImGui::MenuItem("Load Scene", shortcut_load_scene->GetNameScancodes(), nullptr, !App->objects->prefab_scene))
 		{
 			panel_scene_selector->OrganizeSave(PanelSceneSelector::SceneSelectorState::LOAD_SCENE);
 		}
