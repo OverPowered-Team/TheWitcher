@@ -1,4 +1,9 @@
 #include "GameManager.h"
+#include "EventManager.h"
+#include "EnemyManager.h"
+#include "DialogueManager.h"
+#include "PlayerManager.h"
+#include "RelicManager.h"
 
 GameManager::GameManager() : Alien()
 {
