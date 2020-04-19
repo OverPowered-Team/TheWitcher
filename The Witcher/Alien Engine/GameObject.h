@@ -97,7 +97,7 @@ public:
 	static GameObject* FindWithName(const char* name);
 	static GameObject* FindWithTag(const char* tag_to_find);
 	// return the sie of the array of gameobjects found, pass a GameObject** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	static std::vector<GameObject*> FindGameObjectsWithTag(const char* tag_to_find);
+	static std::vector<GameObject*>& FindGameObjectsWithTag(const char* tag_to_find);
 	// parent = nullptr is root
 	static GameObject* Instantiate(const Prefab& prefab, const float3& position, bool check_child = false, GameObject* parent = nullptr);
 	static GameObject* CloneObject(GameObject* to_clone, GameObject* parent = nullptr);
@@ -132,7 +132,7 @@ public:
 	GameObject* GetChild(const int& index);
 	// look for child of child of child bla bla
 	GameObject* GetChildRecursive(const char* child_name);
-	std::vector<GameObject*> GetChildren();
+	std::vector<GameObject*>& GetChildren();
 
 	void SetEnable(bool enable);
 	bool IsEnabled() const;

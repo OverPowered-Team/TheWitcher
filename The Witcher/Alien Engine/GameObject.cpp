@@ -144,7 +144,7 @@ GameObject* GameObject::GetChildRecursive(const char* child_name)
 	}
 }
 
-std::vector<GameObject*> GameObject::GetChildren()
+std::vector<GameObject*>& GameObject::GetChildren()
 {
 	return children;
 }
@@ -756,9 +756,10 @@ GameObject* GameObject::FindWithTag(const char* tag_to_find)
 	return App->objects->GetRoot(true)->FindTag(tag_to_find);
 }
 
-std::vector<GameObject*> GameObject::FindGameObjectsWithTag(const char* tag_to_find)
+std::vector<GameObject*>& GameObject::FindGameObjectsWithTag(const char* tag_to_find)
 {
-	std::vector<GameObject*> found;
+	static std::vector<GameObject*> found;
+	found.clear();
 	App->objects->GetRoot(true)->FindTags(tag_to_find, &found);
 	return found;
 }
