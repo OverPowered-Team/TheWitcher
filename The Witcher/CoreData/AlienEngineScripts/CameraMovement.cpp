@@ -21,7 +21,10 @@ void CameraMovement::Update()
 {   
     switch (state) {
     case CameraState::DYNAMIC: {
-        transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        if (smooth_camera)
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateMidPoint() + trg_offset) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+        else
+            transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
         break;
     }
     case CameraState::STATIC:
