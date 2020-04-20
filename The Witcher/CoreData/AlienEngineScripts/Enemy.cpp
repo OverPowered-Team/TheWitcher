@@ -206,7 +206,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		character_ctrl->SetWalkDirection(float3::zero());
 	}
 
-	return aux_health - stats.current_health;
+	return aux_health - stats["Health"].GetValue();
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
 	character_ctrl->SetWalkDirection(float3::zero());
