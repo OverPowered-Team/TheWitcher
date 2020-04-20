@@ -28,8 +28,18 @@ public:
 	int current_points1 = 0;
 	int current_points2 = 0;
 
+	bool in_place = true;
+
 	// Position
 	float max_Y = 4.5f;
+	float original_position1 = 0.0f;
+	float original_position2 = 0.0f;
+	float desired_position1 = 0.0f;
+	float desired_position2 = 0.0f;
+
+	// Time
+	float time_to_scale = 0.0f;
+	float time = 0.0f;
 };
 
 ALIEN_FACTORY Scale_Win* CreateScale_Win() {
@@ -38,6 +48,8 @@ ALIEN_FACTORY Scale_Win* CreateScale_Win() {
 
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->player1_points);
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->player2_points);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->max_Y);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_scale);
 
 	return alien;
 } 

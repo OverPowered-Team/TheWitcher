@@ -20,6 +20,18 @@ void Scale_Win::Update()
 	{
 		CalculateInclination();
 	}
+
+	// Waiting on new release
+	/*if (!in_place)
+	{
+		left_scale->transform->SetLocalPosition(7.5f, math::Lerp(original_position1,desired_position1,(Time::GetGameTime()-time)/time_to_scale), 0);
+		right_scale->transform->SetLocalPosition(-7.5f, math::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0);
+
+		if (Time::GetGameTime() > time + time_to_scale)
+		{ 
+			in_place = true;
+		}
+	}*/
 }
 
 void Scale_Win::CalculateInclination()
@@ -50,9 +62,10 @@ void Scale_Win::CalculateInclination()
 		value = 1 - ((ratio - 0.5f) * 2);
 	}
 
-
-
-	left_scale->transform->SetLocalPosition(7.5f, 4.5f * value, 0);
-	right_scale->transform->SetLocalPosition(-7.5f, -4.5f * value, 0);
-
+	in_place = false;
+	original_position1 = left_scale->transform->GetLocalPosition().y;
+	original_position2 = right_scale->transform->GetLocalPosition().y;
+	desired_position1 = max_Y * value;
+	desired_position2 = -max_Y * value;
+	time = Time::GetGameTime();
 }
