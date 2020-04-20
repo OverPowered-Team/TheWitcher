@@ -149,7 +149,7 @@
                 "ParentID": "17232811697877510915",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -194,6 +194,16 @@
                                 "VarType": 0,
                                 "Name": "player2_points",
                                 "int": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "max_Y",
+                                "float": 4.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_scale",
+                                "float": 0.5
                             }
                         ]
                     }
@@ -207,7 +217,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -284,7 +294,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -350,6 +360,96 @@
                             1,
                             1
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "Spawner",
+                "FamilyNumber": 1,
+                "ID": "9977837962003834614",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2624213426393209673",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7.5,
+                            8,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9259459688472790052"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2384678424055447360",
+                        "ResourceID": "777922129843890485",
+                        "DataName": "Spawner",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Spawner",
+                "FamilyNumber": 1,
+                "ID": "16058222640128355106",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2624213426393209673",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -7.5,
+                            8,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9560324198211225436"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11435762685255555332",
+                        "ResourceID": "777922129843890485",
+                        "DataName": "Spawner",
+                        "HasInspector": false
                     }
                 ]
             }

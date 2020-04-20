@@ -79,7 +79,7 @@ void Scale_Win::CalculateInclination()
 	// TO DELETE
 	left_scale->transform->SetLocalPosition(7.5f, desired_position1, 0);
 	right_scale->transform->SetLocalPosition(-7.5f, desired_position2, 0);
-	// ----------------------------------------
+	//-----------------------------------------
 
 	in_place = false;
 	time = Time::GetGameTime();
