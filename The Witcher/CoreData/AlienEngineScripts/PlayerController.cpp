@@ -54,21 +54,15 @@ void PlayerController::Start()
 	max_aabb.maxPoint -= transform->GetGlobalPosition();
 	LOG("MAX AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", max_aabb.minPoint.x, max_aabb.minPoint.y, max_aabb.minPoint.z, max_aabb.maxPoint.x, max_aabb.maxPoint.y, max_aabb.maxPoint.z);
 
-	auto v_particles = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
-
-	for (auto i = v_particles.begin(); i != v_particles.end(); ++i) {
-		particles.insert(std::pair((*i)->game_object_attached->GetName(), (*i)->game_object_attached));
-		(*i)->game_object_attached->SetEnable(false);
-	}
-
-	controller->SetRotation(Quat::identity());
-
-	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
+	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
 		(*it)->SetEnable(false);
-	}*/
+	}
+
+	controller->SetRotation(Quat::identity());
+
 
 	if (controller_index == 1) {
 		keyboard_move_up = SDL_SCANCODE_W;
@@ -662,11 +656,10 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 void PlayerController::OnUltimateActivation(float value)
 {
-	//animator->IncreaseAllStateSpeeds(2.0f);
+	animator->IncreaseAllStateSpeeds(2.0f);
 }
 
 void PlayerController::OnUltimateDeactivation(float value)
 {
-
-	//animator->DecreaseAllStateSpeeds(2.0f);
+	animator->DecreaseAllStateSpeeds(2.0f);
 } 
