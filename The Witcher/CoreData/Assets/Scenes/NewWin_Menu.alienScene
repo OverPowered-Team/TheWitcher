@@ -1,0 +1,358 @@
+{
+    "Scene": {
+        "Name": "NewWin_Menu",
+        "GameObjects": [
+            {
+                "Name": "Directional light",
+                "FamilyNumber": 1,
+                "ID": "8275406848848438453",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0.29396787285804749,
+                            0,
+                            0,
+                            0.95581531524658203
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4681244636418935577"
+                    },
+                    {
+                        "Type": 3,
+                        "Enabled": true,
+                        "ID": "3410374433364700363",
+                        "PrintIcon": true,
+                        "Intensity": 1,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Direction": [
+                            0,
+                            -0.56195801496505737,
+                            0.82716578245162964
+                        ],
+                        "Ambient": [
+                            0.16666668653488159,
+                            0.16666501760482788,
+                            0.16666501760482788
+                        ],
+                        "Diffuse": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Camera",
+                "FamilyNumber": 1,
+                "ID": "3139537393299070191",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            5,
+                            -15
+                        ],
+                        "Rotation": [
+                            0.11495953053236008,
+                            0,
+                            0,
+                            0.9933701753616333
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5045172614862141465"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "13421276926279949467",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Fog": false,
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/575523041464209442.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/2272049821688510999.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/8243941029542624066.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13353609087236361933.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/14034231489549923375.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/10216792741298181251.dds"
+                    }
+                ]
+            },
+            {
+                "Name": "Scale",
+                "FamilyNumber": 1,
+                "ID": "4298183386308403159",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1129397650820665848",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "127914463865267196"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "413193251548148872",
+                        "ResourceID": "6356480813473579658",
+                        "DataName": "Scale_Win",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "player1_points",
+                                "int": 0
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "player2_points",
+                                "int": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Right_Scale",
+                "FamilyNumber": 2,
+                "ID": "16974777659574851064",
+                "ParentID": "4298183386308403159",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1129397650820665848",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -7.5,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            7,
+                            0.67810875177383423,
+                            7
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17110884597999404715"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "18076432269616006592",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6471386845582562187",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Left_Scale",
+                "FamilyNumber": 2,
+                "ID": "18000383806054536551",
+                "ParentID": "4298183386308403159",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1129397650820665848",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            7.5,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            7,
+                            0.67810875177383423,
+                            7
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6762852835956926787"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "482648867272877941",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "17896110244732308255",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
