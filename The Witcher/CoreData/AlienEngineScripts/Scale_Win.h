@@ -38,7 +38,7 @@ public:
 	float desired_position2 = 0.0f;
 
 	// Time
-	float time_to_scale = 0.0f;
+	float time_to_scale = 0.5f;
 	float time = 0.0f;
 };
 

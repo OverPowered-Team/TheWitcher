@@ -62,10 +62,25 @@ void Scale_Win::CalculateInclination()
 		value = 1 - ((ratio - 0.5f) * 2);
 	}
 
-	in_place = false;
 	original_position1 = left_scale->transform->GetLocalPosition().y;
 	original_position2 = right_scale->transform->GetLocalPosition().y;
-	desired_position1 = max_Y * value;
-	desired_position2 = -max_Y * value;
+
+	if (Maths::Min(player1_points, player2_points) == player1_points)
+	{
+		desired_position1 = max_Y * value;
+		desired_position2 = -max_Y * value;
+	}
+	else
+	{
+		desired_position1 = -max_Y * value;
+		desired_position2 = max_Y * value;
+	}
+
+	// TO DELETE
+	left_scale->transform->SetLocalPosition(7.5f, desired_position1, 0);
+	right_scale->transform->SetLocalPosition(-7.5f, desired_position2, 0);
+	// ----------------------------------------
+
+	in_place = false;
 	time = Time::GetGameTime();
 }
