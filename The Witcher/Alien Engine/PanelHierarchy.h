@@ -19,8 +19,11 @@ private:
 	void PrintNode(GameObject* node);
 	void RightClickMenu();
 
+	void RightClickSceneNode(GameObject* obj);
 
 private:
+
+	bool right_click_scene = false;
 
 	GameObject* object_hovered = nullptr;
 	GameObject* object_menu = nullptr;

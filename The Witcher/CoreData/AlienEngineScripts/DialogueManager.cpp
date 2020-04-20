@@ -13,8 +13,8 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	audioEmitter = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
-	text = (ComponentText*)GameObject::FindWithName("SubtitlesText")->GetComponent(ComponentType::UI_TEXT);
+	audioEmitter = GetComponent<ComponentAudioEmitter>();
+	text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
 
 	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
 	LoadJSONDialogues();

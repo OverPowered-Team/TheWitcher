@@ -42,10 +42,7 @@ public:
 		float currentSpeed = 0.f;
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
-		Stat health = Stat("Health", 100.0f);
-		Stat power = Stat("Strength", 10.0f);
-		Stat chaos = Stat("Chaos", 150.0f);
-		Stat attack_speed = Stat("Attack Speed", 1.0f);
+		std::map<std::string, Stat> stats;
 
 		PlayerType player_type = PlayerType::GERALT;
 		float total_damage_dealt = 0.0f;

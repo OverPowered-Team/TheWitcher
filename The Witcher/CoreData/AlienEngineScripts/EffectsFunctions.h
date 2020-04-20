@@ -4,48 +4,63 @@
 #include "Macros/AlienScripts.h"
 
 #include "Enemy.h"
+#include "PlayerController.h"
 
 //ONHIT
-static void ApplyBurnOnHit(GameObject _enemy)
+static void ApplyBurnOnHit(Enemy* _enemy, uint size)
 {
-    //TODO: Add particle
-    Enemy* enemy = (Enemy*)_enemy.GetComponentScript("Enemy.h");
-    if (enemy && enemy->particles["p_burnonhit"])
-        enemy->particles["p_burnonhit"]->SetEnable(true);
+    Effect* effect = new Effect();
+    effect->AddFlatModifier(-20.0f, "Health");
+    effect->name = "Burn On Hit";
+    effect->time = size * 0.5;
+    effect->ticks_time = 1.0f;
+    effect->last_tick_time = Time::GetGameTime();
+    effect->start_time = Time::GetGameTime();
+    _enemy->AddEffect(effect);
 }
 
-static void ApplyIceOnHit(GameObject _enemy)
+static void ApplyIceOnHit(Enemy* _enemy, uint size)
 {
-    Enemy* enemy = (Enemy*)_enemy.GetComponentScript("Enemy.h");
+    Effect* effect = new Effect();
+    effect->AddMultiplicativeModifier(0.5, "Agility");
+    effect->name = "Ice On Hit";
+    effect->time = size * 0.2;
+    effect->ticks_time = 0;
+    effect->last_tick_time = Time::GetGameTime();
+    effect->start_time = Time::GetGameTime();
+    _enemy->AddEffect(effect);
 }
 
-static void ApplyLightningOnHit(GameObject _enemy)
+static void ApplyLightningOnHit(Enemy* _enemy, uint size)
 {
-    Enemy* enemy = (Enemy*)_enemy.GetComponentScript("Enemy.h");
+    
 }
 
-static void ApplyPoisonOnHit(GameObject _enemy)
+static void ApplyPoisonOnHit(Enemy* _enemy, uint size)
 {
-    Enemy* enemy = (Enemy*)_enemy.GetComponentScript("Enemy.h");
+    Effect* effect = new Effect();
+    effect->AddFlatModifier(size * 10.0f, "Health");
+    effect->name = "Poison On Hit";
+    effect->time = 8.0f;
+    effect->ticks_time = 1.0f;
+    effect->last_tick_time = Time::GetGameTime();
+    effect->start_time = Time::GetGameTime();
+    _enemy->AddEffect(effect);
 }
 
 //ONDASH
-static void ApplyBurnOnDash(GameObject _player)
+static void ApplyBurnOnDash(PlayerController* _player)
 {
-    PlayerController* player = (PlayerController*)_player.GetComponentScript("PlayerController.h");
 }
 
-static void ApplyIceOnDash(GameObject _player)
+static void ApplyIceOnDash(PlayerController* _player)
 {
-    PlayerController* player = (PlayerController*)_player.GetComponentScript("PlayerController.h");
 }
 
-static void ApplyEarthOnDash(GameObject _player)
+static void ApplyEarthOnDash(PlayerController* _player)
 {
-    PlayerController* player = (PlayerController*)_player.GetComponentScript("PlayerController.h");
 }
 
-static void ApplyPoisonOnDash(GameObject _player)
+static void ApplyPoisonOnDash(PlayerController* _player)
 {
-    PlayerController* player = (PlayerController*)_player.GetComponentScript("PlayerController.h");
 }

@@ -12,8 +12,10 @@ private :
 
 public:
 
-	Module(bool start_enabled = true)
-	{}
+	Module(bool start_enabled=true)
+	{
+		enabled = start_enabled;
+	}
 
 	virtual ~Module()
 	{}
@@ -52,6 +54,16 @@ public:
 	}
 		
 	virtual void HandleEvent(EventType eventType) {}
+
+	void SetEnable(bool enable)
+	{
+		enabled = enable;
+	}
+
+	bool IsEnabled()
+	{
+		return enabled;
+	}
 
 	std::string name;
 

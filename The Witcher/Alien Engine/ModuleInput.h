@@ -2,13 +2,14 @@
 #include "Module.h"
 #include "Globals.h"
 #include "imgui/imgui.h"
+#include "StaticInput.h"
 #include "SDL/include/SDL_scancode.h"
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL_gamecontroller.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <map>
 
-#define DEAD_ZONE 1000 // 0 - 32767
+#define DEAD_ZONE 8000 // 0 - 32767
 #define MAX_MOUSE_BUTTONS 5
 
 enum KEY_STATE
@@ -23,6 +24,10 @@ struct GamePad {
 	struct Joystick {
 		float valueX = 0;
 		float valueY = 0;
+		KEY_STATE joystick_state_up = KEY_IDLE;
+		KEY_STATE joystick_state_down = KEY_IDLE;
+		KEY_STATE joystick_state_left = KEY_IDLE;
+		KEY_STATE joystick_state_right = KEY_IDLE;
 	};
 	int number = 0;
 	Joystick joystick_left;
@@ -52,6 +57,48 @@ public:
 	KEY_STATE GetControllerButton(int controller_index, int button)
 	{
 		return (IsControllerActive(controller_index)) ? game_pads[controller_index]->controller_buttons[button] : KEY_IDLE;
+	}
+
+	KEY_STATE GetControllerJoystickLeft(int controller_index, Input::JOYSTICK_BUTTONS button)
+	{
+		switch (button)
+		{
+		case Input::JOYSTICK_UP: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_left.joystick_state_up : KEY_IDLE;
+			break; }
+		case Input::JOYSTICK_DOWN: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_left.joystick_state_down : KEY_IDLE;
+			break; }
+		case Input::JOYSTICK_RIGHT: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_left.joystick_state_right : KEY_IDLE;
+			break; }
+		case Input::JOYSTICK_LEFT: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_left.joystick_state_left : KEY_IDLE;
+			break; }
+		default: {
+			break; }
+		}
+	}
+
+	KEY_STATE GetControllerJoystickRight(int controller_index, Input::JOYSTICK_BUTTONS button)
+	{
+		switch (button)
+		{
+		case Input::JOYSTICK_UP: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_right.joystick_state_up : KEY_IDLE;
+			break; }
+		case Input::JOYSTICK_DOWN: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_right.joystick_state_down : KEY_IDLE;
+			break; }
+		case Input::JOYSTICK_RIGHT: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_right.joystick_state_right : KEY_IDLE;
+			break; }
+		case Input::JOYSTICK_LEFT: {
+			return (IsControllerActive(controller_index)) ? game_pads[controller_index]->joystick_right.joystick_state_left : KEY_IDLE;
+			break; }
+		default: {
+			break; }
+		}
 	}
 
 	// strength 0 - 1 duration 1000 = 1s
@@ -103,6 +150,7 @@ public:
 private:
 
 	void AddInputBuff(const uint& key, const uint& state, const bool& is_mouse = false);
+	void SetJoystickState(float value, KEY_STATE* state, Input::JOYSTICK_BUTTONS joystick);
 
 private:
 	KEY_STATE* keyboard;

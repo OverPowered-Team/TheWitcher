@@ -117,6 +117,15 @@ ComponentCamera::~ComponentCamera()
 				App->camera->selected_viewport->SetCamera(nullptr);
 			}
 			#endif
+
+			if (App->objects->game_viewport->GetCamera() == this) {
+				if (!App->objects->game_cameras.empty()) {
+					App->objects->game_viewport->SetCamera(App->objects->game_cameras.front());
+				}
+				else {
+					App->objects->game_viewport->SetCamera(nullptr);
+				}
+			}
 			break;
 		}
 	}

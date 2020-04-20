@@ -132,9 +132,9 @@ ResourceFont* ResourceFont::ImportFont(const char* file, u64 forced_id)
 		font->name = App->file_system->GetBaseFileName(file);
 		font->meta_data_path = LIBRARY_FONTS_FOLDER + std::to_string(font->GetID()) + ".fnt";
 		font->text_shader = SetShader("text_shader_meta.alien");
-		font->text_ortho = SetShader("text_ortho_meta.alien");
+		font->background_shader = SetShader("background_shader_meta.alien");
 
-		ResourceFont::SaveFile(fontData, font->meta_data_path.c_str(), font->text_ortho->GetID(), font->text_shader->GetID());
+		ResourceFont::SaveFile(fontData, font->meta_data_path.c_str(), font->background_shader->GetID(), font->text_shader->GetID());
 		font->CreateMeta();
 	}
 
@@ -201,7 +201,7 @@ ResourceFont* ResourceFont::LoadFile(const char* file, u64 forced_id)
 		bytes = sizeof(u64);
 		u64 ID = 0;
 		memcpy(&ID, cursor, bytes);
-		res->text_ortho = (ResourceShader*)App->resources->GetResourceWithID(ID);
+		res->background_shader = (ResourceShader*)App->resources->GetResourceWithID(ID);
 		cursor += bytes;
 
 		// Text Shader ID
@@ -301,8 +301,8 @@ bool ResourceFont::LoadMemory()
 {
 	if (text_shader != nullptr)
 		text_shader->LoadMemory();
-	if (text_ortho != nullptr)
-		text_ortho->LoadMemory();
+	if (background_shader != nullptr)
+		background_shader->LoadMemory();
 	return true;
 }
 
@@ -318,7 +318,7 @@ void ResourceFont::FreeMemory()
 	if (!App->IsQuiting())
 	{
 		text_shader->FreeMemory();
-		text_ortho->FreeMemory();
+		background_shader->FreeMemory();
 	}
 }
 

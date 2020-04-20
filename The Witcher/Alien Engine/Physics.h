@@ -13,9 +13,8 @@ public:
 	static float3 GetGravity();
 
 	static ComponentCollider*			   RayCastClosest(math::Ray ray);
-	static uint RayCastAll(Ray ray, ComponentCollider*** comp_array);
-	static uint SphereCast(float3 position, float radius, ComponentCollider*** comp_array);
-	static uint BoxCast(float3 size, float3 position, Quat rotation, ComponentCollider*** comp_array);
-	static void FreeArray(ComponentCollider*** comp_array);
+	static std::vector<ComponentCollider*> RayCastAll(Ray ray);
+	static std::vector<ComponentCollider*> SphereCast(float3 position, float radius);
+	static std::vector<ComponentCollider*> BoxCast(float3 size, float3 position, Quat rotation);
 };
 

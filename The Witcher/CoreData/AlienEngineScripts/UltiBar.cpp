@@ -12,7 +12,7 @@ UltiBar::~UltiBar()
 void UltiBar::Start()
 {
 	ultibar->SetEnable(true);
-	normal_ulti = (ComponentBar*)ultibar->GetComponent(ComponentType::UI_BAR);
+	normal_ulti = ultibar->GetComponent<ComponentBar>();
 	normal_ulti->SetBarValue(0);
 	ultibar_charged->SetEnable(false);
 }

@@ -98,6 +98,8 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,6 +140,8 @@
       <ExceptionHandling>Async</ExceptionHandling>
       <AdditionalIncludeDirectories>..\..\Alien Engine\Bullet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -178,6 +182,9 @@
     <ClInclude Include="CameraLimits.h" />
     <ClInclude Include="CameraMovement.h" />
     <ClInclude Include="Leshen.h" />
+    <ClInclude Include="CheckPoint.h" />
+    <ClInclude Include="CheckPoints_Manager.h" />
+    <ClInclude Include="Ghoul.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Check_EndMenu.h" />
     <ClInclude Include="DebugManager.h" />
@@ -198,6 +205,8 @@
     <ClInclude Include="NilfgaardSoldier.h" />
     <ClInclude Include="PlayerAttacks.h" />
     <ClInclude Include="RelicBehaviour.h" />
+    <ClInclude Include="Relic_Notification.h" />
+    <ClInclude Include="RelicManager.h" />
     <ClInclude Include="ReverbZone.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Macros\AlienScripts.h" />
@@ -224,6 +233,9 @@
     <ClCompile Include="CameraLimits.cpp" />
     <ClCompile Include="CameraMovement.cpp" />
     <ClCompile Include="Leshen.cpp" />
+    <ClCompile Include="CheckPoint.cpp" />
+    <ClCompile Include="CheckPoints_Manager.cpp" />
+    <ClCompile Include="Ghoul.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Check_EndMenu.cpp" />
     <ClCompile Include="DebugManager.cpp" />
@@ -243,6 +255,8 @@
     <ClCompile Include="NilfgaardSoldier.cpp" />
     <ClCompile Include="PlayerAttacks.cpp" />
     <ClCompile Include="RelicBehaviour.cpp" />
+    <ClCompile Include="Relic_Notification.cpp" />
+    <ClCompile Include="RelicManager.cpp" />
     <ClCompile Include="ReverbZone.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Macros\dllmain.cpp" />

@@ -1775,12 +1775,12 @@ namespace ImGuizmo
             vec_t baseVector = gContext.mTranslationPlanOrigin - gContext.mModel.v.position;
             float ratio = Dot(axisValue, baseVector + delta) / Dot(axisValue, baseVector);
 
-            gContext.mScale[axisIndex] = max(ratio, 0.F);
+            gContext.mScale[axisIndex] = max(ratio, 0.001f);
          }
          else
          {
             float scaleDelta = (io.MousePos.x - gContext.mSaveMousePosx)  * 0.01f;
-            gContext.mScale.Set(scaleDelta);
+            gContext.mScale.Set(max(1.f + scaleDelta, 0.001f));
          }
 
          // snap

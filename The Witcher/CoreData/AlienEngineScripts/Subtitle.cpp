@@ -10,12 +10,17 @@ Subtitle::~Subtitle()
 
 void Subtitle::Start()
 {
-	text = (ComponentText*)GetComponent(ComponentType::UI_TEXT);
+	text = GetComponent<ComponentText>();
 	if (!text)
 		return;
-	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+	audio = GetComponent<ComponentAudioEmitter>();
 	if (!audio)
 		return;
+	if (songBard)
+	{
+		song = songBard->GetComponent<ComponentAudioEmitter>();
+	}
+
 
 	std::string json_path = std::string("Configuration/Subtitles/Project_1.json");
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
@@ -63,8 +68,13 @@ void Subtitle::Update()
 			}
 		}
 	}
-	if (current_time > end_seconds)
+	if (current_time > end_seconds || Input::GetControllerButton(1,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A))
 	{
+		LOG("ENTERED");
+		if(audio)
+			audio->Mute(true);
+		if(song)
+			song->Mute(true);
 		SceneManager::LoadScene("newTRIGGER");
 	}
 }

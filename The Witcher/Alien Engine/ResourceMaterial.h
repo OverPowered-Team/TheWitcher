@@ -50,9 +50,9 @@ struct ShaderInputs
 	} iluminatedShaderProperties;
 
 	struct ParticleShaderProperties {
-		float3 color = float3(1.f, 0.f, 0.8f);
-		float3 start_color = float3(1.f, 0.f, 0.8f);
-		float3 end_color = float3(1.f, 1.f, 1.f);
+		float4 color = float4(1.f, 0.f, 0.8f, 1.0f);
+		//float3 start_color = float3(1.f, 0.f, 0.8f);
+		//float3 end_color = float3(1.f, 1.f, 1.f);
 	} particleShaderProperties;
 };
 

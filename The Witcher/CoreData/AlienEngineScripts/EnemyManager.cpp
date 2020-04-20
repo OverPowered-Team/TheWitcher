@@ -3,21 +3,23 @@
 #include "NilfgaardSoldier.h"
 #include "PlayerController.h"
 
-void EnemyManager::Start()
+void EnemyManager::Awake()
 {
-	GameObject** players = nullptr;
-	uint size = GameObject::FindGameObjectsWithTag("Player", &players);
-	if (size == 2) {
+	auto players = GameObject::FindGameObjectsWithTag("Player");
+	if (players.size() == 2)
+	{
 		player1 = players[0];
 		player2 = players[1];
 	}
-	GameObject::FreeArrayMemory((void***)&players);
+	else
+		LOG("There's no player or just one in the scene!");
+}
 
+void EnemyManager::Start()
+{
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
-		(*item)->player_1 = player1;
-		(*item)->player_controllers.push_back(static_cast<PlayerController*>((*item)->player_1->GetComponentScript("PlayerController")));
-		(*item)->player_2 = player2;
-		(*item)->player_controllers.push_back(static_cast<PlayerController*>((*item)->player_2->GetComponentScript("PlayerController")));
+		(*item)->player_controllers.push_back(player1->GetComponent<PlayerController>());
+		(*item)->player_controllers.push_back(player2->GetComponent<PlayerController>());
 		(*item)->StartEnemy();
 	}
 }
@@ -48,13 +50,10 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 	case EnemyType::NILFGAARD_SOLDIER: {
 		switch ((NilfgaardSoldier::NilfgaardType)extra_type)
 		{
-		case NilfgaardSoldier::NilfgaardType::SPEAR: {
-			LOG("SPEAR");
-			break; }
 		case NilfgaardSoldier::NilfgaardType::ARCHER: {
 			LOG("ARCHER");
 			break; }
-		case NilfgaardSoldier::NilfgaardType::LARGE_SWORD: {
+		case NilfgaardSoldier::NilfgaardType::SWORD: {
 			LOG("LARGE_SWORD");
 			break; }
 		case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD: {
@@ -80,8 +79,10 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 void EnemyManager::AddEnemy(Enemy* enemy)
 {
 	enemies.push_back(enemy);
-	enemy->player_1 = player1;
-	enemy->player_2 = player2;
+	if(player1)
+		enemy->player_controllers.push_back(player1->GetComponent<PlayerController>());
+	if(player2)
+		enemy->player_controllers.push_back(player2->GetComponent<PlayerController>());
 }
 
 void EnemyManager::DeleteEnemy(Enemy* enemy)

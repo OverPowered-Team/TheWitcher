@@ -289,7 +289,7 @@ void ResourceMaterial::ApplyMaterial()
 
 	// Update uniforms
 	shaderInputs.standardShaderProperties.diffuse_color = float3(color.x, color.y, color.z);
-	shaderInputs.particleShaderProperties.color = float3(color.x, color.y, color.z);
+	shaderInputs.particleShaderProperties.color = color;
 	used_shader->UpdateUniforms(shaderInputs);
 
 }

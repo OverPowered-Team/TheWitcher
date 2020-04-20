@@ -14,7 +14,7 @@ TriggerCamera::~TriggerCamera()
 void TriggerCamera::Start()
 {
 	camera = Camera::GetCurrentCamera()->game_object_attached;
-	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+	cam_script = camera->GetComponent<CameraMovement>();
 }
 
 void TriggerCamera::StartTransition(TransitionInfo transition_info)
@@ -56,7 +56,7 @@ void TriggerCamera::OnDrawGizmos()
 
 	if (cam_script == nullptr) {
 		camera = Camera::GetCurrentCamera()->game_object_attached;
-		cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
+		cam_script = camera->GetComponent<CameraMovement>();
 	}
 
 	switch (prev_camera.type)

@@ -390,12 +390,15 @@ void PanelProject::RightClickInFileOrFolder(const uint& i, bool& pop_up_item)
 	if (current_active_file != nullptr && current_active_file == current_active_folder->children[i] && !current_active_file->is_base_file && ImGui::BeginPopupContextItem()) {
 		pop_up_item = true;
 
-			if (ImGui::MenuItem("Delete")) {
-				to_delete_menu = true;
-			}
-			if (ImGui::MenuItem("Rename")) {
-				current_active_folder->children[i]->changing_name = true;
-			}
+		if (ImGui::MenuItem("Delete")) {
+			to_delete_menu = true;
+		}
+		if (ImGui::MenuItem("Rename")) {
+			current_active_folder->children[i]->changing_name = true;
+		}
+		if (current_active_folder->children[i]->type == FileDropType::SCENE && ImGui::MenuItem("Open as Co-Scene", nullptr, nullptr, !App->objects->prefab_scene)) {
+			App->objects->OpenCoScene(App->file_system->GetBaseFileName(current_active_folder->children[i]->name.data()).data());
+		}
 		ImGui::EndPopup();
 	}
 }

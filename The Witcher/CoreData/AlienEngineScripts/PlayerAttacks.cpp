@@ -16,8 +16,8 @@ PlayerAttacks::~PlayerAttacks()
 
 void PlayerAttacks::Start()
 {
-	player_controller = (PlayerController*)GetComponentScript("PlayerController");
-	collider = (ComponentBoxCollider*)collider_go->GetComponent(ComponentType::BOX_COLLIDER);
+	player_controller = GetComponent<PlayerController>();
+	collider = collider_go->GetComponent<ComponentBoxCollider>();
 
 	CreateAttacks();
 }
@@ -118,14 +118,13 @@ std::vector<std::string> PlayerAttacks::GetFinalAttacks()
 	return final_attacks;
 }
 
-void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
+void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 {
 	for (std::vector<Attack*>::iterator it = attacks.begin(); it != attacks.end(); ++it)
 	{
-		if ((*it)->info.name == _attack_name)
+		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
-			(*it)->info.base_damage.CalculateStat(player_controller->effects);
-			//(*it)->base_range.CalculateStat(player_controller->effects);
+			(*it)->info.base_damage.ApplyEffect(new_effect);
 		}
 	}
 }
@@ -133,6 +132,7 @@ void PlayerAttacks::OnAddAttackEffect(std::string _attack_name)
 void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;
+	collider->SetEnable(false);
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -168,27 +168,26 @@ void PlayerAttacks::SnapToTarget()
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	ComponentCollider** colliders_in_range;
-	uint size = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range, &colliders_in_range);
+	std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
 	std::vector<GameObject*> enemies_in_range;
-	for (uint i = 0u; i < size; ++i)
+
+	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp(colliders_in_range[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
-			enemies_in_range.push_back(colliders_in_range[i]->game_object_attached);
+			enemies_in_range.push_back((*i)->game_object_attached);
 		}
 	}
-	Physics::FreeArray(&colliders_in_range);
 
 	float3 vector = GetMovementVector();
-	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 100.0f);
+	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
 
 	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = (*it)->transform->GetGlobalPosition().Distance(transform->GetGlobalPosition());
+		float distance = transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition());
 		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
-		if (distance <= snap_detection_range && angle <= max_snap_angle)
+		if (distance <= snap_detection_range && angle <= abs(max_snap_angle))
 		{
 			float snap_value = (angle * snap_angle_value) + (distance * snap_distance_value);
 			if (snap_candidate.second > snap_value)
@@ -301,7 +300,7 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 float PlayerAttacks::GetCurrentDMG()
 {
 	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
-		return current_attack->info.base_damage.GetValue() * player_controller->player_data.power.GetValue();
+		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
 		return current_attack->info.base_damage.GetValue();
 }

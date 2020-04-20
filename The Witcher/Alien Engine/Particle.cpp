@@ -10,12 +10,12 @@
 #include "ModuleObjects.h"
 #include "Viewport.h"
 #include "mmgr/mmgr.h"
-
+#include "ModuleResources.h"
 Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo endInfo) : owner(owner), particleInfo(info), startInfo(info), endInfo(endInfo)
 {
 	owner->sourceFactor = GL_SRC_ALPHA;
 	owner->destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
-
+	currentFrame = owner->currentFrame;
 
 	if (owner->material != nullptr) 
 	{
@@ -24,10 +24,21 @@ Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo
 		p_material->SetTexture(owner->material->GetTexture(TextureType::DIFFUSE));
 		p_material->color = owner->material->color;
 
-		p_material->shaderInputs.particleShaderProperties.color = owner->material->shaderInputs.particleShaderProperties.color;
+		/*p_material->shaderInputs.particleShaderProperties.color = owner->material->shaderInputs.particleShaderProperties.color;
 		p_material->shaderInputs.particleShaderProperties.start_color = owner->material->shaderInputs.particleShaderProperties.color;
-		p_material->shaderInputs.particleShaderProperties.end_color = owner->material->shaderInputs.particleShaderProperties.end_color;
+		p_material->shaderInputs.particleShaderProperties.end_color = owner->material->shaderInputs.particleShaderProperties.end_color;*/
+
+		/*ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(p_material->texturesID[int(TextureType::DIFFUSE)]);
+
+		if (tex != nullptr)
+		{
+			sheetWidth = tex->width;
+			sheetHeight = tex->height;
+		}*/
+
 	}
+
+
 
 }
 
@@ -36,7 +47,7 @@ Particle::~Particle()
 	if (owner->material != nullptr)
 		delete p_material;
 
-	
+	currentFrame = 0;
 }
 
 void Particle::PreUpdate(float dt)
@@ -71,16 +82,48 @@ void Particle::Update(float dt)
 
 		particleInfo.angle3D += particleInfo.angularVelocity3D * dt;
 	}
-	
-	//Animation
-	if (particleInfo.animation != nullptr)
+
+
+	// Animation 
+
+	if (particleInfo.animated)
 	{
 		animationTime += dt;
 
 		if (animationTime > particleInfo.animSpeed)
 		{
-			if (particleInfo.animation->size() > currentFrame + 1)
+			if (currentFrame > particleInfo.currentAnimation.endFrame) {
+
+				if (owner->emmitter.GetLoop())
+				{
+					currentFrame = particleInfo.currentAnimation.startFrame;
+				}
+				else
+					currentFrame = particleInfo.currentAnimation.endFrame;
+
+			}
+
+			PlayFrame(currentFrame);
+			currentFrame++;
+
+			animationTime = 0.f;
+
+		}
+	}
+	
+	//----------- Animation (Deprecated) ---------------- //
+
+	/*if (particleInfo.animation != nullptr)
+	{
+		animationTime += dt;
+
+		if (animationTime > particleInfo.animSpeed)
+		{
+			if (particleInfo.animation->size() > (currentFrame + 1))
 			{
+				LOG_ENGINE("Current Particle Frame: %i ", currentFrame);
+				LOG_ENGINE("Current Particle UV: %i ", particleInfo.animation->at(currentFrame));
+
 				glBindVertexArray(owner->vao);
 
 				
@@ -94,12 +137,13 @@ void Particle::Update(float dt)
 				currentFrame++;
 			}
 			else
-				currentFrame = 0.f;
+				currentFrame = 0;
 
 		
 			animationTime = 0.f;
 		}
-	}
+	}*/
+
 	
 
 
@@ -133,7 +177,7 @@ void Particle::Draw()
 
 
 	// ----- BLENDING COLOR ----- //
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 
 	switch (owner->funcBlendSource)
 	{
@@ -171,7 +215,7 @@ void Particle::Draw()
 	}
 
 	
-	glBlendFunc(owner->sourceFactor, owner->destinationFactor);
+	//glBlendFunc(owner->sourceFactor, owner->destinationFactor);
 
 	switch (owner->eqBlend)
 	{
@@ -182,8 +226,8 @@ void Particle::Draw()
 
 
 	// ------ TRANSPARENCY ------ //
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, owner->alpha_test);
+	/*glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, owner->alpha_test);*/
 
 	
 	// --------- COLOR --------- //
@@ -205,7 +249,7 @@ void Particle::Draw()
 	if (owner->material != nullptr && p_material != nullptr)
 	{
 
-		//owner->DeactivateLight();
+		owner->DeactivateLight();
 
 		// ---- TEXTCOORD BUFFER ----- //
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -232,15 +276,13 @@ void Particle::Draw()
 	owner->ActivateLight();
 	
 
-
-
 	// ----- DRAW QUAD ------ //
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	
 	// ---- DISABLE STUFF --- //
-	glDisable(GL_BLEND);
-	glDisable(GL_ALPHA_TEST);
+	/*glDisable(GL_BLEND);
+	glDisable(GL_ALPHA_TEST);*/
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -279,7 +321,7 @@ void Particle::Orientate(ComponentCamera* camera)
 		break;
 
 	case BillboardType::NONE:
-
+		particleInfo.rotation = Quat::identity();
 		break;
 
 	default:
@@ -302,8 +344,8 @@ void Particle::InterpolateValues(float dt)
 	{
 		t += rateToLerp * dt;
 
-		if(owner->material != nullptr && p_material != nullptr)
-			p_material->shaderInputs.particleShaderProperties.color = float3::Lerp(p_material->shaderInputs.particleShaderProperties.start_color, p_material->shaderInputs.particleShaderProperties.end_color, t);
+		if (owner->material != nullptr && p_material != nullptr)
+			p_material->color = float4::Lerp(startInfo.color, endInfo.color, t);
 		else
 			particleInfo.color = float4::Lerp(startInfo.color, endInfo.color, t);
 
@@ -347,18 +389,52 @@ void Particle::SetUniform(ResourceMaterial* resource_material, ComponentCamera* 
 	}
 }
 
-void Particle::SetAnimation(std::vector<uint>& uvs, float speed)
+
+// ------------------------------ PARTICLE ANIMATION ------------------------------
+
+void Particle::UpdateUVs()
 {
+	glBindVertexArray(owner->vao);//Open Vertex Array
 
+	glBindBuffer(GL_ARRAY_BUFFER, owner->id_uv);//Bind UVBO, VBO unbound
+	glBufferData(GL_ARRAY_BUFFER, sizeof(UVpoint) * 4 * 2, particleInfo.UVs, GL_STATIC_DRAW);
+	
+	/*glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);*/
 
-	if (!uvs.empty()) {
-		particleInfo.animation = &uvs;
-	}
-	else
-		particleInfo.animation = nullptr;
-
-
-	particleInfo.animSpeed = speed;
-	animationTime = 0.0f;
-	currentFrame = 0u;
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+
+void Particle::PlayFrame(int frame)
+{
+	particleInfo.UVs[0].U = particleInfo.frames[frame].x0 / owner->sheetWidth;
+	particleInfo.UVs[0].V = particleInfo.frames[frame].y1 / owner->sheetHeight;//up left
+	particleInfo.UVs[1].U = particleInfo.frames[frame].x1 / owner->sheetWidth;
+	particleInfo.UVs[1].V = particleInfo.frames[frame].y1 / owner->sheetHeight;//up right
+	particleInfo.UVs[2].U = particleInfo.frames[frame].x0 / owner->sheetWidth;
+	particleInfo.UVs[2].V = particleInfo.frames[frame].y0 / owner->sheetHeight;//down left
+	particleInfo.UVs[3].U = particleInfo.frames[frame].x1 / owner->sheetWidth;
+	particleInfo.UVs[3].V = particleInfo.frames[frame].y0 / owner->sheetHeight;//down right
+
+	UpdateUVs();
+}
+
+void Particle::ResetFrame()
+{
+	//UV Data
+	particleInfo.UVs[0].U = 0;
+	particleInfo.UVs[0].V = 1;//
+	particleInfo.UVs[1].U = 1;
+	particleInfo.UVs[1].V = 1;//
+	particleInfo.UVs[2].U = 0;
+	particleInfo.UVs[2].V = 0;//
+	particleInfo.UVs[3].U = 1;
+	particleInfo.UVs[3].V = 0;//
+
+	UpdateUVs();
+	particleInfo.animated = false;
+	particleInfo.frames.clear();
+}
+
