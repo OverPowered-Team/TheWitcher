@@ -314,9 +314,9 @@ void PlayerAttacks::CreateAttacks()
 {
 	std::string json;
 	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
-		json = "Configuration/GeraltCombos.json";
+		json = "GameData/GeraltCombos.json";
 	else
-		json = "Configuration/YenneferCombos.json";
+		json = "GameData/YenneferCombos.json";
 
 	JSONfilepack* combo = JSONfilepack::GetJSON(json.c_str());
 
