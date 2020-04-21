@@ -378,6 +378,18 @@ void PlayerController::AttackingInput()
 	}
 }
 
+void PlayerController::ApplyRoot(float time)
+{
+	state = PlayerState::ROOT;
+	player_data.speed = float3(0.0f, -0.01f, 0.0f);
+	Invoke(std::bind(&PlayerController::ReleaseFromRoot, this), time);
+}
+
+void PlayerController::ReleaseFromRoot()
+{
+	state = PlayerState::IDLE;
+}
+
 bool PlayerController::AnyKeyboardInput()
 {
 	return Input::GetKeyDown(keyboard_move_up)

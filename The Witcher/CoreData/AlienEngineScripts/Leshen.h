@@ -17,6 +17,13 @@ public:
 		CLOUD
 		);
 
+	enum(ActionState,
+		NONE = -1,
+		LAUNCH,
+		UPDATING,
+		ENDED
+		);
+
 	//-----------Data to set probabilities-----------//
 	float player_distance[TOTAL_PLAYERS];
 	float melee_range = 2.0f;
@@ -32,10 +39,16 @@ public:
 		LeshenAction(ActionType _type, float _probability);
 		float probability = 0.0f;
 		ActionType type = ActionType::NONE;
+		ActionState state = ActionState::NONE;
 	};
 
 	std::map<std::string, LeshenAction*> actions;
 	LeshenAction* current_action;
+
+	Prefab root_prefab;
+	GameObject* root_1 = nullptr;
+	GameObject* root_2 = nullptr;
+
 
 public:
 	void StartEnemy() override;
@@ -49,15 +62,31 @@ public:
 	void SelectAction();
 	bool IsOnAction();
 
+	void FinishAttack();
+
 	void SetIdleState();
 	void SetAttackState();
 
+	void LaunchAction();
+
+	void LaunchRootAction();
+	void LaunchMeleeAction();
+	void LaunchCrowsAction();
+	void LaunchCloudAction();
+
 	bool UpdateAction();
 
-	bool UpdateRootAction();
-	bool UpdateMeleeAction();
-	bool UpdateCrowsAction();
-	bool UpdateCloudAction();
+	ActionState UpdateRootAction();
+	ActionState UpdateMeleeAction();
+	ActionState UpdateCrowsAction();
+	ActionState UpdateCloudAction();
+
+	void EndRootAction(GameObject* root);
+	void EndMeleeAction();
+	void EndCrowsAction();
+	void EndCloudAction();
+
+	void CreateRoot();
 
 	void SetActionVariables();
 	//void ChangePhase();
@@ -72,6 +101,7 @@ ALIEN_FACTORY Leshen* CreateLeshen() {
 	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, leshen->state);
 	SHOW_VOID_FUNCTION(Leshen::ActivateCollider, leshen);
 	SHOW_VOID_FUNCTION(Leshen::DeactivateCollider, leshen);
+	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->root_prefab);
 
 	return leshen;
 }

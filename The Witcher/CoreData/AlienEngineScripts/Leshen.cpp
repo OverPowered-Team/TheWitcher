@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
+#include "RootLeshen.h"
 #include "Leshen.h"
 
 void Leshen::StartEnemy()
@@ -25,7 +26,7 @@ void Leshen::UpdateEnemy()
 	case Enemy::EnemyState::NONE:
 		break;
 	case Enemy::EnemyState::IDLE:
-		if (time_to_action < action_cooldown)
+		if (time_to_action <= action_cooldown)
 			time_to_action += Time::GetDT();
 		else {
 			SetAttackState();
@@ -125,6 +126,11 @@ bool Leshen::IsOnAction()
 	return current_action != nullptr;
 }
 
+void Leshen::FinishAttack()
+{
+
+}
+
 void Leshen::SetIdleState()
 {
 	current_action = nullptr;
@@ -138,7 +144,51 @@ void Leshen::SetAttackState()
 	SelectAction();
 	time_to_action = 0.0f;
 	state = Enemy::EnemyState::ATTACK;
+	current_action->state = ActionState::LAUNCH;
+	LaunchAction();
 	//animator->PlayState("Action")
+}
+
+void Leshen::LaunchAction()
+{
+	switch (current_action->type)
+	{
+	case Leshen::ActionType::NONE:
+		break;
+	case Leshen::ActionType::ROOT:
+		LaunchRootAction();
+		break;
+	case Leshen::ActionType::MELEE:
+		LaunchMeleeAction();
+		break;
+	case Leshen::ActionType::CROWS:
+		LaunchCrowsAction();
+		break;
+	case Leshen::ActionType::CLOUD:
+		LaunchCloudAction();
+		break;
+	default:
+		break;
+	}
+
+	current_action->state = ActionState::UPDATING;
+}
+
+void Leshen::LaunchRootAction()
+{
+	CreateRoot();
+}
+
+void Leshen::LaunchMeleeAction()
+{
+}
+
+void Leshen::LaunchCrowsAction()
+{
+}
+
+void Leshen::LaunchCloudAction()
+{
 }
 
 Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
@@ -149,93 +199,102 @@ Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
 
 bool Leshen::UpdateAction()
 {
-	bool updating = true;
-
 	switch (current_action->type)
 	{
 	case Leshen::ActionType::NONE:
 		break;
 	case Leshen::ActionType::ROOT:
-		updating = UpdateRootAction();
+		current_action->state = UpdateRootAction();
 		break;
 	case Leshen::ActionType::MELEE:
-		updating = UpdateMeleeAction();
+		current_action->state = UpdateMeleeAction();
 		break;
 	case Leshen::ActionType::CROWS:
-		updating = UpdateCrowsAction();
+		current_action->state = UpdateCrowsAction();
 		break;
 	case Leshen::ActionType::CLOUD:
-		updating = UpdateCloudAction();
+		current_action->state = UpdateCloudAction();
 		break;
 	default:
 		break;
 	}
 
-	return updating;
+	if (current_action->state == ActionState::ENDED)
+		return false;
+	else
+		return true;
 }
 
-bool Leshen::UpdateRootAction()
+Leshen::ActionState Leshen::UpdateRootAction()
 {
-	bool updating = true;
-
 	LOG("UPDATING ROOT ACTION");
 
-	action_time += Time::GetDT();
-
-	if (action_time >= 3.0f) {
-		updating = false;
-		action_time = 0.0f;
-	}
-
-	return updating;
+	return current_action->state;
 }
 
-bool Leshen::UpdateMeleeAction()
+Leshen::ActionState Leshen::UpdateMeleeAction()
 {
-	bool updating = true;
-
 	LOG("UPDATING MELEE ACTION");
 
-	action_time += Time::GetDT();
+	current_action->state = ActionState::ENDED;
 
-	if (action_time >= 3.0f) {
-		updating = false;
-		action_time = 0.0f;
-	}
-
-	return updating;
+	return current_action->state;
 }
 
-bool Leshen::UpdateCrowsAction()
+Leshen::ActionState Leshen::UpdateCrowsAction()
 {
-	bool updating = true;
-
 	LOG("UPDATING CROWS ACTION");
 
-	action_time += Time::GetDT();
+	current_action->state = ActionState::ENDED;
 
-	if (action_time >= 3.0f) {
-		updating = false;
-		action_time = 0.0f;
-	}
-
-	return updating;
+	return current_action->state;
 }
 
-bool Leshen::UpdateCloudAction()
+Leshen::ActionState Leshen::UpdateCloudAction()
 {
-	bool updating = true;
-
 	LOG("UPDATING CLOUD ACTION");
 
-	action_time += Time::GetDT();
+	current_action->state = ActionState::ENDED;
 
-	if (action_time >= 3.0f) {
-		updating = false;
-		action_time = 0.0f;
+	return current_action->state;
+}
+
+void Leshen::EndRootAction(GameObject* root)
+{
+	current_action->state = Leshen::ActionState::ENDED;
+
+	if (root == root_1) {
+		Destroy(root_2);
 	}
+	else if (root == root_2) {
+		Destroy(root_1);
+	}
+}
 
-	return updating;
+void Leshen::EndMeleeAction()
+{
+	
+}
+
+void Leshen::EndCrowsAction()
+{
+	
+}
+
+void Leshen::EndCloudAction()
+{
+	
+}
+
+void Leshen::CreateRoot()
+{
+	root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+	root_1->GetComponent<RootLeshen>()->leshen = this;
+	root_1->GetComponent<RootLeshen>()->target = 0;
+
+	root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+	root_2->GetComponent<RootLeshen>()->leshen = this;
+	root_2->GetComponent<RootLeshen>()->target = 1;
 }
 
 void Leshen::SetActionVariables()

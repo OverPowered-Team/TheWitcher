@@ -64,6 +64,8 @@ public:
 	void IdleInput();
 	void RunningInput();
 	void AttackingInput();
+	void ApplyRoot(float time);
+	void ReleaseFromRoot();
 
 	bool AnyKeyboardInput();
 
