@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
+                        "HoritzontalFov": 77.130233764648438,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -282,9 +282,10 @@
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "Enemy",
+                "PrefabID": "17776917341790225388",
                 "Components": [
                     {
                         "Type": 0,
@@ -329,28 +330,28 @@
                         "Enabled": true
                     },
                     {
-                        "Enabled": true,
-                        "Type": 7,
+                        "Type": 14,
+                        "ID": "7420952084056825227",
+                        "ControllerID": "12780697632108753897",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 13,
+                        "SlopeLimit": 45,
+                        "StepOffset": 0.5,
+                        "SkinWidth": 0.10000000149011612,
+                        "MinMoveDistance": 0.0010000000474974513,
                         "Center": [
                             0,
                             0,
                             0
                         ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Default",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
+                        "CharacterRadius": 0.5,
+                        "CharacterHeight": 2,
+                        "Gravity": 20,
+                        "ForceGravity": true,
+                        "ForceMove": false,
+                        "CollisionLayer": "Default"
                     },
                     {
                         "Type": 29,
@@ -375,12 +376,13 @@
                 "ParentID": "9958029101100018453",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "EnemyAttack",
+                "PrefabID": "17776917341790225388",
                 "Components": [
                     {
                         "Type": 0,
@@ -2408,9 +2410,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.76665365695953369,
-                                1.6758307218551636,
-                                -0.77706736326217651
+                                -0.044956900179386139,
+                                0.72182995080947876,
+                                1.8646557331085205
                             ],
                             "Force": [
                                 0,
@@ -2484,7 +2486,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 2.292999267578125,
+                            "CurrentLife": 4.829002857208252,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -2589,9 +2591,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.81891214847564697,
-                                4.5621552467346191,
-                                -1.8751320838928223
+                                3.7759087085723877,
+                                -2.60284423828125,
+                                -1.9919127225875854
                             ],
                             "Force": [
                                 0,
@@ -2774,9 +2776,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                4.1525425910949707,
-                                -2.421722412109375,
-                                1.3753725290298462
+                                3.3026189804077148,
+                                -3.4433891773223877,
+                                1.4952514171600342
                             ],
                             "Force": [
                                 0,
@@ -2850,7 +2852,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.37999999523162842,
+                            "CurrentLife": 0.35599997639656067,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -2986,7 +2988,7 @@
                             {
                                 "VarType": 14,
                                 "Name": "player_data.player_type",
-                                "enumInt": 0
+                                "enumInt": 1
                             },
                             {
                                 "VarType": 3,
@@ -3500,7 +3502,7 @@
                             1.0000003576278687
                         ],
                         "ScaleNegative": false,
-                        "ID": "8961750291754516847"
+                        "ID": "971761333232468335"
                     },
                     {
                         "Type": 28,
@@ -3933,7 +3935,7 @@
                             1.0000002384185791,
                             1
                         ],
-                        "ScaleNegative": false,
+                        "ScaleNegative": true,
                         "ID": "3200948559676771219"
                     },
                     {
@@ -3973,7 +3975,7 @@
                             0.81217300891876221
                         ],
                         "Scale": [
-                            0.99999994039535522,
+                            8.0840458025823509e-31,
                             1,
                             0.9999997615814209
                         ],
@@ -4065,7 +4067,7 @@
                             1,
                             1
                         ],
-                        "ScaleNegative": false,
+                        "ScaleNegative": true,
                         "ID": "6713826904213720787"
                     }
                 ]
@@ -4255,7 +4257,7 @@
                             0.098999336361885071
                         ],
                         "Scale": [
-                            1.0000002384185791,
+                            9.8866304194411936e-33,
                             0.99999994039535522,
                             1.0000001192092896
                         ],
@@ -4880,9 +4882,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.0913149118423462,
-                                -1.6738704442977905,
-                                -0.084793552756309509
+                                -0.32609564065933228,
+                                -1.403792142868042,
+                                -1.3867334127426147
                             ],
                             "Force": [
                                 0,
@@ -4956,7 +4958,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 2.292999267578125,
+                            "CurrentLife": 4.829002857208252,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -5061,9 +5063,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                2.5367391109466553,
-                                -2.8750278949737549,
-                                -3.2092318534851074
+                                4.3503909111022949,
+                                -1.1974629163742065,
+                                2.1541073322296143
                             ],
                             "Force": [
                                 0,
@@ -5246,9 +5248,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                3.0853328704833984,
-                                0.092477753758430481,
-                                -3.9334676265716553
+                                4.9879879951477051,
+                                -0.06689973920583725,
+                                -0.33985000848770142
                             ],
                             "Force": [
                                 0,
@@ -5322,7 +5324,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.37999999523162842,
+                            "CurrentLife": 0.35599997639656067,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -5380,7 +5382,7 @@
                 "ParentID": "7762019331281494382",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,

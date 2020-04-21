@@ -13,10 +13,13 @@ void Leshen::StartEnemy()
 	can_get_interrupted = false;
 
 	Enemy::StartEnemy();
+
+	type = EnemyType::LESHEN;
 }
 
 void Leshen::UpdateEnemy()
 {
+	LOG("Update");
 	switch (state)
 	{
 	case Enemy::EnemyState::NONE:
@@ -240,15 +243,15 @@ void Leshen::SetActionVariables()
 	player_distance[0] = 0;
 	player_distance[1] = 0;
 
-	player_distance[0] = transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players[0]->game_object->transform->GetGlobalPosition());
-	player_distance[1] = transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players[1]->game_object->transform->GetGlobalPosition());
+	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
+	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
 
 	player_rooted[0] = false;
 	player_rooted[1] = false;	
 	
-	if(GameManager::manager->player_manager->players[0]->state == PlayerController::PlayerState::ROOT)
+	if(player_controllers[0]->state == PlayerController::PlayerState::ROOT)
 		player_rooted[0] = true;
-	else if(GameManager::manager->player_manager->players[1]->state == PlayerController::PlayerState::ROOT)
+	else if(player_controllers[1]->state == PlayerController::PlayerState::ROOT)
 		player_rooted[1] = true;
 }
 

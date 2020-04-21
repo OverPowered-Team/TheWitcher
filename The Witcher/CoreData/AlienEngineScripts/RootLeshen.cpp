@@ -24,5 +24,4 @@ void RootLeshen::Update()
 {
 	direction = (GameManager::manager->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 	transform->AddPosition(direction * speed);
-	LOG("PERSIGO HEHE");
 }

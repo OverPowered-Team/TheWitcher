@@ -10,7 +10,6 @@ void Enemy::Awake()
 {
 	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
-	LOG("ASD");
 }
 
 void Enemy::StartEnemy()
