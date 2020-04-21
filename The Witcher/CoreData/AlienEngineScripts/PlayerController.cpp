@@ -61,7 +61,7 @@ void PlayerController::Start()
 		(*it)->SetEnable(false);
 	}
 
-	controller->SetRotation(Quat::identity());
+	//controller->SetRotation(Quat::identity());
 
 
 	if (controller_index == 1) {
@@ -143,13 +143,13 @@ void PlayerController::Update()
 		can_move = true;
 		particles["p_run"]->SetEnable(false);
 
-		if (!controller->OnGround())
+		/*if (!controller->OnGround())
 		{
 			can_move = true;
 			state = PlayerState::JUMPING;
 			animator->PlayState("Air");
 			animator->SetBool("air", true);
-		}
+		}*/
 
 		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack)) {
@@ -181,16 +181,16 @@ void PlayerController::Update()
 			state = PlayerState::DASHING;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, controller_revive)
+		/*if (Input::GetControllerButtonDown(controller_index, controller_revive)
 			|| Input::GetKeyDown(keyboard_revive)) {
 			if (CheckForPossibleRevive()) {
 				controller->SetWalkDirection(float3::zero());
 				animator->SetBool("reviving", true);
 				state = PlayerState::REVIVING;
 			}
-		}
+		}*/
 
-		if (Input::GetControllerButtonDown(controller_index, controller_jump)
+		/*if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
 			animator->PlayState("Air");
@@ -198,7 +198,7 @@ void PlayerController::Update()
 				controller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
 			}
-		}
+		}*/
 
 	} break;
 	case PlayerController::PlayerState::RUNNING:
@@ -206,27 +206,27 @@ void PlayerController::Update()
 		particles["p_run"]->SetEnable(true);
 		can_move = true;
 
-		if (!controller->OnGround())
+		/*if (!controller->OnGround())
 		{
 			can_move = true;
 			state = PlayerState::JUMPING;
 			animator->PlayState("Air");
 			animator->SetBool("air", true);
-		}
+		}*/
 
 		if (Time::GetGameTime() - timer >= delay_footsteps) {
 			timer = Time::GetGameTime();
 			audio->StartSound();
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
+		/*if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 			|| Input::GetKeyDown(keyboard_light_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 			state = PlayerState::BASIC_ATTACK;
 			audio->StartSound("Hit_Sword");
 			controller->SetWalkDirection(float3::zero());
 			can_move = false;
-		}
+		}*/
 		/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 			|| Input::GetKeyDown(keyboard_heavy_attack)) {
 			attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
@@ -243,14 +243,14 @@ void PlayerController::Update()
 			state = PlayerState::DASHING;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, controller_revive)
+		/*if (Input::GetControllerButtonDown(controller_index, controller_revive)
 			|| Input::GetKeyDown(keyboard_revive)) {
 			if (CheckForPossibleRevive()) {
 				controller->SetWalkDirection(float3::zero());
 				animator->SetBool("reviving", true);
 				state = PlayerState::REVIVING;
 			}
-		}
+		}*/
 
 		if (Input::GetControllerButtonDown(controller_index, controller_spell)
 			|| Input::GetKeyDown(keyboard_spell)) {
@@ -258,7 +258,7 @@ void PlayerController::Update()
 			state = PlayerState::CASTING;
 		}
 
-		if (Input::GetControllerButtonDown(controller_index, controller_jump)
+		/*if (Input::GetControllerButtonDown(controller_index, controller_jump)
 			|| Input::GetKeyDown(keyboard_jump)) {
 			state = PlayerState::JUMPING;
 			animator->PlayState("Air");
@@ -266,7 +266,7 @@ void PlayerController::Update()
 				controller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
 			}
-		}
+		}*/
 
 	} break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
@@ -294,18 +294,18 @@ void PlayerController::Update()
 			can_move = true;
 			state = PlayerState::JUMPING;
 			animator->PlayState("Air");
-			if (controller->CanJump()) {
+			/*if (controller->CanJump()) {
 				controller->Jump(transform->up * player_data.jump_power);
 				animator->SetBool("air", true);
-			}
+			}*/
 		}
 
 		break;
 	case PlayerController::PlayerState::JUMPING:
 		particles["p_run"]->SetEnable(false);
 		can_move = true;
-		if (controller->CanJump())
-			animator->SetBool("air", false);
+		/*if (controller->CanJump())
+			animator->SetBool("air", false);*/
 		break;
 	case PlayerController::PlayerState::DASHING:
 		particles["p_run"]->SetEnable(false);
@@ -318,17 +318,17 @@ void PlayerController::Update()
 		break;
 	case PlayerController::PlayerState::DEAD:
 		can_move = false;
-		controller->SetWalkDirection(float3::zero());
+		//controller->SetWalkDirection(float3::zero());
 		break;
 	case PlayerController::PlayerState::REVIVING:
 		can_move = false;
-		controller->SetWalkDirection(float3::zero());
+		//controller->SetWalkDirection(float3::zero());
 		break;
 	case PlayerController::PlayerState::MAX:
 		break;
 	case PlayerController::PlayerState::HIT:
 		can_move = false;
-		controller->SetWalkDirection(float3::zero());
+		//controller->SetWalkDirection(float3::zero());
 		break;
 	default:
 		break;
@@ -345,12 +345,12 @@ void PlayerController::Update()
 		timer = Time::GetGameTime();
 	}
 
-	if (state == PlayerState::JUMPING && controller->CanJump()) {
+	/*if (state == PlayerState::JUMPING && controller->CanJump()) {
 		if (abs(player_data.currentSpeed) < 0.1F)
 			state = PlayerState::IDLE;
 		if (abs(player_data.currentSpeed) > 0.1F)
 			state = PlayerState::RUNNING;
-	}
+	}*/
 	player_data.currentSpeed = 0;
 
 
@@ -409,16 +409,16 @@ void PlayerController::HandleMovement(const float2& joystickInput)
 	if (abs(joystickInput.x) >= stick_threshold || abs(joystickInput.y) >= stick_threshold)
 	{
 		player_data.currentSpeed = (player_data.movementSpeed * joystickIntensity);
-		controller->SetRotation(rot);
+		//controller->SetRotation(rot);
 	}
 
 	if (state == PlayerState::DASHING)
 	{
-		controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power / Time::GetScaleTime());
+		//controller->SetWalkDirection(transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power / Time::GetScaleTime());
 	}
 	else
 	{
-		controller->SetWalkDirection(vector * player_data.currentSpeed / Time::GetScaleTime());
+		//controller->SetWalkDirection(vector * player_data.currentSpeed / Time::GetScaleTime());
 	}
 
 	animator->SetFloat("speed", Maths::Abs(player_data.currentSpeed));
@@ -464,7 +464,7 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	GameManager::manager->event_manager->OnPlayerDead(this);
-	controller->SetWalkDirection(float3::zero());
+	//controller->SetWalkDirection(float3::zero());
 }
 
 void PlayerController::Revive()
@@ -497,7 +497,7 @@ void PlayerController::ReceiveDamage(float value)
 		animator->PlayState("Hit");
 		attacks->CancelAttack();
 		state = PlayerState::HIT;
-		controller->SetWalkDirection(float3::zero());
+		//controller->SetWalkDirection(float3::zero());
 	}	
 
 	GameManager::manager->Rumbler(RumblerType::RECEIVE_HIT, controller_index);
@@ -582,7 +582,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 				if (!fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					controller->SetWalkDirection(float3::zero());
+					//controller->SetWalkDirection(float3::zero());
 					return false;
 				}
 			}
@@ -593,7 +593,7 @@ bool PlayerController::CheckBoundaries(const float2& joystickInput)
 		return true;
 	}
 	else {
-		controller->SetWalkDirection(float3::zero());
+		//controller->SetWalkDirection(float3::zero());
 		return false;
 	}
 }
