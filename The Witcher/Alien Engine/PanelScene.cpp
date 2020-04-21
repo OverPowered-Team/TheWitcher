@@ -268,7 +268,7 @@ void PanelScene::GuizmosLogic()
 		ImGuizmo::SetDrawlist();
 
 		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation,  (guizmo_operation!= ImGuizmo::OPERATION::SCALE) ? guizmo_mode : ImGuizmo::MODE::LOCAL, object_transform_matrix.ptr());
-
+		
 		static bool guizmo_return = true;
 		static bool duplicate = false;
 

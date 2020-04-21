@@ -9,7 +9,7 @@ enum class BillboardType
 	SCREEN = 0,
 	WORLD,
 	AXIS,
-
+	VELOCITY,
 	// ----
 
 	NONE
@@ -23,6 +23,8 @@ namespace Billboard
 	Quat AlignToWorld(ComponentCamera* camera, float3 position);
 
 	Quat AlignToAxis(ComponentCamera* camera, float3 position, float3 axis = float3::zero());
+
+	Quat AlignToVelocity(ComponentCamera* camera, float3 position, float3 velocity);
 
 }
 

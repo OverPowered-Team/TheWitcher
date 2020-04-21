@@ -5,6 +5,7 @@
 #include "ComponentCanvas.h"
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/float2.h"
+#include "MathGeoLib/include/Math/quat.h"
 #include "Color.h"
 
 class ResourceTexture;
@@ -74,6 +75,8 @@ public:
 
 private:
 	void CheckFirstSelected();
+	void Orientate(ComponentCamera* camera);
+	void Rotate();
 	
 	
 public:
@@ -108,7 +111,16 @@ protected:
 	u64 select_on_left		= -1;
 	u64 select_on_right		= -1;
 
+	// AUDIO EVENTS
+	std::string click_event = "CLICK";
+	std::string move_event = "ENTER";
 
+
+	//billboard
+	Quat rotation = Quat::identity();
+	float3 position = float3::zero();
+	float3 angle3D = float3::zero();
+	float3 scale = float3::zero();
 
 };
 

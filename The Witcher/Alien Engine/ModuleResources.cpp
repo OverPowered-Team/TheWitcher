@@ -396,7 +396,7 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 {
 	(*ret)->is_primitive = true;
 	par_shapes_mesh* par_mesh = nullptr;
-
+	
 	switch (type)
 	{
 	case PrimitiveType::CUBE: {
@@ -920,6 +920,8 @@ void ModuleResources::ReadModels(std::vector<std::string> directories, std::vect
 		ResourceModel* model = new ResourceModel();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
 			App->importer->ReImportModel(model);
+			/*model->DeleteMetaData();
+			App->importer->LoadModelFile(std::string(current_folder + files[i]).data(), std::string(current_folder + files[i]).data());*/
 		}
 	}
 	if (!directories.empty()) {

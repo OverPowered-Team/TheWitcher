@@ -26,19 +26,25 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
+
 	to_save->SetNumber("UIType", (int)ui_type);
+
 	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()).data() : "0");
 	to_save->SetString("TextureIdleID", (idle_tex != nullptr) ? std::to_string(idle_tex->GetID()).data() : "0");
 	to_save->SetString("TextureHoverID", (hover_tex != nullptr) ? std::to_string(hover_tex->GetID()).data() : "0");
 	to_save->SetString("TextureClickedID", (clicked_tex != nullptr) ? std::to_string(clicked_tex->GetID()).data() : "0");
 	to_save->SetString("TexturePressedID", (pressed_tex != nullptr) ? std::to_string(pressed_tex->GetID()).data() : "0");
 	to_save->SetString("TextureDisabledID", (disabled_tex != nullptr) ? std::to_string(disabled_tex->GetID()).data() : "0");
+
 	to_save->SetColor("ColorCurrent", current_color);
 	to_save->SetColor("ColorIdle", idle_color);
 	to_save->SetColor("ColorHover", hover_color);
 	to_save->SetColor("ColorClicked", clicked_color);
 	to_save->SetColor("ColorPressed", pressed_color);
 	to_save->SetColor("ColorDisabled", disabled_color);
+
+	to_save->SetString("ClickEvent", click_event.data());
+	to_save->SetString("MoveEvent", move_event.data());
 
 	//---------------------------------------------------------
 	to_save->SetBoolean("HasListenersOnClick", !listenersOnClick.empty());
@@ -119,6 +125,15 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 	clicked_color = to_load->GetColor("ColorClicked");
 	pressed_color = to_load->GetColor("ColorPressed");
 	disabled_color = to_load->GetColor("ColorDisabled");
+
+	try {
+		click_event = to_load->GetString("ClickEvent");
+		move_event = to_load->GetString("MoveEvent");
+	}
+	catch (...) {
+		// f
+	}
+	
 
 	select_on_up = std::stoull(to_load->GetString("SelectOnUp"));
 	select_on_down = std::stoull(to_load->GetString("SelectOnDown"));
@@ -1137,8 +1152,38 @@ bool ComponentButton::DrawInspector()
 			ImGui::TreePop();
 		}
 
-		ImGui::Spacing();
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
 
+		if (ImGui::TreeNode("Audio Events"))
+		{
+			ImGui::Text("Move Event");
+			ImGui::SameLine(120);
+
+			static char move_name[30];
+			memcpy(move_name, move_event.c_str(), 30);
+
+			if (ImGui::InputText("##MoveEventName", move_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				move_event = move_name;
+			}
+			ImGui::Spacing();
+
+			ImGui::Text("Click Event");
+			ImGui::SameLine(120);
+
+			static char click_name[30];
+			memcpy(click_name, click_event.c_str(), 30);
+
+			if (ImGui::InputText("##ClickEventName", click_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				click_event = click_name;
+			}
+			ImGui::Spacing(); ImGui::Spacing();
+
+
+
+			ImGui::TreePop();
+		}
 
 		ImGui::Separator();
 		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
@@ -1158,7 +1203,7 @@ bool ComponentButton::OnEnter()
 		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
 		if (emitter != nullptr)
 		{
-			emitter->StartSound("ENTER");
+			emitter->StartSound(move_event.c_str());
 		}
 		CallListeners(&listenersOnEnter);
 	}
@@ -1198,7 +1243,7 @@ bool ComponentButton::OnClick()
 		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
 		if (emitter != nullptr)
 		{
-			emitter->StartSound("CLICK");
+			emitter->StartSound(click_event.c_str());
 		}
 
 		current_color = clicked_color;

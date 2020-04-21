@@ -12,8 +12,7 @@
 class ParticleSystem;
 class ComponentCamera;
 
-#define DEGTORAD 0.0174532925199432957f // 1degree x (pi rads / 180 degrees) = 0.017 rads
-#define RADTODEG 57.295779513082320876f // 1rad x (180 degrees / pi rads) = 57 degrees
+
 #define ANGULAR_CAP 200 // angular velocity will be capped at 360 degrees x second
 #define MAX_ANIMATIONS 16
 
@@ -65,6 +64,11 @@ struct ParticleInfo
 	float animSpeed = 0.f;
 	bool animated = false;
 	//int currentFrame = 0;
+
+	//Stretch billboard
+	float lengthScale = 1.0f;
+	float speedScale = 0.0f;
+	float velocityScale = 0.0f;
 };
 
 struct ParticleMutableInfo

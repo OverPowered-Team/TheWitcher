@@ -425,11 +425,30 @@ bool ComponentParticleSystem::DrawInspector()
 
 			ImGui::Text("Orientation Mode ");
 			ImGui::SameLine(200, 15);
-			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0None\0\0"))
+			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0Velocity Aligned\0None\0\0"))
 			{
 				particleSystem->SetBillboardType((BillboardType)bbTypeSelected);
 			}
 
+			if (particleSystem->bbType == BillboardType::VELOCITY)
+			{
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				ImGui::Text("Length Scale: "); ImGui::SameLine(200, 15);
+				ImGui::DragFloat("##Length Scale", &particleSystem->particleInfo.lengthScale, 0.0f, 100.0f);
+				
+				ImGui::Spacing();
+
+				ImGui::Text("Speed Scale: "); ImGui::SameLine(200, 15);
+				ImGui::DragFloat("##Speed Scale", &particleSystem->particleInfo.speedScale, 0.0f, 100.0f);
+			}
+			else
+			{
+				particleSystem->particleInfo.lengthScale = 1.0f;
+				particleSystem->particleInfo.speedScale = 0.0f;
+			}
+			
 			ImGui::Spacing();
 			ImGui::Spacing();
 

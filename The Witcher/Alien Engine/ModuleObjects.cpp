@@ -30,7 +30,6 @@
 #include "ModuleUI.h"
 #include "ModuleCamera3D.h"
 #include "ModuleFileSystem.h"
-#include "ModulePhysics.h"
 #include "ModuleAudio.h"
 #include "ComponentParticleSystem.h"
 #include "ReturnZ.h"
@@ -265,10 +264,11 @@ update_status ModuleObjects::PostUpdate(float dt)
 				glEnable(GL_LIGHT0);
 			}
 			
-			if (App->physics->debug_physics)
-			{
-				App->physics->DrawWorld();
-			}
+			// TODO : DELETE ------------------------
+
+			//App->physx->DrawWorld();
+
+			// -------------------------------------
 		}
 
 		if (base_game_object->HasChildren()) {
@@ -315,12 +315,15 @@ update_status ModuleObjects::PostUpdate(float dt)
 			if (!printing_scene) {
 				std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
 			}
+			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
 			std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
 			for (; it_ui != to_draw_ui.end(); ++it_ui) {
 				if ((*it_ui).second != nullptr) {
 					ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
 					if (ui != nullptr && ui->IsEnabled())
 					{			
+						ui->Orientate(mainCamera);
+						ui->Rotate();
 						ui->Draw(!printing_scene);
 
 					}
@@ -1350,6 +1353,7 @@ void ModuleObjects::CreateEmptyScene()
 
 void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number)
 {
+	OPTICK_EVENT();
 	obj->SaveObject(to_save, family_number);
 
 	std::vector<GameObject*>::iterator item = obj->children.begin();
