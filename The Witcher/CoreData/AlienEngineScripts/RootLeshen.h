@@ -11,12 +11,14 @@ public:
 	virtual ~RootLeshen();
 	
 
-	float speed, life_time, root_time;
+	float speed, life_time, root_time, total_life_time;
 	float3 direction;
 	int target = 0;
 
 	void Start();
 	void Update();
+
+	void OnTriggerEnter(ComponentCollider* collider);
 
 };
 

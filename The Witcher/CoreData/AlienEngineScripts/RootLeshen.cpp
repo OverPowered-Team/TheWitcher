@@ -24,4 +24,28 @@ void RootLeshen::Update()
 {
 	direction = (GameManager::manager->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 	transform->AddPosition(direction * speed);
+
+	if(life_time <= total_life_time)
+		life_time += Time::GetDT();
+	else
+		GameObject::Destroy(game_object);
+}
+
+void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
+		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
+		if (player_ctrl) {
+			LOG("Rooted");
+		}
+		else {
+			LOG("There's no Player Controller in GO in ArrowScript!");
+		}
+
+		GameObject::Destroy(game_object);
+	}
+	else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
+	{
+		GameObject::Destroy(game_object);
+	}
 }
