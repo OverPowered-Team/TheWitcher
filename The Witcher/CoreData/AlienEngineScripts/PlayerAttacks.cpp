@@ -44,13 +44,13 @@ void PlayerAttacks::UpdateCurrentAttack()
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
 	else
-		player_controller->controller->SetWalkDirection(float3::zero());
+		player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
-		if (abs(player_controller->player_data.currentSpeed) < 0.01F)
+		if (player_controller->player_data.velocity < 0.01F)
 			player_controller->state = PlayerController::PlayerState::IDLE;
-		if (abs(player_controller->player_data.currentSpeed) > 0.01F)
+		if (player_controller->player_data.velocity > 0.01F)
 			player_controller->state = PlayerController::PlayerState::RUNNING;
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
@@ -103,7 +103,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 
 	if(current_attack && current_attack->IsLast())
-		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5 * current_attack->info.name.size());
+		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5f);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -162,22 +162,22 @@ void PlayerAttacks::SnapToTarget()
 	float3 velocity = transform->forward * speed * Time::GetDT();
 	distance_snapped += velocity.Length();
 
-	player_controller->controller->SetRotation(rot);
-	player_controller->controller->SetWalkDirection(velocity);
+	//player_controller->controller->SetRotation(rot);
+	player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
 }
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
+	//std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
 	std::vector<GameObject*> enemies_in_range;
 
-	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
+	/*for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
 		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
-	}
+	}*/
 
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
@@ -203,6 +203,7 @@ bool PlayerAttacks::FindSnapTarget()
 		current_target = snap_candidate.first;
 		return true;
 	}
+
 
 	return false;
 }
@@ -234,8 +235,8 @@ void PlayerAttacks::AttackMovement()
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
 		float3 impulse = direction * current_attack->info.movement_strength;
-		player_controller->controller->ApplyImpulse(impulse);
-		player_controller->controller->SetRotation(rot);
+		//player_controller->controller->ApplyImpulse(impulse);
+		player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
 	}	
 }
 
@@ -314,9 +315,9 @@ void PlayerAttacks::CreateAttacks()
 {
 	std::string json;
 	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
-		json = "Configuration/GeraltCombos.json";
+		json = "GameData/GeraltCombos.json";
 	else
-		json = "Configuration/YenneferCombos.json";
+		json = "GameData/YenneferCombos.json";
 
 	JSONfilepack* combo = JSONfilepack::GetJSON(json.c_str());
 

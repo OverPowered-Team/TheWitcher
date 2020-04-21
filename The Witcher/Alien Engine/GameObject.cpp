@@ -919,6 +919,54 @@ void GameObject::ReTag(const char* from, const char* to)
 	}
 }
 
+void GameObject::SendAlienEventHierarchy(void* object, AlienEventType type)
+{
+	AlienEvent alien_event;
+	alien_event.object = object;
+	alien_event.type = type;
+	std::stack<GameObject*> go_stack;
+	go_stack.push(this);
+
+	while (!go_stack.empty())
+	{
+		GameObject* go = go_stack.top();
+		go_stack.pop();
+
+		for (Component* component : go->components)
+		{
+			if (component)
+				component->HandleAlienEvent(alien_event);
+		}
+
+		for (GameObject* child : go->children)
+		{
+			go_stack.push(child);
+		}
+	}
+}
+
+void GameObject::SendAlienEventAll(void* object, AlienEventType type)
+{
+	AlienEvent alien_event;
+	alien_event.object = object;
+	alien_event.type = type;
+	App->objects->HandleAlienEvent(alien_event);
+}
+
+void GameObject::SendAlientEventThis(void* object, AlienEventType type)
+{
+	AlienEvent alien_event;
+	alien_event.object = object;
+	alien_event.type = type;
+
+	for (Component* component : components)
+	{
+		if (component)
+			component->HandleAlienEvent(alien_event);
+	}
+}
+
+
 GameObject* GameObject::GetGameObjectByID(const u64 & id)
 {
 	GameObject* ret = nullptr;
@@ -1072,6 +1120,7 @@ OBB GameObject::GetGlobalOBB()
 
 void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 {
+	OPTICK_EVENT();
 	to_save->SetString("Name", name);
 	to_save->SetNumber("FamilyNumber", family_number);
 	to_save->SetString("ID", std::to_string(ID).data());
@@ -1092,7 +1141,7 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 
 	std::vector<Component*>::iterator item = components.begin();
 	for (; item != components.end(); ++item) {
-		if (*item != nullptr) {
+		if (*item != nullptr && (*item)->serialize) {
 			(*item)->SaveComponent(components_to_save);
 			if ((*item) != components.back())
 				components_to_save->SetAnotherNode();
@@ -1204,33 +1253,93 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				break; }
 			case (int)ComponentType::BOX_COLLIDER: {
 				ComponentBoxCollider* box_collider = new ComponentBoxCollider(this);
-				box_collider->LoadComponent(components_to_load);
-				AddComponent(box_collider);
+				try {
+					box_collider->LoadComponent(components_to_load);
+					AddComponent(box_collider);
+				}
+				catch (...) {
+					try {
+						delete box_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::SPHERE_COLLIDER: {
 				ComponentSphereCollider* sphere_collider = new ComponentSphereCollider(this);
-				sphere_collider->LoadComponent(components_to_load);
-				AddComponent(sphere_collider);
+				try {
+					sphere_collider->LoadComponent(components_to_load);
+					AddComponent(sphere_collider);
+				}
+				catch (...) {
+					try {
+						delete sphere_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::CAPSULE_COLLIDER: {
 				ComponentCapsuleCollider* capsule_collider = new ComponentCapsuleCollider(this);
-				capsule_collider->LoadComponent(components_to_load);
-				AddComponent(capsule_collider);
+				try {
+					capsule_collider->LoadComponent(components_to_load);
+					AddComponent(capsule_collider);
+				}
+				catch (...) {
+					try {
+						delete capsule_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::CONVEX_HULL_COLLIDER: {
 				ComponentConvexHullCollider* convex_hull_collider = new ComponentConvexHullCollider(this);
-				convex_hull_collider->LoadComponent(components_to_load);
-				AddComponent(convex_hull_collider);
+				try {
+					convex_hull_collider->LoadComponent(components_to_load);
+					AddComponent(convex_hull_collider);
+				}
+				catch (...) {
+					try {
+						delete convex_hull_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::RIGID_BODY: {
 				ComponentRigidBody* rigi_body = new ComponentRigidBody(this);
-				rigi_body->LoadComponent(components_to_load);
-				AddComponent(rigi_body);
+				try {
+					rigi_body->LoadComponent(components_to_load);
+					AddComponent(rigi_body);
+				}
+				catch (...) {
+					try {
+						delete rigi_body;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::CHARACTER_CONTROLLER: {
 				ComponentCharacterController* character_controller = new ComponentCharacterController(this);
-				character_controller->LoadComponent(components_to_load);
-				AddComponent(character_controller);
+				try {
+					character_controller->LoadComponent(components_to_load);
+					AddComponent(character_controller);
+				}
+				catch (...) {
+					try {
+						delete character_controller;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::SCRIPT: {
 				ComponentScript* script = new ComponentScript(this);
@@ -1430,7 +1539,26 @@ void GameObject::CloningGameObject(GameObject* clone)
 						break; }
 					}
 					break; }
-
+				case ComponentType::BOX_COLLIDER: {
+					ComponentBoxCollider* collider = new ComponentBoxCollider(clone);
+					(*item)->Clone(collider);
+					clone->AddComponent(collider);
+					break; }
+				case ComponentType::SPHERE_COLLIDER: {
+					ComponentSphereCollider* collider = new ComponentSphereCollider(clone);
+					(*item)->Clone(collider);
+					clone->AddComponent(collider);
+					break; }
+				case ComponentType::CAPSULE_COLLIDER: {
+					ComponentCapsuleCollider* collider = new ComponentCapsuleCollider(clone);
+					(*item)->Clone(collider);
+					clone->AddComponent(collider);
+					break; }
+				case ComponentType::CONVEX_HULL_COLLIDER: {
+					ComponentConvexHullCollider* collider = new ComponentConvexHullCollider(clone);
+					(*item)->Clone(collider);
+					clone->AddComponent(collider);
+					break; }
 				default:
 					LOG_ENGINE("Unknown component type while loading");
 					break;

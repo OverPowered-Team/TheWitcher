@@ -157,11 +157,25 @@ void PanelSceneSelector::SaveSceneAsNew()
 		ResourceScene* scene = new ResourceScene();
 		scene->SetAssetsPath(path.data());
 		scene->CreateMetaData();
+
+		if (force_save == nullptr && App->objects->GetGlobalRoot()->children.size() == 1) {
+			force_save = App->objects->GetGlobalRoot()->children.front();
+		}
+
+
 		if (force_save != nullptr) {
+			if (App->objects->GetGlobalRoot()->children.size() > 1 && App->objects->scene_active == force_save->ID) {
+				App->objects->scene_active = scene->GetID();
+			}
 			force_save->ID = scene->GetID();
 			force_save->SetName(scene->GetName());
 			force_save = nullptr;
 		}
+
+		if (App->objects->GetGlobalRoot()->children.size() == 1) {
+			App->objects->scene_active = scene->GetID();
+		}
+
 		App->objects->SaveScene(scene);
 
 		// last of all, refresh nodes because I have no idea if the user has created folders or moved things in the explorer. Users are bad people creating folders without using the alien engine explorer :(

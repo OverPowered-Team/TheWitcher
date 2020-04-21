@@ -13,11 +13,11 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	audioEmitter = GetComponent<ComponentAudioEmitter>();
+	/*audioEmitter = GetComponent<ComponentAudioEmitter>();
 	text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
 
 	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
-	LoadJSONDialogues();
+	LoadJSONDialogues();*/
 }
 
 void DialogueManager::LoadJSONDialogues()
@@ -55,7 +55,7 @@ void DialogueManager::LoadJSONDialogues()
 
 void DialogueManager::Update()
 {
-	if (playing)
+	/*if (playing)
 	{
 		LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
@@ -65,7 +65,7 @@ void DialogueManager::Update()
 			currentDialogue.Reset();
 			audioEmitter->ChangeVolume(0.5f);
 		}
-	}
+	}*/
 
 }
 

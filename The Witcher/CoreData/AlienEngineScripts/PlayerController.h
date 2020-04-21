@@ -38,7 +38,8 @@ public:
 	struct PlayerData {
 		float movementSpeed = 200.0F;
 		float rotationSpeed = 120.0F;
-		float currentSpeed = 0.f;
+		float velocity = 0.f;
+		float3 speed = float3::zero();
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
 		std::map<std::string, Stat> stats;
@@ -56,9 +57,17 @@ public:
 	void Start();
 	void Update();
 
+	void UpdateInput();
+
+	void IdleUpdate();
+	void RunningUpdate();
+	void AttackingUpdate();
+
 	bool AnyKeyboardInput();
 
-	void HandleMovement(const float2& joystickInput);
+	void HandleMovement();
+	void EffectsUpdate();
+	void Jump();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
@@ -70,7 +79,7 @@ public:
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
-	bool CheckBoundaries(const float2& joystickInput);
+	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
 	bool CheckForPossibleRevive();
 
@@ -89,8 +98,10 @@ public:
 
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
-	bool can_move = false;
+	bool can_jump = true;
+	float2 movement_input;
 	float stick_threshold = 0.1f;
+	float gravity = 10;
 
 	float revive_range = 5.0f;
 

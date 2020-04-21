@@ -10,7 +10,7 @@ RelicManager::~RelicManager()
 
 void RelicManager::Start()
 {
-	spawn = GameObject::FindWithName("SpawnRelics");
+	//spawn = GameObject::FindWithName("SpawnRelics");
 
 	if (spawn)
 	{
