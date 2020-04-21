@@ -19,7 +19,7 @@ void Enemy::StartEnemy()
 	state = EnemyState::IDLE;
 	std::string json_str;
 
-	character_ctrl->SetRotation(Quat::identity());
+	//character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -145,16 +145,16 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	//character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
+	//character_ctrl->SetRotation(rot);
 
 	if (distance < stats["AttackRange"].GetValue())
 	{
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
@@ -162,7 +162,7 @@ void Enemy::Move(float3 direction)
 	if (distance > stats["VisionRange"].GetValue())
 	{
 		state = Enemy::EnemyState::IDLE;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
 	}
 }
@@ -209,7 +209,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	return aux_health - stats["Health"].GetValue();
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
-	character_ctrl->SetWalkDirection(float3::zero());
+	//character_ctrl->SetWalkDirection(float3::zero());
 
 	if (stats["Health"].GetValue() == 0.0F) {
 		animator->SetBool("dead", true);
