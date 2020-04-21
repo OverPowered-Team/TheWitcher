@@ -11,7 +11,10 @@ public:
 	virtual ~RootLeshen();
 	
 
-	float speed, life_time, root_time, total_life_time;
+	float speed = 0.1f;
+	float life_time = 0.0f;
+	float root_time = 5.0f;
+	float total_life_time = 10.0f;
 	float3 direction;
 	int target = 0;
 
