@@ -4,8 +4,8 @@
             {
                 "Name": "Geralt",
                 "FamilyNumber": 1,
-                "ID": "18134824694823875184",
-                "ParentID": "14398903867598547532",
+                "ID": "4985387174041602485",
+                "ParentID": "7705521593869861077",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,9 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -167.20057678222656,
-                            17.354869842529297,
-                            -15.143174171447754
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -35,16 +35,28 @@
                             0.10000130534172058
                         ],
                         "ScaleNegative": false,
-                        "ID": "151038796891981612"
+                        "ID": "666342417896097712"
+                    },
+                    {
+                        "Type": 13,
+                        "CharacterOffset": [
+                            0,
+                            0.69999998807907104,
+                            0.15000000596046448
+                        ],
+                        "CharacterRadius": 0.40000000596046448,
+                        "CharacterHeight": 0.69999998807907104,
+                        "JumpSpeed": 10,
+                        "Gravity": 20
                     },
                     {
                         "Type": 14,
-                        "ID": "16013641842486673910",
+                        "ID": "18283656459957148197",
                         "ControllerID": "13191867011978931639",
                         "Enabled": true
                     },
                     {
-                        "ID": "4033437139032273594",
+                        "ID": "6326362236834518205",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -52,14 +64,112 @@
                         "Bank": "393239870",
                         "Event": "2453392179",
                         "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16274014043831279783",
+                        "ResourceID": "7419212300060188559",
+                        "DataName": "PlayerController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "controller_index",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "player_data.player_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.movementSpeed",
+                                "float": 0.070000000298023224
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.rotationSpeed",
+                                "float": 120
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "stick_threshold",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.dash_power",
+                                "float": 3
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.jump_power",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "revive_range",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "HUD",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "delay_footsteps",
+                                "float": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5403686073021162715",
+                        "ResourceID": "12343127533893259601",
+                        "DataName": "PlayerAttacks",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "collider_go",
+                                "gameobject": "4040135161708425457"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_detection_range",
+                                "float": 4.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "max_snap_angle",
+                                "float": 25
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_angle_value",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_distance_value",
+                                "float": 1
+                            }
+                        ]
                     }
                 ]
             },
             {
                 "Name": "mixamorig_Hips",
                 "FamilyNumber": 2,
-                "ID": "17269738754892165857",
-                "ParentID": "18134824694823875184",
+                "ID": "3217516607123321870",
+                "ParentID": "4985387174041602485",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -89,11 +199,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "9374195620024085843"
+                        "ID": "5441663280356046481"
                     },
                     {
                         "Type": 28,
-                        "ID": "10918643404520720226",
+                        "ID": "1418933936393427922",
                         "BoneID": "1032848394238661699",
                         "Enabled": true
                     }
@@ -102,8 +212,8 @@
             {
                 "Name": "mixamorig_Spine",
                 "FamilyNumber": 3,
-                "ID": "14180125043785834753",
-                "ParentID": "17269738754892165857",
+                "ID": "15317349251294608562",
+                "ParentID": "3217516607123321870",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -133,11 +243,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17923667451328160464"
+                        "ID": "2939050892181906139"
                     },
                     {
                         "Type": 28,
-                        "ID": "16797491078226004911",
+                        "ID": "13608005764788051883",
                         "BoneID": "6249126393845122175",
                         "Enabled": true
                     }
@@ -146,8 +256,8 @@
             {
                 "Name": "mixamorig_Spine1",
                 "FamilyNumber": 4,
-                "ID": "7424439549226032331",
-                "ParentID": "14180125043785834753",
+                "ID": "17705386281427778768",
+                "ParentID": "15317349251294608562",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -177,11 +287,11 @@
                             0.99999964237213135
                         ],
                         "ScaleNegative": false,
-                        "ID": "2676520793196673451"
+                        "ID": "8053043794416947248"
                     },
                     {
                         "Type": 28,
-                        "ID": "3953796362616081326",
+                        "ID": "4013165597366439130",
                         "BoneID": "3378626092054945910",
                         "Enabled": true
                     }
@@ -190,8 +300,8 @@
             {
                 "Name": "mixamorig_Spine2",
                 "FamilyNumber": 5,
-                "ID": "10358331184909019337",
-                "ParentID": "7424439549226032331",
+                "ID": "17388036112293777742",
+                "ParentID": "17705386281427778768",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -221,11 +331,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10479777104840798923"
+                        "ID": "8315523286823048953"
                     },
                     {
                         "Type": 28,
-                        "ID": "8713614538208353905",
+                        "ID": "12193872358094334506",
                         "BoneID": "9453885965035171694",
                         "Enabled": true
                     }
@@ -234,8 +344,8 @@
             {
                 "Name": "mixamorig_Neck",
                 "FamilyNumber": 6,
-                "ID": "12759333778803228723",
-                "ParentID": "10358331184909019337",
+                "ID": "7472382502370942261",
+                "ParentID": "17388036112293777742",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -265,11 +375,11 @@
                             0.99999970197677612
                         ],
                         "ScaleNegative": false,
-                        "ID": "13137308229407399290"
+                        "ID": "8358404826925897911"
                     },
                     {
                         "Type": 28,
-                        "ID": "6565205422576202611",
+                        "ID": "9349861591267572983",
                         "BoneID": "17963598945331428101",
                         "Enabled": true
                     }
@@ -278,8 +388,8 @@
             {
                 "Name": "mixamorig_Head",
                 "FamilyNumber": 7,
-                "ID": "2543417253437098310",
-                "ParentID": "12759333778803228723",
+                "ID": "4241831070086831592",
+                "ParentID": "7472382502370942261",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -309,11 +419,11 @@
                             0.99999982118606567
                         ],
                         "ScaleNegative": false,
-                        "ID": "12343925968974341705"
+                        "ID": "3811321121331174229"
                     },
                     {
                         "Type": 28,
-                        "ID": "7945361183650859791",
+                        "ID": "7820789298171952714",
                         "BoneID": "9420301100113934915",
                         "Enabled": true
                     }
@@ -322,8 +432,8 @@
             {
                 "Name": "mixamorig_HeadTop_End",
                 "FamilyNumber": 8,
-                "ID": "15893415123500916320",
-                "ParentID": "2543417253437098310",
+                "ID": "8158202789813091884",
+                "ParentID": "4241831070086831592",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -353,15 +463,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7197089723803668858"
+                        "ID": "933144361524356571"
                     }
                 ]
             },
             {
                 "Name": "mixamorig_LeftShoulder",
                 "FamilyNumber": 6,
-                "ID": "9181538811588276849",
-                "ParentID": "10358331184909019337",
+                "ID": "4470281352766947192",
+                "ParentID": "17388036112293777742",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -391,11 +501,11 @@
                             0.99999970197677612
                         ],
                         "ScaleNegative": false,
-                        "ID": "3262115256194102084"
+                        "ID": "12449843878551813473"
                     },
                     {
                         "Type": 28,
-                        "ID": "2377962302029846206",
+                        "ID": "9390075239180071534",
                         "BoneID": "8639155535151660928",
                         "Enabled": true
                     }
@@ -404,8 +514,8 @@
             {
                 "Name": "mixamorig_LeftArm",
                 "FamilyNumber": 7,
-                "ID": "8969354453156263354",
-                "ParentID": "9181538811588276849",
+                "ID": "12871281352751872986",
+                "ParentID": "4470281352766947192",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -435,11 +545,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "14229157175113292137"
+                        "ID": "16213886435633825462"
                     },
                     {
                         "Type": 28,
-                        "ID": "3655265255393057354",
+                        "ID": "7885098254327306958",
                         "BoneID": "5777558173640564447",
                         "Enabled": true
                     }
@@ -448,8 +558,8 @@
             {
                 "Name": "mixamorig_LeftForeArm",
                 "FamilyNumber": 8,
-                "ID": "18008023124455946067",
-                "ParentID": "8969354453156263354",
+                "ID": "6822243979878047002",
+                "ParentID": "12871281352751872986",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -479,11 +589,11 @@
                             1.0000003576278687
                         ],
                         "ScaleNegative": false,
-                        "ID": "769475255966492033"
+                        "ID": "17205027634113372761"
                     },
                     {
                         "Type": 28,
-                        "ID": "2807498917166331516",
+                        "ID": "9039032500947745849",
                         "BoneID": "12125902267771002018",
                         "Enabled": true
                     }
@@ -492,8 +602,8 @@
             {
                 "Name": "mixamorig_LeftHand",
                 "FamilyNumber": 9,
-                "ID": "14372230858611026156",
-                "ParentID": "18008023124455946067",
+                "ID": "17857100711668861227",
+                "ParentID": "6822243979878047002",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -523,11 +633,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17985743783134982069"
+                        "ID": "689496471194537969"
                     },
                     {
                         "Type": 28,
-                        "ID": "6670836700700869685",
+                        "ID": "1873779471996315127",
                         "BoneID": "6420702416048369470",
                         "Enabled": true
                     }
@@ -536,8 +646,8 @@
             {
                 "Name": "mixamorig_LeftHandIndex1",
                 "FamilyNumber": 10,
-                "ID": "11705570441944122808",
-                "ParentID": "14372230858611026156",
+                "ID": "9132820451544385481",
+                "ParentID": "17857100711668861227",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -567,11 +677,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "14074495851653418200"
+                        "ID": "1742046024063430150"
                     },
                     {
                         "Type": 28,
-                        "ID": "9735495324591529802",
+                        "ID": "12416811893382919508",
                         "BoneID": "15397320424224257109",
                         "Enabled": true
                     }
@@ -580,8 +690,8 @@
             {
                 "Name": "mixamorig_LeftHandIndex2",
                 "FamilyNumber": 11,
-                "ID": "18340745866531892345",
-                "ParentID": "11705570441944122808",
+                "ID": "8013588215548972257",
+                "ParentID": "9132820451544385481",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -611,11 +721,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "12286222920170615719"
+                        "ID": "5847827962567345144"
                     },
                     {
                         "Type": 28,
-                        "ID": "3158457050171959986",
+                        "ID": "15968543406074713555",
                         "BoneID": "1958177252006353524",
                         "Enabled": true
                     }
@@ -624,8 +734,8 @@
             {
                 "Name": "mixamorig_LeftHandIndex3",
                 "FamilyNumber": 12,
-                "ID": "13858938449848994372",
-                "ParentID": "18340745866531892345",
+                "ID": "18274903766283334003",
+                "ParentID": "8013588215548972257",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -655,11 +765,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "16792279242365985624"
+                        "ID": "3457726555514531734"
                     },
                     {
                         "Type": 28,
-                        "ID": "13991004832047620775",
+                        "ID": "10138440130679295506",
                         "BoneID": "1534987534677330080",
                         "Enabled": true
                     }
@@ -668,8 +778,8 @@
             {
                 "Name": "mixamorig_LeftHandIndex4",
                 "FamilyNumber": 13,
-                "ID": "10244903887887987331",
-                "ParentID": "13858938449848994372",
+                "ID": "3250607924284364006",
+                "ParentID": "18274903766283334003",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -699,15 +809,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11282475978543433529"
+                        "ID": "4175193720037739886"
                     }
                 ]
             },
             {
                 "Name": "mixamorig_RightShoulder",
                 "FamilyNumber": 6,
-                "ID": "7574539129928429341",
-                "ParentID": "10358331184909019337",
+                "ID": "17870104039384624519",
+                "ParentID": "17388036112293777742",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -737,11 +847,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9761480208129496354"
+                        "ID": "9283068367507685677"
                     },
                     {
                         "Type": 28,
-                        "ID": "15997377301999669565",
+                        "ID": "17314705106507050252",
                         "BoneID": "17957749487994532973",
                         "Enabled": true
                     }
@@ -750,8 +860,8 @@
             {
                 "Name": "mixamorig_RightArm",
                 "FamilyNumber": 7,
-                "ID": "8546173639978336737",
-                "ParentID": "7574539129928429341",
+                "ID": "2463056094253249256",
+                "ParentID": "17870104039384624519",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -781,11 +891,11 @@
                             0.99999994039535522
                         ],
                         "ScaleNegative": false,
-                        "ID": "568504118862870092"
+                        "ID": "622214567051612623"
                     },
                     {
                         "Type": 28,
-                        "ID": "7375079773996959872",
+                        "ID": "12711685983140468860",
                         "BoneID": "12843663199718634035",
                         "Enabled": true
                     }
@@ -794,8 +904,8 @@
             {
                 "Name": "mixamorig_RightForeArm",
                 "FamilyNumber": 8,
-                "ID": "11047917167730035865",
-                "ParentID": "8546173639978336737",
+                "ID": "709292118167692763",
+                "ParentID": "2463056094253249256",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -825,11 +935,11 @@
                             0.99999970197677612
                         ],
                         "ScaleNegative": false,
-                        "ID": "5042515591836272952"
+                        "ID": "8128291667854147148"
                     },
                     {
                         "Type": 28,
-                        "ID": "12451424868295528227",
+                        "ID": "8390111556522160965",
                         "BoneID": "8253113155993815461",
                         "Enabled": true
                     }
@@ -838,8 +948,8 @@
             {
                 "Name": "mixamorig_RightHand",
                 "FamilyNumber": 9,
-                "ID": "16178752669915886524",
-                "ParentID": "11047917167730035865",
+                "ID": "4546913048503277048",
+                "ParentID": "709292118167692763",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -869,11 +979,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4529162020962272872"
+                        "ID": "4554107366736321944"
                     },
                     {
                         "Type": 28,
-                        "ID": "12707243467029777885",
+                        "ID": "3461665130377867741",
                         "BoneID": "7127019782240428522",
                         "Enabled": true
                     }
@@ -882,8 +992,8 @@
             {
                 "Name": "mixamorig_RightHandIndex1",
                 "FamilyNumber": 10,
-                "ID": "15996399447709530008",
-                "ParentID": "16178752669915886524",
+                "ID": "2981825963496803544",
+                "ParentID": "4546913048503277048",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -913,11 +1023,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14876853165801523347"
+                        "ID": "12772792122522233043"
                     },
                     {
                         "Type": 28,
-                        "ID": "13156296347873117383",
+                        "ID": "18142479065790254745",
                         "BoneID": "17390056104549545603",
                         "Enabled": true
                     }
@@ -926,8 +1036,8 @@
             {
                 "Name": "mixamorig_RightHandIndex2",
                 "FamilyNumber": 11,
-                "ID": "11737045198801905271",
-                "ParentID": "15996399447709530008",
+                "ID": "12147981890699504972",
+                "ParentID": "2981825963496803544",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -957,11 +1067,11 @@
                             0.9999997615814209
                         ],
                         "ScaleNegative": false,
-                        "ID": "8223780457373237563"
+                        "ID": "11469921364912696482"
                     },
                     {
                         "Type": 28,
-                        "ID": "7560212185042435951",
+                        "ID": "4554602355421520621",
                         "BoneID": "6446829632462776928",
                         "Enabled": true
                     }
@@ -970,8 +1080,8 @@
             {
                 "Name": "mixamorig_RightHandIndex3",
                 "FamilyNumber": 12,
-                "ID": "2716249029674850801",
-                "ParentID": "11737045198801905271",
+                "ID": "16833613712570418870",
+                "ParentID": "12147981890699504972",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1001,11 +1111,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18044765112413310726"
+                        "ID": "18329885025191621672"
                     },
                     {
                         "Type": 28,
-                        "ID": "11884241610811783707",
+                        "ID": "549910866062124764",
                         "BoneID": "13161790449646297942",
                         "Enabled": true
                     }
@@ -1014,8 +1124,8 @@
             {
                 "Name": "mixamorig_RightHandIndex4",
                 "FamilyNumber": 13,
-                "ID": "6819440167522813439",
-                "ParentID": "2716249029674850801",
+                "ID": "13145662484781492014",
+                "ParentID": "16833613712570418870",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1045,15 +1155,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13480167487537229669"
+                        "ID": "6085319910825283027"
                     }
                 ]
             },
             {
                 "Name": "Sword",
                 "FamilyNumber": 11,
-                "ID": "7173722629695054768",
-                "ParentID": "15996399447709530008",
+                "ID": "2878671284679936419",
+                "ParentID": "2981825963496803544",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1083,15 +1193,15 @@
                             9.5254812240600586
                         ],
                         "ScaleNegative": false,
-                        "ID": "10789673400897529518"
+                        "ID": "15403725273401451867"
                     }
                 ]
             },
             {
                 "Name": "Cube",
                 "FamilyNumber": 12,
-                "ID": "10051577960653177209",
-                "ParentID": "7173722629695054768",
+                "ID": "18230231354551699816",
+                "ParentID": "2878671284679936419",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1121,7 +1231,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14237279563252956458"
+                        "ID": "9991672785626430695"
                     },
                     {
                         "Type": 1,
@@ -1131,7 +1241,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3831447962592747316",
+                        "ID": "8481352537439600994",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -1139,7 +1249,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "11816287130265467323",
+                        "ID": "15757019245820286215",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -1149,8 +1259,8 @@
             {
                 "Name": "Cube",
                 "FamilyNumber": 12,
-                "ID": "16978480633140921801",
-                "ParentID": "7173722629695054768",
+                "ID": "14340907370229181866",
+                "ParentID": "2878671284679936419",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1180,7 +1290,7 @@
                             0.12258407473564148
                         ],
                         "ScaleNegative": false,
-                        "ID": "14980793386040900074"
+                        "ID": "5796850767989631585"
                     },
                     {
                         "Type": 1,
@@ -1190,7 +1300,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "18299024759942555728",
+                        "ID": "13052735528013493511",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 0,
@@ -1198,7 +1308,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14657387327166010289",
+                        "ID": "18285284243530313309",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -1208,8 +1318,8 @@
             {
                 "Name": "mixamorig_LeftUpLeg",
                 "FamilyNumber": 3,
-                "ID": "14081555221829297263",
-                "ParentID": "17269738754892165857",
+                "ID": "17514971687326722664",
+                "ParentID": "3217516607123321870",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1239,11 +1349,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "16796191505402947428"
+                        "ID": "6607014142487126901"
                     },
                     {
                         "Type": 28,
-                        "ID": "17320364418752898062",
+                        "ID": "17391608746226157893",
                         "BoneID": "13344470957085982803",
                         "Enabled": true
                     }
@@ -1252,8 +1362,8 @@
             {
                 "Name": "mixamorig_LeftLeg",
                 "FamilyNumber": 4,
-                "ID": "14529638777878613340",
-                "ParentID": "14081555221829297263",
+                "ID": "3754885229054711859",
+                "ParentID": "17514971687326722664",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1283,11 +1393,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4816803879677288181"
+                        "ID": "6299316991945422704"
                     },
                     {
                         "Type": 28,
-                        "ID": "16699869826341117317",
+                        "ID": "8849867139319356658",
                         "BoneID": "8824059436366854012",
                         "Enabled": true
                     }
@@ -1296,8 +1406,8 @@
             {
                 "Name": "mixamorig_LeftFoot",
                 "FamilyNumber": 5,
-                "ID": "2697062542668804612",
-                "ParentID": "14529638777878613340",
+                "ID": "12043714185522066707",
+                "ParentID": "3754885229054711859",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1327,11 +1437,11 @@
                             0.9999997615814209
                         ],
                         "ScaleNegative": false,
-                        "ID": "14897281124580581938"
+                        "ID": "5717472129034657566"
                     },
                     {
                         "Type": 28,
-                        "ID": "15848740142826857116",
+                        "ID": "5957876820821931726",
                         "BoneID": "17629205964519978840",
                         "Enabled": true
                     }
@@ -1340,8 +1450,8 @@
             {
                 "Name": "mixamorig_LeftToeBase",
                 "FamilyNumber": 6,
-                "ID": "10221807151611503314",
-                "ParentID": "2697062542668804612",
+                "ID": "15955647588560787850",
+                "ParentID": "12043714185522066707",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1371,11 +1481,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15053181600640313309"
+                        "ID": "10994091072075510990"
                     },
                     {
                         "Type": 28,
-                        "ID": "9880138504518357365",
+                        "ID": "15566263434955437098",
                         "BoneID": "817165781664745946",
                         "Enabled": true
                     }
@@ -1384,8 +1494,8 @@
             {
                 "Name": "mixamorig_LeftToe_End",
                 "FamilyNumber": 7,
-                "ID": "3915686923803548911",
-                "ParentID": "10221807151611503314",
+                "ID": "11660578382689655393",
+                "ParentID": "15955647588560787850",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1415,15 +1525,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4247842788600344798"
+                        "ID": "6632247400679228806"
                     }
                 ]
             },
             {
                 "Name": "mixamorig_RightUpLeg",
                 "FamilyNumber": 3,
-                "ID": "18232567267210892693",
-                "ParentID": "17269738754892165857",
+                "ID": "6034299696081448087",
+                "ParentID": "3217516607123321870",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1453,11 +1563,11 @@
                             1.0000003576278687
                         ],
                         "ScaleNegative": false,
-                        "ID": "504588096113689978"
+                        "ID": "8867730332366624314"
                     },
                     {
                         "Type": 28,
-                        "ID": "675652801076449438",
+                        "ID": "9025219055796880105",
                         "BoneID": "6313905419139817193",
                         "Enabled": true
                     }
@@ -1466,8 +1576,8 @@
             {
                 "Name": "mixamorig_RightLeg",
                 "FamilyNumber": 4,
-                "ID": "9848020781416104100",
-                "ParentID": "18232567267210892693",
+                "ID": "6503188710971103535",
+                "ParentID": "6034299696081448087",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1497,11 +1607,11 @@
                             0.9999997615814209
                         ],
                         "ScaleNegative": false,
-                        "ID": "2481490675189488532"
+                        "ID": "1507037375222190913"
                     },
                     {
                         "Type": 28,
-                        "ID": "17165935123098524265",
+                        "ID": "9569788466821263226",
                         "BoneID": "15346287262826142896",
                         "Enabled": true
                     }
@@ -1510,8 +1620,8 @@
             {
                 "Name": "mixamorig_RightFoot",
                 "FamilyNumber": 5,
-                "ID": "8989927624327564087",
-                "ParentID": "9848020781416104100",
+                "ID": "5545058340435259615",
+                "ParentID": "6503188710971103535",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1541,11 +1651,11 @@
                             0.99999958276748657
                         ],
                         "ScaleNegative": false,
-                        "ID": "4827577636444964798"
+                        "ID": "18167445051501513154"
                     },
                     {
                         "Type": 28,
-                        "ID": "10461477073767802640",
+                        "ID": "378607853383079378",
                         "BoneID": "12214804073133095548",
                         "Enabled": true
                     }
@@ -1554,8 +1664,8 @@
             {
                 "Name": "mixamorig_RightToeBase",
                 "FamilyNumber": 6,
-                "ID": "18022675455732275746",
-                "ParentID": "8989927624327564087",
+                "ID": "17563851350517253458",
+                "ParentID": "5545058340435259615",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1585,11 +1695,11 @@
                             0.99999964237213135
                         ],
                         "ScaleNegative": false,
-                        "ID": "12863770036941596474"
+                        "ID": "11938517413415556341"
                     },
                     {
                         "Type": 28,
-                        "ID": "6773311293157268475",
+                        "ID": "749808550315128408",
                         "BoneID": "8222261861419078742",
                         "Enabled": true
                     }
@@ -1598,8 +1708,8 @@
             {
                 "Name": "mixamorig_RightToe_End",
                 "FamilyNumber": 7,
-                "ID": "17526761729913720126",
-                "ParentID": "18022675455732275746",
+                "ID": "12895168865466092643",
+                "ParentID": "17563851350517253458",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1629,15 +1739,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3341382192280539883"
+                        "ID": "9333649930530048925"
                     }
                 ]
             },
             {
                 "Name": "Attacks_Collider",
                 "FamilyNumber": 2,
-                "ID": "991107854311023122",
-                "ParentID": "18134824694823875184",
+                "ID": "4040135161708425457",
+                "ParentID": "4985387174041602485",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1667,15 +1777,33 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6442374974829526659"
+                        "ID": "13546061035024205762"
+                    },
+                    {
+                        "Enabled": false,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0.64999997615814209,
+                            1.1499999761581421
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "Friction": 0.5,
+                        "AngularFriction": 0.10000000149011612,
+                        "Size": [
+                            0.9100000262260437,
+                            0.89999997615814209,
+                            0.70999997854232788
+                        ]
                     }
                 ]
             },
             {
                 "Name": "Meshes",
                 "FamilyNumber": 2,
-                "ID": "9082667524080370240",
-                "ParentID": "18134824694823875184",
+                "ID": "10260062759628140318",
+                "ParentID": "4985387174041602485",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1705,15 +1833,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "366276955691482189"
+                        "ID": "15247047609446684476"
                     }
                 ]
             },
             {
                 "Name": "GeraltSubs_Belt006_Belt007",
                 "FamilyNumber": 3,
-                "ID": "3271031020215288445",
-                "ParentID": "9082667524080370240",
+                "ID": "16612846728113364066",
+                "ParentID": "10260062759628140318",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1743,7 +1871,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14706783865383900563"
+                        "ID": "15030303003694526326"
                     },
                     {
                         "Type": 27,
@@ -1753,14 +1881,14 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "15413109871038276710",
+                        "ID": "18195692992897170274",
                         "MeshID": "4547184986923532365",
-                        "RootBoneID": "17269738754892165857",
+                        "RootBoneID": "3217516607123321870",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "14308602342039754019",
+                        "ID": "15761064316923929761",
                         "HasMaterial": true,
                         "MaterialID": "6157262434152796534",
                         "Enabled": true
@@ -1770,8 +1898,8 @@
             {
                 "Name": "Particles",
                 "FamilyNumber": 2,
-                "ID": "11352044429542303061",
-                "ParentID": "18134824694823875184",
+                "ID": "3379719139520919920",
+                "ParentID": "4985387174041602485",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1801,15 +1929,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3714474594175528851"
+                        "ID": "13998658058563996983"
                     }
                 ]
             },
             {
                 "Name": "p_run",
                 "FamilyNumber": 3,
-                "ID": "12957204923872034034",
-                "ParentID": "11352044429542303061",
+                "ID": "11059489518142353172",
+                "ParentID": "3379719139520919920",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1839,17 +1967,17 @@
                             10
                         ],
                         "ScaleNegative": false,
-                        "ID": "17840889489331514877"
+                        "ID": "16289174758698150587"
                     },
                     {
                         "Type": 15,
-                        "ID": "1112658215458604950",
+                        "ID": "2820502164129064571",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -167.20057678222656,
-                                17.354869842529297,
-                                -15.143174171447754
+                                0,
+                                0,
+                                0
                             ],
                             "Rotation": [
                                 0,
@@ -1859,9 +1987,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -1.259860634803772,
-                                0.59554153680801392,
-                                1.4346014261245728
+                                0.32869836688041687,
+                                1.2665101289749146,
+                                1.5125836133956909
                             ],
                             "Force": [
                                 0,
@@ -1935,14 +2063,14 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 1.8180001974105835,
+                            "CurrentLife": 2.2539994716644287,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
                             "Position": [
-                                -167.20057678222656,
-                                17.354869842529297,
-                                -15.143174171447754
+                                0,
+                                0,
+                                0
                             ],
                             "RelativePosition": [
                                 0,
@@ -1989,8 +2117,8 @@
             {
                 "Name": "p_attack",
                 "FamilyNumber": 3,
-                "ID": "470567611874963544",
-                "ParentID": "11352044429542303061",
+                "ID": "13333311052170041843",
+                "ParentID": "3379719139520919920",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2020,17 +2148,17 @@
                             10
                         ],
                         "ScaleNegative": false,
-                        "ID": "4899987417434433666"
+                        "ID": "14647679999335539175"
                     },
                     {
                         "Type": 15,
-                        "ID": "13935679941544857347",
+                        "ID": "3614866563868753755",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -167.20057678222656,
-                                17.354869842529297,
-                                -15.143174171447754
+                                0,
+                                0,
+                                0
                             ],
                             "Rotation": [
                                 0,
@@ -2040,9 +2168,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.8523015975952148,
-                                0.14341987669467926,
-                                -1.1977487802505493
+                                1.8196096420288086,
+                                -0.98398590087890625,
+                                4.5520095825195313
                             ],
                             "Force": [
                                 0,
@@ -2116,14 +2244,14 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 25.156000137329102,
+                            "CurrentLife": 2.0019989013671875,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
-                                -167.20057678222656,
-                                17.354869842529297,
-                                -15.143174171447754
+                                0,
+                                0,
+                                0
                             ],
                             "RelativePosition": [
                                 0,
@@ -2174,8 +2302,8 @@
             {
                 "Name": "p_igni",
                 "FamilyNumber": 3,
-                "ID": "1699239675721382369",
-                "ParentID": "11352044429542303061",
+                "ID": "5728419769499044874",
+                "ParentID": "3379719139520919920",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2205,17 +2333,17 @@
                             0.99999934434890747
                         ],
                         "ScaleNegative": false,
-                        "ID": "13847086677664189681"
+                        "ID": "618441198454220089"
                     },
                     {
                         "Type": 15,
-                        "ID": "2850617439921931139",
+                        "ID": "6806939820544598744",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -166.47491455078125,
-                                18.061046600341797,
-                                -15.37639331817627
+                                0.72565543651580811,
+                                0.7061765193939209,
+                                -0.23321954905986786
                             ],
                             "Rotation": [
                                 0,
@@ -2225,9 +2353,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.6518610715866089,
-                                -3.2832913398742676,
-                                -3.3898897171020508
+                                1.4717934131622314,
+                                -1.3642904758453369,
+                                -4.5795779228210449
                             ],
                             "Force": [
                                 0,
@@ -2301,14 +2429,14 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 25.156000137329102,
+                            "CurrentLife": 0.30799999833106995,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
-                                -166.47491455078125,
-                                18.061046600341797,
-                                -15.37639331817627
+                                -0.0055477865971624851,
+                                0.7061765193939209,
+                                0.76219183206558228
                             ],
                             "RelativePosition": [
                                 0,

@@ -103,7 +103,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 
 	if(current_attack && current_attack->IsLast())
-		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5 * current_attack->info.name.size());
+		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5f);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -168,16 +168,16 @@ void PlayerAttacks::SnapToTarget()
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
+	//std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
 	std::vector<GameObject*> enemies_in_range;
 
-	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
+	/*for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
 		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
-	}
+	}*/
 
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
@@ -203,6 +203,7 @@ bool PlayerAttacks::FindSnapTarget()
 		current_target = snap_candidate.first;
 		return true;
 	}
+
 
 	return false;
 }
