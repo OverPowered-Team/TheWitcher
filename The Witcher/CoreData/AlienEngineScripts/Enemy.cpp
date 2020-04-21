@@ -203,7 +203,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	if (can_get_interrupted) {
 		state = EnemyState::HIT;
 		animator->PlayState("Hit");
-		character_ctrl->SetWalkDirection(float3::zero());
+		//character_ctrl->SetWalkDirection(float3::zero());
 	}
 
 	return aux_health - stats["Health"].GetValue();
