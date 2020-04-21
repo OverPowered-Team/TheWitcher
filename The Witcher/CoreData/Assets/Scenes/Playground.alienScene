@@ -1,6 +1,277 @@
 {
-    "Prefab": {
+    "Scene": {
+        "Name": "Playground",
         "GameObjects": [
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 1,
+                "ID": "1917283406269805958",
+                "ParentID": "14919044627399981208",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            -9.5167665481567383
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9853185709278674585"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "16344633113856921940",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Fog": false,
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13294645959885894553.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/882162789730207050.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "14356784704012934220",
+                        "ResourceID": "5217879656618584496",
+                        "DataName": "CameraMovement",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "First parameters"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "distance",
+                                "float": 18.072000503540039
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "hor_angle",
+                                "float": 95.4219970703125
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vert_angle",
+                                "float": 21.687000274658203
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "axis",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "smooth_camera",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "smooth_cam_vel",
+                                "float": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Directional Light",
+                "FamilyNumber": 1,
+                "ID": "17373896148312557967",
+                "ParentID": "14919044627399981208",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0.2798481285572052,
+                            -0.36470523476600647,
+                            0.115916907787323,
+                            0.88047623634338379
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6440906516317185978"
+                    },
+                    {
+                        "Type": 3,
+                        "Enabled": true,
+                        "ID": "10325800234575717098",
+                        "PrintIcon": true,
+                        "Intensity": 1,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Direction": [
+                            -0.57735037803649902,
+                            -0.57735025882720947,
+                            0.57735025882720947
+                        ],
+                        "Ambient": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Diffuse": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 1,
+                "ID": "16645696685873739172",
+                "ParentID": "14919044627399981208",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            19.553058624267578,
+                            1,
+                            18.50384521484375
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13901788941855120642"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "2275976967450458196",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "11431706719839443875",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
             {
                 "Name": "Geralt",
                 "FamilyNumber": 1,
@@ -116,7 +387,7 @@
                             {
                                 "VarType": 3,
                                 "Name": "player_data.jump_power",
-                                "float": 1
+                                "float": 0.10000000149011612
                             },
                             {
                                 "VarType": 3,
@@ -1975,9 +2246,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.4645440578460693,
-                                -1.0545026063919067,
-                                -0.8620527982711792
+                                -1.0306944847106934,
+                                0.28195872902870178,
+                                -1.6906118392944336
                             ],
                             "Force": [
                                 0,
@@ -2051,7 +2322,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 1.4030003547668457,
+                            "CurrentLife": 3.035999059677124,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -2156,9 +2427,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -3.5241532325744629,
-                                2.7371785640716553,
-                                2.2557041645050049
+                                1.6223715543746948,
+                                -2.9667162895202637,
+                                -3.6832737922668457
                             ],
                             "Force": [
                                 0,
@@ -2232,7 +2503,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0029995441436768,
+                            "CurrentLife": 2.0060000419616699,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -2341,9 +2612,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                4.0482654571533203,
-                                -0.2463117241859436,
-                                2.9241881370544434
+                                2.8836467266082764,
+                                3.49332594871521,
+                                -2.1168966293334961
                             ],
                             "Force": [
                                 0,
@@ -2417,7 +2688,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.34000000357627869,
+                            "CurrentLife": 0.34299999475479126,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -2465,6 +2736,192 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         }
+                    }
+                ]
+            },
+            {
+                "Name": "GameManager",
+                "FamilyNumber": 1,
+                "ID": "15653155152376827343",
+                "ParentID": "14919044627399981208",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12922817184992308906",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12811165116052883252"
+                    },
+                    {
+                        "ID": "4847916457830123603",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 0.5,
+                        "Mute": false,
+                        "Bank": "1669749310",
+                        "Event": "740533573",
+                        "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "10236017372282923714",
+                        "ResourceID": "17206304544927406460",
+                        "DataName": "GameManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1940467106055140912",
+                        "ResourceID": "10454231044988625899",
+                        "DataName": "DialogueManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7078901209389956436",
+                        "ResourceID": "12931529595659776773",
+                        "DataName": "EventManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5046763531857340021",
+                        "ResourceID": "1616101574407180879",
+                        "DataName": "PlayerManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "max_ultimate_charge",
+                                "int": 200
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "ultimate_time",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "ultimate_effect_value",
+                                "float": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "18038977212362368114",
+                        "ResourceID": "10347121337452531063",
+                        "DataName": "RelicManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "fire_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_runestone",
+                                "prefab": "14345935870360924178"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_runestone",
+                                "prefab": "2289476701194859904"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "lightning_runestone",
+                                "prefab": "16448281988015221948"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_runestone",
+                                "prefab": "915245159270916750"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "fire_oil",
+                                "prefab": "4897692966543348103"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_oil",
+                                "prefab": "12016371024677234694"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_oil",
+                                "prefab": "6970049334727365231"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_oil",
+                                "prefab": "3987566163270230324"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nature_soul",
+                                "prefab": "6076778088024267194"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "sea_soul",
+                                "prefab": "8313000836464753319"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "djinn_jar",
+                                "prefab": "1853242969475161181"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "strigas_claws",
+                                "prefab": "5962552769781594257"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "witcher_rage",
+                                "prefab": "18026174053446935841"
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "8539242558700664049",
+                        "ResourceID": "8592519274657653365",
+                        "DataName": "CheckPoints_Manager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16828878319809409461",
+                        "ResourceID": "9022960755365003618",
+                        "DataName": "EnemyManager",
+                        "HasInspector": false
                     }
                 ]
             }

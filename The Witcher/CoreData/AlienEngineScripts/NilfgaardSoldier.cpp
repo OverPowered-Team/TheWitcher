@@ -90,17 +90,17 @@ void NilfgaardSoldier::Block()
 
 void NilfgaardSoldier::Flee(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	//character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
+	//character_ctrl->SetRotation(rot);
 
 	if (distance > stats["FleeRange"].GetMaxValue())
 	{
 		state = Enemy::EnemyState::ATTACK;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
@@ -162,7 +162,7 @@ void NilfgaardSoldier::UpdateEnemy()
 		case NilfgaardSoldier::NilfgaardType::ARCHER:
 			float angle = atan2f(direction.z, direction.x);
 			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-			character_ctrl->SetRotation(rot);
+			//character_ctrl->SetRotation(rot);
 
 			if (distance < stats["FleeRange"].GetValue())
 			{
