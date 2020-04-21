@@ -18,17 +18,31 @@ void RootLeshen::Start()
 	player_2_distance = transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players[1]->game_object->transform->GetGlobalPosition());
 
 	(player_1_distance < player_2_distance) ? target = 1 : target = 2;
+
+	state = ROOTSTATE::SEEK;
 }
 
 void RootLeshen::Update()
 {
-	direction = (GameManager::manager->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-	transform->AddPosition(direction * speed);
+	if (state == ROOTSTATE::SEEK) {
+		direction = (GameManager::manager->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+		direction.y = 0;
+		transform->AddPosition(direction * speed);
 
-	if(life_time <= total_life_time)
-		life_time += Time::GetDT();
-	else
-		GameObject::Destroy(game_object);
+		if (life_time <= total_life_time)
+			life_time += Time::GetDT();
+		else
+			GameObject::Destroy(game_object);
+	}
+	else if (state == ROOTSTATE::ROOT) {
+		transform->AddPosition(rooted_effect_direction * root_speed);
+		if (life_time <= total_life_time)
+			life_time += Time::GetDT();
+		else
+			GameObject::Destroy(game_object);
+	}
+
+
 }
 
 void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
@@ -36,13 +50,13 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl) {
-			LOG("Rooted");
+			state = ROOTSTATE::ROOT;
+			transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
+			root_time = 4.0f;
 		}
 		else {
 			LOG("There's no Player Controller in GO in ArrowScript!");
 		}
-
-		GameObject::Destroy(game_object);
 	}
 	else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
 	{
