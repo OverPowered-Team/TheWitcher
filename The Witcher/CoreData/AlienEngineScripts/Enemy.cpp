@@ -8,7 +8,7 @@
 
 void Enemy::Awake()
 {
-	GameManager::manager->enemy_manager->AddEnemy(this);
+	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 }
 
@@ -142,6 +142,7 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
+	character_ctrl->Move(direction);
 	//character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 

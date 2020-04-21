@@ -92,6 +92,8 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
+	return;
+
 	float2 joystickInput = float2(Input::GetControllerHoritzontalLeftAxis(controller_index), Input::GetControllerVerticalLeftAxis(controller_index));
 
 	animator->SetBool("movement_input", joystickInput.Length() > stick_threshold ? true : false);

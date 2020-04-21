@@ -111,9 +111,9 @@ void NilfgaardSoldier::ShootAttack()
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
-	arrow_go->GetChild("Point")->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
+	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateArrow());
-	arrow_rb->AddForce(direction.Mul(20));
+	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
 }
 
 Quat NilfgaardSoldier::RotateArrow()
