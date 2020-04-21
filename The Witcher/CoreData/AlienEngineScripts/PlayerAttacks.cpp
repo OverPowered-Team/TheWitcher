@@ -43,6 +43,10 @@ void PlayerAttacks::UpdateCurrentAttack()
 {
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
+	else
+	{
+		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f;
+	}
 		
 
 	if (Time::GetGameTime() >= finish_attack_time)
@@ -208,7 +212,6 @@ bool PlayerAttacks::FindSnapTarget()
 
 	if (snap_candidate.first)
 	{
-		LOG("GOTCHA");
 		current_target = snap_candidate.first;
 		return true;
 	}

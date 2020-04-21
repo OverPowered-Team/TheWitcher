@@ -127,6 +127,7 @@ void PlayerController::PreUpdate()
 				particles["p_run"]->SetEnable(true);
 			}
 			animator->SetBool("air", false);
+			player_data.speed.y = -0.01f;
 		}
 		break;
 	case PlayerController::PlayerState::DASHING:
@@ -173,7 +174,7 @@ void PlayerController::Update()
 		}
 
 		//if (CheckBoundaries())
-			HandleMovement();
+		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
 		break;
