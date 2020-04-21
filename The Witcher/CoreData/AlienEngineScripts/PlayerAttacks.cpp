@@ -43,14 +43,14 @@ void PlayerAttacks::UpdateCurrentAttack()
 {
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
-	/*else
-		player_controller->controller->SetWalkDirection(float3::zero());*/
+	else
+		player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
-		if (abs(player_controller->player_data.currentSpeed) < 0.01F)
+		if (player_controller->player_data.velocity < 0.01F)
 			player_controller->state = PlayerController::PlayerState::IDLE;
-		if (abs(player_controller->player_data.currentSpeed) > 0.01F)
+		if (player_controller->player_data.velocity > 0.01F)
 			player_controller->state = PlayerController::PlayerState::RUNNING;
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
@@ -162,8 +162,8 @@ void PlayerAttacks::SnapToTarget()
 	float3 velocity = transform->forward * speed * Time::GetDT();
 	distance_snapped += velocity.Length();
 
-	/*player_controller->controller->SetRotation(rot);
-	player_controller->controller->SetWalkDirection(velocity);*/
+	//player_controller->controller->SetRotation(rot);
+	player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
 }
 
 bool PlayerAttacks::FindSnapTarget()
@@ -235,8 +235,8 @@ void PlayerAttacks::AttackMovement()
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
 		float3 impulse = direction * current_attack->info.movement_strength;
-		/*player_controller->controller->ApplyImpulse(impulse);
-		player_controller->controller->SetRotation(rot);*/
+		//player_controller->controller->ApplyImpulse(impulse);
+		player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
 	}	
 }
 
