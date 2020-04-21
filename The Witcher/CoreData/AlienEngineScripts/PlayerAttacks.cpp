@@ -192,7 +192,7 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition());
+		float distance = abs(transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition()));
 		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
 		if (distance <= snap_detection_range && angle <= abs(max_snap_angle))
