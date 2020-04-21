@@ -807,7 +807,38 @@ bool ComponentCheckbox::DrawInspector()
 			ImGui::TreePop();
 		}
 
-		ImGui::Spacing();
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+
+		if (ImGui::TreeNode("Audio Events"))
+		{
+			ImGui::Text("Move Event");
+			ImGui::SameLine(120);
+
+			static char move_name[30];
+			memcpy(move_name, move_event.c_str(), 30);
+
+			if (ImGui::InputText("##MoveEventName", move_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				move_event = move_name;
+			}
+			ImGui::Spacing();
+
+			ImGui::Text("Click Event");
+			ImGui::SameLine(120);
+
+			static char click_name[30];
+			memcpy(click_name, click_event.c_str(), 30);
+
+			if (ImGui::InputText("##ClickEventName", click_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				click_event = click_name;
+			}
+			ImGui::Spacing(); ImGui::Spacing();
+
+
+
+			ImGui::TreePop();
+		}
 
 
 		ImGui::Separator();
@@ -971,7 +1002,7 @@ bool ComponentCheckbox::OnClick()
 		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
 		if (emitter != nullptr)
 		{
-			emitter->StartSound("CLICK");
+			emitter->StartSound(click_event.c_str());
 		}
 
 		current_color = clicked_color;
@@ -1021,7 +1052,7 @@ bool ComponentCheckbox::OnEnter()
 		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
 		if (emitter != nullptr)
 		{
-			emitter->StartSound("ENTER");
+			emitter->StartSound(move_event.c_str());
 		}
 
 		CallListeners(&listenersOnEnter);
@@ -1153,6 +1184,9 @@ void ComponentCheckbox::SaveComponent(JSONArraypack* to_save)
 	to_save->SetString("SelectOnRight", std::to_string(select_on_right).data());
 	to_save->SetString("SelectOnLeft", std::to_string(select_on_left).data());
 
+	to_save->SetString("ClickEvent", click_event.data());
+	to_save->SetString("MoveEvent", move_event.data());
+
 	//---------------------------------------------------------
 	to_save->SetBoolean("HasListenersOnClick", !listenersOnClick.empty());
 	if (!listenersOnClick.empty()) {
@@ -1248,6 +1282,14 @@ void ComponentCheckbox::LoadComponent(JSONArraypack* to_load)
 	select_on_down = std::stoull(to_load->GetString("SelectOnDown"));
 	select_on_right = std::stoull(to_load->GetString("SelectOnRight"));
 	select_on_left = std::stoull(to_load->GetString("SelectOnLeft"));
+
+	try {
+		click_event = to_load->GetString("ClickEvent");
+		move_event = to_load->GetString("MoveEvent");
+	}
+	catch (...) {
+		// f
+	}
 
 	//-------------------------------------------------------------
 	if (to_load->GetBoolean("HasListenersOnClick")) {

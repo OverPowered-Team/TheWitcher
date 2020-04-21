@@ -302,8 +302,35 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
 
-	glPushMatrix();
-	glMultMatrixf(matrix.Transposed().ptr());
+	if (!canvas->isWorld)
+	{
+		glPushMatrix();
+		glMultMatrixf(matrix.Transposed().ptr());
+	}
+	else
+	{
+		position.x = matrix[0][3];
+		position.y = matrix[1][3];
+		position.z = matrix[2][3];
+
+		scale.x = matrix[0][0];
+		scale.y = matrix[1][1];
+		scale.z = 1.0f;
+
+
+		float4x4 uiLocal = float4x4::FromTRS(position, rotation, scale);
+		float4x4 uiGlobal = uiLocal;
+
+		/*	if (!particleInfo.globalTransform)
+			{
+				float4x4 parentGlobal = owner->emmitter.GetGlobalTransform();
+				particleGlobal = parentGlobal * particleLocal;
+			}*/
+
+		glPushMatrix();
+		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
+
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 

@@ -2,7 +2,7 @@
 
 #include "imgui/imgui.h"
 #include <regex>
-#include "ModulePhysics.h"
+#include "ModulePhysX.h"
 #include "j1PerfTimer.h"
 #include "Timer.h"
 
@@ -12,7 +12,6 @@
 
 enum class EventType; 
 enum class AlienEventType;
-
 
 class Module;
 class ModuleWindow;
@@ -58,7 +57,7 @@ public:
 	ModuleFileSystem*	file_system = nullptr;
 	ModuleResources*	resources = nullptr;
 	ModuleAudio*		audio = nullptr;
-	ModulePhysics* 		physics = nullptr;
+	ModulePhysX*		physx = nullptr;
 	AnimTween*			tween = nullptr;
 	FadeToBlack*		fade_to_black = nullptr;
 

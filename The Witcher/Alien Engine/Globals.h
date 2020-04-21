@@ -19,7 +19,7 @@ __declspec(dllexport) void log(const char file[], int line, const char* format, 
 
 
 // DISCOMMENT TO START THE ENGINE IN PLAY MODE
-#define GAME_VERSION
+//#define GAME_VERSION
 
 #define RELEASE( x )\
     {\
@@ -68,3 +68,6 @@ enum update_status
 
 #define BAR_BEGIN_POS 6
 #define BAR_END_POS WINDOW_ICON_WIDTH - BAR_BEGIN_POS
+
+#define DEGTORAD 0.0174532925199432957f // 1degree x (pi rads / 180 degrees) = 0.017 rads
+#define RADTODEG 57.295779513082320876f // 1rad x (180 degrees / pi rads) = 57 degrees

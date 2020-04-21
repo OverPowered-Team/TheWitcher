@@ -32,7 +32,10 @@ public:
 	static float Max(const float& value1, const float& value2);
 	static double Max(const double& value1, const double& value2);
 
-	// TODO: Lerp(); :D
+	static float PerlinNoise(const unsigned int& seed, const double& x, const double& y, const double& z);
+
+	static float Lerp(const float& start, const float& end, const float& t);
+	static int   Lerp(const int& start, const int& end, const float& t);
 
 	static double PI();
 	static double Deg2Rad();

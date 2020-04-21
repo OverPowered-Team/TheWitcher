@@ -141,7 +141,7 @@ void ShortCutManager::ShortCutClicked()
 			}
 		}
 	}
-	
+	App->ui->update_shortcut = true;
 }
 
 const char* ShortCut::GetShortcutName()
