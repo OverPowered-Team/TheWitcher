@@ -6,6 +6,7 @@
 #include "Effect.h"
 #include "CameraMovement.h"
 #include "Enemy.h"
+#include "RumblerManager.h"
 
 #include "../../ComponentDeformableMesh.h"
 
@@ -257,14 +258,14 @@ void PlayerController::IdleInput()
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
 		player_data.speed = float3(0, -1, 0);
-		//GameManager::manager->Rumbler(RumblerType::INCREASING, controller_index, 5);
+		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::INCREASING, controller_index, 5);
 	}
 	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->Rumbler(RumblerType::HEAVY_ATTACK, controller_index);
+		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 		can_move = false;
 	}*/
 
@@ -323,7 +324,7 @@ void PlayerController::RunningInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->Rumbler(RumblerType::HEAVY_ATTACK, controller_index);
+		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 		controller->SetWalkDirection(float3::zero());
 		can_move = false;
 	}*/
@@ -515,7 +516,7 @@ void PlayerController::Revive()
 	GameManager::manager->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
 	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	GameManager::manager->Rumbler(RumblerType::REVIVE, controller_index);
+	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 }
 
 void PlayerController::ActionRevive()
@@ -540,7 +541,7 @@ void PlayerController::ReceiveDamage(float value)
 		player_data.speed = float3(0, -1, 0);
 	}	
 
-	GameManager::manager->Rumbler(RumblerType::RECEIVE_HIT, controller_index);
+	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)

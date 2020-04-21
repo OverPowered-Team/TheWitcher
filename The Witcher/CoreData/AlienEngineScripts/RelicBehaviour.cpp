@@ -110,7 +110,6 @@ RelicBehaviour::~RelicBehaviour()
 
 void RelicBehaviour::Start()
 {
-
 	std::string json_str;
 
 	switch (relic_type)
@@ -156,10 +155,8 @@ void RelicBehaviour::Update()
 
 void RelicBehaviour::SetRelic(const char* json_array)
 {
-	/*std::string json_path = std::string("Configuration/Relics.json");*/
-
 	
-	JSONfilepack* relic_json = JSONfilepack::GetJSON("Configuration/Relics.json");
+	JSONfilepack* relic_json = JSONfilepack::GetJSON("GameData/Relics.json");
 
 	JSONArraypack* type_array = relic_json->GetArray(json_array);
 

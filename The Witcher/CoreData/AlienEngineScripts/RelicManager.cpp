@@ -10,9 +10,9 @@ RelicManager::~RelicManager()
 
 void RelicManager::Start()
 {
-	//spawn = GameObject::FindWithName("SpawnRelics");
+	spawn = GameObject::FindWithName("SpawnRelics");
 
-	if (spawn)
+	if (spawn && spawn->GetChildren().size() > 0)
 	{
 		auto c_trans = spawn->GetComponentsInChildren<ComponentTransform>();
 
