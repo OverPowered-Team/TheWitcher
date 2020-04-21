@@ -196,7 +196,7 @@ void PlayerController::Update()
 	controller->Move(player_data.speed);
 
 	player_data.velocity = player_data.speed.Length();
-	animator->SetFloat("speed", player_data.velocity);
+	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 
 	//Effects-----------------------------
 	EffectsUpdate();
@@ -257,7 +257,6 @@ void PlayerController::IdleInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		player_data.speed = float3(0, -1, 0);
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::INCREASING, controller_index, 5);
 	}
 	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
@@ -273,7 +272,7 @@ void PlayerController::IdleInput()
 		|| Input::GetKeyDown(keyboard_spell)) {
 		attacks->StartSpell(0);
 		state = PlayerState::CASTING;
-		player_data.speed = float3(0, -1, 0);
+		player_data.speed = float3(0,-0.01f,0);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -283,7 +282,7 @@ void PlayerController::IdleInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_revive)
 		|| Input::GetKeyDown(keyboard_revive)) {
 		if (CheckForPossibleRevive()) {
-			player_data.speed = float3(0, -1, 0);
+			player_data.speed = float3(0,-0.01f,0);
 			animator->SetBool("reviving", true);
 			state = PlayerState::REVIVING;
 		}
@@ -308,7 +307,7 @@ void PlayerController::RunningInput()
 	{
 		state = PlayerState::IDLE;
 		particles["p_run"]->SetEnable(false);
-		player_data.speed = float3(0,-1, 0);
+		player_data.speed = float3(0,-0.01f,0);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -316,7 +315,6 @@ void PlayerController::RunningInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		player_data.speed = float3(0, -1, 0);
 		particles["p_run"]->SetEnable(false);
 	}
 	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
@@ -336,7 +334,7 @@ void PlayerController::RunningInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_revive)
 		|| Input::GetKeyDown(keyboard_revive)) {
 		if (CheckForPossibleRevive()) {
-			player_data.speed = float3(0, -1, 0);
+			player_data.speed = float3(0,-0.01f,0);
 			animator->SetBool("reviving", true);
 			state = PlayerState::REVIVING;
 			particles["p_run"]->SetEnable(false);
@@ -347,7 +345,7 @@ void PlayerController::RunningInput()
 		|| Input::GetKeyDown(keyboard_spell)) {
 		attacks->StartSpell(0);
 		state = PlayerState::CASTING;
-		player_data.speed = float3(0, -1, 0);
+		player_data.speed = float3(0,-0.01f,0);
 		particles["p_run"]->SetEnable(false);
 	}
 
@@ -467,17 +465,23 @@ void PlayerController::Roll()
 
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
-		if(player_data.velocity < 0.01F)
+		if (movement_input.Length() < stick_threshold)
 			state = PlayerState::IDLE;
-		if (player_data.velocity > 0.01F)
+		if (movement_input.Length() > stick_threshold)
+		{
 			state = PlayerState::RUNNING;
+			particles["p_run"]->SetEnable(true);
+		}
 	}
 
 	if (strcmp(name, "Spell") == 0) {
-		if (player_data.velocity < 0.01F)
+		if (movement_input.Length() < stick_threshold)
 			state = PlayerState::IDLE;
-		if (player_data.velocity > 0.01F)
+		if (movement_input.Length() > stick_threshold)
+		{
 			state = PlayerState::RUNNING;
+			particles["p_run"]->SetEnable(true);
+		}
 	}
 
 	if (strcmp(name, "Hit") == 0) {
@@ -538,7 +542,7 @@ void PlayerController::ReceiveDamage(float value)
 		animator->PlayState("Hit");
 		attacks->CancelAttack();
 		state = PlayerState::HIT;
-		player_data.speed = float3(0, -1, 0);
+		player_data.speed = float3(0,-0.01f,0);
 	}	
 
 	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
