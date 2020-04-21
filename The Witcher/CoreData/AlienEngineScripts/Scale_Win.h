@@ -18,6 +18,8 @@ public:
 	// Scales
 	GameObject* left_scale = nullptr;
 	GameObject* right_scale = nullptr;
+	ComponentRigidBody* rigid_body1 = nullptr;
+	ComponentRigidBody* rigid_body2 = nullptr;
 
 	// Scores
 	int player1_points = 0;

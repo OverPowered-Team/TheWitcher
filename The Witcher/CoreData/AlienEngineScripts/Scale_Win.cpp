@@ -12,6 +12,8 @@ void Scale_Win::Start()
 {
 	left_scale = game_object->GetChild("Left_Scale");
 	right_scale = game_object->GetChild("Right_Scale");
+	rigid_body1 = left_scale->GetComponent<ComponentRigidBody>();
+	rigid_body2 = right_scale->GetComponent<ComponentRigidBody>();
 }
 
 void Scale_Win::Update()
@@ -21,17 +23,21 @@ void Scale_Win::Update()
 		CalculateInclination();
 	}
 
-	// Waiting on new release
-	/*if (!in_place)
+	if (!in_place)
 	{
-		left_scale->transform->SetLocalPosition(7.5f, math::Lerp(original_position1,desired_position1,(Time::GetGameTime()-time)/time_to_scale), 0);
-		right_scale->transform->SetLocalPosition(-7.5f, math::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0);
+		left_scale->transform->SetGlobalPosition(float3(7.5f, Maths::Lerp(original_position1,desired_position1,(Time::GetGameTime()-time)/time_to_scale), 0));
+		right_scale->transform->SetGlobalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
+
+		// Delete this when physics updated rigid body position with GO
+		rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());
+		rigid_body2->SetPosition(right_scale->transform->GetLocalPosition());
+		// ------------------------------------------
 
 		if (Time::GetGameTime() > time + time_to_scale)
 		{ 
 			in_place = true;
 		}
-	}*/
+	}
 }
 
 void Scale_Win::CalculateInclination()
@@ -75,11 +81,6 @@ void Scale_Win::CalculateInclination()
 		desired_position1 = -max_Y * value;
 		desired_position2 = max_Y * value;
 	}
-
-	// TO DELETE
-	left_scale->transform->SetLocalPosition(7.5f, desired_position1, 0);
-	right_scale->transform->SetLocalPosition(-7.5f, desired_position2, 0);
-	//-----------------------------------------
 
 	in_place = false;
 	time = Time::GetGameTime();

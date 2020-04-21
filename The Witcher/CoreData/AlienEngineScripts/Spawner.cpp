@@ -26,7 +26,7 @@ void Spawner::Spawn(TO_SPAWN type, float3 position)
 	{
 	case TO_SPAWN::HEAD:
 	{
-		GameObject::Instantiate(enemy_heads, position);
+		heads_spawned.push_back(GameObject::Instantiate(enemy_heads, position));
 		break;
 	}
 	case TO_SPAWN::COIN:
