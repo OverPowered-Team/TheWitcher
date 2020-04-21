@@ -159,7 +159,7 @@ void PlayerController::Update()
 			timer = Time::GetGameTime();
 			audio->StartSound();
 		}
-		if (CheckBoundaries())
+		/*if (CheckBoundaries())*/
 			HandleMovement();
 		break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
@@ -172,7 +172,7 @@ void PlayerController::Update()
 			player_data.speed.y = -0.35f;
 		}
 
-		if (CheckBoundaries())
+		//if (CheckBoundaries())
 			HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
@@ -193,7 +193,8 @@ void PlayerController::Update()
 	}
 
 	//MOVE
-	controller->Move(player_data.speed);
+	if(CheckBoundaries())
+		controller->Move(player_data.speed);
 
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", player_data.velocity);
@@ -299,6 +300,7 @@ void PlayerController::RunningInput()
 {	
 	if (!controller->isGrounded)
 	{
+		LOG("EN EL AIRE");
 		state = PlayerState::JUMPING;
 		animator->PlayState("Air");
 		animator->SetBool("air", true);
@@ -577,12 +579,12 @@ bool PlayerController::CheckBoundaries()
 	float3 next_pos = float3::zero();
 	float joystickIntensity = movement_input.Length();
 
-	float3 vector = float3(movement_input.x, 0.f, movement_input.y);
-	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
-	vector.y = 0.f;
-	vector.Normalize();
-
-	float angle = atan2f(vector.z, vector.x);
+	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
+	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
+	direction_vector.y = 0.f;
+	direction_vector.Normalize();
+	//rotate
+	float angle = atan2f(direction_vector.z, direction_vector.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
 	float speed = 0.f;
@@ -598,7 +600,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * speed * 3.f;
+		next_pos = transform->GetGlobalPosition() + direction_vector * speed * 20.f;
 	}
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
@@ -623,9 +625,12 @@ bool PlayerController::CheckBoundaries()
 				if (!fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					controller->velocity = PxExtendedVec3(0, 0, 0);
+					player_data.can_move = true;
+					player_data.speed = float3::zero();
 					return false;
 				}
+				else
+					player_data.can_move = false;
 			}
 		}
 	}
@@ -634,7 +639,7 @@ bool PlayerController::CheckBoundaries()
 		return true;
 	}
 	else {
-		controller->velocity = PxExtendedVec3(0, 0, 0);
+		player_data.speed = float3::zero();
 		return false;
 	}
 }
