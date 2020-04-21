@@ -37,6 +37,12 @@ void Component::SetEnable(bool enable)
 	(enabled) ? OnEnable() : OnDisable();
 }
 
+void Component::Destroy()
+{
+	not_destroy = false;
+	App->objects->need_to_delete_objects = true;
+}
+
 void Component::ResetIDs()
 {
 	ID = App->resources->GetRandomID();

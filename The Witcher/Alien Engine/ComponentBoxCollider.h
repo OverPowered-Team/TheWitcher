@@ -2,41 +2,34 @@
 
 #include "ComponentCollider.h"
 #include "MathGeoLib/include/Math/MathAll.h"
-#include "Bullet/include/btBulletDynamicsCommon.h"
 
 class GameObject;
-class ModulePhysics;
 
 
 class __declspec(dllexport) ComponentBoxCollider : public ComponentCollider
 {
-	friend class ModulePhysics;
 	friend class GameObject;
 
 public:
 
 	ComponentBoxCollider(GameObject* go);
 
-	void SetCenter(float3 center);
 	void SetSize(const float3 size);
-	float3 GetSize() { return size; }
+	const float3 GetSize() const { return size; }
 
-private:
+private :
 
-	float3 CheckInvalidCollider(float3 size);
+	void ScaleChanged();
 	void DrawSpecificInspector();
-
-	void Clone(Component* clone);
-	void Reset();
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
-	
-	void CreateDefaultShape();
-	void UpdateShape();
+	void Clone(Component* clone);
+	void Reset();
+
+	const float3 CalculateSize();
+	PxShape* ReCreateBoxShape();
 
 private:
 
-	float3 final_size = float3::zero();
 	float3 size = float3::one();
 };
-

@@ -6,7 +6,12 @@
 
 class ComponentTransform;
 class ComponentCharacterController;
+class Collision;
+class ContactPoint;
+class ControllerColliderHit;
 class ComponentCollider;
+class GameObject;
+
 enum class ComponentType;
 class Component;
 typedef unsigned int uint;
@@ -17,6 +22,8 @@ class __declspec(dllexport) Alien {
 	friend class ModuleObjects;
 	friend class ComponentTransform;
 	friend class ResourceAnimatorController;
+	friend class SimulationEventCallback;
+	friend class ComponentCharacterController;
 public:
 	Alien();
 	virtual ~Alien();
@@ -43,10 +50,24 @@ public:
 
 	virtual void CleanUp() {}
 
-	//void OnCollision(ComponentCollider* collider) {}
-	virtual void OnTrigger(ComponentCollider* collider) {}
+
+	// Physics ------------------------------------------------
+
+	virtual void OnCollisionEnter(const Collision& collision) {}
+	virtual void OnCollisionStay(const Collision& collision) {}
+	virtual void OnCollisionExit(const Collision& collision) {}
+
 	virtual void OnTriggerEnter(ComponentCollider* collider) {}
+	virtual void OnTriggerStay(ComponentCollider* collider) {}
 	virtual void OnTriggerExit(ComponentCollider* collider) {}
+
+	// OnControllerColliderHit is called when the controller hits a collider while performing a Move.
+	virtual void OnControllerColliderHit(const ControllerColliderHit& hit) {}
+
+	// Deprecated , use OnTriggerStay()
+	virtual void OnTrigger(ComponentCollider* collider) {}  // TODO:  Delete after change al code
+	// --------------------------------------------------------
+
 	virtual void OnAnimationEnd(const char* name) {}
 
 

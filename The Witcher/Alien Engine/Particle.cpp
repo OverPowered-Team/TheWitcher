@@ -63,7 +63,6 @@ void Particle::Update(float dt)
 	// Apply forces
 	particleInfo.velocity += particleInfo.force * dt;
 	
-
 	// Move
 	particleInfo.position += particleInfo.velocity * dt;
 
@@ -110,6 +109,9 @@ void Particle::Update(float dt)
 
 		}
 	}
+
+	//Update Speed Scale
+	particleInfo.velocityScale = particleInfo.speedScale * particleInfo.speed;
 	
 	//----------- Animation (Deprecated) ---------------- //
 
@@ -162,7 +164,7 @@ void Particle::Draw()
 {
 	
 	// -------- ATTITUDE -------- //
-	float4x4 particleLocal = float4x4::FromTRS(particleInfo.position, particleInfo.rotation, float3(particleInfo.size, particleInfo.size, 1.f));
+	float4x4 particleLocal = float4x4::FromTRS(particleInfo.position, particleInfo.rotation, float3(particleInfo.size, particleInfo.size * (particleInfo.lengthScale + particleInfo.velocityScale), 1.f));
 	float4x4 particleGlobal = particleLocal;
 
 	if (!particleInfo.globalTransform)
@@ -317,6 +319,11 @@ void Particle::Orientate(ComponentCamera* camera)
 
 	case BillboardType::AXIS:
 		particleInfo.rotation = Billboard::AlignToAxis(camera, particleInfo.position);
+
+		break;
+
+	case BillboardType::VELOCITY:
+		particleInfo.rotation = Billboard::AlignToVelocity(camera, particleInfo.position, particleInfo.velocity);
 
 		break;
 

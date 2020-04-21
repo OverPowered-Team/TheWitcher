@@ -151,7 +151,7 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 		{
 			if (meta_materials_paths == nullptr) {
 				std::string materialName = materials_attached[i]->GetName();
-				App->ui->panel_project->GetUniqueFileName(materialName, MATERIALS_FOLDER);
+				//App->ui->panel_project->GetUniqueFileName(materialName, MATERIALS_FOLDER);
 
 				materials_attached[i]->SetName(materialName.c_str());
 				materials_attached[i]->SetAssetsPath(std::string(MATERIALS_FOLDER + materialName + ".material").data());
@@ -699,8 +699,8 @@ void ResourceModel::ConvertToGameObjects()
 
 	App->objects->SetNewSelectedObject(App->objects->GetRoot(false)->children.back(), false);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
-	App->camera->fake_camera->Look(App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint());
-	App->camera->reference = App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint();
+	//App->camera->fake_camera->Look(App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint());
+	//App->camera->reference = App->objects->GetRoot(false)->children.back()->GetBB().CenterPoint();
 }
 
 bool ResourceModel::SortByFamilyNumber(const ModelNode& node1, const ModelNode& node2)
