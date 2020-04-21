@@ -48,6 +48,7 @@ public:
 		PlayerType player_type = PlayerType::GERALT;
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+		bool can_move = true;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
