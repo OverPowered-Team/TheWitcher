@@ -17,7 +17,7 @@ void ArrowScript::Start()
 void ArrowScript::Update()
 {
 	if ((Time::GetGameTime() - current_time) > life_time)
-		GameObject::Destroy(game_object->parent);
+		GameObject::Destroy(game_object);
 }
 
 void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
@@ -29,10 +29,10 @@ void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 		else
 			LOG("There's no Player Controller in GO in ArrowScript!");
 
-		GameObject::Destroy(game_object->parent);
+		GameObject::Destroy(game_object);
 	}
 	else if(strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
 	{
-		GameObject::Destroy(game_object->parent);
+		GameObject::Destroy(game_object);
 	}
 }
