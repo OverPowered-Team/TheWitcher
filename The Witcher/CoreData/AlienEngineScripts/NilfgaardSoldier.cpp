@@ -90,17 +90,18 @@ void NilfgaardSoldier::Block()
 
 void NilfgaardSoldier::Flee(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	character_ctrl->Move(velocity_vec);
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
+	transform->SetGlobalRotation(rot);
 
 	if (distance > stats["FleeRange"].GetMaxValue())
 	{
 		state = Enemy::EnemyState::ATTACK;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
@@ -111,9 +112,9 @@ void NilfgaardSoldier::ShootAttack()
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
-	arrow_go->GetChild("Point")->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
+	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateArrow());
-	arrow_rb->AddForce(direction.Mul(20));
+	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
 }
 
 Quat NilfgaardSoldier::RotateArrow()
@@ -148,7 +149,7 @@ void NilfgaardSoldier::UpdateEnemy()
 	switch (state)
 	{
 	case Enemy::EnemyState::IDLE:
-		if (distance < stats["VisionRange"].GetValue() && distance > stats["AttackRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue())
 			state = Enemy::EnemyState::MOVE;
 		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
 			state = Enemy::EnemyState::FLEE;
@@ -162,7 +163,7 @@ void NilfgaardSoldier::UpdateEnemy()
 		case NilfgaardSoldier::NilfgaardType::ARCHER:
 			float angle = atan2f(direction.z, direction.x);
 			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-			character_ctrl->SetRotation(rot);
+			transform->SetGlobalRotation(rot);
 
 			if (distance < stats["FleeRange"].GetValue())
 			{
@@ -206,6 +207,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		else
 		{
 			state = Enemy::EnemyState::IDLE;
+			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		}
 	}
 
@@ -214,7 +216,10 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			state = EnemyState::HIT;
 		}
 		else
+		{
 			state = Enemy::EnemyState::IDLE;
+			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		}
 	}
 
 	if (strcmp(name, "Dizzy") == 0)

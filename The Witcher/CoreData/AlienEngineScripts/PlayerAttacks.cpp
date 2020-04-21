@@ -43,15 +43,22 @@ void PlayerAttacks::UpdateCurrentAttack()
 {
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
-	else
-		player_controller->controller->SetWalkDirection(float3::zero());
+		
 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
-		if (abs(player_controller->player_data.currentSpeed) < 0.01F)
+		if (player_controller->movement_input.Length() < player_controller->stick_threshold)
+		{
 			player_controller->state = PlayerController::PlayerState::IDLE;
-		if (abs(player_controller->player_data.currentSpeed) > 0.01F)
+			player_controller->player_data.speed = float3(0,-0.01f,0);
+		}
+		else if (player_controller->movement_input.Length() > player_controller->stick_threshold)
+		{
 			player_controller->state = PlayerController::PlayerState::RUNNING;
+			player_controller->particles["p_run"]->SetEnable(true);
+			player_controller->player_data.speed = float3(0,-0.01f,0);
+		}
+			
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
@@ -102,8 +109,9 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
-	if(current_attack && current_attack->IsLast())
-		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5f);
+	//THIS CRASHES NOW DONT KNOW WHY
+	//if(current_attack && current_attack->IsLast())
+		//GameManager::manager->player_manager->IncreaseUltimateCharge(0.5f);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -162,29 +170,29 @@ void PlayerAttacks::SnapToTarget()
 	float3 velocity = transform->forward * speed * Time::GetDT();
 	distance_snapped += velocity.Length();
 
-	player_controller->controller->SetRotation(rot);
-	player_controller->controller->SetWalkDirection(velocity);
+	player_controller->transform->SetGlobalRotation(rot);
+	player_controller->player_data.speed = velocity;
 }
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	//std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
+	std::vector<ComponentCollider*> colliders_in_range = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), snap_detection_range);
 	std::vector<GameObject*> enemies_in_range;
 
-	/*for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
+	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
 		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
-	}*/
+	}
 
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
 
 	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition());
+		float distance = abs(transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition()));
 		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
 		if (distance <= snap_detection_range && angle <= abs(max_snap_angle))
@@ -200,10 +208,10 @@ bool PlayerAttacks::FindSnapTarget()
 
 	if (snap_candidate.first)
 	{
+		LOG("GOTCHA");
 		current_target = snap_candidate.first;
 		return true;
 	}
-
 
 	return false;
 }
@@ -233,10 +241,11 @@ void PlayerAttacks::AttackMovement()
 		float3 direction = GetMovementVector();
 		float angle = atan2f(direction.z, direction.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
 
-		float3 impulse = direction * current_attack->info.movement_strength;
-		player_controller->controller->ApplyImpulse(impulse);
-		player_controller->controller->SetRotation(rot);
+		float tmp_y = player_controller->player_data.speed.y;
+		player_controller->player_data.speed = direction * current_attack->info.movement_strength;
+		//player_controller->controller->ApplyImpulse(impulse);
 	}	
 }
 
@@ -276,19 +285,16 @@ bool PlayerAttacks::CanBeInterrupted()
 
 float3 PlayerAttacks::GetMovementVector()
 {
-	float3 vector = float3(Input::GetControllerHoritzontalLeftAxis(player_controller->controller_index), 0.f,
-		Input::GetControllerVerticalLeftAxis(player_controller->controller_index));
-
-	if (vector.Length() < player_controller->stick_threshold)
-		vector = player_controller->transform->forward;
+	float3 direction_vector = float3(player_controller->movement_input.x, 0.f, player_controller->movement_input.y);
+	if (direction_vector.Length() < player_controller->stick_threshold)
+		direction_vector = player_controller->transform->forward;
 	else
 	{
-		vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
-		vector.y = 0.f;
-		vector.Normalize();
+		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
+		direction_vector.y = 0.f;
 	}
 
-	return vector;
+	return direction_vector;
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {

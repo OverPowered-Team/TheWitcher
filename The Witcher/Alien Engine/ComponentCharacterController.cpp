@@ -323,7 +323,6 @@ void ComponentCharacterController::Update()
 
 PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 {
-
 	// set velocity on current position before move
 	velocity = controller->getPosition();
 

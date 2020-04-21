@@ -8,7 +8,7 @@
 
 void Enemy::Awake()
 {
-	GameManager::manager->enemy_manager->AddEnemy(this);
+	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 }
 
@@ -18,8 +18,6 @@ void Enemy::StartEnemy()
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	state = EnemyState::IDLE;
 	std::string json_str;
-
-	character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -142,16 +140,17 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	character_ctrl->Move(velocity_vec);
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
+	transform->SetGlobalRotation(rot);
 
 	if (distance < stats["AttackRange"].GetValue())
 	{
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
@@ -159,7 +158,7 @@ void Enemy::Move(float3 direction)
 	if (distance > stats["VisionRange"].GetValue())
 	{
 		state = Enemy::EnemyState::IDLE;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 	}
 }
@@ -199,7 +198,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
-	character_ctrl->SetWalkDirection(float3::zero());
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
 		animator->SetBool("dead", true);

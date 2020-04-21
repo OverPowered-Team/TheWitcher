@@ -38,14 +38,17 @@ public:
 	struct PlayerData {
 		float movementSpeed = 200.0F;
 		float rotationSpeed = 120.0F;
-		float currentSpeed = 0.f;
+		float velocity = 0.f;
+		float3 speed = float3::zero();
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
+		float gravity = 9.8f;
 		std::map<std::string, Stat> stats;
 
 		PlayerType player_type = PlayerType::GERALT;
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+		bool can_move = true;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
@@ -55,10 +58,19 @@ public:
 
 	void Start();
 	void Update();
+	void PreUpdate();
+
+	void UpdateInput();
+	void IdleInput();
+	void RunningInput();
+	void AttackingInput();
 
 	bool AnyKeyboardInput();
 
-	void HandleMovement(const float2& joystickInput);
+	void HandleMovement();
+	void EffectsUpdate();
+	void Jump();
+	void Roll();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
@@ -70,7 +82,7 @@ public:
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
-	bool CheckBoundaries(const float2& joystickInput);
+	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
 	bool CheckForPossibleRevive();
 
@@ -89,7 +101,7 @@ public:
 
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
-	bool can_move = false;
+	float2 movement_input;
 	float stick_threshold = 0.1f;
 
 	float revive_range = 5.0f;
@@ -149,6 +161,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
