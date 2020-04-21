@@ -1,13 +1,579 @@
 {
     "Controller": {
         "Name": "PlayerAnimController",
-        "NumStates": 0,
-        "NumTransitions": 0,
-        "States": [],
-        "Transitions": [],
+        "NumStates": 14,
+        "NumTransitions": 23,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "11847928359428543970"
+            },
+            {
+                "Name": "Run",
+                "Speed": 1,
+                "Clip": "6946917102901728312"
+            },
+            {
+                "Name": "Roll",
+                "Speed": 3,
+                "Clip": "4244113142840779604"
+            },
+            {
+                "Name": "Air",
+                "Speed": 1,
+                "Clip": "9449538334584208347"
+            },
+            {
+                "Name": "Igni",
+                "Speed": 1,
+                "Clip": "7211782662776671787"
+            },
+            {
+                "Name": "L",
+                "Speed": 4,
+                "Clip": "17156228017399226362"
+            },
+            {
+                "Name": "LL",
+                "Speed": 2,
+                "Clip": "7930577302406065666"
+            },
+            {
+                "Name": "LLL",
+                "Speed": 2,
+                "Clip": "16304126710174412820"
+            },
+            {
+                "Name": "LLLL",
+                "Speed": 3,
+                "Clip": "16819087015883391959"
+            },
+            {
+                "Name": "LLLLL",
+                "Speed": 2,
+                "Clip": "17588914217724974085"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "11063703462969190022"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 3,
+                "Clip": "15249942156982629435"
+            },
+            {
+                "Name": "RCP",
+                "Speed": 1,
+                "Clip": "11249509642733254706"
+            },
+            {
+                "Name": "Revive",
+                "Speed": 1,
+                "Clip": "1634045271620092584"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Idle",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Run",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Idle",
+                "Blend": 0.10000000149011612,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Run",
+                "Blend": 0.10000000149011612,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Air",
+                "Target": "Run",
+                "Blend": 0.10000000149011612,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Air",
+                "Target": "Idle",
+                "Blend": 0.10000000149011612,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Igni",
+                "Target": "Idle",
+                "Blend": 0.10000000149011612,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Igni",
+                "Target": "Run",
+                "Blend": 0.10000000149011612,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "L",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "L",
+                "Target": "Run",
+                "Blend": 0.20000000298023224,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Death",
+                "Target": "Idle",
+                "Blend": 0.20000000298023224,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
+            },
+            {
+                "Source": "LL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLLLL",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "LLLL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "RCP",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Idle",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Revive",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            }
+        ],
         "IntParameters": [],
-        "FloatParameters": [],
-        "BoolParameters": [],
-        "Events": []
+        "FloatParameters": [
+            {
+                "Name": "speed",
+                "Value": 0
+            }
+        ],
+        "BoolParameters": [
+            {
+                "Name": "air",
+                "Value": false
+            },
+            {
+                "Name": "movement_input",
+                "Value": false
+            },
+            {
+                "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "reviving",
+                "Value": false
+            }
+        ],
+        "Events": [
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 25,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 26,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 49,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 35,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7930577302406065666",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16304126710174412820",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16819087015883391959",
+                "Frame": 35,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "17588914217724974085",
+                "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "17588914217724974085",
+                "Frame": 36,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "17156228017399226362",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 13,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 15,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 12,
+                "Type": 2
+            },
+            {
+                "Event_Id": "2719919427",
+                "Animation_Id": "4244113142840779604",
+                "Frame": 4,
+                "Type": 0
+            },
+            {
+                "Event_Id": "511861945",
+                "Animation_Id": "7211782662776671787",
+                "Frame": 11,
+                "Type": 0
+            },
+            {
+                "Event_Id": "2048623797",
+                "Animation_Id": "11063703462969190022",
+                "Frame": 4,
+                "Type": 0
+            },
+            {
+                "Event_Id": "219750196",
+                "Animation_Id": "13193819018923853663",
+                "Frame": 4,
+                "Type": 0
+            }
+        ]
     }
 }
