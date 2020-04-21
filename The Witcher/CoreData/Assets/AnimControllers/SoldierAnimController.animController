@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "SoldierAnimController",
-        "NumStates": 8,
-        "NumTransitions": 9,
+        "NumStates": 9,
+        "NumTransitions": 11,
         "States": [
             {
                 "Name": "Idle",
@@ -43,6 +43,11 @@
                 "Name": "QuickDeat",
                 "Speed": 1,
                 "Clip": "7795381935914547974"
+            },
+            {
+                "Name": "Block",
+                "Speed": 1,
+                "Clip": "0"
             }
         ],
         "Transitions": [
@@ -173,6 +178,38 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Block",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Block",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
                 "BoolConditions": []
             }
         ],

@@ -4,7 +4,7 @@
 #include "Macros/AlienScripts.h"
 #include "Stat.h"
 
-#define ENEMY_JSON "Configuration/Enemies/"
+#define ENEMY_JSON "GameData/Enemies/"
 
 class PlayerController;
 class Effect;

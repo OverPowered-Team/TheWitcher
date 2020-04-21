@@ -73,7 +73,6 @@ void Ghoul::Attack()
 void Ghoul::JumpImpulse()
 {
     float force = (distance * maxForce) / stats["AttackRange"].GetValue();
-  //  character_ctrl->SetWalkDirection(direction * force);
 }
 
 void Ghoul::OnAnimationEnd(const char* name)
