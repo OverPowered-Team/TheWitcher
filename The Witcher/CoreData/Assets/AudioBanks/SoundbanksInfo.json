@@ -5,11 +5,11 @@
   "SchemaVersion": "11",
   "SoundbankVersion": "128",
   "RootPaths": {
-   "ProjectRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\",
-   "SourceFilesRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
-   "SoundBanksRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
+   "ProjectRoot": "F:\\Documents\\GitHub\\WwiseProject\\TheWitcher\\",
+   "SourceFilesRoot": "F:\\Documents\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
+   "SoundBanksRoot": "F:\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
    "ExternalSourcesInputFile": "",
-   "ExternalSourcesOutputRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
+   "ExternalSourcesOutputRoot": "F:\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
   },
   "DialogueEvents": [],
   "StreamedFiles": [],
@@ -94,14 +94,8 @@
      {
       "Id": "65317710",
       "Language": "SFX",
-      "ShortName": "damage_received_noscream1.wav",
-      "Path": "SFX\\damage_received_noscream1_1C9C67B2.wem"
-     },
-     {
-      "Id": "69587374",
-      "Language": "SFX",
-      "ShortName": "damage_received_scream3_yennefer.wav",
-      "Path": "SFX\\damage_received_scream3_yennefer_1C9C67B2.wem"
+      "ShortName": "walking_sand2.wav",
+      "Path": "SFX\\walking_sand2_1C9C67B2.wem"
      },
      {
       "Id": "69587374",
@@ -649,11 +643,11 @@
     ]
    },
    {
-    "Id": "3529925883",
+    "Id": "3563481019",
     "Language": "SFX",
-    "ObjectPath": "\\SoundBanks\\Default Work Unit\\UI_SXF",
-    "ShortName": "UI_SXF",
-    "Path": "UI_SXF.bnk",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\UI_SFX",
+    "ShortName": "UI_SFX",
+    "Path": "UI_SFX.bnk",
     "IncludedEvents": [
      {
       "Id": "1291640088",
@@ -727,24 +721,9 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Bard_Music"
      },
      {
-      "Id": "3155474038",
-      "Name": "Play_Combat_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Combat_Music"
-     },
-     {
       "Id": "1635916389",
       "Name": "Play_End_Music",
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_End_Music"
-     },
-     {
-      "Id": "110125719",
-      "Name": "Play_Lake_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Lake_Music"
-     },
-     {
-      "Id": "29834681",
-      "Name": "Play_Lvl1_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Lvl1_Music"
      },
      {
       "Id": "166541076",
@@ -752,14 +731,9 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_MainMenu_Music"
      },
      {
-      "Id": "3813093503",
-      "Name": "Play_Mountain_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Mountain_Music"
-     },
-     {
-      "Id": "2462691910",
-      "Name": "Play_Quiet_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Quiet_Music"
+      "Id": "4145153789",
+      "Name": "Play_Music_Lvl1",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Music_Lvl1"
      },
      {
       "Id": "3241038393",
@@ -779,12 +753,6 @@
       "Language": "SFX",
       "ShortName": "music_calm_green_lake_serenade.wav",
       "Path": "SFX\\music_calm_green_lake_serenade_F17FB28C.wem"
-     },
-     {
-      "Id": "214870564",
-      "Language": "SFX",
-      "ShortName": "songlvl1.wav",
-      "Path": "SFX\\songlvl1_F17FB28C.wem"
      },
      {
       "Id": "247361237",
@@ -815,6 +783,105 @@
       "Language": "SFX",
       "ShortName": "combatmusic.wav",
       "Path": "SFX\\combatmusic_F17FB28C.wem"
+     }
+    ]
+   },
+   {
+    "Id": "4070387514",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Enemy_Interaction",
+    "ShortName": "Enemy_Interaction",
+    "Path": "Enemy_Interaction.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "3827515080",
+      "Name": "GhoulAttack",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\GhoulAttack"
+     },
+     {
+      "Id": "2611108682",
+      "Name": "GhoulDeath",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\GhoulDeath"
+     },
+     {
+      "Id": "1866221083",
+      "Name": "GhoulHit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\GhoulHit"
+     },
+     {
+      "Id": "192287144",
+      "Name": "SoldierBlock",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierBlock"
+     },
+     {
+      "Id": "962204745",
+      "Name": "SoldierDeath",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierDeath"
+     },
+     {
+      "Id": "4199645896",
+      "Name": "SoldierHit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierHit"
+     },
+     {
+      "Id": "1115497702",
+      "Name": "SoldierShoot",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierShoot"
+     },
+     {
+      "Id": "2142965948",
+      "Name": "SoldierSword",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierSword"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "389192671",
+      "Language": "SFX",
+      "ShortName": "ghoulDeath.wav",
+      "Path": "SFX\\ghoulDeath_1C9C67B2.wem"
+     },
+     {
+      "Id": "532431438",
+      "Language": "SFX",
+      "ShortName": "shieldblock.wav",
+      "Path": "SFX\\shieldblock_1C9C67B2.wem"
+     },
+     {
+      "Id": "547647646",
+      "Language": "SFX",
+      "ShortName": "ghoulHit.wav",
+      "Path": "SFX\\ghoulHit_1C9C67B2.wem"
+     },
+     {
+      "Id": "682751301",
+      "Language": "SFX",
+      "ShortName": "soldierHit.wav",
+      "Path": "SFX\\soldierHit_1C9C67B2.wem"
+     },
+     {
+      "Id": "852443415",
+      "Language": "SFX",
+      "ShortName": "shootArrow.wav",
+      "Path": "SFX\\shootArrow_1C9C67B2.wem"
+     },
+     {
+      "Id": "882909606",
+      "Language": "SFX",
+      "ShortName": "ghoulAttack.wav",
+      "Path": "SFX\\ghoulAttack_1C9C67B2.wem"
+     },
+     {
+      "Id": "990442094",
+      "Language": "SFX",
+      "ShortName": "enemySwordSwing.wav",
+      "Path": "SFX\\enemySwordSwing_1C9C67B2.wem"
+     },
+     {
+      "Id": "1049390434",
+      "Language": "SFX",
+      "ShortName": "soldierDeath.wav",
+      "Path": "SFX\\soldierDeath_1C9C67B2.wem"
      }
     ]
    },
