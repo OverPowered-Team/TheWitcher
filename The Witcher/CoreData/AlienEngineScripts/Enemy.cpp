@@ -205,6 +205,8 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				particles["decapitation_particle"]->Restart();
+
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
