@@ -13,6 +13,7 @@ class RumblerManager;
 class ALIEN_ENGINE_API GameManager : public Alien {
 
 public:
+	GameManager();
 	virtual ~GameManager();
 
 	EventManager* event_manager = nullptr;
@@ -26,22 +27,14 @@ public:
 	void Start();
 	void Update();
 
-	static GameManager* GetInstance()
-	{
-		if(!instance)
-			instance = new GameManager();
-
-		return instance;
-	}
-private:
-	GameManager();
 	static GameManager* instance;
 
 };
 GameManager* GameManager::instance = 0;
 
 ALIEN_FACTORY GameManager* CreateGameManager() {
-	GameManager* alien = GameManager::GetInstance();
+	GameManager* alien = new GameManager();
+	GameManager::instance = alien;
 	// To show in inspector here
 
 	return alien;
