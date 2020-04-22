@@ -95,28 +95,11 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
-	delete animator;
-	animator = nullptr;
-	delete character_ctrl;
-	character_ctrl = nullptr;
-
-	for (auto it_pc = player_controllers.begin(); it_pc != player_controllers.end();)
-	{
-		delete (*it_pc);
-		it_pc = player_controllers.erase(it_pc);
-	}
-	for (auto it_eff = effects.begin(); it_eff != effects.end();)
-	{
-		delete (*it_eff);
-		it_eff = effects.erase(it_eff);
-	}
-
 	if (decapitated_head)
 	{
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
-
 }
 
 void Enemy::SetStats(const char* json)
@@ -208,9 +191,8 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
-			GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 
-			decapitated_head = GameObject::Instantiate(head_prefab, game_object->transform->GetGlobalPosition());
+			decapitated_head = GameObject::Instantiate(head_prefab, head_position->transform->GetGlobalPosition());
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
