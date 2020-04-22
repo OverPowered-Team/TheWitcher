@@ -175,7 +175,10 @@ void NilfgaardSoldier::UpdateEnemy()
 	{
 	case Enemy::EnemyState::IDLE:
 		if (distance < stats["VisionRange"].GetValue())
+		{
 			state = Enemy::EnemyState::MOVE;
+			is_combat = true;
+		}
 		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
 			state = Enemy::EnemyState::FLEE;
 		break;
@@ -215,6 +218,7 @@ void NilfgaardSoldier::UpdateEnemy()
 		//Ori Ori function sintaxis
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = EnemyState::DEAD;
+		is_combat = false;
 		break;
 	}
 	case Enemy::EnemyState::DEAD:
@@ -238,6 +242,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			state = Enemy::EnemyState::IDLE;
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+			is_combat = false;
 		}
 	}
 

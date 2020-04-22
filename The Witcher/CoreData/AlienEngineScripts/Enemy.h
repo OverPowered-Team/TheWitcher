@@ -72,6 +72,8 @@ public:
 	std::map<std::string, ComponentParticleSystem*> particles;
 	std::map<std::string, Stat> stats;
 
+	bool is_combat = false;
+
 protected:
 	GameObject* decapitated_head = nullptr;
 	std::vector<Effect*> effects;
