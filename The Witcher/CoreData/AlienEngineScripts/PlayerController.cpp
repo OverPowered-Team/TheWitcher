@@ -257,7 +257,6 @@ void PlayerController::IdleInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::INCREASING, controller_index, 5);
 	}
 	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
