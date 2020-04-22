@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "UltiBar.h"
 #include "InGame_UI.h"
+#include "Scores_Data.h"
 
 PlayerManager::PlayerManager() : Alien()
 {
@@ -35,6 +36,8 @@ void PlayerManager::OnPlayerDead(PlayerController* dead_player)
 
 	if (players_dead.size() == players.size())
 	{
+		Scores_Data::player1_kills = players[0]->player_data.total_kills;
+		Scores_Data::player2_kills = players[1]->player_data.total_kills;
 		GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->YouDied(); 
 	}
 }
