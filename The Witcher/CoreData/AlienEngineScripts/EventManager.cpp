@@ -29,12 +29,12 @@ void EventManager::Update()
 
 void EventManager::OnPlayerDead(PlayerController* player_dead)
 {
-	GameManager::manager->player_manager->OnPlayerDead(player_dead);
+	GameManager::GetInstance()->player_manager->OnPlayerDead(player_dead);
 }
 
 void EventManager::OnPlayerRevive(PlayerController* player_revived)
 {
-	GameManager::manager->player_manager->OnPlayerRevive(player_revived);
+	GameManager::GetInstance()->player_manager->OnPlayerRevive(player_revived);
 }
 
 void EventManager::ReceiveDialogueEvent(Dialogue& dialogue, float delay) const
@@ -51,7 +51,7 @@ void EventManager::ReceiveDialogueEvent(Dialogue& dialogue, float delay) const
 	//eventPriorities.at(dialogue.priority)
 
 	// TODO: send this to the dialogue script
-	GameManager::manager->dialogue_manager->InputNewDialogue(dialogue);
+	GameManager::GetInstance()->dialogue_manager->InputNewDialogue(dialogue);
 
 }
 
@@ -62,5 +62,5 @@ void EventManager::ReceiveDialogueEvent(int index, float volume) const
 	else if (volume > 1.0f)
 		volume = 1.0f;
 
-	GameManager::manager->dialogue_manager->InputNewDialogue(index, volume);
+	GameManager::GetInstance()->dialogue_manager->InputNewDialogue(index, volume);
 }

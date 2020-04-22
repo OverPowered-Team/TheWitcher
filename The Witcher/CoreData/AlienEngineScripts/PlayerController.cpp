@@ -6,6 +6,7 @@
 #include "Effect.h"
 #include "CameraMovement.h"
 #include "Enemy.h"
+#include "GameManager.h"
 #include "RumblerManager.h"
 
 #include "../../ComponentDeformableMesh.h"
@@ -96,11 +97,11 @@ void PlayerController::PreUpdate()
 	//ULTIMATE INPUT ON ALL STATES FOR NOW
 	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
 		|| Input::GetKeyDown(keyboard_ultimate)) {
-		GameManager::manager->player_manager->ultimate_buttons_pressed++;
+		GameManager::GetInstance()->player_manager->ultimate_buttons_pressed++;
 	}
 	else if (Input::GetControllerButtonUp(controller_index, controller_ultimate)
 		|| Input::GetKeyUp(keyboard_ultimate)) {
-		GameManager::manager->player_manager->ultimate_buttons_pressed--;
+		GameManager::GetInstance()->player_manager->ultimate_buttons_pressed--;
 	}
 
 	switch (state)
@@ -261,8 +262,8 @@ void PlayerController::IdleInput()
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
+		GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_spell)
@@ -315,7 +316,7 @@ void PlayerController::RunningInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
+		GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -464,7 +465,10 @@ void PlayerController::Roll()
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
 		if (movement_input.Length() < stick_threshold)
+		{
 			state = PlayerState::IDLE;
+			player_data.speed = float3::zero();
+		}
 		if (movement_input.Length() > stick_threshold)
 		{
 			state = PlayerState::RUNNING;
@@ -507,7 +511,7 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	player_data.speed = float3::zero();
-	GameManager::manager->event_manager->OnPlayerDead(this);
+	GameManager::GetInstance()->event_manager->OnPlayerDead(this);
 }
 
 void PlayerController::Revive()
@@ -515,10 +519,10 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	GameManager::manager->event_manager->OnPlayerRevive(this);
+	GameManager::GetInstance()->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
 	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
+	GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 }
 
 void PlayerController::ActionRevive()
@@ -543,7 +547,7 @@ void PlayerController::ReceiveDamage(float value)
 		player_data.speed = float3::zero();
 	}	
 
-	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+	GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -651,10 +655,10 @@ void PlayerController::OnDrawGizmosSelected()
 
 bool PlayerController::CheckForPossibleRevive()
 {
-	for (int i = 0; i < GameManager::manager->player_manager->players_dead.size(); ++i) {
-		float distance = this->transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players_dead[i]->transform->GetGlobalPosition());
+	for (int i = 0; i < GameManager::GetInstance()->player_manager->players_dead.size(); ++i) {
+		float distance = this->transform->GetGlobalPosition().Distance(GameManager::GetInstance()->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= revive_range) {
-			player_being_revived = GameManager::manager->player_manager->players_dead[i];
+			player_being_revived = GameManager::GetInstance()->player_manager->players_dead[i];
 			return true;
 		}
 	}
@@ -679,7 +683,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
-	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+	GameManager::GetInstance()->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)

@@ -114,8 +114,8 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 
 	//THIS CRASHES NOW DONT KNOW WHY
-	//if(current_attack && current_attack->IsLast())
-		//GameManager::manager->player_manager->IncreaseUltimateCharge(5);
+	if(current_attack && current_attack->IsLast())
+		GameManager::GetInstance()->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()

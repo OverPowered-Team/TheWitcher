@@ -169,7 +169,12 @@
                         ],
                         "ClickEvent": "CLICK",
                         "MoveEvent": "ENTER",
-                        "HasListenersOnClick": false,
+                        "HasListenersOnClick": true,
+                        "ListenersOnClick": [
+                            {
+                                "0": "Audio_Button::Click"
+                            }
+                        ],
                         "HasListenersOnHover": false,
                         "HasListenersOnClickRepeat": false,
                         "HasListenersOnRelease": true,
@@ -178,7 +183,12 @@
                                 "0": "MainMenu_Buttons::NewGame"
                             }
                         ],
-                        "HasListenersOnExit": false,
+                        "HasListenersOnExit": true,
+                        "ListenersOnExit": [
+                            {
+                                "0": "Audio_Button::Change"
+                            }
+                        ],
                         "HasListenersOnEnter": false,
                         "SelectOnUp": "2975670240445246443",
                         "SelectOnDown": "6114787316109266419",
@@ -194,13 +204,6 @@
                         "Bank": "3529925883",
                         "Event": "40516875",
                         "PlayOnAwake": false
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "3502602939873214712",
-                        "ResourceID": "10290786987156997685",
-                        "DataName": "MainMenu_Buttons",
-                        "HasInspector": false
                     }
                 ]
             },
@@ -242,7 +245,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12291272250552899276",
+                        "ID": "12625485510153815210",
                         "Text": "Continue",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -380,13 +383,6 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "16529887553189564798",
-                        "ResourceID": "10290786987156997685",
-                        "DataName": "MainMenu_Buttons",
-                        "HasInspector": false
                     }
                 ]
             },
@@ -428,7 +424,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "2705216576546022249",
+                        "ID": "14732513293094097256",
                         "Text": "New Game",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -566,13 +562,6 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "16210590848960938857",
-                        "ResourceID": "10290786987156997685",
-                        "DataName": "MainMenu_Buttons",
-                        "HasInspector": false
                     }
                 ]
             },
@@ -614,7 +603,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "688628807414929903",
+                        "ID": "5333313670374999993",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -788,7 +777,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "4274829433458240198",
+                        "ID": "5995063138093064776",
                         "Text": "Settings",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -926,13 +915,6 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "5380116022308358028",
-                        "ResourceID": "10290786987156997685",
-                        "DataName": "MainMenu_Buttons",
-                        "HasInspector": false
                     }
                 ]
             },
@@ -974,7 +956,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "16889907590225343343",
+                        "ID": "4604772161474547911",
                         "Text": "Exit",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1010,7 +992,7 @@
                         "Type": 0,
                         "Position": [
                             -31.5,
-                            32,
+                            30.5,
                             0
                         ],
                         "Rotation": [
@@ -1021,19 +1003,19 @@
                         ],
                         "Scale": [
                             6,
-                            6,
+                            7,
                             2
                         ],
                         "ScaleNegative": false,
                         "ID": "1390361375795866729"
                     },
                     {
-                        "Width": 8.7899999618530273,
-                        "Height": 4.25,
+                        "Width": 8,
+                        "Height": 4,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "1502948448638238044",
+                        "TextureID": "16234303385987842058",
                         "Color": [
                             1,
                             0.99998998641967773,
@@ -1119,7 +1101,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12588238365699259353",
+                        "ID": "16426299113277582606",
                         "Text": "Select",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1309,13 +1291,6 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "13687202339867823815",
-                        "ResourceID": "10290786987156997685",
-                        "DataName": "MainMenu_Buttons",
-                        "HasInspector": false
                     }
                 ]
             },

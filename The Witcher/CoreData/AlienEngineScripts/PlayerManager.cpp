@@ -63,12 +63,12 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	{
 		collective_ultimate_charge = max_ultimate_charge;
 		// UI
-		ulti_bar->GetComponent<UltiBar>()->MaxBar();
+		//ulti_bar->GetComponent<UltiBar>()->MaxBar();
 	}
 	else
 	{
 		// UI
-		ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+		//ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
 	}
 }
 
