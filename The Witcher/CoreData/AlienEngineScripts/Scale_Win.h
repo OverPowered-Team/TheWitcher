@@ -15,32 +15,31 @@ public:
 
 	void CalculateInclination();
 
+public:
+
+	float max_Y = 4.5f;
+	float time_to_scale = 0.5f;
+
+	// Scores
+	int player1_points = 0;
+	int player2_points = 0;
+
+private:
 	// Scales
 	GameObject* left_scale = nullptr;
 	GameObject* right_scale = nullptr;
 	ComponentRigidBody* rigid_body1 = nullptr;
 	ComponentRigidBody* rigid_body2 = nullptr;
 
-	// Scores
-	int player1_points = 0;
-	int player2_points = 0;
-	int* max_points = nullptr;
-	int* min_points = nullptr;
-
-	int current_points1 = 0;
-	int current_points2 = 0;
-
-	bool in_place = true;
-
 	// Position
-	float max_Y = 4.5f;
 	float original_position1 = 0.0f;
 	float original_position2 = 0.0f;
 	float desired_position1 = 0.0f;
 	float desired_position2 = 0.0f;
+	bool in_place = true;
 
 	// Time
-	float time_to_scale = 0.5f;
+
 	float time = 0.0f;
 };
 
