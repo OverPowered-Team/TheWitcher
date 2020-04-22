@@ -35,6 +35,13 @@ void Enemy::StartEnemy()
 	}
 
 	SetStats(json_str.data());
+
+	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+
+	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+		(*it)->OnStop();
+	}
 }
 
 void Enemy::UpdateEnemy()
@@ -143,6 +150,7 @@ void Enemy::Move(float3 direction)
 		state = Enemy::EnemyState::IDLE;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
 	}
 }
 
@@ -197,15 +205,18 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				particles["decapitation_particle"]->Restart();
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
 
-				float decapitation_force = 5;
-				float3 decapitation_vector = (transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized() * decapitation_force;
+				float decapitation_force = 3;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.2f;
+				decapitation_vector += transform->up * decapitation_force * 0.5f;
 	
 				head_rb->AddForce(decapitation_vector);
 				head_rb->AddTorque(transform->up * decapitation_force);
+				head_rb->AddTorque(transform->forward * decapitation_force * 0.5f);
 			}
 
 			player->OnEnemyKill();

@@ -96,6 +96,6 @@ void RelicManager::DropRelic(float3 position)
 			break;
 		}
 	}
-	else
+	else if(random_index <= 100)
 		GameObject::Instantiate(witcher_rage, position);
 }

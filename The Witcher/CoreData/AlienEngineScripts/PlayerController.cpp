@@ -352,9 +352,9 @@ void PlayerController::AttackingInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack))
 		attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack))
-		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);*/
+		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
 	if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 		|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
@@ -464,7 +464,10 @@ void PlayerController::Roll()
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
 		if (movement_input.Length() < stick_threshold)
+		{
 			state = PlayerState::IDLE;
+			player_data.speed = float3::zero();
+		}
 		if (movement_input.Length() > stick_threshold)
 		{
 			state = PlayerState::RUNNING;
@@ -532,7 +535,7 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.stats["Health"].DecreaseStat(value);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 
