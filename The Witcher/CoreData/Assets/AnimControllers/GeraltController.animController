@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GeraltController",
-        "NumStates": 26,
-        "NumTransitions": 45,
+        "NumStates": 27,
+        "NumTransitions": 47,
         "States": [
             {
                 "Name": "Idle",
@@ -132,7 +132,12 @@
             {
                 "Name": "Igni",
                 "Speed": 1,
-                "Clip": "0"
+                "Clip": "12180050432665512495"
+            },
+            {
+                "Name": "LLHL",
+                "Speed": 1,
+                "Clip": "14634722325299198036"
             }
         ],
         "Transitions": [
@@ -792,6 +797,36 @@
             },
             {
                 "Source": "LLH",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLHL",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "LLHL",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": true,
