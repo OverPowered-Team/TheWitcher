@@ -350,7 +350,6 @@ void PlayerController::RunningInput()
 	{
 		Jump();
 	}
-
 }
 
 void PlayerController::AttackingInput()
@@ -685,6 +684,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
+	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
