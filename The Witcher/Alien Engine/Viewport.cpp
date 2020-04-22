@@ -184,6 +184,11 @@ uint FBO::GetFBOTexture()
 	return ID[NORMAL_TEXTURE];
 }
 
+uint FBO::GetFBO()
+{
+	return ID[MULTISAMPLING_FBO];
+}
+
 // Viewport ========================================================================
 
 Viewport::Viewport(ComponentCamera* camera_go)
@@ -257,12 +262,6 @@ void Viewport::BeginViewport()
 
 void Viewport::EndViewport()
 {
-	// This will draw the editor skybox too.
-	// Note that the editor skybox will use the default skybox, so if you change the skybox on a 
-	// component camera it will have no effect on the editor skybox.
-	if(camera != nullptr)
-		camera->DrawSkybox();
-
 	// Disables --------------------------------------------
 	glDisable(GL_LIGHTING);
 	glDisable(GL_POLYGON_SMOOTH);
@@ -303,6 +302,11 @@ uint Viewport::GetMSAA()
 uint Viewport::GetTexture()
 {
 	return fbo->GetFBOTexture();
+}
+
+uint Viewport::GetFBO()
+{
+	return fbo->GetFBO();
 }
 
 bool Viewport::CanRender()

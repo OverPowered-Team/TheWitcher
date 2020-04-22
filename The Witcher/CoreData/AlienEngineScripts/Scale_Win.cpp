@@ -33,8 +33,8 @@ void Scale_Win::Start()
 	for (int i = 1; i <= Scores_Data::player1_kills; ++i)
 	{
 		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
+		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
 
 		Invoke([this, random_pos_x, random_pos_z]() -> void
 			{
@@ -49,8 +49,8 @@ void Scale_Win::Start()
 	for (int i = 1; i <= Scores_Data::player2_kills; ++i)
 	{
 		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
+		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
 
 		Invoke([this, random_pos_x, random_pos_z]() -> void
 			{
