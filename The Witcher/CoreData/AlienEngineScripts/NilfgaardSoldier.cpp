@@ -267,7 +267,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Dizzy") == 0)
 	{
 		state = EnemyState::DYING;
-		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+		GameManager::GetInstance()->player_manager->IncreaseUltimateCharge(10);
 		//need to know last enemy who hit him to count kill?
 	}
 }
