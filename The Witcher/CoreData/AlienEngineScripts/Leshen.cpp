@@ -69,7 +69,16 @@ void Leshen::CleanUpEnemy()
 float Leshen::GetDamaged(float dmg, PlayerController* player)
 {
 	HandleHitCount();
+	LOG("hp remaining %f", stats["Health"].GetValue());
 	return Enemy::GetDamaged(dmg, player);
+}
+
+void Leshen::OrientToPlayer(int target)
+{
+	direction = -(player_controllers[target]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
 }
 
 void Leshen::SetStats(const char* json)
@@ -156,13 +165,24 @@ void Leshen::LaunchAction()
 	case Leshen::ActionType::NONE:
 		break;
 	case Leshen::ActionType::ROOT:
-		LaunchRootAction();
+		animator->PlayState("Roots");
 		break;
 	case Leshen::ActionType::MELEE:
 		LaunchMeleeAction();
+		animator->PlayState("Melee");
 		break;
 	case Leshen::ActionType::CROWS:
-		LaunchCrowsAction();
+		animator->PlayState("Crows");
+		if (player_rooted[0]) {
+			crows_target = 0;
+		}
+		else if (player_rooted[1]) {
+			crows_target = 1;
+		}
+		else {
+			crows_target = rand() % 1;
+		}
+		OrientToPlayer(crows_target);
 		break;
 	case Leshen::ActionType::CLOUD:
 		LaunchCloudAction();
@@ -176,11 +196,23 @@ void Leshen::LaunchAction()
 
 void Leshen::LaunchRootAction()
 {
-	CreateRoot();
+	root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+	root_1->GetComponent<RootLeshen>()->leshen = this;
+	root_1->GetComponent<RootLeshen>()->target = 0;
+
+
+	root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+	root_2->GetComponent<RootLeshen>()->leshen = this;
+	root_2->GetComponent<RootLeshen>()->target = 1;
 }
 
 void Leshen::LaunchMeleeAction()
 {
+	if (player_distance[0] < player_distance[1])
+		OrientToPlayer(0);
+	else {
+		OrientToPlayer(1);
+	}
 }
 
 void Leshen::LaunchCrowsAction()
@@ -188,12 +220,15 @@ void Leshen::LaunchCrowsAction()
 	crows = GameObject::Instantiate(crow_prefab, transform->GetGlobalPosition());
 	if (player_rooted[0]) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
+		crows_target = 0;
 	}
 	else if (player_rooted[1]){
 		crows->GetComponent<CrowsLeshen>()->target = 1;
+		crows_target = 1;
 	}
 	else {
 		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
+		crows_target = crows->GetComponent<CrowsLeshen>()->target;
 	}
 
 	crows->GetComponent<CrowsLeshen>()->leshen = this;
@@ -310,17 +345,6 @@ void Leshen::EndCrowsAction(GameObject* crow)
 void Leshen::EndCloudAction()
 {
 	
-}
-
-void Leshen::CreateRoot()
-{
-	root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
-	root_1->GetComponent<RootLeshen>()->leshen = this;
-	root_1->GetComponent<RootLeshen>()->target = 0;
-
-	root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
-	root_2->GetComponent<RootLeshen>()->leshen = this;
-	root_2->GetComponent<RootLeshen>()->target = 1;
 }
 
 void Leshen::SetActionVariables()

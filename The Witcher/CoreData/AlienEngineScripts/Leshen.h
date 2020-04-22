@@ -27,9 +27,9 @@ public:
 
 	//-----------Data to set probabilities-----------//
 	float player_distance[TOTAL_PLAYERS];
-	float melee_range = 2.0f;
+	float melee_range = 5.0f;
 	bool player_rooted[TOTAL_PLAYERS];
-	float action_cooldown = 3.0f;
+	float action_cooldown = 1.5f;
 	float time_to_action;
 	int times_hitted = 0;
 	//int phase = 1;
@@ -72,6 +72,8 @@ public:
 	void CleanUpEnemy() override;
 	float GetDamaged(float dmg, PlayerController* player) override;
 
+	void OrientToPlayer(int target);
+
 	void SetStats(const char* json) override;
 
 	void SetActionProbabilities();
@@ -102,8 +104,6 @@ public:
 	void EndCrowsAction(GameObject* crow);
 	void EndCloudAction();
 
-	void CreateRoot();
-
 	void SetActionVariables();
 	//void ChangePhase();
 
@@ -121,6 +121,8 @@ ALIEN_FACTORY Leshen* CreateLeshen() {
 	SHOW_VOID_FUNCTION(Leshen::DeactivateCollider, leshen);
 	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->root_prefab);
 	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->crow_prefab);
+	SHOW_VOID_FUNCTION(Leshen::LaunchRootAction, leshen);
+	SHOW_VOID_FUNCTION(Leshen::LaunchCrowsAction, leshen);
 
 	return leshen;
 }
