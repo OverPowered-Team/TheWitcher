@@ -27,7 +27,6 @@ void PlayerController::Start()
 	animator = GetComponent<ComponentAnimator>();
 	controller = GetComponent<ComponentCharacterController>();
 	attacks = GetComponent<PlayerAttacks>();
-
 	audio = GetComponent<ComponentAudioEmitter>();
 
 	camera = Camera::GetCurrentCamera();
@@ -511,8 +510,8 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
+	player_data.speed = float3::zero();
 	GameManager::manager->event_manager->OnPlayerDead(this);
-	controller->velocity = PxExtendedVec3(0, 0, 0);
 }
 
 void PlayerController::Revive()
