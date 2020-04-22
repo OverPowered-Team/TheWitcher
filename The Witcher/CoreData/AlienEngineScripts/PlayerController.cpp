@@ -27,7 +27,6 @@ void PlayerController::Start()
 	animator = GetComponent<ComponentAnimator>();
 	controller = GetComponent<ComponentCharacterController>();
 	attacks = GetComponent<PlayerAttacks>();
-
 	audio = GetComponent<ComponentAudioEmitter>();
 
 	camera = Camera::GetCurrentCamera();
@@ -350,7 +349,6 @@ void PlayerController::RunningInput()
 	{
 		Jump();
 	}
-
 }
 
 void PlayerController::AttackingInput()
@@ -512,8 +510,8 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
-	//GameManager::manager->event_manager->OnPlayerDead(this);
-	controller->velocity = PxExtendedVec3(0, 0, 0);
+	player_data.speed = float3::zero();
+	GameManager::manager->event_manager->OnPlayerDead(this);
 }
 
 void PlayerController::Revive()
@@ -685,6 +683,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
+	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)

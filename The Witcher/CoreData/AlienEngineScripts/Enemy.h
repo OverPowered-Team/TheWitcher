@@ -66,6 +66,7 @@ public:
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
 	Prefab head_prefab;
+	GameObject* head_position;
 
 	std::vector<PlayerController*> player_controllers;
 

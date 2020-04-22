@@ -227,10 +227,6 @@ void NilfgaardSoldier::UpdateEnemy()
 
 }
 
-void NilfgaardSoldier::CleanUpEnemy()
-{
-}
-
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
