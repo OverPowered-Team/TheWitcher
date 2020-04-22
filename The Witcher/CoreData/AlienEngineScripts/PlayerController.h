@@ -42,11 +42,13 @@ public:
 		float3 speed = float3::zero();
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
+		float gravity = 9.8f;
 		std::map<std::string, Stat> stats;
 
 		PlayerType player_type = PlayerType::GERALT;
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+		bool can_move = true;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
@@ -56,18 +58,20 @@ public:
 
 	void Start();
 	void Update();
+	void PreUpdate();
 
 	void UpdateInput();
-
-	void IdleUpdate();
-	void RunningUpdate();
-	void AttackingUpdate();
+	void IdleInput();
+	void RunningInput();
+	void AttackingInput();
 
 	bool AnyKeyboardInput();
 
 	void HandleMovement();
 	void EffectsUpdate();
 	void Jump();
+	void Fall();
+	void Roll();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
@@ -98,10 +102,8 @@ public:
 
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
-	bool can_jump = true;
 	float2 movement_input;
 	float stick_threshold = 0.1f;
-	float gravity = 10;
 
 	float revive_range = 5.0f;
 
@@ -160,6 +162,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
@@ -170,3 +173,19 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	return player;
 }
+
+/*class PlayerState {
+	PlayerState() {}
+	virtual ~PlayerState() {}
+
+	virtual void HandleInput() {}
+	virtual void Update() {}
+};
+
+class OnGroundState: public PlayerState {
+	OnGroundState() {}
+	virtual ~OnGroundState() {}
+
+	virtual void HandleInput() {}
+	virtual void Update() {}
+};*/

@@ -8,7 +8,7 @@
 
 void Enemy::Awake()
 {
-	GameManager::manager->enemy_manager->AddEnemy(this);
+	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 }
 
@@ -18,8 +18,6 @@ void Enemy::StartEnemy()
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	state = EnemyState::IDLE;
 	std::string json_str;
-
-	//character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -37,6 +35,13 @@ void Enemy::StartEnemy()
 	}
 
 	SetStats(json_str.data());
+
+	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+
+	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+		(*it)->OnStop();
+	}
 }
 
 void Enemy::UpdateEnemy()
@@ -97,28 +102,11 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
-	delete animator;
-	animator = nullptr;
-	delete character_ctrl;
-	character_ctrl = nullptr;
-
-	for (auto it_pc = player_controllers.begin(); it_pc != player_controllers.end();)
-	{
-		delete (*it_pc);
-		it_pc = player_controllers.erase(it_pc);
-	}
-	for (auto it_eff = effects.begin(); it_eff != effects.end();)
-	{
-		delete (*it_eff);
-		it_eff = effects.erase(it_eff);
-	}
-
 	if (decapitated_head)
 	{
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
-
 }
 
 void Enemy::SetStats(const char* json)
@@ -142,16 +130,17 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	//character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	character_ctrl->Move(velocity_vec);
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	//character_ctrl->SetRotation(rot);
+	transform->SetGlobalRotation(rot);
 
 	if (distance < stats["AttackRange"].GetValue())
 	{
-		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
@@ -159,8 +148,9 @@ void Enemy::Move(float3 direction)
 	if (distance > stats["VisionRange"].GetValue())
 	{
 		state = Enemy::EnemyState::IDLE;
-		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
 	}
 }
 
@@ -199,7 +189,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
-	//character_ctrl->SetWalkDirection(float3::zero());
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
 		animator->SetBool("dead", true);
@@ -209,12 +199,14 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
-			GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+			//GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 
-			decapitated_head = GameObject::Instantiate(head_prefab, game_object->transform->GetGlobalPosition());
+			decapitated_head = GameObject::Instantiate(head_prefab, head_position->transform->GetGlobalPosition());
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				particles["decapitation_particle"]->Restart();
+
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());

@@ -10,9 +10,9 @@ RelicManager::~RelicManager()
 
 void RelicManager::Start()
 {
-	//spawn = GameObject::FindWithName("SpawnRelics");
+	spawn = GameObject::FindWithName("SpawnRelics");
 
-	if (spawn)
+	if (spawn && spawn->GetChildren().size() > 0)
 	{
 		auto c_trans = spawn->GetComponentsInChildren<ComponentTransform>();
 
@@ -96,6 +96,6 @@ void RelicManager::DropRelic(float3 position)
 			break;
 		}
 	}
-	else
+	else if(random_index <= 100)
 		GameObject::Instantiate(witcher_rage, position);
 }
