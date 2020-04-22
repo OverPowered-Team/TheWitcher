@@ -12,11 +12,11 @@ public:
 	TriggerFog();
 	virtual ~TriggerFog();
 	
-	void OnTriggerEnter(ComponentCollider* collider) override;
-	void OnTriggerExit(ComponentCollider* collider) override;
-
 	void Start();
 	void Update();
+
+	void OnTriggerEnter(ComponentCollider* collider) override;
+	void OnTriggerExit(ComponentCollider* collider) override;
 
 	int collider_index = 0;
 	ProgressiveFog* parentScript = nullptr;
