@@ -70,6 +70,7 @@ public:
 	void HandleMovement();
 	void EffectsUpdate();
 	void Jump();
+	void Fall();
 	void Roll();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
@@ -172,3 +173,19 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	return player;
 }
+
+/*class PlayerState {
+	PlayerState() {}
+	virtual ~PlayerState() {}
+
+	virtual void HandleInput() {}
+	virtual void Update() {}
+};
+
+class OnGroundState: public PlayerState {
+	OnGroundState() {}
+	virtual ~OnGroundState() {}
+
+	virtual void HandleInput() {}
+	virtual void Update() {}
+};*/
