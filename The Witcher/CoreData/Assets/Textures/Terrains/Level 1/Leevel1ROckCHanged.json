@@ -1,0 +1,69 @@
+{
+    "format": {
+        "version": "1.0"
+    },
+    "shaders": {
+        "Main shader": {
+            "parameters": {
+                "Coat Layer": {
+                    "coating_ior": 1.5,
+                    "coating_opacity": 1,
+                    "coating_opacity_use_tex": true,
+                    "coating_rough": 0.009999999776482582,
+                    "coating_rough_use_tex": true,
+                    "coating_surface_behavior": 0
+                },
+                "Common Parameters": {
+                    "ao_intensity": 0.75,
+                    "emissive_intensity": 1,
+                    "horizonFade": 1.2999999523162842,
+                    "nbSamples": 32
+                },
+                "Subsurface Scattering Parameters": {
+                    "sssColor": [
+                        0.7009999752044678,
+                        0.3009999990463257,
+                        0.3050000071525574
+                    ],
+                    "sssEnabled": true,
+                    "sssScale": 0.5,
+                    "sssType": 1
+                }
+            },
+            "shader": "pbr-coated",
+            "shaderInstance": "Main shader"
+        }
+    },
+    "texturesets": {
+        "BossEarth": {
+            "shader": "Main shader"
+        },
+        "BossTallGround": {
+            "shader": "Main shader"
+        },
+        "GhoulsLow": {
+            "shader": "Main shader"
+        },
+        "MudDrowners": {
+            "shader": "Main shader"
+        },
+        "Ravine": {
+            "shader": "Main shader"
+        },
+        "Terrain2_400k": {
+            "shader": "Main shader"
+        },
+        "Terrain500k": {
+            "shader": "Main shader"
+        },
+        "Transition2": {
+            "shader": "Main shader"
+        },
+        "t3": {
+            "shader": "Main shader"
+        },
+        "terrains": {
+            "shader": "Main shader"
+        }
+    }
+}
