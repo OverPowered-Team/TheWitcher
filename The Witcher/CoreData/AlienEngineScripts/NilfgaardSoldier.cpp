@@ -62,6 +62,7 @@ void NilfgaardSoldier::Action()
 	{
 	case NilfgaardSoldier::NilfgaardType::SWORD:
 		animator->PlayState("Attack");
+		audio_emitter->StartSound("SoldierSword");
 		state = EnemyState::ATTACK;
 		break;
 	case NilfgaardSoldier::NilfgaardType::ARCHER:
@@ -140,6 +141,7 @@ void NilfgaardSoldier::ShootAttack()
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
+	audio_emitter->StartSound("SoldierShoot");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateArrow());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
@@ -147,7 +149,7 @@ void NilfgaardSoldier::ShootAttack()
 
 Quat NilfgaardSoldier::RotateArrow()
 {
-	float3 front = float3::unitZ(); //front of the object
+	float3 front = -float3::unitZ(); //front of the object
 	Quat rot1 = Quat::RotateFromTo(front, direction);
 
 	float3 desiredUp = float3::unitY();
@@ -225,6 +227,7 @@ void NilfgaardSoldier::UpdateEnemy()
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		//Ori Ori function sintaxis
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		audio_emitter->StartSound("SoldierDeath");
 		state = EnemyState::DEAD;
 		m_controller->is_combat = false;
 		m_controller->has_changed = true;
@@ -283,6 +286,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			break_shield_attack++;
 			LOG("breakshield: %i", break_shield_attack);
 			particles["ClinckEmitter"]->Restart();
+			audio_emitter->StartSound("SoldierBlock");
 		}
 		else
 		{
