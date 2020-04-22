@@ -22,7 +22,7 @@ void MainMenu_Buttons::ExitGame()
 void MainMenu_Buttons::Controls()
 {
 	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
-	((Extra_Menus*)GameObject::FindWithName("Extra_Menus")->GetComponentScript("Extra_Menus"))->MenuSpawn(Extra_Menus::MENU::CONTROLS);
+	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::CONTROLS);
 	GameObject::FindWithName("Main_Menu")->SetEnable(false);
 }
 

@@ -21,7 +21,10 @@ void CameraMovement::Update()
 {   
     switch (state) {
     case CameraState::DYNAMIC: {
-        transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        if (smooth_camera)
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateMidPoint() + trg_offset) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+        else
+            transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
         break;
     }
     case CameraState::STATIC:
@@ -138,15 +141,12 @@ void CameraMovement::OnDrawGizmos()
 
 void CameraMovement::SearchAndAssignPlayers()
 {
-    GameObject** get_players = nullptr;
-    uint size;
-    size = GameObject::FindGameObjectsWithTag("Player", &get_players);
-    for (int i = 0; i < size; i++) {
-        if (std::find(players.begin(), players.end(), get_players[i]) == players.end())
-            players.push_back(get_players[i]);
+    auto objs = GameObject::FindGameObjectsWithTag("Player");
+    for (auto i = objs.begin(); i != objs.end(); i++) {
+        if (std::find(players.begin(), players.end(), *i) == players.end())
+            players.push_back(*i);
     }
-    GameObject::FreeArrayMemory((void***)&get_players);
-    num_curr_players = size;
+    num_curr_players = objs.size();
     LOG("player num %i", num_curr_players);
 }
 

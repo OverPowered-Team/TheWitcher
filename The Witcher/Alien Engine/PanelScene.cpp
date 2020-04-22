@@ -27,6 +27,11 @@ PanelScene::PanelScene(const std::string& panel_name, const SDL_Scancode& key1_d
 	: Panel(panel_name, key1_down, key2_repeat, key3_repeat_extra)
 {
 	shortcut = App->shortcut_manager->AddShortCut("Panel Scene", key1_down, std::bind(&Panel::ChangeEnable, this), key2_repeat, key3_repeat_extra);
+	App->shortcut_manager->AddShortCut("Translate", SDL_SCANCODE_W, std::bind(&PanelScene::Translate, this));
+	App->shortcut_manager->AddShortCut("Rotate", SDL_SCANCODE_E, std::bind(&PanelScene::Rotate, this));
+	App->shortcut_manager->AddShortCut("Scale", SDL_SCANCODE_R, std::bind(&PanelScene::Scale, this));
+	App->shortcut_manager->AddShortCut("World Mode", SDL_SCANCODE_W, std::bind(&PanelScene::ChangeWorldMode, this), SDL_SCANCODE_LSHIFT);
+	App->shortcut_manager->AddShortCut("Local Mode", SDL_SCANCODE_L, std::bind(&PanelScene::ChangeLocalMode, this), SDL_SCANCODE_LSHIFT);
 }
 
 PanelScene::~PanelScene()
@@ -139,11 +144,24 @@ void PanelScene::PanelLogic()
 				u64 ID = App->resources->GetIDFromAlienPath(path.data());
 				if (ID != 0) {
 					ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
-					prefab->ConvertToGameObjects(App->objects->GetRoot(false));
-					if (Time::IsInGameState()) {
-						Prefab::InitScripts(App->objects->GetRoot(false)->children.back());
+					GameObject* prefab_parent = nullptr;
+					if (App->objects->current_scenes.empty() || App->objects->GetSelectedObjects().empty()) {
+						if (App->objects->prefab_scene) {
+							prefab_parent = App->objects->GetRoot(false);
+						}
+						else {
+							prefab_parent = App->objects->GetRoot(true)->children.front();
+						}
 					}
-					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, App->objects->GetRoot(false)->children.back());
+					else {
+						prefab_parent = App->objects->GetRoot(false);
+					}
+					prefab_parent = App->objects->GetRoot(false);
+					prefab->ConvertToGameObjects(prefab_parent);
+					if (Time::IsInGameState()) {
+						Prefab::InitScripts(prefab_parent->children.back());
+					}
+					ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, prefab_parent->children.back());
 				}
 			}
 
@@ -166,7 +184,7 @@ void PanelScene::PanelLogic()
 			}
 
 			// drop scene
-			if (node != nullptr && node->type == FileDropType::SCENE) {
+			if (node != nullptr && node->type == FileDropType::SCENE && !App->objects->prefab_scene) {
 				static char curr_dir[MAX_PATH];
 				GetCurrentDirectoryA(MAX_PATH, curr_dir);
 				std::string full_scene_path = curr_dir + std::string("/") + node->path + node->name;
@@ -212,65 +230,102 @@ void PanelScene::PanelLogic()
 
 void PanelScene::GuizmosLogic()
 {
-	if (!App->objects->GetSelectedObjects().empty()) {
-		bool block_move = false;
-		float4x4 trans = float4x4::zero();
+	if (!App->objects->GetSelectedObjects().empty()) 
+	{
 		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
-		auto item = selected.begin();
-		for (; item != selected.end(); ++item) {
-			if (*item != nullptr) {
-				if ((*item)->is_static) {
-					block_move = true;
-				}
-				trans += (*item)->GetComponent<ComponentTransform>()->global_transformation;
-			}
-		}
 
-		float4x4 view_transposed = App->camera->fake_camera->frustum.ViewMatrix();
-		view_transposed.Transpose();
-		float4x4 projection_transposed = App->camera->fake_camera->frustum.ProjectionMatrix();
-		projection_transposed.Transpose();
-		float4x4 object_transform_matrix = trans / selected.size();
-		object_transform_matrix.Transpose();
-		float4x4 delta_matrix;
+		float4x4 view_transposed = float4x4(App->camera->fake_camera->frustum.ViewMatrix()).Transposed();
+		float4x4 projection_transposed = float4x4(App->camera->fake_camera->frustum.ProjectionMatrix()).Transposed();
+		math::float4x4 object_transform_matrix;
+		math::float3 globalPosition = float3::zero();
+		math::float3 globalSize = float3::zero();
+		
+
+		if (selected.size() > 1)
+		{
+			for (auto item = selected.begin(); item != selected.end(); ++item)
+			{
+				if (*item != nullptr)
+				{
+					if ((*item)->is_static)
+						return;
+
+					globalPosition += (*item)->transform->GetGlobalMatrix().TranslatePart();
+					globalSize += (*item)->transform->GetGlobalMatrix().GetScale();
+				}
+			}
+
+			globalPosition /= selected.size();
+			globalSize /= selected.size();
+			object_transform_matrix = float4x4::FromTRS(globalPosition, math::Quat::identity(), globalSize).Transposed();
+		}
+		else
+		{
+			object_transform_matrix = (*selected.begin())->transform->GetGlobalMatrix().Transposed();
+		}
 
 		ImGuizmo::SetRect(viewport_min.x, viewport_min.y, current_viewport_size.x, current_viewport_size.y);
 		ImGuizmo::SetDrawlist();
 
-		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, guizmo_mode, object_transform_matrix.ptr(), delta_matrix.ptr());
+		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation,  (guizmo_operation!= ImGuizmo::OPERATION::SCALE) ? guizmo_mode : ImGuizmo::MODE::LOCAL, object_transform_matrix.ptr());
+		
 		static bool guizmo_return = true;
 		static bool duplicate = false;
-		if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && !block_move && ImGui::IsWindowFocused())
-		{
-			if (!duplicate && (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_REPEAT)) {
-				duplicate = true;
-				App->objects->DuplicateObjects();
-			}
-			GameObject* root = App->objects->GetRoot(true);
-			item = selected.begin();
-			for (; item != selected.end(); ++item) {
-				if (*item != nullptr) {
+
+			if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && ImGui::IsWindowFocused())
+			{
+				if (!duplicate && (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_REPEAT)) {
+					duplicate = true;
+					App->objects->DuplicateObjects();
+				}
+				if (selected.size() > 1)
+				{
+					object_transform_matrix.Transpose();
+					math::float3 transformPos = object_transform_matrix.TranslatePart();
+					math::Quat resformQuat = object_transform_matrix.RotatePart().ToQuat();
+					math::float3 transformScale = object_transform_matrix.GetScale();
+
+					for (auto item = selected.begin(); item != selected.end(); ++item) {
+						if (*item != nullptr) 
+						{
+							if (guizmo_return)
+								ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*item)->transform);
+							
+							math::float3 finalPos, finalScale;
+							math::Quat finalRot;
+
+							(*item)->transform->GetGlobalMatrix().Decompose(finalPos, finalRot, finalScale);
+
+							finalPos += transformPos - globalPosition;
+							finalRot = resformQuat * finalRot;
+							finalScale += transformScale - globalSize;
+
+							(*item)->transform->SetGlobalTransformation(math::float4x4::FromTRS(finalPos, finalRot, finalScale));
+
+						}
+						if (guizmo_return && (*item) == selected.back()) 
+							guizmo_return = false;
+						
+					}
+				}
+				else
+				{
+					if (guizmo_return) 
+						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*selected.begin())->transform);
+			
+					(*selected.begin())->transform->SetGlobalTransformation((*selected.begin())->parent->transform->global_transformation.Inverted() * object_transform_matrix.Transposed());
+
 					if (guizmo_return) {
-						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*item)->GetComponent<ComponentTransform>());
-					}
-					if ((*item)->parent != root)
-					{
-						ComponentTransform* parent_transform = (ComponentTransform*)(*item)->parent->GetComponent(ComponentType::TRANSFORM);
-						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(parent_transform->global_transformation.Inverted() * delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
-					}
-					else {
-						(*item)->GetComponent<ComponentTransform>()->SetGlobalTransformation(delta_matrix.Transposed() * (*item)->GetComponent<ComponentTransform>()->global_transformation);
+						guizmo_return = false;
 					}
 				}
-				if (guizmo_return && (*item) == selected.back()) {
-					guizmo_return = false;
-				}
+			
 			}
-		}
-		else if (!guizmo_return) {
-			guizmo_return = true;
-			duplicate = false;
-		}
+			else if (!guizmo_return) {
+				guizmo_return = true;
+				duplicate = false;
+			}
+		
 	}
 }
 
@@ -280,18 +335,6 @@ void PanelScene::GuizmosControls()
 		return;
 	}
 
-	if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)&& (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
-	{
-		guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-	{
-		guizmo_operation = ImGuizmo::OPERATION::ROTATE;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-	{
-		guizmo_operation = ImGuizmo::OPERATION::SCALE;
-	}
 	if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
 	{
 		guizmo_mode = ImGuizmo::MODE::WORLD;
@@ -300,4 +343,48 @@ void PanelScene::GuizmosControls()
 	{
 		guizmo_mode = ImGuizmo::MODE::LOCAL;
 	}
+	
+
+}
+void PanelScene::ChangeWorldMode()
+{
+	if (ImGuizmo::IsUsing()) 
+	{
+		return;
+	}
+
+	if ((App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT))
+	{
+		guizmo_mode = ImGuizmo::MODE::WORLD;
+	}
+}
+void PanelScene::ChangeLocalMode()
+{
+	if (ImGuizmo::IsUsing()) {
+		return;
+	}
+		guizmo_mode = ImGuizmo::MODE::LOCAL;
+}
+void PanelScene::Translate()
+{
+	if (ImGuizmo::IsUsing()) {
+		return;
+	}
+	if((App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) && (App->input->GetKey(SDL_SCANCODE_LSHIFT) != KEY_REPEAT))
+		guizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+}
+void PanelScene::Rotate()
+{
+	if (ImGuizmo::IsUsing()) {
+		return;
+	}
+		guizmo_operation = ImGuizmo::OPERATION::ROTATE;
+
+}
+void PanelScene::Scale()
+{
+	if (ImGuizmo::IsUsing()) {
+		return;
+	}
+	guizmo_operation = ImGuizmo::OPERATION::SCALE;
 }

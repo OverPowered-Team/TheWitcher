@@ -69,6 +69,8 @@ Index of this file:
 #pragma GCC diagnostic ignored "-Wclass-memaccess"          // [__GNUC__ >= 8] warning: 'memset/memcpy' clearing/writing an object of type 'xxxx' with no trivial copy-assignment; use assignment or value-initialization instead
 #endif
 
+#include "..\Application.h"
+#include "..\ModuleUI.h"
 //-------------------------------------------------------------------------
 // Data
 //-------------------------------------------------------------------------
@@ -3202,7 +3204,8 @@ bool ImGui::InputDouble(const char* label, double* v, double step, double step_f
 bool ImGui::InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
 {
     IM_ASSERT(!(flags & ImGuiInputTextFlags_Multiline)); // call InputTextMultiline()
-    return InputTextEx(label, NULL, buf, (int)buf_size, ImVec2(0,0), flags, callback, user_data);
+    bool ret = InputTextEx(label, NULL, buf, (int)buf_size, ImVec2(0, 0), flags, callback, user_data);
+    return  ret;
 }
 
 bool ImGui::InputTextMultiline(const char* label, char* buf, size_t buf_size, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
@@ -4039,11 +4042,16 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         state->UserCallback = NULL;
         state->UserCallbackData = NULL;
     }
+    if (g.ActiveId == id)
+    {
+        App->ui->update_shortcut = false;
+    }
 
     // Release active ID at the end of the function (so e.g. pressing Return still does a final application of the value)
     if (clear_active_id && g.ActiveId == id)
+    {
         ClearActiveID();
-
+    }
     // Render frame
     if (!is_multiline)
     {
@@ -7889,7 +7897,7 @@ void ImGui::Title(const char* title, int hierarchy) // Type 1: Panel | 2: Menu
     }
 
     float window_width = ImGui::GetWindowContentRegionWidth();
-    float separation;
+    float separation = 0;
 
     if (style.SeparationType == ImGuiSeparationType::ImGui_WindowSeparation)
     {

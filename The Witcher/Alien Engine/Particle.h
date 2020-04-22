@@ -12,9 +12,22 @@
 class ParticleSystem;
 class ComponentCamera;
 
-#define DEGTORAD 0.0174532925199432957f // 1degree x (pi rads / 180 degrees) = 0.017 rads
-#define RADTODEG 57.295779513082320876f // 1rad x (180 degrees / pi rads) = 57 degrees
+
 #define ANGULAR_CAP 200 // angular velocity will be capped at 360 degrees x second
+#define MAX_ANIMATIONS 16
+
+
+struct Frame {
+	float x0, x1, y0, y1;
+};
+
+struct UVpoint {
+	float U, V;
+};
+
+struct Animation {
+	int startFrame, endFrame = 0;
+};
 
 struct ParticleInfo
 {
@@ -29,7 +42,7 @@ struct ParticleInfo
 	float3 force = float3(0.f, 0.0f, 0.f); // float3::zero;
 	float speed = 1.0f;
 
-	float4 color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	float4 color = float4(1.0f, 0.0f, 0.8f, 1.0f); // default pink
 	float size = 1.f;
 	float4 lightColor = float4::zero;
 
@@ -42,9 +55,20 @@ struct ParticleInfo
 	bool axisRot3D = false;
 	bool axisRot3DStart = false;
 
-	std::vector<uint>* animation = nullptr;
+	
+	// Animation
+	UVpoint UVs[4];
+	std::vector<Frame> frames;
+	Animation currentAnimation;
+	Animation animations[MAX_ANIMATIONS];
 	float animSpeed = 0.f;
+	bool animated = false;
+	//int currentFrame = 0;
 
+	//Stretch billboard
+	float lengthScale = 1.0f;
+	float speedScale = 0.0f;
+	float velocityScale = 0.0f;
 };
 
 struct ParticleMutableInfo
@@ -92,7 +116,11 @@ public:
 	float Lerp(float v0, float v1, float t);
 	void SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera, float4x4 globalMatrix);
 
-	void SetAnimation(std::vector<uint>& uvs, float speed);
+	//Animation
+	void UpdateUVs();
+	void PlayFrame(int frame);
+	void ResetFrame();
+
 public:
 
 	bool to_delete = false;
@@ -108,13 +136,13 @@ private:
 	ParticleMutableInfo endInfo;
 
 	float currentLifeTime = 0.f;
-	uint currentFrame = 0u;
 	float animationTime = 0.f;
+	int currentFrame = 0;
 	
-
 	// -------- Lerping -------------
 
 	float rateToLerp = 0.f;
 	float t = 0.0f;
+	//float sheetWidth, sheetHeight = 0.f;
 
 };

@@ -14,8 +14,8 @@ void Relic_Notification::Start()
 	relic_notification = GameObject::FindWithName("Relics_Notification");
 	geralt_portrait = game_object->GetChild("Relics_Notification")->GetChild("Portrait_Relics")->GetChild("Geralt_Relics_Portrait");
 	yennefer_portrait = game_object->GetChild("Relics_Notification")->GetChild("Portrait_Relics")->GetChild("Yennefer_Relics_Portrait");
-	relic_title = (ComponentText*)game_object->GetChild("Relics_Notification")->GetChild("Relic_Name")->GetComponent(ComponentType::UI_TEXT);
-	description = (ComponentText*)game_object->GetChild("Relics_Notification")->GetChild("Relic_Description")->GetComponent(ComponentType::UI_TEXT);
+	relic_title = game_object->GetChild("Relics_Notification")->GetChild("Relic_Name")->GetComponent<ComponentText>();
+	description = game_object->GetChild("Relics_Notification")->GetChild("Relic_Description")->GetComponent<ComponentText>();
 	combo = game_object->GetChild("Relics_Notification")->GetChild("Combo_Container");
 
 	L_combo_images.resize(5);

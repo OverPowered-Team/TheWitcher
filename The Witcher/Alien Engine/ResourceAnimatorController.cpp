@@ -400,7 +400,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 
 		float to_end = state->fade_duration - state->fade_time;
 
-		if (to_end >= 0) {
+		if (to_end > 0) {
 
 			state->fade_time += (Time::GetDT());
 			UpdateState(state->next_state);

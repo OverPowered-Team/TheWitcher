@@ -26,6 +26,8 @@
 #include "mmgr/mmgr.h"
 #include "Viewport.h"
 
+#include "Optick/include/optick.h"
+
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
 	type = ComponentType::CAMERA;
@@ -66,12 +68,26 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 	// This is the default skybox
 
-	cubemap->pos_x.assign(LIBRARY_TEXTURES_FOLDER"575523041464209442.dds");
-	cubemap->neg_x.assign(LIBRARY_TEXTURES_FOLDER"2272049821688510999.dds");
-	cubemap->pos_y.assign(LIBRARY_TEXTURES_FOLDER"8243941029542624066.dds");
-	cubemap->neg_y.assign(LIBRARY_TEXTURES_FOLDER"13353609087236361933.dds");
-	cubemap->pos_z.assign(LIBRARY_TEXTURES_FOLDER"14034231489549923375.dds");
-	cubemap->neg_z.assign(LIBRARY_TEXTURES_FOLDER"10216792741298181251.dds");
+	/*cubemap->pos_x.assign(LIBRARY_TEXTURES_FOLDER"6647353476053033927.dds");
+	cubemap->neg_x.assign(LIBRARY_TEXTURES_FOLDER"16365362325777703218.dds");
+	cubemap->pos_y.assign(LIBRARY_TEXTURES_FOLDER"13945118401434491814.dds");
+	cubemap->neg_y.assign(LIBRARY_TEXTURES_FOLDER"13294645959885894553.dds");
+	cubemap->neg_z.assign(LIBRARY_TEXTURES_FOLDER"882162789730207050.dds");
+	cubemap->pos_z.assign(LIBRARY_TEXTURES_FOLDER"13059454142476507694.dds");*/
+
+	/*cubemap->neg_x.assign(LIBRARY_TEXTURES_FOLDER"6647353476053033927.dds");
+	cubemap->pos_x.assign(LIBRARY_TEXTURES_FOLDER"16365362325777703218.dds");
+	cubemap->pos_y.assign(LIBRARY_TEXTURES_FOLDER"13945118401434491814.dds");
+	cubemap->neg_y.assign(LIBRARY_TEXTURES_FOLDER"13294645959885894553.dds");
+	cubemap->pos_z.assign(LIBRARY_TEXTURES_FOLDER"882162789730207050.dds");
+	cubemap->neg_z.assign(LIBRARY_TEXTURES_FOLDER"13059454142476507694.dds");*/
+
+	cubemap->neg_x.assign(LIBRARY_TEXTURES_FOLDER"6647353476053033927.dds");
+	cubemap->pos_x.assign(LIBRARY_TEXTURES_FOLDER"16365362325777703218.dds");
+	cubemap->pos_y.assign(LIBRARY_TEXTURES_FOLDER"13945118401434491814.dds");
+	cubemap->neg_y.assign(LIBRARY_TEXTURES_FOLDER"13294645959885894553.dds");
+	cubemap->pos_z.assign(LIBRARY_TEXTURES_FOLDER"882162789730207050.dds");
+	cubemap->neg_z.assign(LIBRARY_TEXTURES_FOLDER"13059454142476507694.dds");
 
 	auto faces = cubemap->ToVector();
 	skybox_texture_id = skybox->LoadCubeMapFromLibraryFiles(faces);
@@ -117,6 +133,15 @@ ComponentCamera::~ComponentCamera()
 				App->camera->selected_viewport->SetCamera(nullptr);
 			}
 			#endif
+
+			if (App->objects->game_viewport->GetCamera() == this) {
+				if (!App->objects->game_cameras.empty()) {
+					App->objects->game_viewport->SetCamera(App->objects->game_cameras.front());
+				}
+				else {
+					App->objects->game_viewport->SetCamera(nullptr);
+				}
+			}
 			break;
 		}
 	}
@@ -718,6 +743,7 @@ float3 ComponentCamera::GetBackgroundColor() const
 
 void ComponentCamera::DrawSkybox()
 {
+	OPTICK_EVENT();
 	if (App->renderer3D->render_skybox && !activeFog)
 	{
 		glDepthFunc(GL_LEQUAL);
@@ -833,6 +859,7 @@ void ComponentCamera::Clone(Component* clone)
 
 void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetNumber("VerticalFov", vertical_fov);
@@ -872,6 +899,7 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 
 void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
 	enabled = to_load->GetBoolean("Enabled");
 	vertical_fov = to_load->GetNumber("VerticalFov");
 	horizontal_fov = to_load->GetNumber("HoritzontalFov");

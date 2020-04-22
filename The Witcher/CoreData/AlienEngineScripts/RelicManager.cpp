@@ -12,19 +12,15 @@ void RelicManager::Start()
 {
 	spawn = GameObject::FindWithName("SpawnRelics");
 
-	if (spawn)
+	if (spawn && spawn->GetChildren().size() > 0)
 	{
-		ComponentTransform** c_trans = nullptr;
-		int size = spawn->GetComponentsInChildren(ComponentType::TRANSFORM, (Component***)&c_trans, false);
+		auto c_trans = spawn->GetComponentsInChildren<ComponentTransform>();
 
-		for (uint i = 0u; i < size; ++i) {
+		for (auto i = c_trans.begin(); i != c_trans.end(); ++i) {
 
-			DropRelic(c_trans[i]->GetGlobalPosition());
+			DropRelic((*i)->GetGlobalPosition());
 		}
-
-		GameObject::FreeArrayMemory((void***)&c_trans);
 	}
-	
 }
 
 void RelicManager::Update()

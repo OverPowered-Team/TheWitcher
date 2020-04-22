@@ -250,7 +250,7 @@ bool ComponentMesh::DrawInspector()
 	ImGui::PopID();
 	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader(name, &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(name, &not_destroy))
 	{
 		RightClickMenu("Mesh");
 		ImGui::Spacing();
@@ -505,6 +505,7 @@ const OBB ComponentMesh::GetOBB() const
 
 void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("ViewMesh", view_mesh);
 	to_save->SetBoolean("Wireframe", wireframe);
@@ -547,6 +548,7 @@ void ComponentMesh::SaveComponent(JSONArraypack* to_save)
 
 void ComponentMesh::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
 	view_mesh = to_load->GetBoolean("ViewMesh");
 	wireframe = to_load->GetBoolean("Wireframe");
 	view_vertex_normals = to_load->GetBoolean("ViewVertexNormals");

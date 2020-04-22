@@ -54,5 +54,5 @@ public:
 	ResourceFontData fontData;
 
 	ResourceShader* text_shader = nullptr;
-	ResourceShader* text_ortho = nullptr;
+	ResourceShader* background_shader = nullptr;
 };

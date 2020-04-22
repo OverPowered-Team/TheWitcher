@@ -42,6 +42,7 @@
 
 #include "mmgr/mmgr.h"
 
+#include "ComponentCollider.h"
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
 #include "ComponentCapsuleCollider.h"
@@ -106,7 +107,7 @@ void PanelInspector::PanelLogic()
 			if (*item != nullptr)
 			{
 				if ((*item)->DrawInspector()) {
-					if (!(*item)->not_destroy) {
+					if (!(*item)->not_destroy && (*item)->serialize) {
 						to_destroy = (*item);
 						delete_panel = &(*item)->not_destroy;
 						*delete_panel = !(*delete_panel);
@@ -559,10 +560,27 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::UI))
 					{
 						ComponentCanvas* canvas = GetCanvas();
+						Component* comp_emitter = nullptr;
+						Component* comp_text = nullptr;
+
+						GameObject* object_text = App->objects->CreateEmptyGameObject(nullptr);
+
 						comp = new ComponentButton(selected);
+						comp_emitter = new ComponentAudioEmitter(selected);
+						comp_text = new ComponentText(object_text);
+
 						dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
+						dynamic_cast<ComponentUI*>(comp_text)->SetCanvas(canvas);
+
+						selected->SetName("Button");
 						selected->AddComponent(comp);
+						selected->AddComponent(comp_emitter);
+
+						object_text->SetName("Text");
+						object_text->AddComponent(comp_text);
+
 						App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
+						App->objects->ReparentGameObject(object_text, selected, false);
 					}
 
 					else
@@ -584,10 +602,12 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::UI))
 					{
 						ComponentCanvas* canvas = GetCanvas();
-
+						Component* comp_emitter = nullptr;	
 						comp = new ComponentCheckbox(selected);
+						comp_emitter = new ComponentAudioEmitter(selected);
 						dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 						selected->AddComponent(comp);
+						selected->AddComponent(comp_emitter);
 						App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
 					}
 					else
@@ -597,9 +617,12 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::UI))
 					{
 						ComponentCanvas* canvas = GetCanvas();
+						Component* comp_emitter = nullptr;
 						comp = new ComponentSlider(selected);
+						comp_emitter = new ComponentAudioEmitter(selected);
 						dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 						selected->AddComponent(comp);
+						selected->AddComponent(comp_emitter);
 						App->objects->ReparentGameObject(selected, canvas->game_object_attached, false);
 
 					}
@@ -631,32 +654,20 @@ void PanelInspector::ButtonAddComponent()
 						LOG_ENGINE("The selected object already has Component UI!");
 					break; }
 				case ComponentType::BOX_COLLIDER: {
-					if (selected->GetComponent<ComponentCollider>() == nullptr)
-					{
 						comp = new ComponentBoxCollider(selected);
 						selected->AddComponent(comp);
-					}
 					break; }
 				case ComponentType::SPHERE_COLLIDER: {
-					if (selected->GetComponent<ComponentCollider>() == nullptr)
-					{
 						comp = new ComponentSphereCollider(selected);
 						selected->AddComponent(comp);
-					}
 					break; }
 				case ComponentType::CAPSULE_COLLIDER: {
-					if (selected->GetComponent<ComponentCollider>() == nullptr)
-					{
 						comp = new ComponentCapsuleCollider(selected);
 						selected->AddComponent(comp);
-					}
 					break; }
 				case ComponentType::CONVEX_HULL_COLLIDER: {
-					if (selected->GetComponent<ComponentCollider>() == nullptr)
-					{
 						comp = new ComponentConvexHullCollider(selected);
 						selected->AddComponent(comp);
-					}
 					break; }
 				case ComponentType::RIGID_BODY: {
 					if (!selected->HasComponent(ComponentType::RIGID_BODY))

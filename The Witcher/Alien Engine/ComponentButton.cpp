@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "ComponentUI.h"
 #include "ComponentCanvas.h"
+#include "ComponentAudioEmitter.h"
 #include "ReturnZ.h"
 #include "ComponentScript.h"
 #include "ResourceTexture.h"
@@ -25,19 +26,25 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
+
 	to_save->SetNumber("UIType", (int)ui_type);
+
 	to_save->SetString("TextureID", (texture != nullptr) ? std::to_string(texture->GetID()).data() : "0");
 	to_save->SetString("TextureIdleID", (idle_tex != nullptr) ? std::to_string(idle_tex->GetID()).data() : "0");
 	to_save->SetString("TextureHoverID", (hover_tex != nullptr) ? std::to_string(hover_tex->GetID()).data() : "0");
 	to_save->SetString("TextureClickedID", (clicked_tex != nullptr) ? std::to_string(clicked_tex->GetID()).data() : "0");
 	to_save->SetString("TexturePressedID", (pressed_tex != nullptr) ? std::to_string(pressed_tex->GetID()).data() : "0");
 	to_save->SetString("TextureDisabledID", (disabled_tex != nullptr) ? std::to_string(disabled_tex->GetID()).data() : "0");
+
 	to_save->SetColor("ColorCurrent", current_color);
 	to_save->SetColor("ColorIdle", idle_color);
 	to_save->SetColor("ColorHover", hover_color);
 	to_save->SetColor("ColorClicked", clicked_color);
 	to_save->SetColor("ColorPressed", pressed_color);
 	to_save->SetColor("ColorDisabled", disabled_color);
+
+	to_save->SetString("ClickEvent", click_event.data());
+	to_save->SetString("MoveEvent", move_event.data());
 
 	//---------------------------------------------------------
 	to_save->SetBoolean("HasListenersOnClick", !listenersOnClick.empty());
@@ -89,6 +96,16 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 			onExitArray->SetString(std::to_string(item - listenersOnExit.begin()).data(), (*item).first.data());
 		}
 	}
+
+	to_save->SetBoolean("HasListenersOnEnter", !listenersOnEnter.empty());
+	if (!listenersOnEnter.empty()) {
+		JSONArraypack* onEnterArray = to_save->InitNewArray("ListenersOnEnter");
+		auto item = listenersOnEnter.begin();
+		for (; item != listenersOnEnter.end(); ++item) {
+			onEnterArray->SetAnotherNode();
+			onEnterArray->SetString(std::to_string(item - listenersOnEnter.begin()).data(), (*item).first.data());
+		}
+	}
 	//---------------------------------------------------------------
 	to_save->SetString("SelectOnUp", std::to_string(select_on_up).data());
 	to_save->SetString("SelectOnDown", std::to_string(select_on_down).data());
@@ -108,6 +125,15 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 	clicked_color = to_load->GetColor("ColorClicked");
 	pressed_color = to_load->GetColor("ColorPressed");
 	disabled_color = to_load->GetColor("ColorDisabled");
+
+	try {
+		click_event = to_load->GetString("ClickEvent");
+		move_event = to_load->GetString("MoveEvent");
+	}
+	catch (...) {
+		// f
+	}
+	
 
 	select_on_up = std::stoull(to_load->GetString("SelectOnUp"));
 	select_on_down = std::stoull(to_load->GetString("SelectOnDown"));
@@ -157,6 +183,15 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 			std::pair<std::string, std::function<void()>> pair = { onExitListeners->GetString(std::to_string(i).data()), std::function<void()>() };
 			listenersOnExit.push_back(pair);
 			onExitListeners->GetAnotherNode();
+		}
+	}
+
+	if (to_load->GetBoolean("HasListenersOnEnter")) {
+		JSONArraypack* onEnterListeners = to_load->GetArray("ListenersOnEnter");
+		for (int i = 0; i < onEnterListeners->GetArraySize(); ++i) {
+			std::pair<std::string, std::function<void()>> pair = { onEnterListeners->GetString(std::to_string(i).data()), std::function<void()>() };
+			listenersOnEnter.push_back(pair);
+			onEnterListeners->GetAnotherNode();
 		}
 	}
 	//-------------------------------------------------------------
@@ -296,6 +331,18 @@ void ComponentButton::HandleAlienEvent(const AlienEvent& e)
 					if ((*item).first == (*functs).first)
 					{
 						listenersOnExit.erase(item);
+						break;
+					}
+				}
+			}
+
+			//delete on enter
+			for (auto functs = script->functionMap.begin(); functs != script->functionMap.end(); ++functs)
+			{
+				for (auto item = listenersOnEnter.begin(); item != listenersOnEnter.end(); ++item) {
+					if ((*item).first == (*functs).first)
+					{
+						listenersOnEnter.erase(item);
 						break;
 					}
 				}
@@ -706,6 +753,32 @@ bool ComponentButton::DrawInspector()
 
 					ImGui::TreePop();
 				}
+
+				ImGui::Spacing();
+				if (ImGui::TreeNode("On Enter Added")) {
+					for (auto item = listenersOnEnter.begin(); item != listenersOnEnter.end(); ++item) {
+
+						ImGui::Text((*item).first.data());
+
+						ImGui::SameLine();
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 3);
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Button, { 0.65F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonHovered, { 0.8F,0,0,1 });
+						ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.95F,0,0,1 });
+						ImGui::PushID(std::distance(listenersOnEnter.begin(), item) + 1919751);
+						if (ImGui::Button("X") && (*item).second != nullptr) {
+							//delete function
+							listenersOnEnter.erase(item);
+							ImGui::PopID();
+							ImGui::PopStyleColor(3);
+							break;
+						}
+						ImGui::PopID();
+						ImGui::PopStyleColor(3);
+					}
+
+					ImGui::TreePop();
+				}
 				ImGui::TreePop();
 			}
 			//--------------
@@ -811,6 +884,29 @@ bool ComponentButton::DrawInspector()
 										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
 											if (ImGui::MenuItem((*functs).first.data())) {
 												AddListenerOnExit((*functs).first, (*functs).second);
+											}
+										}
+									}
+									else {
+										ImGui::Text("No exported functions");
+									}
+									ImGui::EndMenu();
+								}
+							}
+						}
+						ImGui::TreePop();
+					}
+
+					ImGui::Spacing();
+					//-----------------------------
+					if (ImGui::TreeNode("On Enter To Add")) {
+						for (auto item = scripts.begin(); item != scripts.end(); ++item) {
+							if (*item != nullptr && (*item)->data_ptr != nullptr) {
+								if (ImGui::BeginMenu((*item)->data_name.data())) {
+									if (!(*item)->functionMap.empty()) {
+										for (auto functs = (*item)->functionMap.begin(); functs != (*item)->functionMap.end(); ++functs) {
+											if (ImGui::MenuItem((*functs).first.data())) {
+												AddListenerOnEnter((*functs).first, (*functs).second);
 											}
 										}
 									}
@@ -1056,8 +1152,38 @@ bool ComponentButton::DrawInspector()
 			ImGui::TreePop();
 		}
 
-		ImGui::Spacing();
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
 
+		if (ImGui::TreeNode("Audio Events"))
+		{
+			ImGui::Text("Move Event");
+			ImGui::SameLine(120);
+
+			static char move_name[30];
+			memcpy(move_name, move_event.c_str(), 30);
+
+			if (ImGui::InputText("##MoveEventName", move_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				move_event = move_name;
+			}
+			ImGui::Spacing();
+
+			ImGui::Text("Click Event");
+			ImGui::SameLine(120);
+
+			static char click_name[30];
+			memcpy(click_name, click_event.c_str(), 30);
+
+			if (ImGui::InputText("##ClickEventName", click_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				click_event = click_name;
+			}
+			ImGui::Spacing(); ImGui::Spacing();
+
+
+
+			ImGui::TreePop();
+		}
 
 		ImGui::Separator();
 		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
@@ -1066,6 +1192,21 @@ bool ComponentButton::DrawInspector()
 		RightClickMenu("Button");
 	}
 
+	return true;
+}
+
+bool ComponentButton::OnEnter()
+{
+	if (active)
+	{
+		//baina loka
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound(move_event.c_str());
+		}
+		CallListeners(&listenersOnEnter);
+	}
 	return true;
 }
 
@@ -1084,6 +1225,7 @@ bool ComponentButton::OnIdle()
 bool ComponentButton::OnHover()
 {
 	if (active) {
+
 		current_color = hover_color;
 		if (hover_tex != nullptr){
 			SetTexture(hover_tex);
@@ -1097,6 +1239,13 @@ bool ComponentButton::OnHover()
 bool ComponentButton::OnClick()
 {
 	if (active) {
+
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound(click_event.c_str());
+		}
+
 		current_color = clicked_color;
 		if (clicked_tex != nullptr) {
 			SetTexture(clicked_tex);
@@ -1110,6 +1259,7 @@ bool ComponentButton::OnClick()
 bool ComponentButton::OnPressed()
 {
 	if (active) {
+
 		current_color = pressed_color;
 		if (pressed_tex != nullptr) {
 			SetTexture(pressed_tex);
@@ -1123,6 +1273,7 @@ bool ComponentButton::OnPressed()
 bool ComponentButton::OnRelease()
 {
 	if (active) {
+	
 		current_color = hover_color;
 		if (hover_tex != nullptr) {
 			SetTexture(hover_tex);
@@ -1137,7 +1288,7 @@ bool ComponentButton::OnExit()
 {
 	if (active) 
 	{
-		//baina loka
+		
 		CallListeners(&listenersOnExit);
 	}
 	return true;
@@ -1324,6 +1475,15 @@ void ComponentButton::AddListenerOnExit(std::string name, std::function<void()> 
 	if (!CheckIfScriptIsAlreadyAdded(&listenersOnExit, name))
 	{
 		listenersOnExit.push_back(pair);
+	}
+}
+
+void ComponentButton::AddListenerOnEnter(std::string name, std::function<void()> funct)
+{
+	std::pair<std::string, std::function<void()>> pair = { name, funct };
+	if (!CheckIfScriptIsAlreadyAdded(&listenersOnEnter, name))
+	{
+		listenersOnEnter.push_back(pair);
 	}
 }
 

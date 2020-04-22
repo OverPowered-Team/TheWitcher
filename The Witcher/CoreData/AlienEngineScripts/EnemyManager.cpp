@@ -5,23 +5,21 @@
 
 void EnemyManager::Awake()
 {
-	GameObject** players = nullptr;
-	uint size = GameObject::FindGameObjectsWithTag("Player", &players);
-	if (size == 2)
+	auto players = GameObject::FindGameObjectsWithTag("Player");
+	if (players.size() == 2)
 	{
 		player1 = players[0];
 		player2 = players[1];
 	}
 	else
 		LOG("There's no player or just one in the scene!");
-	GameObject::FreeArrayMemory((void***)&players);
 }
 
 void EnemyManager::Start()
 {
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
-		(*item)->player_controllers.push_back(static_cast<PlayerController*>(player1->GetComponentScript("PlayerController")));
-		(*item)->player_controllers.push_back(static_cast<PlayerController*>(player2->GetComponentScript("PlayerController")));
+		(*item)->player_controllers.push_back(player1->GetComponent<PlayerController>());
+		(*item)->player_controllers.push_back(player2->GetComponent<PlayerController>());
 		(*item)->StartEnemy();
 	}
 }
@@ -82,9 +80,9 @@ void EnemyManager::AddEnemy(Enemy* enemy)
 {
 	enemies.push_back(enemy);
 	if(player1)
-		enemy->player_controllers.push_back(static_cast<PlayerController*>(player1->GetComponentScript("PlayerController")));
+		enemy->player_controllers.push_back(player1->GetComponent<PlayerController>());
 	if(player2)
-		enemy->player_controllers.push_back(static_cast<PlayerController*>(player2->GetComponentScript("PlayerController")));
+		enemy->player_controllers.push_back(player2->GetComponent<PlayerController>());
 }
 
 void EnemyManager::DeleteEnemy(Enemy* enemy)

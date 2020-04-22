@@ -18,6 +18,7 @@ public:
 public:
 	float life_time = 5.0F;
 	float damage = 0.0F;
+	float3 direction;
 
 private:
 	float current_time = 0.0F;

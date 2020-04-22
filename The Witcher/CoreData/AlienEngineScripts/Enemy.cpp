@@ -8,18 +8,16 @@
 
 void Enemy::Awake()
 {
-	GameManager::manager->enemy_manager->AddEnemy(this);
-	attack_collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
+	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
+	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 }
 
 void Enemy::StartEnemy()
 {
-	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
+	animator = GetComponent<ComponentAnimator>();
+	character_ctrl = GetComponent<ComponentCharacterController>();
 	state = EnemyState::IDLE;
 	std::string json_str;
-
-	character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -142,16 +140,17 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	character_ctrl->Move(velocity_vec);
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
+	transform->SetGlobalRotation(rot);
 
 	if (distance < stats["AttackRange"].GetValue())
 	{
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
@@ -159,7 +158,7 @@ void Enemy::Move(float3 direction)
 	if (distance > stats["VisionRange"].GetValue())
 	{
 		state = Enemy::EnemyState::IDLE;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 	}
 }
@@ -183,7 +182,7 @@ void Enemy::DeactivateCollider()
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
+		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
@@ -199,7 +198,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
-	character_ctrl->SetWalkDirection(float3::zero());
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
 		animator->SetBool("dead", true);
@@ -216,7 +215,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
 
-				ComponentRigidBody* head_rb = (ComponentRigidBody*)decapitated_head->GetComponent(ComponentType::RIGID_BODY);
+				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
 
 				float decapitation_force = 5;

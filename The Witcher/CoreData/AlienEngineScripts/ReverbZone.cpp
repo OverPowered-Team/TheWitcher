@@ -23,7 +23,7 @@ void ReverbZone::OnTrigger(ComponentCollider* collider)
 
 void ReverbZone::OnTriggerEnter(ComponentCollider* collider)
 {
-	ComponentAudioEmitter* emitter = (ComponentAudioEmitter*)collider->game_object_attached->GetComponent(ComponentType::A_EMITTER);
+	ComponentAudioEmitter* emitter = collider->game_object_attached->GetComponent<ComponentAudioEmitter>();
 
 
 	if (emitter != nullptr)
@@ -32,7 +32,7 @@ void ReverbZone::OnTriggerEnter(ComponentCollider* collider)
 
 void ReverbZone::OnTriggerExit(ComponentCollider* collider)
 {
-	ComponentAudioEmitter* emitter = (ComponentAudioEmitter*)collider->game_object_attached->GetComponent(ComponentType::A_EMITTER);
+	ComponentAudioEmitter* emitter = collider->game_object_attached->GetComponent<ComponentAudioEmitter>();
 
 	if (emitter != nullptr)
 		emitter->SetReverb(0.f, zone_name.c_str());

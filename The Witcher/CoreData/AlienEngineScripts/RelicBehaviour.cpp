@@ -19,7 +19,7 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	((Relic_Notification*)GameObject::FindWithName("InGame")->GetComponentScript("Relic_Notification"))->TriggerRelic(player, this->name, this->description, attack);
+	GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
 }
 
 // AttackRelic
@@ -110,7 +110,6 @@ RelicBehaviour::~RelicBehaviour()
 
 void RelicBehaviour::Start()
 {
-
 	std::string json_str;
 
 	switch (relic_type)
@@ -156,10 +155,8 @@ void RelicBehaviour::Update()
 
 void RelicBehaviour::SetRelic(const char* json_array)
 {
-	/*std::string json_path = std::string("Configuration/Relics.json");*/
-
 	
-	JSONfilepack* relic_json = JSONfilepack::GetJSON("Configuration/Relics.json");
+	JSONfilepack* relic_json = JSONfilepack::GetJSON("GameData/Relics.json");
 
 	JSONArraypack* type_array = relic_json->GetArray(json_array);
 
@@ -185,9 +182,9 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 	{
-		if ((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"))
+		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
-			relic->OnPickUp((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"));
+			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
 			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
 
 			//it remains to be determined if it is Geralt's audio or Yennefer's. 

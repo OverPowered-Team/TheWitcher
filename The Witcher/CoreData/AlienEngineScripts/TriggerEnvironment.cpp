@@ -14,8 +14,8 @@ void TriggerEnvironment::Start()
 {
 	
 	camera = Camera::GetCurrentCamera()->game_object_attached;
-	cam_script = (CameraMovement*)camera->GetComponentScript("CameraMovement");
-	emitter = (ComponentAudioEmitter*)this->game_object->GetComponent(ComponentType::A_EMITTER);
+	cam_script = camera->GetComponent<CameraMovement>();
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
 	timer = Time::GetGameTime();
 	emitter->SetState("Env_Lvl1", "Quiet");
 }

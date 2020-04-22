@@ -69,6 +69,9 @@ void ComponentDeformableMesh::AttachSkeleton()
 
 void ComponentDeformableMesh::AttachBone(ComponentTransform* bone_transform)
 {
+	if (mesh == nullptr) {
+		return;
+	}
 	std::vector<ComponentBone*> c_bones = bone_transform->game_object_attached->GetComponents<ComponentBone>();
 
 	if (c_bones.size() > 0)
@@ -160,6 +163,10 @@ void ComponentDeformableMesh::LoadComponent(JSONArraypack* to_load)
 //When loading resouce model
 void ComponentDeformableMesh::SendWeightsAndID()
 {
+	if (mesh == nullptr) {
+		return;
+	}
+
 	if (mesh->weights != nullptr && mesh->bones_ID != nullptr)
 		return;
 
