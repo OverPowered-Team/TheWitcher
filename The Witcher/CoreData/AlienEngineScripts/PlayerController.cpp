@@ -512,7 +512,7 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
-	GameManager::manager->event_manager->OnPlayerDead(this);
+	//GameManager::manager->event_manager->OnPlayerDead(this);
 	controller->velocity = PxExtendedVec3(0, 0, 0);
 }
 
@@ -538,7 +538,7 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value)
 {
 	player_data.stats["Health"].DecreaseStat(value);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 

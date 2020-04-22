@@ -35,6 +35,13 @@ void Enemy::StartEnemy()
 	}
 
 	SetStats(json_str.data());
+
+	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+
+	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+		(*it)->OnStop();
+	}
 }
 
 void Enemy::UpdateEnemy()
