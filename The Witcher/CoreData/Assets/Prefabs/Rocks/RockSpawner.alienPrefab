@@ -4,7 +4,7 @@
             {
                 "Name": "RockSpawner",
                 "FamilyNumber": 1,
-                "ID": "8856039819213911121",
+                "ID": "5988971654338387976",
                 "ParentID": "14398903867598547532",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -35,11 +35,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11141088726313207624"
+                        "ID": "12203976865425894938"
                     },
                     {
                         "Type": 29,
-                        "ID": "5598677897596832729",
+                        "ID": "14583431962735794090",
                         "ResourceID": "12721139138281645707",
                         "DataName": "RockSpawner",
                         "HasInspector": true,
@@ -51,8 +51,23 @@
                             },
                             {
                                 "VarType": 3,
-                                "Name": "time_btw",
-                                "float": 2
+                                "Name": "min_time_btw",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "max_time_btw",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "rocks_rotation",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "rocks_speed",
+                                "float": 5
                             }
                         ]
                     }
@@ -61,8 +76,8 @@
             {
                 "Name": "RockSpawn_0",
                 "FamilyNumber": 2,
-                "ID": "12333221253296844459",
-                "ParentID": "8856039819213911121",
+                "ID": "5892388255979663865",
+                "ParentID": "5988971654338387976",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -92,15 +107,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17385611914696797045"
+                        "ID": "12096597835807179601"
                     }
                 ]
             },
             {
                 "Name": "RockSpawn_1",
                 "FamilyNumber": 2,
-                "ID": "16081505479483295388",
-                "ParentID": "8856039819213911121",
+                "ID": "8971556669827421574",
+                "ParentID": "5988971654338387976",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -130,15 +145,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8455214792149587068"
+                        "ID": "15957992962179267563"
                     }
                 ]
             },
             {
                 "Name": "RockSpawn_end",
                 "FamilyNumber": 2,
-                "ID": "338516584902464296",
-                "ParentID": "8856039819213911121",
+                "ID": "7036151344226027214",
+                "ParentID": "5988971654338387976",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -168,15 +183,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6530079297139527349"
+                        "ID": "14696794548112531660"
                     }
                 ]
             },
             {
                 "Name": "Collider",
                 "FamilyNumber": 2,
-                "ID": "17966312389387152363",
-                "ParentID": "8856039819213911121",
+                "ID": "12207507742690741768",
+                "ParentID": "5988971654338387976",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -206,7 +221,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3893424817950723926"
+                        "ID": "222057275611045870"
                     },
                     {
                         "Enabled": true,
@@ -231,6 +246,75 @@
                             12.699999809265137,
                             11.899999618530273
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "ColliderOff",
+                "FamilyNumber": 2,
+                "ID": "14004632533737975278",
+                "ParentID": "5988971654338387976",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "16338185620678664534",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -26.536022186279297,
+                            20.286930084228516,
+                            22.46898078918457
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10270742191693433794"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            27.799999237060547,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            14.5,
+                            9.1999998092651367,
+                            4.9000000953674316
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5733747857336372526",
+                        "ResourceID": "2539305648645285910",
+                        "DataName": "TriggerRocks",
+                        "HasInspector": false
                     }
                 ]
             }

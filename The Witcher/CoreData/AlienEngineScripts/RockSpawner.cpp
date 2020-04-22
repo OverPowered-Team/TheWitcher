@@ -13,6 +13,7 @@ void RockSpawner::Start()
 {
 	FindChildren();
 	direction = spawn_end->transform->GetGlobalPosition() - spawn_0->transform->GetGlobalPosition();
+	time_btw = Random::GetRandomFloatBetweenTwo(min_time_btw, max_time_btw);
 }
 
 void RockSpawner::FindChildren()
@@ -24,13 +25,20 @@ void RockSpawner::FindChildren()
 
 void RockSpawner::Update()
 {
-	if (Time::GetGameTime() - timer >= time_btw) {
-		timer = Time::GetGameTime();
-		float3 new_pos = GetRandomPositionBtw(spawn_0->transform->GetGlobalPosition(), spawn_1->transform->GetGlobalPosition());
-		RockDownHill* scr = GameObject::Instantiate(rock, new_pos, false, game_object)->GetComponent<RockDownHill>();
-		scr->end_pos = new_pos + direction;
-		scr->CalculateDirection();
-	}
+	if (enabled)
+		if (Time::GetGameTime() - timer >= time_btw) {
+			timer = Time::GetGameTime();
+			time_btw = Random::GetRandomFloatBetweenTwo(min_time_btw, max_time_btw);
+			float3 new_pos = GetRandomPositionBtw(spawn_0->transform->GetGlobalPosition(), spawn_1->transform->GetGlobalPosition());
+			RockDownHill* obj = GameObject::Instantiate(rock, new_pos, false, game_object)->GetComponent<RockDownHill>();
+			obj->CalculateDirection(new_pos + direction);
+			obj->SetMoveAndRotationSpeed(rocks_rotation, rocks_speed);
+		}
+}
+
+void RockSpawner::Disable()
+{
+	enabled = false;
 }
 
 void RockSpawner::OnDrawGizmos() {

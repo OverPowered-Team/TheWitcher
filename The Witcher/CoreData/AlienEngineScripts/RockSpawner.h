@@ -14,15 +14,22 @@ public:
 	void FindChildren();
 	void Update();
 
+	void Disable();
+
 	void OnDrawGizmos() override;
 
 	float3 GetRandomPositionBtw(const float3& min, const float3& max);
 
-	float time_btw = 5.f;
+	float min_time_btw = 5.f;
+	float max_time_btw = 5.f;
 	Prefab rock;
+
+	float rocks_rotation = 5.f;
+	float rocks_speed = 5.f;
 
 private:
 	float timer = 0.f;
+	float time_btw = 0.f;
 
 	GameObject* spawn_0 = nullptr;
 	GameObject* spawn_1 = nullptr;
@@ -30,6 +37,8 @@ private:
 	GameObject* spawn_end = nullptr;
 
 	float3 direction = float3::zero();
+
+	bool enabled = true;
 };
 
 ALIEN_FACTORY RockSpawner* CreateRockSpawner() {
@@ -38,7 +47,11 @@ ALIEN_FACTORY RockSpawner* CreateRockSpawner() {
 
 	SHOW_IN_INSPECTOR_AS_PREFAB(alien->rock);
 
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_btw);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->min_time_btw);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->max_time_btw);
+
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->rocks_rotation);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->rocks_speed);
 
 	return alien;
 } 
