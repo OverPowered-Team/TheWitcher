@@ -68,6 +68,7 @@ public:
 	ComponentCollider* attack_collider = nullptr;
 	bool can_get_interrupted = true;
 	Prefab head_prefab;
+	GameObject* head_position;
 
 	std::vector<PlayerController*> player_controllers;
 

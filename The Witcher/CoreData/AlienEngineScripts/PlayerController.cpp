@@ -27,7 +27,6 @@ void PlayerController::Start()
 	animator = GetComponent<ComponentAnimator>();
 	controller = GetComponent<ComponentCharacterController>();
 	attacks = GetComponent<PlayerAttacks>();
-
 	audio = GetComponent<ComponentAudioEmitter>();
 
 	camera = Camera::GetCurrentCamera();
@@ -94,6 +93,7 @@ void PlayerController::PreUpdate()
 {
 	UpdateInput();
 
+	//ULTIMATE INPUT ON ALL STATES FOR NOW
 	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
 		|| Input::GetKeyDown(keyboard_ultimate)) {
 		GameManager::manager->player_manager->ultimate_buttons_pressed++;
@@ -159,21 +159,13 @@ void PlayerController::Update()
 			timer = Time::GetGameTime();
 			audio->StartSound();
 		}
-		if (CheckBoundaries())
-			HandleMovement();
+		HandleMovement();
 		break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		attacks->UpdateCurrentAttack();
 		break;
 	case PlayerController::PlayerState::JUMPING:
-		player_data.speed.y -= player_data.gravity * Time::GetDT();
-		if(player_data.speed.y < -0.35f)
-		{
-			player_data.speed.y = -0.35f;
-		}
-
-		if (CheckBoundaries())
-			HandleMovement();
+		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
 		break;
@@ -192,11 +184,20 @@ void PlayerController::Update()
 		break;
 	}
 
+	//GRAVITY
+	player_data.speed.y -= player_data.gravity * Time::GetDT();
+	if (player_data.speed.y < -0.35f)
+	{
+		player_data.speed.y = -0.35f;
+	}
+
 	//MOVE
-	controller->Move(player_data.speed);
+	if(CheckBoundaries())
+		controller->Move(player_data.speed);
 
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
+
 
 	//Effects-----------------------------
 	EffectsUpdate();
@@ -222,6 +223,7 @@ void PlayerController::UpdateInput()
 
 	if (joystickInput.Length() > stick_threshold) {
 		animator->SetBool("movement_input", true);
+		//movement_input = joystickInput.Normalized() * ((joystickInput.Normalized().Length() - stick_threshold) / (1 - stick_threshold));
 		movement_input = joystickInput.Normalized();
 	}
 	else if (keyboardInput.Length() > stick_threshold)
@@ -240,10 +242,7 @@ void PlayerController::IdleInput()
 {
 	if (!controller->isGrounded)
 	{
-		state = PlayerState::JUMPING;
-		animator->PlayState("Air");
-		animator->SetBool("air", true);
-		particles["p_run"]->SetEnable(false);
+		Fall();
 	}
 	if (movement_input.Length() > 0)
 	{
@@ -257,22 +256,20 @@ void PlayerController::IdleInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::INCREASING, controller_index, 5);
 	}
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		audio->StartSound("Hit_Sword");
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		can_move = false;
-	}*/
+	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_spell)
 		|| Input::GetKeyDown(keyboard_spell)) {
 		attacks->StartSpell(0);
 		state = PlayerState::CASTING;
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -282,32 +279,28 @@ void PlayerController::IdleInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_revive)
 		|| Input::GetKeyDown(keyboard_revive)) {
 		if (CheckForPossibleRevive()) {
-			player_data.speed = float3(0,-0.01f,0);
+			player_data.speed = float3::zero();
 			animator->SetBool("reviving", true);
 			state = PlayerState::REVIVING;
 		}
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_jump)
-		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded) {
+		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded)
 		Jump();
-	}
 }
 
 void PlayerController::RunningInput()
 {	
 	if (!controller->isGrounded)
 	{
-		state = PlayerState::JUMPING;
-		animator->PlayState("Air");
-		animator->SetBool("air", true);
-		particles["p_run"]->SetEnable(false);
+		Fall();
 	}
 	if (movement_input.Length() < stick_threshold)
 	{
 		state = PlayerState::IDLE;
 		particles["p_run"]->SetEnable(false);
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -317,15 +310,13 @@ void PlayerController::RunningInput()
 		audio->StartSound("Hit_Sword");
 		particles["p_run"]->SetEnable(false);
 	}
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		controller->SetWalkDirection(float3::zero());
-		can_move = false;
-	}*/
+	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
 		|| Input::GetKeyDown(keyboard_dash))
@@ -334,7 +325,7 @@ void PlayerController::RunningInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_revive)
 		|| Input::GetKeyDown(keyboard_revive)) {
 		if (CheckForPossibleRevive()) {
-			player_data.speed = float3(0,-0.01f,0);
+			player_data.speed = float3::zero();
 			animator->SetBool("reviving", true);
 			state = PlayerState::REVIVING;
 			particles["p_run"]->SetEnable(false);
@@ -345,7 +336,7 @@ void PlayerController::RunningInput()
 		|| Input::GetKeyDown(keyboard_spell)) {
 		attacks->StartSpell(0);
 		state = PlayerState::CASTING;
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 		particles["p_run"]->SetEnable(false);
 	}
 
@@ -353,9 +344,7 @@ void PlayerController::RunningInput()
 		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded)
 	{
 		Jump();
-		particles["p_run"]->SetEnable(false);
 	}
-
 }
 
 void PlayerController::AttackingInput()
@@ -457,6 +446,15 @@ void PlayerController::Jump()
 	particles["p_run"]->SetEnable(false);
 }
 
+void PlayerController::Fall()
+{
+	player_data.speed.y = 0;
+	state = PlayerState::JUMPING;
+	animator->PlayState("Air");
+	animator->SetBool("air", true);
+	particles["p_run"]->SetEnable(false);
+}
+
 void PlayerController::Roll()
 {
 	float3 direction_vector = float3::zero();
@@ -520,8 +518,8 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
+	player_data.speed = float3::zero();
 	GameManager::manager->event_manager->OnPlayerDead(this);
-	controller->velocity = PxExtendedVec3(0, 0, 0);
 }
 
 void PlayerController::Revive()
@@ -554,7 +552,7 @@ void PlayerController::ReceiveDamage(float value)
 		animator->PlayState("Hit");
 		attacks->CancelAttack();
 		state = PlayerState::HIT;
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 	}	
 
 	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
@@ -593,12 +591,12 @@ bool PlayerController::CheckBoundaries()
 	float3 next_pos = float3::zero();
 	float joystickIntensity = movement_input.Length();
 
-	float3 vector = float3(movement_input.x, 0.f, movement_input.y);
-	vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
-	vector.y = 0.f;
-	vector.Normalize();
-
-	float angle = atan2f(vector.z, vector.x);
+	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
+	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
+	direction_vector.y = 0.f;
+	direction_vector.Normalize();
+	//rotate
+	float angle = atan2f(direction_vector.z, direction_vector.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 
 	float speed = 0.f;
@@ -614,7 +612,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	else
 	{
-		next_pos = transform->GetGlobalPosition() + vector * speed * 3.f;
+		next_pos = transform->GetGlobalPosition() + direction_vector * speed * 20.f;
 	}
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
@@ -639,9 +637,12 @@ bool PlayerController::CheckBoundaries()
 				if (!fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					controller->velocity = PxExtendedVec3(0, 0, 0);
+					player_data.can_move = true;
+					player_data.speed = float3::zero();
 					return false;
 				}
+				else
+					player_data.can_move = false;
 			}
 		}
 	}
@@ -650,7 +651,7 @@ bool PlayerController::CheckBoundaries()
 		return true;
 	}
 	else {
-		controller->velocity = PxExtendedVec3(0, 0, 0);
+		player_data.speed = float3::zero();
 		return false;
 	}
 }
@@ -690,6 +691,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
+	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)

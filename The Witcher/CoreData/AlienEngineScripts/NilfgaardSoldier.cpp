@@ -41,6 +41,10 @@ void NilfgaardSoldier::SetStats(const char* json)
 			stats["FleeRange"] = Stat("FleeRange", stat_weapon->GetNumber("FleeRange"));
 			stats["FleeRange"].SetMaxValue(stat_weapon->GetNumber("MaxFleeRange"));
 		}
+		else if (nilf_type == NilfgaardType::SWORD_SHIELD)
+		{
+			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));
+		}
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 
 		stat_weapon->GetAnotherNode();
@@ -64,6 +68,7 @@ void NilfgaardSoldier::Action()
 	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
 		animator->PlayState("Block");
 		current_time = Time::GetGameTime();
+		is_blocked = true;
 		state = EnemyState::BLOCK;
 		break;
 	}
@@ -74,17 +79,28 @@ void NilfgaardSoldier::Block()
 	float b_time = (has_been_attacked) ? block_attack_time : block_time;
 	if (Time::GetGameTime() - current_time > b_time)
 	{
-		state = EnemyState::ATTACK;
-		animator->PlayState("Attack");
+		if (stats["AttackRange"].GetValue() < distance)
+		{
+			state = EnemyState::IDLE;
+			animator->PlayState("Idle");
+		}
+		else
+		{
+			state = EnemyState::ATTACK;
+			animator->PlayState("Attack");
+		}
+
 		has_been_attacked = false;
-		break_shield_attack = 0.0f;
+		break_shield_attack = 0;
+		is_blocked = false;
 	}
 	else if (break_shield_attack >= max_break_shield_attack)
 	{
 		state = EnemyState::ATTACK;
 		animator->PlayState("Hit");
 		has_been_attacked = false;
-		break_shield_attack = 0.0f;
+		break_shield_attack = 0;
+		is_blocked = false;
 	}
 }
 
@@ -179,6 +195,11 @@ void NilfgaardSoldier::UpdateEnemy()
 		}
 		break;
 	case Enemy::EnemyState::BLOCK:
+		if (stats["BlockRange"].GetValue() < distance)
+		{
+			state = EnemyState::IDLE;
+			animator->PlayState("Idle");
+		}
 		Block();
 		break;
 	case Enemy::EnemyState::FLEE:
@@ -196,10 +217,6 @@ void NilfgaardSoldier::UpdateEnemy()
 		break;
 	}
 
-}
-
-void NilfgaardSoldier::CleanUpEnemy()
-{
 }
 
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
@@ -244,6 +261,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			has_been_attacked = true;
 			current_time = Time::GetGameTime();
 			break_shield_attack++;
+			LOG("breakshield: %i", break_shield_attack);
 		}
 		else
 		{
@@ -252,6 +270,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
 				player->OnHit(this, GetDamaged(dmg_received, player));
+				LOG("live: %f", stats["Health"].GetValue());
 
 				if (state == EnemyState::DYING)
 					player->OnEnemyKill();
