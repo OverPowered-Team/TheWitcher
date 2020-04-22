@@ -26,6 +26,10 @@ public:
 	int player1_points = 0;
 	int player2_points = 0;
 
+	// Lerp
+	int current_points1 = 0;
+	int current_points2 = 0;
+
 private:
 	// Scales
 	GameObject* left_scale = nullptr;
@@ -44,8 +48,11 @@ private:
 	float desired_position2 = 0.0f;
 	bool in_place = true;
 
-	// Time
+	// Scores
+	ComponentText* score_text_1 = nullptr;
+	ComponentText* score_text_2 = nullptr;
 
+	// Time
 	float time = 0.0f;
 };
 
