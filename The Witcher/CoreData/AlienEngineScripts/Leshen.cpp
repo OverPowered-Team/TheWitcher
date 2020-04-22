@@ -68,8 +68,7 @@ void Leshen::CleanUpEnemy()
 
 float Leshen::GetDamaged(float dmg, PlayerController* player)
 {
-	times_hitted++;
-	LOG("times hitted %i", times_hitted)
+	HandleHitCount();
 	return Enemy::GetDamaged(dmg, player);
 }
 
@@ -202,6 +201,7 @@ void Leshen::LaunchCrowsAction()
 
 void Leshen::LaunchCloudAction()
 {
+	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 }
 
 Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
@@ -268,14 +268,18 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 
 	if (times_switched < total_switch_times) {
 		if (direction_time <= switch_direction_time) {
-			transform->AddPosition(direction * speed);
+			character_ctrl->Move(direction * speed);
+			direction_time += Time::GetDT();
 		}
 		else {
 			SetRandomDirection();
+			times_switched++;
+			direction_time = 0;
 		}
 	}
-
-	current_action->state = ActionState::ENDED;
+	else {
+		current_action->state = Leshen::ActionState::ENDED;
+	}
 
 	return current_action->state;
 }
@@ -353,8 +357,24 @@ void Leshen::HandleHitCount()
 
 void Leshen::SetRandomDirection()
 {
-	float rand_x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	float rand_z = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	if(rand_x > 0)
+		rand_x = Random::GetRandomIntBetweenTwo(-1, 0);
+	else if((rand_x < 0))
+		rand_x = Random::GetRandomIntBetweenTwo(0, 1);
+	else {
+		rand_x = Random::GetRandomIntBetweenTwo(-1, 1);
+	}
+
+	if (rand_z > 0)
+		rand_z = Random::GetRandomIntBetweenTwo(-1, 0);
+	else if ((rand_z < 0))
+		rand_z = Random::GetRandomIntBetweenTwo(0, 1);
+	else {
+		if (rand_x != 0)
+			rand_z = Random::GetRandomIntBetweenTwo(-1, 1);
+		else
+			rand_z = 1;
+	}
 
 	direction = float3(rand_x, 0, rand_z);
 }

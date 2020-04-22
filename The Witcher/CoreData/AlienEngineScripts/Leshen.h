@@ -55,12 +55,15 @@ public:
 
 	float3 direction;
 	float direction_time = 0.0f;
-	float switch_direction_time = 4.0f;
+	float switch_direction_time = 3.0f;
 	float times_switched = 0;
 	float total_switch_times = 5;
-	float speed = 0.02f;
+	float speed = 0.05f;
 
 	int crows_target = 0;
+
+	int rand_x = 0;
+	int rand_z = 0;
 
 
 public:
