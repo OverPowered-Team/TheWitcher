@@ -256,16 +256,14 @@ void PlayerController::IdleInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::INCREASING, controller_index, 5);
 	}
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		audio->StartSound("Hit_Sword");
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		can_move = false;
-	}*/
+	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_spell)
 		|| Input::GetKeyDown(keyboard_spell)) {
@@ -312,15 +310,13 @@ void PlayerController::RunningInput()
 		audio->StartSound("Hit_Sword");
 		particles["p_run"]->SetEnable(false);
 	}
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		controller->SetWalkDirection(float3::zero());
-		can_move = false;
-	}*/
+	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
 		|| Input::GetKeyDown(keyboard_dash))
