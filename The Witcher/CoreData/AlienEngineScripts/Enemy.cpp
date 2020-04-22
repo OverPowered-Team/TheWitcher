@@ -208,7 +208,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
-			GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+			//GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 
 			decapitated_head = GameObject::Instantiate(head_prefab, game_object->transform->GetGlobalPosition());
 			if (decapitated_head)
