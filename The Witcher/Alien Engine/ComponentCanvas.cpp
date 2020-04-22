@@ -95,13 +95,8 @@ void ComponentCanvas::SaveComponent(JSONArraypack* to_save)
 void ComponentCanvas::LoadComponent(JSONArraypack* to_load)
 {
 	enabled = to_load->GetBoolean("Enabled");
-	try {
-		isWorld = to_load->GetBoolean("isWorld");
-		bbtype = (BillboardType)(int)to_load->GetNumber("BBType");
-	}
-	catch (...) {
-		// f
-	}
+	isWorld = to_load->GetBoolean("isWorld");
+	bbtype  = (BillboardType)(int)to_load->GetNumber("BBType");
 }
 
 void ComponentCanvas::Draw()
