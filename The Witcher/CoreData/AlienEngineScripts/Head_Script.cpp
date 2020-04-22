@@ -3,7 +3,7 @@
 
 Head_Script::Head_Script() : Alien()
 {
-	script_scale = (Scale_Win*)GameObject::FindWithName("Scale")->GetComponent<Scale_Win>();
+	script_scale = GameObject::FindWithName("Scale")->GetComponent<Scale_Win>();
 }
 
 Head_Script::~Head_Script()

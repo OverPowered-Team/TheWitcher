@@ -16,9 +16,6 @@ public:
 
 	Spawner();
 	virtual ~Spawner();
-	
-	void Start();
-	void Update();
 
 	void Spawn(TO_SPAWN type, float3 position);
 
@@ -26,8 +23,6 @@ public:
 	Prefab enemy_heads;
 	Prefab coin;
 	Prefab relic;
-
-	std::vector<GameObject*> heads_spawned;
 };
 
 ALIEN_FACTORY Spawner* CreateSpawner() {

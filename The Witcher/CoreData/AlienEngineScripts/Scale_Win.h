@@ -3,6 +3,8 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class Spawner;
+
 class ALIEN_ENGINE_API Scale_Win : public Alien {
 
 public:
@@ -30,6 +32,10 @@ private:
 	GameObject* right_scale = nullptr;
 	ComponentRigidBody* rigid_body1 = nullptr;
 	ComponentRigidBody* rigid_body2 = nullptr;
+
+	// Spawners
+	Spawner* spawner_l = nullptr;
+	Spawner* spawner_r = nullptr;
 
 	// Position
 	float original_position1 = 0.0f;

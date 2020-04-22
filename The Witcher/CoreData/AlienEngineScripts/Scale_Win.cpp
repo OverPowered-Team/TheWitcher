@@ -1,4 +1,5 @@
 #include "Scale_Win.h"
+#include "Spawner.h"
 
 Scale_Win::Scale_Win() : Alien()
 {
@@ -10,17 +11,27 @@ Scale_Win::~Scale_Win()
 
 void Scale_Win::Start()
 {
+	// Scales
 	left_scale = game_object->GetChild("Left_Scale");
 	right_scale = game_object->GetChild("Right_Scale");
 	rigid_body1 = left_scale->GetComponent<ComponentRigidBody>();
 	rigid_body2 = right_scale->GetComponent<ComponentRigidBody>();
+
+	// Spawners
+	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
+	spawner_r = GameObject::FindWithName("Right_Spawner")->GetComponent<Spawner>();
 }
 
 void Scale_Win::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_P))
+	if (Input::GetKeyDown(SDL_SCANCODE_LCTRL))
 	{
-		CalculateInclination();
+		spawner_l->Spawn(TO_SPAWN::HEAD, spawner_l->transform->GetLocalPosition());
+	}
+
+	if (Input::GetKeyDown(SDL_SCANCODE_RCTRL))
+	{
+		spawner_r->Spawn(TO_SPAWN::HEAD, spawner_r->transform->GetLocalPosition());
 	}
 
 	if (!in_place)
