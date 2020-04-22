@@ -5,11 +5,14 @@
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "EnemyManager.h"
+#include "MusicController.h"
 
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
+	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
+
 }
 
 void NilfgaardSoldier::SetStats(const char* json)
@@ -165,12 +168,20 @@ void NilfgaardSoldier::UpdateEnemy()
 	switch (state)
 	{
 	case Enemy::EnemyState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue()) {
 			state = Enemy::EnemyState::MOVE;
+			m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
+			m_controller->has_changed = true;
+		}
 		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
 			state = Enemy::EnemyState::FLEE;
 		break;
 	case Enemy::EnemyState::MOVE:
+		if (distance > stats["VisionRange"].GetValue())
+		{
+			m_controller->is_combat = false;
+			m_controller->has_changed = true;
+		}
 		Move(direction);
 		break;
 	case Enemy::EnemyState::ATTACK:
@@ -206,6 +217,8 @@ void NilfgaardSoldier::UpdateEnemy()
 		//Ori Ori function sintaxis
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = EnemyState::DEAD;
+		m_controller->is_combat = false;
+		m_controller->has_changed = true;
 		break;
 	}
 	case Enemy::EnemyState::DEAD:
@@ -220,11 +233,14 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		if (distance < stats["VisionRange"].GetValue())
 		{
 			state = Enemy::EnemyState::MOVE;
+			
 		}
 		else
 		{
 			state = Enemy::EnemyState::IDLE;
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+			m_controller->is_combat = false;
+			m_controller->has_changed = true;
 		}
 	}
 
