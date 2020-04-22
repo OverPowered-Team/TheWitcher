@@ -80,7 +80,7 @@ public:
 	void Die();
 	void Revive();
 	void ActionRevive();
-	void ReceiveDamage(float value);
+	void ReceiveDamage(float value, float3 knock_back = {0, 0, 0});
 
 	//Relics
 	void PickUpRelic(Relic* _relic);

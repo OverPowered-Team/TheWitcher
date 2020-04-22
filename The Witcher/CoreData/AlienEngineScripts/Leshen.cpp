@@ -14,9 +14,9 @@ void Leshen::StartEnemy()
 	
 	can_get_interrupted = false;
 
-	Enemy::StartEnemy();
-
 	type = EnemyType::LESHEN;
+
+	Enemy::StartEnemy();
 }
 
 void Leshen::UpdateEnemy()
@@ -69,8 +69,8 @@ void Leshen::CleanUpEnemy()
 float Leshen::GetDamaged(float dmg, PlayerController* player)
 {
 	HandleHitCount();
-	LOG("hp remaining %f", stats["Health"].GetValue());
 	return Enemy::GetDamaged(dmg, player);
+	LOG("hp remaining %f", stats["Health"].GetValue());
 }
 
 void Leshen::OrientToPlayer(int target)
@@ -83,7 +83,11 @@ void Leshen::OrientToPlayer(int target)
 
 void Leshen::SetStats(const char* json)
 {
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
 
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+	if (stat)
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
 }
 
 void Leshen::SetActionProbabilities()

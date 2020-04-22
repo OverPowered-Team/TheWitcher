@@ -173,7 +173,6 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
 			player->OnHit(this, GetDamaged(dmg_received, player));
-			LOG("ASDF");
 		}
 	}
 }
@@ -186,7 +185,6 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	if (can_get_interrupted) {
 		state = EnemyState::HIT;
 		animator->PlayState("Hit");
-		//character_ctrl->SetWalkDirection(float3::zero());
 	}
 
 	return aux_health - stats["Health"].GetValue();

@@ -179,6 +179,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::MAX:
 		break;
 	case PlayerController::PlayerState::HIT:
+		player_data.speed += player_data.speed * -0.08;
 		break;
 	default:
 		break;
@@ -497,6 +498,7 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Hit") == 0) {
 		state = PlayerState::IDLE;
 		animator->SetBool("reviving", false);
+		player_data.speed = float3::zero();
 	}
 
 	if (strcmp(name, "RCP") == 0) {
@@ -541,10 +543,10 @@ void PlayerController::ActionRevive()
 	player_being_revived = nullptr;
 }
 
-void PlayerController::ReceiveDamage(float value)
+void PlayerController::ReceiveDamage(float value, float3 knock_back)
 {
 	player_data.stats["Health"].DecreaseStat(value);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 
@@ -552,10 +554,11 @@ void PlayerController::ReceiveDamage(float value)
 		animator->PlayState("Hit");
 		attacks->CancelAttack();
 		state = PlayerState::HIT;
-		player_data.speed = float3::zero();
+		player_data.speed = knock_back;
+
 	}	
 
-	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+	//GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -705,7 +708,10 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			for (auto i = comps.begin(); i != comps.end(); ++i) {
 				Enemy* enemy = dynamic_cast<Enemy*>(*i);
 				if (enemy) {
-					ReceiveDamage(enemy->stats["Damage"].GetValue());
+					float3 dir = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+					dir.y = 0;
+					LOG("%f, %f, %f", dir.x, dir.y, dir.z);
+					ReceiveDamage(enemy->stats["Damage"].GetValue(), -dir * 0.5f);
 					return;
 				}
 			}
