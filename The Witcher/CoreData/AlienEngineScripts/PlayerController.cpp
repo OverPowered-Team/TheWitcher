@@ -353,9 +353,9 @@ void PlayerController::AttackingInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack))
 		attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack))
-		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);*/
+		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
 	if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 		|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
