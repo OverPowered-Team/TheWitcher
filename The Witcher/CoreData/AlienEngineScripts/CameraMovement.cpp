@@ -32,6 +32,7 @@ void CameraMovement::Update()
         break;
     case CameraState::AXIS:
         transform->SetGlobalPosition(CalculateAxisMidPoint() + trg_offset);
+        LookAtMidPoint();
         break;
     case CameraState::MOVING_TO_AXIS: {
         current_transition_time += Time::GetDT();

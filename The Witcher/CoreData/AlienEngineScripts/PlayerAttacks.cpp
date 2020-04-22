@@ -115,7 +115,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 
 	//THIS CRASHES NOW DONT KNOW WHY
 	//if(current_attack && current_attack->IsLast())
-		//GameManager::manager->player_manager->IncreaseUltimateCharge(0.5f);
+		//GameManager::manager->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -248,7 +248,6 @@ void PlayerAttacks::AttackMovement()
 
 		float tmp_y = player_controller->player_data.speed.y;
 		player_controller->player_data.speed = direction * current_attack->info.movement_strength;
-		//player_controller->controller->ApplyImpulse(impulse);
 	}	
 }
 
@@ -258,14 +257,14 @@ void PlayerAttacks::ActivateCollider()
 	{
 		collider->SetCenter(current_attack->info.collider_position);
 		collider->SetSize(current_attack->info.collider_size);
-		collider->SetEnable(true);
+		collider->game_object_attached->SetEnable(true);
 	}
 }
 
 void PlayerAttacks::DeactivateCollider()
 {
 	if(collider)
-		collider->SetEnable(false);
+		collider->game_object_attached->SetEnable(false);
 }
 
 void PlayerAttacks::AllowCombo()

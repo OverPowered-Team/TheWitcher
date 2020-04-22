@@ -27,7 +27,6 @@ void PlayerController::Start()
 	animator = GetComponent<ComponentAnimator>();
 	controller = GetComponent<ComponentCharacterController>();
 	attacks = GetComponent<PlayerAttacks>();
-
 	audio = GetComponent<ComponentAudioEmitter>();
 
 	camera = Camera::GetCurrentCamera();
@@ -258,14 +257,13 @@ void PlayerController::IdleInput()
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
 	}
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		audio->StartSound("Hit_Sword");
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		can_move = false;
-	}*/
+	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_spell)
 		|| Input::GetKeyDown(keyboard_spell)) {
@@ -312,15 +310,13 @@ void PlayerController::RunningInput()
 		audio->StartSound("Hit_Sword");
 		particles["p_run"]->SetEnable(false);
 	}
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
 		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		controller->SetWalkDirection(float3::zero());
-		can_move = false;
-	}*/
+	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
 		|| Input::GetKeyDown(keyboard_dash))
@@ -349,7 +345,6 @@ void PlayerController::RunningInput()
 	{
 		Jump();
 	}
-
 }
 
 void PlayerController::AttackingInput()
@@ -511,8 +506,8 @@ void PlayerController::Die()
 	animator->PlayState("Death");
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
+	player_data.speed = float3::zero();
 	GameManager::manager->event_manager->OnPlayerDead(this);
-	controller->velocity = PxExtendedVec3(0, 0, 0);
 }
 
 void PlayerController::Revive()
@@ -684,6 +679,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
+	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
