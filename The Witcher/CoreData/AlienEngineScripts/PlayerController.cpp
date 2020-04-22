@@ -94,6 +94,7 @@ void PlayerController::PreUpdate()
 {
 	UpdateInput();
 
+	//ULTIMATE INPUT ON ALL STATES FOR NOW
 	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
 		|| Input::GetKeyDown(keyboard_ultimate)) {
 		GameManager::manager->player_manager->ultimate_buttons_pressed++;
@@ -127,7 +128,6 @@ void PlayerController::PreUpdate()
 				particles["p_run"]->SetEnable(true);
 			}
 			animator->SetBool("air", false);
-			player_data.speed.y = -0.01f;
 		}
 		break;
 	case PlayerController::PlayerState::DASHING:
@@ -160,20 +160,12 @@ void PlayerController::Update()
 			timer = Time::GetGameTime();
 			audio->StartSound();
 		}
-		/*if (CheckBoundaries())*/
-			HandleMovement();
+		HandleMovement();
 		break;
 	case PlayerController::PlayerState::BASIC_ATTACK:
 		attacks->UpdateCurrentAttack();
 		break;
 	case PlayerController::PlayerState::JUMPING:
-		player_data.speed.y -= player_data.gravity * Time::GetDT();
-		if(player_data.speed.y < -0.35f)
-		{
-			player_data.speed.y = -0.35f;
-		}
-
-		//if (CheckBoundaries())
 		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
@@ -193,12 +185,20 @@ void PlayerController::Update()
 		break;
 	}
 
+	//GRAVITY
+	player_data.speed.y -= player_data.gravity * Time::GetDT();
+	if (player_data.speed.y < -0.35f)
+	{
+		player_data.speed.y = -0.35f;
+	}
+
 	//MOVE
 	if(CheckBoundaries())
 		controller->Move(player_data.speed);
 
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
+
 
 	//Effects-----------------------------
 	EffectsUpdate();
@@ -224,6 +224,7 @@ void PlayerController::UpdateInput()
 
 	if (joystickInput.Length() > stick_threshold) {
 		animator->SetBool("movement_input", true);
+		//movement_input = joystickInput.Normalized() * ((joystickInput.Normalized().Length() - stick_threshold) / (1 - stick_threshold));
 		movement_input = joystickInput.Normalized();
 	}
 	else if (keyboardInput.Length() > stick_threshold)
@@ -242,10 +243,7 @@ void PlayerController::IdleInput()
 {
 	if (!controller->isGrounded)
 	{
-		state = PlayerState::JUMPING;
-		animator->PlayState("Air");
-		animator->SetBool("air", true);
-		particles["p_run"]->SetEnable(false);
+		Fall();
 	}
 	if (movement_input.Length() > 0)
 	{
@@ -274,7 +272,7 @@ void PlayerController::IdleInput()
 		|| Input::GetKeyDown(keyboard_spell)) {
 		attacks->StartSpell(0);
 		state = PlayerState::CASTING;
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -284,33 +282,28 @@ void PlayerController::IdleInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_revive)
 		|| Input::GetKeyDown(keyboard_revive)) {
 		if (CheckForPossibleRevive()) {
-			player_data.speed = float3(0,-0.01f,0);
+			player_data.speed = float3::zero();
 			animator->SetBool("reviving", true);
 			state = PlayerState::REVIVING;
 		}
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_jump)
-		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded) {
+		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded)
 		Jump();
-	}
 }
 
 void PlayerController::RunningInput()
 {	
 	if (!controller->isGrounded)
 	{
-		LOG("EN EL AIRE");
-		state = PlayerState::JUMPING;
-		animator->PlayState("Air");
-		animator->SetBool("air", true);
-		particles["p_run"]->SetEnable(false);
+		Fall();
 	}
 	if (movement_input.Length() < stick_threshold)
 	{
 		state = PlayerState::IDLE;
 		particles["p_run"]->SetEnable(false);
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
@@ -337,7 +330,7 @@ void PlayerController::RunningInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_revive)
 		|| Input::GetKeyDown(keyboard_revive)) {
 		if (CheckForPossibleRevive()) {
-			player_data.speed = float3(0,-0.01f,0);
+			player_data.speed = float3::zero();
 			animator->SetBool("reviving", true);
 			state = PlayerState::REVIVING;
 			particles["p_run"]->SetEnable(false);
@@ -348,7 +341,7 @@ void PlayerController::RunningInput()
 		|| Input::GetKeyDown(keyboard_spell)) {
 		attacks->StartSpell(0);
 		state = PlayerState::CASTING;
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 		particles["p_run"]->SetEnable(false);
 	}
 
@@ -356,7 +349,6 @@ void PlayerController::RunningInput()
 		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded)
 	{
 		Jump();
-		particles["p_run"]->SetEnable(false);
 	}
 
 }
@@ -442,6 +434,15 @@ void PlayerController::Jump()
 {
 	player_data.speed.y = player_data.jump_power;
 
+	state = PlayerState::JUMPING;
+	animator->PlayState("Air");
+	animator->SetBool("air", true);
+	particles["p_run"]->SetEnable(false);
+}
+
+void PlayerController::Fall()
+{
+	player_data.speed.y = 0;
 	state = PlayerState::JUMPING;
 	animator->PlayState("Air");
 	animator->SetBool("air", true);
@@ -545,7 +546,7 @@ void PlayerController::ReceiveDamage(float value)
 		animator->PlayState("Hit");
 		attacks->CancelAttack();
 		state = PlayerState::HIT;
-		player_data.speed = float3(0,-0.01f,0);
+		player_data.speed = float3::zero();
 	}	
 
 	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
