@@ -97,11 +97,11 @@ void PlayerController::PreUpdate()
 	//ULTIMATE INPUT ON ALL STATES FOR NOW
 	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
 		|| Input::GetKeyDown(keyboard_ultimate)) {
-		GameManager::GetInstance()->player_manager->ultimate_buttons_pressed++;
+		GameManager::instance->player_manager->ultimate_buttons_pressed++;
 	}
 	else if (Input::GetControllerButtonUp(controller_index, controller_ultimate)
 		|| Input::GetKeyUp(keyboard_ultimate)) {
-		GameManager::GetInstance()->player_manager->ultimate_buttons_pressed--;
+		GameManager::instance->player_manager->ultimate_buttons_pressed--;
 	}
 
 	switch (state)
@@ -262,7 +262,7 @@ void PlayerController::IdleInput()
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 		audio->StartSound("Hit_Sword");
 	}
 
@@ -316,7 +316,7 @@ void PlayerController::RunningInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -511,7 +511,7 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	player_data.speed = float3::zero();
-	GameManager::GetInstance()->event_manager->OnPlayerDead(this);
+	GameManager::instance->event_manager->OnPlayerDead(this);
 }
 
 void PlayerController::Revive()
@@ -519,10 +519,10 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	GameManager::GetInstance()->event_manager->OnPlayerRevive(this);
+	GameManager::instance->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
 	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
+	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 }
 
 void PlayerController::ActionRevive()
@@ -547,7 +547,7 @@ void PlayerController::ReceiveDamage(float value)
 		player_data.speed = float3::zero();
 	}	
 
-	GameManager::GetInstance()->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -655,10 +655,10 @@ void PlayerController::OnDrawGizmosSelected()
 
 bool PlayerController::CheckForPossibleRevive()
 {
-	for (int i = 0; i < GameManager::GetInstance()->player_manager->players_dead.size(); ++i) {
-		float distance = this->transform->GetGlobalPosition().Distance(GameManager::GetInstance()->player_manager->players_dead[i]->transform->GetGlobalPosition());
+	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
+		float distance = this->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= revive_range) {
-			player_being_revived = GameManager::GetInstance()->player_manager->players_dead[i];
+			player_being_revived = GameManager::instance->player_manager->players_dead[i];
 			return true;
 		}
 	}
@@ -683,7 +683,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
-	GameManager::GetInstance()->player_manager->IncreaseUltimateCharge(10);
+	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)

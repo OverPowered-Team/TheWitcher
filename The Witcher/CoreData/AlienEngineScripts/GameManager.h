@@ -16,6 +16,7 @@ public:
 	GameManager();
 	virtual ~GameManager();
 
+	static GameManager* instance;
 	EventManager* event_manager = nullptr;
 	EnemyManager* enemy_manager = nullptr;
 	DialogueManager* dialogue_manager = nullptr;
@@ -26,9 +27,6 @@ public:
 	void Awake();
 	void Start();
 	void Update();
-
-	static GameManager* instance;
-
 };
 GameManager* GameManager::instance = 0;
 
