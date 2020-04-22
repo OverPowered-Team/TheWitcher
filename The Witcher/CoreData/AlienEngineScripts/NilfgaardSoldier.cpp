@@ -69,10 +69,19 @@ void NilfgaardSoldier::Action()
 		state = EnemyState::ATTACK;
 		break;
 	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
-		animator->PlayState("Block");
-		current_time = Time::GetGameTime();
-		is_blocked = true;
-		state = EnemyState::BLOCK;
+		int rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+		/*if (rand_num == 0)
+		{*/
+			animator->PlayState("Block");
+			current_time = Time::GetGameTime();
+			is_blocked = true;
+			state = EnemyState::BLOCK;
+		/*}
+		else
+		{
+			animator->PlayState("Attack");
+			state = EnemyState::ATTACK;
+		}*/
 		break;
 	}
 }
@@ -273,6 +282,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			current_time = Time::GetGameTime();
 			break_shield_attack++;
 			LOG("breakshield: %i", break_shield_attack);
+			particles["ClinckEmitter"]->Restart();
 		}
 		else
 		{
