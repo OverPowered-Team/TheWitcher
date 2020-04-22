@@ -464,7 +464,10 @@ void PlayerController::Roll()
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
 		if (movement_input.Length() < stick_threshold)
+		{
 			state = PlayerState::IDLE;
+			player_data.speed = float3::zero();
+		}
 		if (movement_input.Length() > stick_threshold)
 		{
 			state = PlayerState::RUNNING;
