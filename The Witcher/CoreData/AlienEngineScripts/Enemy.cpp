@@ -16,6 +16,7 @@ void Enemy::StartEnemy()
 {
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
+	audio_emitter = GetComponent<ComponentAudioEmitter>();
 	state = EnemyState::IDLE;
 	std::string json_str;
 

@@ -70,18 +70,18 @@ void NilfgaardSoldier::Action()
 		break;
 	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
 		int rand_num = Random::GetRandomIntBetweenTwo(0, 1);
-		/*if (rand_num == 0)
-		{*/
+		if (rand_num == 0)
+		{
 			animator->PlayState("Block");
 			current_time = Time::GetGameTime();
 			is_blocked = true;
 			state = EnemyState::BLOCK;
-		/*}
+		}
 		else
 		{
 			animator->PlayState("Attack");
 			state = EnemyState::ATTACK;
-		}*/
+		}
 		break;
 	}
 }
