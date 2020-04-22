@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "RootLeshen.h"
+#include "CrowsLeshen.h"
 #include "Leshen.h"
 
 void Leshen::StartEnemy()
@@ -20,7 +21,6 @@ void Leshen::StartEnemy()
 
 void Leshen::UpdateEnemy()
 {
-	LOG("Update");
 	switch (state)
 	{
 	case Enemy::EnemyState::NONE:
@@ -69,6 +69,7 @@ void Leshen::CleanUpEnemy()
 float Leshen::GetDamaged(float dmg, PlayerController* player)
 {
 	times_hitted++;
+	LOG("times hitted %i", times_hitted)
 	return Enemy::GetDamaged(dmg, player);
 }
 
@@ -185,6 +186,18 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
+	crows = GameObject::Instantiate(crow_prefab, transform->GetGlobalPosition());
+	if (player_rooted[0]) {
+		crows->GetComponent<CrowsLeshen>()->target = 0;
+	}
+	else if (player_rooted[1]){
+		crows->GetComponent<CrowsLeshen>()->target = 1;
+	}
+	else {
+		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
+	}
+
+	crows->GetComponent<CrowsLeshen>()->leshen = this;
 }
 
 void Leshen::LaunchCloudAction()
@@ -245,7 +258,6 @@ Leshen::ActionState Leshen::UpdateCrowsAction()
 {
 	LOG("UPDATING CROWS ACTION");
 
-	current_action->state = ActionState::ENDED;
 
 	return current_action->state;
 }
@@ -253,6 +265,15 @@ Leshen::ActionState Leshen::UpdateCrowsAction()
 Leshen::ActionState Leshen::UpdateCloudAction()
 {
 	LOG("UPDATING CLOUD ACTION");
+
+	if (times_switched < total_switch_times) {
+		if (direction_time <= switch_direction_time) {
+			transform->AddPosition(direction * speed);
+		}
+		else {
+			SetRandomDirection();
+		}
+	}
 
 	current_action->state = ActionState::ENDED;
 
@@ -276,9 +297,10 @@ void Leshen::EndMeleeAction()
 	
 }
 
-void Leshen::EndCrowsAction()
+void Leshen::EndCrowsAction(GameObject* crow)
 {
-	
+	Destroy(crow);
+	current_action->state = Leshen::ActionState::ENDED;
 }
 
 void Leshen::EndCloudAction()
@@ -308,10 +330,12 @@ void Leshen::SetActionVariables()
 	player_rooted[0] = false;
 	player_rooted[1] = false;	
 	
-	if(player_controllers[0]->state == PlayerController::PlayerState::ROOT)
+	if (player_controllers[0]->state == PlayerController::PlayerState::ROOT) {
 		player_rooted[0] = true;
-	else if(player_controllers[1]->state == PlayerController::PlayerState::ROOT)
+	}
+	else if (player_controllers[1]->state == PlayerController::PlayerState::ROOT) {
 		player_rooted[1] = true;
+	}
 }
 
 //void Leshen::ChangePhase()
@@ -325,4 +349,12 @@ void Leshen::HandleHitCount()
 		times_hitted++;
 	else
 		times_hitted = 0;
+}
+
+void Leshen::SetRandomDirection()
+{
+	float rand_x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	float rand_z = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	direction = float3(rand_x, 0, rand_z);
 }

@@ -5,6 +5,7 @@
 #include "Enemy.h"
 
 #define TOTAL_PLAYERS 2
+#define TOTAL_CROWS 10
 
 class ALIEN_ENGINE_API Leshen : public Enemy {
 
@@ -49,6 +50,18 @@ public:
 	GameObject* root_1 = nullptr;
 	GameObject* root_2 = nullptr;
 
+	Prefab crow_prefab;
+	GameObject* crows = nullptr;
+
+	float3 direction;
+	float direction_time = 0.0f;
+	float switch_direction_time = 4.0f;
+	float times_switched = 0;
+	float total_switch_times = 5;
+	float speed = 0.02f;
+
+	int crows_target = 0;
+
 
 public:
 	void StartEnemy() override;
@@ -83,7 +96,7 @@ public:
 
 	void EndRootAction(GameObject* root);
 	void EndMeleeAction();
-	void EndCrowsAction();
+	void EndCrowsAction(GameObject* crow);
 	void EndCloudAction();
 
 	void CreateRoot();
@@ -93,6 +106,8 @@ public:
 
 	//Phase 2 exclusive
 	void HandleHitCount();
+
+	void SetRandomDirection();
 };
 
 ALIEN_FACTORY Leshen* CreateLeshen() {
@@ -102,6 +117,7 @@ ALIEN_FACTORY Leshen* CreateLeshen() {
 	SHOW_VOID_FUNCTION(Leshen::ActivateCollider, leshen);
 	SHOW_VOID_FUNCTION(Leshen::DeactivateCollider, leshen);
 	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->root_prefab);
+	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->crow_prefab);
 
 	return leshen;
 }

@@ -206,8 +206,6 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	}
 
 	return aux_health - stats["Health"].GetValue();
-	state = EnemyState::HIT;
-	animator->PlayState("Hit");
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
