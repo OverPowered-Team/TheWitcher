@@ -258,14 +258,14 @@ void PlayerAttacks::ActivateCollider()
 	{
 		collider->SetCenter(current_attack->info.collider_position);
 		collider->SetSize(current_attack->info.collider_size);
-		collider->SetEnable(true);
+		collider->game_object_attached->SetEnable(true);
 	}
 }
 
 void PlayerAttacks::DeactivateCollider()
 {
 	if(collider)
-		collider->SetEnable(false);
+		collider->game_object_attached->SetEnable(false);
 }
 
 void PlayerAttacks::AllowCombo()

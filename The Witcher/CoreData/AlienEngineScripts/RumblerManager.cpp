@@ -38,7 +38,7 @@ void RumblerManager::Update()
 
 void RumblerManager::StartRumbler(RumblerType type, int _index_controller, float _rumbler_time)
 {
-	rumbler_end_time = Time::GetGameTime() + _rumbler_time;
+	/*rumbler_end_time = Time::GetGameTime() + _rumbler_time;
 	rumbler_start_time = Time::GetGameTime();
 
 	if (_index_controller > 0)
@@ -68,5 +68,5 @@ void RumblerManager::StartRumbler(RumblerType type, int _index_controller, float
 	{
 		StartRumbler(type, 1, _rumbler_time);
 		StartRumbler(type, 2, _rumbler_time);
-	}
+	}*/
 }
