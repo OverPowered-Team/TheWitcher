@@ -747,13 +747,8 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 	select_on_right = std::stoull(to_load->GetString("SelectOnRight"));
 	select_on_left = std::stoull(to_load->GetString("SelectOnLeft"));
 
-	try {
-		click_event = to_load->GetString("ClickEvent");
-		move_event = to_load->GetString("MoveEvent");
-	}
-	catch (...) {
-		// f
-	}
+	click_event = to_load->GetString("ClickEvent");
+	move_event = to_load->GetString("MoveEvent");
 
 	u64 textureID = std::stoull(to_load->GetString("TextureID"));
 	if (textureID != 0) {

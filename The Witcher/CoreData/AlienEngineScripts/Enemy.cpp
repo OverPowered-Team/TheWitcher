@@ -16,6 +16,7 @@ void Enemy::StartEnemy()
 {
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
+	audio_emitter = GetComponent<ComponentAudioEmitter>();
 	state = EnemyState::IDLE;
 	std::string json_str;
 
@@ -187,6 +188,16 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 	
+	switch (type)
+	{
+	case EnemyType::GHOUL:
+		audio_emitter->StartSound("SoldierHit");
+		break;
+	case EnemyType::NILFGAARD_SOLDIER:
+		audio_emitter->StartSound("GhoulHit");
+		break;
+	}
+	
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
@@ -199,7 +210,16 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
-			//GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+
+			switch (type)
+			{
+			case EnemyType::GHOUL:
+				audio_emitter->StartSound("SoldierDeath");
+				break;
+			case EnemyType::NILFGAARD_SOLDIER:
+				audio_emitter->StartSound("GhoulDeath");
+				break;
+			}
 
 			decapitated_head = GameObject::Instantiate(head_prefab, head_position->transform->GetGlobalPosition());
 			if (decapitated_head)

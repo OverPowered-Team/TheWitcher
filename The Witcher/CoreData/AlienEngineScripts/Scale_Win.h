@@ -60,8 +60,6 @@ ALIEN_FACTORY Scale_Win* CreateScale_Win() {
 	Scale_Win* alien = new Scale_Win();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->player1_points);
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->player2_points);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->max_Y);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_scale);
 

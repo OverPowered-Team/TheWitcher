@@ -65,6 +65,7 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
+	ComponentAudioEmitter* audio_emitter = nullptr;
 	Prefab head_prefab;
 	GameObject* head_position;
 

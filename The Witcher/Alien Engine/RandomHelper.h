@@ -22,6 +22,14 @@ public:
 		return uniform_dist(rng);
 	}
 
+	static u32 GetRandom32ID()
+	{
+		pcg_extras::seed_seq_from<std::random_device> seed_source;
+		pcg32 rng(seed_source);
+		std::uniform_int_distribution<u32> uniform_dist(1, ULLONG_MAX);
+		return uniform_dist(rng);
+	}
+
 	// min & max are inclusive
 	static float GetRandomFloatBetweenTwo(const float& min, const float& max) {
 		pcg_extras::seed_seq_from<std::random_device> seed_source;
