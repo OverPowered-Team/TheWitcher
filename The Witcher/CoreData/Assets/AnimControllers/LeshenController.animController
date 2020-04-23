@@ -1,0 +1,97 @@
+{
+    "Controller": {
+        "Name": "LeshenController",
+        "NumStates": 5,
+        "NumTransitions": 3,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "17599076435809593095"
+            },
+            {
+                "Name": "Melee",
+                "Speed": 1,
+                "Clip": "6237433947271409033"
+            },
+            {
+                "Name": "Crows",
+                "Speed": 1,
+                "Clip": "3207370710218579342"
+            },
+            {
+                "Name": "Roots",
+                "Speed": 1,
+                "Clip": "9811282441251029284"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "478306222198824128"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Roots",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Crows",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Melee",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            }
+        ],
+        "Events": [
+            {
+                "Event_Id": "Leshen::LaunchCrowsAction",
+                "Animation_Id": "3207370710218579342",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Leshen::LaunchRootAction",
+                "Animation_Id": "9811282441251029284",
+                "Frame": 41,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Leshen::ActivateCollider",
+                "Animation_Id": "6237433947271409033",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Leshen::DeactivateCollider",
+                "Animation_Id": "6237433947271409033",
+                "Frame": 24,
+                "Type": 2
+            }
+        ]
+    }
+}
