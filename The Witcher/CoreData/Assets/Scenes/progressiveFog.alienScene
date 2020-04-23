@@ -9,7 +9,7 @@
                 "ParentID": "7601433438955250839",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -19,15 +19,15 @@
                     {
                         "Type": 0,
                         "Position": [
-                            32.963161468505859,
+                            67.561058044433594,
                             0,
-                            0
+                            -3.7252902984619141e-09
                         ],
                         "Rotation": [
                             0,
-                            -0.82700634002685547,
+                            -0.69371932744979858,
                             0,
-                            0.56219261884689331
+                            0.72024554014205933
                         ],
                         "Scale": [
                             1,
@@ -41,11 +41,11 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
+                        "HoritzontalFov": 52.711536407470703,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
-                            0.10000000149011612,
+                            0.5,
                             1
                         ],
                         "FarPlane": 200,
@@ -53,7 +53,7 @@
                         "isFovHori": 0,
                         "ID": "8338183315968838486",
                         "IsGameCamera": true,
-                        "IsSelectedCamera": false,
+                        "IsSelectedCamera": true,
                         "PrintIcon": true,
                         "IconColor": [
                             0.85000002384185791,
@@ -62,7 +62,7 @@
                             1
                         ],
                         "Fog": false,
-                        "Density": 0.035000000149011612,
+                        "Density": 0,
                         "Gradient": 1.3500000238418579,
                         "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
                         "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
@@ -104,9 +104,9 @@
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
                         "Size": [
-                            1,
-                            1,
-                            1
+                            0.5,
+                            0.5,
+                            0.5
                         ]
                     }
                 ]
@@ -181,13 +181,13 @@
                 ]
             },
             {
-                "Name": "Fog",
+                "Name": "FogZone",
                 "FamilyNumber": 1,
                 "ID": "8599940341453162681",
                 "ParentID": "7601433438955250839",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -223,6 +223,65 @@
                         "HasInspector": true,
                         "Inspector": [
                             {
+                                "VarType": 11,
+                                "Name": "Zone Radius"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "innerRadius",
+                                "float": 30
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "outterRadius",
+                                "float": 50
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Fog Properties"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "targetFogDensity",
+                                "float": 0.035000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "targetFogGradient",
+                                "float": 1.3500000238418579
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Fog Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.x",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.y",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.z",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Current State"
+                            },
+                            {
                                 "VarType": 14,
                                 "Name": "fogState",
                                 "enumInt": 0
@@ -239,7 +298,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -284,7 +343,7 @@
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
-                        "Radius": 25
+                        "Radius": 50
                     },
                     {
                         "Type": 29,
@@ -310,7 +369,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -355,7 +414,7 @@
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
-                        "Radius": 20
+                        "Radius": 30
                     },
                     {
                         "Type": 29,
@@ -401,9 +460,9 @@
                             1
                         ],
                         "Scale": [
-                            182.14834594726563,
+                            1258.2008056640625,
                             1,
-                            161.47930908203125
+                            836.7403564453125
                         ],
                         "ScaleNegative": false,
                         "ID": "13061122026069046914"
@@ -444,6 +503,88 @@
                         ],
                         "IsTrigger": false,
                         "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 1,
+                "ID": "9357879479752653335",
+                "ParentID": "7601433438955250839",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            4.7699999809265137,
+                            4.7699999809265137,
+                            4.7699999809265137
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17230785299299323520"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "7160385973815758593",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "1876694904945538357",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",

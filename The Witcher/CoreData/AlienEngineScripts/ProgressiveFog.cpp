@@ -16,7 +16,6 @@ void ProgressiveFog::Start()
 	{
 		innerCol = colliders.at(0);
 		outterCol = colliders.at(1);
-		innerCol->SetRadius(innerRadius);
 		LOG("Set inner to %f, and outter to %f", innerRadius, outterRadius);
 	}
 	else
@@ -30,24 +29,16 @@ void ProgressiveFog::Update()
 	switch (fogState)
 	{
 	case FogState::OFF:
-		camera->DisableFog();
-
 		break;
 
 	case FogState::ON:
-		camera->EnableFog();
-		camera->SetFogDensity(targetFogDensity);
-		camera->SetFogGradient(targetFogGradient);
-		camera->SetBackgroundColor(fogColor);
 		break;
 
 	case FogState::TRANSITION:
 
 		float percentage = CalculateRatio();
-		camera->SetBackgroundColor(fogColor);
-
 		camera->SetFogDensity(targetFogDensity * percentage);
-		camera->SetFogGradient(targetFogGradient);
+		camera->SetFogGradient(targetFogGradient * percentage);
 
 		break;
 	}
@@ -59,11 +50,21 @@ void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 	{
 	case 1:
 		fogState = FogState::TRANSITION;
+
+		camera->SetBackgroundColor(fogColor);
+		camera->EnableFog();
+		camera->SetFogDensity(0.f);
+		camera->SetFogGradient(0.f);
+
 		LOG("State in TRANSITION");
 		break;
 
 	case 2:
 		fogState = FogState::ON;
+
+		camera->SetFogDensity(targetFogDensity);
+		camera->SetFogGradient(targetFogGradient);
+
 		LOG("State ON");
 		break;
 	}
@@ -75,6 +76,7 @@ void ProgressiveFog::RecieveCollisionExitInteraction(int collider_index)
 	{
 	case 1:
 		fogState = FogState::OFF;
+		camera->DisableFog();
 		LOG("State in OFF");
 		break;
 
@@ -87,6 +89,23 @@ void ProgressiveFog::RecieveCollisionExitInteraction(int collider_index)
 
 float ProgressiveFog::CalculateRatio()
 {
-	
-	return 0.0f;
+	float totalDistance = outterRadius - innerRadius;
+
+	float3 camPos = camera->game_object_attached->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
+	float3 outterPos = camPos;
+	camPos.Normalize();
+	float3 innerPos = camPos * innerRadius;
+
+	float3 totalPos = outterPos - innerPos;
+
+	float magnitude = totalPos.Length();
+
+	float percentage = magnitude / totalDistance;
+
+	percentage = 1 - percentage;
+
+	percentage = Clamp(percentage, 0.0f, 1.0f);
+
+	LOG("Percentage: %f", percentage);
+	return percentage;
 }

@@ -55,12 +55,12 @@ ALIEN_FACTORY ProgressiveFog* CreateProgressiveFog() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->outterRadius);
 	SHOW_SEPARATOR();
 	SHOW_TEXT("Fog Properties");
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->targetFogDensity);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->targetFogGradient);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->targetFogDensity, 0.f, 0.5f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->targetFogGradient, 0.f, 2.f);
 	SHOW_TEXT("Fog Color");
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->fogColor.x);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->fogColor.y);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->fogColor.z);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->fogColor.x, 0.f, 1.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->fogColor.y, 0.f, 1.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->fogColor.z, 0.f, 1.f);
 	SHOW_SEPARATOR();
 	SHOW_TEXT("Current State");
 	SHOW_IN_INSPECTOR_AS_ENUM(FogState, alien->fogState);
