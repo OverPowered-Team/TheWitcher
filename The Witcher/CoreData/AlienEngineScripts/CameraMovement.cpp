@@ -35,7 +35,7 @@ void CameraMovement::Update()
         break;
     case CameraState::AXIS: {
         if (smooth_camera)
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint() + trg_offset) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
         else {
             transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
         }
@@ -51,6 +51,7 @@ void CameraMovement::Update()
         if ((trg_pos - curr_pos).Length() < min_dist) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
+            first_pos = trg_pos;
             state = CameraState::AXIS;
         }
         else {
