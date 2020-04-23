@@ -118,11 +118,11 @@ void PlayerController::PreUpdate()
 	case PlayerController::PlayerState::JUMPING:
 		if (controller->isGrounded)
 		{
-			if (movement_input.Length() < stick_threshold)
+			if (!mov_input)
 			{
 				state = PlayerState::IDLE;
 			}
-			if (movement_input.Length() > stick_threshold)
+			if (mov_input)
 			{
 				state = PlayerState::RUNNING;
 				particles["p_run"]->SetEnable(true);
@@ -199,7 +199,6 @@ void PlayerController::Update()
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 
-
 	//Effects-----------------------------
 	EffectsUpdate();
 }
@@ -210,31 +209,34 @@ void PlayerController::UpdateInput()
 	float2 keyboardInput = float2::zero();
 
 	if (Input::GetKeyRepeat(keyboard_move_left)) {
-		keyboardInput.x += 1.f;
+		keyboardInput.x = 1.f;
 	}
 	if (Input::GetKeyRepeat(keyboard_move_right)) {
-		keyboardInput.x -= 1.f;
-	}
-	if (Input::GetKeyRepeat(keyboard_move_up)) {
-		keyboardInput.y += 1.f;
+		keyboardInput.x = -1.f;
 	}
 	if (Input::GetKeyRepeat(keyboard_move_down)) {
-		keyboardInput.y -= 1.f;
+		keyboardInput.y = -1.f;
+	}
+	if (Input::GetKeyRepeat(keyboard_move_up)) {
+		keyboardInput.y = 1.f;
 	}
 
-	if (joystickInput.Length() > stick_threshold) {
-		animator->SetBool("movement_input", true);
-		//movement_input = joystickInput.Normalized() * ((joystickInput.Normalized().Length() - stick_threshold) / (1 - stick_threshold));
-		movement_input = joystickInput.Normalized();
-	}
-	else if (keyboardInput.Length() > stick_threshold)
+	if (keyboardInput.Length() > 0)
 	{
 		animator->SetBool("movement_input", true);
-		movement_input = keyboardInput.Normalized();
+		mov_input = true;
+		keyboardInput.Normalize();
+		movement_input = keyboardInput;
+	}
+	else if (joystickInput.Length() > 0) {
+		animator->SetBool("movement_input", true);
+		mov_input = true;
+		movement_input = joystickInput;
 	}
 	else
 	{
 		animator->SetBool("movement_input", false);
+		mov_input = false;
 		movement_input = float2::zero();
 	}
 }
@@ -297,7 +299,7 @@ void PlayerController::RunningInput()
 	{
 		Fall();
 	}
-	if (movement_input.Length() < stick_threshold)
+	if (!mov_input)
 	{
 		state = PlayerState::IDLE;
 		particles["p_run"]->SetEnable(false);
@@ -448,7 +450,7 @@ void PlayerController::Roll()
 {
 	float3 direction_vector = float3::zero();
 
-	if (movement_input.Length() > stick_threshold)
+	if (mov_input)
 	{
 		direction_vector = float3(movement_input.x, 0.f, movement_input.y);
 		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
@@ -464,12 +466,12 @@ void PlayerController::Roll()
 
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
-		if (movement_input.Length() < stick_threshold)
+		if (!mov_input)
 		{
 			state = PlayerState::IDLE;
 			player_data.speed = float3::zero();
 		}
-		if (movement_input.Length() > stick_threshold)
+		else
 		{
 			state = PlayerState::RUNNING;
 			particles["p_run"]->SetEnable(true);
@@ -477,9 +479,12 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	}
 
 	if (strcmp(name, "Spell") == 0) {
-		if (movement_input.Length() < stick_threshold)
+		if (!mov_input)
+		{
 			state = PlayerState::IDLE;
-		if (movement_input.Length() > stick_threshold)
+			player_data.speed = float3::zero();
+		}
+		if (mov_input)
 		{
 			state = PlayerState::RUNNING;
 			particles["p_run"]->SetEnable(true);
@@ -489,6 +494,7 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Hit") == 0) {
 		state = PlayerState::IDLE;
 		animator->SetBool("reviving", false);
+		player_data.speed = float3::zero();
 	}
 
 	if (strcmp(name, "RCP") == 0) {
@@ -593,7 +599,7 @@ bool PlayerController::CheckBoundaries()
 
 	float speed = 0.f;
 
-	if (abs(movement_input.x) >= stick_threshold || abs(movement_input.y) >= stick_threshold)
+	if (mov_input)
 	{
 		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT() / Time::GetScaleTime());
 	}
@@ -667,6 +673,9 @@ bool PlayerController::CheckForPossibleRevive()
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
+	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+
+	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
@@ -703,6 +712,14 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			}
 		}
 	}
+}
+
+void PlayerController::HitFreeze(float freeze_time)
+{
+	float speed = animator->GetCurrentStateSpeed();
+	animator->SetCurrentStateSpeed(0);
+	ComponentAnimator* anim = animator;
+	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
 }
 
 void PlayerController::OnUltimateActivation(float value)

@@ -93,6 +93,8 @@ public:
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
 
+	void HitFreeze(float freeze_time);
+
 public:
 	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
@@ -103,7 +105,7 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	float2 movement_input;
-	float stick_threshold = 0.1f;
+	bool mov_input = false;
 
 	float revive_range = 5.0f;
 
@@ -159,7 +161,6 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);

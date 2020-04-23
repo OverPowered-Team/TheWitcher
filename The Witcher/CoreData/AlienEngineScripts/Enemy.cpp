@@ -10,6 +10,7 @@ void Enemy::Awake()
 {
 	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
+	attack_collider->SetEnable(false);
 }
 
 void Enemy::StartEnemy()
@@ -132,7 +133,7 @@ void Enemy::SetStats(const char* json)
 void Enemy::Move(float3 direction)
 {
 	float3 velocity_vec = direction * stats["Agility"].GetValue();
-	character_ctrl->Move(velocity_vec);
+	character_ctrl->Move(velocity_vec * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
@@ -255,4 +256,13 @@ void Enemy::AddEffect(Effect* new_effect)
 		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
 			it->second.ApplyEffect(new_effect);
 	}
+}
+
+void Enemy::HitFreeze(float freeze_time)
+{
+	CancelInvoke();
+	float speed = animator->GetCurrentStateSpeed();
+	animator->SetCurrentStateSpeed(0);
+	ComponentAnimator* anim = animator;
+	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
 }
