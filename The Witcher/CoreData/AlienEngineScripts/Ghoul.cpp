@@ -103,8 +103,16 @@ void Ghoul::Action()
 
 void Ghoul::JumpImpulse()
 {
-    float3 jump_direction = direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
-    character_ctrl->Move(jump_direction);
+    if (distance > stats["AttackRange"].GetValue())
+    {
+        float3 jump_direction = direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
+        character_ctrl->Move(jump_direction);
+    }
+    else
+    {
+        animator->PlayState("Slash");
+        state = EnemyState::ATTACK;
+    }
 }
 
 void Ghoul::OnAnimationEnd(const char* name)
