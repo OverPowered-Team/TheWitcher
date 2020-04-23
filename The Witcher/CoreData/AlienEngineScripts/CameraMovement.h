@@ -39,6 +39,7 @@ public:
 	std::vector<GameObject*> players;
 	uint num_curr_players = 0u;
 	float3 trg_offset;
+	float3 first_pos;
 	CameraAxis axis = CameraAxis::NONE;
 	float current_transition_time = 0.f;
 
