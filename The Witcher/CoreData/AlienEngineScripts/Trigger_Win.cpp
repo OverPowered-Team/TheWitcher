@@ -22,14 +22,15 @@ void Trigger_Win::Update()
 
 void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 {
-	 ComponentAudioEmitter* em = collider->game_object_attached->GetComponent<ComponentAudioEmitter>();
+	ComponentAudioEmitter* em = collider->game_object_attached->GetComponent<ComponentAudioEmitter>();
 	if (Time::GetGameTime() - timer >= 2.f)
 	{
 		if (em != nullptr && !first)
 		{
 			Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 			Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-			SceneManager::LoadScene("NewWin_Menu");
+			Scores_Data::won_level1 = true;
+			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 			first = true;
 		}
 	}
