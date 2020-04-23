@@ -38,7 +38,7 @@ void ProgressiveFog::Update()
 
 		float percentage = CalculateRatio();
 		camera->SetFogDensity(targetFogDensity * percentage);
-		camera->SetFogGradient(targetFogGradient * percentage);
+		//camera->SetFogGradient(targetFogGradient * percentage);
 
 		break;
 	}
@@ -53,8 +53,8 @@ void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 
 		camera->SetBackgroundColor(fogColor);
 		camera->EnableFog();
-		camera->SetFogDensity(0.f);
-		camera->SetFogGradient(0.f);
+		camera->SetFogDensity(0.0001f);
+		camera->SetFogGradient(targetFogGradient);
 
 		LOG("State in TRANSITION");
 		break;
@@ -63,7 +63,7 @@ void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 		fogState = FogState::ON;
 
 		camera->SetFogDensity(targetFogDensity);
-		camera->SetFogGradient(targetFogGradient);
+		//camera->SetFogGradient(targetFogGradient);
 
 		LOG("State ON");
 		break;
@@ -104,7 +104,7 @@ float ProgressiveFog::CalculateRatio()
 
 	percentage = 1 - percentage;
 
-	percentage = Clamp(percentage, 0.0f, 1.0f);
+	percentage = Clamp(percentage, 0.0001f, 1.0f);
 
 	LOG("Percentage: %f", percentage);
 	return percentage;
