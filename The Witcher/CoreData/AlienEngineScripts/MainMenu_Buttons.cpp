@@ -11,7 +11,7 @@ MainMenu_Buttons::~MainMenu_Buttons()
 
 void MainMenu_Buttons::NewGame()
 {
-	SceneManager::LoadScene("Intro");
+	SceneManager::LoadScene("Intro", FadeToBlackType::HORIZONTAL_CURTAIN);
 }
 
 void MainMenu_Buttons::ExitGame()

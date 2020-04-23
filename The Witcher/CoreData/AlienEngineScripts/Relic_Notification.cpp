@@ -12,6 +12,7 @@ Relic_Notification::~Relic_Notification()
 void Relic_Notification::Start()
 {
 	relic_notification = GameObject::FindWithName("Relics_Notification");
+	relic_notification->SetEnable(false);
 	geralt_portrait = game_object->GetChild("Relics_Notification")->GetChild("Portrait_Relics")->GetChild("Geralt_Relics_Portrait");
 	yennefer_portrait = game_object->GetChild("Relics_Notification")->GetChild("Portrait_Relics")->GetChild("Yennefer_Relics_Portrait");
 	relic_title = game_object->GetChild("Relics_Notification")->GetChild("Relic_Name")->GetComponent<ComponentText>();
