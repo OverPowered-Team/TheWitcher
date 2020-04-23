@@ -129,8 +129,6 @@ bool ModuleUI::CleanUp()
 
 void ModuleUI::LoadConfig(JSONfilepack*& config)
 {
-	OPTICK_EVENT();
-
 	for (uint i = 0; i < 3; ++i) {
 		panel_config_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", i);
 		panel_build_codes[i] = (SDL_Scancode)(uint)config->GetArrayNumber("Configuration.UI.ShortCuts.PanelBuild", i);
@@ -208,8 +206,6 @@ void ModuleUI::LoadConfig(JSONfilepack*& config)
 
 void ModuleUI::SaveConfig(JSONfilepack*& config)
 {
-	OPTICK_EVENT();
-
 	for (uint i = 0; i < 3; ++i) {
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_config->shortcut->GetScancode(i));
 		config->SetArrayNumber("Configuration.UI.ShortCuts.PanelConfig", (uint)panel_build->shortcut->GetScancode(i));
@@ -247,8 +243,6 @@ void ModuleUI::SaveConfig(JSONfilepack*& config)
 }
 void ModuleUI::LoadLayouts()
 {
-	OPTICK_EVENT();
-
 	JSONfilepack* json_layout = App->GetJSONLayout();
 	JSONArraypack* arr_layouts = json_layout->GetArray("Layouts");
 
@@ -284,8 +278,6 @@ void ModuleUI::LoadLayouts()
 
 void ModuleUI::SaveAllLayouts()
 {
-	OPTICK_EVENT();
-
 	JSONfilepack* json_layout = App->GetJSONLayout();
 	App->DeleteJSONfile(json_layout);
 	App->file_system->Remove("Configuration/LayoutsInfo.json");
@@ -316,8 +308,6 @@ void ModuleUI::SaveAllLayouts()
 
 void ModuleUI::SaveLayout(Layout* layout, bool is_new)
 {
-	OPTICK_EVENT();
-
 	JSONfilepack* json_layout = App->GetJSONLayout();
 	json_layout->StartSave();
 
@@ -356,8 +346,6 @@ void ModuleUI::SaveLayout(Layout* layout, bool is_new)
 
 void ModuleUI::SaveLayoutsActive()
 {
-	OPTICK_EVENT();
-
 	// just save the active attribut & name to know in the next session which layout was active
 
 	JSONfilepack* json_layout = App->GetJSONLayout();
@@ -1053,8 +1041,6 @@ void ModuleUI::ReportBug()
 
 void ModuleUI::ChangeStyle(const int& style_number)
 {
-	OPTICK_EVENT();
-
 	switch (style_number) {
 	case 0:
 		ImGui::StyleColorsClassic();
@@ -1078,15 +1064,11 @@ void ModuleUI::ChangeStyle(const int& style_number)
 
 void ModuleUI::ChangeEnableDemo()
 {
-	OPTICK_EVENT();
-
 	show_demo_wndow = !show_demo_wndow;
 }
 
 void ModuleUI::CreateNewScriptPopUp()
 {
-	OPTICK_EVENT();
-
 	static int type = 0;
 	static char _name[MAX_PATH] = "Data Name";
 	static bool _export = true;
@@ -1131,8 +1113,6 @@ void ModuleUI::CreateNewScriptPopUp()
 
 void ModuleUI::SetError()
 {
-	OPTICK_EVENT();
-
 	if (!App->objects->errors) {
 		App->objects->errors = true;
 		panel_console->game_console = false;
@@ -1148,7 +1128,6 @@ void ModuleUI::SetError()
 
 void ModuleUI::DeleteLayout(Layout* layout)
 {
-	OPTICK_EVENT();
 
 	if (layout == active_layout) {
 		layout->active = false;
@@ -1226,8 +1205,6 @@ void ModuleUI::UpdatePanels()
                   
 void ModuleUI::InitShortCuts()
 {
-	OPTICK_EVENT();
-
 	shortcut_demo = App->shortcut_manager->AddShortCut("imGui Demo", shortcut_demo_codes[0], std::bind(&ModuleUI::ChangeEnableDemo, App->ui), shortcut_demo_codes[1], shortcut_demo_codes[2]);
 	shortcut_report_bug = App->shortcut_manager->AddShortCut("Report Bug", shortcut_report_bug_codes[0], std::bind(&ModuleUI::ReportBug, App->ui), shortcut_report_bug_codes[1], shortcut_report_bug_codes[2]);
 	shortcut_view_mesh = App->shortcut_manager->AddShortCut("Mesh View", shortcut_view_mesh_codes[0], std::bind(&ModuleObjects::ChangeViewMeshMode, App->objects), shortcut_view_mesh_codes[1], shortcut_view_mesh_codes[2]);
@@ -1252,8 +1229,6 @@ void ModuleUI::InitShortCuts()
 
 void ModuleUI::LoadActiveLayout()
 {
-	OPTICK_EVENT();
-
 	std::vector<Layout*>::iterator item = layouts.begin();
 	for (; item != layouts.end(); ++item) {
 		if (*item != nullptr && (*item)->active) {
@@ -1271,8 +1246,6 @@ void ModuleUI::LoadActiveLayout()
 
 void ModuleUI::HandleEvent(EventType eventType)
 {
-	OPTICK_EVENT();
-
 	for each (Panel* p in panels)
 	{
 		switch (eventType)
@@ -1308,16 +1281,12 @@ void ModuleUI::HandleEvent(EventType eventType)
 
 void ModuleUI::FramerateRegister(float frames, float ms)
 {
-	OPTICK_EVENT();
-
 	if (panel_config->IsEnabled())
 		panel_config->FramerateInfo(frames,ms);
 }
 
 void ModuleUI::BackgroundDockspace()
 {
-	OPTICK_EVENT();
-
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -1353,8 +1322,6 @@ void ModuleUI::BackgroundDockspace()
 
 Layout::Layout(const char* name)
 {
-	OPTICK_EVENT();
-
 	this->name = std::string(name);
 
 	bool done = false;

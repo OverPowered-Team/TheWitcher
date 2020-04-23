@@ -388,6 +388,21 @@ void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit
 	}
 }
 
+bool ComponentCharacterController::SetPosition(float3 position) const
+{
+	return controller->setPosition(F3_TO_PXVEC3EXT(position));
+}
+
+float3 ComponentCharacterController::GetPosition() const
+{
+	return  PXVEC3EXT_TO_F3(controller->getPosition());
+}
+
+float3 ComponentCharacterController::GetFootPosition() const
+{
+	return  PXVEC3EXT_TO_F3(controller->getFootPosition());
+}
+
 //* -------------------------- User hit callbacks
 void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 {

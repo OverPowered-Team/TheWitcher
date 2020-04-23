@@ -179,7 +179,7 @@ void Enemy::DeactivateCollider()
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
@@ -196,10 +196,10 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	switch (type)
 	{
 	case EnemyType::GHOUL:
-		audio_emitter->StartSound("SoldierHit");
+		audio_emitter->StartSound("GhoulHit");
 		break;
 	case EnemyType::NILFGAARD_SOLDIER:
-		audio_emitter->StartSound("GhoulHit");
+		audio_emitter->StartSound("SoldierHit");
 		break;
 	}
 	

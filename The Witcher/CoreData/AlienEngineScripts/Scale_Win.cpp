@@ -31,6 +31,22 @@ void Scale_Win::Start()
 	score_text_1->SetText("0");
 	score_text_2->SetText("0");
 
+	// Win/Lose
+	if (!Scores_Data::dead)
+	{
+		GameObject::FindWithName("Victory")->SetEnable(true);
+		GameObject::FindWithName("Defeat")->SetEnable(false);
+		if (Scores_Data::won_level2)
+		{
+			GameObject::FindWithName("Victory")->GetChild("Text")->GetComponent<ComponentText>()->SetText("Congratulations! Main Menu");
+		}
+	}
+	else
+	{
+		GameObject::FindWithName("Victory")->SetEnable(false);
+		GameObject::FindWithName("Defeat")->SetEnable(true);
+	}
+
 	for (int i = 1; i <= Scores_Data::player1_kills; ++i)
 	{
 		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
@@ -116,6 +132,35 @@ void Scale_Win::Update()
 		if (Time::GetGameTime() > time + time_to_scale)
 		{ 
 			in_place = true;
+		}
+	}
+
+	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y))
+	{
+		if (Scores_Data::dead)
+		{
+			Scores_Data::dead = false;
+			if (Scores_Data::won_level1)
+			{
+				SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			}
+			else
+			{
+				SceneManager::LoadScene("newTRIGGERS", FadeToBlackType::VERTICAL_CURTAIN);
+			}
+		}
+		else
+		{
+			if (Scores_Data::won_level1)
+			{
+				SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			}
+			else if (Scores_Data::won_level2)
+			{
+				Scores_Data::won_level1 = false;
+				Scores_Data::won_level2 = false;
+				SceneManager::LoadScene("Main_Menu", FadeToBlackType::VERTICAL_CURTAIN);
+			}
 		}
 	}
 }

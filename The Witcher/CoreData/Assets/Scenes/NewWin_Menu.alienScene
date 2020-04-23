@@ -9,7 +9,7 @@
                 "ParentID": "17232811697877510915",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -89,7 +89,7 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            7.0544238090515137,
+                            8.812169075012207,
                             -19.814994812011719
                         ],
                         "Rotation": [
@@ -110,7 +110,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
+                        "HoritzontalFov": 101.03900146484375,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -218,7 +218,7 @@
                         "Type": 0,
                         "Position": [
                             -7.5,
-                            -2.9802322387695313e-08,
+                            0,
                             0
                         ],
                         "Rotation": [
@@ -2490,7 +2490,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5594088261869047453",
+                        "ID": "5762853529818317214",
                         "Text": "4872",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -2544,7 +2544,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13024609160995673209",
+                        "ID": "13918000720880949395",
                         "Text": "5623",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -2562,11 +2562,11 @@
                 ]
             },
             {
-                "Name": "Image",
+                "Name": "Victory",
                 "FamilyNumber": 2,
                 "ID": "11228745552395536587",
                 "ParentID": "15963664901747148926",
-                "Enabled": false,
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -2579,7 +2579,7 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            0,
+                            -32.5,
                             0
                         ],
                         "Rotation": [
@@ -2589,26 +2589,80 @@
                             1
                         ],
                         "Scale": [
-                            80,
-                            50,
+                            5,
+                            5,
                             1
                         ],
                         "ScaleNegative": false,
                         "ID": "16493090976228441335"
                     },
                     {
-                        "Width": 10,
-                        "Height": 10,
+                        "Width": 7,
+                        "Height": 5,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "0",
+                        "TextureID": "5239295638391244311",
                         "Color": [
-                            0.068627476692199707,
-                            0.06862679123878479,
-                            0.06862679123878479,
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
                             1
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "9750648177085762287",
+                "ParentID": "11228745552395536587",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -14.384101867675781,
+                            -1.7963075637817383,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.0024000001139938831,
+                            0.0024000001139938831,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15149435421360978566"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "944932856284758890",
+                        "Text": "Go to Level 2",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.94607841968536377,
+                            0.94606894254684448,
+                            0.94606894254684448,
+                            1
+                        ],
+                        "Width": 3015,
+                        "Interlineal": 1.5,
+                        "Align": 0
                     }
                 ]
             },
@@ -2649,7 +2703,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "286322975961300102",
+                        "ID": "5855026626300059804",
                         "Text": "-Geralt-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2703,7 +2757,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17078714128576949219",
+                        "ID": "15498927569342575481",
                         "Text": "-Yennefer-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2717,6 +2771,162 @@
                         "Width": 200,
                         "Interlineal": 1.5,
                         "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Defeat",
+                "FamilyNumber": 2,
+                "ID": "6167678599204295045",
+                "ParentID": "15963664901747148926",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -32.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5,
+                            5,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1807586485847697053"
+                    },
+                    {
+                        "Width": 7,
+                        "Height": 5,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "15512998250041092473",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "6892438007333696270",
+                "ParentID": "6167678599204295045",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -14.384101867675781,
+                            -1.7963075637817383,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.0024000001139938831,
+                            0.0024000001139938831,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6830907205255601575"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "9535811216988977424",
+                        "Text": "Retry Level",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.94607841968536377,
+                            0.94606894254684448,
+                            0.94606894254684448,
+                            1
+                        ],
+                        "Width": 1530,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Y",
+                "FamilyNumber": 2,
+                "ID": "4681123506590235182",
+                "ParentID": "15963664901747148926",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -74.920509338378906,
+                            -40.281536102294922,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            3,
+                            3,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15080937744958424189"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "8994133557069102572",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
                     }
                 ]
             }

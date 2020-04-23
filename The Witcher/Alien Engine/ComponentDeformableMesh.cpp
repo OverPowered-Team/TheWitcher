@@ -90,8 +90,6 @@ void ComponentDeformableMesh::AttachBone(ComponentTransform* bone_transform)
 
 void ComponentDeformableMesh::UpdateBonesMatrix()
 {
-	OPTICK_EVENT(); 
-
 	uint i = 0;
 	for (std::vector<ComponentBone*>::iterator it = bones.begin(); it != bones.end(); ++it, ++i)
 	{
@@ -117,27 +115,10 @@ void ComponentDeformableMesh::DrawPolygon(ComponentCamera* camera)
 
 }
 
-void ComponentDeformableMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
+void ComponentDeformableMesh::SetUniform(ResourceMaterial* material, ComponentCamera* camera)
 {
-	OPTICK_EVENT();
-	if (mesh == nullptr || mesh->id_index <= 0 || material == nullptr)
-		return;
-
-	UpdateBonesMatrix();
-
-	ComponentMesh::PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
-}
-
-void ComponentDeformableMesh::SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera)
-{
-	ComponentMesh::SetUniforms(resource_material, camera);
-	resource_material->used_shader->SetUniformMat4f("gBones", bones_matrix, bones.size());
-}
-
-void ComponentDeformableMesh::SetShadowUniforms(ResourceMaterial* resource_material, ComponentCamera* camera,const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
-{
-	ComponentMesh::SetShadowUniforms(resource_material, camera, ViewMat, ProjMatrix, position);
-	resource_material->simple_depth_shader->SetUniformMat4f("gBones", bones_matrix, bones.size());
+	ComponentMesh::SetUniform(material, camera);
+	material->used_shader->SetUniformMat4f("gBones", bones_matrix, bones.size());
 }
 
 void ComponentDeformableMesh::SaveComponent(JSONArraypack* to_save)

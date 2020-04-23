@@ -11,7 +11,6 @@
 #include "ReturnZ.h"
 #include "mmgr/mmgr.h"
 
-#include "Optick/include/optick.h"
 
 ComponentCanvas::ComponentCanvas(GameObject* obj):Component(obj)
 {
@@ -102,7 +101,6 @@ void ComponentCanvas::LoadComponent(JSONArraypack* to_load)
 
 void ComponentCanvas::Draw()
 {
-	OPTICK_EVENT();
 #ifndef GAME_VERSION
 	if (!App->objects->printing_scene)
 		return;
