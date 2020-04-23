@@ -199,7 +199,6 @@ void PlayerController::Update()
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 
-
 	//Effects-----------------------------
 	EffectsUpdate();
 }

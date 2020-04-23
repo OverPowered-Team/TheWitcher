@@ -18,6 +18,7 @@ void PlayerAttacks::Start()
 {
 	player_controller = GetComponent<PlayerController>();
 	collider = collider_go->GetComponent<ComponentBoxCollider>();
+	collider->SetEnable(false);
 
 	CreateAttacks();
 }
@@ -263,14 +264,14 @@ void PlayerAttacks::ActivateCollider()
 	{
 		collider->SetCenter(current_attack->info.collider_position);
 		collider->SetSize(current_attack->info.collider_size);
-		collider->game_object_attached->SetEnable(true);
+		collider->SetEnable(true);
 	}
 }
 
 void PlayerAttacks::DeactivateCollider()
 {
 	if(collider)
-		collider->game_object_attached->SetEnable(false);
+		collider->SetEnable(false);
 }
 
 void PlayerAttacks::AllowCombo()
