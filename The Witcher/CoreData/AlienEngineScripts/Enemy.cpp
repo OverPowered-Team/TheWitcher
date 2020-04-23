@@ -8,18 +8,18 @@
 
 void Enemy::Awake()
 {
-	GameManager::manager->enemy_manager->AddEnemy(this);
+	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
+	attack_collider->SetEnable(false);
 }
 
 void Enemy::StartEnemy()
 {
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
+	audio_emitter = GetComponent<ComponentAudioEmitter>();
 	state = EnemyState::IDLE;
 	std::string json_str;
-
-	//character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -37,6 +37,17 @@ void Enemy::StartEnemy()
 	}
 
 	SetStats(json_str.data());
+
+	
+	if (game_object->GetChild("Particles"))
+	{
+		std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+
+		for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+			particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+			(*it)->OnStop();
+		}
+	}
 }
 
 void Enemy::UpdateEnemy()
@@ -97,28 +108,11 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
-	delete animator;
-	animator = nullptr;
-	delete character_ctrl;
-	character_ctrl = nullptr;
-
-	for (auto it_pc = player_controllers.begin(); it_pc != player_controllers.end();)
-	{
-		delete (*it_pc);
-		it_pc = player_controllers.erase(it_pc);
-	}
-	for (auto it_eff = effects.begin(); it_eff != effects.end();)
-	{
-		delete (*it_eff);
-		it_eff = effects.erase(it_eff);
-	}
-
 	if (decapitated_head)
 	{
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
-
 }
 
 void Enemy::SetStats(const char* json)
@@ -142,25 +136,27 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	//character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	character_ctrl->Move(velocity_vec * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	//character_ctrl->SetRotation(rot);
+	transform->SetGlobalRotation(rot);
 
-	if (distance < stats["AttackRange"].GetValue())
+	if ((distance < stats["AttackRange"].GetValue() && type != EnemyType::GHOUL) || (type == EnemyType::GHOUL && distance < stats["JumpRange"].GetValue()))
 	{
-		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
 		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		Action();
 	}
 
 	if (distance > stats["VisionRange"].GetValue())
 	{
 		state = Enemy::EnemyState::IDLE;
-		//character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
 	}
 }
 
@@ -183,7 +179,7 @@ void Enemy::DeactivateCollider()
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
@@ -197,9 +193,19 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 	
+	switch (type)
+	{
+	case EnemyType::GHOUL:
+		audio_emitter->StartSound("GhoulHit");
+		break;
+	case EnemyType::NILFGAARD_SOLDIER:
+		audio_emitter->StartSound("SoldierHit");
+		break;
+	}
+	
 	state = EnemyState::HIT;
 	animator->PlayState("Hit");
-	//character_ctrl->SetWalkDirection(float3::zero());
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
 		animator->SetBool("dead", true);
@@ -209,21 +215,33 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
-			GameManager::manager->player_manager->IncreaseUltimateCharge(10);
 
-			decapitated_head = GameObject::Instantiate(head_prefab, game_object->transform->GetGlobalPosition());
+			switch (type)
+			{
+			case EnemyType::GHOUL:
+				audio_emitter->StartSound("SoldierDeath");
+				break;
+			case EnemyType::NILFGAARD_SOLDIER:
+				audio_emitter->StartSound("GhoulDeath");
+				break;
+			}
+
+			decapitated_head = GameObject::Instantiate(head_prefab, head_position->transform->GetGlobalPosition());
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				particles["decapitation_particle"]->Restart();
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
 
-				float decapitation_force = 5;
-				float3 decapitation_vector = (transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized() * decapitation_force;
+				float decapitation_force = 3;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.2f;
+				decapitation_vector += transform->up * decapitation_force * 0.5f;
 	
 				head_rb->AddForce(decapitation_vector);
 				head_rb->AddTorque(transform->up * decapitation_force);
+				head_rb->AddTorque(transform->forward * decapitation_force * 0.5f);
 			}
 
 			player->OnEnemyKill();
@@ -242,4 +260,13 @@ void Enemy::AddEffect(Effect* new_effect)
 		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
 			it->second.ApplyEffect(new_effect);
 	}
+}
+
+void Enemy::HitFreeze(float freeze_time)
+{
+	CancelInvoke();
+	float speed = animator->GetCurrentStateSpeed();
+	animator->SetCurrentStateSpeed(0);
+	ComponentAnimator* anim = animator;
+	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
 }

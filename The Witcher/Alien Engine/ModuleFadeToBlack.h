@@ -2,30 +2,11 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "SceneManager.h"
 
 class GameObject;
 class ComponentImage;
 class ComponentCanvas;
-
-enum class FadeToBlackType
-{
-	FADE,
-	DIAGONAL_1,
-	DIAGONAL_2,
-	HORIZONTAL_CURTAIN,
-	VERTICAL_CURTAIN,
-
-	NONE=-1
-};
-
-enum class FadeType
-{
-	FADE_TO,
-	FADE_FROM,
-	COMPLETE_FADE,
-
-	NONE=-1
-};
 
 struct Fade
 {
@@ -69,7 +50,7 @@ public:
 
 	update_status PreUpdate(float dt);
 
-	void StartFade(float seconds, FadeType fade_type, FadeToBlackType FTB_Type, float3 fade_color, const char* scene_name_to_change=nullptr);
+	void StartFade(float seconds, FadeType fade_type, FadeToBlackType FTB_Type, float3 fade_color = float3(0, 0, 0), const char* scene_name_to_change = nullptr);
 
 	void Reset();
 

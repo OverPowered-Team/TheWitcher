@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
 
+class MusicController;
+
 class ALIEN_ENGINE_API Ghoul : public Enemy {
 
 public:
@@ -17,14 +19,14 @@ public:
 	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
 
-	void Attack() override;
+	void Action() override;
 	void JumpImpulse();
 
 	void OnAnimationEnd(const char* name) override;
 
 public:
 	float maxForce = 40.0F;
-
+	MusicController* m_controller = nullptr;
 };
 
 ALIEN_FACTORY Ghoul* CreateGhoul() {

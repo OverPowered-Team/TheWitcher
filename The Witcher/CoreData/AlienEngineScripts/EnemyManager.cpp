@@ -5,14 +5,14 @@
 
 void EnemyManager::Awake()
 {
-	/*auto players = GameObject::FindGameObjectsWithTag("Player");
+	auto players = GameObject::FindGameObjectsWithTag("Player");
 	if (players.size() == 2)
 	{
 		player1 = players[0];
 		player2 = players[1];
 	}
 	else
-		LOG("There's no player or just one in the scene!");*/
+		LOG("There's no player or just one in the scene!");
 }
 
 void EnemyManager::Start()
@@ -26,8 +26,21 @@ void EnemyManager::Start()
 
 void EnemyManager::Update()
 {
+	is_combat_enemies = false;
+
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->UpdateEnemy();
+		if ((*item)->is_combat)
+		{
+			is_combat_enemies = true;
+			// Set combat music
+		}
+			
+	}
+
+	if (!is_combat_enemies)
+	{
+		//Set normal music
 	}
 }
 

@@ -56,6 +56,7 @@ private:
 	void UpdatePositioning();
 	void WakeUp();
 	void PutToSleep();
+	void ChangedFilters();
 
 	bool CheckChangeState();
 	void UpdateBody();
@@ -65,7 +66,7 @@ private:
 	bool ShapeAttached(PxShape* shape);
 	bool IsDynamic();
 	bool IsKinematic();
-
+	bool IsDisabled();
 
 
 protected:
@@ -75,6 +76,7 @@ protected:
 
 	bool gizmo_selected = false;
 
+	PxU32							ID = 0;
 	GameObject*						go = nullptr;
 	ComponentTransform*				transform = nullptr;
 	std::list<ComponentCollider*>	colliders;

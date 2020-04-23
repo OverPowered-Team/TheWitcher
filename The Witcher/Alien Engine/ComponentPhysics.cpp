@@ -11,11 +11,12 @@
 #include "Alien.h"
 #include "Event.h"
 #include "Time.h"
-
+#include "RandomHelper.h"
 ComponentPhysics::ComponentPhysics(GameObject* go) : Component(go)
 {
-	serialize = false;  // Not save & load 
 	this->go = go;
+	serialize = false;  // Not save & load 
+	ID = (PxU32)Random::GetRandom32ID();
 	transform = go->GetComponent<ComponentTransform>();
 	state = PhysicState::DISABLED;
 	layers = &App->physx->layers;
@@ -33,13 +34,13 @@ ComponentPhysics::~ComponentPhysics()
 		App->physx->RemoveBody(actor);
 		actor = nullptr;
 	}
-
+	
 	rigid_body = nullptr;
 }
 
 void ComponentPhysics::Update()
 {
-	if (state == PhysicState::DISABLED) return;
+	if (IsDisabled()) return;
 
 	GizmoManipulation();  // Check if gizmo is selected
 	UpdatePositioning();  // Move body or gameobject
@@ -305,13 +306,11 @@ void ComponentPhysics::UpdateBody()
 	if (actor)  // Dettach and Delete Actor
 	{
 		PxU32 num_shapes = actor->getNbShapes();
-		PxShape** shapes = new PxShape * [num_shapes]; // Buffer Shapes 
-		actor->getShapes(shapes, num_shapes);
+		PxShape* shapes = nullptr; // Buffer Shapes 
+		actor->getShapes(&shapes, num_shapes);
 
 		for (PxU32 i = 0; i < num_shapes; ++i)
-			actor->detachShape(*shapes[i]);
-
-		delete[]shapes;
+			actor->detachShape(shapes[i]);
 
 		App->physx->RemoveBody(actor);
 		actor = nullptr;
@@ -421,6 +420,14 @@ void ComponentPhysics::PutToSleep()
 		actor->is<PxRigidDynamic>()->putToSleep();
 }
 
+void ComponentPhysics::ChangedFilters()
+{
+	if (IsDisabled()) return;
+
+	//App->physx->px_scene->resetFiltering(*actor);
+
+}
+
 
 bool ComponentPhysics::HasEnabledColliders()
 {
@@ -451,4 +458,5 @@ bool ComponentPhysics::ShapeAttached(PxShape* shape)
 
 bool ComponentPhysics::IsDynamic() { return state == PhysicState::DYNAMIC; }
 bool ComponentPhysics::IsKinematic() { return state == PhysicState::DYNAMIC && rigid_body->is_kinematic; }
+bool ComponentPhysics::IsDisabled() { return state == PhysicState::DISABLED; }
 

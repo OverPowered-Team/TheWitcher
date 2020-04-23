@@ -17,7 +17,8 @@ PlayerAttacks::~PlayerAttacks()
 void PlayerAttacks::Start()
 {
 	player_controller = GetComponent<PlayerController>();
-	collider = collider_go->GetComponent<ComponentBoxCollider>();
+	collider = game_object->GetChild("Attacks_Collider")->GetComponent<ComponentBoxCollider>();
+	collider->SetEnable(false);
 
 	CreateAttacks();
 }
@@ -41,17 +42,33 @@ void PlayerAttacks::StartSpell(uint spell_index)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
+	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f)
+	{
+		finish_attack_time += Time::GetDT();
+		return;
+	}
+
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
 	else
-		player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
+	{
+		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f;
+	}
+		
 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
-		if (player_controller->player_data.velocity < 0.01F)
+		if (!player_controller->mov_input)
+		{
 			player_controller->state = PlayerController::PlayerState::IDLE;
-		if (player_controller->player_data.velocity > 0.01F)
+			player_controller->player_data.speed = float3::zero();
+		}
+		else if (player_controller->mov_input)
+		{
 			player_controller->state = PlayerController::PlayerState::RUNNING;
+			player_controller->particles["p_run"]->SetEnable(true);
+		}
+			
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
@@ -102,8 +119,9 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
+	//THIS CRASHES NOW DONT KNOW WHY
 	if(current_attack && current_attack->IsLast())
-		GameManager::manager->player_manager->IncreaseUltimateCharge(0.5f);
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -162,29 +180,29 @@ void PlayerAttacks::SnapToTarget()
 	float3 velocity = transform->forward * speed * Time::GetDT();
 	distance_snapped += velocity.Length();
 
-	//player_controller->controller->SetRotation(rot);
-	player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
+	player_controller->transform->SetGlobalRotation(rot);
+	player_controller->player_data.speed = velocity;
 }
 
 bool PlayerAttacks::FindSnapTarget()
 {
-	//std::vector<ComponentCollider*> colliders_in_range = Physics::SphereCast(game_object->transform->GetGlobalPosition(), snap_detection_range);
+	std::vector<ComponentCollider*> colliders_in_range = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), snap_detection_range);
 	std::vector<GameObject*> enemies_in_range;
 
-	/*for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
+	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
 		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
-	}*/
+	}
 
 	float3 vector = GetMovementVector();
 	std::pair<GameObject*, float> snap_candidate = std::pair(nullptr, 1000.0f);
 
 	for(auto it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		float distance = transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition());
+		float distance = abs(transform->GetGlobalPosition().Distance((*it)->transform->GetGlobalPosition()));
 		float angle = math::RadToDeg(vector.AngleBetweenNorm(((*it)->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized()));
 
 		if (distance <= snap_detection_range && angle <= abs(max_snap_angle))
@@ -203,7 +221,6 @@ bool PlayerAttacks::FindSnapTarget()
 		current_target = snap_candidate.first;
 		return true;
 	}
-
 
 	return false;
 }
@@ -231,12 +248,13 @@ void PlayerAttacks::AttackMovement()
 	else
 	{
 		float3 direction = GetMovementVector();
+		LOG("DIRECTION IS %f %f %f", direction.x, direction.y, direction.z);
 		float angle = atan2f(direction.z, direction.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
 
-		float3 impulse = direction * current_attack->info.movement_strength;
-		//player_controller->controller->ApplyImpulse(impulse);
-		player_controller->controller->velocity = PxExtendedVec3(0, 0, 0);
+		float tmp_y = player_controller->player_data.speed.y;
+		player_controller->player_data.speed = direction * current_attack->info.movement_strength;
 	}	
 }
 
@@ -276,25 +294,23 @@ bool PlayerAttacks::CanBeInterrupted()
 
 float3 PlayerAttacks::GetMovementVector()
 {
-	float3 vector = float3(Input::GetControllerHoritzontalLeftAxis(player_controller->controller_index), 0.f,
-		Input::GetControllerVerticalLeftAxis(player_controller->controller_index));
-
-	if (vector.Length() < player_controller->stick_threshold)
-		vector = player_controller->transform->forward;
+	float3 direction_vector = float3(player_controller->movement_input.x, 0.f, player_controller->movement_input.y);
+	if (!player_controller->mov_input)
+		direction_vector = player_controller->transform->forward;
 	else
 	{
-		vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(vector);
-		vector.y = 0.f;
-		vector.Normalize();
+		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
+		direction_vector.y = 0.f;
 	}
 
-	return vector;
+	return direction_vector;
 }
 
 void PlayerAttacks::OnAnimationEnd(const char* name) {
 	if (current_attack)
 	{
 		current_attack = nullptr;
+
 	}
 }
 
@@ -339,6 +355,7 @@ void PlayerAttacks::CreateAttacks()
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
 			info.base_damage = Stat("Attack_Damage", attack_combo->GetNumber("base_damage"));
+			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
@@ -369,6 +386,7 @@ void PlayerAttacks::CreateAttacks()
 		info.movement_strength = spells_json->GetNumber("movement_strength");
 		info.activation_frame = spells_json->GetNumber("activation_frame");
 		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
+		info.freeze_time = spells_json->GetNumber("freeze_time");
 
 		Attack* attack = new Attack(info);
 		spells.push_back(attack);

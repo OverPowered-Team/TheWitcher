@@ -16,14 +16,11 @@ ComponentConvexHullCollider::ComponentConvexHullCollider(GameObject* go) : Compo
 	// stores current gameobject scale
 	//prev_scale = float3(transform->GetGlobalScale());
 
-	try {
-		shape = CreateConvexMesh(go);
+	shape = CreateConvexMesh(go);
+	if (!shape) {	// if convex mesh cook fail, create default cube
+		shape = App->physx->CreateShape(PxBoxGeometry(.5f, .5f, .5f), *material);
 	}
-	catch (...) {
-		if (!shape) {	// if convex mesh cook fail, create default cube
-			shape = App->physx->CreateShape(PxBoxGeometry(.5f, .5f, .5f), *material);
-		}
-	}
+
 	App->SendAlienEvent(this, AlienEventType::COLLIDER_ADDED);
 
 	InitCollider();
@@ -33,7 +30,7 @@ PxShape* ComponentConvexHullCollider::CreateConvexMesh(const GameObject* go)
 {
 	// try to get mesh from gameobject
 	const ComponentMesh* mesh = GetMesh();
-	if (!mesh || !mesh->mesh) {
+	if (!mesh) {
 		valid = false;
 		return nullptr;
 	}
