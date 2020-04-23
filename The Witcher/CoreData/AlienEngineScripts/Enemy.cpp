@@ -256,3 +256,12 @@ void Enemy::AddEffect(Effect* new_effect)
 			it->second.ApplyEffect(new_effect);
 	}
 }
+
+void Enemy::HitFreeze(float freeze_time)
+{
+	CancelInvoke();
+	float speed = animator->GetCurrentStateSpeed();
+	animator->SetCurrentStateSpeed(0);
+	ComponentAnimator* anim = animator;
+	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
+}

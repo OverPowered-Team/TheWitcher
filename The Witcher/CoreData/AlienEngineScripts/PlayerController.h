@@ -93,6 +93,8 @@ public:
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
 
+	void HitFreeze(float freeze_time);
+
 public:
 	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
