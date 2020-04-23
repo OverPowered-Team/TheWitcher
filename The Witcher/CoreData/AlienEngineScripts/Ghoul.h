@@ -19,7 +19,7 @@ public:
 	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
 
-	void Attack() override;
+	void Action() override;
 	void JumpImpulse();
 
 	void OnAnimationEnd(const char* name) override;
