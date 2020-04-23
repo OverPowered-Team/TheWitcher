@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
 
+class MusicController;
+
 class ALIEN_ENGINE_API NilfgaardSoldier : public Enemy {
 public:
 	enum(NilfgaardType,
@@ -41,12 +43,12 @@ public:
 	float block_time = 2.0f;
 	float block_attack_time = 3.0f;
 	int max_break_shield_attack = 5;
-
 private:
 	float current_time = 0.0f;
 	bool has_been_attacked = false;
 	bool is_blocked = false;
 	int break_shield_attack = 0;
+	MusicController* m_controller = nullptr;
 };
 
 ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {

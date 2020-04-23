@@ -16,6 +16,9 @@
 #include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
+#include "Viewport.h"
+#include "ComponentCamera.h"
+
 #include "Optick/include/optick.h"
 
 ComponentMesh::ComponentMesh(GameObject* attach) : Component(attach)
@@ -47,6 +50,7 @@ void ComponentMesh::SetResourceMesh(ResourceMesh* resource)
 
 void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 {
+
 	OPTICK_EVENT();
 	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
@@ -61,34 +65,109 @@ void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 	ComponentMaterial* mat = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
 
 	// Mandatory Material ??
-	if (mat == nullptr) 
+	if (mat == nullptr)
 		return;
 
 	ResourceMaterial* material = mat->material;
 
+
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
 
-	// -------------------------- Actual Drawing -------------------------- 
-	material->ApplyMaterial();
+	//Shadows------------------------------
 
+	material->ApplyMaterial();
 	glBindVertexArray(mesh->vao);
 
-	// Uniforms --------------
-	SetUniform(material, camera);
+	SetUniforms(material, camera);
 
+	// Reflection / Refraction --------------
+
+	// TODO: Change slots, probably used
+
+	/*glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetReflectionTexture());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetRefractionTexture());
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->dvud_tex->id);*/
+
+	// --------------------------------------------------------------------- 
+	// Uniforms --------------
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
 
-	// --------------------------------------------------------------------- 
-
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	material->used_shader->Unbind();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	material->UnbindMaterial();
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
+
+
+}
+
+void ComponentMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
+{
+	OPTICK_EVENT();
+
+	if (mesh == nullptr || mesh->id_index <= 0)
+		return;
+
+	if (game_object_attached->IsSelected() || game_object_attached->IsParentSelected()) {
+		/*glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);*/
+	}
+
+	ComponentTransform* transform = game_object_attached->transform;
+	ComponentMaterial* mat = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
+
+	// Mandatory Material ??
+	if (mat == nullptr)
+		return;
+
+	ResourceMaterial* material = mat->material;
+
+
+	if (transform->IsScaleNegative())
+		glFrontFace(GL_CW);
+
+	//Shadows------------------------------
+
+		// -------------------------- Actual Drawing -------------------------- 
+	material->ApplyPreRenderShadows();
+	glBindVertexArray(mesh->vao);
+
+	// Uniforms --------------
+	SetShadowUniforms(material, camera, ViewMat, ProjMatrix, position);
+
+	//TODO: Change slots, probably occupied
+
+	/*glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetReflectionTexture());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetRefractionTexture());
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->dvud_tex->id);*/
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
+
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	material->simple_depth_shader->Unbind();
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	material->UnbindMaterial();
+
+	if (transform->IsScaleNegative())
+		glFrontFace(GL_CCW);
+
+
 }
 
 void ComponentMesh::DrawOutLine()
@@ -168,14 +247,21 @@ void ComponentMesh::DrawMesh()
 
 }
 
-void ComponentMesh::SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera)
+void ComponentMesh::SetShadowUniforms(ResourceMaterial* resource_material, ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
+{
+	resource_material->simple_depth_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
+	resource_material->simple_depth_shader->SetUniformMat4f("lightSpaceMatrix", ProjMatrix * ViewMat);
+	resource_material->simple_depth_shader->SetUniform1i("animate", animate);
+}
+
+void ComponentMesh::SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera)
 {
 	resource_material->used_shader->SetUniformMat4f("view", camera->GetViewMatrix4x4());
 	resource_material->used_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 	resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());
+
 	resource_material->used_shader->SetUniform1i("animate", animate);
-	
 	resource_material->used_shader->SetUniform1i("activeFog", camera->activeFog);
 	if (camera->activeFog)
 	{

@@ -98,6 +98,8 @@ void ComponentParticleSystem::PostUpdate()
 
 void ComponentParticleSystem::DebugDraw()
 {
+	OPTICK_EVENT();
+
 	if (drawEmmitter && App->objects->GetSelectedObjects().back() == game_object_attached)
 		particleSystem->DrawEmmitter();
 }

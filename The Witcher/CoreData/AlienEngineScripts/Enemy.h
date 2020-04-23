@@ -67,13 +67,16 @@ public:
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
 	bool can_get_interrupted = true;
+	ComponentAudioEmitter* audio_emitter = nullptr;
 	Prefab head_prefab;
 	GameObject* head_position;
 
 	std::vector<PlayerController*> player_controllers;
 
-	std::map<std::string, GameObject*> particles;
+	std::map<std::string, ComponentParticleSystem*> particles;
 	std::map<std::string, Stat> stats;
+
+	bool is_combat = false;
 
 protected:
 	GameObject* decapitated_head = nullptr;

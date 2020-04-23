@@ -6,6 +6,7 @@
 #include "Effect.h"
 #include "CameraMovement.h"
 #include "Enemy.h"
+#include "GameManager.h"
 #include "RumblerManager.h"
 
 #include "../../ComponentDeformableMesh.h"
@@ -96,11 +97,11 @@ void PlayerController::PreUpdate()
 	//ULTIMATE INPUT ON ALL STATES FOR NOW
 	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
 		|| Input::GetKeyDown(keyboard_ultimate)) {
-		GameManager::manager->player_manager->ultimate_buttons_pressed++;
+		GameManager::instance->player_manager->ultimate_buttons_pressed++;
 	}
 	else if (Input::GetControllerButtonUp(controller_index, controller_ultimate)
 		|| Input::GetKeyUp(keyboard_ultimate)) {
-		GameManager::manager->player_manager->ultimate_buttons_pressed--;
+		GameManager::instance->player_manager->ultimate_buttons_pressed--;
 	}
 
 	switch (state)
@@ -117,11 +118,11 @@ void PlayerController::PreUpdate()
 	case PlayerController::PlayerState::JUMPING:
 		if (controller->isGrounded)
 		{
-			if (movement_input.Length() < stick_threshold)
+			if (!mov_input)
 			{
 				state = PlayerState::IDLE;
 			}
-			if (movement_input.Length() > stick_threshold)
+			if (mov_input)
 			{
 				state = PlayerState::RUNNING;
 				particles["p_run"]->SetEnable(true);
@@ -222,19 +223,22 @@ void PlayerController::UpdateInput()
 		keyboardInput.y -= 1.f;
 	}
 
-	if (joystickInput.Length() > stick_threshold) {
-		animator->SetBool("movement_input", true);
-		//movement_input = joystickInput.Normalized() * ((joystickInput.Normalized().Length() - stick_threshold) / (1 - stick_threshold));
-		movement_input = joystickInput.Normalized();
-	}
-	else if (keyboardInput.Length() > stick_threshold)
+
+	else if (keyboardInput.Length() > 0)
 	{
 		animator->SetBool("movement_input", true);
-		movement_input = keyboardInput.Normalized();
+		mov_input = true;
+		movement_input = keyboardInput;
+	}
+	else if (joystickInput.Length() > 0) {
+		animator->SetBool("movement_input", true);
+		mov_input = true;
+		movement_input = joystickInput;
 	}
 	else
 	{
 		animator->SetBool("movement_input", false);
+		mov_input = false;
 		movement_input = float2::zero();
 	}
 }
@@ -262,8 +266,8 @@ void PlayerController::IdleInput()
 		|| Input::GetKeyDown(keyboard_heavy_attack)) {
 		state = PlayerState::BASIC_ATTACK;
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_spell)
@@ -297,7 +301,7 @@ void PlayerController::RunningInput()
 	{
 		Fall();
 	}
-	if (movement_input.Length() < stick_threshold)
+	if (!mov_input)
 	{
 		state = PlayerState::IDLE;
 		particles["p_run"]->SetEnable(false);
@@ -316,7 +320,7 @@ void PlayerController::RunningInput()
 		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
 		state = PlayerState::BASIC_ATTACK;
 		audio->StartSound("Hit_Sword");
-		GameManager::manager->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
 	}
 
 	if (Input::GetControllerButtonDown(controller_index, controller_dash)
@@ -353,9 +357,9 @@ void PlayerController::AttackingInput()
 	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
 		|| Input::GetKeyDown(keyboard_light_attack))
 		attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-	/*else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
 		|| Input::GetKeyDown(keyboard_heavy_attack))
-		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);*/
+		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
 
 	if ((Input::GetControllerButtonDown(controller_index, controller_dash)
 		|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
@@ -460,7 +464,7 @@ void PlayerController::Roll()
 {
 	float3 direction_vector = float3::zero();
 
-	if (movement_input.Length() > stick_threshold)
+	if (mov_input)
 	{
 		direction_vector = float3(movement_input.x, 0.f, movement_input.y);
 		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
@@ -476,9 +480,12 @@ void PlayerController::Roll()
 
 void PlayerController::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Roll") == 0) {
-		if (movement_input.Length() < stick_threshold)
+		if (!mov_input)
+		{
 			state = PlayerState::IDLE;
-		if (movement_input.Length() > stick_threshold)
+			player_data.speed = float3::zero();
+		}
+		if (mov_input)
 		{
 			state = PlayerState::RUNNING;
 			particles["p_run"]->SetEnable(true);
@@ -486,9 +493,12 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	}
 
 	if (strcmp(name, "Spell") == 0) {
-		if (movement_input.Length() < stick_threshold)
+		if (!mov_input)
+		{
 			state = PlayerState::IDLE;
-		if (movement_input.Length() > stick_threshold)
+			player_data.speed = float3::zero();
+		}
+		if (mov_input)
 		{
 			state = PlayerState::RUNNING;
 			particles["p_run"]->SetEnable(true);
@@ -521,7 +531,7 @@ void PlayerController::Die()
 	state = PlayerState::DEAD;
 	animator->SetBool("dead", true);
 	player_data.speed = float3::zero();
-	GameManager::manager->event_manager->OnPlayerDead(this);
+	GameManager::instance->event_manager->OnPlayerDead(this);
 }
 
 void PlayerController::Revive()
@@ -529,10 +539,10 @@ void PlayerController::Revive()
 	state = PlayerState::IDLE;
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	GameManager::manager->event_manager->OnPlayerRevive(this);
+	GameManager::instance->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
 	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	GameManager::manager->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
+	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 }
 
 void PlayerController::ActionRevive()
@@ -558,7 +568,7 @@ void PlayerController::ReceiveDamage(float value, float3 knock_back)
 
 	}	
 
-	//GameManager::manager->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
 void PlayerController::PickUpRelic(Relic* _relic)
@@ -604,7 +614,7 @@ bool PlayerController::CheckBoundaries()
 
 	float speed = 0.f;
 
-	if (abs(movement_input.x) >= stick_threshold || abs(movement_input.y) >= stick_threshold)
+	if (mov_input)
 	{
 		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT() / Time::GetScaleTime());
 	}
@@ -666,10 +676,10 @@ void PlayerController::OnDrawGizmosSelected()
 
 bool PlayerController::CheckForPossibleRevive()
 {
-	for (int i = 0; i < GameManager::manager->player_manager->players_dead.size(); ++i) {
-		float distance = this->transform->GetGlobalPosition().Distance(GameManager::manager->player_manager->players_dead[i]->transform->GetGlobalPosition());
+	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
+		float distance = this->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= revive_range) {
-			player_being_revived = GameManager::manager->player_manager->players_dead[i];
+			player_being_revived = GameManager::instance->player_manager->players_dead[i];
 			return true;
 		}
 	}
@@ -694,7 +704,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
-	GameManager::manager->player_manager->IncreaseUltimateCharge(10);
+	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)

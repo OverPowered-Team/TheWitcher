@@ -51,16 +51,15 @@ void PlayerAttacks::UpdateCurrentAttack()
 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
-		if (player_controller->movement_input.Length() < player_controller->stick_threshold)
+		if (!player_controller->mov_input)
 		{
 			player_controller->state = PlayerController::PlayerState::IDLE;
-			player_controller->player_data.speed = float3(0,-0.01f,0);
+			player_controller->player_data.speed = float3::zero();
 		}
-		else if (player_controller->movement_input.Length() > player_controller->stick_threshold)
+		else if (player_controller->mov_input)
 		{
 			player_controller->state = PlayerController::PlayerState::RUNNING;
 			player_controller->particles["p_run"]->SetEnable(true);
-			player_controller->player_data.speed = float3(0,-0.01f,0);
 		}
 			
 	}
@@ -114,8 +113,8 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 
 	//THIS CRASHES NOW DONT KNOW WHY
-	//if(current_attack && current_attack->IsLast())
-		//GameManager::manager->player_manager->IncreaseUltimateCharge(5);
+	if(current_attack && current_attack->IsLast())
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -288,7 +287,7 @@ bool PlayerAttacks::CanBeInterrupted()
 float3 PlayerAttacks::GetMovementVector()
 {
 	float3 direction_vector = float3(player_controller->movement_input.x, 0.f, player_controller->movement_input.y);
-	if (direction_vector.Length() < player_controller->stick_threshold)
+	if (player_controller->mov_input)
 		direction_vector = player_controller->transform->forward;
 	else
 	{
@@ -303,6 +302,7 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	if (current_attack)
 	{
 		current_attack = nullptr;
+
 	}
 }
 

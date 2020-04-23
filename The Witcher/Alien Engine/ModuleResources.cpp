@@ -587,7 +587,7 @@ ResourceShader* ModuleResources::GetShaderByName(std::string shaderName)
 			if (App->StringCmp((*res)->GetName(), shaderName.c_str()))
 			{
 				desiredShader = (ResourceShader*)(*res);
-				break;
+				return desiredShader;
 			}
 		}
 	}
@@ -699,10 +699,12 @@ void ModuleResources::ReadAllMetaData()
 	ReadShaders(directories, files, SHADERS_FOLDER);
 	files.clear();
 	directories.clear();
-	default_shader = GetShaderByName("default_shader");
+	simple_depth_shader = GetShaderByName("simple_depth_shader");
 	default_particle_shader = GetShaderByName("particle_shader");
-
+	default_shader = GetShaderByName("default_shader");
 	skybox_shader = GetShaderByName("skybox_shader");
+	water_shader = GetShaderByName("water_shader");
+
 	// Init Materials
 	App->file_system->DiscoverFiles(MATERIALS_FOLDER, files, directories);
 	ReadMaterials(directories, files, MATERIALS_FOLDER);
@@ -775,6 +777,8 @@ void ModuleResources::ReadAllMetaData()
 	default_shader = (ResourceShader*)GetResourceWithID(2074311779325559006);
 	skybox_shader = (ResourceShader*)GetResourceWithID(10031399484334738574); // TODO
 	default_particle_shader = (ResourceShader*)GetResourceWithID(2017390725125490915);
+	simple_depth_shader = (ResourceShader*)GetResourceWithID(12293234483734622872);
+	water_shader = (ResourceShader*)GetResourceWithID(14940717270935665446);
 
 	// materials
 	App->file_system->DiscoverFiles(LIBRARY_MATERIALS_FOLDER, files, directories, true);
@@ -920,8 +924,6 @@ void ModuleResources::ReadModels(std::vector<std::string> directories, std::vect
 		ResourceModel* model = new ResourceModel();
 		if (!model->ReadBaseInfo(std::string(current_folder + files[i]).data())) {
 			App->importer->ReImportModel(model);
-			/*model->DeleteMetaData();
-			App->importer->LoadModelFile(std::string(current_folder + files[i]).data(), std::string(current_folder + files[i]).data());*/
 		}
 	}
 	if (!directories.empty()) {

@@ -7,6 +7,8 @@
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
 
+#include "Maths.h"
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
@@ -138,61 +140,12 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 			}
 		}
-		float value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTX);
-		if (value < -32767 + DEAD_ZONE) {
-			(*item).second->joystick_right.valueX = -1;
-		}
-		else if (value > 32767 - DEAD_ZONE) {
-			(*item).second->joystick_right.valueX = 1;
-		}
-		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
-			(*item).second->joystick_right.valueX = 0;
-		}
-		else {
-			(*item).second->joystick_right.valueX = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
-		}
 
-		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_RIGHTY);
-		if (value < -32767 + DEAD_ZONE) {
-			(*item).second->joystick_right.valueY = -1;
-		}
-		else if (value > 32767 - DEAD_ZONE) {
-			(*item).second->joystick_right.valueY = 1;
-		}
-		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
-			(*item).second->joystick_right.valueY = 0;
-		}
-		else { // (value - DEAD_ZONE) / (32767 - 3*DEAD_ZONE);
-			(*item).second->joystick_right.valueY = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
-		}
 
-		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTX);
-		if (value < -32767 + DEAD_ZONE) {
-			(*item).second->joystick_left.valueX = -1;
-		}
-		else if (value > 32767 - DEAD_ZONE) {
-			(*item).second->joystick_left.valueX = 1;
-		}
-		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
-			(*item).second->joystick_left.valueX = 0;
-		}
-		else {
-			(*item).second->joystick_left.valueX = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
-		}
-
-		value = SDL_GameControllerGetAxis((*item).second->controller, SDL_CONTROLLER_AXIS_LEFTY);
-		if (value < -32767 + DEAD_ZONE) {
-			(*item).second->joystick_left.valueY = -1;
-		}
-		else if (value > 32767 - DEAD_ZONE) {
-			(*item).second->joystick_left.valueY = 1;
-		}
-		else if (value > -DEAD_ZONE && value < DEAD_ZONE) {
-			(*item).second->joystick_left.valueY = 0;
-		}
-		else {
-			(*item).second->joystick_left.valueY = (value - ((value > 0) ? DEAD_ZONE : -DEAD_ZONE)) / (32767 - 3 * DEAD_ZONE);
-		}
+		(*item).second->joystick_left.valueX = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_LEFTX);
+		(*item).second->joystick_left.valueY = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_LEFTY);
+		(*item).second->joystick_right.valueX = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_RIGHTX);
+		(*item).second->joystick_right.valueY = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_RIGHTY);
 
 		SetJoystickState((*item).second->joystick_left.valueX, &(*item).second->joystick_left.joystick_state_right, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT);
 		SetJoystickState((*item).second->joystick_left.valueX, &(*item).second->joystick_left.joystick_state_left, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT);
@@ -447,4 +400,13 @@ void ModuleInput::SetJoystickState(float value, KEY_STATE* state, Input::JOYSTIC
 		break; }
 	}
 	
+}
+
+float ModuleInput::GetControllerAxis(GamePad* gp , SDL_GameControllerAxis axis) {
+	Sint16 axisValue = SDL_GameControllerGetAxis(gp->controller, axis);
+	//Avoid clunky zone for older or used gamepads precision
+	if (axisValue < -DEAD_ZONE || axisValue > DEAD_ZONE) {
+		return Maths::Map(axisValue, SDL_MIN_SINT16, SDL_MAX_SINT16, -1.0f, 1.0f);
+	}
+	return 0;
 }

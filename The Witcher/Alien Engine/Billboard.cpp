@@ -33,33 +33,33 @@ Quat Billboard::AlignToAxis(ComponentCamera* camera, float3 position, float3 axi
 
 Quat Billboard::AlignToVelocity(ComponentCamera* camera, float3 position, float3 velocity)
 {
-	//float3 vz = (camera->GetCameraPosition() - position).Normalized();
-	////vz.Normalized();
+	float3 vz = (camera->GetCameraPosition() - position).Normalized();
+	vz.Normalized();
 
-	//velocity.Normalized();
-	//float3 vx = velocity.Cross(vz);
-	//vx.Normalized();
+	velocity.Normalized();
+	float3 vx = velocity.Cross(vz);
+	vx.Normalized();
 
-	//float3 vy = vz.Cross(vx);
+	float3 vy = vz.Cross(vx);
 
-	////float4x4 rot2 = float4x4(float4(vy, 0.0f), float4(vx, 0.0f), float4(vz, 0.0f), float4(position, 1.0f));
-	//float3x3 rot = float3x3(vx, vy, vz);
-	//
-	//return rot.ToQuat();
-
-	float4x4 viewMatrix = camera->GetViewMatrix4x4();
-	float3 z = (camera->GetCameraPosition() - position).Normalized();
+	//float4x4 rot2 = float4x4(float4(vy, 0.0f), float4(vx, 0.0f), float4(vz, 0.0f), float4(position, 1.0f));
+	float3x3 rot = float3x3(vx, vy, vz);
 	
-	//float3 z = viewMatrix.MulDir(front).Normalized();
+	return rot.ToQuat();
 
-	float3 y = velocity.Normalized();
+	//float4x4 viewMatrix = camera->GetViewMatrix4x4();
+	//float3 z = (camera->GetCameraPosition() - position).Normalized();
+	//
+	////float3 z = viewMatrix.MulDir(front).Normalized();
 
-	float3 x = y.Cross(z);
+	//float3 y = velocity.Normalized();
+
+	//float3 x = y.Cross(z);
 
 	//y = z.Cross(x);
 
-	float3x3 rot = float3x3(x, y, z);
-	return rot.ToQuat();
+	//float3x3 rot = float3x3(x, y, z);
+	//return rot.ToQuat();
 
 
 }
