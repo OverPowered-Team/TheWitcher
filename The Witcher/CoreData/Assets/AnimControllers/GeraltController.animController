@@ -67,7 +67,7 @@
             {
                 "Name": "Roll",
                 "Speed": 3,
-                "Clip": "15774273021718758329"
+                "Clip": "16259373316750279160"
             },
             {
                 "Name": "H",
@@ -116,7 +116,7 @@
             },
             {
                 "Name": "HL",
-                "Speed": 1,
+                "Speed": 4,
                 "Clip": "16098445893649691647"
             },
             {
@@ -421,7 +421,7 @@
             {
                 "Source": "Roll",
                 "Target": "Idle",
-                "Blend": 0.10000000149011612,
+                "Blend": 0.15000000596046448,
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
@@ -436,7 +436,7 @@
             {
                 "Source": "Roll",
                 "Target": "Run",
-                "Blend": 0.10000000149011612,
+                "Blend": 0.15000000596046448,
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
@@ -1178,21 +1178,21 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "15648905613134895705",
-                "Frame": 33,
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "16813058118423146582",
+                "Frame": 26,
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "15648905613134895705",
-                "Frame": 35,
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "9931012369867076074",
+                "Frame": 37,
                 "Type": 2
             },
             {
                 "Event_Id": "PlayerAttacks::ActivateCollider",
                 "Animation_Id": "7425335695216091952",
-                "Frame": 17,
+                "Frame": 15,
                 "Type": 2
             },
             {
@@ -1208,15 +1208,33 @@
                 "Type": 2
             },
             {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "7425335695216091952",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "15648905613134895705",
+                "Frame": 33,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "15648905613134895705",
+                "Frame": 36,
+                "Type": 2
+            },
+            {
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "2185954702925284050",
-                "Frame": 69,
+                "Frame": 68,
                 "Type": 2
             },
             {
                 "Event_Id": "PlayerAttacks::ActivateCollider",
                 "Animation_Id": "2185954702925284050",
-                "Frame": 83,
+                "Frame": 84,
                 "Type": 2
             },
             {
@@ -1228,7 +1246,19 @@
             {
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "18236356071610215831",
-                "Frame": 42,
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "8559991752706635001",
+                "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "8559991752706635001",
+                "Frame": 36,
                 "Type": 2
             }
         ]
