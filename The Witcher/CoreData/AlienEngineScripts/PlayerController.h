@@ -23,6 +23,7 @@ public:
 		DEAD,
 		REVIVING,
 		HIT,
+		ROOT,
 
 		MAX
 		);
@@ -64,6 +65,8 @@ public:
 	void IdleInput();
 	void RunningInput();
 	void AttackingInput();
+	void ApplyRoot(float time);
+	void ReleaseFromRoot();
 
 	bool AnyKeyboardInput();
 
@@ -77,7 +80,7 @@ public:
 	void Die();
 	void Revive();
 	void ActionRevive();
-	void ReceiveDamage(float value);
+	void ReceiveDamage(float value, float3 knock_back = {0, 0, 0});
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
@@ -131,7 +134,7 @@ public:
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_light_attack = Input::CONTROLLER_BUTTON_X;
 	Input::CONTROLLER_BUTTONS controller_heavy_attack = Input::CONTROLLER_BUTTON_Y;
-	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_LEFT;
+	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_UP;
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 

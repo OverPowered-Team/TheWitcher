@@ -75,7 +75,6 @@ public:
 	Attack* GetCurrentAttack();
 
 public:
-	GameObject* collider_go = nullptr;
 	float snap_detection_range = 5.0f;
 	float max_snap_angle = 0.0f;
 
@@ -117,7 +116,6 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	PlayerAttacks* player_attacks = new PlayerAttacks();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->collider_go);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_detection_range);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->max_snap_angle);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);

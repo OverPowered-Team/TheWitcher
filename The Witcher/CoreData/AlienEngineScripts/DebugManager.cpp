@@ -18,7 +18,7 @@ void DebugManager::Start()
 
 void DebugManager::Update()
 {
-	if (Input::GetKeyRepeat(SDL_SCANCODE_LALT))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3))
 	{
 		if (Input::GetKeyDown(SDL_SCANCODE_M))
 		{
@@ -26,15 +26,15 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_W))
 		{
-			SceneManager::LoadScene("Win");
+			SceneManager::LoadScene("NewWin_Menu");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_L))
 		{
-			SceneManager::LoadScene("Lose");
+			SceneManager::LoadScene("Mahakam");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_D))
 		{
-			
+			SceneManager::LoadScene("EndGame_Menu");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_F))
 		{

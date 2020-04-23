@@ -22,7 +22,7 @@ public:
 	float ultimate_time = 5.0f;
 	float ultimate_effect_value = 0.5f;
 
-	uint collective_ultimate_charge = 0;
+	int collective_ultimate_charge = 0;
 	uint ultimate_buttons_pressed = 0;
 	bool ultimate_is_active = false;
 
@@ -49,6 +49,8 @@ ALIEN_FACTORY PlayerManager* CreatePlayerManager() {
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->max_ultimate_charge);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->ultimate_time);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->ultimate_effect_value);
+
+	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->collective_ultimate_charge);
 
 	return alien;
 } 
