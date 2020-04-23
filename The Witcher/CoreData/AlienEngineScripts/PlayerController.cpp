@@ -603,32 +603,7 @@ void PlayerController::AddEffect(Effect* _effect)
 
 bool PlayerController::CheckBoundaries()
 {
-	float3 next_pos = float3::zero();
-	float joystickIntensity = movement_input.Length();
-
-	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-	//direction_vector.y = 0.f;
-	direction_vector.Normalize();
-	//rotate
-	float angle = atan2f(direction_vector.z, direction_vector.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-
-	float speed = 0.f;
-
-	if (mov_input)
-	{
-		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT() / Time::GetScaleTime());
-	}
-
-	if (state == PlayerState::DASHING)
-	{
-		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT() / Time::GetScaleTime();
-	}
-	else
-	{
-		next_pos = transform->GetGlobalPosition() + direction_vector * speed * 20.f;
-	}
+	float3 next_pos = transform->GetGlobalPosition() + player_data.speed * Time::GetDT();
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
 	AABB fake_aabb(max_aabb.minPoint + moved + transform->GetGlobalPosition(), max_aabb.maxPoint + moved + transform->GetGlobalPosition());
