@@ -17,7 +17,7 @@ PlayerAttacks::~PlayerAttacks()
 void PlayerAttacks::Start()
 {
 	player_controller = GetComponent<PlayerController>();
-	collider = collider_go->GetComponent<ComponentBoxCollider>();
+	collider = game_object->GetChild("Attacks_Collider")->GetComponent<ComponentBoxCollider>();
 	collider->SetEnable(false);
 
 	CreateAttacks();

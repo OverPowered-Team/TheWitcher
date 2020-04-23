@@ -449,8 +449,7 @@ void ModuleImporter::LoadModelTexture(const aiMaterial *material, ResourceMateri
 		ResourceTexture *tex = (ResourceTexture *)App->resources->GetTextureByName(name.data());
 		if (tex != nullptr)
 		{
-			mat->textures[(uint)type].first = tex->GetID();
-			mat->textures[(uint)type].second = tex;
+			mat->texturesID[(uint)type] = tex->GetID();
 		}
 		else if (extern_path != nullptr)
 		{
@@ -473,8 +472,7 @@ void ModuleImporter::LoadModelTexture(const aiMaterial *material, ResourceMateri
 				tex->CreateMetaData();
 				App->resources->AddNewFileNode(assets_path, true);
 
-				mat->textures[(uint)type].first = tex->GetID();
-				mat->textures[(uint)type].second = tex;
+				mat->texturesID[(uint)type] = tex->GetID();
 			}
 		}
 	}
