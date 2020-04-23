@@ -9,15 +9,13 @@ public:
 
 	BreakableObject();
 	virtual ~BreakableObject();
-
-	void Explode();
+	
+	void Start();
+	void Update();
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
 	Prefab object_broken;
-
-	float force = 15.f;
-	float time_to_despawn = 5.f;
 };
 
 ALIEN_FACTORY BreakableObject* CreateBreakableObject() {
@@ -25,9 +23,6 @@ ALIEN_FACTORY BreakableObject* CreateBreakableObject() {
 	// To show in inspector here
 
 	SHOW_IN_INSPECTOR_AS_PREFAB(alien->object_broken);
-
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->force);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_despawn);
 
 	return alien;
 } 

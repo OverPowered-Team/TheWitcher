@@ -9,16 +9,11 @@ public:
 
 	ExplodeChildren();
 	virtual ~ExplodeChildren();
-
-	void Explode();
-
-	void SetVars(float force, float time_despawn);
+	
+	void Start();
+	void Update();
 
 	void DeleteMyself();
-
-private:
-	float time_to_disappear = 5.f;
-	float force = 15.f;
 
 };
 
