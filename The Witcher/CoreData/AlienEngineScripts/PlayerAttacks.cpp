@@ -41,6 +41,12 @@ void PlayerAttacks::StartSpell(uint spell_index)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
+	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f)
+	{
+		finish_attack_time += Time::GetDT();
+		return;
+	}
+
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
 	else
@@ -241,6 +247,7 @@ void PlayerAttacks::AttackMovement()
 	else
 	{
 		float3 direction = GetMovementVector();
+		LOG("DIRECTION IS %f %f %f", direction.x, direction.y, direction.z);
 		float angle = atan2f(direction.z, direction.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
@@ -287,7 +294,7 @@ bool PlayerAttacks::CanBeInterrupted()
 float3 PlayerAttacks::GetMovementVector()
 {
 	float3 direction_vector = float3(player_controller->movement_input.x, 0.f, player_controller->movement_input.y);
-	if (player_controller->mov_input)
+	if (!player_controller->mov_input)
 		direction_vector = player_controller->transform->forward;
 	else
 	{
@@ -347,6 +354,7 @@ void PlayerAttacks::CreateAttacks()
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
 			info.base_damage = Stat("Attack_Damage", attack_combo->GetNumber("base_damage"));
+			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
@@ -377,6 +385,7 @@ void PlayerAttacks::CreateAttacks()
 		info.movement_strength = spells_json->GetNumber("movement_strength");
 		info.activation_frame = spells_json->GetNumber("activation_frame");
 		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
+		info.freeze_time = spells_json->GetNumber("freeze_time");
 
 		Attack* attack = new Attack(info);
 		spells.push_back(attack);
