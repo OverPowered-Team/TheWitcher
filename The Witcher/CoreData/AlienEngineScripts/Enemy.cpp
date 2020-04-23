@@ -230,10 +230,10 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			switch (type)
 			{
 			case EnemyType::GHOUL:
-				audio_emitter->StartSound("SoldierDeath");
+				audio_emitter->StartSound("GhoulDeath");
 				break;
 			case EnemyType::NILFGAARD_SOLDIER:
-				audio_emitter->StartSound("GhoulDeath");
+				audio_emitter->StartSound("SoldierDeath");
 				break;
 			}
 
@@ -246,13 +246,13 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
 
-				float decapitation_force = 3;
-				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.2f;
-				decapitation_vector += transform->up * decapitation_force * 0.5f;
+				float decapitation_force = 2;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+				decapitation_vector += transform->up * decapitation_force;
 	
 				head_rb->AddForce(decapitation_vector);
-				head_rb->AddTorque(transform->up * decapitation_force);
-				head_rb->AddTorque(transform->forward * decapitation_force * 0.5f);
+				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
 			}
 
 			player->OnEnemyKill();

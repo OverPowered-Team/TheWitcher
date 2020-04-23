@@ -67,7 +67,7 @@
             {
                 "Name": "Roll",
                 "Speed": 3,
-                "Clip": "9671756966496077186"
+                "Clip": "0"
             },
             {
                 "Name": "H",
@@ -201,10 +201,16 @@
                 "Source": "Death",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
             },
             {
                 "Source": "Hit",
