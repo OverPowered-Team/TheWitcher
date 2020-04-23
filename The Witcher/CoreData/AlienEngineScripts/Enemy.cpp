@@ -215,7 +215,11 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		animator->SetBool("dead", true);
 		OnDeathHit();
 
-		if (player->attacks->GetCurrentAttack()->IsLast())
+		if (this->type == EnemyType::LESHEN) {
+			state = EnemyState::DYING;
+			animator->PlayState("Death");
+		}
+		else if (player->attacks->GetCurrentAttack()->IsLast())
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
