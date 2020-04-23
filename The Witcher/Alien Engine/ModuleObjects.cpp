@@ -281,96 +281,79 @@ update_status ModuleObjects::PostUpdate(float dt)
 		printing_scene = (viewport == App->camera->scene_viewport) ? true : false;
 		bool isGameCamera = (viewport == game_viewport) ? true : false;
 
-		if (isGameCamera)
-		{
-			glEnable(GL_CLIP_DISTANCE0);
+		//if (isGameCamera)
+		//{
+		//	std::vector<std::pair<float, GameObject*>> to_draw;
+		//	std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
-			/* Reflection */
-			wfbos->BindReflectionFrameBuffer();
-			{
-				float distance = 2 * (App->renderer3D->actual_game_camera->GetCameraPosition().y - 0.0f);
-				ComponentCamera* c_cam = App->renderer3D->actual_game_camera;
-				float c_pos_y = c_cam->GetCameraPosition().y;
-				c_pos_y -= distance;
-				c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
-				c_cam->InvertPitch();
-				if (base_game_object->HasChildren()) {
-					std::vector<std::pair<float, GameObject*>> to_draw;
-					std::vector<std::pair<float, GameObject*>> to_draw_ui;
+		//	if (base_game_object->HasChildren())
+		//	{
+		//		ComponentCamera* frustum_camera = viewport->GetCamera();
 
-					ComponentCamera* frustum_camera = viewport->GetCamera();
+		//		if (check_culling_in_scene && App->renderer3D->actual_game_camera)
+		//		{
+		//			frustum_camera = App->renderer3D->actual_game_camera;
+		//		}
 
-					if (check_culling_in_scene && App->renderer3D->actual_game_camera)
-					{
-						frustum_camera = App->renderer3D->actual_game_camera;
-					}
+		//		octree.SetStaticDrawList(&to_draw, frustum_camera);
 
-					octree.SetStaticDrawList(&to_draw, frustum_camera);
+		//		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+		//		for (; item != base_game_object->children.end(); ++item) {
+		//			if (*item != nullptr && (*item)->IsEnabled()) {
+		//				(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
+		//			}
+		//		}
 
-					std::vector<GameObject*>::iterator item = base_game_object->children.begin();
-					for (; item != base_game_object->children.end(); ++item) {
-						if (*item != nullptr && (*item)->IsEnabled()) {
-							(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
-						}
-					}
+		//		std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+		//	}
 
-					std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
-					
-					std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
-					for (; it != to_draw.end(); ++it) {
-						if ((*it).second != nullptr) {
-							viewport->GetCamera()->DrawSkybox();
-								//(*it).second->DrawGame(viewport->GetCamera(), float4(0.0f, 1.0f, 0.0f, -0.0f));
-						}
-					}
-				}
+		//	glEnable(GL_CLIP_DISTANCE0);
 
-				c_pos_y = c_cam->GetCameraPosition().y;
-				c_pos_y += distance;
-				c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
-				c_cam->InvertPitch();
-			}
-			wfbos->UnbindCurrentFrameBuffer();
+		//	/* Reflection */
+		//	wfbos->BindReflectionFrameBuffer();
+		//	{
+		//		float distance = 2 * (App->renderer3D->actual_game_camera->GetCameraPosition().y - 0.0f);
+		//		ComponentCamera* c_cam = App->renderer3D->actual_game_camera;
+		//		float c_pos_y = c_cam->GetCameraPosition().y;
+		//		c_pos_y -= distance;
+		//		c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
+		//		c_cam->InvertPitch();
+		//		if (base_game_object->HasChildren()) {
+		//			
+		//			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+		//			for (; it != to_draw.end(); ++it) {
+		//				if ((*it).second != nullptr) {
+		//					viewport->GetCamera()->DrawSkybox();
+		//						//(*it).second->DrawGame(viewport->GetCamera(), float4(0.0f, 1.0f, 0.0f, -0.0f));
+		//				}
+		//			}
+		//		}
 
-			/* Refraction */
-			wfbos->BindRefractionFrameBuffer();
-			{
-				if (base_game_object->HasChildren())
-				{
-					std::vector<std::pair<float, GameObject*>> to_draw;
-					std::vector<std::pair<float, GameObject*>> to_draw_ui;
+		//		c_pos_y = c_cam->GetCameraPosition().y;
+		//		c_pos_y += distance;
+		//		c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
+		//		c_cam->InvertPitch();
+		//	}
+		//	wfbos->UnbindCurrentFrameBuffer();
 
-					ComponentCamera* frustum_camera = viewport->GetCamera();
+		//	/* Refraction */
+		//	wfbos->BindRefractionFrameBuffer();
+		//	{
+		//		if (base_game_object->HasChildren())
+		//		{
+		//			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+		//			for (; it != to_draw.end(); ++it) {
+		//				if ((*it).second != nullptr) {
+		//					viewport->GetCamera()->DrawSkybox();
+		//					//(*it).second->DrawGame(viewport->GetCamera(), float4(0.0f, -1.0f, 0.0f, 1.0f));
+		//				}
+		//			}
+		//		}
+		//	}
+		//	wfbos->UnbindCurrentFrameBuffer();
 
-					if (check_culling_in_scene && App->renderer3D->actual_game_camera)
-					{
-						frustum_camera = App->renderer3D->actual_game_camera;
-					}
-
-					octree.SetStaticDrawList(&to_draw, frustum_camera);
-
-					std::vector<GameObject*>::iterator item = base_game_object->children.begin();
-					for (; item != base_game_object->children.end(); ++item) {
-						if (*item != nullptr && (*item)->IsEnabled()) {
-							(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
-						}
-					}
-
-					std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
-
-					std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
-					for (; it != to_draw.end(); ++it) {
-						if ((*it).second != nullptr) {
-							viewport->GetCamera()->DrawSkybox();
-							//(*it).second->DrawGame(viewport->GetCamera(), float4(0.0f, -1.0f, 0.0f, 1.0f));
-						}
-					}
-				}
-			}
-			wfbos->UnbindCurrentFrameBuffer();
-
-			glDisable(GL_CLIP_DISTANCE0);
-		}
+		//	glDisable(GL_CLIP_DISTANCE0);
+		//}
 
 		viewport->BeginViewport();
 		if (printing_scene)
@@ -430,6 +413,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 			
 			for (std::list<DirLightProperties*>::const_iterator iter = directional_light_properites.begin(); iter != directional_light_properites.end(); iter++)
 			{
+				if (!(*iter)->light->castShadows)
+					continue; 
 
 				glViewport(0, 0, 1024, 1024);
 				glBindFramebuffer(GL_FRAMEBUFFER, (*iter)->depthMapFBO);
@@ -513,92 +498,92 @@ update_status ModuleObjects::PostUpdate(float dt)
 	if (!game_viewport->active || !game_viewport->CanRender() || game_viewport->GetCamera() == nullptr)
 		return UPDATE_CONTINUE;
 
-	
-	glEnable(GL_CLIP_DISTANCE0);
+	//
+	//glEnable(GL_CLIP_DISTANCE0);
 
-	// Reflection 
-	wfbos->BindReflectionFrameBuffer();
-	{
-		float distance = 2 * (App->renderer3D->actual_game_camera->GetCameraPosition().y - 0.0f);
-		ComponentCamera* c_cam = App->renderer3D->actual_game_camera;
-		float c_pos_y = c_cam->GetCameraPosition().y;
-		c_pos_y -= distance;
-		c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
-		c_cam->InvertPitch();
-		if (base_game_object->HasChildren()) {
-			std::vector<std::pair<float, GameObject*>> to_draw;
-			std::vector<std::pair<float, GameObject*>> to_draw_ui;
+	//// Reflection 
+	//wfbos->BindReflectionFrameBuffer();
+	//{
+	//	float distance = 2 * (App->renderer3D->actual_game_camera->GetCameraPosition().y - 0.0f);
+	//	ComponentCamera* c_cam = App->renderer3D->actual_game_camera;
+	//	float c_pos_y = c_cam->GetCameraPosition().y;
+	//	c_pos_y -= distance;
+	//	c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
+	//	c_cam->InvertPitch();
+	//	if (base_game_object->HasChildren()) {
+	//		std::vector<std::pair<float, GameObject*>> to_draw;
+	//		std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
-			ComponentCamera* frustum_camera = game_viewport->GetCamera();
+	//		ComponentCamera* frustum_camera = game_viewport->GetCamera();
 
-			if (check_culling_in_scene && App->renderer3D->actual_game_camera)
-			{
-				frustum_camera = App->renderer3D->actual_game_camera;
-			}
+	//		if (check_culling_in_scene && App->renderer3D->actual_game_camera)
+	//		{
+	//			frustum_camera = App->renderer3D->actual_game_camera;
+	//		}
 
-			octree.SetStaticDrawList(&to_draw, frustum_camera);
+	//		octree.SetStaticDrawList(&to_draw, frustum_camera);
 
-			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
-			for (; item != base_game_object->children.end(); ++item) {
-				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
-				}
-			}
+	//		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+	//		for (; item != base_game_object->children.end(); ++item) {
+	//			if (*item != nullptr && (*item)->IsEnabled()) {
+	//				(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
+	//			}
+	//		}
 
-			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+	//		std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
 
-			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
-			for (; it != to_draw.end(); ++it) {
-				if ((*it).second != nullptr) {
-					(*it).second->DrawGame(game_viewport->GetCamera(), float4(0.0f, 1.0f, 0.0f, -0.0f));
-				}
-			}
-		}
+	//		std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+	//		for (; it != to_draw.end(); ++it) {
+	//			if ((*it).second != nullptr) {
+	//				(*it).second->DrawGame(game_viewport->GetCamera(), float4(0.0f, 1.0f, 0.0f, -0.0f));
+	//			}
+	//		}
+	//	}
 
-		c_pos_y = c_cam->GetCameraPosition().y;
-		c_pos_y += distance;
-		c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
-		c_cam->InvertPitch();
-	}
-	wfbos->UnbindCurrentFrameBuffer();
+	//	c_pos_y = c_cam->GetCameraPosition().y;
+	//	c_pos_y += distance;
+	//	c_cam->SetCameraPosition(float3(c_cam->GetCameraPosition().x, c_pos_y, c_cam->GetCameraPosition().z));
+	//	c_cam->InvertPitch();
+	//}
+	//wfbos->UnbindCurrentFrameBuffer();
 
-	// efraction
-	wfbos->BindRefractionFrameBuffer();
-	{
-		if (base_game_object->HasChildren())
-		{
-			std::vector<std::pair<float, GameObject*>> to_draw;
-			std::vector<std::pair<float, GameObject*>> to_draw_ui;
+	//// efraction
+	//wfbos->BindRefractionFrameBuffer();
+	//{
+	//	if (base_game_object->HasChildren())
+	//	{
+	//		std::vector<std::pair<float, GameObject*>> to_draw;
+	//		std::vector<std::pair<float, GameObject*>> to_draw_ui;
 
-			ComponentCamera* frustum_camera = game_viewport->GetCamera();
+	//		ComponentCamera* frustum_camera = game_viewport->GetCamera();
 
-			if (check_culling_in_scene && App->renderer3D->actual_game_camera)
-			{
-				frustum_camera = App->renderer3D->actual_game_camera;
-			}
+	//		if (check_culling_in_scene && App->renderer3D->actual_game_camera)
+	//		{
+	//			frustum_camera = App->renderer3D->actual_game_camera;
+	//		}
 
-			octree.SetStaticDrawList(&to_draw, frustum_camera);
+	//		octree.SetStaticDrawList(&to_draw, frustum_camera);
 
-			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
-			for (; item != base_game_object->children.end(); ++item) {
-				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
-				}
-			}
+	//		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
+	//		for (; item != base_game_object->children.end(); ++item) {
+	//			if (*item != nullptr && (*item)->IsEnabled()) {
+	//				(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
+	//			}
+	//		}
 
-			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+	//		std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
 
-			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
-			for (; it != to_draw.end(); ++it) {
-				if ((*it).second != nullptr) {
-					(*it).second->DrawGame(game_viewport->GetCamera(), float4(0.0f, -1.0f, 0.0f, 1.0f));
-				}
-			}
-		}
-	}
-	wfbos->UnbindCurrentFrameBuffer();
+	//		std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+	//		for (; it != to_draw.end(); ++it) {
+	//			if ((*it).second != nullptr) {
+	//				(*it).second->DrawGame(game_viewport->GetCamera(), float4(0.0f, -1.0f, 0.0f, 1.0f));
+	//			}
+	//		}
+	//	}
+	//}
+	//wfbos->UnbindCurrentFrameBuffer();
 
-	glDisable(GL_CLIP_DISTANCE0);
+	//glDisable(GL_CLIP_DISTANCE0);
 	
 
 	game_viewport->BeginViewport();

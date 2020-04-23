@@ -781,6 +781,8 @@ void ComponentCamera::DrawSkybox()
 
 void ComponentCamera::DrawFrustum()
 {
+	OPTICK_EVENT();
+
 	static float3 points[8];
 	frustum.GetCornerPoints(points);
 
@@ -830,6 +832,8 @@ void ComponentCamera::DrawFrustum()
 
 void ComponentCamera::DrawIconCamera()
 {
+	OPTICK_EVENT();
+
 	if (mesh_camera != nullptr && print_icon)
 	{
 		ComponentTransform* transform = game_object_attached->transform;

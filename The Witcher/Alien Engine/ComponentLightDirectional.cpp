@@ -13,6 +13,8 @@
 #include "Gizmos.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/type_ptr.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
@@ -63,6 +65,8 @@ ComponentLightDirectional::~ComponentLightDirectional()
 
 void ComponentLightDirectional::PostUpdate()
 {	
+	OPTICK_EVENT();
+
 	float near_plane = sizefrustrum;
 	glm::mat4 projectionMatrix = glm::ortho(-sizefrustrum, sizefrustrum, -sizefrustrum, sizefrustrum,
 		-near_plane,
@@ -75,6 +79,8 @@ void ComponentLightDirectional::PostUpdate()
 
 void ComponentLightDirectional::LightLogic()
 {
+	OPTICK_EVENT(); 
+
 	ComponentTransform* transform=(ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	light_props.position = float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
 	light_props.direction = game_object_attached->transform->GetGlobalRotation().WorldZ();
@@ -137,7 +143,10 @@ bool ComponentLightDirectional::DrawInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 
-		ImGui::Image((ImTextureID)light_props.depthMap, ImVec2(500, 500),ImVec2(0,1), ImVec2(1,0));
+		ImGui::Checkbox("Casts Shadows", &castShadows);
+
+		if(castShadows)
+			ImGui::Image((ImTextureID)light_props.depthMap, ImVec2(500, 500),ImVec2(0,1), ImVec2(1,0));
 
 	}
 	else
@@ -207,6 +216,8 @@ void ComponentLightDirectional::LoadComponent(JSONArraypack* to_load)
 
 void ComponentLightDirectional::DrawIconLight()
 {
+	OPTICK_EVENT(); 
+
 	if (bulb != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
@@ -220,6 +231,8 @@ void ComponentLightDirectional::DrawIconLight()
 
 void ComponentLightDirectional::DrawLightFrustrum()
 {
+	OPTICK_EVENT();
+
 	if (this->game_object_attached->IsSelected())
 	{
 		App->renderer3D->BeginDebugDraw(math::float4(0.0f, 1.0f, 0.0f, 1.0f));

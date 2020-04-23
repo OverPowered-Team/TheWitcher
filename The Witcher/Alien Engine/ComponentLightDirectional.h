@@ -51,10 +51,12 @@ public:
 	float sizefrustrum = 88.f;
 	float distance_far_plane = 178.f;
 	float3 fake_position;
+	bool castShadows = false;
 
 private:
 	ComponentMesh* bulb = nullptr;
 	bool print_icon = true;
+
 
 	uint renderer_id = 0;
 	DirLightProperties light_props;

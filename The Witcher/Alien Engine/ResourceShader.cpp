@@ -378,10 +378,17 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 		std::string variablesLocation = std::string(cname).append(".dirLightProperties");
 		SetUniformFloat3v(variablesLocation, variablesVec3, 5);
 
-		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
-		std::string cdepthmap = std::string(cname).append(".depthMap");
-		SetUniform1i(cdepthmap, 4);
+		std::string cshadow = std::string(cname).append(".castShadow");
+		if ((*iter)->light->castShadows)
+		{
+			SetUniform1i(cshadow, 1);
+			glActiveTexture(GL_TEXTURE4);
+			glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
+			std::string cdepthmap = std::string(cname).append(".depthMap");
+			SetUniform1i(cdepthmap, 4);
+		}
+		else 
+			SetUniform1i(cshadow, 0);
 
 		char clightspaceM[128];
 		sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);

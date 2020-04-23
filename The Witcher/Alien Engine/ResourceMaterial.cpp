@@ -273,24 +273,6 @@ void ResourceMaterial::ApplyMaterial()
 	OPTICK_EVENT();
 
 	// Bind the actual shader
-	simple_depth_shader->Bind();
-
-	if (!recive_shadow)
-	{
-		simple_depth_shader->has_shadow = true;
-	}
-	// Bind textures
-	std::string depth_shader("simple_depth_shader");
-
-	// Update uniforms
-	shaderInputs.standardShaderProperties.diffuse_color = color;
-	shaderInputs.particleShaderProperties.color = color;
-	//simple_depth_shader->UpdateUniforms(shaderInputs);
-}
-
-void ResourceMaterial::ApplyShadows()
-{
-	// Bind the actual shader
 	used_shader->Bind();
 
 	if (textures[(uint)TextureType::DIFFUSE].first != NO_TEXTURE_ID && textures[(uint)TextureType::DIFFUSE].second != nullptr)
@@ -331,6 +313,24 @@ void ResourceMaterial::ApplyShadows()
 	shaderInputs.standardShaderProperties.diffuse_color = color;
 	shaderInputs.particleShaderProperties.color = color;
 	used_shader->UpdateUniforms(shaderInputs);
+
+}
+
+void ResourceMaterial::ApplyPreRenderShadows()
+{
+	// Bind the actual shader
+	simple_depth_shader->Bind();
+
+	if (!recive_shadow)
+	{
+		simple_depth_shader->has_shadow = true;
+	}
+	// Bind textures
+
+	// Update uniforms
+	shaderInputs.standardShaderProperties.diffuse_color = color;
+	shaderInputs.particleShaderProperties.color = color;
+	//simple_depth_shader->UpdateUniforms(shaderInputs);
 }
 
 void ResourceMaterial::UnbindMaterial()

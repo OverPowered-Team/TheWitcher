@@ -88,7 +88,7 @@ public:
 	void ApplyMaterial();
 	void UnbindMaterial();
 
-	void ApplyShadows();
+	void ApplyPreRenderShadows();
 
 	void SetTexture(ResourceTexture* texture, TextureType texType = TextureType::DIFFUSE);
 	const ResourceTexture* GetTexture(TextureType texType = TextureType::DIFFUSE) const;

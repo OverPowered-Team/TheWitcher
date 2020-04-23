@@ -184,22 +184,8 @@ void GameObject::PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, 
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
 		if (!mesh->wireframe)
-			mesh->DrawPolygon(camera, ViewMat, ProjMatrix, position);
-		/*if ((selected || parent_selected) && App->objects->outline)
-			mesh->DrawOutLine();*/
-			//if (mesh->view_mesh || mesh->wireframe)
-			//	mesh->DrawMesh();
-			//if (mesh->view_vertex_normals)
-			//	mesh->DrawVertexNormals();
-			//if (mesh->view_face_normals)
-			//	mesh->DrawFaceNormals();
-			//if (mesh->draw_AABB)
-			//	mesh->DrawGlobalAABB(camera);
-			//if (mesh->draw_OBB)
-			//	mesh->DrawOBB(camera);
+			mesh->PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
 	}
-
-
 }
 
 void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
@@ -231,7 +217,7 @@ void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
 		if (!mesh->wireframe)
-			mesh->DrawPolygonWithShadows(camera);
+			mesh->DrawPolygon(camera);
 		/*if ((selected || parent_selected) && App->objects->outline)
 			mesh->DrawOutLine();*/
 		if (mesh->view_mesh || mesh->wireframe)
@@ -270,7 +256,7 @@ void GameObject::PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, c
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
-		mesh->DrawPolygon(camera, ViewMat, ProjMatrix, position);
+		mesh->PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
 
 	}
 }
@@ -302,7 +288,7 @@ void GameObject::DrawGame(ComponentCamera* camera, const float4& clip_plane)
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
-		mesh->DrawPolygonWithShadows(camera);
+		mesh->DrawPolygon(camera);
 
 	}
 }
@@ -310,6 +296,7 @@ void GameObject::DrawGame(ComponentCamera* camera, const float4& clip_plane)
 void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {
 	OPTICK_EVENT();
+	// TODO: HUGE TODO!: REVIEW THIS FUNCTION 
 
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
@@ -363,6 +350,7 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 		camera_->frustum.up = transform->GetGlobalRotation().WorldY();
 	}
 
+
 	ComponentParticleSystem* partSystem = (ComponentParticleSystem*)GetComponent(ComponentType::PARTICLES);
 	
 	if(partSystem != nullptr)
@@ -373,26 +361,26 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 
 	if (App->objects->printing_scene)
 	{
-		if (camera_ != nullptr && camera_->IsEnabled())
-		{
-			camera_->DrawIconCamera();
-		}
+		//if (camera_ != nullptr && camera_->IsEnabled())
+		//{
+		//	camera_->DrawIconCamera();
+		//}
 
-		//TOFIX / DO. Light does not exist anymore here
-		if (light_dir != nullptr && light_dir->IsEnabled())
-		{
-			light_dir->DrawIconLight();
-		}
+		////TOFIX / DO. Light does not exist anymore here
+		//if (light_dir != nullptr && light_dir->IsEnabled())
+		//{
+		//	light_dir->DrawIconLight();
+		//}
 
-		if (light_spot != nullptr && light_spot->IsEnabled())
-		{
-			light_spot->DrawIconLight();
-		}
-		
-		if (light_point != nullptr && light_point->IsEnabled())
-		{
-			light_point->DrawIconLight();
-		}
+		//if (light_spot != nullptr && light_spot->IsEnabled())
+		//{
+		//	light_spot->DrawIconLight();
+		//}
+		//
+		//if (light_point != nullptr && light_point->IsEnabled())
+		//{
+		//	light_point->DrawIconLight();
+		//}
 
 		if (partSystem != nullptr)
 		{
