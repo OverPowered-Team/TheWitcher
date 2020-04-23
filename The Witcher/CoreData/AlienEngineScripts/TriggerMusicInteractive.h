@@ -31,7 +31,6 @@ public:
 	GameObject* p1 = nullptr;
 	GameObject* p2 = nullptr;
 	int player_counter = 0;
-	float timer = 0.f;
 	bool first_time = true;
 };
 ALIEN_FACTORY TriggerMusicInteractive* CreateTriggerMusicInteractive() {

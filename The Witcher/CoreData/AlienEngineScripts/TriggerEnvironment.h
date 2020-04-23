@@ -29,7 +29,6 @@ public:
 	GameObject* p1 = nullptr;
 	GameObject* p2 = nullptr;
 	int player_counter = 0;
-	float timer = 0.f;
 };
 ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	TriggerEnvironment* alien = new TriggerEnvironment();
