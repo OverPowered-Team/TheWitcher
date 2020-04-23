@@ -14,18 +14,22 @@ public:
 	void Update();
 
 	void CalculateDirection(const float3& end_pos);
-	void SetMoveAndRotationSpeed(const float& rot_speed, const float& speed);
+	void SetMoveAndRotationSpeed(float rot_speed, float speed, float time);
 
 	void OnTriggerEnter(ComponentCollider* trigger) override;
+	void OnCollisionEnter(const Collision& trigger) override;
 
 	float3 direction = float3::zero();
 
 	float damage = 1.f;
+
 private:
 	float3 axis_rot = float3::zero();
 	ComponentRigidBody* rb = nullptr;
 	float rot_speed = 10.f;
 	float speed = 5.f;
+	float time = 7.f;
+	float timer = 0.f;
 };
 
 ALIEN_FACTORY RockDownHill* CreateRockDownHill() {
