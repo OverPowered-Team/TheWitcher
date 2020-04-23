@@ -61,27 +61,32 @@ void Subtitle::Update()
 {
 	if (!text || !audio)
 		return;
-	
 	current_time = Time::GetGameTime() - start_time;
-	if (subtitles.size() > 0 && subtitles.size() > current_sub)
+	
+	if (!change_scene)
 	{
-		if (current_time >= subtitles[current_sub].start)
+		if (subtitles.size() > 0 && subtitles.size() > current_sub)
 		{
-			if (first_entered)
+			if (current_time >= subtitles[current_sub].start)
 			{
-				text->SetText(subtitles[current_sub].text.c_str());
-				first_entered = false;
-			}
-			else if (current_time > subtitles[current_sub].end && !first_entered)
-			{
-				text->SetText("");
-				first_entered = true;
-				++current_sub;
+				if (first_entered)
+				{
+					text->SetText(subtitles[current_sub].text.c_str());
+					first_entered = false;
+				}
+				else if (current_time > subtitles[current_sub].end && !first_entered)
+				{
+					text->SetText("");
+					first_entered = true;
+					++current_sub;
+				}
 			}
 		}
 	}
-	if (current_time > end_seconds || Input::GetControllerButton(1,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A))
+	
+	if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
 	{
+		change_scene = true;
 		LOG("ENTERED");
 		if(audio)
 			audio->Mute(true);
