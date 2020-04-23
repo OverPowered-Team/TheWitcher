@@ -15,8 +15,6 @@ public:
 public:
 	ComponentAudioEmitter* emitter = nullptr;
 	bool triggered = false;
-	float timer = 0.f;
-	//std::string event_name;
 };
 
 ALIEN_FACTORY TriggerAudioEvent* CreateTriggerAudioEvent() {

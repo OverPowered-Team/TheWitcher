@@ -581,7 +581,7 @@ bool PlayerController::CheckBoundaries()
 
 	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
 	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-	direction_vector.y = 0.f;
+	//direction_vector.y = 0.f;
 	direction_vector.Normalize();
 	//rotate
 	float angle = atan2f(direction_vector.z, direction_vector.x);

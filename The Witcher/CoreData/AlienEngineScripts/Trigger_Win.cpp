@@ -19,13 +19,9 @@ void Trigger_Win::Update()
 void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 {
 	ComponentAudioEmitter* em = collider->game_object_attached->GetComponent<ComponentAudioEmitter>();
-	if (Time::GetGameTime() - timer >= 2.f)
+	if (em != nullptr && !first)
 	{
-		if (em != nullptr && !first)
-		{
-			SceneManager::LoadScene("Win");
-			first = true;
-		}
+		SceneManager::LoadScene("Win");
+		first = true;
 	}
-	
 }
