@@ -53,7 +53,6 @@ public:
 	Prefab crow_prefab;
 	GameObject* crows = nullptr;
 	GameObject* meshes = nullptr;
-	GameObject* cloud = nullptr;
 
 	float3 direction;
 	float direction_time = 0.0f;

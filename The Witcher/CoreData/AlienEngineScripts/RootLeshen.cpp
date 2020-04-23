@@ -23,7 +23,7 @@ void RootLeshen::Start()
 void RootLeshen::Update()
 {
 	if (state == ROOTSTATE::SEEK) {
-		direction = (GameManager::manager->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+		direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 		direction.y = 0;
 		transform->AddPosition(direction * speed);
 

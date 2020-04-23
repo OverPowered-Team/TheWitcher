@@ -18,8 +18,7 @@ void Leshen::StartEnemy()
 
 	Enemy::StartEnemy();
 
-	meshes = game_object->GetChild(3);
-	cloud = game_object->GetChild(2);
+	meshes = game_object->GetChild("Meshes");
 }
 
 void Leshen::UpdateEnemy()
@@ -245,7 +244,7 @@ void Leshen::LaunchCloudAction()
 {
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	cloud->SetEnable(true);
+	particles["Cloud"]->game_object_attached->SetEnable(true);
 }
 
 Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
@@ -353,8 +352,8 @@ void Leshen::EndCrowsAction(GameObject* crow)
 
 void Leshen::EndCloudAction()
 {
-	meshes->SetEnable(false);
-	cloud->SetEnable(true);
+	meshes->SetEnable(true);
+	particles["Cloud"]->game_object_attached->SetEnable(false);
 	current_action->state = Leshen::ActionState::ENDED;
 }
 
