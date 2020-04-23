@@ -559,12 +559,11 @@ void PlayerController::ReceiveDamage(float value, float3 knock_back)
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 
+	attacks->CancelAttack();
 	if (state != PlayerState::HIT && state != PlayerState::DASHING && state != PlayerState::DEAD) {
 		animator->PlayState("Hit");
-		attacks->CancelAttack();
 		state = PlayerState::HIT;
 		player_data.speed = knock_back;
-
 	}	
 
 	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
