@@ -171,6 +171,7 @@ void PlayerController::Update()
 		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
+		player_data.speed += player_data.speed * -0.075f;
 		break;
 	case PlayerController::PlayerState::CASTING:
 		attacks->UpdateCurrentAttack();
