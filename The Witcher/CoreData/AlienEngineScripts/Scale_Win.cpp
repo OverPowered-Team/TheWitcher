@@ -159,7 +159,7 @@ void Scale_Win::Update()
 			{
 				Scores_Data::won_level1 = false;
 				Scores_Data::won_level2 = false;
-				SceneManager::LoadScene("Main_Menu", FadeToBlackType::VERTICAL_CURTAIN);
+				SceneManager::LoadScene("EndGame_Menu", FadeToBlackType::VERTICAL_CURTAIN);
 			}
 		}
 	}
