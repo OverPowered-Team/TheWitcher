@@ -35,6 +35,7 @@ public:
 	bool OnPressed();
 	bool OnRelease();
 	bool OnExit();
+	bool OnEnter();
 
 	void SetValue(float factor);
 	float GetValue();
@@ -64,6 +65,9 @@ public:
 	Color slider_clicked_color	= { 0.7f,0.7f,0.7f,1.0f };
 	Color slider_pressed_color	= { 0.75f,0.75f,0.75f,1.0f };
 	Color slider_disabled_color = { 0.3f,0.3f,0.3f,1.0f };
+
+private:
+	bool active = true;
 };
 
 #endif // !_COMPONENT_SLIDER_H_

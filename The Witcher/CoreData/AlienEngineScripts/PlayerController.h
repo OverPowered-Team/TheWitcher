@@ -23,6 +23,7 @@ public:
 		DEAD,
 		REVIVING,
 		HIT,
+		ROOT,
 
 		MAX
 		);
@@ -38,17 +39,17 @@ public:
 	struct PlayerData {
 		float movementSpeed = 200.0F;
 		float rotationSpeed = 120.0F;
-		float currentSpeed = 0.f;
+		float velocity = 0.f;
+		float3 speed = float3::zero();
 		float dash_power = 1.5f;
 		float jump_power = 25.f;
-		Stat health = Stat("Health", 100.0f);
-		Stat power = Stat("Strength", 10.0f);
-		Stat chaos = Stat("Chaos", 150.0f);
-		Stat attack_speed = Stat("Attack Speed", 1.0f);
+		float gravity = 9.8f;
+		std::map<std::string, Stat> stats;
 
 		PlayerType player_type = PlayerType::GERALT;
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+		bool can_move = true;
 		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
@@ -58,30 +59,46 @@ public:
 
 	void Start();
 	void Update();
+	void PreUpdate();
+
+	void UpdateInput();
+	void IdleInput();
+	void RunningInput();
+	void AttackingInput();
+	void ApplyRoot(float time);
+	void ReleaseFromRoot();
 
 	bool AnyKeyboardInput();
 
-	void HandleMovement(const float2& joystickInput);
+	void HandleMovement();
+	void EffectsUpdate();
+	void Jump();
+	void Fall();
+	void Roll();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
 	void Revive();
 	void ActionRevive();
-	void ReceiveDamage(float value);
+	void ReceiveDamage(float value, float3 knock_back = {0, 0, 0});
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
-	bool CheckBoundaries(const float2& joystickInput);
+	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
 	bool CheckForPossibleRevive();
 
-	void OnUltimateActivation();
-	void OnUltimateDeactivation();
+	void OnUltimateActivation(float value);
+	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
+
+	void HitFreeze(float freeze_time);
+
+	void RemoveFreeze(float speed);
 
 public:
 	int controller_index = 1;
@@ -92,8 +109,8 @@ public:
 
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
-	bool can_move = false;
-	float stick_threshold = 0.1f;
+	float2 movement_input;
+	bool mov_input = false;
 
 	float revive_range = 5.0f;
 
@@ -117,7 +134,7 @@ public:
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_light_attack = Input::CONTROLLER_BUTTON_X;
 	Input::CONTROLLER_BUTTONS controller_heavy_attack = Input::CONTROLLER_BUTTON_Y;
-	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_LEFT;
+	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_UP;
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
@@ -149,9 +166,9 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
@@ -162,3 +179,19 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	return player;
 }
+
+/*class PlayerState {
+	PlayerState() {}
+	virtual ~PlayerState() {}
+
+	virtual void HandleInput() {}
+	virtual void Update() {}
+};
+
+class OnGroundState: public PlayerState {
+	OnGroundState() {}
+	virtual ~OnGroundState() {}
+
+	virtual void HandleInput() {}
+	virtual void Update() {}
+};*/

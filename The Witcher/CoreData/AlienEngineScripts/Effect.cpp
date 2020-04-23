@@ -1,3 +1,4 @@
+#include "Stat.h"
 #include "Effect.h"
 
 // Effect
@@ -58,6 +59,42 @@ float Effect::GetMultiplicativeAmount(std::string identifier)
 
     return final_value;
 }
+
+bool Effect::UpdateEffect()
+{
+    if (time > 0)
+    {
+        if (Time::GetGameTime() > start_time + time)
+        {
+            to_delete = true;
+        }
+        else if (ticks_time > 0 && ticks_time + last_tick_time < Time::GetGameTime())
+        {
+            last_tick_time = Time::GetGameTime();
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool Effect::AffectsStat(std::string stat_name)
+{
+    for (auto it = additive_modifiers.begin(); it != additive_modifiers.end(); ++it)
+    {
+        if ((*it).identifier == stat_name)
+            return true;
+    }
+
+    for (auto it = multiplicative_modifiers.begin(); it != multiplicative_modifiers.end(); ++it)
+    {
+        if ((*it).identifier == stat_name)
+            return true;
+    }
+
+    return false;
+}
+
 
 // AttackEffect
 AttackEffect::AttackEffect()

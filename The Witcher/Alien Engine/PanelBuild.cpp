@@ -347,6 +347,7 @@ void PanelBuild::CreateBuild()
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Tags"), std::string(folder_location + "/Configuration/Tags"), std::experimental::filesystem::copy_options::recursive);
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/BuildSettings.alienBuild"), std::string(folder_location + "/Configuration/BuildSettings.alienBuild"));
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/DefaultConfiguration.json"), std::string(folder_location + "/Configuration/DefaultConfiguration.json"));
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/PhysicsSettings.json"), std::string(folder_location + "/Configuration/PhysicsSettings.json"));
 
 	if (!readme_fullpath.empty()) {
 		std::experimental::filesystem::copy(readme_fullpath.data(), std::string(folder_location + "/" + readme_name).data());

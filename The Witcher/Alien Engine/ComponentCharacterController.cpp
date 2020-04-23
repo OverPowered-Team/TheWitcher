@@ -1,7 +1,5 @@
 #include "Application.h"
-#include "BulletCollision\CollisionDispatch\btGhostObject.h"
-#include <BulletDynamics\Character\btKinematicCharacterController.h>
-#include "ModulePhysics.h"
+#include "ModulePhysX.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentCharacterController.h"
 #include "ComponentCollider.h"
@@ -9,204 +7,214 @@
 #include "GameObject.h"
 #include "ReturnZ.h"
 
+#include "UtilitiesPhysX.h"
+#include "ComponentPhysics.h"
+#include "ComponentScript.h"
+#include "Alien.h"
+
 #include "Time.h"
 #include "ModuleInput.h"
 #include "mmgr/mmgr.h"
 
-ComponentCharacterController::ComponentCharacterController(GameObject* go) : Component(go)
+ComponentCharacterController::ComponentCharacterController(GameObject* go) : ComponentCollider(go)
 {
 	type = ComponentType::CHARACTER_CONTROLLER;
 	// GameObject Components 
 	transform = go->GetComponent<ComponentTransform>();
 
-	shape = new btCapsuleShape(character_radius, character_height);
+	// load default settings
+	SetDefaultConf();
+	controller = App->physx->CreateCharacterController(desc);
 
-	body = new btPairCachingGhostObject();
-	body->setCollisionShape(shape);
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT | btCollisionObject::CF_KINEMATIC_OBJECT);
-	body->setActivationState(DISABLE_DEACTIVATION);
-	body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
+	moveDirection = controller_offset = float3::zero();
 
-	controller = new btKinematicCharacterController(body, (btConvexShape*)shape, 0.5);
-	controller->setUp(btVector3(0.f, 1.f, 0.f));
-	controller->setGravity(btVector3(0.f, -gravity, 0.f));
-	jump_speed = controller->getJumpSpeed();
+	// links hidden kinematic actor shapes with user data
+	// contacts callback method currently needs user data on shape ptr
+	Uint32 ns = controller->getActor()->getNbShapes();
+	PxShape* all_shapes;
+	controller->getActor()->getShapes(&all_shapes, ns);
+	for (uint i = 0; i < ns; ++i)
+		all_shapes[i].userData = this;
 
-	App->physics->world->addCollisionObject(body, btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::StaticFilter, btBroadphaseProxy::StaticFilter | btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter);
-	App->physics->AddAction(controller);
-
-	detector = new btPairCachingGhostObject();
-	detector->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
-	detector->setCollisionFlags(detector->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	detector->setCollisionShape(shape);
-	App->physics->AddDetector(detector);
-
-	collider = new ComponentCollider(go);
-	collider->internal_collider = true;
-	collider->detector = detector;
-	detector->setUserPointer(collider);
-	body->setUserPointer(collider);
+	controller->setUserData(this);
+	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
+	SetCollisionLayer("Default");
 }
 
 ComponentCharacterController::~ComponentCharacterController()
 {
-	App->physics->RemoveAction(controller);
-	App->physics->RemoveDetector(body);
-	App->physics->RemoveDetector(detector);
-
-	delete shape;
-	delete body;
-	delete detector;
-	delete collider;
+	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
+	controller->release();
+	delete report;
 }
 
 // Movement Functions -----------------------------------------
 
-void ComponentCharacterController::SetWalkDirection(float3 direction)
+void ComponentCharacterController::SetContactOffset(const float contactOffset)
 {
-	controller->setWalkDirection(ToBtVector3(direction));
+	float max = FLT_MAX, min = 0.0001f;
+	desc.contactOffset = Clamp(contactOffset, min, max);
+
+	switch (desc.getType())
+	{
+	case PxControllerShapeType::eCAPSULE:
+	{
+		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
+		capsule_c->setContactOffset(desc.contactOffset);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
-
-void ComponentCharacterController::SetJumpSpeed(const float jump_speed)
+void ComponentCharacterController::SetStepOffset(const float stepOffset)
 {
-	this->jump_speed = jump_speed;
-	controller->setJumpSpeed(jump_speed);
+	float max = FLT_MAX, min = 0.0f;
+	desc.stepOffset = Clamp(stepOffset, min, max);
+
+	switch (desc.getType())
+	{
+	case PxControllerShapeType::eCAPSULE:
+	{
+		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
+		capsule_c->setStepOffset(desc.stepOffset);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
-void ComponentCharacterController::SetGravity(const float gravity)
+void ComponentCharacterController::SetSlopeLimit(const float slopeLimit)
 {
-	this->gravity = gravity;
-	controller->setGravity(ToBtVector3(float3(0.f, -gravity, 0.f)));
-}
+	float max = 180.0f, min = 0.0f;
+	float _slopeLimit = Clamp(slopeLimit, min, max);
+	desc.slopeLimit = cosf(DegToRad(_slopeLimit));
 
-void ComponentCharacterController::ApplyImpulse(float3 direction)
-{
-	controller->applyImpulse({ direction.x, direction.y, direction.z });
-}
-
-void ComponentCharacterController::Jump(float3 direction)
-{
-	controller->jump(ToBtVector3(direction));
-}
-
-bool ComponentCharacterController::CanJump()
-{
-	return controller->canJump();
-}
-
-bool ComponentCharacterController::OnGround()
-{
-	return controller->onGround();
-}
-
-void ComponentCharacterController::SetRotation(const Quat rotation)
-{
-	body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, rotation));
-	transform->SetGlobalRotation(math::Quat(rotation));
-}
-
-Quat ComponentCharacterController::GetRotation() const
-{
-	return transform->GetGlobalRotation();
-}
-
-void ComponentCharacterController::SetPosition(const float3 pos)
-{
-	body->setWorldTransform(ToBtTransform(pos + character_offset, transform->GetGlobalRotation()));
-	transform->SetGlobalPosition(pos);
-}
-
-float3 ComponentCharacterController::GetPosition() const
-{
-	return transform->GetGlobalPosition();
-}
-
-void ComponentCharacterController::SetCharacterOffset(const float3 offset)
-{
-	character_offset = offset;
+	switch (desc.getType())
+	{
+	case PxControllerShapeType::eCAPSULE:
+	{
+		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
+		capsule_c->setSlopeLimit(desc.slopeLimit);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void ComponentCharacterController::SetCharacterHeight(const float height)
 {
-	float max = FLOAT_INF, min = 0.1f;
-	character_height = Clamp(height, min, max);
-	RecreateCapusle();
+	float max = FLOAT_INF, min = 0.0f; // 0 means sphere
+	desc.height = Clamp(height, min, max);
+
+	switch (desc.getType())
+	{
+	case PxControllerShapeType::eCAPSULE:
+	{
+		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
+		capsule_c->setHeight(desc.height);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void ComponentCharacterController::SetCharacterRadius(const float radius)
 {
 	float max = FLOAT_INF, min = 0.1f;
-	character_radius = Clamp(radius, min, max);
-	RecreateCapusle();
+	desc.radius = Clamp(radius, min, max);
+
+	switch (desc.getType())
+	{
+	case PxControllerShapeType::eCAPSULE:
+	{
+		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
+		capsule_c->setRadius(desc.radius);
+		break;
+	}
+	default:
+		break;
+	}
+
+}
+
+void ComponentCharacterController::SetCharacterOffset(float3 offset)
+{
+	controller_offset = offset;
+	controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
 }
 // -------------------------------------------------------------
-
-void ComponentCharacterController::RecreateCapusle()
-{
-	shape->setLocalScaling(btVector3(character_radius * 2, character_height, character_radius * 2));
-}
 
 void ComponentCharacterController::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Type", (int)type);
 
-	to_save->SetFloat3("CharacterOffset", character_offset);
-	to_save->SetNumber("CharacterRadius", character_radius);
-	to_save->SetNumber("CharacterHeight", character_height);
-	to_save->SetNumber("JumpSpeed", jump_speed);
+	to_save->SetNumber("SlopeLimit", RadToDeg(acosf(desc.slopeLimit)));
+	to_save->SetNumber("StepOffset", desc.stepOffset);
+	to_save->SetNumber("SkinWidth", desc.contactOffset);
+	to_save->SetNumber("MinMoveDistance", min_distance);
+	to_save->SetFloat3("Center", controller_offset);
+	to_save->SetNumber("CharacterRadius", desc.radius);
+	to_save->SetNumber("CharacterHeight", desc.height);
+
 	to_save->SetNumber("Gravity", gravity);
+	to_save->SetBoolean("ForceGravity", force_gravity);
+	to_save->SetBoolean("ForceMove", force_move);
+
+	to_save->SetString("CollisionLayer", layer_name.c_str());
 }
 
 void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 {
-	SetCharacterOffset(to_load->GetFloat3("CharacterOffset"));
+	SetSlopeLimit(to_load->GetNumber("SlopeLimit"));
+	SetStepOffset(to_load->GetNumber("StepOffset"));
+	SetContactOffset(to_load->GetNumber("SkinWidth"));
+	min_distance = to_load->GetNumber("MinMoveDistance");
+	SetCharacterOffset(to_load->GetFloat3("Center"));
 	SetCharacterRadius(to_load->GetNumber("CharacterRadius"));
 	SetCharacterHeight(to_load->GetNumber("CharacterHeight"));
-	SetJumpSpeed(to_load->GetNumber("JumpSpeed"));
-	SetGravity(to_load->GetNumber("Gravity"));
+
+	gravity = to_load->GetNumber("Gravity");
+	force_gravity = to_load->GetBoolean("ForceGravity");
+	force_move = to_load->GetBoolean("ForceMove");
+
+	SetCollisionLayer(to_load->GetString("CollisionLayer"));
 }
 
 bool ComponentCharacterController::DrawInspector()
 {
-	float3 current_character_offset = character_offset;
-	float current_character_radius = character_radius;
-	float current_character_height = character_height;
-	float current_jump_speed = jump_speed;
-	float current_gravity = gravity;
-
 	ImGui::PushID(this);
 
-	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy, ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy))
 	{
 		ImGui::Spacing();
+	
+		DrawLayersCombo();
+		float slopeLimitDeg = RadToDeg(acosf((float)desc.slopeLimit));
+		ImGui::Title("Slope Limit", 1);				if (ImGui::DragFloat("##slopeLimit", &slopeLimitDeg, 0.03f, 0.0f, 180.0f))					{ SetSlopeLimit(slopeLimitDeg); }
+		ImGui::Title("Step Offset", 1);				if (ImGui::DragFloat("##stepOffset", &desc.stepOffset, 0.03f, 0.0f, FLT_MAX))				{ SetStepOffset(desc.stepOffset); }
+		ImGui::Title("Skin Width", 1);				if (ImGui::DragFloat("##skinWidth", &desc.contactOffset, 0.03f, 0.0001f, FLT_MAX))			{ SetContactOffset(desc.contactOffset); }
+		ImGui::Title("Min Move Distance", 1);		ImGui::DragFloat("##minDist", &min_distance, 0.03f, 0.f, FLT_MAX);
+		ImGui::Title("Center", 1);					if (ImGui::DragFloat3("##center", controller_offset.ptr(), 0.03f, -math::inf, math::inf))	{ SetCharacterOffset(controller_offset); }
+		ImGui::Title("Radius", 1);					if (ImGui::DragFloat("##radius", &desc.radius, 0.05f, 0.1f, FLT_MAX))						{ SetCharacterRadius(desc.radius); }
+		ImGui::Title("Height", 1);					if (ImGui::DragFloat("##height", &desc.height, 0.05f, 0.0f, FLT_MAX))						{ SetCharacterHeight(desc.height); }
+		
+		ImGui::Separator();
+		ImGui::Title("Experimental features",0);
+		ImGui::Separator();
+		ImGui::Title("Gravity", 1);					ImGui::DragFloat("##gravity", &gravity, 0.01f, 0.00f, FLT_MAX);
+		ImGui::Title("Force gravity", 1);			ImGui::Checkbox("##forceGravity", &force_gravity);
+		ImGui::Title("Force move", 1);				ImGui::Checkbox("##forceMove", &force_move);
+		
+		
+		//ImGui::Checkbox("isGrounded", &isGrounded); // debug test
 
-		ImGui::Title("Layer");
-
-		if (ImGui::BeginComboEx(std::string("##layers").c_str(), std::string(" " + App->physics->layers.at(collider->layer)).c_str(), 200, ImGuiComboFlags_NoArrowButton))
-		{
-			for (int n = 0; n < App->physics->layers.size(); ++n)
-			{
-				bool is_selected = (collider->layer == n);
-
-				if (ImGui::Selectable(std::string("   " + App->physics->layers.at(n)).c_str(), is_selected))
-				{
-					collider->layer = n;
-				}
-
-				if (is_selected)
-				{
-					ImGui::SetItemDefaultFocus();
-				}
-			}
-
-			ImGui::EndCombo();
-		}
-		ImGui::Title("Offset", 1);				if (ImGui::DragFloat3("##center", current_character_offset.ptr(), 0.05f)) { SetCharacterOffset(current_character_offset); }
-		ImGui::Title("Radius", 1);				if (ImGui::DragFloat("##radius", &current_character_radius, 0.05f, 0.1f, FLT_MAX)) { SetCharacterRadius(current_character_radius); }
-		ImGui::Title("Height", 1);				if (ImGui::DragFloat("##height", &current_character_height, 0.05f, 0.1f, FLT_MAX)) { SetCharacterHeight(current_character_height); }
-		ImGui::Title("Jump Speed", 1);			if (ImGui::DragFloat("##jump_speed", &current_jump_speed, 0.01f, 0.00f, FLT_MAX)) { SetJumpSpeed(current_jump_speed); }
-		ImGui::Title("Gravity", 1);				if (ImGui::DragFloat("##gravity", &current_gravity, 0.01f, 0.00f, FLT_MAX)) { SetGravity(current_gravity); }
+		/*ImGui::Separator();
+		ImGui::Text("velocity: %f,%f,%f", velocity.x, velocity.y, velocity.z);*/
 		ImGui::Spacing();
 	}
 
@@ -217,60 +225,226 @@ bool ComponentCharacterController::DrawInspector()
 
 void ComponentCharacterController::Update()
 {
-	collider->Update();
+	//collider->Update();
 
 	if (Time::IsPlaying())
 	{
-	/*	float3 movement = float3::zero();
+		// TODO DELETE hardcoded test 1 -----------------------------------------------------------------------
+		//moveDirection.x = moveDirection.z = 0.0f;
+		//float speed = 10.0f;
+		//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT)
+		//	moveDirection.x -= 1.0f;
+		//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_STATE::KEY_REPEAT)
+		//	moveDirection.x += 1;
+		//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_STATE::KEY_REPEAT)
+		//	moveDirection.z += 1;
+		//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_STATE::KEY_REPEAT)
+		//	moveDirection.z -= 1;
+		//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
+		//	moveDirection.y = 8.0f;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT)
-			movement.x -= 1;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_STATE::KEY_REPEAT)
-			movement.x += 1;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_STATE::KEY_REPEAT)
-			movement.z += 1;
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_STATE::KEY_REPEAT)
-			movement.z -= 1;
+		//moveDirection = float3(moveDirection.x * speed, moveDirection.y, moveDirection.z * speed) ; // SPEED
+		// ----------------------------------------------------------------------------------------------------
 
-		float speed = (movement.Equals(float3::zero())) ? 0.f : 10.f;
-		controller->setWalkDirection(ToBtVector3(movement.Normalized() * speed * Time::GetDT()));
+		if (force_move && isGrounded && velocity.isZero())
+		{
+			// always force downwards to mantain collision state 
+			// (cct solver puts on top of skin and not returns collision state when performs a 0y)
+			Move(float3(0.0f, -controller->getContactOffset(), 0.0f));
+		}
 
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_REPEAT && CanJump())
-			Jump();*/
+		if (force_gravity && !isGrounded)
+		{
+			moveDirection.y -= gravity * Time::GetDT();
+			Move(moveDirection * Time::GetDT());
+			isGrounded ? moveDirection.y = 0.0f : 0;
+		}
+		//else // TODO: DELETE HARDCODED TEST from 1
+		//{
+		//	Move(float3(moveDirection.x, moveDirection.y - controller->getContactOffset(), moveDirection.z) * Time::GetDT());
+		//}
 
-		btTransform bt_transform = body->getWorldTransform();
-		btQuaternion rotation = bt_transform.getRotation();
-		btVector3 position = bt_transform.getOrigin() - ToBtVector3(character_offset);
-
-		transform->SetGlobalPosition(float3(position));
-		transform->SetGlobalRotation(math::Quat(rotation));
+		transform->SetGlobalPosition(PXVEC3EXT_TO_F3(controller->getPosition()) - controller_offset);
 	}
 	else
 	{
-		body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, transform->GetGlobalRotation()));
+		controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
+	}
+}
+
+PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
+{
+
+	// set velocity on current position before move
+	velocity = controller->getPosition();
+
+	// perform the move
+	PxFilterData filter_data( layer_num, physics->ID, 0, 0);
+	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter_callback); // TODO: implement filters callback when needed
+	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
+
+	// set grounded internal state
+	collisionFlags.isSet(PxControllerCollisionFlag::eCOLLISION_DOWN) ? isGrounded = true : isGrounded = false;
+	// substract the difference from current pos to velocity before move
+	velocity = isGrounded ? F3_TO_PXVEC3EXT(float3::zero()) : PXVEC3_TO_VEC3EXT(controller->getPosition() - velocity);
+
+	return collisionFlags;
+}
+
+void ComponentCharacterController::SetCollisionLayer(std::string layer)
+{
+	int index = 0;
+	if (!physics->layers->GetIndexByName(layer, index)) return;
+	layer_num = index;
+	layer_name = layer;
+
+	PxShape* all_shapes;
+	Uint32 ns = controller->getActor()->getNbShapes();
+	controller->getActor()->getShapes(&all_shapes, ns);
+	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
+
+	for (uint i = 0; i < ns; ++i) {
+		all_shapes[i].setSimulationFilterData(filter_data);
+		all_shapes[i].setQueryFilterData(filter_data);
 	}
 }
 
 void ComponentCharacterController::DrawScene()
 {
-	if (game_object_attached->IsSelected() && App->physics->debug_physics == false)
+	if (game_object_attached->IsSelected() && App->physx->debug_physics == false)
 	{
-		App->physics->DrawCharacterController(this);
-	}
-}
+		switch (desc.getType())
+		{
+		case PxControllerShapeType::eCAPSULE:
+		{
+			PxCapsuleController* capsule = (PxCapsuleController*)controller;
+			float skin_offset = capsule->getContactOffset();
 
+			//float4x4 transform = PXTRANS_TO_F4X4(capsule->getActor()->getGlobalPose());
+
+			float radius = capsule->getRadius() + skin_offset;
+			float height = capsule->getHeight() + skin_offset; //
+
+
+			float3 oriblue(0.15f, 0.3f, 0.95f);
+			PxExtendedVec3 pos = capsule->getPosition();
+			PxTransform trans;
+			trans.p = PxVec3(pos.x, pos.y, pos.z);
+			trans.q = QUAT_TO_PXQUAT(Quat::FromEulerXYZ(0.0f, 0.0f, DEGTORAD * 90.0f));
+			App->renderer3D->DebugDrawCapsule(PXTRANS_TO_F4X4(trans), radius, height * 0.5f, oriblue);
+
+			break;
+		}
+		case PxControllerShapeType::eBOX:
+		{
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+}
 
 
 void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
 {
-	collider->HandleAlienEvent(e);
 }
 
-
-void ComponentCharacterController::Reset()
+void ComponentCharacterController::SetDefaultConf()
 {
+	desc.radius = 0.5f;
+	desc.height = 2.0f;
+	if (desc.material) desc.material->release();
+	desc.material = App->physx->CreateMaterial(static_friction, dynamic_friction, restitution);
+	desc.position = F3_TO_PXVEC3EXT(game_object_attached->transform->GetGlobalPosition());
+	desc.slopeLimit = cosf(DegToRad(45.0f));
+	desc.nonWalkableMode = PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
+	// hit report callback
+	if (report) delete report;
+	desc.reportCallback = report = new UserControllerHitReport();
+	report->controller = this;
+	// 
 
+	//desc.invisibleWallHeight = 100.0f;// TODO: implement if needed automatic invisible walls
+	//desc.maxJumpHeight = 1.0f;
+	//desc.upDirection = // up direction can be changed to simulate planetoids or surfaces with other gravity dir vector
+
+	min_distance = 0.001f;
 }
 
+void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit hit)
+{
+	Alien* alien = nullptr;
+	for (ComponentScript* script : physics->scripts)
+	{
+		try {
+			alien = (Alien*)script->data_ptr;
+			alien->OnControllerColliderHit(hit);
+		}
+		catch (...) {
+			LOG_ENGINE("Error on script \"%s\" when calling \"%s\"", alien->data_name, hit.gameObject->GetName());
+		}
+	}
+}
 
+bool ComponentCharacterController::SetPosition(float3 position) const
+{
+	return controller->setPosition(F3_TO_PXVEC3EXT(position));
+}
 
+float3 ComponentCharacterController::GetPosition() const
+{
+	return  PXVEC3EXT_TO_F3(controller->getPosition());
+}
+
+float3 ComponentCharacterController::GetFootPosition() const
+{
+	return  PXVEC3EXT_TO_F3(controller->getFootPosition());
+}
+
+//* -------------------------- User hit callbacks
+void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
+{
+	ControllerColliderHit _hit;
+	
+	ComponentCollider* col = (ComponentCollider*)hit.shape->userData;
+	_hit.collider = col;
+	if (_hit.collider)
+	{
+		//_hit.controller = (ComponentCharacterController*)col; // only onControllerHit
+		_hit.gameObject = (GameObject*)col->game_object_attached;
+		_hit.rigidbody = col->physics->rigid_body;
+		_hit.transform = _hit.gameObject->transform;
+	}
+
+	_hit.moveDirection = PXVEC3_TO_F3(hit.dir);
+	_hit.moveLength = hit.length;
+	_hit.normal = PXVEC3_TO_F3(hit.worldNormal);
+	_hit.point = PXVEC3EXT_TO_F3(hit.worldPos);
+	
+	controller->OnControllerColliderHit(_hit);
+}
+
+void UserControllerHitReport::onControllerHit(const PxControllersHit& hit)
+{
+	ControllerColliderHit _hit;
+
+	_hit.controller = (ComponentCharacterController*)hit.other->getUserData();
+	_hit.collider = (ComponentCollider*)_hit.controller;
+	_hit.gameObject = _hit.controller->game_object_attached;
+	_hit.rigidbody = _hit.collider->physics->rigid_body;
+	_hit.transform = _hit.gameObject->transform;
+	
+	_hit.moveDirection = PXVEC3_TO_F3(hit.dir);
+	_hit.moveLength = hit.length;
+	_hit.normal = PXVEC3_TO_F3(hit.worldNormal);
+	_hit.point = PXVEC3EXT_TO_F3(hit.worldPos);
+
+	controller->OnControllerColliderHit(_hit);
+}
+
+void UserControllerHitReport::onObstacleHit(const PxControllerObstacleHit& hit)
+{
+	LOG_ENGINE("OBSTACLE HIT");
+}

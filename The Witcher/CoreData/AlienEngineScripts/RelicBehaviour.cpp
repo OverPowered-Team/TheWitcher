@@ -5,20 +5,22 @@
 #include "Effect.h"
 #include "EffectsFunctions.h"
 #include "EventManager.h"
+#include "Relic_Notification.h"
 
 // Relic
 Relic::Relic()
 {
-	// Inicialize effects with a json
 }
 
 Relic::~Relic()
 {
 }
 
-void Relic::OnPickUp(PlayerController* player)
+void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
+	if(GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
 }
 
 // AttackRelic
@@ -30,7 +32,7 @@ AttackRelic::~AttackRelic()
 {
 }
 
-void AttackRelic::OnPickUp(PlayerController* _player)
+void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
 	std::vector<std::string> attack_pool = _player->attacks->GetFinalAttacks();
 
@@ -61,7 +63,7 @@ void AttackRelic::OnPickUp(PlayerController* _player)
 
 	effects.push_back(test_effect);
 
-	Relic::OnPickUp(_player);
+	Relic::OnPickUp(_player, attack_name);
 }
 
 // DashRelic
@@ -73,7 +75,7 @@ DashRelic::~DashRelic()
 {
 }
 
-void DashRelic::OnPickUp(PlayerController* _player)
+void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
 	Effect* test_effect = new Effect();
 
@@ -109,19 +111,21 @@ RelicBehaviour::~RelicBehaviour()
 
 void RelicBehaviour::Start()
 {
+	std::string json_str;
 
 	switch (relic_type)
 	{
 	case Relic_Type::BASE:
 		relic = new Relic();
+		json_str = "BASE";
 		break;
 	case Relic_Type::ATTACK:
 		relic = new AttackRelic();
+		json_str = "ATTACK";
 		break;
 	case Relic_Type::DASH:
 		relic = new DashRelic();
-		break;
-	case Relic_Type::COMPANION:
+		json_str = "DASH";
 		break;
 	default:
 		break;
@@ -129,20 +133,9 @@ void RelicBehaviour::Start()
 
 	if (relic)
 	{
-		relic->name = name;
-		relic->description = description;
 		relic->relic_effect = relic_effect;
+		SetRelic(json_str.data());
 	}
-
-	////Geralt dialogue
-	//geraltDialogue.audioData.eventName = "Hit_Sword";
-	//geraltDialogue.priority = "Relics";
-	//geraltDialogue.entityName = "Geralt";
-
-	////Yennefer dialogue
-	//YenneferDialogue.audioData.eventName = "Hit_Sword";
-	//YenneferDialogue.priority = "Relics";
-	//YenneferDialogue.entityName = "Yennefer";
 
 }
 
@@ -151,18 +144,38 @@ void RelicBehaviour::Update()
 	
 }
 
+void RelicBehaviour::SetRelic(const char* json_array)
+{
+	
+	JSONfilepack* relic_json = JSONfilepack::GetJSON("GameData/Relics.json");
+
+	JSONArraypack* type_array = relic_json->GetArray(json_array);
+
+	if (type_array)
+	{
+		type_array->GetFirstNode();
+
+		for (uint i = 0; i < type_array->GetArraySize(); i++)
+		{
+			if (type_array->GetNumber("effect") != (int)relic_effect)
+				type_array->GetAnotherNode();
+			else
+				break;
+		}
+		relic->name = type_array->GetString("name");
+		relic->description = type_array->GetString("description");
+	}
+
+	JSONfilepack::FreeJSON(relic_json);
+}
+
 void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 	{
-		if ((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"))
+		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
-			relic->OnPickUp((PlayerController*)collider->game_object_attached->GetComponentScript("PlayerController"));
-			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
-
-			//it remains to be determined if it is Geralt's audio or Yennefer's. 
-			//-> You can check if it's yen or geralt with variable (PlayerController)->player_data->player_type 
-			/*Game_Manager->event_manager->ReceiveDialogueEvent(geraltDialogue);*/
+			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
 
 			Destroy(this->game_object);		
 		}

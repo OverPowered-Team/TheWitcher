@@ -21,7 +21,7 @@ void CameraLimits::Update()
 void CameraLimits::OnDrawGizmos()
 {
     static float3 points[8];
-    ComponentCamera* cam = (ComponentCamera*)Camera::GetCurrentCamera()->game_object_attached->GetComponent(ComponentType::CAMERA);
+    ComponentCamera* cam = Camera::GetCurrentCamera()->game_object_attached->GetComponent<ComponentCamera>();
     cam->frustum.GetCornerPoints(points);
     Gizmos::DrawLine(points[0], points[1], Color::Blue(), 1.f);
     Gizmos::DrawLine(points[0], points[2], Color::Blue(), 1.f);

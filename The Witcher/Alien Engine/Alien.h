@@ -1,11 +1,17 @@
 #pragma once
 
 #include <functional>
+#include "ComponentScript.h"
+#include "GameObject.h"
 
 class ComponentTransform;
 class ComponentCharacterController;
+class Collision;
+class ContactPoint;
+class ControllerColliderHit;
 class ComponentCollider;
 class GameObject;
+
 enum class ComponentType;
 class Component;
 typedef unsigned int uint;
@@ -16,6 +22,8 @@ class __declspec(dllexport) Alien {
 	friend class ModuleObjects;
 	friend class ComponentTransform;
 	friend class ResourceAnimatorController;
+	friend class SimulationEventCallback;
+	friend class ComponentCharacterController;
 public:
 	Alien();
 	virtual ~Alien();
@@ -42,10 +50,24 @@ public:
 
 	virtual void CleanUp() {}
 
-	//void OnCollision(ComponentCollider* collider) {}
-	virtual void OnTrigger(ComponentCollider* collider) {}
+
+	// Physics ------------------------------------------------
+
+	virtual void OnCollisionEnter(const Collision& collision) {}
+	virtual void OnCollisionStay(const Collision& collision) {}
+	virtual void OnCollisionExit(const Collision& collision) {}
+
 	virtual void OnTriggerEnter(ComponentCollider* collider) {}
+	virtual void OnTriggerStay(ComponentCollider* collider) {}
 	virtual void OnTriggerExit(ComponentCollider* collider) {}
+
+	// OnControllerColliderHit is called when the controller hits a collider while performing a Move.
+	virtual void OnControllerColliderHit(const ControllerColliderHit& hit) {}
+
+	// Deprecated , use OnTriggerStay()
+	virtual void OnTrigger(ComponentCollider* collider) {}  // TODO:  Delete after change al code
+	// --------------------------------------------------------
+
 	virtual void OnAnimationEnd(const char* name) {}
 
 
@@ -54,35 +76,27 @@ public:
 
 	const char* ToString();
 
+	template <class Comp>
+	Comp* GetComponent();
+	template <class Comp>
+	std::vector<Comp*> GetComponents();
+
+	template <class Comp>
+	Comp* GetComponentInParent();
+	template <class Comp>
+	std::vector<Comp*> GetComponentsInParent();
+
+	template <class Comp>
+	Comp* GetComponentInChildren();
+	template <class Comp>
+	std::vector<Comp*> GetComponentsInChildren();
+
+	template <class Comp>
+	Comp* GetComponentInChildrenRecursive();
+	template <class Comp>
+	std::vector<Comp*> GetComponentsInChildrenRecursive();
+
 	bool HasComponent(const ComponentType& component) const;
-	Component* GetComponent(const ComponentType& type);
-	const Component* GetComponent(const ComponentType& type) const;
-	void* GetComponentScript(const char* script_class_name);
-	const void* GetComponentScript(const char* script_class_name) const;
-	Component* GetComponentInParent(const ComponentType& type);
-	const Component* GetComponentInParent(const ComponentType& type) const;
-	void* GetComponentScriptInParent(const char* script_class_name);
-	const void* GetComponentScriptInParent(const char* script_class_name) const;
-	Component* GetComponentInChildren(const ComponentType& type, bool recursive);
-	const Component* GetComponentInChildren(const ComponentType& type, bool recursive) const;
-	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	uint GetComponents(const ComponentType& type, Component*** comp_array);
-	const uint GetComponents(const ComponentType& type, Component*** comp_array) const;
-	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	uint GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive);
-	const uint GetComponentsInChildren(const ComponentType& type, Component*** comp_array, bool recursive) const;
-	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	uint GetComponentsInParent(const ComponentType& type, Component*** comp_array);
-	const uint GetComponentsInParent(const ComponentType& type, Component*** comp_array) const;
-	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	uint GetComponentsScript(const char* script_class_name, void*** script_array);
-	const uint GetComponentsScript(const char* script_class_name, void*** script_array) const;
-	// return the sie of the array of components found, pass a ScriptClassToFind** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	uint GetComponentsScriptInChildren(const char* script_class_name, void*** script_array, bool recursive);
-	const uint GetComponentsScriptInChildren(const char* script_class_name, void*** script_array, bool recursive) const;
-	// return the sie of the array of components found, pass a Component** nullptr with &. Remember to delete it with GameObject::FreeArrayMemory!!!
-	uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array);
-	const uint GetComponentsScriptInParent(const char* script_class_name, void*** script_array) const;
 
 	static void Destroy(GameObject* obj);
 	static void DestroyInstantly(GameObject* obj);
@@ -131,3 +145,51 @@ private:
 	bool* enabled = nullptr;
 	char data_name[260];
 };
+
+template<class Comp>
+inline Comp* Alien::GetComponent()
+{
+	return game_object->GetComponent<Comp>();
+}
+
+template<class Comp>
+inline std::vector<Comp*> Alien::GetComponents()
+{
+	return game_object->GetComponents<Comp>();
+}
+
+template<class Comp>
+inline Comp* Alien::GetComponentInParent()
+{
+	return game_object->parent->GetComponent<Comp>();
+}
+
+template<class Comp>
+inline std::vector<Comp*> Alien::GetComponentsInParent()
+{
+	return game_object->parent->GetComponents<Comp>();
+}
+
+template<class Comp>
+inline Comp* Alien::GetComponentInChildren()
+{
+	return game_object->GetComponentInChildren<Comp>();
+}
+
+template<class Comp>
+inline std::vector<Comp*> Alien::GetComponentsInChildren()
+{
+	return game_object->GetComponentsInChildren<Comp>();
+}
+
+template<class Comp>
+inline Comp* Alien::GetComponentInChildrenRecursive()
+{
+	return game_object->GetComponentInChildrenRecursive<Comp>();
+}
+
+template<class Comp>
+inline std::vector<Comp*> Alien::GetComponentsInChildrenRecursive()
+{
+	return game_object->GetComponentsInChildrenRecursive<Comp>();
+}

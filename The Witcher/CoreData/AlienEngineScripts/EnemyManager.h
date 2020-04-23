@@ -14,6 +14,7 @@ public:
 	EnemyManager() {}
 	virtual ~EnemyManager() {}
 	
+	void Awake();
 	void Start();
 	void Update();
 	void CleanUp();
@@ -24,13 +25,14 @@ public:
 	void DeleteEnemy(Enemy* enemy);
 
 public:
-
 	GameObject* player1 = nullptr;
 	GameObject* player2 = nullptr;
 
 
 private:
 	std::vector<Enemy*> enemies;
+
+	bool is_combat_enemies = false;
 
 };
 

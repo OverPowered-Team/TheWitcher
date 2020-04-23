@@ -16,7 +16,7 @@ public:
 
 	PlayerController* geralt_controller = nullptr;
 	PlayerController* yennefer_controller = nullptr;
-
+	ComponentCamera* main_camera = nullptr;
 };
 
 ALIEN_FACTORY DebugManager* CreateDebugManager() {

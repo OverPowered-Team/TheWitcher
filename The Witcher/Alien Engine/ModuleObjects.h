@@ -130,7 +130,7 @@ public:
 	void DeleteAllObjects();
 
 	// select/disselect objects
-	void SetNewSelectedObject(GameObject* selected);
+	void SetNewSelectedObject(GameObject* selected, bool select_children);
 	const std::list<GameObject*>& GetSelectedObjects();
 	void DeselectObjects();
 	void DeselectObject(GameObject* obj);
@@ -166,12 +166,14 @@ public:
 	// scenes
 	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
 	void LoadScene(const char * name, bool change_scene = true);
-	void CreateEmptyScene(ResourceScene* scene);
+	void OpenCoScene(const char* name);
+	void CreateEmptyScene();
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
 
 	GameObject* GetRoot(bool ignore_prefab);
+	GameObject* GetGlobalRoot();
 	void CreateRoot();
 
 	void SwapReturnZ(bool get_save, bool delete_current);
@@ -207,10 +209,13 @@ private:
 	void CompareName(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::vector<ComponentScript*>& scriptsVec);
 
 public:
+
+	u64 scene_active = 0;
+
 	//Focus
 	u64 selected_ui = -1;
 
-	ResourceScene* current_scene = nullptr;
+	std::vector<ResourceScene*> current_scenes;
 
 	std::list<Alien*> current_scripts;
 

@@ -4,8 +4,8 @@
             {
                 "Name": "Earth_Runestone",
                 "FamilyNumber": 1,
-                "ID": "8803756582294343644",
-                "ParentID": "0",
+                "ID": "5781225774062957505",
+                "ParentID": "14312280510082287296",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -20,8 +20,8 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            0,
-                            0
+                            2.6545619964599609,
+                            -9.4465599060058594
                         ],
                         "Rotation": [
                             0,
@@ -35,7 +35,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11636050356789197693"
+                        "ID": "1351337875206315562"
                     },
                     {
                         "Type": 1,
@@ -45,7 +45,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10161034929067328845",
+                        "ID": "16583678935728089727",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -53,26 +53,18 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "5315285759783545174",
+                        "ID": "5462563041949725908",
                         "HasMaterial": true,
-                        "MaterialID": "0",
+                        "MaterialID": "4067749186061296870",
                         "Enabled": true
                     },
                     {
                         "Type": 29,
-                        "ID": "12830532950773868817",
-                        "ResourceID": "14917809848631228412",
+                        "ID": "3647393264087627471",
+                        "ResourceID": "4897385080197603127",
                         "DataName": "RelicBehaviour",
                         "HasInspector": true,
                         "Inspector": [
-                            {
-                                "VarType": 6,
-                                "Name": "name"
-                            },
-                            {
-                                "VarType": 6,
-                                "Name": "description"
-                            },
                             {
                                 "VarType": 14,
                                 "Name": "relic_type",
@@ -81,7 +73,7 @@
                             {
                                 "VarType": 14,
                                 "Name": "relic_effect",
-                                "enumInt": 2
+                                "enumInt": 3
                             }
                         ]
                     },
@@ -93,10 +85,16 @@
                             0,
                             0
                         ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
                         "IsTrigger": true,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
                         "Radius": 1
                     }
                 ]

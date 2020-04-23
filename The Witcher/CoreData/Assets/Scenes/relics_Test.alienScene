@@ -1,0 +1,447 @@
+{
+    "Scene": {
+        "Name": "relics_Test",
+        "GameObjects": [
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 1,
+                "ID": "4690146793706007352",
+                "ParentID": "13649637716936546834",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10663050712932716061"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 100.38987731933594,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "15044920934592346775",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Fog": false,
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13294645959885894553.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/882162789730207050.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds"
+                    }
+                ]
+            },
+            {
+                "Name": "Directional Light",
+                "FamilyNumber": 1,
+                "ID": "6837585972642471150",
+                "ParentID": "13649637716936546834",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0.2798481285572052,
+                            -0.36470523476600647,
+                            0.115916907787323,
+                            0.88047623634338379
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5789772720286786435"
+                    },
+                    {
+                        "Type": 3,
+                        "Enabled": true,
+                        "ID": "12116534111218327291",
+                        "PrintIcon": true,
+                        "Intensity": 1,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Direction": [
+                            -0.57735037803649902,
+                            -0.57735025882720947,
+                            0.57735025882720947
+                        ],
+                        "Ambient": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Diffuse": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "GameManager",
+                "FamilyNumber": 1,
+                "ID": "18002624462320248268",
+                "ParentID": "13649637716936546834",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12922817184992308906",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8625602470248867384"
+                    },
+                    {
+                        "ID": "10007921583822801982",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 0.5,
+                        "Mute": false,
+                        "Bank": "1669749310",
+                        "Event": "740533573",
+                        "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9451068723687860107",
+                        "ResourceID": "17206304544927406460",
+                        "DataName": "GameManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3860838480791145145",
+                        "ResourceID": "10454231044988625899",
+                        "DataName": "DialogueManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9159279136513666277",
+                        "ResourceID": "12931529595659776773",
+                        "DataName": "EventManager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16779718953826872849",
+                        "ResourceID": "1616101574407180879",
+                        "DataName": "PlayerManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "max_ultimate_charge",
+                                "int": 200
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "ultimate_time",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "ultimate_effect_value",
+                                "float": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "10435367623563224792",
+                        "ResourceID": "10347121337452531063",
+                        "DataName": "RelicManager",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "fire_runestone",
+                                "prefab": "9224451279124193605"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_runestone",
+                                "prefab": "14345935870360924178"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_runestone",
+                                "prefab": "2289476701194859904"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "lightning_runestone",
+                                "prefab": "16448281988015221948"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_runestone",
+                                "prefab": "915245159270916750"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "fire_oil",
+                                "prefab": "4897692966543348103"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ice_oil",
+                                "prefab": "12016371024677234694"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "earth_oil",
+                                "prefab": "6970049334727365231"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "poison_oil",
+                                "prefab": "3987566163270230324"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nature_soul",
+                                "prefab": "6076778088024267194"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "sea_soul",
+                                "prefab": "8313000836464753319"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "djinn_jar",
+                                "prefab": "1853242969475161181"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "strigas_claws",
+                                "prefab": "5962552769781594257"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "witcher_rage",
+                                "prefab": "18026174053446935841"
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6182776350046049454",
+                        "ResourceID": "8592519274657653365",
+                        "DataName": "CheckPoints_Manager",
+                        "HasInspector": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1114285931614846867",
+                        "ResourceID": "9022960755365003618",
+                        "DataName": "EnemyManager",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "SpawnRelicsLvL1",
+                "FamilyNumber": 1,
+                "ID": "13645133059913413941",
+                "ParentID": "13649637716936546834",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8968486252241813282",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3933251201992706793"
+                    }
+                ]
+            },
+            {
+                "Name": "SpawnRelics",
+                "FamilyNumber": 2,
+                "ID": "10908761597346090499",
+                "ParentID": "13645133059913413941",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8968486252241813282",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9121214532584572429"
+                    }
+                ]
+            },
+            {
+                "Name": "Relic1",
+                "FamilyNumber": 3,
+                "ID": "2197980914722186824",
+                "ParentID": "10908761597346090499",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8968486252241813282",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -172.80303955078125,
+                            18.992166519165039,
+                            -6.3286428451538086
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16219158118220858788"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,98 +1,73 @@
+#include "Application.h"
+#include "ComponentPhysics.h"
 #include "ComponentBoxCollider.h"
-#include "ComponentRigidBody.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
-#include "ModulePhysics.h"
 #include "GameObject.h"
 #include "imgui/imgui.h"
-#include "mmgr/mmgr.h"
 
 ComponentBoxCollider::ComponentBoxCollider(GameObject* go) : ComponentCollider(go)
 {
 	name.assign("Box Collider");
 	type = ComponentType::BOX_COLLIDER;
 
-	// More useful if its called externaly
-	Init();
+	size = GetLocalMeshAabbSize();
+	float3 dimensions = CalculateSize();
+	shape = App->physx->CreateShape(PxBoxGeometry(dimensions.x, dimensions.y, dimensions.z), *material);
+	App->SendAlienEvent(this, AlienEventType::COLLIDER_ADDED);
+	InitCollider();
 }
 
-void ComponentBoxCollider::SetCenter(float3 value)
+void ComponentBoxCollider::ScaleChanged()
 {
-	center = value;
-	final_center = center.Mul(final_size);
+	ReCreateBoxShape();
 }
 
-void ComponentBoxCollider::SetSize(const float3 value)
+PxShape* ComponentBoxCollider::ReCreateBoxShape()
 {
-	if (!value.Equals(size))
-	{
-		size = value;
-		UpdateShape();
-	}
+	if (!shape)
+		return nullptr;
+
+	BeginUpdateShape();
+	PxTransform trans = shape->getLocalPose();
+	float3 dimensions = CalculateSize();
+	float3 rad_rot = float3(rotation.x, rotation.y, rotation.z) * DEGTORAD;
+	trans.p = F3_TO_PXVEC3(center.Mul(transform->GetGlobalScale()));
+	trans.q = QUAT_TO_PXQUAT(Quat::FromEulerXYZ(rad_rot.x, rad_rot.y, rad_rot.z));
+	shape->setLocalPose(trans);
+	shape->setGeometry(PxBoxGeometry(dimensions.x, dimensions.y, dimensions.z));
+	EndUpdateShape();
+
+	return shape;
+}
+
+const float3 ComponentBoxCollider::CalculateSize()
+{
+	return size.Mul(transform->GetGlobalScale()) * 0.5f;
 }
 
 void ComponentBoxCollider::DrawSpecificInspector()
 {
-	float3 current_size = size;
-
-	ImGui::Title("Size", 1);			ImGui::DragFloat3("##size", current_size.ptr(), 0.1f, 0.01f, FLT_MAX);
-
-	SetSize(current_size);
-}
-
-//float3 t = { transform->global_transformation[0][0], transform->global_transformation[1][1], transform->global_transformation[2][2] };
-//float3 final_size = CheckInvalidCollider(size.Mul(t)) * 0.5f;
-
-void ComponentBoxCollider::CreateDefaultShape()
-{
-	ComponentMesh* mesh = game_object_attached->GetComponent<ComponentMesh>();
-
-	if (mesh != nullptr)
-	{
-		center = mesh->local_aabb.CenterPoint();
-		size = mesh->local_aabb.Size();
-	}
-	else
-	{
-		size = float3::one();
-		center = float3::zero();
-	}
-
-	UpdateShape();
-}
-
-void ComponentBoxCollider::UpdateShape()
-{
-	if (shape != nullptr)
-	{
-		delete shape;
-	}
-
-	final_size = size.Mul(transform->GetGlobalScale());
-	final_center = transform->GetGlobalMatrix().MulPos(center);
-
-	shape = new btBoxShape(ToBtVector3(final_size.Abs() * 0.5f));
-
-	if (aux_body) 
-		aux_body->setCollisionShape(shape);
-	if (detector) 
-		detector->setCollisionShape(shape);
-
-	if (rigid_body != nullptr)  rigid_body->UpdateCollider();
+	ImGui::Title("Size", 1);
+	if (ImGui::DragFloat3("##size", size.ptr(), 0.1f, 0.01f, FLT_MAX)) {
+		ReCreateBoxShape();
+	};
 }
 
 void ComponentBoxCollider::Clone(Component* clone)
 {
 	ComponentBoxCollider* box_clone = (ComponentBoxCollider*)clone;
-	center = box_clone->GetCenter();
-	size = box_clone->GetSize();
-	UpdateShape();
+	box_clone->center = center;
+	box_clone->size = size;
+	box_clone->rotation = rotation;
+	box_clone->ReCreateBoxShape();
 }
 
 void ComponentBoxCollider::Reset()
 {
 	ComponentCollider::Reset();
-	SetSize(float3::one());
+	size = GetLocalMeshAabbSize();
+	ReCreateBoxShape();
 }
 
 void ComponentBoxCollider::SaveComponent(JSONArraypack* to_save)
@@ -104,10 +79,14 @@ void ComponentBoxCollider::SaveComponent(JSONArraypack* to_save)
 void ComponentBoxCollider::LoadComponent(JSONArraypack* to_load)
 {
 	ComponentCollider::LoadComponent(to_load);
-	SetSize(to_load->GetFloat3("Size"));
+	size = to_load->GetFloat3("Size");
+	ReCreateBoxShape();
 }
 
-float3 ComponentBoxCollider::CheckInvalidCollider(float3 size)
+// * --------- ACCESS THROUGH SCRIPTING ----------* //
+
+void ComponentBoxCollider::SetSize(float3 size)
 {
-	return size.Max(float3(0.01, 0.01, 0.01));
+	this->size = size;
+	ReCreateBoxShape();
 }

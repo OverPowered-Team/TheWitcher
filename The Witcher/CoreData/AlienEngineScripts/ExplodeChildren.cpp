@@ -10,19 +10,30 @@ ExplodeChildren::~ExplodeChildren()
 
 void ExplodeChildren::Start()
 {
-	ComponentRigidBody** rbs = nullptr;
-
-	uint size = game_object->GetComponentsInChildren(ComponentType::RIGID_BODY, (Component***)&rbs, false);
-	for (auto i = 0u; i < size; ++i) {
-		rbs[i]->AddForce(float3(Random::GetRandomIntBetweenTwo(-50, 50), Random::GetRandomIntBetweenTwo(0, 30), Random::GetRandomIntBetweenTwo(-50, 50)).Normalized() * 3.0);
+	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+		(*it)->OnStop();
 	}
-
-	GameObject::FreeArrayMemory((void***)&rbs);
-	Invoke(std::bind(&ExplodeChildren::DeleteMyself, this), 4);
 }
 
-void ExplodeChildren::Update()
+void ExplodeChildren::Explode()
 {
+	auto rbs = game_object->GetComponentsInChildren<ComponentRigidBody>();
+	for (auto i = rbs.begin(); i != rbs.end(); ++i) {
+		(*i)->AddForce(float3(Random::GetRandomFloatBetweenTwo(-1.f, 1.f), Random::GetRandomFloatBetweenTwo(0, 1.f), Random::GetRandomFloatBetweenTwo(-1.f, 1.f)).Normalized() * force);
+	}
+
+	Invoke(std::bind(&ExplodeChildren::DeleteMyself, this), time_to_disappear);
+
+	particles["explosion"]->Restart();
+	particles["smoke"]->Restart();
+}
+
+void ExplodeChildren::SetVars(float force, float time_despawn)
+{
+	this->force = force;
+	time_to_disappear = time_despawn;
 }
 
 void ExplodeChildren::DeleteMyself()

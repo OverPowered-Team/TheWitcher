@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "SoldierAnimController",
-        "NumStates": 6,
-        "NumTransitions": 7,
+        "NumStates": 9,
+        "NumTransitions": 11,
         "States": [
             {
                 "Name": "Idle",
@@ -27,12 +27,27 @@
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "13193819018923853663"
+                "Clip": "10663251678402736471"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
                 "Clip": "11546414413718116826"
+            },
+            {
+                "Name": "Dizzy",
+                "Speed": 2,
+                "Clip": "1199706854251793232"
+            },
+            {
+                "Name": "QuickDeat",
+                "Speed": 1,
+                "Clip": "7795381935914547974"
+            },
+            {
+                "Name": "Block",
+                "Speed": 1,
+                "Clip": "5774308581466997684"
             }
         ],
         "Transitions": [
@@ -134,11 +149,67 @@
             },
             {
                 "Source": "Hit",
+                "Target": "Dizzy",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "QuickDeat",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Block",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Block",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
                 "BoolConditions": []
             }
         ],
@@ -149,7 +220,12 @@
                 "Value": 0
             }
         ],
-        "BoolParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            }
+        ],
         "Events": [
             {
                 "Event_Id": "NilfgaardSoldier::ShootAttack",
@@ -186,6 +262,12 @@
                 "Animation_Id": "2170783508099958459",
                 "Frame": 27,
                 "Type": 2
+            },
+            {
+                "Event_Id": "2142965948",
+                "Animation_Id": "2170783508099958459",
+                "Frame": 23,
+                "Type": 0
             }
         ]
     }

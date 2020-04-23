@@ -396,7 +396,7 @@ void ModuleResources::CreatePrimitive(const PrimitiveType& type, ResourceMesh** 
 {
 	(*ret)->is_primitive = true;
 	par_shapes_mesh* par_mesh = nullptr;
-
+	
 	switch (type)
 	{
 	case PrimitiveType::CUBE: {

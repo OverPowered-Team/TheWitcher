@@ -274,10 +274,25 @@ bool ComponentParticleSystem::DrawInspector()
 			// Initial State || Final State
 			if (ImGui::TreeNodeEx("Start State", ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				if(particleSystem->material != nullptr)
-					ImGui::ColorPicker4("Color", (float*)&particleSystem->material->shaderInputs.particleShaderProperties.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+
+				if (ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview))
+				{
+					if (particleSystem->material != nullptr)
+						particleSystem->material->color = particleSystem->particleInfo.color;
+				}
 				else
-					ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+				{
+					if (particleSystem->material != nullptr)
+						particleSystem->particleInfo.color = particleSystem->material->color;
+				}
+
+				/*if (particleSystem->material != nullptr) {
+
+					if(ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview))
+						particleSystem->material->color = particleSystem->particleInfo.color;
+				}
+				else
+					ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);*/
 
 				ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX);
 
@@ -307,12 +322,15 @@ bool ComponentParticleSystem::DrawInspector()
 			{
 				if (ImGui::TreeNodeEx("Final State", ImGuiTreeNodeFlags_DefaultOpen))
 				{
-					if (particleSystem->material != nullptr)
-						ImGui::ColorPicker4("Color", (float*)&particleSystem->material->shaderInputs.particleShaderProperties.end_color,
+
+					ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+
+					/*if (particleSystem->material != nullptr)
+						ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
 							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
 					else
 						ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
-							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);*/
 
 					ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX);
 					ImGui::DragFloat3("Gravity", (float*)&particleSystem->endInfo.force);
@@ -407,11 +425,30 @@ bool ComponentParticleSystem::DrawInspector()
 
 			ImGui::Text("Orientation Mode ");
 			ImGui::SameLine(200, 15);
-			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0None\0\0"))
+			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0Velocity Aligned\0None\0\0"))
 			{
 				particleSystem->SetBillboardType((BillboardType)bbTypeSelected);
 			}
 
+			if (particleSystem->bbType == BillboardType::VELOCITY)
+			{
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				ImGui::Text("Length Scale: "); ImGui::SameLine(200, 15);
+				ImGui::DragFloat("##Length Scale", &particleSystem->particleInfo.lengthScale, 0.0f, 100.0f);
+				
+				ImGui::Spacing();
+
+				ImGui::Text("Speed Scale: "); ImGui::SameLine(200, 15);
+				ImGui::DragFloat("##Speed Scale", &particleSystem->particleInfo.speedScale, 0.0f, 100.0f);
+			}
+			else
+			{
+				particleSystem->particleInfo.lengthScale = 1.0f;
+				particleSystem->particleInfo.speedScale = 0.0f;
+			}
+			
 			ImGui::Spacing();
 			ImGui::Spacing();
 
@@ -530,7 +567,7 @@ bool ComponentParticleSystem::DrawInspector()
 			
 			ImGui::Spacing();
 
-			static bool enable_anim = false;
+			//enable_anim = false;
 
 			// Add Spritesheet texture
 			ImGui::Checkbox("##pptActiveAnim", &enable_anim);
@@ -555,18 +592,25 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::Spacing();
 				ImGui::Spacing();
 				ImGui::Text("Rows: "); ImGui::SameLine(200, 15);
-				ImGui::SliderInt("##Rows", &texRows, 0, 10);
+				if (ImGui::SliderInt("##Rows", &texRows, 0, 10)) { endFrame = (texRows * texColumns) - 1; }
 				ImGui::Spacing();
 				ImGui::Spacing();
 				ImGui::Text("Columns: "); ImGui::SameLine(200, 15);
-				ImGui::SliderInt("##Columns", &texColumns, 0, 10);
+				if (ImGui::SliderInt("##Columns", &texColumns, 0, 10)) { endFrame = (texRows * texColumns) - 1; }
+				
 				ImGui::Spacing();
-				ImGui::Spacing(); 
 				ImGui::Spacing();
+				ImGui::Text("Start Frame: "); ImGui::SameLine(200, 15);
+				ImGui::InputInt("##startf", &startFrame, 1,1);
+				ImGui::Text("End Frame: "); ImGui::SameLine(200, 15);
+				ImGui::InputInt("##endf", &endFrame, 1, 1);
 				//ImGui::SameLine(535, 15);
+				ImGui::Spacing();
+				ImGui::Spacing();
+
 				if (ImGui::Button("Calculate UV", { 120,20 }))
 				{
-					particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed);
+					particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed, startFrame, endFrame);
 				}
 				ImGui::SameLine();
 
@@ -574,8 +618,17 @@ bool ComponentParticleSystem::DrawInspector()
 				if (ImGui::Button("Reset", { 120,20 })  ||  !enable_anim)
 				{
 					particleSystem->ResetParticleUV();
+					texRows = 1;
+					texColumns = 1;
+					startFrame = 0;
+					endFrame = (texRows * texColumns) - 1;
 				}
-				
+				ImGui::SameLine();
+				ImGui::Text("Texture UV Frames: "); ImGui::SameLine();
+				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%i", particleSystem->particleInfo.frames.size());
+
+				ImGui::Spacing();
+				ImGui::Spacing();
 
 				if (!enable_anim)
 				{
@@ -912,6 +965,8 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Emmitter.Shape", (int)particleSystem->emmitter.GetShape());
 	//Zone
 	to_save->SetNumber("Emmitter.Zone", (int)particleSystem->emmitter.GetZone());
+	//Distance
+	to_save->SetNumber("Emmitter.Distance", particleSystem->emmitter.GetDistance());
 	// Radius
 	to_save->SetNumber("Emmitter.Radius", particleSystem->emmitter.GetRadius());
 	// OutterRadius
@@ -958,6 +1013,7 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 		to_save->SetNumber(name.c_str(), particleSystem->emmitter.bursts[i].partsToInstantiate);
 	}
 
+
 	// ---------------------- Blending Info -------------------------- //
 
 	// Source
@@ -972,11 +1028,23 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("HasMaterial", (particleSystem->material != nullptr) ? true : false);
 	if (particleSystem->material != nullptr) {
 		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()).data());
-		to_save->SetFloat3("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
-		to_save->SetFloat3("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
-		to_save->SetFloat3("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
+		//to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
+		//to_save->SetFloat3("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
+		//to_save->SetFloat3("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
 	}
 
+	// ------------------------ Animation Info ------------------------ //
+	to_save->SetBoolean("HasAnimation", (enable_anim) ? true : false);
+	// AnimSpeed
+	to_save->SetNumber("Animation.AnimSpeed", (float)animSpeed);
+	// Rows
+	to_save->SetNumber("Animation.Rows", texRows);
+	// Columns
+	to_save->SetNumber("Animation.Columns", texColumns);
+	// StartFrame
+	to_save->SetNumber("Animation.StartFrame", startFrame);
+	// EndFrame
+	to_save->SetNumber("Animation.EndFrame", endFrame);
 
 	// --------------- Deprecated -------------------- //
 	/*to_save->SetBoolean("TextureEnabled", texture_activated);
@@ -1055,6 +1123,8 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->emmitter.SetShape((Emmitter_Shape)(int)to_load->GetNumber("Emmitter.Shape"));
 	//Zone
 	particleSystem->emmitter.SetZone((Emmitter_Zone)(int)to_load->GetNumber("Emmitter.Zone"));
+	//Distance
+	particleSystem->emmitter.SetDistance(to_load->GetNumber("Emmitter.Distance"));
 	// Radius
 	particleSystem->emmitter.SetRadius(to_load->GetNumber("Emmitter.Radius"));
 	// OutterRadius
@@ -1116,19 +1186,36 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->eqBlend = (EquationBlendType)(int)to_load->GetNumber("Blending.Equation");
 
 
-
 	// ---------------------- Resource Info -------------------------- //
 
 	if (to_load->GetBoolean("HasMaterial")) {
 		u64 ID = std::stoull(to_load->GetString("MaterialID"));
 		particleSystem->SetMaterial((ResourceMaterial*)App->resources->GetResourceWithID(ID));
-		particleSystem->material->shaderInputs.particleShaderProperties.start_color = to_load->GetFloat3("Start.Color");
-		particleSystem->material->shaderInputs.particleShaderProperties.color = to_load->GetFloat3("Start.Color");
-		particleSystem->material->shaderInputs.particleShaderProperties.end_color = to_load->GetFloat3("End.Color");
+		//particleSystem->material->shaderInputs.particleShaderProperties.color = to_load->GetFloat4("Start.Color");
+
+		//particleSystem->material->shaderInputs.particleShaderProperties.start_color = to_load->GetFloat3("Start.Color");
+		//particleSystem->material->shaderInputs.particleShaderProperties.end_color = to_load->GetFloat3("End.Color");
 	}
 	ID = std::stoull(to_load->GetString("ID"));
 	
 	
+	// ---------------------- Animation Info -------------------------- //
+
+	if (to_load->GetBoolean("HasAnimation")) {
+		enable_anim = to_load->GetBoolean("HasAnimation");
+		// AnimSpeed
+		animSpeed = to_load->GetNumber("Animation.AnimSpeed");
+		// Rows
+		texRows = (int)to_load->GetNumber("Animation.Rows");
+		// Columns
+		texColumns = (int)to_load->GetNumber("Animation.Columns");
+		// StartFrame
+		startFrame = (int)to_load->GetNumber("Animation.StartFrame");
+		// EndFrame
+		endFrame = (int)to_load->GetNumber("Animation.EndFrame");
+
+		particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed, startFrame, endFrame);
+	}
 
 	// ---------------------- Deprecated -------------------------- //
 	/*texture_activated = to_load->GetBoolean("TextureEnabled");

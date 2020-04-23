@@ -10,6 +10,7 @@
 #include "ComponentTransform.h"
 #include "ComponentUI.h"
 #include "ComponentImage.h"
+#include "GameObject.h"
 #include "ComponentCamera.h"
 #include "ReturnZ.h"
 #include "mmgr/mmgr.h"
@@ -34,6 +35,12 @@ void Component::SetEnable(bool enable)
 	enabled = enable;
 
 	(enabled) ? OnEnable() : OnDisable();
+}
+
+void Component::Destroy()
+{
+	not_destroy = false;
+	App->objects->need_to_delete_objects = true;
 }
 
 void Component::ResetIDs()

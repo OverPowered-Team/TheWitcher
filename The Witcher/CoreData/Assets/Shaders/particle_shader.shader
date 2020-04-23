@@ -33,7 +33,7 @@ void main()
 #shader fragment
 #version 330 core
 struct Material {
-    vec3 diffuse_color;
+    vec4 diffuse_color;
 
     sampler2D diffuseTexture;
     bool hasDiffuseTexture;
@@ -54,7 +54,7 @@ out vec4 FragColor;
 
 void main()
 {
-    vec4 objectColor = vec4(objectMaterial.diffuse_color, 1.0f);
+    vec4 objectColor = objectMaterial.diffuse_color;
 
     if(objectMaterial.hasDiffuseTexture == true)
     {

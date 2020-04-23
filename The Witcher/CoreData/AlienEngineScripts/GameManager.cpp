@@ -1,7 +1,14 @@
 #include "GameManager.h"
+#include "EventManager.h"
+#include "EnemyManager.h"
+#include "DialogueManager.h"
+#include "PlayerManager.h"
+#include "RelicManager.h"
+#include "RumblerManager.h"
 
 GameManager::GameManager() : Alien()
 {
+
 }
 
 GameManager::~GameManager()
@@ -10,12 +17,12 @@ GameManager::~GameManager()
 
 void GameManager::Awake()
 {
-	manager = this;
-
-	event_manager = (EventManager*)game_object->GetComponentScript("EventManager");
-	enemy_manager = (EnemyManager*)game_object->GetComponentScript("EnemyManager");
-	dialogue_manager = (DialogueManager*)game_object->GetComponentScript("DialogueManager");
-	player_manager = (PlayerManager*)game_object->GetComponentScript("PlayerManager");
+	event_manager = game_object->GetComponent<EventManager>();
+	enemy_manager = game_object->GetComponent<EnemyManager>();
+	dialogue_manager = game_object->GetComponent<DialogueManager>();
+	player_manager = game_object->GetComponent<PlayerManager>();
+	relic_manager = game_object->GetComponent<RelicManager>();
+	rumbler_manager = game_object->GetComponent<RumblerManager>();
 }
 
 void GameManager::Start()
@@ -24,4 +31,5 @@ void GameManager::Start()
 
 void GameManager::Update()
 {
+	
 }

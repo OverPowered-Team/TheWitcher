@@ -27,7 +27,20 @@ out float visibility;
 
 void main()
 {
+    // --------------- OUTS ---------------
     vec4 pos = vec4(position, 1.0);
+    texCoords = vec2(uvs.x, uvs.y);
+
+    // --------- Fog ----------
+    vec4 worldPos = model * pos;
+    vec4 positionRelativeToCam = view * worldPos;
+    float distance = length(positionRelativeToCam.xyz);
+    visibility = exp(-pow((distance * density), gradient));
+    visibility = clamp(visibility, 0.0, 1.0);
+    // ------------------------
+
+    // --------------------------------------- 
+
     // --------------- Animation -------------
     if(animate == 1)
     {
@@ -38,19 +51,7 @@ void main()
             pos = BoneTransform * pos;
     }
     // --------------------------------------- 
-
-    // --------- Outs ----------
     frag_pos = vec3(model * pos);
-    texCoords = vec2(uvs.x, uvs.y);
-
-    // --------------- Fog -------------
-    vec4 worldPos = model * pos;
-    vec4 positionRelativeToCam = view * worldPos;
-    float distance = length(positionRelativeToCam.xyz);
-    visibility = exp(-pow((distance * density), gradient));
-    visibility = clamp(visibility, 0.0, 1.0);
-    // ------------------------
-
     // --------------- Normals ---------------
     norms = mat3(transpose(inverse(model))) * normals;
 

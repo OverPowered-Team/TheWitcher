@@ -39,12 +39,16 @@ public:
 	std::vector<GameObject*> players;
 	uint num_curr_players = 0u;
 	float3 trg_offset;
+	float3 first_pos;
 	CameraAxis axis = CameraAxis::NONE;
 	float current_transition_time = 0.f;
 
 	float distance = 0.f;
 	float hor_angle = 0.f;
 	float vert_angle = 0.f;
+
+	bool smooth_camera = true;
+	float smooth_cam_vel = 5.f;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
@@ -57,5 +61,9 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->hor_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->vert_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
+
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->smooth_camera);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->smooth_cam_vel);
+
 	return alien;
 }

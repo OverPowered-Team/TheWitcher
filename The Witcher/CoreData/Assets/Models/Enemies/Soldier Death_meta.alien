@@ -4,13 +4,25 @@
         "NumMeshes": 1,
         "Name": "Soldier Death",
         "NumBones": 42,
-        "NumAnimations": 1,
+        "NumAnimations": 3,
         "Animations": [
             {
                 "Name": "soldier_death",
                 "Loops": false,
                 "Start_Tick": 0,
                 "End_Tick": 88
+            },
+            {
+                "Name": "soldier_gethit",
+                "Loops": false,
+                "Start_Tick": 0,
+                "End_Tick": 24
+            },
+            {
+                "Name": "soldier_quickdeath",
+                "Loops": false,
+                "Start_Tick": 24,
+                "End_Tick": 89
             }
         ],
         "NumMaterials": 1,
@@ -18,7 +30,9 @@
             "Library\/Meshes\/3347025203989520616.alienMesh"
         ],
         "PathAnimations": [
-            "Library\/Animations\/11546414413718116826.alienAnimation"
+            "Library\/Animations\/11546414413718116826.alienAnimation",
+            "Library\/Animations\/10663251678402736471.alienAnimation",
+            "Library\/Animations\/7795381935914547974.alienAnimation"
         ],
         "PathBones": [
             "Library\/Bones\/11972721236997696088.alienBone",
