@@ -14,6 +14,7 @@
 #include "ResourceMaterial.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleResources.h"
+#include "Time.h"
 #include "mmgr/mmgr.h"
 
 #include "Viewport.h"
@@ -50,7 +51,8 @@ void ComponentMesh::SetResourceMesh(ResourceMesh* resource)
 
 void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 {
-
+	Timer timer ;
+	timer.Start();
 	OPTICK_EVENT();
 	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
@@ -107,7 +109,8 @@ void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
 
-
+	if (timer.Read() > 20)
+		LOG_ENGINE("Ole ole: %s", game_object_attached->GetName());
 }
 
 void ComponentMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
@@ -256,6 +259,7 @@ void ComponentMesh::SetShadowUniforms(ResourceMaterial* resource_material, Compo
 
 void ComponentMesh::SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera)
 {
+	OPTICK_EVENT();
 	resource_material->used_shader->SetUniformMat4f("view", camera->GetViewMatrix4x4());
 	resource_material->used_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
