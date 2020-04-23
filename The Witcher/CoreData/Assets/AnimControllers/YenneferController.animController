@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "YenneferController",
         "NumStates": 14,
-        "NumTransitions": 23,
+        "NumTransitions": 24,
         "States": [
             {
                 "Name": "L",
@@ -413,6 +413,21 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Run",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -541,12 +556,6 @@
                 "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "11452384421895114614",
                 "Frame": 47,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerController::ActionRevive",
-                "Animation_Id": "4619227199824952727",
-                "Frame": 42,
                 "Type": 2
             },
             {
