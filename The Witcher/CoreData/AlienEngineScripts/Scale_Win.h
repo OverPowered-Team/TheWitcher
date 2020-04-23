@@ -31,11 +31,12 @@ public:
 	int current_points2 = 0;
 
 private:
-	// Scales
+	// Plates
 	GameObject* left_scale = nullptr;
 	GameObject* right_scale = nullptr;
 	ComponentRigidBody* rigid_body1 = nullptr;
 	ComponentRigidBody* rigid_body2 = nullptr;
+	GameObject* connector = nullptr;
 
 	// Spawners
 	Spawner* spawner_l = nullptr;
