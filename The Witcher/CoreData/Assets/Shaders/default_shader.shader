@@ -29,7 +29,6 @@ void main()
 {
     // --------------- OUTS ---------------
     vec4 pos = vec4(position, 1.0);
-    frag_pos = vec3(model * pos);
     texCoords = vec2(uvs.x, uvs.y);
 
     // --------- Fog ----------
@@ -52,7 +51,7 @@ void main()
             pos = BoneTransform * pos;
     }
     // --------------------------------------- 
-
+    frag_pos = vec3(model * pos);
     // --------------- Normals ---------------
     norms = mat3(transpose(inverse(model))) * normals;
 
