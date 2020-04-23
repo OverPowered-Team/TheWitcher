@@ -11,7 +11,6 @@ TriggerAudioEvent::~TriggerAudioEvent()
 void TriggerAudioEvent::Start()
 {
 	emitter = game_object->GetComponent<ComponentAudioEmitter>();
-	timer = Time::GetGameTime();
 }
 
 void TriggerAudioEvent::Update()
@@ -20,12 +19,9 @@ void TriggerAudioEvent::Update()
 
 void TriggerAudioEvent::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (Time::GetGameTime() - timer >= 1.f)
-	{
-		if (!triggered && strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
-			emitter->StartSound();
-			triggered = true;
-		}
+	if (!triggered && strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
+		emitter->StartSound();
+		triggered = true;
 	}
 }
 
