@@ -12,7 +12,8 @@ class Effect;
 enum (EnemyType,
 	NONE = -1,
 	GHOUL,
-	NILFGAARD_SOLDIER
+	NILFGAARD_SOLDIER,
+	LESHEN
 	);
 
 class Enemy : public Alien {
@@ -54,7 +55,7 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 	virtual void OnDeathHit() {}
 
-	float GetDamaged(float dmg, PlayerController* player);
+	virtual float GetDamaged(float dmg, PlayerController* player);
 	void AddEffect(Effect* new_effect);
 
 	void HitFreeze(float freeze_time);
@@ -67,6 +68,7 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
+	bool can_get_interrupted = true;
 	ComponentAudioEmitter* audio_emitter = nullptr;
 	Prefab head_prefab;
 	GameObject* head_position;
@@ -75,6 +77,8 @@ public:
 
 	std::map<std::string, ComponentParticleSystem*> particles;
 	std::map<std::string, Stat> stats;
+
+	float knockback = 0.0f;
 
 	bool is_combat = false;
 
