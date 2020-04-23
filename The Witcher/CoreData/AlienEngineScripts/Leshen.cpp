@@ -72,6 +72,8 @@ float Leshen::GetDamaged(float dmg, PlayerController* player)
 {
 	HandleHitCount();
 	return Enemy::GetDamaged(dmg, player);
+	LOG("health remaining %f", stats["Health"].GetValue());
+	LOG("hitcount %f", times_hitted);
 }
 
 void Leshen::OrientToPlayer(int target)
@@ -379,8 +381,6 @@ void Leshen::HandleHitCount()
 {
 	if (times_hitted < 5)
 		times_hitted++;
-	else
-		times_hitted = 0;
 }
 
 void Leshen::SetRandomDirection()
