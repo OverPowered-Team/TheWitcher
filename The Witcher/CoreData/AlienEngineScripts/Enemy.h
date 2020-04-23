@@ -78,6 +78,8 @@ public:
 	std::map<std::string, ComponentParticleSystem*> particles;
 	std::map<std::string, Stat> stats;
 
+	float knockback = 0.0f;
+
 	bool is_combat = false;
 
 protected:

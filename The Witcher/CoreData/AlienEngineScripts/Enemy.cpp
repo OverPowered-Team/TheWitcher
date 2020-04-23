@@ -183,7 +183,7 @@ void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
 		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player)
+		if (player && state != EnemyState::DYING)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
 			player->OnHit(this, GetDamaged(dmg_received, player));
@@ -201,8 +201,6 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		animator->PlayState("Hit");
 	}
 
-	return aux_health - stats["Health"].GetValue();
-
 	switch (type)
 	{
 	case EnemyType::GHOUL:
@@ -216,10 +214,11 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
+
 		animator->SetBool("dead", true);
 		OnDeathHit();
 
-		if (this->type == EnemyType::LESHEN) {
+		if (type == EnemyType::LESHEN) {
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
 		}

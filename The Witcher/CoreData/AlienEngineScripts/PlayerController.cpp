@@ -373,6 +373,7 @@ void PlayerController::AttackingInput()
 
 void PlayerController::ApplyRoot(float time)
 {
+	attacks->CancelAttack();
 	state = PlayerState::ROOT;
 	player_data.speed = float3(0.0f, -0.01f, 0.0f);
 	Invoke(std::bind(&PlayerController::ReleaseFromRoot, this), time);
@@ -722,7 +723,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 					float3 dir = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 					dir.y = 0;
 					LOG("%f, %f, %f", dir.x, dir.y, dir.z);
-					ReceiveDamage(enemy->stats["Damage"].GetValue(), -dir * 0.5f);
+					ReceiveDamage(enemy->stats["Damage"].GetValue(), -dir * enemy->knockback);
 					return;
 				}
 			}

@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
+#include "EnemyManager.h"
 #include "PlayerController.h"
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
@@ -19,19 +20,24 @@ void Leshen::StartEnemy()
 	Enemy::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
+	knockback = 0.5;
 }
 
 void Leshen::UpdateEnemy()
 {
+	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
+
 	switch (state)
 	{
 	case Enemy::EnemyState::NONE:
 		break;
 	case Enemy::EnemyState::IDLE:
-		if (time_to_action <= action_cooldown)
-			time_to_action += Time::GetDT();
-		else {
-			SetAttackState();
+		if (player_distance[0] < stats["VisionRange"].GetValue()) {
+			if (time_to_action <= action_cooldown)
+				time_to_action += Time::GetDT();
+			else {
+				SetAttackState();
+			}
 		}
 		break;
 	case Enemy::EnemyState::ATTACK:
@@ -49,7 +55,13 @@ void Leshen::UpdateEnemy()
 		else
 			state = EnemyState::IDLE;
 		break;
-	case Enemy::EnemyState::DYING:
+	case Enemy::EnemyState::DYING: {
+		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+		//Ori Ori function sintaxis
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		audio_emitter->StartSound("SoldierDeath");
+		state = EnemyState::DEAD;
+	}
 		break;
 	case Enemy::EnemyState::DEAD:
 		break;
@@ -71,9 +83,9 @@ void Leshen::CleanUpEnemy()
 float Leshen::GetDamaged(float dmg, PlayerController* player)
 {
 	HandleHitCount();
-	return Enemy::GetDamaged(dmg, player);
 	LOG("health remaining %f", stats["Health"].GetValue());
-	LOG("hitcount %f", times_hitted);
+	LOG("hitcount %i", times_hitted);
+	return Enemy::GetDamaged(dmg, player);
 }
 
 void Leshen::OrientToPlayer(int target)
@@ -86,6 +98,7 @@ void Leshen::OrientToPlayer(int target)
 
 void Leshen::SetStats(const char* json)
 {
+	Enemy::SetStats(json);
 }
 
 void Leshen::SetActionProbabilities()
@@ -94,9 +107,8 @@ void Leshen::SetActionProbabilities()
 		(*it).second->probability = 0.f;
 	}
 
-	if (times_hitted >= 5) {
+	if (times_hitted >= 10) {
 		actions.find("Cloud")->second->probability = 100.0f;
-		times_hitted = 0;
 		return;
 	}
 	else if (player_distance[0] <= melee_range || player_distance[1] <= melee_range) {
@@ -196,6 +208,10 @@ void Leshen::LaunchAction()
 	current_action->state = ActionState::UPDATING;
 }
 
+void Leshen::OnDeathHit()
+{
+}
+
 void Leshen::LaunchRootAction()
 {
 	root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
@@ -238,6 +254,7 @@ void Leshen::LaunchCrowsAction()
 
 void Leshen::LaunchCloudAction()
 {
+	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
 	particles["Cloud"]->game_object_attached->SetEnable(true);
@@ -351,6 +368,8 @@ void Leshen::EndCloudAction()
 	meshes->SetEnable(true);
 	particles["Cloud"]->game_object_attached->SetEnable(false);
 	current_action->state = Leshen::ActionState::ENDED;
+	direction_time = 0.0f;
+	times_switched = 0;
 }
 
 void Leshen::SetActionVariables()
@@ -379,7 +398,7 @@ void Leshen::SetActionVariables()
 
 void Leshen::HandleHitCount()
 {
-	if (times_hitted < 5)
+	if (times_hitted < 10)
 		times_hitted++;
 }
 

@@ -27,7 +27,7 @@ public:
 
 	//-----------Data to set probabilities-----------//
 	float player_distance[TOTAL_PLAYERS];
-	float melee_range = 5.0f;
+	float melee_range = 3.0f;
 	bool player_rooted[TOTAL_PLAYERS];
 	float action_cooldown = 1.5f;
 	float time_to_action;
@@ -87,6 +87,7 @@ public:
 	void SetAttackState();
 
 	void LaunchAction();
+	void OnDeathHit();
 
 	void LaunchRootAction();
 	void LaunchMeleeAction();
