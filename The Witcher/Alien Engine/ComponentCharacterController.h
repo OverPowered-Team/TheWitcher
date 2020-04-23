@@ -92,6 +92,11 @@ private:
 	void SetDefaultConf();
 
 	void OnControllerColliderHit(ControllerColliderHit hit);
+	
+	// translates without overlap check
+	bool SetPosition(float3 position) const;
+	float3 GetPosition() const;
+	float3 GetFootPosition() const;
 
 protected:
 

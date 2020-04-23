@@ -9,17 +9,11 @@
 #include "ResourceMaterial.h"
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
-#include "ModuleRenderer3D.h"
 #include "Globals.h"
-#include "Time.h"
 #include "ComponentLightDirectional.h"
 #include "ComponentLightSpot.h"
-#include "ComponentTransform.h"
 #include "ComponentLightPoint.h"
-#include "Viewport.h"
 #include "mmgr/mmgr.h"
-
-#include "Optick/include/optick.h"
 
 ResourceShader::ResourceShader()
 {
@@ -164,10 +158,6 @@ void ResourceShader::TryToSetShaderType()
 		shaderType = SHADER_TEMPLATE::ILUMINATED;
 	else if (std::strcmp(name.c_str(), "particle_shader") == 0)
 		shaderType = SHADER_TEMPLATE::PARTICLE;
-	else if (std::strcmp(name.c_str(), "simple_depth_shader") == 0)
-		shaderType = SHADER_TEMPLATE::SHADOW;
-	else if (std::strcmp(name.c_str(), "water_shader") == 0)
-		shaderType = SHADER_TEMPLATE::WATER;
 	else 
 		shaderType = SHADER_TEMPLATE::NO_TEMPLATE;
 }
@@ -187,11 +177,9 @@ SHADER_TEMPLATE ResourceShader::GetShaderType() const
 
 void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 {
-	OPTICK_EVENT();
-
 	switch (shaderType) {
 	case SHADER_TEMPLATE::DEFAULT: { 
-		SetUniform4f("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
+		SetUniformFloat3("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
 		SetUniform1f("objectMaterial.smoothness", inputs.standardShaderProperties.smoothness);
 		SetUniform1f("objectMaterial.metalness", inputs.standardShaderProperties.metalness);
 		ApplyLightsUniforms();
@@ -209,21 +197,6 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 	case SHADER_TEMPLATE::PARTICLE: {
 		SetUniform4f("objectMaterial.diffuse_color", inputs.particleShaderProperties.color);
 		break; }
-	case SHADER_TEMPLATE::SHADOW: {
-
-		break; }
-
-	case SHADER_TEMPLATE::WATER: {
-		SetUniform4f("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
-		SetUniform1f("objectMaterial.smoothness", inputs.standardShaderProperties.smoothness);
-		SetUniform1f("objectMaterial.metalness", inputs.standardShaderProperties.metalness);
-		SetUniform1i("reflection_texture", 1);
-		SetUniform1i("refraction_texture", 2);
-		SetUniform1i("dudv_map", 3);
-		SetUniform1f("move_factor", Time::GetTimeSinceStart() * 0.075f);
-		SetUniformFloat3("camera_position", App->renderer3D->actual_game_camera->GetCameraPosition());
-		ApplyLightsUniforms();
-		break; }
 
 	default:
 		LOG_ENGINE("We currently don't support editing this type of uniform...");
@@ -234,8 +207,6 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 
 void ResourceShader::ApplyLightsUniforms()
 {
-	OPTICK_EVENT();
-
 	// Light uniforms set from here
 	SetUniform3i("max_lights", App->objects->GetNumOfDirLights(), App->objects->GetNumOfPointLights(), App->objects->GetNumOfSpotLights());
 
@@ -249,22 +220,16 @@ void ResourceShader::ApplyLightsUniforms()
 
 void ResourceShader::Bind() const
 {
-	OPTICK_EVENT();
-
 	glUseProgram(shader_id);
 }
 
 void ResourceShader::Unbind() const
 {
-	OPTICK_EVENT();
-
 	glUseProgram(NULL);
 }
 
 void ResourceShader::SetUniform1i(const std::string& name, const int& value)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform1i(location, value);
@@ -272,8 +237,6 @@ void ResourceShader::SetUniform1i(const std::string& name, const int& value)
 
 void ResourceShader::SetUniform1ui(const std::string& name, const uint& value)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if(location != -1)
 		glUniform1ui(GetUniformLocation(name), value);
@@ -281,8 +244,6 @@ void ResourceShader::SetUniform1ui(const std::string& name, const uint& value)
 
 void ResourceShader::SetUniform1f(const std::string& name, const float& value)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform1f(location, value);
@@ -290,8 +251,6 @@ void ResourceShader::SetUniform1f(const std::string& name, const float& value)
 
 void ResourceShader::SetUniform3i(const std::string& name, const int& v0, const int& v1, const int& v2)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform3i(GetUniformLocation(name), v0, v1, v2);
@@ -299,8 +258,6 @@ void ResourceShader::SetUniform3i(const std::string& name, const int& v0, const 
 
 void ResourceShader::SetUniformFloat3(const std::string& name, const float3& vec)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform3f(location, vec.x, vec.y, vec.z);
@@ -308,8 +265,6 @@ void ResourceShader::SetUniformFloat3(const std::string& name, const float3& vec
 
 void ResourceShader::SetUniformFloat3v(const std::string& name, const float3* vec, uint count)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform3fv(location, count, vec[0].ptr());
@@ -317,8 +272,6 @@ void ResourceShader::SetUniformFloat3v(const std::string& name, const float3* ve
 
 void ResourceShader::SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform4f(location, v0, v1, v2, v3);
@@ -326,8 +279,6 @@ void ResourceShader::SetUniform4f(const std::string& name, const float& v0, cons
 
 void ResourceShader::SetUniform4f(const std::string& name, const float4& vec)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
@@ -335,8 +286,6 @@ void ResourceShader::SetUniform4f(const std::string& name, const float4& vec)
 
 void ResourceShader::SetUniformMat4f(const std::string& name, const math::float4x4& matrix)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniformMatrix4fv(location, 1, GL_FALSE, matrix.ptr());
@@ -344,8 +293,6 @@ void ResourceShader::SetUniformMat4f(const std::string& name, const math::float4
 
 void ResourceShader::SetUniformMat4f(const std::string& name, const math::float4x4* matrix, uint count)
 {
-	OPTICK_EVENT();
-
 	int location = GetUniformLocation(name);
 	if (location != -1)
 		glUniformMatrix4fv(location, count, GL_TRUE, matrix[0].ptr());
@@ -353,21 +300,14 @@ void ResourceShader::SetUniformMat4f(const std::string& name, const math::float4
 
 void ResourceShader::SetDirectionalLights(const std::string& name, const std::list<DirLightProperties*>& dirLights)
 {
-	OPTICK_EVENT();
-
 	int i = 0;
 	std::string tmp_name(name.c_str());
 	tmp_name.append("[%i]");
-
-	std::string clightSpaceMatrix("lightSpaceMatrix");
-	clightSpaceMatrix.append("[%i]");
-
-	SetUniform1i("num_space_matrix", dirLights.size());
 	for (std::list<DirLightProperties*>::const_iterator iter = dirLights.begin(); iter != dirLights.end(); iter++)
 	{
 		char cname[128];
 		sprintf_s(cname, tmp_name.c_str(), i);
-
+		
 		// All uniforms
 		std::string cintensity = std::string(cname).append(".intensity");
 		SetUniform1f(cintensity, (*iter)->intensity);
@@ -378,33 +318,12 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 		std::string variablesLocation = std::string(cname).append(".dirLightProperties");
 		SetUniformFloat3v(variablesLocation, variablesVec3, 5);
 
-		std::string cshadow = std::string(cname).append(".castShadow");
-		if ((*iter)->light->castShadows)
-		{
-			SetUniform1i(cshadow, 1);
-			glActiveTexture(GL_TEXTURE4);
-			glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
-			std::string cdepthmap = std::string(cname).append(".depthMap");
-			SetUniform1i(cdepthmap, 4);
-		}
-		else 
-			SetUniform1i(cshadow, 0);
-
-		char clightspaceM[128];
-		sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);
-		SetUniformMat4f(clightspaceM, (*iter)->projMat * (*iter)->viewMat);
-
-		std::string clightPos = std::string(cname).append(".lightPos");
-		SetUniformFloat3(clightPos , (*iter)->fake_position);
-
 		++i;
 	}
 }
 
 void ResourceShader::SetPointLights(const std::string& name, const std::list<PointLightProperties*>& pointLights)
 {
-	OPTICK_EVENT();
-
 	int i = 0;
 	std::string tmp_name(name.c_str());
 	tmp_name.append("[%i]");
@@ -438,8 +357,6 @@ void ResourceShader::SetPointLights(const std::string& name, const std::list<Poi
 
 void ResourceShader::SetSpotLights(const std::string& name, const std::list<SpotLightProperties*>& spotLights)
 {
-	OPTICK_EVENT();
-
 	int i = 0;
 	std::string tmp_name(name.c_str());
 	tmp_name.append("[%i]");
@@ -647,24 +564,4 @@ void ResourceShader::CreateShaderDoc(const int& type, const char* name)
 		file.close();
 	}
 	App->file_system->Save(file_output.data(), file_str.data(), file_str.size());
-}
-
-void ResourceShader::CreateDepthMap(DirLightProperties* light)
-{
-
-}
-
-void ResourceShader::DrawShadows()
-{
-	// 1. first render to depth map
-	//int i = 0;
-	//std::string tmp_name("dir_light");
-	//tmp_name.append("[%i]");
-
-	//for (std::list<DirLightProperties*>::const_iterator iter = App->objects->directional_light_properites.begin(); iter != App->objects->directional_light_properites.end(); iter++)
-	//{
-	//	
-
-
-	//}
 }
