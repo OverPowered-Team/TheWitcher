@@ -19,6 +19,7 @@ void Scale_Win::Start()
 	right_scale = game_object->GetChild("Right_Scale");
 	rigid_body1 = left_scale->GetComponent<ComponentRigidBody>();
 	rigid_body2 = right_scale->GetComponent<ComponentRigidBody>();
+	connector = game_object->GetChild("Connector");
 
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
@@ -106,6 +107,11 @@ void Scale_Win::Update()
 		rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());
 		rigid_body2->SetPosition(right_scale->transform->GetLocalPosition());
 		// ------------------------------------------
+
+		// Connector between plates
+		//float3 vector = (left_scale->transform->GetGlobalPosition() - right_scale->transform->GetGlobalPosition()).Normalized();
+		//Quat quat = Quat::RotateAxisAngle(float3(0, 0, 1), vector.AngleBetweenNorm(connector->transform->right));
+		//connector->transform->SetLocalRotation(quat);
 
 		if (Time::GetGameTime() > time + time_to_scale)
 		{ 
