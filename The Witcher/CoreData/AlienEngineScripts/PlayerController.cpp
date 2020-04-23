@@ -559,7 +559,7 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value, float3 knock_back)
 {
 	player_data.stats["Health"].DecreaseStat(value);
-	//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 

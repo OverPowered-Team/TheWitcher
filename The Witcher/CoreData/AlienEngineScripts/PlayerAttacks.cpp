@@ -119,7 +119,6 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
-	//THIS CRASHES NOW DONT KNOW WHY
 	if(current_attack && current_attack->IsLast())
 		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
@@ -248,7 +247,6 @@ void PlayerAttacks::AttackMovement()
 	else
 	{
 		float3 direction = GetMovementVector();
-		LOG("DIRECTION IS %f %f %f", direction.x, direction.y, direction.z);
 		float angle = atan2f(direction.z, direction.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
