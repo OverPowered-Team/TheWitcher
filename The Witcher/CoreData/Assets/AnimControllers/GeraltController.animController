@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "GeraltController",
         "NumStates": 27,
-        "NumTransitions": 49,
+        "NumTransitions": 50,
         "States": [
             {
                 "Name": "Idle",
@@ -67,7 +67,7 @@
             {
                 "Name": "Roll",
                 "Speed": 3,
-                "Clip": "9671756966496077186"
+                "Clip": "0"
             },
             {
                 "Name": "H",
@@ -201,10 +201,16 @@
                 "Source": "Death",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
             },
             {
                 "Source": "Hit",
@@ -865,6 +871,21 @@
                         "Type": "bool",
                         "CompText": "True",
                         "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Run",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
                     }
                 ]
             }
