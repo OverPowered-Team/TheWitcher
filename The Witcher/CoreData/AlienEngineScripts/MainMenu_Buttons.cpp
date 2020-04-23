@@ -23,7 +23,7 @@ void MainMenu_Buttons::Controls()
 {
 	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
 	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::CONTROLS);
-	GameObject::FindWithName("Main_Menu")->SetEnable(false);
+	GameObject::FindWithName("Main_Menu_UI")->SetEnable(false);
 }
 
 void MainMenu_Buttons::Settings()
