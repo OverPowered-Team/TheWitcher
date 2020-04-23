@@ -32,6 +32,9 @@ void Enemy::StartEnemy()
 	case EnemyType::NILFGAARD_SOLDIER:
 		json_str = "nilfgaardsoldier";
 		break;
+	case EnemyType::LESHEN:
+		json_str = "leshen";
+		break;
 	default:
 		break;
 	}
@@ -193,6 +196,11 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 	
+	if (can_get_interrupted) {
+		state = EnemyState::HIT;
+		animator->PlayState("Hit");
+	}
+
 	switch (type)
 	{
 	case EnemyType::GHOUL:
@@ -202,16 +210,19 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		audio_emitter->StartSound("SoldierHit");
 		break;
 	}
-	
-	state = EnemyState::HIT;
-	animator->PlayState("Hit");
+
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
+
 		animator->SetBool("dead", true);
 		OnDeathHit();
 
-		if (player->attacks->GetCurrentAttack()->IsLast())
+		if (type == EnemyType::LESHEN) {
+			state = EnemyState::DYING;
+			animator->PlayState("Death");
+		}
+		else if (player->attacks->GetCurrentAttack()->IsLast())
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
