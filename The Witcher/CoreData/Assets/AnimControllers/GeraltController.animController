@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "GeraltController",
         "NumStates": 27,
-        "NumTransitions": 49,
+        "NumTransitions": 50,
         "States": [
             {
                 "Name": "Idle",
@@ -871,6 +871,21 @@
                         "Type": "bool",
                         "CompText": "True",
                         "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Run",
+                "Target": "RCP",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 3
                     }
                 ]
             }
