@@ -32,6 +32,8 @@ public:
 	static float Max(const float& value1, const float& value2);
 	static double Max(const double& value1, const double& value2);
 
+	static float  Map(float s, float a1, float a2, float b1, float b2);
+
 	static float PerlinNoise(const unsigned int& seed, const double& x, const double& y, const double& z);
 
 	static float Lerp(const float& start, const float& end, const float& t);

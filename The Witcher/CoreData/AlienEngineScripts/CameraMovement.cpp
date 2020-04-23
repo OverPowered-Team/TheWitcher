@@ -32,6 +32,7 @@ void CameraMovement::Update()
         break;
     case CameraState::AXIS:
         transform->SetGlobalPosition(CalculateAxisMidPoint() + trg_offset);
+        LookAtMidPoint();
         break;
     case CameraState::MOVING_TO_AXIS: {
         current_transition_time += Time::GetDT();
@@ -97,21 +98,9 @@ void CameraMovement::Update()
 
 void CameraMovement::LookAtMidPoint()
 {
-    float3 midPoint = CalculateMidPoint();
+    float3 direction = (CalculateMidPoint() - transform->GetGlobalPosition()).Normalized();
 
-    float3 front = float3::unitZ(); //front of the object
-    float3 direction = (midPoint - transform->GetGlobalPosition()).Normalized();
-    
-    Quat rot1 = RotationBetweenVectors(front, direction);
-
-    float3 desiredUp = float3::unitY();
-    float3 right = Cross(direction, desiredUp);
-    desiredUp = Cross(right, direction);
-
-    float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
-    Quat rot2 = RotationBetweenVectors(newUp, desiredUp);
-
-    transform->SetGlobalRotation(rot2 * rot1);
+    transform->SetGlobalRotation(Quat::LookAt(float3::unitZ(), direction, float3::unitY(), float3::unitY()));
 }
 
 float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst)

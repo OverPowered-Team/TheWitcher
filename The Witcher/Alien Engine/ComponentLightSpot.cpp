@@ -11,6 +11,8 @@
 #include "Gizmos.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ComponentLightSpot::ComponentLightSpot(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT_SPOT;
@@ -35,6 +37,8 @@ ComponentLightSpot::~ComponentLightSpot()
 
 void ComponentLightSpot::LightLogic()
 {
+	OPTICK_EVENT();
+
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	light_props.position = float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
 	light_props.direction = game_object_attached->transform->GetGlobalRotation().WorldZ();
@@ -179,6 +183,8 @@ void ComponentLightSpot::LoadComponent(JSONArraypack* to_load)
 
 void ComponentLightSpot::DrawIconLight()
 {
+	OPTICK_EVENT();
+
 	if (bulb != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);

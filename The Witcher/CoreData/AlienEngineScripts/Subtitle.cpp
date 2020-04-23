@@ -10,23 +10,31 @@ Subtitle::~Subtitle()
 
 void Subtitle::Start()
 {
-	text = GetComponent<ComponentText>();
+	text = game_object->GetComponent<ComponentText>();
 	if (!text)
+	{
+		LOG("Text not found");
 		return;
+	}
+		
 	audio = GetComponent<ComponentAudioEmitter>();
 	if (!audio)
+	{
+		LOG("Audio component not found");
 		return;
+	}
+		
 	if (songBard)
 	{
 		song = songBard->GetComponent<ComponentAudioEmitter>();
 	}
 
 
-	std::string json_path = std::string("Configuration/Subtitles/Project_1.json");
+	std::string json_path = std::string("GameData/Intro.json");
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
 	if (jsonDoc)
 	{
-		LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+		LOG("READING Intro named %s", json_path.data());
 		JSONArraypack* titles = jsonDoc->GetArray("titles");
 		if (titles == nullptr)
 			return;
@@ -39,6 +47,10 @@ void Subtitle::Start()
 			subtitles.push_back(new_subtitle);
 			
 		} while (titles->GetAnotherNode());
+	}
+	else
+	{
+		LOG("Can't read this json");
 	}
 	
 	JSONfilepack::FreeJSON(jsonDoc);
