@@ -29,12 +29,13 @@ public:
 	ComponentCamera* camera = nullptr;
 	 
 	float3 centerPoint = float3::zero();
+	float3 fogColor = float3::one();
 
-	float targetFogDensity;
-	float targetFogGradient;
+	float targetFogDensity = 0.035;
+	float targetFogGradient = 1.35;
 
-	float currentDensity;
-	float currentGradient;
+	float currentDensity = 0.f;
+	float currentGradient = 0.f;
 
 	float innerRadius = 20.f; 
 	float outterRadius = 25.f;
@@ -52,9 +53,15 @@ ALIEN_FACTORY ProgressiveFog* CreateProgressiveFog() {
 	SHOW_TEXT("Zone Radius");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->innerRadius);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->outterRadius);
+	SHOW_SEPARATOR();
 	SHOW_TEXT("Fog Properties");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->targetFogDensity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->targetFogGradient);
+	SHOW_TEXT("Fog Color");
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->fogColor.x);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->fogColor.y);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->fogColor.z);
+	SHOW_SEPARATOR();
 	SHOW_TEXT("Current State");
 	SHOW_IN_INSPECTOR_AS_ENUM(FogState, alien->fogState);
 

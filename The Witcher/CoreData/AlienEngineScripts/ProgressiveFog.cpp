@@ -16,6 +16,7 @@ void ProgressiveFog::Start()
 	{
 		innerCol = colliders.at(0);
 		outterCol = colliders.at(1);
+		innerCol->SetRadius(innerRadius);
 		LOG("Set inner to %f, and outter to %f", innerRadius, outterRadius);
 	}
 	else
@@ -37,11 +38,16 @@ void ProgressiveFog::Update()
 		camera->EnableFog();
 		camera->SetFogDensity(targetFogDensity);
 		camera->SetFogGradient(targetFogGradient);
+		camera->SetBackgroundColor(fogColor);
 		break;
 
 	case FogState::TRANSITION:
 
+		float percentage = CalculateRatio();
+		camera->SetBackgroundColor(fogColor);
 
+		camera->SetFogDensity(targetFogDensity * percentage);
+		camera->SetFogGradient(targetFogGradient);
 
 		break;
 	}
