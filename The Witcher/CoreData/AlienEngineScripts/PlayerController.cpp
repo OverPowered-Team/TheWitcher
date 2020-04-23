@@ -471,7 +471,7 @@ void PlayerController::OnAnimationEnd(const char* name) {
 			state = PlayerState::IDLE;
 			player_data.speed = float3::zero();
 		}
-		if (mov_input)
+		else
 		{
 			state = PlayerState::RUNNING;
 			particles["p_run"]->SetEnable(true);

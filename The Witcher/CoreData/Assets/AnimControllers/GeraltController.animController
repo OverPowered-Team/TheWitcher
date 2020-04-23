@@ -421,34 +421,32 @@
             {
                 "Source": "Roll",
                 "Target": "Idle",
-                "Blend": 0.25,
+                "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
-                "FloatConditions": [
+                "FloatConditions": [],
+                "BoolConditions": [
                     {
-                        "Type": "float",
-                        "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
                     }
-                ],
-                "BoolConditions": []
+                ]
             },
             {
                 "Source": "Roll",
                 "Target": "Run",
-                "Blend": 0.25,
+                "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
-                "FloatConditions": [
+                "FloatConditions": [],
+                "BoolConditions": [
                     {
-                        "Type": "float",
-                        "CompText": "Greater",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
                     }
-                ],
-                "BoolConditions": []
+                ]
             },
             {
                 "Source": "H",
