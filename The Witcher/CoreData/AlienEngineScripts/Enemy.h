@@ -57,8 +57,6 @@ public:
 	float GetDamaged(float dmg, PlayerController* player);
 	void AddEffect(Effect* new_effect);
 
-	void HitFreeze(float freeze_time);
-
 public:
 	float distance = 0.0F;
 	float3 direction;
@@ -67,16 +65,12 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
-	ComponentAudioEmitter* audio_emitter = nullptr;
 	Prefab head_prefab;
-	GameObject* head_position;
 
 	std::vector<PlayerController*> player_controllers;
 
-	std::map<std::string, ComponentParticleSystem*> particles;
+	std::map<std::string, GameObject*> particles;
 	std::map<std::string, Stat> stats;
-
-	bool is_combat = false;
 
 protected:
 	GameObject* decapitated_head = nullptr;

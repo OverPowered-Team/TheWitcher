@@ -7,7 +7,6 @@
 #include "ComponentTransform.h"
 #include "AnimTween.h"
 #include "Time.h"
-#include "SceneManager.h"
 
 FadeToBlack::FadeToBlack(bool start_enabled): Module(start_enabled)
 {
@@ -68,7 +67,6 @@ update_status FadeToBlack::PreUpdate(float dt)
 			Reset();
 		}
 	}
-
 	return UPDATE_CONTINUE;
 }
 

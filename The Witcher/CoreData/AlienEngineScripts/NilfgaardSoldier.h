@@ -4,8 +4,6 @@
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
 
-class MusicController;
-
 class ALIEN_ENGINE_API NilfgaardSoldier : public Enemy {
 public:
 	enum(NilfgaardType,
@@ -30,6 +28,7 @@ public:
 	void ShootAttack();
 	Quat RotateArrow();
 	void OnDeathHit();
+	void CleanUpEnemy() override;
 
 	void OnAnimationEnd(const char* name) override;
 	void OnTriggerEnter(ComponentCollider* collider) override;
@@ -40,12 +39,12 @@ public:
 	float block_time = 2.0f;
 	float block_attack_time = 3.0f;
 	int max_break_shield_attack = 5;
+
 private:
 	float current_time = 0.0f;
 	bool has_been_attacked = false;
 	bool is_blocked = false;
 	int break_shield_attack = 0;
-	MusicController* m_controller = nullptr;
 };
 
 ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
@@ -55,7 +54,6 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->head_position);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ShootAttack, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);

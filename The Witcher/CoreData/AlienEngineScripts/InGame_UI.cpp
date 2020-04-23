@@ -28,7 +28,7 @@ void InGame_UI::Update()
 
 	if (died)
 	{
-		if (time + waiting < Time::GetGameTime())
+		if (time + waiting > Time::GetGameTime())
 		{
 			if (!died_gone)
 			{
@@ -39,7 +39,7 @@ void InGame_UI::Update()
 			}
 			else
 			{
-				SceneManager::LoadScene("NewWin_Menu");
+				SceneManager::LoadScene("Lose");
 			}
 		}
 	}

@@ -35,8 +35,6 @@ public:
 
 	uint GetFBOTexture();
 
-	uint GetFBO();
-
 	// Only multiple of 2 values // 0 : MSAA disabled // 2-16 : MSAA enabled
 	void SetMSAA(uint MSAA)
 	{
@@ -90,8 +88,6 @@ public:
 	uint GetMSAA();
 
 	uint GetTexture();
-
-	uint GetFBO();
 
 	bool ScreenPointToViewport(float2& screen_point);
 

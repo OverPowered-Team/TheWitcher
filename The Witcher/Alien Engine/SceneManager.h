@@ -1,24 +1,7 @@
 #pragma once
 
-enum class FadeToBlackType
-{
-	FADE,
-	DIAGONAL_1,
-	DIAGONAL_2,
-	HORIZONTAL_CURTAIN,
-	VERTICAL_CURTAIN,
-
-	NONE = -1
-};
-
-enum class FadeType
-{
-	FADE_TO,
-	FADE_FROM,
-	COMPLETE_FADE,
-
-	NONE = -1
-};
+enum class FadeType;
+enum class FadeToBlackType;
 
 #include "MathGeoLib/include/Math/float3.h"
 

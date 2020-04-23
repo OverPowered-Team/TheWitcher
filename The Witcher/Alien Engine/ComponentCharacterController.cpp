@@ -50,6 +50,55 @@ ComponentCharacterController::~ComponentCharacterController()
 
 // Movement Functions -----------------------------------------
 
+//* OBSOLETE ------------------------------------------------------------------------------------------------- */
+//void ComponentCharacterController::SetWalkDirection(float3 direction)
+//{
+//	controller->setWalkDirection(ToBtVector3(direction));
+//}
+//
+//
+//void ComponentCharacterController::SetJumpSpeed(const float jump_speed)
+//{
+//	this->jump_speed = jump_speed;
+//	controller->setJumpSpeed(jump_speed);
+//}
+//
+//void ComponentCharacterController::SetGravity(const float gravity)
+//{
+//	this->gravity = gravity;
+//	controller->setGravity(ToBtVector3(float3(0.f, -gravity, 0.f)));
+//}
+//
+//void ComponentCharacterController::ApplyImpulse(float3 direction)
+//{
+//	controller->applyImpulse({ direction.x, direction.y, direction.z });
+//}
+//
+//void ComponentCharacterController::Jump(float3 direction)
+//{
+//	controller->jump(ToBtVector3(direction));
+//}
+//
+//bool ComponentCharacterController::OnGround()
+//{
+//	return controller->onGround();
+//}
+//
+//void ComponentCharacterController::SetRotation(const Quat rotation)
+//{
+//	body->setWorldTransform(ToBtTransform(transform->GetGlobalPosition() + character_offset, rotation));
+//	transform->SetGlobalRotation(math::Quat(rotation));
+//}
+//
+//Quat ComponentCharacterController::GetRotation() const
+//{
+//	return transform->GetGlobalRotation();
+//}
+//
+//*------------------------------------------------------------------------------------------------------------*/
+
+
+
 void ComponentCharacterController::SetContactOffset(const float contactOffset)
 {
 	float max = FLT_MAX, min = 0.0001f;
@@ -274,12 +323,11 @@ void ComponentCharacterController::Update()
 
 PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 {
-
 	// set velocity on current position before move
 	velocity = controller->getPosition();
 
 	// perform the move
-	PxFilterData filter_data( layer_num, physics->ID, 0, 0);
+	PxFilterData filter_data( layer_num, game_object_attached->ID , 0, 0);
 	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter_callback); // TODO: implement filters callback when needed
 	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
 
@@ -298,14 +346,12 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	layer_num = index;
 	layer_name = layer;
 
-	PxShape* all_shapes;
 	Uint32 ns = controller->getActor()->getNbShapes();
+	PxShape* all_shapes;
 	controller->getActor()->getShapes(&all_shapes, ns);
-	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
-
 	for (uint i = 0; i < ns; ++i) {
-		all_shapes[i].setSimulationFilterData(filter_data);
-		all_shapes[i].setQueryFilterData(filter_data);
+		all_shapes[i].setSimulationFilterData(PxFilterData(layer_num, game_object_attached->ID, 0, 0));
+		all_shapes[i].setQueryFilterData(PxFilterData(layer_num, game_object_attached->ID, 0, 0));
 	}
 }
 

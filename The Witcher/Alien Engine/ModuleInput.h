@@ -146,8 +146,6 @@ public:
 	}
 	bool IsControllerActive(int controller_index);
 
-	float GetControllerAxis(GamePad* gp, SDL_GameControllerAxis axis);
-
 	float3 GetMousePosition();
 private:
 

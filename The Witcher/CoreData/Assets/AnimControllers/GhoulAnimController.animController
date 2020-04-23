@@ -7,32 +7,32 @@
             {
                 "Name": "Idle",
                 "Speed": 1,
-                "Clip": "17597294058179667036"
+                "Clip": "9333412865652030349"
             },
             {
                 "Name": "Run",
                 "Speed": 1,
-                "Clip": "15614024080544662546"
+                "Clip": "0"
             },
             {
                 "Name": "Jump",
                 "Speed": 1,
-                "Clip": "9200705209273843039"
+                "Clip": "0"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
-                "Clip": "9090936577813051920"
+                "Clip": "0"
             },
             {
-                "Name": "Slash",
+                "Name": "Attack",
                 "Speed": 1,
-                "Clip": "712575525310086962"
+                "Clip": "0"
             },
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "18125317178253250943"
+                "Clip": "0"
             }
         ],
         "Transitions": [
@@ -69,7 +69,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Slash",
+                "Source": "Attack",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
@@ -85,7 +85,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Slash",
+                "Source": "Attack",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": true,
@@ -150,19 +150,6 @@
             }
         ],
         "BoolParameters": [],
-        "Events": [
-            {
-                "Event_Id": "Ghoul::ActivateCollider",
-                "Animation_Id": "712575525310086962",
-                "Frame": 27,
-                "Type": 2
-            },
-            {
-                "Event_Id": "Ghoul::DeactivateCollider",
-                "Animation_Id": "712575525310086962",
-                "Frame": 33,
-                "Type": 2
-            }
-        ]
+        "Events": []
     }
 }

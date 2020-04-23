@@ -18,7 +18,6 @@ public:
 		Stat base_damage;
 		float movement_strength = 0.0f;
 		float max_snap_distance = 0.0f;
-		float freeze_time = 0.0f;
 		int activation_frame = 0;
 		std::string next_light = "";
 		std::string next_heavy = "";

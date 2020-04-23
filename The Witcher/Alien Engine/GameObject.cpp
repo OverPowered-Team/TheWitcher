@@ -168,27 +168,7 @@ bool GameObject::IsEnabled() const
 	return enabled;
 }
 
-void GameObject::PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
-{
-	OPTICK_EVENT();
-	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-
-	if (mesh == nullptr) //not sure if this is the best solution
-		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
-
-
-	if (mesh != nullptr && mesh->IsEnabled())
-	{
-		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
-			glColor3f(1, 1, 1);
-		if (!mesh->wireframe)
-			mesh->PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
-	}
-}
-
-void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
+void GameObject::DrawScene(ComponentCamera* camera)
 {
 	OPTICK_EVENT();
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -197,20 +177,11 @@ void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
 	
 	if (mesh == nullptr) //not sure if this is the best solution
 		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
-	
-	if(material)
-		material->material->used_shader->SetUniform4f("clip_plane", clip_plane);
 
 	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
 		material->BindTexture();
 	}*/
-
-	// Skybox Drawn before anything ---
-	// This will draw the editor skybox too.
-	// Note that the editor skybox will use the default skybox, so if you change the skybox on a 
-	// component camera it will have no effect on the editor skybox.
-	camera->DrawSkybox();
 
 	if (mesh != nullptr && mesh->IsEnabled())
 	{
@@ -232,71 +203,38 @@ void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
 			mesh->DrawOBB(camera);
 	}
 
+
 	for (Component* component : components)
 	{
 		component->DrawScene();
 	}
 }
 
-void GameObject::PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
+
+void GameObject::DrawGame(ComponentCamera* camera)
 {
 	OPTICK_EVENT();
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-
-	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	if (mesh == nullptr) //not sure if this is the best solution
-		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
-
-	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
-	{
-		material->BindTexture();
-	}*/
-
-	if (mesh != nullptr && mesh->IsEnabled())
-	{
-		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
-			glColor3f(1, 1, 1);
-		mesh->PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
-
-	}
-}
-
-void GameObject::DrawGame(ComponentCamera* camera, const float4& clip_plane)
-{
-	OPTICK_EVENT();
-	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-
+	
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	if(mesh == nullptr) //not sure if this is the best solution
 		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
 
-	if(material)
-		material->material->used_shader->SetUniform4f("clip_plane", clip_plane);
-
 	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
 	{
 		material->BindTexture();
 	}*/
-
-	// Skybox Drawn before anything ---
-	// This will draw the editor skybox too.
-	// Note that the editor skybox will use the default skybox, so if you change the skybox on a 
-	// component camera it will have no effect on the editor skybox.
-	camera->DrawSkybox();
 
 	if (mesh != nullptr && mesh->IsEnabled())
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
 		mesh->DrawPolygon(camera);
-
 	}
 }
 
 void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {
-	OPTICK_EVENT();
-	// TODO: HUGE TODO!: REVIEW THIS FUNCTION 
 
 	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
@@ -327,13 +265,11 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 	{
 		light_dir->LightLogic();
 	}
-
 	ComponentLightSpot* light_spot = (ComponentLightSpot*)GetComponent(ComponentType::LIGHT_SPOT);
 	if (light_spot != nullptr && light_spot->IsEnabled())
 	{
 		light_spot->LightLogic();
 	}
-
 	ComponentLightPoint* light_point = (ComponentLightPoint*)GetComponent(ComponentType::LIGHT_POINT);
 	if (light_point != nullptr && light_point->IsEnabled())
 	{
@@ -350,7 +286,6 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 		camera_->frustum.up = transform->GetGlobalRotation().WorldY();
 	}
 
-
 	ComponentParticleSystem* partSystem = (ComponentParticleSystem*)GetComponent(ComponentType::PARTICLES);
 	
 	if(partSystem != nullptr)
@@ -361,26 +296,17 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 
 	if (App->objects->printing_scene)
 	{
-		//if (camera_ != nullptr && camera_->IsEnabled())
-		//{
-		//	camera_->DrawIconCamera();
-		//}
+		if (camera_ != nullptr && camera_->IsEnabled())
+		{
+			//camera_->DrawIconCamera();
+		}
 
-		////TOFIX / DO. Light does not exist anymore here
-		//if (light_dir != nullptr && light_dir->IsEnabled())
-		//{
-		//	light_dir->DrawIconLight();
-		//}
-
-		//if (light_spot != nullptr && light_spot->IsEnabled())
-		//{
-		//	light_spot->DrawIconLight();
-		//}
-		//
-		//if (light_point != nullptr && light_point->IsEnabled())
-		//{
-		//	light_point->DrawIconLight();
-		//}
+		/* TOFIX / DO. Light does not exist anymore here
+		if (light != nullptr && light->IsEnabled())
+		{
+			//light->DrawIconLight();
+		}
+		*/
 
 		if (partSystem != nullptr)
 		{
@@ -554,8 +480,6 @@ const char* GameObject::GetTag() const
 
 Component* GameObject::GetComponent(const ComponentType& type)
 {
-	OPTICK_EVENT();
-
 	if (type == ComponentType::UI_BUTTON || type == ComponentType::UI_IMAGE || type == ComponentType::UI_CHECKBOX || type == ComponentType::UI_BAR || type == ComponentType::UI_SLIDER || type == ComponentType::UI_ANIMATED_IMAGE || type == ComponentType::UI_TEXT) {
 		std::vector<Component*>::iterator item = components.begin();
 		for (; item != components.end(); ++item) {
@@ -1329,33 +1253,93 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				break; }
 			case (int)ComponentType::BOX_COLLIDER: {
 				ComponentBoxCollider* box_collider = new ComponentBoxCollider(this);
-				box_collider->LoadComponent(components_to_load);
-				AddComponent(box_collider);
+				try {
+					box_collider->LoadComponent(components_to_load);
+					AddComponent(box_collider);
+				}
+				catch (...) {
+					try {
+						delete box_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::SPHERE_COLLIDER: {
 				ComponentSphereCollider* sphere_collider = new ComponentSphereCollider(this);
-				sphere_collider->LoadComponent(components_to_load);
-				AddComponent(sphere_collider);
+				try {
+					sphere_collider->LoadComponent(components_to_load);
+					AddComponent(sphere_collider);
+				}
+				catch (...) {
+					try {
+						delete sphere_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::CAPSULE_COLLIDER: {
 				ComponentCapsuleCollider* capsule_collider = new ComponentCapsuleCollider(this);
-				capsule_collider->LoadComponent(components_to_load);
-				AddComponent(capsule_collider);
+				try {
+					capsule_collider->LoadComponent(components_to_load);
+					AddComponent(capsule_collider);
+				}
+				catch (...) {
+					try {
+						delete capsule_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::CONVEX_HULL_COLLIDER: {
 				ComponentConvexHullCollider* convex_hull_collider = new ComponentConvexHullCollider(this);
-				convex_hull_collider->LoadComponent(components_to_load);
-				AddComponent(convex_hull_collider);
+				try {
+					convex_hull_collider->LoadComponent(components_to_load);
+					AddComponent(convex_hull_collider);
+				}
+				catch (...) {
+					try {
+						delete convex_hull_collider;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::RIGID_BODY: {
 				ComponentRigidBody* rigi_body = new ComponentRigidBody(this);
-				rigi_body->LoadComponent(components_to_load);
-				AddComponent(rigi_body);
+				try {
+					rigi_body->LoadComponent(components_to_load);
+					AddComponent(rigi_body);
+				}
+				catch (...) {
+					try {
+						delete rigi_body;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::CHARACTER_CONTROLLER: {
 				ComponentCharacterController* character_controller = new ComponentCharacterController(this);
-				character_controller->LoadComponent(components_to_load);
-				AddComponent(character_controller);
+				try {
+					character_controller->LoadComponent(components_to_load);
+					AddComponent(character_controller);
+				}
+				catch (...) {
+					try {
+						delete character_controller;
+					}
+					catch (...) {
+						// pt bida
+					}
+				}
 				break; }
 			case (int)ComponentType::SCRIPT: {
 				ComponentScript* script = new ComponentScript(this);
@@ -1575,11 +1559,6 @@ void GameObject::CloningGameObject(GameObject* clone)
 					(*item)->Clone(collider);
 					clone->AddComponent(collider);
 					break; }
-				case ComponentType::RIGID_BODY: {
-					ComponentRigidBody* rb = new ComponentRigidBody(clone);
-					(*item)->Clone(rb);
-					clone->AddComponent(rb);
-					break; }
 				default:
 					LOG_ENGINE("Unknown component type while loading");
 					break;
@@ -1627,9 +1606,9 @@ void GameObject::SearchResourceToDelete(const ResourceType& type, Resource* to_d
 		break; }
 	case ResourceType::RESOURCE_SHADER: {
 		ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-		if (material != nullptr && material->material->simple_depth_shader == (ResourceShader*)to_delete) {
-			material->material->simple_depth_shader = App->resources->simple_depth_shader;
-			App->resources->simple_depth_shader->IncreaseReferences();
+		if (material != nullptr && material->material->used_shader == (ResourceShader*)to_delete) {
+			material->material->used_shader = App->resources->default_shader;
+			App->resources->default_shader->IncreaseReferences();
 		}
 		break; }
 	case ResourceType::RESOURCE_MESH: {

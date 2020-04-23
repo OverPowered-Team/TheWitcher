@@ -13,7 +13,11 @@
 ComponentRigidBody::ComponentRigidBody(GameObject* go) : ComponentBasePhysic(go)
 {
 	type = ComponentType::RIGID_BODY;
-	Reset();
+
+	SetMass(1.0f);
+	SetDrag(0.f);
+	SetAngularDrag(0.f);
+
 	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_ADDED);
 }
 
@@ -86,30 +90,6 @@ bool ComponentRigidBody::DrawInspector()
 	ImGui::PopID();
 
 	return true;
-}
-
-void ComponentRigidBody::Reset()
-{
-	bool values[3] = { false, false, false };
-
-	SetIsKinematic(false);
-	SetMass(1.f);
-	SetDrag(0.f);
-	SetAngularDrag(0.1f);
-	SetFreezePosition(values);
-	SetFreezeRotation(values);
-}
-
-void ComponentRigidBody::Clone(Component* clone)
-{
-	ComponentRigidBody* rb = (ComponentRigidBody*)clone;
-
-	rb->SetIsKinematic(is_kinematic);
-	rb->SetMass(mass);
-	rb->SetDrag(drag);
-	rb->SetAngularDrag(angular_drag);
-	rb->SetFreezePosition(freeze_position);
-	rb->SetFreezeRotation(freeze_rotation);
 }
 
 void ComponentRigidBody::SaveComponent(JSONArraypack* to_save)

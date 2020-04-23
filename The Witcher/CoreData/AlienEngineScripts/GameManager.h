@@ -16,7 +16,7 @@ public:
 	GameManager();
 	virtual ~GameManager();
 
-	static GameManager* instance;
+	static GameManager* manager;
 	EventManager* event_manager = nullptr;
 	EnemyManager* enemy_manager = nullptr;
 	DialogueManager* dialogue_manager = nullptr;
@@ -27,12 +27,12 @@ public:
 	void Awake();
 	void Start();
 	void Update();
+
 };
-GameManager* GameManager::instance = 0;
+GameManager* GameManager::manager = nullptr;
 
 ALIEN_FACTORY GameManager* CreateGameManager() {
 	GameManager* alien = new GameManager();
-	GameManager::instance = alien;
 	// To show in inspector here
 
 	return alien;

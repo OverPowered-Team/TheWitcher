@@ -43,12 +43,14 @@ ComponentCollider::~ComponentCollider()
 
 void ComponentCollider::SetCenter(const float3& value)
 {
-	center = value;
-	PxTransform trans = shape->getLocalPose();
-	trans.p = F3_TO_PXVEC3(center.Mul(physics->scale));
-	BeginUpdateShape();
-	shape->setLocalPose(trans);
-	EndUpdateShape();
+	if (shape != nullptr) {
+		center = value;
+		PxTransform trans = shape->getLocalPose();
+		trans.p = F3_TO_PXVEC3(center.Mul(physics->scale));
+		BeginUpdateShape();
+		shape->setLocalPose(trans);
+		EndUpdateShape();
+	}
 }
 
 void ComponentCollider::SetRotation(const float3& value)
@@ -120,12 +122,12 @@ void ComponentCollider::SetCollisionLayer(std::string layer)
 	BeginUpdateShape();
 	PxFilterData filter_data;
 	filter_data.word0 = index;
-	filter_data.word1 = physics->ID;
+	filter_data.word1 = game_object_attached->ID;
 	shape->setSimulationFilterData(filter_data);
 	shape->setQueryFilterData(filter_data);
 	EndUpdateShape();
 
-	physics->ChangedFilters();
+	physics->WakeUp();
 }
 
 std::string ComponentCollider::GetCollisionLayer()
@@ -163,7 +165,12 @@ void ComponentCollider::LoadComponent(JSONArraypack* to_load)
 	SetBouncing(to_load->GetNumber("Bouncing"));
 	SetStaticFriction(to_load->GetNumber("StaticFriction"));
 	SetDynamicFriction(to_load->GetNumber("DynamicFriction"));
-	SetCollisionLayer(to_load->GetString("CollisionLayer"));
+	try {
+		SetCollisionLayer(to_load->GetString("CollisionLayer"));
+	}
+	catch (...) {
+		SetCollisionLayer("Default");
+	}
 	EndUpdateShape(true);
 }
 
@@ -341,16 +348,17 @@ void ComponentCollider::HandleAlienEvent(const AlienEvent& e)
 
 void ComponentCollider::InitCollider()
 {
-	shape->userData = this;
-	go->SendAlientEventThis(this, AlienEventType::COLLIDER_ADDED);
-	SetCollisionLayer("Default");
+	if (shape != nullptr) {
+		shape->userData = this;
+		go->SendAlientEventThis(this, AlienEventType::COLLIDER_ADDED);
+		SetCollisionLayer("Default");
+	}
 }
 
 void ComponentCollider::InitMaterial()
 {
 	SetStaticFriction(0.5f);
 	SetDynamicFriction(0.5f);
-	SetBouncing(0.5f);
 	SetFrictionCombineMode(CombineMode::Average);
 	SetBouncingCombineMode(CombineMode::Average);
 }

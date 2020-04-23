@@ -55,19 +55,19 @@ public:
 	Quat GetRotation();
 	void SetTransform(const float3 position, const Quat rotation);
 
-	void  SetIsKinematic(const bool value);
-	bool  GetIsKinematic() { return is_kinematic; }
-	void  SetMass(const float mass);
+	void SetIsKinematic(const bool value);
+	bool GetIsKinematic() { return is_kinematic; }
+	void SetMass(const float mass);
 	float GetMass() { return mass; }
-	void  SetDrag(const float drag);
+	void SetDrag(const float drag);
 	float GetDrag() { return drag; }
-	void  SetAngularDrag(const float angular_drag);
+	void SetAngularDrag(const float angular_drag);
 	float GetAngularDrag() { return angular_drag; }
 
-	void  SetFreezePosition(bool values[3]);
-	void  GetFreezePosition(bool values[3]);
-	void  SetFreezeRotation(bool values[3]);
-	void  GetFreezeRotation(bool values[3]);
+	void SetFreezePosition(bool values[3]);
+	void GetFreezePosition(bool values[3]);
+	void SetFreezeRotation(bool values[3]);
+	void GetFreezeRotation(bool values[3]);
 				
 	float3 GetVelocity();
 	void SetVelocity(const float3 velocity);
@@ -81,8 +81,8 @@ private:
 	void Update();
 	bool DrawInspector();
 
-	void Reset();
-	void Clone(Component* clone);
+	void Reset(){}
+	void Clone(Component* clone) {}
 	void SaveComponent(JSONArraypack* config);
 	void LoadComponent(JSONArraypack* config);
 
@@ -91,7 +91,7 @@ private:
 
 private:
 
-	float mass = 1.f;
+	float mass = 0.0f;
 	float drag = 0.f;
 	float angular_drag = 0.f;
 	bool use_gravity = true;

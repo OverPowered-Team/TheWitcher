@@ -1,5 +1,4 @@
 #include "Ghoul.h"
-#include "MusicController.h"
 
 Ghoul::Ghoul() : Enemy()
 {
@@ -33,7 +32,6 @@ void Ghoul::SetStats(const char* json)
 void Ghoul::StartEnemy()
 {
 	type = EnemyType::GHOUL;
-    m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }
 
@@ -44,19 +42,9 @@ void Ghoul::UpdateEnemy()
 	{
     case Enemy::EnemyState::IDLE:
         if (distance < stats["VisionRange"].GetValue())
-        {
             state = Enemy::EnemyState::MOVE;
-            m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
-            m_controller->has_changed = true;
-        }
         break;
     case Enemy::EnemyState::MOVE:
-        if (distance > stats["VisionRange"].GetValue())
-        {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-        }
-
         Move(direction);
         break;
     case Enemy::EnemyState::ATTACK:

@@ -4,7 +4,6 @@
 #include "Macros/AlienScripts.h"
 
 class CameraMovement;
-class MusicController;
 
 class ALIEN_ENGINE_API TriggerMusicInteractive : public Alien {
 public:
@@ -27,7 +26,6 @@ public:
 	GameObject* camera = nullptr;
 	CameraMovement* cam_script = nullptr;
 	ComponentAudioEmitter* emitter = nullptr;
-	MusicController* m_controller = nullptr;
 	GameObject* p1 = nullptr;
 	GameObject* p2 = nullptr;
 	int player_counter = 0;

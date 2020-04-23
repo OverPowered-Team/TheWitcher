@@ -26,21 +26,8 @@ void EnemyManager::Start()
 
 void EnemyManager::Update()
 {
-	is_combat_enemies = false;
-
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->UpdateEnemy();
-		if ((*item)->is_combat)
-		{
-			is_combat_enemies = true;
-			// Set combat music
-		}
-			
-	}
-
-	if (!is_combat_enemies)
-	{
-		//Set normal music
 	}
 }
 

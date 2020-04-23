@@ -8,7 +8,7 @@
 
 GameManager::GameManager() : Alien()
 {
-
+	manager = this;
 }
 
 GameManager::~GameManager()
@@ -17,11 +17,11 @@ GameManager::~GameManager()
 
 void GameManager::Awake()
 {
-	event_manager = game_object->GetComponent<EventManager>();
-	enemy_manager = game_object->GetComponent<EnemyManager>();
+	event_manager =	game_object->GetComponent<EventManager>();
+	enemy_manager =	game_object->GetComponent<EnemyManager>();
 	dialogue_manager = game_object->GetComponent<DialogueManager>();
 	player_manager = game_object->GetComponent<PlayerManager>();
-	relic_manager = game_object->GetComponent<RelicManager>();
+	relic_manager =	game_object->GetComponent<RelicManager>();
 	rumbler_manager = game_object->GetComponent<RumblerManager>();
 }
 

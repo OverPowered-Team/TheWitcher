@@ -70,7 +70,6 @@ public:
 	void HandleMovement();
 	void EffectsUpdate();
 	void Jump();
-	void Fall();
 	void Roll();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
@@ -93,8 +92,6 @@ public:
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
 
-	void HitFreeze(float freeze_time);
-
 public:
 	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
@@ -105,7 +102,7 @@ public:
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	float2 movement_input;
-	bool mov_input = false;
+	float stick_threshold = 0.1f;
 
 	float revive_range = 5.0f;
 
@@ -161,6 +158,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->stick_threshold);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
@@ -174,19 +172,3 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	return player;
 }
-
-/*class PlayerState {
-	PlayerState() {}
-	virtual ~PlayerState() {}
-
-	virtual void HandleInput() {}
-	virtual void Update() {}
-};
-
-class OnGroundState: public PlayerState {
-	OnGroundState() {}
-	virtual ~OnGroundState() {}
-
-	virtual void HandleInput() {}
-	virtual void Update() {}
-};*/

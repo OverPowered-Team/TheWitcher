@@ -2,7 +2,6 @@
 #include "PlayerManager.h"
 #include "UltiBar.h"
 #include "InGame_UI.h"
-#include "Scores_Data.h"
 
 PlayerManager::PlayerManager() : Alien()
 {
@@ -14,12 +13,13 @@ PlayerManager::~PlayerManager()
 
 void PlayerManager::Start()
 {
-	auto player_go = GameObject::FindGameObjectsWithTag("Player");
+/*	auto player_go = GameObject::FindGameObjectsWithTag("Player");
+
 	for (auto i = player_go.begin(); i != player_go.end(); ++i) {
 		players.push_back((*i)->GetComponent<PlayerController>());
-	}
+	}*/
 
-	ulti_bar = GameObject::FindWithName("Ulti_bar");
+	//ulti_bar = GameObject::FindWithName("Ulti_bar");
 }
 
 void PlayerManager::Update()
@@ -36,8 +36,6 @@ void PlayerManager::OnPlayerDead(PlayerController* dead_player)
 
 	if (players_dead.size() == players.size())
 	{
-		Scores_Data::player1_kills = players[0]->player_data.total_kills;
-		Scores_Data::player2_kills = players[1]->player_data.total_kills;
 		GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->YouDied(); 
 	}
 }
