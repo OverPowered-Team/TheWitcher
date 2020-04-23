@@ -699,7 +699,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (!godmode)
 	{
-		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD) {
+		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD && state != PlayerState::DASHING) {
 
 			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
 
