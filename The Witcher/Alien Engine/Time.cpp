@@ -40,7 +40,6 @@ void Time::Update()
 
 void Time::Play()
 {
-	static std::string actual_scene_name;
 	static std::vector<std::string> actual_scene_names;
 	if (state == GameState::NONE) {
 #ifndef GAME_VERSION
@@ -48,9 +47,6 @@ void Time::Play()
 			for each (ResourceScene * scene in App->objects->current_scenes) {
 				actual_scene_names.push_back(scene->GetName());
 			}
-		}
-		else {
-			actual_scene_names.clear();
 		}
 		App->objects->SaveScene(nullptr, "Library/play_scene.alienScene");
 		App->objects->ignore_cntrlZ = true;
@@ -88,12 +84,22 @@ void Time::Play()
 			for (auto item = actual_scene_names.begin(); item != actual_scene_names.end(); ++item) {
 				ResourceScene* scene = App->resources->GetSceneByName((*item).data());
 				if (scene != nullptr) {
-					App->objects->current_scenes.push_back(scene);
+					bool exists = false;
+					for (auto item = App->objects->current_scenes.begin(); item != App->objects->current_scenes.end(); ++item) {
+						if ((*item) == scene) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists) {
+						App->objects->current_scenes.push_back(scene);
+					}
 				}
 			}
 		}
 		App->ui->panel_console->game_console = false;
 		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
+		actual_scene_names.clear();
 #endif
 	}
 }

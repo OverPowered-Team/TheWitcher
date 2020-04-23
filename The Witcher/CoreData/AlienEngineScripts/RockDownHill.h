@@ -20,6 +20,7 @@ public:
 
 	float3 direction = float3::zero();
 
+	float damage = 1.f;
 private:
 	float3 axis_rot = float3::zero();
 	ComponentRigidBody* rb = nullptr;
@@ -30,6 +31,8 @@ private:
 ALIEN_FACTORY RockDownHill* CreateRockDownHill() {
 	RockDownHill* alien = new RockDownHill();
 	// To show in inspector here
+
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->damage);
 
 	return alien;
 } 

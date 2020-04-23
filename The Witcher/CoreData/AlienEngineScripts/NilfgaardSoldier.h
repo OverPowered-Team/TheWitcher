@@ -23,6 +23,9 @@ public:
 	void UpdateEnemy() override;
 
 	void SetStats(const char* json) override;
+	//void Move(float3 direction) override;
+	//void Attack() override;
+	float GetDamaged(float dmg, PlayerController* player) override;
 	void Action() override;
 	void Block();
 	void Flee(float3 direction);
