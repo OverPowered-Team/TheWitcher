@@ -11,7 +11,7 @@ DebugManager::~DebugManager()
 
 void DebugManager::Start()
 {
-	geralt_controller = GameObject::FindWithName("Geralt")->GetComponent<PlayerController>();
+	geralt_controller = GameObject::FindWithName("Geralt_Prefab")->GetComponent<PlayerController>();
 	yennefer_controller = GameObject::FindWithName("Yennefer")->GetComponent<PlayerController>();
 	main_camera = Camera::GetCurrentCamera();
 }
