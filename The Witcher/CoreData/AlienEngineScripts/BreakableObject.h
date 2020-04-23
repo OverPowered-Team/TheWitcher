@@ -9,12 +9,14 @@ public:
 
 	BreakableObject();
 	virtual ~BreakableObject();
-
+	
+	void Start();
 	void Explode();
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
 	Prefab object_broken;
+	std::map<std::string, ComponentParticleSystem*> particles;
 
 	float force = 15.f;
 	float time_to_despawn = 5.f;
