@@ -86,7 +86,7 @@ void Ghoul::CleanUpEnemy()
 {
 }
 
-void Ghoul::Action()
+void Ghoul::Action() 
 {
     // Check if inside range or just entered
     if (distance < stats["AttackRange"].GetValue())
@@ -110,7 +110,7 @@ void Ghoul::JumpImpulse()
 void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
-        if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetMaxValue())
+        if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
             state = Enemy::EnemyState::MOVE;
         }
@@ -121,13 +121,9 @@ void Ghoul::OnAnimationEnd(const char* name)
     }
     else if (strcmp(name, "Jump") == 0)
     {
-        if (distance < stats["VisionRange"].GetMaxValue() && distance > stats["JumpRange"].GetMaxValue())
+        if (distance < stats["VisionRange"].GetValue())
         {
             state = Enemy::EnemyState::MOVE;
-        }
-        else if(distance < stats["JumpRange"].GetMaxValue())
-        {
-            Action();
         }
         else
         {
