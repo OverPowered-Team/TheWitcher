@@ -1,6 +1,6 @@
 # TheWitcher
 
-TheWitcher v.0.2.3
+TheWitcher v.0.4.0
 
 ## Description
 
@@ -10,9 +10,10 @@ The player will end up mastering its character, each time being able to complete
 
 In this release you will see:
 
+V.2
 Main character with basic stage navigation (Idle / move / dash / jump).
-The main character must collide with the level.
-The character looking graphically finished.
+The two main character must collide with the level.
+The two characters looking graphically finished.
 A basic attack of the player.
 We must be able to play 2 players with Xbox controller.
 Blockout of the integrated engine and navigable scenario.
@@ -21,6 +22,55 @@ Functional camera system.
 HUD integrated.
 Sound: walk and hit.
 Particles: walk and hit.
+
+V.3
+Camera block the movement of the players
+Combat
+	One magic attack + particle system finished for this attack
+	Working combos (1 minimum)
+	PickUps: (+health +stamina,...): can be infinite and used with a button
+	Basic revival
+2 enemies (can share the same model) with Walk + Attack + Die animations
+	Ranged
+	Melee
+Game Loop
+	Menu -> Scene (+Pause) -> Win/Lose -> Menu
+	Initial narrative should be included at some point of the loop (can be an intro a previous to the scene,... up to you)
+	Win screen should display a summary of the level
+Main Menu: Start / Quit (+others)
+	Initial art proposal
+	Buttons should have visual feedback (animations + audio)
+Level 1 Blockout finished
+	Part of the level with final art - Includes lighting (no need for shadows… yet)
+	Breakable prop (crate, barrel,...)
+Environment music, transitioning from menu to scene. There should be music changes depending on the level (combat scene or location)
+Sound FX
+	All attacks should have a sound (can be a placeholder)
+	Movement, death
+
+V.4
+Combat: Game Feeling
+Polish Feedback:
+Exaggeration
+Add complexity to particles, multiple sprites
+Sound fx
+Reactions feedback
+Geralt model polished
+
+2 Enemies:
+1 ranged & 1 melee - different models. 4 behaviours in total: Melee, Ranged with escape, Shield & Jump.
+
+Boss:
+Main mechanics & LowPoly model
+
+Levels:
+1st level art finished with “life” to the environment
+Polished camera positions and blocking objects
+1st approach to shadows
+Another Breakable prop finished -> explosion particles / animation & sound
+Terrain
+Environmental music polished
+2nd level blockout with colliders and camera transitions
 
 ## Links
 
@@ -70,6 +120,8 @@ Yessica Tamara Servín Domínguez [YessicaSD](https://github.com/YessicaSD)
 
 Francisco Javier Venteo Rodrigo [CereVenteo](https://github.com/CereVenteo)
 
+Victor Segura Blanco [VictorSegura99](https://github.com/VictorSegura99)
+
 #### DESIGN
 
 Castillo Arria Aleix [AleixCas95](https://github.com/AleixCas95)
@@ -91,8 +143,6 @@ Jaume Montagut Guix [JaumeMontagut](https://github.com/JaumeMontagut) as LEAD
 Alejandro Paris Gómez [AlejandroParis](https://github.com/AlejandroParis)
 
 Guillem Sanchez Herranz [GuillemSanchez](https://github.com/GuillemSanchez)
-
-Victor Segura Blanco [VictorSegura99](https://github.com/VictorSegura99)
 
 Marc Tarrés Urbieta [MAtaur00](https://github.com/MAtaur00)
 
@@ -119,6 +169,19 @@ Marti Torras Isanta [martitorras](https://github.com/martitorras)
 Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
 
 ## Controls
+
+- Debug:
+
+  - F3+G: Godmode
+
+  - F3+M: Main_Menu
+
+  - F3+W: NewWin_Menu
+
+  - F3+L: Mahakam
+
+  - F3+D: EndGame_Menu
+
 ### Player controls:
 
 - Controller:
@@ -129,7 +192,9 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
   
   - RB: DASH
   
-  - B: SPELL
+  - LB: SPELL
+
+  - B: REVIVE
   
   - A: JUMP
 
