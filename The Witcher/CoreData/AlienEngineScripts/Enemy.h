@@ -57,6 +57,8 @@ public:
 	float GetDamaged(float dmg, PlayerController* player);
 	void AddEffect(Effect* new_effect);
 
+	void HitFreeze(float freeze_time);
+
 public:
 	float distance = 0.0F;
 	float3 direction;

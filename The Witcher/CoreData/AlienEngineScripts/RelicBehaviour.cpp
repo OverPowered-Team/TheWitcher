@@ -19,7 +19,8 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
+	if(GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
 }
 
 // AttackRelic
@@ -136,16 +137,6 @@ void RelicBehaviour::Start()
 		SetRelic(json_str.data());
 	}
 
-	////Geralt dialogue
-	//geraltDialogue.audioData.eventName = "Hit_Sword";
-	//geraltDialogue.priority = "Relics";
-	//geraltDialogue.entityName = "Geralt";
-
-	////Yennefer dialogue
-	//YenneferDialogue.audioData.eventName = "Hit_Sword";
-	//YenneferDialogue.priority = "Relics";
-	//YenneferDialogue.entityName = "Yennefer";
-
 }
 
 void RelicBehaviour::Update()
@@ -185,11 +176,6 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
 			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
-			//GameObject.Find("Canvas").GetComponent<UIManager>().CreateRelicPopup((AttackRelic)relic, relic_type);
-
-			//it remains to be determined if it is Geralt's audio or Yennefer's. 
-			//-> You can check if it's yen or geralt with variable (PlayerController)->player_data->player_type 
-			/*Game_Manager->event_manager->ReceiveDialogueEvent(geraltDialogue);*/
 
 			Destroy(this->game_object);		
 		}
