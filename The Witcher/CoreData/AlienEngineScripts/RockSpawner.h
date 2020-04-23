@@ -27,6 +27,8 @@ public:
 	float rocks_rotation = 5.f;
 	float rocks_speed = 5.f;
 
+	float time_despawn = 9.f;
+
 private:
 	float timer = 0.f;
 	float time_btw = 0.f;
@@ -52,6 +54,7 @@ ALIEN_FACTORY RockSpawner* CreateRockSpawner() {
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->rocks_rotation);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->rocks_speed);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_despawn);
 
 	return alien;
 } 
