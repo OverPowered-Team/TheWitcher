@@ -16,7 +16,7 @@ void MoveImages::Start()
 void MoveImages::Update()
 {
 	current_time = Time::GetGameTime() - start_time;
-	if (!started_event && current_time > start_movement)
+	if (!started_event && current_time >= start_movement)
 	{
 		Tween::TweenMoveTo(game_object, nextPos->transform->GetGlobalPosition(), transition_duration, Tween::linear);
 		started_event = true;
