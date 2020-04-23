@@ -208,6 +208,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		break;
 	case EnemyType::NILFGAARD_SOLDIER:
 		audio_emitter->StartSound("SoldierHit");
+		particles["hit_particle"]->Restart();
 		break;
 	}
 

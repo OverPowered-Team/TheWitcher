@@ -171,6 +171,7 @@ void PlayerController::Update()
 		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
+		player_data.speed += player_data.speed * -0.075f;
 		break;
 	case PlayerController::PlayerState::CASTING:
 		attacks->UpdateCurrentAttack();
@@ -689,7 +690,8 @@ bool PlayerController::CheckForPossibleRevive()
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
-	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+	if(state != PlayerState::DASHING)
+		HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
 
 	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
