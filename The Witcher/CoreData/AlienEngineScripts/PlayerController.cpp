@@ -75,6 +75,7 @@ void PlayerController::Start()
 		keyboard_heavy_attack = SDL_SCANCODE_B;
 		keyboard_revive = SDL_SCANCODE_C;
 		keyboard_ultimate = SDL_SCANCODE_X;
+		keyboard_spell = SDL_SCANCODE_F;
 	}
 	else if (controller_index == 2) {
 		keyboard_move_up = SDL_SCANCODE_I;
@@ -86,7 +87,8 @@ void PlayerController::Start()
 		keyboard_light_attack = SDL_SCANCODE_RCTRL;
 		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
 		keyboard_revive = SDL_SCANCODE_M;
-		keyboard_ultimate = SDL_SCANCODE_COMMA;
+		keyboard_ultimate = SDL_SCANCODE_APOSTROPHE;
+		keyboard_spell = SDL_SCANCODE_COMMA;
 	}
 }
 
