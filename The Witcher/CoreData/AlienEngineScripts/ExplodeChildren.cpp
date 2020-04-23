@@ -8,6 +8,15 @@ ExplodeChildren::~ExplodeChildren()
 {
 }
 
+void ExplodeChildren::Start()
+{
+	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+		(*it)->OnStop();
+	}
+}
+
 void ExplodeChildren::Explode()
 {
 	auto rbs = game_object->GetComponentsInChildren<ComponentRigidBody>();
@@ -16,6 +25,9 @@ void ExplodeChildren::Explode()
 	}
 
 	Invoke(std::bind(&ExplodeChildren::DeleteMyself, this), time_to_disappear);
+
+	particles["explosion"]->Restart();
+	particles["smoke"]->Restart();
 }
 
 void ExplodeChildren::SetVars(float force, float time_despawn)
