@@ -62,7 +62,6 @@ void NilfgaardSoldier::Action()
 	{
 	case NilfgaardSoldier::NilfgaardType::SWORD:
 		animator->PlayState("Attack");
-		audio_emitter->StartSound("SoldierSword");
 		state = EnemyState::ATTACK;
 		break;
 	case NilfgaardSoldier::NilfgaardType::ARCHER:

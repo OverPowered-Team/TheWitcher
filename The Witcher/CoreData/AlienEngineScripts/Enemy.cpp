@@ -144,7 +144,7 @@ void Enemy::Move(float3 direction)
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
-	if (distance < stats["AttackRange"].GetValue() || (type == EnemyType::GHOUL && distance < stats["JumpRange"].GetValue()))
+	if ((distance < stats["AttackRange"].GetValue() && type != EnemyType::GHOUL) || (type == EnemyType::GHOUL && distance < stats["JumpRange"].GetValue()))
 	{
 		animator->SetFloat("speed", 0.0F);
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);

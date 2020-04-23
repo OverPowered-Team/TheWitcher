@@ -4,8 +4,8 @@
             {
                 "Name": "CameraTrigger",
                 "FamilyNumber": 1,
-                "ID": "18085110840167442527",
-                "ParentID": "0",
+                "ID": "12034926414822494983",
+                "ParentID": "15307433602627518110",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -20,14 +20,14 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            0,
-                            0
+                            3.3313031196594238,
+                            -4.1104707717895508
                         ],
                         "Rotation": [
                             0,
+                            0.99999934434890747,
                             0,
-                            0,
-                            1
+                            0.0011581646976992488
                         ],
                         "Scale": [
                             1,
@@ -35,12 +35,12 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14172180922138881350"
+                        "ID": "12577857482658661638"
                     },
                     {
                         "Type": 29,
-                        "ID": "14689774901122003496",
-                        "ResourceID": "3700915403338815760",
+                        "ID": "1905889600949426141",
+                        "ResourceID": "1150593167430491262",
                         "DataName": "TriggerCamera",
                         "HasInspector": true,
                         "Inspector": [
@@ -85,6 +85,15 @@
                                 "VarType": 9,
                                 "Name": "prev_camera.to_move",
                                 "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.axis_type",
+                                "enumInt": 0
                             },
                             {
                                 "VarType": 12,
@@ -133,6 +142,15 @@
                                 "gameobject": "0"
                             },
                             {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
                                 "VarType": 12,
                                 "Name": ""
                             }
@@ -143,8 +161,8 @@
             {
                 "Name": "Enter",
                 "FamilyNumber": 2,
-                "ID": "9871466256284826964",
-                "ParentID": "18085110840167442527",
+                "ID": "12097540362721780405",
+                "ParentID": "12034926414822494983",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -174,19 +192,26 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16485972733952370848"
+                        "ID": "9802409602732144515"
                     },
                     {
+                        "Enabled": true,
                         "Type": 7,
-                        "IsTrigger": true,
                         "Center": [
                             0,
                             0,
                             0
                         ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
                         "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
                         "Size": [
                             10,
                             10,
@@ -195,8 +220,8 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "1774008189766496493",
-                        "ResourceID": "7753277895768345165",
+                        "ID": "18281867482425637907",
+                        "ResourceID": "5679370406799328818",
                         "DataName": "CameraEnterExit",
                         "HasInspector": true,
                         "Inspector": [
@@ -212,8 +237,8 @@
             {
                 "Name": "Middle",
                 "FamilyNumber": 2,
-                "ID": "3271354999643299613",
-                "ParentID": "18085110840167442527",
+                "ID": "5373768697094091536",
+                "ParentID": "12034926414822494983",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -243,19 +268,26 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4490981084560481526"
+                        "ID": "3918227431662865728"
                     },
                     {
+                        "Enabled": true,
                         "Type": 7,
-                        "IsTrigger": true,
                         "Center": [
                             0,
                             0,
                             0
                         ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
                         "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
                         "Size": [
                             10,
                             10,
@@ -264,8 +296,8 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "3845720103999737345",
-                        "ResourceID": "7753277895768345165",
+                        "ID": "2151619075844367415",
+                        "ResourceID": "5679370406799328818",
                         "DataName": "CameraEnterExit",
                         "HasInspector": true,
                         "Inspector": [
@@ -281,8 +313,8 @@
             {
                 "Name": "Exit",
                 "FamilyNumber": 2,
-                "ID": "4855820789345689895",
-                "ParentID": "18085110840167442527",
+                "ID": "14027554767540516376",
+                "ParentID": "12034926414822494983",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -312,19 +344,26 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4461403605783071578"
+                        "ID": "5653784594107936345"
                     },
                     {
+                        "Enabled": true,
                         "Type": 7,
-                        "IsTrigger": true,
                         "Center": [
                             0,
                             0,
                             0
                         ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
                         "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
                         "Size": [
                             10,
                             10,
@@ -333,8 +372,8 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "17550412997121333552",
-                        "ResourceID": "7753277895768345165",
+                        "ID": "14148119951563777795",
+                        "ResourceID": "5679370406799328818",
                         "DataName": "CameraEnterExit",
                         "HasInspector": true,
                         "Inspector": [
