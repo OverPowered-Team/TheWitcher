@@ -52,6 +52,8 @@ public:
 
 	Prefab crow_prefab;
 	GameObject* crows = nullptr;
+	GameObject* meshes = nullptr;
+	GameObject* cloud = nullptr;
 
 	float3 direction;
 	float direction_time = 0.0f;
@@ -123,6 +125,7 @@ ALIEN_FACTORY Leshen* CreateLeshen() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->crow_prefab);
 	SHOW_VOID_FUNCTION(Leshen::LaunchRootAction, leshen);
 	SHOW_VOID_FUNCTION(Leshen::LaunchCrowsAction, leshen);
+	SHOW_VOID_FUNCTION(Leshen::EndMeleeAction, leshen);
 
 	return leshen;
 }

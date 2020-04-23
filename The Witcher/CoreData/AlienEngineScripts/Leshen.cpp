@@ -17,6 +17,9 @@ void Leshen::StartEnemy()
 	type = EnemyType::LESHEN;
 
 	Enemy::StartEnemy();
+
+	meshes = game_object->GetChild(3);
+	cloud = game_object->GetChild(2);
 }
 
 void Leshen::UpdateEnemy()
@@ -241,6 +244,8 @@ void Leshen::LaunchCrowsAction()
 void Leshen::LaunchCloudAction()
 {
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
+	meshes->SetEnable(false);
+	cloud->SetEnable(true);
 }
 
 Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
@@ -317,7 +322,7 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 		}
 	}
 	else {
-		current_action->state = Leshen::ActionState::ENDED;
+		EndCloudAction();
 	}
 
 	return current_action->state;
@@ -337,7 +342,7 @@ void Leshen::EndRootAction(GameObject* root)
 
 void Leshen::EndMeleeAction()
 {
-	
+	current_action->state = Leshen::ActionState::ENDED;
 }
 
 void Leshen::EndCrowsAction(GameObject* crow)
@@ -348,7 +353,9 @@ void Leshen::EndCrowsAction(GameObject* crow)
 
 void Leshen::EndCloudAction()
 {
-	
+	meshes->SetEnable(false);
+	cloud->SetEnable(true);
+	current_action->state = Leshen::ActionState::ENDED;
 }
 
 void Leshen::SetActionVariables()
@@ -385,24 +392,20 @@ void Leshen::HandleHitCount()
 
 void Leshen::SetRandomDirection()
 {
-	if(rand_x > 0)
+	if (rand_x > 0) {
 		rand_x = Random::GetRandomIntBetweenTwo(-1, 0);
-	else if((rand_x < 0))
+		rand_z = -1;
+	}
+	else if (rand_x < 0) {
 		rand_x = Random::GetRandomIntBetweenTwo(0, 1);
+		rand_z = -1;
+	}
 	else {
 		rand_x = Random::GetRandomIntBetweenTwo(-1, 1);
+		rand_z = 1;
 	}
 
-	if (rand_z > 0)
-		rand_z = Random::GetRandomIntBetweenTwo(-1, 0);
-	else if ((rand_z < 0))
-		rand_z = Random::GetRandomIntBetweenTwo(0, 1);
-	else {
-		if (rand_x != 0)
-			rand_z = Random::GetRandomIntBetweenTwo(-1, 1);
-		else
-			rand_z = 1;
-	}
+
 
 	direction = float3(rand_x, 0, rand_z);
 }
