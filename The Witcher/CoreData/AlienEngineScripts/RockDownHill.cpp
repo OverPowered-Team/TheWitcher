@@ -1,4 +1,5 @@
 #include "RockDownHill.h"
+#include "PlayerController.h"
 
 RockDownHill::RockDownHill() : Alien()
 {
@@ -35,5 +36,13 @@ void RockDownHill::OnTriggerEnter(ComponentCollider* trigger)
 {
 	if (strcmp(trigger->game_object_attached->GetTag(), "RockEnd") == 0) {
 		GameObject::Destroy(game_object);
+	}
+	else if (strcmp(trigger->game_object_attached->GetTag(), "Player") == 0) {
+		PlayerController* player_ctrl = trigger->game_object_attached->GetComponent<PlayerController>();
+		if (player_ctrl && player_ctrl->state != PlayerController::PlayerState::DEAD)
+		{
+			Destroy(game_object);
+			player_ctrl->ReceiveDamage(damage, direction.Normalized() * 0.3f);
+		}
 	}
 }
