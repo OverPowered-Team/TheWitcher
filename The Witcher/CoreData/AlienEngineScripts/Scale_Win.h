@@ -31,11 +31,12 @@ public:
 	int current_points2 = 0;
 
 private:
-	// Scales
+	// Plates
 	GameObject* left_scale = nullptr;
 	GameObject* right_scale = nullptr;
 	ComponentRigidBody* rigid_body1 = nullptr;
 	ComponentRigidBody* rigid_body2 = nullptr;
+	GameObject* connector = nullptr;
 
 	// Spawners
 	Spawner* spawner_l = nullptr;
@@ -60,8 +61,6 @@ ALIEN_FACTORY Scale_Win* CreateScale_Win() {
 	Scale_Win* alien = new Scale_Win();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->player1_points);
-	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->player2_points);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->max_Y);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_scale);
 

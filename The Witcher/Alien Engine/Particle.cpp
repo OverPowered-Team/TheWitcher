@@ -292,7 +292,7 @@ void Particle::Draw()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if (owner->material != nullptr && p_material != nullptr)
-		p_material->used_shader->Unbind();
+		p_material->UnbindMaterial();
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);

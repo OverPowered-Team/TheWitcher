@@ -7,32 +7,32 @@
             {
                 "Name": "Idle",
                 "Speed": 1,
-                "Clip": "0"
+                "Clip": "17597294058179667036"
             },
             {
                 "Name": "Run",
                 "Speed": 1,
-                "Clip": "0"
+                "Clip": "15614024080544662546"
             },
             {
                 "Name": "Jump",
-                "Speed": 1,
-                "Clip": "0"
+                "Speed": 2,
+                "Clip": "2461403856463709162"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
-                "Clip": "0"
+                "Clip": "9090936577813051920"
             },
             {
-                "Name": "Attack",
+                "Name": "Slash",
                 "Speed": 1,
-                "Clip": "12729934716185127298"
+                "Clip": "2909912792962758385"
             },
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "0"
+                "Clip": "18125317178253250943"
             }
         ],
         "Transitions": [
@@ -69,7 +69,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Attack",
+                "Source": "Slash",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
@@ -85,7 +85,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Attack",
+                "Source": "Slash",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": true,
@@ -150,6 +150,31 @@
             }
         ],
         "BoolParameters": [],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "Ghoul::ActivateCollider",
+                "Animation_Id": "712575525310086962",
+                "Frame": 27,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateCollider",
+                "Animation_Id": "712575525310086962",
+                "Frame": 33,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateCollider",
+                "Animation_Id": "2909912792962758385",
+                "Frame": 26,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateCollider",
+                "Animation_Id": "2909912792962758385",
+                "Frame": 31,
+                "Type": 2
+            }
+        ]
     }
 }

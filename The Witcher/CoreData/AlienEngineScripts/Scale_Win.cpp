@@ -19,6 +19,7 @@ void Scale_Win::Start()
 	right_scale = game_object->GetChild("Right_Scale");
 	rigid_body1 = left_scale->GetComponent<ComponentRigidBody>();
 	rigid_body2 = right_scale->GetComponent<ComponentRigidBody>();
+	connector = game_object->GetChild("Connector");
 
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
@@ -33,8 +34,8 @@ void Scale_Win::Start()
 	for (int i = 1; i <= Scores_Data::player1_kills; ++i)
 	{
 		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
+		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
 
 		Invoke([this, random_pos_x, random_pos_z]() -> void
 			{
@@ -49,8 +50,8 @@ void Scale_Win::Start()
 	for (int i = 1; i <= Scores_Data::player2_kills; ++i)
 	{
 		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.5f, 3.5f);
+		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
 
 		Invoke([this, random_pos_x, random_pos_z]() -> void
 			{
@@ -106,6 +107,11 @@ void Scale_Win::Update()
 		rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());
 		rigid_body2->SetPosition(right_scale->transform->GetLocalPosition());
 		// ------------------------------------------
+
+		// Connector between plates
+		//float3 vector = (left_scale->transform->GetGlobalPosition() - right_scale->transform->GetGlobalPosition()).Normalized();
+		//Quat quat = Quat::RotateAxisAngle(float3(0, 0, 1), vector.AngleBetweenNorm(connector->transform->right));
+		//connector->transform->SetLocalRotation(quat);
 
 		if (Time::GetGameTime() > time + time_to_scale)
 		{ 

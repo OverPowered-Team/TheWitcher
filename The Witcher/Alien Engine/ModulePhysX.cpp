@@ -59,7 +59,6 @@ bool ModulePhysX::Init()
 
 	px_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *px_foundation, PxTolerancesScale(), true, px_pvd);
 
-
 	px_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *px_foundation, PxCookingParams(PxTolerancesScale()));
 	if (!px_cooking)
 		LOG_ENGINE("PxCreateCooking failed!");

@@ -3,7 +3,7 @@
     {
       "name": "L",
       "button": "L",
-      "particle_name": "p_attack",
+      "particle_name": "L_particle",
       "collider": {
         "pos_x": -0.500,
         "pos_y": 4.300,
@@ -17,34 +17,34 @@
       "movement_strength": 0.03,
       "max_snap_distance": 4.5,
       "next_attack_light": "LL",
-      "next_attack_heavy": "End",
-	  "freeze_time": 1
+      "next_attack_heavy": "LH",
+	  "freeze_time": 0.1
     },
     {
       "name": "LH",
       "button": "LH",
-      "particle_name": "p_attack",
+      "particle_name": "LL_particle",
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_y": 8.8,
+        "pos_z": 6.25,
+        "width": 11.7,
+        "height": 18.0,
+        "depth": 13.0
       },
       "base_damage": 5,
       "activation_frame": 25,
-      "movement_strength": 0.1,
+      "movement_strength": 0.02,
       "max_snap_distance": 4.5,
       "next_attack_light": "LHL",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
 
     {
       "name": "LL",
       "button": "LL",
-      "particle_name": "p_attack",
+      "particle_name": "LL_particle",
       "collider": {
         "pos_x": -0.250,
         "pos_y": 4.300,
@@ -59,13 +59,13 @@
       "max_snap_distance": 4.5,
       "next_attack_light": "LLL",
       "next_attack_heavy": "LLH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
 
     {
       "name": "LLL",
       "button": "LLL",
-      "particle_name": "p_attack",
+      "particle_name": "LLL_particle",
       "collider": {
         "pos_x": 0,
         "pos_y": 4.200,
@@ -80,27 +80,27 @@
       "max_snap_distance": 4.5,
       "next_attack_light": "LLLL",
       "next_attack_heavy": "LLLH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LHL",
       "button": "LHL",
       "particle_name": "p_attack",
       "collider": {
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_x": 4.15,
+        "pos_y": 7.8,
+        "pos_z": 6.25,
+        "width": 12.4,
+        "height": 16.6,
+        "depth": 13
       },
       "base_damage": 1.0,
       "activation_frame": 25,
-      "max_snap_distance": 0.03,
-      "movement_strength": 10.0,
+      "max_snap_distance": 4.5,
+      "movement_strength": 0.03,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LLH",
@@ -108,19 +108,19 @@
       "particle_name": "p_attack",
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_y": 6.2,
+        "pos_z": 6.05,
+        "width": 9,
+        "height": 10.8,
+        "depth": 9.2
       },
       "base_damage": 0.7,
       "activation_frame": 25,
-      "max_snap_distance": 0.03,
-      "movement_strength": 10.0,
+      "max_snap_distance": 4.1,
+      "movement_strength": 0.04,
       "next_attack_light": "LLHL",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LLHL",
@@ -136,11 +136,11 @@
       },
       "base_damage": 1.5,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 0.1,
+      "max_snap_distance": 3.2,
+      "movement_strength": 0.02,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LLLL",
@@ -160,7 +160,7 @@
       "movement_strength": 0.05,
       "next_attack_light": "LLLLL",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LLLLL",
@@ -177,50 +177,50 @@
       "base_damage": 1,
       "activation_frame": 17,
       "max_snap_distance": 3.0,
-      "movement_strength": 0.1,
+      "movement_strength": 0.02,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LLLH",
       "button": "LLLH",
       "particle_name": "p_attack",
       "collider": {
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_x": 2.75,
+        "pos_y": 5.45,
+        "pos_z": 8.4,
+        "width": 10.4,
+        "height": 10.3,
+        "depth": 10.4
       },
       "base_damage": 0.7,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 0.1,
+      "max_snap_distance": 3.0,
+      "movement_strength": 0.02,
       "next_attack_light": "End",
       "next_attack_heavy": "LLLHH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "LLLHH",
       "button": "LLLHH",
       "particle_name": "p_attack",
       "collider": {
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_x": 1.35,
+        "pos_y": 5.6,
+        "pos_z": 6.1,
+        "width": 17.1,
+        "height": 10.3,
+        "depth": 15.6
       },
       "base_damage": 1.0,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
-      "movement_strength": 0.1,
+      "movement_strength": 0.03,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
 
     {
@@ -229,39 +229,39 @@
       "particle_name": "p_attack",
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_y": 3.0,
+        "pos_z": 9.450,
+        "width": 6.900,
+        "height": 9.700,
+        "depth": 7.800
       },
       "base_damage": 5,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "max_snap_distance": 3.5,
+      "movement_strength": 0.03,
       "next_attack_light": "HL",
       "next_attack_heavy": "HH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "HL",
       "button": "HL",
       "particle_name": "p_attack",
       "collider": {
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_x": -0.250,
+        "pos_y": 4.300,
+        "pos_z": 7.150,
+        "width": 10.000,
+        "height": 9.400,
+        "depth": 6.000
       },
       "base_damage": 0.5,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "max_snap_distance": 3.0,
+      "movement_strength": 0.01,
       "next_attack_light": "HLL",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "HLL",
@@ -269,39 +269,39 @@
       "particle_name": "p_attack",
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_y": 9.400,
+        "pos_z": 7.500,
+        "width": 10.000,
+        "height": 19.000,
+        "depth": 8.100
       },
       "base_damage": 0.8,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.02,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "HH",
       "button": "HH",
       "particle_name": "p_attack",
       "collider": {
-        "pos_x": 0,
-        "pos_y": 0,
+        "pos_x": 3.000,
+        "pos_y": 9.450,
         "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "width": 11.000,
+        "height": 8.600,
+        "depth": 10.000
       },
       "base_damage": 0.7,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "max_snap_distance": 3.5,
+      "movement_strength": 0.01,
       "next_attack_light": "End",
       "next_attack_heavy": "HHH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "HHH",
@@ -309,19 +309,19 @@
       "particle_name": "p_attack",
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_y": 5.450,
+        "pos_z": 8.750,
+        "width": 8.500,
+        "height": 8.600,
+        "depth": 13.2
       },
       "base_damage": 0.8,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "max_snap_distance": 4.0,
+      "movement_strength": 0.02,
       "next_attack_light": "End",
       "next_attack_heavy": "HHHH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "HHHH",
@@ -329,39 +329,39 @@
       "particle_name": "p_attack",
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_y": 5.45,
+        "pos_z": 11.9,
+        "width": 19.7,
+        "height": 8.6,
+        "depth": 16.3
       },
       "base_damage": 0.7,
       "activation_frame": 25,
       "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.01,
       "next_attack_light": "End",
       "next_attack_heavy": "HHHHH",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "HHHHH",
       "button": "HHHHH",
       "particle_name": "p_attack",
       "collider": {
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "pos_x": 3.55,
+        "pos_y": 5.45,
+        "pos_z": 6.55,
+        "width": 14.2,
+        "height": 14.5,
+        "depth": 13.1
       },
       "base_damage": 1.4,
       "activation_frame": 25,
-      "max_snap_distance": 2.0,
-      "movement_strength": 10.0,
+      "max_snap_distance": 3.0,
+      "movement_strength": 0.01,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     }
   ],
   "Spells": [
@@ -381,7 +381,7 @@
         "height": 50,
         "depth": 50
       },
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "Aard",
@@ -399,7 +399,7 @@
         "height": 200,
         "depth": 200
       },
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "Yrden",
@@ -417,7 +417,7 @@
         "height": 0,
         "depth": 0
       },
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     },
     {
       "name": "Quen",
@@ -435,7 +435,7 @@
         "height": 0,
         "depth": 0
       },
-	  "freeze_time": 1
+	  "freeze_time": 0.1
     }
   ]
 }
