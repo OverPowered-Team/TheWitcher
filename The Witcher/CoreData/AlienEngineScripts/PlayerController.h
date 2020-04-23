@@ -95,6 +95,8 @@ public:
 
 	void HitFreeze(float freeze_time);
 
+	void RemoveFreeze(float speed);
+
 public:
 	int controller_index = 1;
 	PlayerState state = PlayerState::IDLE;
