@@ -32,6 +32,9 @@ void Enemy::StartEnemy()
 	case EnemyType::NILFGAARD_SOLDIER:
 		json_str = "nilfgaardsoldier";
 		break;
+	case EnemyType::LESHEN:
+		json_str = "leshen";
+		break;
 	default:
 		break;
 	}
@@ -193,6 +196,11 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 	
+	if (can_get_interrupted) {
+		state = EnemyState::HIT;
+		animator->PlayState("Hit");
+	}
+
 	switch (type)
 	{
 	case EnemyType::GHOUL:
@@ -202,16 +210,19 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		audio_emitter->StartSound("SoldierHit");
 		break;
 	}
-	
-	state = EnemyState::HIT;
-	animator->PlayState("Hit");
+
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
+
 		animator->SetBool("dead", true);
 		OnDeathHit();
 
-		if (player->attacks->GetCurrentAttack()->IsLast())
+		if (type == EnemyType::LESHEN) {
+			state = EnemyState::DYING;
+			animator->PlayState("Death");
+		}
+		else if (player->attacks->GetCurrentAttack()->IsLast())
 		{
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
@@ -219,10 +230,10 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			switch (type)
 			{
 			case EnemyType::GHOUL:
-				audio_emitter->StartSound("SoldierDeath");
+				audio_emitter->StartSound("GhoulDeath");
 				break;
 			case EnemyType::NILFGAARD_SOLDIER:
-				audio_emitter->StartSound("GhoulDeath");
+				audio_emitter->StartSound("SoldierDeath");
 				break;
 			}
 
@@ -235,13 +246,13 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
 
-				float decapitation_force = 3;
-				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.2f;
-				decapitation_vector += transform->up * decapitation_force * 0.5f;
+				float decapitation_force = 2;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+				decapitation_vector += transform->up * decapitation_force;
 	
 				head_rb->AddForce(decapitation_vector);
-				head_rb->AddTorque(transform->up * decapitation_force);
-				head_rb->AddTorque(transform->forward * decapitation_force * 0.5f);
+				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
 			}
 
 			player->OnEnemyKill();
