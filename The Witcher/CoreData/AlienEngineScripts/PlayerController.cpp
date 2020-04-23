@@ -200,7 +200,6 @@ void PlayerController::Update()
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 
-
 	//Effects-----------------------------
 	EffectsUpdate();
 }
@@ -211,23 +210,23 @@ void PlayerController::UpdateInput()
 	float2 keyboardInput = float2::zero();
 
 	if (Input::GetKeyRepeat(keyboard_move_left)) {
-		keyboardInput.x += 1.f;
+		keyboardInput.x = 1.f;
 	}
 	if (Input::GetKeyRepeat(keyboard_move_right)) {
-		keyboardInput.x -= 1.f;
-	}
-	if (Input::GetKeyRepeat(keyboard_move_up)) {
-		keyboardInput.y += 1.f;
+		keyboardInput.x = -1.f;
 	}
 	if (Input::GetKeyRepeat(keyboard_move_down)) {
-		keyboardInput.y -= 1.f;
+		keyboardInput.y = -1.f;
+	}
+	if (Input::GetKeyRepeat(keyboard_move_up)) {
+		keyboardInput.y = 1.f;
 	}
 
-
-	else if (keyboardInput.Length() > 0)
+	if (keyboardInput.Length() > 0)
 	{
 		animator->SetBool("movement_input", true);
 		mov_input = true;
+		keyboardInput.Normalize();
 		movement_input = keyboardInput;
 	}
 	else if (joystickInput.Length() > 0) {
@@ -688,6 +687,9 @@ bool PlayerController::CheckForPossibleRevive()
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
+	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+
+	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		if (dynamic_cast<AttackEffect*>(*it) != nullptr)
@@ -727,6 +729,14 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			}
 		}
 	}
+}
+
+void PlayerController::HitFreeze(float freeze_time)
+{
+	float speed = animator->GetCurrentStateSpeed();
+	animator->SetCurrentStateSpeed(0);
+	ComponentAnimator* anim = animator;
+	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
 }
 
 void PlayerController::OnUltimateActivation(float value)

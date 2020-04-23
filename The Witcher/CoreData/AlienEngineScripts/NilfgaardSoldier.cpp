@@ -304,6 +304,8 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 
 				if (state == EnemyState::DYING)
 					player->OnEnemyKill();
+
+				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 			}
 		}
 	}
