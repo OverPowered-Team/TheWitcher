@@ -471,7 +471,7 @@ void PlayerController::OnAnimationEnd(const char* name) {
 			state = PlayerState::IDLE;
 			player_data.speed = float3::zero();
 		}
-		if (mov_input)
+		else
 		{
 			state = PlayerState::RUNNING;
 			particles["p_run"]->SetEnable(true);
@@ -716,10 +716,16 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 void PlayerController::HitFreeze(float freeze_time)
 {
+	state = PlayerState::DASHING;
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
-	ComponentAnimator* anim = animator;
-	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
+	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
+}
+
+void PlayerController::RemoveFreeze(float speed)
+{
+	animator->SetCurrentStateSpeed(speed);
+	state = PlayerState::BASIC_ATTACK;
 }
 
 void PlayerController::OnUltimateActivation(float value)
