@@ -124,6 +124,8 @@ void Ghoul::OnAnimationEnd(const char* name)
         }
         else
         {
+            m_controller->is_combat = false;
+            m_controller->has_changed = true;
             state = Enemy::EnemyState::IDLE;
         }
     }
@@ -135,6 +137,8 @@ void Ghoul::OnAnimationEnd(const char* name)
         }
         else
         {
+            m_controller->is_combat = false;
+            m_controller->has_changed = true;
             state = Enemy::EnemyState::IDLE;
         }
     }

@@ -12,6 +12,7 @@ void MusicController::Start()
 {
 	emitter = this->GetComponent<ComponentAudioEmitter>();
 	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
+	last_music = "Quiet";
 }
 
 void MusicController::Update()
