@@ -38,20 +38,26 @@
                         "ID": "2679491062449886688"
                     },
                     {
+                        "Type": 17,
+                        "Enabled": true,
+                        "ID": "17200776803129528046",
+                        "ListenerID": "3854354778"
+                    },
+                    {
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
                         "HoritzontalFov": 91.492843627929688,
                         "BackCol": [
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            0.10000000149011612,
+                            9.9999999747524271e-07,
+                            9.9998999303352321e-07,
+                            9.9998999303352321e-07,
                             1
                         ],
                         "FarPlane": 200,
                         "NearPlane": 0.10000000149011612,
                         "isFovHori": 0,
-                        "ID": "5282681079287102150",
+                        "ID": "12622122953606499379",
                         "IsGameCamera": true,
                         "IsSelectedCamera": false,
                         "PrintIcon": true,
@@ -62,20 +68,14 @@
                             1
                         ],
                         "Fog": true,
-                        "Density": 0,
-                        "Gradient": 0,
-                        "Skybox_PositiveX": "Library\/Textures\/575523041464209442.dds",
-                        "Skybox_NegativeX": "Library\/Textures\/2272049821688510999.dds",
-                        "Skybox_PositiveY": "Library\/Textures\/8243941029542624066.dds",
-                        "Skybox_NegativeY": "Library\/Textures\/13353609087236361933.dds",
-                        "Skybox_PositiveZ": "Library\/Textures\/14034231489549923375.dds",
-                        "Skybox_NegativeZ": "Library\/Textures\/10216792741298181251.dds"
-                    },
-                    {
-                        "Type": 17,
-                        "Enabled": true,
-                        "ID": "17200776803129528046",
-                        "ListenerID": "869333555"
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13294645959885894553.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/882162789730207050.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds"
                     }
                 ]
             },
@@ -155,7 +155,7 @@
                 "ParentID": "1305412568853348955",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -185,21 +185,21 @@
                     },
                     {
                         "Enabled": true,
-                        "isWorld": true,
+                        "isWorld": false,
                         "Type": 19,
                         "BBType": 0
                     }
                 ]
             },
             {
-                "Name": "Text",
+                "Name": "Subtitles",
                 "FamilyNumber": 2,
                 "ID": "17683921346627478922",
                 "ParentID": "14974939172428492046",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -209,7 +209,7 @@
                         "Type": 0,
                         "Position": [
                             -62.228572845458984,
-                            1.9554839134216309,
+                            4.7338070869445801,
                             3.7953472137451172
                         ],
                         "Rotation": [
@@ -228,7 +228,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9616249481151211659",
+                        "ID": "12243554235220140418",
                         "Text": "",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -239,7 +239,7 @@
                             0.99998998641967773,
                             1
                         ],
-                        "Width": 4175,
+                        "Width": 4190,
                         "Interlineal": 1.5,
                         "Align": 1
                     },
@@ -264,6 +264,11 @@
                                 "VarType": 9,
                                 "Name": "songBard",
                                 "gameobject": "7666021728586576451"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "end_seconds",
+                                "float": 71
                             }
                         ]
                     }
@@ -277,7 +282,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -321,132 +326,6 @@
                 ]
             },
             {
-                "Name": "Intro1",
-                "FamilyNumber": 2,
-                "ID": "17419854775904064733",
-                "ParentID": "14974939172428492046",
-                "Enabled": false,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0.23738259077072144
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            23.491601943969727,
-                            23.491601943969727,
-                            23.491601943969727
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "765931107575997446"
-                    },
-                    {
-                        "Width": 7.2800002098083496,
-                        "Height": 3.2400000095367432,
-                        "Enabled": true,
-                        "Type": 30,
-                        "UIType": 20,
-                        "TextureID": "9324814218349413722",
-                        "Color": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            1
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "10991901758441077284",
-                        "ResourceID": "1434325329027726894",
-                        "DataName": "FadeImages",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 9,
-                                "Name": "second_image",
-                                "gameobject": "10240803780796325005"
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "start_next_image",
-                                "float": 1
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "transition_duration",
-                                "float": 5
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "Intro2",
-                "FamilyNumber": 2,
-                "ID": "10240803780796325005",
-                "ParentID": "14974939172428492046",
-                "Enabled": false,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            4.7783889770507813
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            23.491601943969727,
-                            23.491601943969727,
-                            23.491601943969727
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "13178136269351971249"
-                    },
-                    {
-                        "Width": 7.2800002098083496,
-                        "Height": 3.2400000095367432,
-                        "Enabled": true,
-                        "Type": 30,
-                        "UIType": 20,
-                        "TextureID": "13399407946522788794",
-                        "Color": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0
-                        ]
-                    }
-                ]
-            },
-            {
                 "Name": "Black",
                 "FamilyNumber": 2,
                 "ID": "12244486506414782064",
@@ -454,7 +333,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -498,14 +377,156 @@
                 ]
             },
             {
-                "Name": "Intro3",
+                "Name": "Button",
                 "FamilyNumber": 2,
-                "ID": "15463407780125944516",
+                "ID": "12806243898840718726",
                 "ParentID": "14974939172428492046",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            46.545845031738281,
+                            -36.696376800537109,
+                            13.651484489440918
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            22.336000442504883,
+                            22.836000442504883,
+                            19.336183547973633
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9445754358907864985"
+                    },
+                    {
+                        "Width": 2.7000000476837158,
+                        "Height": 0.55000001192092896,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "2765066298579762240",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 2,
+                "ID": "12012775329694049473",
+                "ParentID": "14974939172428492046",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            38.416114807128906,
+                            -37.963294982910156,
+                            14.72047233581543
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.019999999552965164,
+                            0.019999999552965164,
+                            0.019999999552965164
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3782302054402666137"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "11974599642409814748",
+                        "Text": "start to skip",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 1335,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Moving Image",
+                "FamilyNumber": 2,
+                "ID": "10653490041881489166",
+                "ParentID": "14974939172428492046",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16500630486418002593"
+                    }
+                ]
+            },
+            {
+                "Name": "Intro1",
+                "FamilyNumber": 3,
+                "ID": "15463407780125944516",
+                "ParentID": "10653490041881489166",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -580,12 +601,12 @@
                             {
                                 "VarType": 9,
                                 "Name": "nextPos",
-                                "gameobject": "8978288819947001153"
+                                "gameobject": "15410670083235755412"
                             },
                             {
                                 "VarType": 3,
                                 "Name": "start_movement",
-                                "float": 50
+                                "float": 45
                             },
                             {
                                 "VarType": 3,
@@ -593,18 +614,42 @@
                                 "float": 30
                             }
                         ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11371344243280570481",
+                        "ResourceID": "1434325329027726894",
+                        "DataName": "FadeImages",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "second_image",
+                                "gameobject": "10240803780796325005"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "start_next_image",
+                                "float": 80
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "transition_duration",
+                                "float": 20
+                            }
+                        ]
                     }
                 ]
             },
             {
-                "Name": "Intro3 (1)",
-                "FamilyNumber": 2,
+                "Name": "Intro1 (1)",
+                "FamilyNumber": 3,
                 "ID": "17214189120307958895",
-                "ParentID": "14974939172428492046",
+                "ParentID": "10653490041881489166",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -648,14 +693,14 @@
                 ]
             },
             {
-                "Name": "Intro3 (2)",
-                "FamilyNumber": 2,
-                "ID": "8978288819947001153",
-                "ParentID": "14974939172428492046",
+                "Name": "Intro2",
+                "FamilyNumber": 3,
+                "ID": "10240803780796325005",
+                "ParentID": "10653490041881489166",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -664,9 +709,60 @@
                     {
                         "Type": 0,
                         "Position": [
-                            96.667831420898438,
-                            35.345119476318359,
-                            0.23738302290439606
+                            0,
+                            0,
+                            4.7783889770507813
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            23.491601943969727,
+                            23.491601943969727,
+                            23.491601943969727
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13178136269351971249"
+                    },
+                    {
+                        "Width": 7.2800002098083496,
+                        "Height": 3.2400000095367432,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "13399407946522788794",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Intro1 (2)",
+                "FamilyNumber": 3,
+                "ID": "15410670083235755412",
+                "ParentID": "10653490041881489166",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -31.962017059326172,
+                            19.042587280273438,
+                            0.23738288879394531
                         ],
                         "Rotation": [
                             0,
@@ -680,7 +776,7 @@
                             51.446605682373047
                         ],
                         "ScaleNegative": false,
-                        "ID": "13329513550175281669"
+                        "ID": "8257105059257146157"
                     },
                     {
                         "Width": 7.2800002098083496,
@@ -705,7 +801,7 @@
                 "ParentID": "1305412568853348955",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -737,7 +833,7 @@
                         "ID": "10902140412854061068",
                         "Type": 16,
                         "Enabled": true,
-                        "Volume": 0.64099997282028198,
+                        "Volume": 1,
                         "Mute": false,
                         "Bank": "3991942870",
                         "Event": "2011049715",
