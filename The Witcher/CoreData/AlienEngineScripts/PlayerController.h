@@ -174,7 +174,6 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player->HUD);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 
 	return player;

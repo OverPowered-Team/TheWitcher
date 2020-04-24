@@ -22,7 +22,6 @@ public:
 
 	void MenuSpawn(MENU menu_type);
 
-	GameObject* extramenus_canvas = nullptr;
 	GameObject* previous_menu = nullptr;
 	//GameObject* Geralt = nullptr;
 	//GameObject* Yennefer = nullptr;
@@ -51,10 +50,6 @@ public:
 ALIEN_FACTORY Extra_Menus* CreateExtra_Menus() {
 	Extra_Menus* alien = new Extra_Menus();
 	// To show in inspector here
-
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->previous_menu);
-	//SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->Geralt);
-	//SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->Yennefer);
 
 	return alien;
 } 

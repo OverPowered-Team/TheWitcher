@@ -76,6 +76,9 @@ void PlayerController::Start()
 		keyboard_revive = SDL_SCANCODE_C;
 		keyboard_ultimate = SDL_SCANCODE_X;
 		keyboard_spell = SDL_SCANCODE_F;
+
+		// HUD
+		HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
 	}
 	else if (controller_index == 2) {
 		keyboard_move_up = SDL_SCANCODE_I;
@@ -89,6 +92,9 @@ void PlayerController::Start()
 		keyboard_revive = SDL_SCANCODE_M;
 		keyboard_ultimate = SDL_SCANCODE_APOSTROPHE;
 		keyboard_spell = SDL_SCANCODE_COMMA;
+
+		// HUD
+		HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character2");
 	}
 }
 

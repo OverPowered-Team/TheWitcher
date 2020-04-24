@@ -53,6 +53,7 @@ void DebugManager::Update()
 				Camera::SetCurrentCamera(main_camera);
 
 		}
+
 		if (Input::GetKeyDown(SDL_SCANCODE_G))
 		{
 			geralt_controller->godmode = !geralt_controller->godmode;

@@ -22,6 +22,15 @@ void Extra_Menus::Start()
 	B->SetEnable(false);
 	settings->SetEnable(false);
 
+	// Main Menu or InGame
+	if (game_object->parent->GetName() == "HUD_Game")
+	{
+		previous_menu = GameObject::FindWithName("Pause_Menu")->GetChild("Menu");
+	}
+	else
+	{
+		previous_menu = GameObject::FindWithName("Main_Menu_UI");
+	}
 
 	/*Geralt_data = (PlayerController*)Geralt->GetComponentScript("PlayerController");
 	damage1=(ComponentText*)game_object->GetChildRecursive("Damage_t1");
