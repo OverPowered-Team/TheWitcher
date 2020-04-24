@@ -52,22 +52,7 @@
     <ClCompile Include="Extra_Menus.cpp">
       <Filter>Scripts\UI</Filter>
     </ClCompile>
-    <ClCompile Include="InGame_UI.cpp">
-      <Filter>Scripts\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu_Buttons.cpp">
-      <Filter>Scripts\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseMenu_Buttons.cpp">
-      <Filter>Scripts\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Char_Frame.cpp">
-      <Filter>Scripts\UI</Filter>
-    </ClCompile>
     <ClCompile Include="UI_EndMenu.cpp">
-      <Filter>Scripts\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UltiBar.cpp">
       <Filter>Scripts\UI</Filter>
     </ClCompile>
     <ClCompile Include="Win_lose_menu.cpp">
@@ -97,14 +82,8 @@
     <ClCompile Include="BreakableObject.cpp">
       <Filter>Scripts\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Check_EndMenu.cpp">
-      <Filter>Scripts\UI</Filter>
-    </ClCompile>
     <ClCompile Include="ExplodeChildren.cpp">
       <Filter>Scripts\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio_Button.cpp">
-      <Filter>Scripts\UI</Filter>
     </ClCompile>
     <ClCompile Include="TriggerMusicInteractive.cpp">
       <Filter>Scripts\Triggers</Filter>
@@ -129,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="Ghoul.cpp">
       <Filter>Scripts\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Relic_Notification.cpp">
-      <Filter>Scripts\UI</Filter>
     </ClCompile>
     <ClCompile Include="RelicManager.cpp">
       <Filter>Scripts\Stats and Effects</Filter>
@@ -205,6 +181,24 @@
     <ClCompile Include="MoveImages.cpp">
       <Filter>Scripts\Intro</Filter>
     </ClCompile>
+    <ClCompile Include="InGame_UI.cpp">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu_Buttons.cpp">
+      <Filter>Scripts\UI\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu_Buttons.cpp">
+      <Filter>Scripts\UI\Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="Relic_Notification.cpp">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Char_Frame.cpp">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="UltiBar.cpp">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macros\AlienScripts.h">
@@ -258,22 +252,7 @@
     <ClInclude Include="Extra_Menus.h">
       <Filter>Scripts\UI</Filter>
     </ClInclude>
-    <ClInclude Include="InGame_UI.h">
-      <Filter>Scripts\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu_Buttons.h">
-      <Filter>Scripts\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenu_Buttons.h">
-      <Filter>Scripts\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Char_Frame.h">
-      <Filter>Scripts\UI</Filter>
-    </ClInclude>
     <ClInclude Include="UI_EndMenu.h">
-      <Filter>Scripts\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UltiBar.h">
       <Filter>Scripts\UI</Filter>
     </ClInclude>
     <ClInclude Include="Win_lose_menu.h">
@@ -309,14 +288,8 @@
     <ClInclude Include="BreakableObject.h">
       <Filter>Scripts\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Check_EndMenu.h">
-      <Filter>Scripts\UI</Filter>
-    </ClInclude>
     <ClInclude Include="ExplodeChildren.h">
       <Filter>Scripts\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio_Button.h">
-      <Filter>Scripts\UI</Filter>
     </ClInclude>
     <ClInclude Include="TriggerMusicInteractive.h">
       <Filter>Scripts\Triggers</Filter>
@@ -341,9 +314,6 @@
     </ClInclude>
     <ClInclude Include="Ghoul.h">
       <Filter>Scripts\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Relic_Notification.h">
-      <Filter>Scripts\UI</Filter>
     </ClInclude>
     <ClInclude Include="RelicManager.h">
       <Filter>Scripts\Stats and Effects</Filter>
@@ -390,9 +360,6 @@
     <ClInclude Include="CrowsLeshen.h">
       <Filter>Scripts\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="MeleeLeshen.h">
-      <Filter>Scripts\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="RockSpawner.h">
       <Filter>Scripts\Objects</Filter>
     </ClInclude>
@@ -422,6 +389,24 @@
     </ClInclude>
     <ClInclude Include="MoveImages.h">
       <Filter>Scripts\Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="InGame_UI.h">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu_Buttons.h">
+      <Filter>Scripts\UI\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu_Buttons.h">
+      <Filter>Scripts\UI\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="Relic_Notification.h">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Char_Frame.h">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="UltiBar.h">
+      <Filter>Scripts\UI\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +445,12 @@
     </Filter>
     <Filter Include="Scripts\Intro">
       <UniqueIdentifier>{a9f2913a-ec8a-4cd3-a704-e9b34bb307b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\UI\HUD">
+      <UniqueIdentifier>{e1ad5f97-acb6-41ca-ab9a-0f92799d0661}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\UI\Buttons">
+      <UniqueIdentifier>{f93cdcf6-5f41-4046-8018-b95261895855}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

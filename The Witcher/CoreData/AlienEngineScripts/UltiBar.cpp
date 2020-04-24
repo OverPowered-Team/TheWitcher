@@ -11,6 +11,8 @@ UltiBar::~UltiBar()
 
 void UltiBar::Start()
 {
+	ultibar = game_object->GetChild("Ultibar");
+	ultibar_charged = game_object->GetChild("Ultibar_Charged");
 	ultibar->SetEnable(true);
 	normal_ulti = ultibar->GetComponent<ComponentBar>();
 	normal_ulti->SetBarValue(0);

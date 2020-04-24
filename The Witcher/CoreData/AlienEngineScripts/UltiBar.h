@@ -27,8 +27,5 @@ ALIEN_FACTORY UltiBar* CreateUltiBar() {
 	UltiBar* alien = new UltiBar();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->ultibar);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->ultibar_charged);
-
 	return alien;
 } 
