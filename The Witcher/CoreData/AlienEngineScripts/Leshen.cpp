@@ -324,7 +324,7 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 
 	if (times_switched < total_switch_times) {
 		if (direction_time <= switch_direction_time) {
-			character_ctrl->Move(direction * speed);
+			character_ctrl->Move(direction * speed * Time::GetDT());
 			direction_time += Time::GetDT();
 		}
 		else {
