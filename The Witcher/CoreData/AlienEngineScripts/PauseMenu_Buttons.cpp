@@ -49,13 +49,13 @@ void PauseMenu_Buttons::Settings()
 void PauseMenu_Buttons::RetryLevel()
 {
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
-	SceneManager::LoadScene("newTRIGGER");
+	SceneManager::LoadScene("Lvl_1_Art_Colliders");
 }
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
-	SceneManager::LoadScene("Main_Menu");
+	SceneManager::LoadScene("Lvl_1_Art_Colliders");
 }
 
 void PauseMenu_Buttons::Exit_Menu()

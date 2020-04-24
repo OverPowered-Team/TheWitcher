@@ -36,7 +36,7 @@ void Win_lose_menu::Update()
 		}
 		else
 		{
-			SceneManager::LoadScene("newTRIGGER");
+			SceneManager::LoadScene("Lvl_1_Art_Colliders");
 		}
 	}
 }

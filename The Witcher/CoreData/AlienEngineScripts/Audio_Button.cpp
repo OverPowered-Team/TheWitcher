@@ -15,12 +15,12 @@ void Audio_Button::Start()
 
 void Audio_Button::Click()
 {
-	if(audio)
-		audio->StartSound("Play_MenuSelect");
+	/*if(audio)
+		audio->StartSound("Play_MenuSelect");*/
 }
 
 void Audio_Button::Change()
 {
-	if(audio)
-		audio->StartSound("Play_MenuMove");
+	/*if(audio)
+		audio->StartSound("Play_MenuMove");*/
 }
