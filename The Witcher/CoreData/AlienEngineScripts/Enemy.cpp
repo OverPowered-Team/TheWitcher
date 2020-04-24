@@ -239,7 +239,10 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 				break;
 			}
 
-			decapitated_head = GameObject::Instantiate(head_prefab, head_position->transform->GetGlobalPosition());
+			float3 head_pos = transform->GetGlobalPosition();
+			head_pos.y += 1.0f;
+
+			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
@@ -247,7 +250,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
-				head_rb->SetPosition(head_position->transform->GetGlobalPosition());
+				//head_rb->SetPosition(head_position->transform->GetGlobalPosition());
 
 				float decapitation_force = 2.0f;
 				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
