@@ -119,7 +119,7 @@ void NilfgaardSoldier::Block()
 void NilfgaardSoldier::Flee(float3 direction)
 {
 	float3 velocity_vec = direction * stats["Agility"].GetValue();
-	character_ctrl->Move(velocity_vec);
+	character_ctrl->Move(velocity_vec * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);

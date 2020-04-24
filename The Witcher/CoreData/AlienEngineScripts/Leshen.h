@@ -59,7 +59,7 @@ public:
 	float switch_direction_time = 3.0f;
 	float times_switched = 0;
 	float total_switch_times = 5;
-	float speed = 0.05f;
+	float speed = 3.0f;
 
 	int crows_target = 0;
 

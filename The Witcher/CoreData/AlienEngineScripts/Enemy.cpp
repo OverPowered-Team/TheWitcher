@@ -140,7 +140,7 @@ void Enemy::SetStats(const char* json)
 void Enemy::Move(float3 direction)
 {
 	float3 velocity_vec = direction * stats["Agility"].GetValue();
-	character_ctrl->Move(velocity_vec * Time::GetScaleTime());
+	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
