@@ -23,28 +23,12 @@ public:
 	void MenuSpawn(MENU menu_type);
 
 	GameObject* previous_menu = nullptr;
-	//GameObject* Geralt = nullptr;
-	//GameObject* Yennefer = nullptr;
 
 	// Menus
 	GameObject* leaderboard = nullptr;
 	GameObject* controls = nullptr;
 	GameObject* B = nullptr;
 	GameObject* settings = nullptr;
-
-	// Data
-	//PlayerController* Geralt_data = nullptr;
-	//PlayerController* Yennefer_data = nullptr;
-
-	// Variables
-	/*ComponentText* damage1 = nullptr;
-	ComponentText* damage2 = nullptr;
-	ComponentText* kills1 = nullptr;
-	ComponentText* kills2 = nullptr;
-	ComponentText* relics1 = nullptr;
-	ComponentText* relics2 = nullptr;
-	ComponentText* score1 = nullptr;
-	ComponentText* score2 = nullptr;*/
 };
 
 ALIEN_FACTORY Extra_Menus* CreateExtra_Menus() {

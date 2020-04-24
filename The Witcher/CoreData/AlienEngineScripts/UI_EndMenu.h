@@ -19,6 +19,7 @@ public:
 		);
 
 	void Start();
+	void Update();
 
 	bool first_time = true;
 
