@@ -171,7 +171,7 @@ void PlayerController::Update()
 		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
-		player_data.speed += player_data.speed * -0.075f;
+		player_data.speed += player_data.speed * -0.08f;
 		break;
 	case PlayerController::PlayerState::CASTING:
 		attacks->UpdateCurrentAttack();
@@ -183,7 +183,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::MAX:
 		break;
 	case PlayerController::PlayerState::HIT:
-		player_data.speed += player_data.speed * -0.08;
+		player_data.speed += player_data.speed * -0.08f;
 		break;
 	default:
 		break;
@@ -191,14 +191,16 @@ void PlayerController::Update()
 
 	//GRAVITY
 	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if (player_data.speed.y < -0.35f)
-	{
-		player_data.speed.y = -0.35f;
-	}
+
 
 	//MOVE
 	if(CheckBoundaries())
-		controller->Move(player_data.speed);
+		controller->Move(player_data.speed * Time::GetDT());
+
+	if (controller->isGrounded)
+	{
+		player_data.speed.y = 0;
+	}
 
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
