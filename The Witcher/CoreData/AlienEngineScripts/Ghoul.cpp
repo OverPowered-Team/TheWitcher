@@ -106,7 +106,7 @@ void Ghoul::JumpImpulse()
     if (distance > stats["AttackRange"].GetValue())
     {
         float3 jump_direction = direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
-        character_ctrl->Move(jump_direction);
+        character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
     }
     else
     {
@@ -124,6 +124,8 @@ void Ghoul::OnAnimationEnd(const char* name)
         }
         else
         {
+            m_controller->is_combat = false;
+            m_controller->has_changed = true;
             state = Enemy::EnemyState::IDLE;
         }
     }
@@ -135,6 +137,8 @@ void Ghoul::OnAnimationEnd(const char* name)
         }
         else
         {
+            m_controller->is_combat = false;
+            m_controller->has_changed = true;
             state = Enemy::EnemyState::IDLE;
         }
     }

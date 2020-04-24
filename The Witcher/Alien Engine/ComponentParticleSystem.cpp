@@ -120,9 +120,7 @@ void ComponentParticleSystem::OnDisable()
 
 bool ComponentParticleSystem::DrawInspector()
 {
-	
 	//texture = material->material->texture;
-	
 	
 	static bool check;
 

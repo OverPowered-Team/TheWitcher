@@ -171,6 +171,7 @@ void PlayerController::Update()
 		HandleMovement();
 		break;
 	case PlayerController::PlayerState::DASHING:
+		player_data.speed += player_data.speed * -0.08f;
 		break;
 	case PlayerController::PlayerState::CASTING:
 		attacks->UpdateCurrentAttack();
@@ -182,7 +183,7 @@ void PlayerController::Update()
 	case PlayerController::PlayerState::MAX:
 		break;
 	case PlayerController::PlayerState::HIT:
-		player_data.speed += player_data.speed * -0.08;
+		player_data.speed += player_data.speed * -0.08f;
 		break;
 	default:
 		break;
@@ -190,14 +191,16 @@ void PlayerController::Update()
 
 	//GRAVITY
 	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if (player_data.speed.y < -0.35f)
-	{
-		player_data.speed.y = -0.35f;
-	}
+
 
 	//MOVE
 	if(CheckBoundaries())
-		controller->Move(player_data.speed);
+		controller->Move(player_data.speed * Time::GetDT());
+
+	if (controller->isGrounded)
+	{
+		player_data.speed.y = 0;
+	}
 
 	player_data.velocity = player_data.speed.Length();
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
@@ -558,7 +561,7 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float value, float3 knock_back)
 {
 	player_data.stats["Health"].DecreaseStat(value);
-	//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
 
@@ -602,32 +605,7 @@ void PlayerController::AddEffect(Effect* _effect)
 
 bool PlayerController::CheckBoundaries()
 {
-	float3 next_pos = float3::zero();
-	float joystickIntensity = movement_input.Length();
-
-	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-	//direction_vector.y = 0.f;
-	direction_vector.Normalize();
-	//rotate
-	float angle = atan2f(direction_vector.z, direction_vector.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-
-	float speed = 0.f;
-
-	if (mov_input)
-	{
-		speed = (player_data.movementSpeed * joystickIntensity * Time::GetDT() / Time::GetScaleTime());
-	}
-
-	if (state == PlayerState::DASHING)
-	{
-		next_pos = transform->GetGlobalPosition() + transform->forward.Normalized() * player_data.movementSpeed * player_data.dash_power * Time::GetDT() / Time::GetScaleTime();
-	}
-	else
-	{
-		next_pos = transform->GetGlobalPosition() + direction_vector * speed * 20.f;
-	}
+	float3 next_pos = transform->GetGlobalPosition() + player_data.speed * Time::GetDT();
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
 	AABB fake_aabb(max_aabb.minPoint + moved + transform->GetGlobalPosition(), max_aabb.maxPoint + moved + transform->GetGlobalPosition());

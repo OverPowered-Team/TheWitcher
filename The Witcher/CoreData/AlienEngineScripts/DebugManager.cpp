@@ -11,7 +11,7 @@ DebugManager::~DebugManager()
 
 void DebugManager::Start()
 {
-	geralt_controller = GameObject::FindWithName("Geralt")->GetComponent<PlayerController>();
+	geralt_controller = GameObject::FindWithName("Geralt_Prefab")->GetComponent<PlayerController>();
 	yennefer_controller = GameObject::FindWithName("Yennefer")->GetComponent<PlayerController>();
 	main_camera = Camera::GetCurrentCamera();
 }
@@ -20,6 +20,11 @@ void DebugManager::Update()
 {
 	if (Input::GetKeyRepeat(SDL_SCANCODE_F3))
 	{
+		if (Input::GetKeyDown(SDL_SCANCODE_F1))
+		{
+			geralt_controller->player_data.stats["Health"].IncreaseStat(10);
+			yennefer_controller->player_data.stats["Health"].IncreaseStat(10);
+		}
 		if (Input::GetKeyDown(SDL_SCANCODE_M))
 		{
 			SceneManager::LoadScene("Main_Menu");

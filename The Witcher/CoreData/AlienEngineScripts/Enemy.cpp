@@ -140,7 +140,7 @@ void Enemy::SetStats(const char* json)
 void Enemy::Move(float3 direction)
 {
 	float3 velocity_vec = direction * stats["Agility"].GetValue();
-	character_ctrl->Move(velocity_vec * Time::GetScaleTime());
+	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
@@ -208,7 +208,8 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 		break;
 	case EnemyType::NILFGAARD_SOLDIER:
 		audio_emitter->StartSound("SoldierHit");
-		particles["hit_particle"]->Restart();
+		if(particles["hit_particle"])
+			particles["hit_particle"]->Restart();
 		break;
 	}
 
@@ -238,7 +239,10 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 				break;
 			}
 
-			decapitated_head = GameObject::Instantiate(head_prefab, head_position->transform->GetGlobalPosition());
+			float3 head_pos = transform->GetGlobalPosition();
+			head_pos.y += 1.0f;
+
+			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
@@ -246,8 +250,9 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
+				//head_rb->SetPosition(head_position->transform->GetGlobalPosition());
 
-				float decapitation_force = 2;
+				float decapitation_force = 2.0f;
 				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
 				decapitation_vector += transform->up * decapitation_force;
 	

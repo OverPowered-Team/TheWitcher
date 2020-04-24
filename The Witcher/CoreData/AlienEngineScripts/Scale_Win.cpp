@@ -146,7 +146,7 @@ void Scale_Win::Update()
 			}
 			else
 			{
-				SceneManager::LoadScene("newTRIGGERS", FadeToBlackType::VERTICAL_CURTAIN);
+				SceneManager::LoadScene("Lvl_1_Art_Colliders", FadeToBlackType::VERTICAL_CURTAIN);
 			}
 		}
 		else
