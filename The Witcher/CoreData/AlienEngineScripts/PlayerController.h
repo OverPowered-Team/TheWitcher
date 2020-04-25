@@ -37,20 +37,17 @@ public:
 
 
 	struct PlayerData {
-		float movementSpeed = 200.0F;
-		float rotationSpeed = 120.0F;
-		float velocity = 0.f;
-		float3 speed = float3::zero();
-		float dash_power = 1.5f;
-		float jump_power = 25.f;
-		float gravity = 9.8f;
+		PlayerType type = PlayerType::GERALT;
 		std::map<std::string, Stat> stats;
 
-		PlayerType player_type = PlayerType::GERALT;
+		//BASIC MOVEMENT DATA
+		float3 speed = float3::zero();
+		float jump_power = 25.f;
+		float gravity = 9.8f;
+
+		//RECOUNT
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
-		bool can_move = true;
-		//Stat movement_speed = Stat("Movement Speed", 1.0f, 1.0f, 1.0f);
 	};
 
 public:
@@ -99,6 +96,11 @@ public:
 	void HitFreeze(float freeze_time);
 
 	void RemoveFreeze(float speed);
+
+private:
+	void LoadStats();
+	void InitKeyboardControls();
+	void CalculateAABB();
 
 public:
 	int controller_index = 1;
@@ -162,12 +164,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
-	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.player_type);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.movementSpeed);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.rotationSpeed);
+	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.type);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.dash_power);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.jump_power);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
 

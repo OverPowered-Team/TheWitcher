@@ -160,7 +160,7 @@ void PlayerAttacks::SnapToTarget()
 	float speed = 0.0f;
 	float distance = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition());
 
-	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
+	if (player_controller->player_data.type == PlayerController::PlayerType::GERALT)
 	{
 		if (distance < current_attack->info.max_snap_distance)
 			if (distance < 1.0)
@@ -327,11 +327,8 @@ Attack* PlayerAttacks::GetCurrentAttack()
 
 void PlayerAttacks::CreateAttacks()
 {
-	std::string json;
-	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
-		json = "GameData/GeraltCombos.json";
-	else
-		json = "GameData/YenneferCombos.json";
+	std::string character_string = player_controller->player_data.type == PlayerController::PlayerType::GERALT ? "Geralt" : "Yennefer";
+	std::string json = "GameData/Players/"+ character_string+"Combos.json";
 
 	JSONfilepack* combo = JSONfilepack::GetJSON(json.c_str());
 
