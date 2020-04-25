@@ -3,6 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "Stat.h"
+#include "State.h"
 
 class PlayerAttacks;
 class Relic;
@@ -10,24 +11,14 @@ class Effect;
 class Enemy;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
-
+	friend class IdleState;
+	friend class RunningState;
+	friend class JumpingState;
+	friend class AttackingState;
+	friend class CastingState;
+	friend class RevivingState;
+	friend class HitState;
 public:
-
-	enum (PlayerState,
-		IDLE,
-		RUNNING,
-		BASIC_ATTACK,
-		JUMPING,
-		DASHING,
-		CASTING,
-		DEAD,
-		REVIVING,
-		HIT,
-		ROOT,
-
-		MAX
-		);
-
 	enum (PlayerType,
 		GERALT,
 		YENNEFER,
@@ -35,10 +26,12 @@ public:
 		MAX
 		);
 
-
 	struct PlayerData {
 		PlayerType type = PlayerType::GERALT;
 		std::map<std::string, Stat> stats;
+
+		//OTHER DATA
+		float revive_range = 5.0f;
 
 		//BASIC MOVEMENT DATA
 		float3 speed = float3::zero();
@@ -56,14 +49,11 @@ public:
 
 	void Start();
 	void Update();
-	void PreUpdate();
 
 	void UpdateInput();
-	void IdleInput();
-	void RunningInput();
-	void AttackingInput();
+	void SetState(StateType new_state);
 	void ApplyRoot(float time);
-	void ReleaseFromRoot();
+	void ReleaseRoot();
 
 	bool AnyKeyboardInput();
 
@@ -71,13 +61,12 @@ public:
 	void EffectsUpdate();
 	void Jump();
 	void Fall();
-	void Roll();
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
 	void Revive();
 	void ActionRevive();
-	void ReceiveDamage(float value, float3 knock_back = {0, 0, 0});
+	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
@@ -103,21 +92,33 @@ private:
 	void CalculateAABB();
 
 public:
-	int controller_index = 1;
-	PlayerState state = PlayerState::IDLE;
+	State* state;
+
 	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
-	PlayerController* player_being_revived = nullptr;
-
+	std::map<std::string, GameObject*> particles;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
+
 	float2 movement_input;
 	bool mov_input = false;
+	bool is_immune = false;
+	bool is_rooted = false;
 
-	float revive_range = 5.0f;
+	//Relics
+	std::vector<Effect*> effects;
+	std::vector<Relic*> relics;
 
-	std::map<std::string, GameObject*> particles;
+	//UI 
+	GameObject* HUD = nullptr;
 
+	//Others
+	float delay_footsteps = 0.5f;
+	PlayerController* player_being_revived = nullptr;
+	bool godmode = false;
+
+	//Input Variables
+	int controller_index = 1;
 	//Keyboard input
 	SDL_Scancode keyboard_move_up;
 	SDL_Scancode keyboard_move_left;
@@ -130,7 +131,6 @@ public:
 	SDL_Scancode keyboard_spell;
 	SDL_Scancode keyboard_revive;
 	SDL_Scancode keyboard_ultimate;
-
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
@@ -139,17 +139,6 @@ public:
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_UP;
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
-
-	//Relics
-	std::vector<Effect*> effects;
-	std::vector<Relic*> relics;
-
-	//UI 
-	GameObject* HUD = nullptr;
-
-	float delay_footsteps = 0.5f;
-
-	bool godmode = false;
 
 private:
 	float angle = 0.0f;
@@ -165,9 +154,9 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.type);
-	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerState, player->state);
+	SHOW_IN_INSPECTOR_AS_ENUM(StateType, player->state);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->revive_range);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
@@ -176,19 +165,3 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	return player;
 }
-
-/*class PlayerState {
-	PlayerState() {}
-	virtual ~PlayerState() {}
-
-	virtual void HandleInput() {}
-	virtual void Update() {}
-};
-
-class OnGroundState: public PlayerState {
-	OnGroundState() {}
-	virtual ~OnGroundState() {}
-
-	virtual void HandleInput() {}
-	virtual void Update() {}
-};*/

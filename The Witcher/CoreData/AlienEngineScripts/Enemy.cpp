@@ -61,12 +61,12 @@ void Enemy::UpdateEnemy()
 	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
+	if (player_controllers[0]->state->type == StateType::DEAD)
 	{
 		distance = distance_2;
 		direction = direction_2.Normalized();
 	}
-	else if (player_controllers[1]->state == PlayerController::PlayerState::DEAD)
+	else if (player_controllers[1]->state->type == StateType::DEAD)
 	{
 		distance = distance_1;
 		direction = direction_1.Normalized();

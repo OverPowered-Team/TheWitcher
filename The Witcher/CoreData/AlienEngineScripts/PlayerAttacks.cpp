@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "State.h"
 #include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
@@ -42,7 +43,7 @@ void PlayerAttacks::StartSpell(uint spell_index)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f)
+	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f) //THIS IS TO ADVANCE THE TIME THE ANIM HAS TO FINISH WHEN HITFREEZED
 	{
 		finish_attack_time += Time::GetDT();
 		return;
@@ -52,22 +53,16 @@ void PlayerAttacks::UpdateCurrentAttack()
 		SnapToTarget();
 	else
 	{
-		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f;
+		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f; //SLOW DOWN
 	}
 		
-
+	//IF ANIM FINISHED 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
 		if (!player_controller->mov_input)
-		{
-			player_controller->state = PlayerController::PlayerState::IDLE;
-			player_controller->player_data.speed = float3::zero();
-		}
+			player_controller->SetState(StateType::IDLE);
 		else if (player_controller->mov_input)
-		{
-			player_controller->state = PlayerController::PlayerState::RUNNING;
-			player_controller->particles["p_run"]->SetEnable(true);
-		}
+			player_controller->SetState(StateType::RUNNING);
 			
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
@@ -150,6 +145,7 @@ void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;
 	collider->SetEnable(false);
+	player_controller->player_data.speed = float3::zero();
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -314,7 +310,7 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
+	if (player_controller->state->type == StateType::ATTACKING)
 		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
 		return current_attack->info.base_damage.GetValue();
