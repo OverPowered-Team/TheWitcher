@@ -16,9 +16,13 @@ public:
 	/*strength must be between 0 and 1*/
 	void Shake(float strength);
 	void Shake(float strength, const float& traumaDecay);
+	void Shake(float strength, const float& traumaDecay, const float off_set, const float maxyaw = 1.f, const float maxpitch = 1.f, const float maxroll = 1.f);
 
 	void RepeatShake(float strength, float seconds_to_first_invoke, 
 		float seconds_between_invokes, float time_to_stop);
+
+	void RepeatShake(float strength, const float& traumaDecay, float seconds_to_first_invoke,
+		float seconds_between_invokes, float time_to_stop, const float off_set, const float maxyaw = 1.f, const float maxpitch = 1.f, const float maxroll = 1.f);
 
 	float traumaDecayDef = 0.9f;
 

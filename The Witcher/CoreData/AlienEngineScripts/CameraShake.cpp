@@ -15,24 +15,24 @@ void CameraShake::Start()
 
 void CameraShake::Update()
 {
-	static float jiji = 1.f;
-	if (Input::GetKeyDown(SDL_SCANCODE_RETURN)) {
-		jiji -= 0.08f;
-		Time::SetScaleTime(jiji);
-	}
+	//static float jiji = 1.f;
+	//if (Input::GetKeyDown(SDL_SCANCODE_RETURN)) {
+	//	jiji -= 0.08f;
+	//	Time::SetScaleTime(jiji);
+	//}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_P)) {
-		jiji = 1.f;
-		Time::SetScaleTime(jiji);
-	}
+	//if (Input::GetKeyDown(SDL_SCANCODE_P)) {
+	//	jiji = 1.f;
+	//	Time::SetScaleTime(jiji);
+	//}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_S)) {
-		Shake(0.13f);
-	}
+	//if (Input::GetKeyDown(SDL_SCANCODE_S)) {
+	//	Shake(0.13f);
+	//}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_A)) {
-		RepeatShake(0.13f, 0.f, 0.2f, 50.f);
-	}
+	//if (Input::GetKeyDown(SDL_SCANCODE_I)) {
+	//	RepeatShake(0.13f, 0.9f, 0.f, 0.2f, 5.f, 5.f, 0.1f, 0.1f, 0.1f);
+	//}
 
 	if(time_to_stop >= 0.0)
 		if (Time::GetGameTime() - invoke_timer >= time_to_stop) {
@@ -68,6 +68,15 @@ void CameraShake::Shake(float strength, const float& traumaDecay)
 	trauma = Maths::Max(0.f, Maths::Min(trauma, 1.f));
 }
 
+void CameraShake::Shake(float strength, const float& traumaDecay, const float off_set, const float maxyaw, const float maxpitch, const float maxroll)
+{
+	this->maxYaw = maxyaw;
+	this->maxPitch = maxpitch;
+	this->maxRoll = maxroll;
+	this->off_set = off_set;
+	Shake(strength, traumaDecay);
+}
+
 void CameraShake::Shake(float strength)
 {
 	Shake(strength, traumaDecayDef);
@@ -76,6 +85,18 @@ void CameraShake::Shake(float strength)
 void CameraShake::RepeatShake(float strength, float seconds_to_first_invoke, float seconds_between_invokes, float time_to_stop)
 {
 	this->time_to_stop = time_to_stop;
+	invoke_timer = Time::GetGameTime();
+	InvokeRepeating([strength, this]() -> void {this->Shake(strength); }, seconds_to_first_invoke, seconds_between_invokes);
+}
+
+void CameraShake::RepeatShake(float strength, const float& traumaDecay, float seconds_to_first_invoke, float seconds_between_invokes, float time_to_stop, const float off_set, const float maxyaw, const float maxpitch, const float maxroll)
+{
+	this->maxYaw = maxyaw;
+	this->maxPitch = maxpitch;
+	this->maxRoll = maxroll;
+	this->off_set = off_set;
+	this->time_to_stop = time_to_stop;
+	this->traumaDecayDef = traumaDecay;
 	invoke_timer = Time::GetGameTime();
 	InvokeRepeating([strength, this]() -> void {this->Shake(strength); }, seconds_to_first_invoke, seconds_between_invokes);
 }

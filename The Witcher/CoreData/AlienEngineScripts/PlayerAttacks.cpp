@@ -313,7 +313,7 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 void PlayerAttacks::AttackShake()
 {
 	if (current_attack->info.shake == 1)
-		shake->Shake(0.13f);
+		shake->Shake(0.13f, 0.9, 5.f,  0.1f, 0.1f, 0.1f);
 }
 
 float PlayerAttacks::GetCurrentDMG()
