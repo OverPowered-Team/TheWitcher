@@ -69,14 +69,9 @@ void PlayerController::Update()
 		player_data.speed.y = 0;
 	}
 
-
-
-
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
-
-
 }
 
 void PlayerController::UpdateInput()
@@ -275,10 +270,16 @@ void PlayerController::Revive()
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	GameManager::instance->event_manager->OnPlayerRevive(this);
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
+	is_immune = false;
+
+
+	if(HUD)
+		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	if(GameManager::instance->rumbler_manager)
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
+	if(GameManager::instance->event_manager)
+		GameManager::instance->event_manager->OnPlayerRevive(this);
 
 	SetState(StateType::IDLE);
 }
