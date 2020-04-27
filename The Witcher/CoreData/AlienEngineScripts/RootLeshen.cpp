@@ -53,6 +53,8 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 			transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
 			player_ctrl->ApplyRoot(total_root_time);
 			leshen->EndAction(game_object);
+			game_object->SetNewParent(player_ctrl->game_object);
+			game_object->transform->SetLocalPosition(float3::zero());
 		}
 		else {
 			LOG("There's no Player Controller in GO in ArrowScript!");

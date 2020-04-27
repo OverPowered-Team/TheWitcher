@@ -323,8 +323,4 @@ void Leshen::OnAnimationEnd(const char* name)
 	if (strcmp(name, "Melee") == 0) {
 		EndMeleeAction();
 	}
-
-	if (strcmp(name, "Crows") == 0) {
-		EndMeleeAction();
-	}
 }
