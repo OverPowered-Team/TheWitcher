@@ -17,7 +17,7 @@ void Leshen::StartEnemy()
 
 	type = EnemyType::LESHEN;
 
-	Enemy::StartEnemy();
+	Boss::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
 

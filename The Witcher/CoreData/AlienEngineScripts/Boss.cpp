@@ -14,6 +14,7 @@ Boss::BossAction::BossAction(ActionType _type, float _probability)
 
 void Boss::StartEnemy()
 {
+	Enemy::StartEnemy();
 }
 
 void Boss::UpdateEnemy()
