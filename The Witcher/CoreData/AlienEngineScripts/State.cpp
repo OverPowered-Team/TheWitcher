@@ -226,7 +226,7 @@ void AttackingState::OnExit(PlayerController* player)
 
 void RollingState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * -0.08f;
+	player->player_data.speed += player->player_data.speed * -0.06f;
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)

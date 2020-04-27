@@ -52,6 +52,7 @@ public:
 
 	void UpdateInput();
 	void SetState(StateType new_state);
+	void SwapState(State* new_state);
 	void ApplyRoot(float time);
 	void ReleaseRoot();
 

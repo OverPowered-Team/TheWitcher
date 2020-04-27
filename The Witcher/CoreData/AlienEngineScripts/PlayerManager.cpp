@@ -38,6 +38,7 @@ void PlayerManager::OnPlayerDead(PlayerController* dead_player)
 	{
 		Scores_Data::player1_kills = players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = players[1]->player_data.total_kills;
+
 		Scores_Data::dead = true;
 		GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->YouDied(); 
 	}
@@ -64,12 +65,14 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	{
 		collective_ultimate_charge = max_ultimate_charge;
 		// UI
-		ulti_bar->GetComponent<UltiBar>()->MaxBar();
+		if(ulti_bar)
+			ulti_bar->GetComponent<UltiBar>()->MaxBar();
 	}
 	else
 	{
 		// UI
-		ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+		if(ulti_bar)
+			ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
 	}
 }
 

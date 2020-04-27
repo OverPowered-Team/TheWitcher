@@ -48,8 +48,13 @@ void PlayerController::Update()
 {
 	UpdateInput();
 
+	//State Machine-----------------
 	State* new_state = state->HandleInput(this);
 	state->Update(this);
+
+	if (new_state != nullptr)
+		SwapState(new_state);
+	//------------------------------
 
 	//Effects-----------------------------
 	EffectsUpdate();
@@ -60,20 +65,18 @@ void PlayerController::Update()
 		controller->Move(player_data.speed * Time::GetDT());
 
 	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
+	{
 		player_data.speed.y = 0;
+	}
+
+
+
 
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
 
-	//SWAP STATE IF NEEDED
-	if (new_state != nullptr)
-	{
-		state->OnExit(this);
-		delete state;
-		state = new_state;
-		state->OnEnter(this);
-	}
+
 }
 
 void PlayerController::UpdateInput()
@@ -153,6 +156,14 @@ void PlayerController::SetState(StateType new_state)
 	state->OnEnter(this);
 }
 
+void PlayerController::SwapState(State* new_state)
+{
+	state->OnExit(this);
+	delete state;
+	state = new_state;
+	state->OnEnter(this);
+}
+
 void PlayerController::ApplyRoot(float time)
 {
 	is_rooted = true;
@@ -181,9 +192,12 @@ void PlayerController::HandleMovement()
 	direction_vector.y = 0.f;
 
 	//rotate
-	float angle = atan2f(direction_vector.z, direction_vector.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	transform->SetGlobalRotation(rot);
+	if (mov_input) //temporal solution
+	{
+		float angle = atan2f(direction_vector.z, direction_vector.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
+	}
 
 	float speed_y = player_data.speed.y;
 	player_data.speed = direction_vector * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
@@ -233,7 +247,7 @@ void PlayerController::PlayAttackParticle()
 #pragma region PlayerActions
 void PlayerController::Jump()
 {
-	player_data.speed.y = player_data.jump_power;
+	player_data.speed.y = player_data.stats["Jump_Power"].GetValue();
 	animator->PlayState("Air");
 	animator->SetBool("air", true);
 }
@@ -389,11 +403,10 @@ void PlayerController::RemoveFreeze(float speed)
 void PlayerController::OnAnimationEnd(const char* name) {
 
 	State* new_state = state->OnAnimationEnd(this, name);
+
+	//SWAP STATE IF NEEDED
 	if (new_state != nullptr)
-	{
-		delete state;
-		state = new_state;
-	}
+		SwapState(new_state);
 }
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
@@ -493,7 +506,8 @@ void PlayerController::InitKeyboardControls()
 		keyboard_spell = SDL_SCANCODE_F;
 
 		// HUD
-		HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
+		if(GameObject::FindWithName("HUD_Game"))
+			HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
 	}
 	else if (controller_index == 2) {
 		keyboard_move_up = SDL_SCANCODE_I;
@@ -509,7 +523,8 @@ void PlayerController::InitKeyboardControls()
 		keyboard_spell = SDL_SCANCODE_COMMA;
 
 		// HUD
-		HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character2");
+		if(GameObject::FindWithName("HUD_Game"))
+			HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character2");
 	}
 }
 void PlayerController::CalculateAABB() {
