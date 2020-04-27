@@ -6,7 +6,7 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "PlayerAttacks.h"
-
+#include "CameraShake.h"
 PlayerAttacks::PlayerAttacks() : Alien()
 {
 }
@@ -20,6 +20,8 @@ void PlayerAttacks::Start()
 	player_controller = GetComponent<PlayerController>();
 	collider = game_object->GetChild("Attacks_Collider")->GetComponent<ComponentBoxCollider>();
 	collider->SetEnable(false);
+	
+	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
 	CreateAttacks();
 }
@@ -308,6 +310,12 @@ void PlayerAttacks::OnAnimationEnd(const char* name) {
 	}
 }
 
+void PlayerAttacks::AttackShake()
+{
+	if (current_attack->info.shake == 1)
+		shake->Shake(0.13f);
+}
+
 float PlayerAttacks::GetCurrentDMG()
 {
 	if (player_controller->state->type == StateType::ATTACKING)
@@ -352,7 +360,7 @@ void PlayerAttacks::CreateAttacks()
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
 			info.next_light = attack_combo->GetString("next_attack_light");
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
-
+			info.shake = attack_combo->GetNumber("cam_shake");
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 
