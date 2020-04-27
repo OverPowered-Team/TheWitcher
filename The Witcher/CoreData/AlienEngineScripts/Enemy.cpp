@@ -96,7 +96,8 @@ void Enemy::UpdateEnemy()
 				}
 			}
 			if (particles["p_" + (*it)->name])
-				particles["p_" + (*it)->name]->SetEnable(true);
+				particles["p_" + (*it)->name]->Restart();
+				
 		}
 		if ((*it)->to_delete)
 		{
