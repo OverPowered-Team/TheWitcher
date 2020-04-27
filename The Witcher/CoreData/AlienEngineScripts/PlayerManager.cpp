@@ -89,7 +89,8 @@ void PlayerManager::ActivateUltimate()
 	}
 
 	// UI
-	ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge);
+	if(ulti_bar)
+		ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge);
 }
 
 void PlayerManager::CancelUltimate()

@@ -69,9 +69,14 @@ void PlayerController::Update()
 		player_data.speed.y = 0;
 	}
 
+
+
+
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
+
+
 }
 
 void PlayerController::UpdateInput()
@@ -272,7 +277,6 @@ void PlayerController::Revive()
 	animator->PlayState("Revive");
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
 	is_immune = false;
-
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());

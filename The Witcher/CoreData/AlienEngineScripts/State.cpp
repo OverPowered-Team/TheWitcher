@@ -226,7 +226,7 @@ void AttackingState::OnExit(PlayerController* player)
 
 void RollingState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed;
+	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -287,7 +287,7 @@ void CastingState::OnExit(PlayerController* player)
 
 void HitState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed;
+	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
 }
 
 State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
