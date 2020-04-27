@@ -10,7 +10,7 @@
 #include "RumblerManager.h"
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
-
+#include "CameraShake.h"
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
 #include "PlayerController.h"
@@ -30,6 +30,7 @@ void PlayerController::Start()
 	attacks = GetComponent<PlayerAttacks>();
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
+	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
@@ -219,7 +220,10 @@ void PlayerController::EffectsUpdate()
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 					if (player_data.stats["Health"].GetValue() == 0)
+					{
+						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
+					}
 				}
 			}
 			if (particles[(*it)->name])
@@ -303,9 +307,11 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 
 	attacks->CancelAttack();
-
 	if (player_data.stats["Health"].GetValue() == 0)
+	{	
+		shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 		Die();
+	}
 	else
 	{
 		animator->PlayState("Hit");

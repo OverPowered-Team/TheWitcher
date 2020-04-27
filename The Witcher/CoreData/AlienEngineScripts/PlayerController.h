@@ -9,7 +9,7 @@ class PlayerAttacks;
 class Relic;
 class Effect;
 class Enemy;
-
+class CameraShake;
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
 	friend class RunningState;
@@ -148,6 +148,7 @@ private:
 
 	ComponentCamera* camera = nullptr;
 	AABB max_aabb;
+	CameraShake* shake = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
