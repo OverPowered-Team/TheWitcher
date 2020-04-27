@@ -32,6 +32,7 @@ public:
 class IdleState : public State
 {
 public:
+	IdleState() { type = StateType::IDLE; }
 	State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	void OnEnter(PlayerController* player) override;
@@ -40,6 +41,8 @@ public:
 
 class RunningState : public State
 {
+public:
+	RunningState() { type = StateType::RUNNING; }
 	State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	void OnEnter(PlayerController* player) override;
@@ -48,6 +51,8 @@ class RunningState : public State
 
 class JumpingState : public State
 {
+public:
+	JumpingState() { type = StateType::JUMPING; }
 	State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	void OnEnter(PlayerController* player) override;
@@ -56,6 +61,8 @@ class JumpingState : public State
 
 class RollingState : public State
 {
+public:
+	RollingState() { type = StateType::ROLLING; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
@@ -65,6 +72,8 @@ class RollingState : public State
 
 class AttackingState : public State
 {
+public:
+	AttackingState() { type = StateType::ATTACKING; }
 	State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
@@ -74,6 +83,8 @@ class AttackingState : public State
 
 class CastingState : public State
 {
+public:
+	CastingState() { type = StateType::CASTING; }
 	//State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
@@ -83,6 +94,8 @@ class CastingState : public State
 
 class DeadState : public State
 {
+public:
+	DeadState() { type = StateType::DEAD; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	//void Update(PlayerController* player) override;
 	void OnEnter(PlayerController* player) override;
@@ -91,6 +104,8 @@ class DeadState : public State
 
 class RevivingState : public State
 {
+public:
+	RevivingState() { type = StateType::REVIVING; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	//void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
@@ -100,6 +115,8 @@ class RevivingState : public State
 
 class HitState : public State
 {
+public:
+	HitState() { type = StateType::HIT; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;

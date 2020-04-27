@@ -36,7 +36,7 @@ public:
 		//BASIC MOVEMENT DATA
 		float3 speed = float3::zero();
 		float gravity = 9.8f;
-		float slow_speed = -0.06f;
+		float slow_speed = -0.07f;
 
 		//RECOUNT
 		float total_damage_dealt = 0.0f;
