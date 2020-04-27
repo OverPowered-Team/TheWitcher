@@ -34,6 +34,9 @@ void Enemy::StartEnemy()
 	case EnemyType::LESHEN:
 		json_str = "leshen";
 		break;
+	case EnemyType::DROWNED:
+		json_str = "drowned";
+		break;
 	default:
 		break;
 	}
@@ -161,52 +164,10 @@ void Enemy::DeactivateCollider()
 	}
 }
 
-void Enemy::OnTriggerEnter(ComponentCollider* collider)
-{
-	//if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-	//	PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-	//	if (player)
-	//	{
-	//		float dmg_received = player->attacks->GetCurrentDMG();
-	//		player->OnHit(this, GetDamaged(dmg_received, player));
-	//	}
-	//}
-}
-
 float Enemy::GetDamaged(float dmg, PlayerController* player)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-	
-	/*if (can_get_interrupted) {
-		state = EnemyState::HIT;
-		animator->PlayState("Hit");
-	}
-
-	switch (type)
-	{
-	case EnemyType::GHOUL:
-		audio_emitter->StartSound("GhoulHit");
-		break;
-	case EnemyType::NILFGAARD_SOLDIER:
-		audio_emitter->StartSound("SoldierHit");
-		if(particles["hit_particle"])
-			particles["hit_particle"]->Restart();
-		break;
-	}
-
-	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-
-	if (stats["Health"].GetValue() == 0.0F) {
-
-		animator->SetBool("dead", true);
-		OnDeathHit();
-
-		if (type == EnemyType::LESHEN) {
-			state = EnemyState::DYING;
-			animator->PlayState("Death");
-		}
-	}*/
 
 	return aux_health - stats["Health"].GetValue();
 }

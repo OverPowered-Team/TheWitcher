@@ -13,6 +13,8 @@ enum (EnemyType,
 	NONE = -1,
 	GHOUL,
 	NILFGAARD_SOLDIER,
+	DROWNED,
+	SHAELMAR,
 	LESHEN
 	);
 
@@ -37,7 +39,7 @@ public:
 	void ActivateCollider();
 	void DeactivateCollider();
 
-	void OnTriggerEnter(ComponentCollider* collider);
+	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
 
 	virtual float GetDamaged(float dmg, PlayerController* player);

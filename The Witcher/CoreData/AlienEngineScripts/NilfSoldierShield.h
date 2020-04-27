@@ -32,6 +32,11 @@ ALIEN_FACTORY NilfSoldierShield* CreateNilfSoldierShield() {
 	NilfSoldierShield* nilfgaard = new NilfSoldierShield();
 
 	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
+	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->head_position);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->block_time);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->block_attack_time);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_INT(nilfgaard->max_break_shield_attack);

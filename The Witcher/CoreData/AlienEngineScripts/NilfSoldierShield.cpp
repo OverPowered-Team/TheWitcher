@@ -10,6 +10,8 @@ NilfSoldierShield::~NilfSoldierShield()
 
 void NilfSoldierShield::UpdateEnemy()
 {
+	Enemy::UpdateEnemy();
+
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:

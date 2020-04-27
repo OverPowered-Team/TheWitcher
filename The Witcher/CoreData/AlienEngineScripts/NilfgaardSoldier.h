@@ -17,7 +17,7 @@ enum(NilfgaardSoldierState,
 	DEAD
 	);
 
-class ALIEN_ENGINE_API NilfgaardSoldier : public Enemy {
+class NilfgaardSoldier : public Enemy {
 public:
 	enum(NilfgaardType,
 		NONE = -1,
@@ -33,7 +33,6 @@ public:
 	void StartEnemy() override;
 	void SetStats(const char* json) override;
 	float GetDamaged(float dmg, PlayerController* player);
-	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
 
 	void OnDeathHit();
@@ -53,17 +52,5 @@ public:
 protected:
 	GameObject* decapitated_head = nullptr;
 };
-
-ALIEN_FACTORY NilfgaardSoldier* CreateNilfgaardSoldier() {
-	NilfgaardSoldier* nilfgaard = new NilfgaardSoldier();
-	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
-	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->head_position);
-	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
-	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
-
-	return nilfgaard;
-}
 
 

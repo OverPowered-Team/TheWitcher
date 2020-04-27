@@ -11,6 +11,8 @@ NilfSoldierMelee::~NilfSoldierMelee()
 
 void NilfSoldierMelee::UpdateEnemy()
 {
+	Enemy::UpdateEnemy();
+
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:

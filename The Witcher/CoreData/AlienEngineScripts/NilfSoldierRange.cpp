@@ -12,6 +12,8 @@ NilfSoldierRange::~NilfSoldierRange()
 
 void NilfSoldierRange::UpdateEnemy()
 {
+	Enemy::UpdateEnemy();
+
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:

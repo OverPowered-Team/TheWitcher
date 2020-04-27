@@ -139,11 +139,6 @@ void NilfgaardSoldier::RotateSoldier()
 	transform->SetGlobalRotation(rot);
 }
 
-void NilfgaardSoldier::UpdateEnemy()
-{	
-	Enemy::UpdateEnemy();
-}
-
 void NilfgaardSoldier::CleanUpEnemy()
 {
 	if (decapitated_head)
