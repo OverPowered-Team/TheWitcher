@@ -3,7 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "DialogueManager.h"
-
+#include "Effect.h"
 
 class PlayerController;
 class Effect;
@@ -52,7 +52,7 @@ public:
 	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
 	std::string attack_name = "";
-
+	EffectData* effect_to_apply = nullptr;
 };
 
 class DashRelic : public Relic {
