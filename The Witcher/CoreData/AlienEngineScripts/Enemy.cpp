@@ -59,12 +59,12 @@ void Enemy::UpdateEnemy()
 	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
+	if (player_controllers[0]->state->type == StateType::DEAD)
 	{
 		distance = distance_2;
 		direction = direction_2.Normalized();
 	}
-	else if (player_controllers[1]->state == PlayerController::PlayerState::DEAD)
+	else if (player_controllers[1]->state->type == StateType::DEAD)
 	{
 		distance = distance_1;
 		direction = direction_1.Normalized();
@@ -223,9 +223,18 @@ void Enemy::AddEffect(Effect* new_effect)
 
 void Enemy::HitFreeze(float freeze_time)
 {
-	CancelInvoke();
-	float speed = animator->GetCurrentStateSpeed();
-	animator->SetCurrentStateSpeed(0);
-	ComponentAnimator* anim = animator;
-	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
+	if (!is_frozen)
+	{
+		is_frozen = true;
+		float speed = animator->GetCurrentStateSpeed();
+		animator->SetCurrentStateSpeed(0);
+		ComponentAnimator* anim = animator;
+		Invoke([this, speed]() -> void {Enemy::StopHitFreeze(speed); }, freeze_time);
+	}
+}
+
+void Enemy::StopHitFreeze(float speed)
+{
+	is_frozen = false;
+	animator->SetCurrentStateSpeed(speed);
 }

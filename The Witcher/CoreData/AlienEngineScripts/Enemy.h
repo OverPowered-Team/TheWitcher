@@ -44,6 +44,7 @@ public:
 	void AddEffect(Effect* new_effect);
 
 	void HitFreeze(float freeze_time);
+	void StopHitFreeze(float speed);
 
 public:
 	float distance = 0.0F;
@@ -62,6 +63,7 @@ public:
 	std::map<std::string, Stat> stats;
 
 	float knockback = 0.0f;
+	bool is_frozen = false;
 	bool is_combat = false;
 
 protected:
