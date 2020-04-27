@@ -1,8 +1,4 @@
 #pragma once
-
-#include "..\..\Alien Engine\Alien.h"
-#include "Macros/AlienScripts.h"
-
 class Enemy;
 class PlayerController;
 class Stat;
@@ -12,6 +8,15 @@ struct Modifier
 	float amount;
 	std::string identifier;
 };
+
+struct EffectData {
+	std::string name = "";
+	float time = 0.0f;
+	float ticks_time = 0.0f;
+	std::vector<Modifier> additive_modifiers;
+	std::vector<Modifier> multiplicative_modifiers;
+};
+
 class Effect {
 public:
 	Effect();
@@ -34,7 +39,7 @@ public:
 	float start_time = 0.0f;
 	bool to_delete = false;
 
-	void (*OnHit)(Enemy* enemy, uint size);
+	void (*OnHit)(Enemy* enemy, uint size, EffectData* data);
 	void (*OnDash)(PlayerController* player);
 
 };
@@ -44,10 +49,12 @@ public:
 	AttackEffect();
 	virtual ~AttackEffect();
 
+
 	void SetAttackIdentifier(std::string identifier);
 	std::string GetAttackIdentifier();
 
 	std::string attack_name = "";
+	EffectData* on_hit_effect = nullptr;
 };
 
 
