@@ -26,7 +26,7 @@ void Leshen::StartEnemy()
 
 void Leshen::UpdateEnemy()
 {
-
+	Boss::UpdateEnemy();
 }
 
 void Leshen::CleanUpEnemy()
