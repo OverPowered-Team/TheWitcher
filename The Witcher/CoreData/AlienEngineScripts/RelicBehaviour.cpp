@@ -19,7 +19,7 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	if(GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+	if(GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
 		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
 }
 
@@ -167,6 +167,9 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		}
 		relic->name = type_array->GetString("name");
 		relic->description = type_array->GetString("description");
+		relic->valor = type_array->GetNumber("valor");
+		relic->time = type_array->GetNumber("time");
+		relic->ticks_time = type_array->GetNumber("ticks_time");
 	}
 
 	JSONfilepack::FreeJSON(relic_json);

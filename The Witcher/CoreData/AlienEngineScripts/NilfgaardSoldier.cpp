@@ -236,8 +236,11 @@ void NilfgaardSoldier::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		audio_emitter->StartSound("SoldierDeath");
 		state = EnemyState::DEAD;
-		m_controller->is_combat = false;
-		m_controller->has_changed = true;
+		if (m_controller)
+		{
+			m_controller->is_combat = false;
+			m_controller->has_changed = true;
+		}
 		break;
 	}
 	case Enemy::EnemyState::DEAD:

@@ -10,7 +10,7 @@
 static void ApplyBurnOnHit(Enemy* _enemy, uint size, Effect* effect)
 {
     effect->AddFlatModifier(-effect->valor, "Health");
-    effect->name = "Burn On Hit";
+    effect->name = "fire_runestone";
     effect->time = size * effect->time;
     effect->ticks_time = effect->ticks_time;
     effect->last_tick_time = Time::GetGameTime();
