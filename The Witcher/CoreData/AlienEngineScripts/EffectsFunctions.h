@@ -7,14 +7,24 @@
 #include "PlayerController.h"
 
 //ONHIT
-static void ApplyBurnOnHit(Enemy* _enemy, uint size, Effect* effect)
+static void ApplyEffectOnHit(Enemy* _enemy, uint size, EffectData* data)
 {
-    effect->AddFlatModifier(-effect->valor, "Health");
-    effect->name = "fire_runestone";
-    effect->time = size * effect->time;
-    effect->ticks_time = effect->ticks_time;
+    Effect* effect = new Effect();
+    effect->name = data->name;
+    effect->time = size * data->time;
+    effect->ticks_time = data->ticks_time;
     effect->last_tick_time = Time::GetGameTime();
     effect->start_time = Time::GetGameTime();
+    
+    for (int i = 0; i < data->additive_modifiers.size(); ++i)
+    {
+        effect->AddFlatModifier(data->additive_modifiers[i].amount, data->additive_modifiers[i].identifier);
+    }
+    for (int i = 0; i < data->multiplicative_modifiers.size(); ++i)
+    {
+        effect->AddMultiplicativeModifier(data->multiplicative_modifiers[i].amount, data->multiplicative_modifiers[i].identifier);
+    }
+
     _enemy->AddEffect(effect);
 }
 
