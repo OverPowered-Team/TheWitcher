@@ -3,6 +3,12 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+enum(States,
+	PREGAME,
+	MINIGAME,
+	POSTGAME
+	)
+
 class ALIEN_ENGINE_API MiniGame_Revive : public Alien {
 
 public:
@@ -13,16 +19,25 @@ public:
 	void Start();
 	void Update();
 
-	GameObject* moving_part = nullptr;
+	void Minigame();
+
+	void Effects();
+
+	States revive_state = States::PREGAME;
 	float lerp_time = 1.0f;
 	int input_times = 4;
 	float revive_percentatge = 0.0f;
 
 private:
+	GameObject* moving_part = nullptr;
+	GameObject* minigame = nullptr;
+	GameObject* start_X = nullptr;
 	GameObject* text = nullptr;
+	float color_time = 0.0f;
 	float time = 0.0f;
 	int sign = 1;
 	int actual_inputs = 0;
+	bool color_changed = false;
 };
 
 ALIEN_FACTORY MiniGame_Revive* CreateMiniGame_Revive() {
