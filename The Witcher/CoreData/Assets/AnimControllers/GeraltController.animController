@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "GeraltController",
         "NumStates": 27,
-        "NumTransitions": 50,
+        "NumTransitions": 49,
         "States": [
             {
                 "Name": "Idle",
@@ -431,28 +431,7 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Roll",
-                "Target": "Run",
-                "Blend": 0.10000000149011612,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
+                "BoolConditions": []
             },
             {
                 "Source": "H",

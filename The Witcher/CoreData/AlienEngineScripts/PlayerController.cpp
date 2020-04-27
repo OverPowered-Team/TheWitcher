@@ -293,23 +293,23 @@ void PlayerController::ActionRevive()
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 {
 	player_data.stats["Health"].DecreaseStat(dmg);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
+	if(HUD)
+		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
+	attacks->CancelAttack();
 
 	if (player_data.stats["Health"].GetValue() == 0)
 		Die();
-
-	attacks->CancelAttack();
-	if (state->type != StateType::HIT && state->type != StateType::DEAD) {
+	else
+	{
 		animator->PlayState("Hit");
-
-
-
 		player_data.speed = knock_speed;
-
 		SetState(StateType::HIT);
 	}
 
-	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+	if(GameManager::instance->rumbler_manager)
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 #pragma endregion PlayerActions
 

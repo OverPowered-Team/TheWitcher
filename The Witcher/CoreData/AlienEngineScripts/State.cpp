@@ -226,7 +226,7 @@ void AttackingState::OnExit(PlayerController* player)
 
 void RollingState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * -0.06f;
+	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed;
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -287,7 +287,7 @@ void CastingState::OnExit(PlayerController* player)
 
 void HitState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * -0.08f;
+	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed;
 }
 
 State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -332,6 +332,7 @@ void DeadState::OnEnter(PlayerController* player)
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
 	player->player_data.speed = float3::zero();
+	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
 }
 

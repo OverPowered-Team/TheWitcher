@@ -27,7 +27,7 @@ public:
 
 private:
 	
-	float base_value;
-	float current_value;
-	float max_value;
+	float base_value = 0.0f;
+	float current_value = 0.0f;
+	float max_value = 0.0f;
 };

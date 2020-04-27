@@ -35,8 +35,8 @@ public:
 
 		//BASIC MOVEMENT DATA
 		float3 speed = float3::zero();
-		float jump_power = 25.f;
 		float gravity = 9.8f;
+		float slow_speed = -0.06f;
 
 		//RECOUNT
 		float total_damage_dealt = 0.0f;
@@ -155,8 +155,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.type);
-	SHOW_IN_INSPECTOR_AS_ENUM(StateType, player->state);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.slow_speed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
