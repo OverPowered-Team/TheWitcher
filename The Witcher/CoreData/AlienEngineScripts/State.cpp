@@ -332,6 +332,7 @@ void DeadState::OnEnter(PlayerController* player)
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
 	player->player_data.speed = float3::zero();
+	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
 }
 
