@@ -282,10 +282,10 @@ void Leshen::SetActionVariables()
 	player_rooted[0] = false;
 	player_rooted[1] = false;	
 	
-	if (player_controllers[0]->state == PlayerController::PlayerState::ROOT) {
+	if (player_controllers[0]->is_rooted) {
 		player_rooted[0] = true;
 	}
-	else if (player_controllers[1]->state == PlayerController::PlayerState::ROOT) {
+	else if (player_controllers[1]->is_rooted) {
 		player_rooted[1] = true;
 	}
 }

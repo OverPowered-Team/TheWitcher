@@ -1,11 +1,12 @@
 #include "PlayerController.h"
+#include "State.h"
 #include "Effect.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "PlayerAttacks.h"
-
+#include "CameraShake.h"
 PlayerAttacks::PlayerAttacks() : Alien()
 {
 }
@@ -19,6 +20,8 @@ void PlayerAttacks::Start()
 	player_controller = GetComponent<PlayerController>();
 	collider = game_object->GetChild("Attacks_Collider")->GetComponent<ComponentBoxCollider>();
 	collider->SetEnable(false);
+	
+	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
 	CreateAttacks();
 }
@@ -42,7 +45,7 @@ void PlayerAttacks::StartSpell(uint spell_index)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f)
+	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f) //THIS IS TO ADVANCE THE TIME THE ANIM HAS TO FINISH WHEN HITFREEZED
 	{
 		finish_attack_time += Time::GetDT();
 		return;
@@ -52,22 +55,16 @@ void PlayerAttacks::UpdateCurrentAttack()
 		SnapToTarget();
 	else
 	{
-		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f;
+		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f; //SLOW DOWN
 	}
 		
-
+	//IF ANIM FINISHED 
 	if (Time::GetGameTime() >= finish_attack_time)
 	{
 		if (!player_controller->mov_input)
-		{
-			player_controller->state = PlayerController::PlayerState::IDLE;
-			player_controller->player_data.speed = float3::zero();
-		}
+			player_controller->SetState(StateType::IDLE);
 		else if (player_controller->mov_input)
-		{
-			player_controller->state = PlayerController::PlayerState::RUNNING;
-			player_controller->particles["p_run"]->SetEnable(true);
-		}
+			player_controller->SetState(StateType::RUNNING);
 			
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
@@ -150,6 +147,7 @@ void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;
 	collider->SetEnable(false);
+	player_controller->player_data.speed = float3::zero();
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -160,7 +158,7 @@ void PlayerAttacks::SnapToTarget()
 	float speed = 0.0f;
 	float distance = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition());
 
-	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
+	if (player_controller->player_data.type == PlayerController::PlayerType::GERALT)
 	{
 		if (distance < current_attack->info.max_snap_distance)
 			if (distance < 1.0)
@@ -304,17 +302,15 @@ float3 PlayerAttacks::GetMovementVector()
 	return direction_vector;
 }
 
-void PlayerAttacks::OnAnimationEnd(const char* name) {
-	if (current_attack)
-	{
-		current_attack = nullptr;
-
-	}
+void PlayerAttacks::AttackShake()
+{
+	if (current_attack->info.shake == 1)
+		shake->Shake(0.13f, 0.9, 5.f,  0.1f, 0.1f, 0.1f);
 }
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	if (player_controller->state == PlayerController::PlayerState::BASIC_ATTACK)
+	if (player_controller->state->type == StateType::ATTACKING)
 		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
 		return current_attack->info.base_damage.GetValue();
@@ -327,11 +323,8 @@ Attack* PlayerAttacks::GetCurrentAttack()
 
 void PlayerAttacks::CreateAttacks()
 {
-	std::string json;
-	if (player_controller->player_data.player_type == PlayerController::PlayerType::GERALT)
-		json = "GameData/GeraltCombos.json";
-	else
-		json = "GameData/YenneferCombos.json";
+	std::string character_string = player_controller->player_data.type == PlayerController::PlayerType::GERALT ? "Geralt" : "Yennefer";
+	std::string json = "GameData/Players/"+ character_string+"Combos.json";
 
 	JSONfilepack* combo = JSONfilepack::GetJSON(json.c_str());
 
@@ -359,7 +352,7 @@ void PlayerAttacks::CreateAttacks()
 			info.max_snap_distance = attack_combo->GetNumber("max_snap_distance");
 			info.next_light = attack_combo->GetString("next_attack_light");
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
-
+			info.shake = attack_combo->GetNumber("cam_shake");
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 
