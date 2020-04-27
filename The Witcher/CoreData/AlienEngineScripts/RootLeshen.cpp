@@ -53,7 +53,7 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 				state = ROOTSTATE::ROOT;
 				transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
 				player_ctrl->ApplyRoot(total_root_time);
-				leshen->EndRootAction(game_object);
+				leshen->EndAction(game_object);
 			}
 		}
 		else {

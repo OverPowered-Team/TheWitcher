@@ -42,7 +42,7 @@ void CrowsLeshen::OnTriggerEnter(ComponentCollider* collider)
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl) {
 			if (player_ctrl->state != PlayerController::PlayerState::DASHING) {
-				leshen->EndCrowsAction(game_object);
+				leshen->EndAction(game_object);
 				player_ctrl->ReceiveDamage(10.0f);
 			}
 		}

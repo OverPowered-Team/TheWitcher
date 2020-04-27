@@ -2,49 +2,18 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
-#include "Enemy.h"
+#include "Boss.h"
 
 #define TOTAL_PLAYERS 2
-#define TOTAL_CROWS 10
 
-class ALIEN_ENGINE_API Leshen : public Enemy {
+class ALIEN_ENGINE_API Leshen : public Boss {
 
 public:
-	enum(ActionType,
-		NONE = -1,
-		ROOT,
-		MELEE,
-		CROWS,
-		CLOUD
-		);
-
-	enum(ActionState,
-		NONE = -1,
-		LAUNCH,
-		UPDATING,
-		ENDED
-		);
-
 	//-----------Data to set probabilities-----------//
-	float player_distance[TOTAL_PLAYERS];
-	float melee_range = 3.0f;
 	bool player_rooted[TOTAL_PLAYERS];
-	float action_cooldown = 1.5f;
-	float time_to_action;
 	int times_hitted = 0;
 	//int phase = 1;
-	float action_time = 0;
 	//-----------Data to set probabilities-----------//
-
-	struct LeshenAction {
-		LeshenAction(ActionType _type, float _probability);
-		float probability = 0.0f;
-		ActionType type = ActionType::NONE;
-		ActionState state = ActionState::NONE;
-	};
-
-	std::map<std::string, LeshenAction*> actions;
-	LeshenAction* current_action;
 
 	Prefab root_prefab;
 	GameObject* root_1 = nullptr;
@@ -55,6 +24,7 @@ public:
 	GameObject* meshes = nullptr;
 
 	float3 direction;
+	float melee_range = 3.0f;
 	float direction_time = 0.0f;
 	float switch_direction_time = 3.0f;
 	float times_switched = 0;
@@ -73,45 +43,33 @@ public:
 	void CleanUpEnemy() override;
 	float GetDamaged(float dmg, PlayerController* player) override;
 
-	void OrientToPlayer(int target);
+	void SetActionProbabilities() override;
+	void SetActionVariables() override;
+	bool IsOnAction() override;
 
-	void SetStats(const char* json) override;
-
-	void SetActionProbabilities();
-	void SelectAction();
-	bool IsOnAction();
-
-	void FinishAttack();
-
-	void SetIdleState();
-	void SetAttackState();
-
-	void LaunchAction();
-	void OnDeathHit();
+	void LaunchAction() override; 
 
 	void LaunchRootAction();
 	void LaunchMeleeAction();
 	void LaunchCrowsAction();
 	void LaunchCloudAction();
 
-	bool UpdateAction();
+	ActionState UpdateAction() override;
 
 	ActionState UpdateRootAction();
 	ActionState UpdateMeleeAction();
 	ActionState UpdateCrowsAction();
 	ActionState UpdateCloudAction();
 
+	void EndAction(GameObject* go_ended) override;
+
 	void EndRootAction(GameObject* root);
 	void EndMeleeAction();
 	void EndCrowsAction(GameObject* crow);
 	void EndCloudAction();
 
-	void SetActionVariables();
-	//void ChangePhase();
-
-	//Phase 2 exclusive
+	//Leshen things
 	void HandleHitCount();
-
 	void SetRandomDirection();
 };
 
