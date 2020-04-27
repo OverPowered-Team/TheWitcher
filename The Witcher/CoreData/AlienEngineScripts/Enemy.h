@@ -17,21 +17,6 @@ enum (EnemyType,
 	);
 
 class Enemy : public Alien {
-
-public: 
-	enum (EnemyState,
-		NONE = -1,
-		IDLE,
-		MOVE,
-		ATTACK,
-		HIT,
-		BLOCK,
-		FLEE,
-		STUNNED,
-		DYING,
-		DEAD,
-		);
-
 public:
 
 	Enemy() {}
@@ -47,7 +32,7 @@ public:
 
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction);
-	virtual void Attack() {}
+	virtual void CheckDistance() {};
 	virtual void Action() {}
 	void ActivateCollider();
 	void DeactivateCollider();
@@ -63,15 +48,13 @@ public:
 public:
 	float distance = 0.0F;
 	float3 direction;
+
 	EnemyType type = EnemyType::NONE;
-	EnemyState state = EnemyState::NONE;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
-	bool can_get_interrupted = true;
 	ComponentAudioEmitter* audio_emitter = nullptr;
-	Prefab head_prefab;
-	GameObject* head_position;
+	bool can_get_interrupted = true;
 
 	std::vector<PlayerController*> player_controllers;
 
@@ -79,10 +62,8 @@ public:
 	std::map<std::string, Stat> stats;
 
 	float knockback = 0.0f;
-
 	bool is_combat = false;
 
 protected:
-	GameObject* decapitated_head = nullptr;
 	std::vector<Effect*> effects;
 };

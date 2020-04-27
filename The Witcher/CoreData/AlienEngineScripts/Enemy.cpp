@@ -18,7 +18,6 @@ void Enemy::StartEnemy()
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
-	state = EnemyState::IDLE;
 	std::string json_str;
 
 	switch (type)
@@ -41,7 +40,6 @@ void Enemy::StartEnemy()
 
 	SetStats(json_str.data());
 
-	
 	if (game_object->GetChild("Particles"))
 	{
 		std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
@@ -90,7 +88,7 @@ void Enemy::UpdateEnemy()
 				{
 					if (stats["Health"].GetValue() == 0)
 					{
-						state = EnemyState::DYING;
+						//state = EnemyState::DYING;
 						animator->PlayState("Death");
 					}
 				}
@@ -111,11 +109,6 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
-	if (decapitated_head)
-	{
-		decapitated_head->ToDelete();
-		decapitated_head = nullptr;
-	}
 }
 
 void Enemy::SetStats(const char* json)
@@ -132,6 +125,7 @@ void Enemy::SetStats(const char* json)
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
 		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
 	}
 
 	JSONfilepack::FreeJSON(stat);
@@ -147,20 +141,7 @@ void Enemy::Move(float3 direction)
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
-	if ((distance < stats["AttackRange"].GetValue() && type != EnemyType::GHOUL) || (type == EnemyType::GHOUL && distance < stats["JumpRange"].GetValue()))
-	{
-		animator->SetFloat("speed", 0.0F);
-		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-		Action();
-	}
-
-	if (distance > stats["VisionRange"].GetValue())
-	{
-		state = Enemy::EnemyState::IDLE;
-		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-		animator->SetFloat("speed", 0.0F);
-		is_combat = false;
-	}
+	CheckDistance();
 }
 
 void Enemy::ActivateCollider()
@@ -181,14 +162,14 @@ void Enemy::DeactivateCollider()
 
 void Enemy::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player)
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			player->OnHit(this, GetDamaged(dmg_received, player));
-		}
-	}
+	//if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
+	//	PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+	//	if (player)
+	//	{
+	//		float dmg_received = player->attacks->GetCurrentDMG();
+	//		player->OnHit(this, GetDamaged(dmg_received, player));
+	//	}
+	//}
 }
 
 float Enemy::GetDamaged(float dmg, PlayerController* player)
@@ -196,7 +177,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 	
-	if (can_get_interrupted) {
+	/*if (can_get_interrupted) {
 		state = EnemyState::HIT;
 		animator->PlayState("Hit");
 	}
@@ -224,46 +205,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 			state = EnemyState::DYING;
 			animator->PlayState("Death");
 		}
-		else if (player->attacks->GetCurrentAttack()->IsLast())
-		{
-			state = EnemyState::DYING;
-			animator->PlayState("Death");
-
-			switch (type)
-			{
-			case EnemyType::GHOUL:
-				audio_emitter->StartSound("GhoulDeath");
-				break;
-			case EnemyType::NILFGAARD_SOLDIER:
-				audio_emitter->StartSound("SoldierDeath");
-				break;
-			}
-
-			float3 head_pos = transform->GetGlobalPosition();
-			head_pos.y += 1.0f;
-
-			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
-			if (decapitated_head)
-			{
-				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				particles["decapitation_particle"]->Restart();
-
-				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
-				head_rb->SetRotation(transform->GetGlobalRotation());
-				//head_rb->SetPosition(head_position->transform->GetGlobalPosition());
-
-				float decapitation_force = 2.0f;
-				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
-				decapitation_vector += transform->up * decapitation_force;
-	
-				head_rb->AddForce(decapitation_vector);
-				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
-				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
-			}
-
-			player->OnEnemyKill();
-		}
-	}
+	}*/
 
 	return aux_health - stats["Health"].GetValue();
 }
