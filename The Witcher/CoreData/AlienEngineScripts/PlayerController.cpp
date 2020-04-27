@@ -8,7 +8,7 @@
 #include "Enemy.h"
 #include "GameManager.h"
 #include "RumblerManager.h"
-
+#include "State.h"
 #include "../../ComponentDeformableMesh.h"
 
 #include "UI_Char_Frame.h"
@@ -29,190 +29,54 @@ void PlayerController::Start()
 	controller = GetComponent<ComponentCharacterController>();
 	attacks = GetComponent<PlayerAttacks>();
 	audio = GetComponent<ComponentAudioEmitter>();
-
 	camera = Camera::GetCurrentCamera();
-
-	player_data.stats.insert(std::pair("Health", Stat("Health", 100.0f)));
-	player_data.stats.insert(std::pair("Strength", Stat("Strength", 10.0f)));
-	player_data.stats.insert(std::pair("Chaos", Stat("Chaos", 150.0f)));
-	player_data.stats.insert(std::pair("Attack_Speed", Stat("Attack_Speed", 1.0f)));
-
-	auto meshes = game_object->GetChild("Meshes")->GetComponentsInChildren<ComponentDeformableMesh>();
-
-	max_aabb.SetNegativeInfinity();
-	AABB new_section;
-	for (auto i = meshes.begin(); i != meshes.end(); ++i) {
-		new_section = (*i)->GetGlobalAABB();
-		LOG("AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", new_section.minPoint.x, new_section.minPoint.y, new_section.minPoint.z, new_section.maxPoint.x, new_section.maxPoint.y, new_section.maxPoint.z);
-		max_aabb.minPoint = { 
-			Maths::Min(new_section.minPoint.x, max_aabb.minPoint.x), Maths::Min(new_section.minPoint.y, max_aabb.minPoint.y),Maths::Min(new_section.minPoint.z, max_aabb.minPoint.z) 
-		};
-		max_aabb.maxPoint = { 
-			Maths::Max(new_section.maxPoint.x, max_aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, max_aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, max_aabb.maxPoint.z) 
-		};
-	}
-	max_aabb.minPoint -= transform->GetGlobalPosition();
-	max_aabb.maxPoint -= transform->GetGlobalPosition();
-	LOG("MAX AABB: %.2f %.2f %.2f, %.2f %.2f %.2f", max_aabb.minPoint.x, max_aabb.minPoint.y, max_aabb.minPoint.z, max_aabb.maxPoint.x, max_aabb.maxPoint.y, max_aabb.maxPoint.z);
-
 	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
-
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
 		(*it)->SetEnable(false);
 	}
 
-	//controller->SetRotation(Quat::identity());
+	LoadStats();
+	CalculateAABB();
+	InitKeyboardControls();
 
-	if (controller_index == 1) {
-		keyboard_move_up = SDL_SCANCODE_W;
-		keyboard_move_left = SDL_SCANCODE_A;
-		keyboard_move_right = SDL_SCANCODE_D;
-		keyboard_move_down = SDL_SCANCODE_S;
-		keyboard_jump = SDL_SCANCODE_SPACE;
-		keyboard_dash = SDL_SCANCODE_LALT;
-		keyboard_light_attack = SDL_SCANCODE_V;
-		keyboard_heavy_attack = SDL_SCANCODE_B;
-		keyboard_revive = SDL_SCANCODE_C;
-		keyboard_ultimate = SDL_SCANCODE_X;
-		keyboard_spell = SDL_SCANCODE_F;
-
-		// HUD
-		HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
-	}
-	else if (controller_index == 2) {
-		keyboard_move_up = SDL_SCANCODE_I;
-		keyboard_move_left = SDL_SCANCODE_J;
-		keyboard_move_right = SDL_SCANCODE_L;
-		keyboard_move_down = SDL_SCANCODE_K;
-		keyboard_jump = SDL_SCANCODE_RSHIFT;
-		keyboard_dash = SDL_SCANCODE_RALT;
-		keyboard_light_attack = SDL_SCANCODE_RCTRL;
-		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
-		keyboard_revive = SDL_SCANCODE_M;
-		keyboard_ultimate = SDL_SCANCODE_APOSTROPHE;
-		keyboard_spell = SDL_SCANCODE_COMMA;
-
-		// HUD
-		HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character2");
-	}
-}
-
-void PlayerController::PreUpdate()
-{
-	UpdateInput();
-
-	//ULTIMATE INPUT ON ALL STATES FOR NOW
-	if (Input::GetControllerButtonDown(controller_index, controller_ultimate)
-		|| Input::GetKeyDown(keyboard_ultimate)) {
-		GameManager::instance->player_manager->ultimate_buttons_pressed++;
-	}
-	else if (Input::GetControllerButtonUp(controller_index, controller_ultimate)
-		|| Input::GetKeyUp(keyboard_ultimate)) {
-		GameManager::instance->player_manager->ultimate_buttons_pressed--;
-	}
-
-	switch (state)
-	{
-	case PlayerController::PlayerState::IDLE:
-		IdleInput();
-		break;
-	case PlayerController::PlayerState::RUNNING:
-		RunningInput();
-		break;
-	case PlayerController::PlayerState::BASIC_ATTACK:
-		AttackingInput();
-		break;
-	case PlayerController::PlayerState::JUMPING:
-		if (controller->isGrounded)
-		{
-			if (!mov_input)
-			{
-				state = PlayerState::IDLE;
-			}
-			if (mov_input)
-			{
-				state = PlayerState::RUNNING;
-				particles["p_run"]->SetEnable(true);
-			}
-			animator->SetBool("air", false);
-		}
-		break;
-	case PlayerController::PlayerState::DASHING:
-		break;
-	case PlayerController::PlayerState::CASTING:
-		particles["p_run"]->SetEnable(false);
-		attacks->UpdateCurrentAttack();
-		break;
-	case PlayerController::PlayerState::DEAD:
-		break;
-	case PlayerController::PlayerState::REVIVING:
-		break;
-	case PlayerController::PlayerState::MAX:
-		break;
-	case PlayerController::PlayerState::HIT:
-		break;
-	default:
-		break;
-	}
+	state = new IdleState();
+	state->OnEnter(this);
 }
 
 void PlayerController::Update()
 {
-	switch (state)
-	{
-	case PlayerController::PlayerState::IDLE:
-		break;
-	case PlayerController::PlayerState::RUNNING:
-		if (Time::GetGameTime() - timer >= delay_footsteps) {
-			timer = Time::GetGameTime();
-			audio->StartSound();
-		}
-		HandleMovement();
-		break;
-	case PlayerController::PlayerState::BASIC_ATTACK:
-		attacks->UpdateCurrentAttack();
-		break;
-	case PlayerController::PlayerState::JUMPING:
-		HandleMovement();
-		break;
-	case PlayerController::PlayerState::DASHING:
-		player_data.speed += player_data.speed * -0.08f;
-		break;
-	case PlayerController::PlayerState::CASTING:
-		attacks->UpdateCurrentAttack();
-		break;
-	case PlayerController::PlayerState::DEAD:
-		break;
-	case PlayerController::PlayerState::REVIVING:
-		break;
-	case PlayerController::PlayerState::MAX:
-		break;
-	case PlayerController::PlayerState::HIT:
-		player_data.speed += player_data.speed * -0.08f;
-		break;
-	default:
-		break;
-	}
+	UpdateInput();
 
-	//GRAVITY
+	//State Machine-----------------
+	State* new_state = state->HandleInput(this);
+	state->Update(this);
+
+	if (new_state != nullptr)
+		SwapState(new_state);
+	//------------------------------
+
+	//Effects-----------------------------
+	EffectsUpdate();
+
+	//MOVEMENT
 	player_data.speed.y -= player_data.gravity * Time::GetDT();
-
-
-	//MOVE
-	if(CheckBoundaries())
+	if(CheckBoundaries() && !is_rooted)
 		controller->Move(player_data.speed * Time::GetDT());
 
-	if (controller->isGrounded)
+	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
 	{
 		player_data.speed.y = 0;
 	}
 
-	player_data.velocity = player_data.speed.Length();
-	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 
-	//Effects-----------------------------
-	EffectsUpdate();
+
+
+	//Update animator variables
+	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
+	animator->SetBool("movement_input", mov_input);
+
+
 }
 
 void PlayerController::UpdateInput()
@@ -235,164 +99,80 @@ void PlayerController::UpdateInput()
 
 	if (keyboardInput.Length() > 0)
 	{
-		animator->SetBool("movement_input", true);
 		mov_input = true;
 		keyboardInput.Normalize();
 		movement_input = keyboardInput;
 	}
 	else if (joystickInput.Length() > 0) {
-		animator->SetBool("movement_input", true);
 		mov_input = true;
 		movement_input = joystickInput;
 	}
 	else
 	{
-		animator->SetBool("movement_input", false);
 		mov_input = false;
 		movement_input = float2::zero();
 	}
 }
 
-void PlayerController::IdleInput()
+void PlayerController::SetState(StateType new_state)
 {
-	if (!controller->isGrounded)
+	state->OnExit(this);
+	delete state;
+
+	switch (new_state)
 	{
-		Fall();
-	}
-	if (movement_input.Length() > 0)
-	{
-		particles["p_run"]->SetEnable(true);
-		state = PlayerState::RUNNING;
-		audio->StartSound();
-		timer = Time::GetGameTime();
-	}
-	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
-		|| Input::GetKeyDown(keyboard_light_attack)) {
-		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
-		state = PlayerState::BASIC_ATTACK;
-		audio->StartSound("Hit_Sword");
-	}
-	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
-		|| Input::GetKeyDown(keyboard_heavy_attack)) {
-		state = PlayerState::BASIC_ATTACK;
-		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-		audio->StartSound("Hit_Sword");
-	}
-
-	if (Input::GetControllerButtonDown(controller_index, controller_spell)
-		|| Input::GetKeyDown(keyboard_spell)) {
-		attacks->StartSpell(0);
-		state = PlayerState::CASTING;
-		player_data.speed = float3::zero();
-	}
-
-	if (Input::GetControllerButtonDown(controller_index, controller_dash)
-		|| Input::GetKeyDown(keyboard_dash))
-		Roll();
-
-	if (Input::GetControllerButtonDown(controller_index, controller_revive)
-		|| Input::GetKeyDown(keyboard_revive)) {
-		if (CheckForPossibleRevive()) {
-			player_data.speed = float3::zero();
-			animator->SetBool("reviving", true);
-			state = PlayerState::REVIVING;
-		}
+	case StateType::IDLE:
+		state = new IdleState();
+		break;
+	case StateType::RUNNING:
+		state = new RunningState();
+		break;
+	case StateType::ATTACKING:
+		state = new AttackingState();
+		break;
+	case StateType::JUMPING:
+		state = new JumpingState();
+		break;
+	case StateType::ROLLING:
+		state = new RollingState();
+		break;
+	case StateType::CASTING:
+		state = new CastingState();
+		break;
+	case StateType::DEAD:
+		state = new DeadState();
+		break;
+	case StateType::REVIVING:
+		state = new RevivingState();
+		break;
+	case StateType::HIT:
+		state = new HitState();
+		break;
+	default:
+		state = new IdleState();
+		break;
 	}
 
-	if (Input::GetControllerButtonDown(controller_index, controller_jump)
-		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded)
-		Jump();
+	state->OnEnter(this);
 }
 
-void PlayerController::RunningInput()
-{	
-	if (!controller->isGrounded)
-	{
-		Fall();
-	}
-	if (!mov_input)
-	{
-		state = PlayerState::IDLE;
-		particles["p_run"]->SetEnable(false);
-		player_data.speed = float3::zero();
-	}
-
-	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
-		|| Input::GetKeyDown(keyboard_light_attack)) {
-		attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
-		state = PlayerState::BASIC_ATTACK;
-		audio->StartSound("Hit_Sword");
-		particles["p_run"]->SetEnable(false);
-	}
-	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
-		|| Input::GetKeyDown(keyboard_heavy_attack)) {
-		attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		state = PlayerState::BASIC_ATTACK;
-		audio->StartSound("Hit_Sword");
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, controller_index);
-	}
-
-	if (Input::GetControllerButtonDown(controller_index, controller_dash)
-		|| Input::GetKeyDown(keyboard_dash))
-		Roll();
-
-	if (Input::GetControllerButtonDown(controller_index, controller_revive)
-		|| Input::GetKeyDown(keyboard_revive)) {
-		if (CheckForPossibleRevive()) {
-			player_data.speed = float3::zero();
-			animator->SetBool("reviving", true);
-			state = PlayerState::REVIVING;
-			particles["p_run"]->SetEnable(false);
-		}
-	}
-
-	if (Input::GetControllerButtonDown(controller_index, controller_spell)
-		|| Input::GetKeyDown(keyboard_spell)) {
-		attacks->StartSpell(0);
-		state = PlayerState::CASTING;
-		player_data.speed = float3::zero();
-		particles["p_run"]->SetEnable(false);
-	}
-
-	if (Input::GetControllerButtonDown(controller_index, controller_jump)
-		|| Input::GetKeyDown(keyboard_jump) && controller->isGrounded)
-	{
-		Jump();
-	}
-}
-
-void PlayerController::AttackingInput()
+void PlayerController::SwapState(State* new_state)
 {
-	if (Input::GetControllerButtonDown(controller_index, controller_light_attack)
-		|| Input::GetKeyDown(keyboard_light_attack))
-		attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
-	else if (Input::GetControllerButtonDown(controller_index, controller_heavy_attack)
-		|| Input::GetKeyDown(keyboard_heavy_attack))
-		attacks->ReceiveInput(PlayerAttacks::AttackType::HEAVY);
-
-	if ((Input::GetControllerButtonDown(controller_index, controller_dash)
-		|| Input::GetKeyDown(keyboard_dash)) && attacks->CanBeInterrupted()) {
-		Roll();
-	}
-
-	if ((Input::GetControllerButtonDown(controller_index, controller_jump)
-		|| Input::GetKeyDown(keyboard_jump)) && attacks->CanBeInterrupted() && controller->isGrounded) {
-		Jump();
-	}
+	state->OnExit(this);
+	delete state;
+	state = new_state;
+	state->OnEnter(this);
 }
 
 void PlayerController::ApplyRoot(float time)
 {
-	attacks->CancelAttack();
-	state = PlayerState::ROOT;
-	player_data.speed = float3(0.0f, -0.01f, 0.0f);
-	Invoke(std::bind(&PlayerController::ReleaseFromRoot, this), time);
+	is_rooted = true;
+	Invoke(std::bind(&PlayerController::ReleaseRoot, this), time);
 }
 
-void PlayerController::ReleaseFromRoot()
+void PlayerController::ReleaseRoot()
 {
-	state = PlayerState::IDLE;
+	is_rooted = false;
 }
 
 bool PlayerController::AnyKeyboardInput()
@@ -412,12 +192,15 @@ void PlayerController::HandleMovement()
 	direction_vector.y = 0.f;
 
 	//rotate
-	float angle = atan2f(direction_vector.z, direction_vector.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	transform->SetGlobalRotation(rot);
+	if (mov_input) //temporal solution
+	{
+		float angle = atan2f(direction_vector.z, direction_vector.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
+	}
 
 	float speed_y = player_data.speed.y;
-	player_data.speed = direction_vector * (player_data.movementSpeed * movement_input.Length());
+	player_data.speed = direction_vector * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
 	player_data.speed.y = speed_y;
 }
 
@@ -452,81 +235,6 @@ void PlayerController::EffectsUpdate()
 	}
 }
 
-void PlayerController::Jump()
-{
-	player_data.speed.y = player_data.jump_power;
-
-	state = PlayerState::JUMPING;
-	animator->PlayState("Air");
-	animator->SetBool("air", true);
-	particles["p_run"]->SetEnable(false);
-}
-
-void PlayerController::Fall()
-{
-	player_data.speed.y = 0;
-	state = PlayerState::JUMPING;
-	animator->PlayState("Air");
-	animator->SetBool("air", true);
-	particles["p_run"]->SetEnable(false);
-}
-
-void PlayerController::Roll()
-{
-	float3 direction_vector = float3::zero();
-
-	if (mov_input)
-	{
-		direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-		direction_vector.y = 0.f;
-	}
-	else
-		direction_vector = transform->forward;
-
-	player_data.speed = direction_vector * player_data.dash_power;
-	animator->PlayState("Roll");
-	state = PlayerState::DASHING;
-}
-
-void PlayerController::OnAnimationEnd(const char* name) {
-	if (strcmp(name, "Roll") == 0) {
-		if (!mov_input)
-		{
-			state = PlayerState::IDLE;
-			player_data.speed = float3::zero();
-		}
-		else
-		{
-			state = PlayerState::RUNNING;
-			particles["p_run"]->SetEnable(true);
-		}
-	}
-
-	if (strcmp(name, "Spell") == 0) {
-		if (!mov_input)
-		{
-			state = PlayerState::IDLE;
-			player_data.speed = float3::zero();
-		}
-		if (mov_input)
-		{
-			state = PlayerState::RUNNING;
-			particles["p_run"]->SetEnable(true);
-		}
-	}
-
-	if (strcmp(name, "Hit") == 0) {
-		state = PlayerState::IDLE;
-		animator->SetBool("reviving", false);
-		player_data.speed = float3::zero();
-	}
-
-	if (strcmp(name, "RCP") == 0) {
-		ActionRevive();
-	}
-}
-
 void PlayerController::PlayAttackParticle()
 {
 	if (attacks->GetCurrentAttack())
@@ -536,51 +244,24 @@ void PlayerController::PlayAttackParticle()
 	}
 }
 
+#pragma region PlayerActions
+void PlayerController::Jump()
+{
+	player_data.speed.y = player_data.stats["Jump_Power"].GetValue();
+	animator->PlayState("Air");
+	animator->SetBool("air", true);
+}
+
+void PlayerController::Fall()
+{
+	animator->PlayState("Air");
+	animator->SetBool("air", true);
+}
+
 void PlayerController::Die()
 {
-	animator->PlayState("Death");
-	state = PlayerState::DEAD;
-	animator->SetBool("dead", true);
-	player_data.speed = float3::zero();
-	GameManager::instance->event_manager->OnPlayerDead(this);
+	SetState(StateType::DEAD);
 }
-
-void PlayerController::Revive()
-{
-	state = PlayerState::IDLE;
-	animator->SetBool("dead", false);
-	animator->PlayState("Revive");
-	GameManager::instance->event_manager->OnPlayerRevive(this);
-	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
-}
-
-void PlayerController::ActionRevive()
-{
-	player_being_revived->Revive();
-	state = PlayerState::IDLE;
-	animator->SetBool("reviving", false);
-	player_being_revived = nullptr;
-}
-
-void PlayerController::ReceiveDamage(float value, float3 knock_back)
-{
-	player_data.stats["Health"].DecreaseStat(value);
-	HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	if (player_data.stats["Health"].GetValue() == 0)
-		Die();
-
-	attacks->CancelAttack();
-	if (state != PlayerState::HIT && state != PlayerState::DASHING && state != PlayerState::DEAD) {
-		animator->PlayState("Hit");
-		state = PlayerState::HIT;
-		player_data.speed = knock_back;
-	}	
-
-	GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
-}
-
 void PlayerController::PickUpRelic(Relic* _relic)
 {
 	relics.push_back(_relic);
@@ -590,6 +271,53 @@ void PlayerController::PickUpRelic(Relic* _relic)
 		AddEffect(_relic->effects.at(i));
 	}
 }
+void PlayerController::Revive()
+{
+	animator->SetBool("dead", false);
+	animator->PlayState("Revive");
+	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
+	is_immune = false;
+
+	if(HUD)
+		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	if(GameManager::instance->rumbler_manager)
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
+	if(GameManager::instance->event_manager)
+		GameManager::instance->event_manager->OnPlayerRevive(this);
+
+	SetState(StateType::IDLE);
+}
+
+void PlayerController::ActionRevive()
+{
+	player_being_revived->Revive();
+	animator->SetBool("reviving", false);
+	player_being_revived = nullptr;
+}
+
+void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
+{
+	player_data.stats["Health"].DecreaseStat(dmg);
+
+	if(HUD)
+		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
+	attacks->CancelAttack();
+
+	if (player_data.stats["Health"].GetValue() == 0)
+		Die();
+	else
+	{
+		animator->PlayState("Hit");
+		player_data.speed = knock_speed;
+		SetState(StateType::HIT);
+	}
+
+	if(GameManager::instance->rumbler_manager)
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+}
+#pragma endregion PlayerActions
+
 
 void PlayerController::AddEffect(Effect* _effect)
 {
@@ -608,7 +336,6 @@ void PlayerController::AddEffect(Effect* _effect)
 		}
 	}
 }
-
 bool PlayerController::CheckBoundaries()
 {
 	float3 next_pos = transform->GetGlobalPosition() + player_data.speed * Time::GetDT();
@@ -635,12 +362,9 @@ bool PlayerController::CheckBoundaries()
 				if (!fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					player_data.can_move = true;
 					player_data.speed = float3::zero();
 					return false;
 				}
-				else
-					player_data.can_move = false;
 			}
 		}
 	}
@@ -653,28 +377,46 @@ bool PlayerController::CheckBoundaries()
 		return false;
 	}
 }
-
-void PlayerController::OnDrawGizmosSelected()
-{
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), revive_range, Color::Cyan()); //snap_range
-}
-
 bool PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
 		float distance = this->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players_dead[i]->transform->GetGlobalPosition());
-		if (distance <= revive_range) {
+		if (distance <= player_data.revive_range) {
 			player_being_revived = GameManager::instance->player_manager->players_dead[i];
 			return true;
 		}
 	}
 }
 
+void PlayerController::HitFreeze(float freeze_time)
+{
+	float speed = animator->GetCurrentStateSpeed();
+	animator->SetCurrentStateSpeed(0);
+	is_immune = true;
+	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
+}
+
+void PlayerController::RemoveFreeze(float speed)
+{
+	animator->SetCurrentStateSpeed(speed);
+	is_immune = false;
+}
+
+
+
+#pragma region Events
+void PlayerController::OnAnimationEnd(const char* name) {
+
+	State* new_state = state->OnAnimationEnd(this, name);
+
+	//SWAP STATE IF NEEDED
+	if (new_state != nullptr)
+		SwapState(new_state);
+}
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
-	if(state != PlayerState::DASHING)
-		HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
 
 	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
@@ -689,49 +431,34 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 		}
 	}
 }
-
-void PlayerController::OnEnemyKill()
-{
-	player_data.total_kills++;
-	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
-}
-
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (!godmode)
 	{
-		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && state != PlayerState::DEAD && state != PlayerState::DASHING) {
+		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {
 
 			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
 
 			for (auto i = comps.begin(); i != comps.end(); ++i) {
 				Enemy* enemy = dynamic_cast<Enemy*>(*i);
 				if (enemy) {
-					float3 dir = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-					dir.y = 0;
-					LOG("%f, %f, %f", dir.x, dir.y, dir.z);
-					ReceiveDamage(enemy->stats["Damage"].GetValue(), -dir * enemy->knockback);
+					//Calculate Knockback
+					float3 direction = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+					float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
+					knock_speed.y = 0;
+
+					ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
 					return;
 				}
 			}
 		}
 	}
 }
-
-void PlayerController::HitFreeze(float freeze_time)
+void PlayerController::OnEnemyKill()
 {
-	state = PlayerState::DASHING;
-	float speed = animator->GetCurrentStateSpeed();
-	animator->SetCurrentStateSpeed(0);
-	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
+	player_data.total_kills++;
+	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }
-
-void PlayerController::RemoveFreeze(float speed)
-{
-	animator->SetCurrentStateSpeed(speed);
-	state = PlayerState::BASIC_ATTACK;
-}
-
 void PlayerController::OnUltimateActivation(float value)
 {
 	animator->IncreaseAllStateSpeeds(2.0f);
@@ -740,4 +467,87 @@ void PlayerController::OnUltimateActivation(float value)
 void PlayerController::OnUltimateDeactivation(float value)
 {
 	animator->DecreaseAllStateSpeeds(2.0f);
-} 
+}
+void PlayerController::OnDrawGizmosSelected()
+{
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
+}
+#pragma endregion Events
+
+#pragma region Init
+void PlayerController::LoadStats()
+{
+	std::string character_string = player_data.type == PlayerController::PlayerType::GERALT ? "Geralt" : "Yennefer";
+	std::string json = "GameData/Players/" + character_string + "Stats.json";
+
+	JSONfilepack* stats_json = JSONfilepack::GetJSON(json.c_str());
+	if (stats_json)
+	{
+		player_data.stats["Health"] = Stat("Health", stats_json->GetNumber("Health"));
+		player_data.stats["Strength"] = Stat("Strength", stats_json->GetNumber("Strength"));
+		player_data.stats["Chaos"] = Stat("Chaos", stats_json->GetNumber("Chaos"));
+		player_data.stats["Chaos_Regen"] = Stat("Chaos_Regen", stats_json->GetNumber("Chaos_Regen"));
+		player_data.stats["Attack_Speed"] = Stat("Attack_Speed", stats_json->GetNumber("Attack_Speed"));
+		player_data.stats["Movement_Speed"] = Stat("Movement_Speed", stats_json->GetNumber("Movement_Speed"));
+		player_data.stats["Dash_Power"] = Stat("Dash_Power", stats_json->GetNumber("Dash_Power"));
+		player_data.stats["Jump_Power"] = Stat("Jump_Power", stats_json->GetNumber("Jump_Power"));
+	}
+
+	JSONfilepack::FreeJSON(stats_json);
+}
+void PlayerController::InitKeyboardControls()
+{
+	if (controller_index == 1) {
+		keyboard_move_up = SDL_SCANCODE_W;
+		keyboard_move_left = SDL_SCANCODE_A;
+		keyboard_move_right = SDL_SCANCODE_D;
+		keyboard_move_down = SDL_SCANCODE_S;
+		keyboard_jump = SDL_SCANCODE_SPACE;
+		keyboard_dash = SDL_SCANCODE_LALT;
+		keyboard_light_attack = SDL_SCANCODE_V;
+		keyboard_heavy_attack = SDL_SCANCODE_B;
+		keyboard_revive = SDL_SCANCODE_C;
+		keyboard_ultimate = SDL_SCANCODE_X;
+		keyboard_spell = SDL_SCANCODE_F;
+
+		// HUD
+		if(GameObject::FindWithName("HUD_Game"))
+			HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
+	}
+	else if (controller_index == 2) {
+		keyboard_move_up = SDL_SCANCODE_I;
+		keyboard_move_left = SDL_SCANCODE_J;
+		keyboard_move_right = SDL_SCANCODE_L;
+		keyboard_move_down = SDL_SCANCODE_K;
+		keyboard_jump = SDL_SCANCODE_RSHIFT;
+		keyboard_dash = SDL_SCANCODE_RALT;
+		keyboard_light_attack = SDL_SCANCODE_RCTRL;
+		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
+		keyboard_revive = SDL_SCANCODE_M;
+		keyboard_ultimate = SDL_SCANCODE_APOSTROPHE;
+		keyboard_spell = SDL_SCANCODE_COMMA;
+
+		// HUD
+		if(GameObject::FindWithName("HUD_Game"))
+			HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character2");
+	}
+}
+void PlayerController::CalculateAABB() {
+	auto meshes = game_object->GetChild("Meshes")->GetComponentsInChildren<ComponentDeformableMesh>();
+	max_aabb.SetNegativeInfinity();
+
+	AABB new_section;
+	for (auto i = meshes.begin(); i != meshes.end(); ++i) {
+		new_section = (*i)->GetGlobalAABB();
+		max_aabb.minPoint = {
+			Maths::Min(new_section.minPoint.x, max_aabb.minPoint.x), Maths::Min(new_section.minPoint.y, max_aabb.minPoint.y),Maths::Min(new_section.minPoint.z, max_aabb.minPoint.z)
+		};
+		max_aabb.maxPoint = {
+			Maths::Max(new_section.maxPoint.x, max_aabb.maxPoint.x), Maths::Max(new_section.maxPoint.y, max_aabb.maxPoint.y),Maths::Max(new_section.maxPoint.z, max_aabb.maxPoint.z)
+		};
+	}
+
+	max_aabb.minPoint -= transform->GetGlobalPosition();
+	max_aabb.maxPoint -= transform->GetGlobalPosition();
+}
+#pragma endregion Init
