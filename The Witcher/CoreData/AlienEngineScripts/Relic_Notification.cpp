@@ -52,7 +52,7 @@ void Relic_Notification::Update()
 void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo)
 {
 	Notification* new_relic = new Notification();
-	new_relic->type = player->player_data.player_type;
+	new_relic->type = player->player_data.type;
 	new_relic->attack = attack_combo;
 	new_relic->relic_name = relic_name.c_str();
 	new_relic->description = description.c_str();

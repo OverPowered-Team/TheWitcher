@@ -24,7 +24,7 @@ void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
-		if (player_ctrl && player_ctrl->state != PlayerController::PlayerState::DEAD)
+		if (player_ctrl && !player_ctrl->is_immune)
 		{
 			GameObject::Destroy(game_object);
 			player_ctrl->ReceiveDamage(damage);

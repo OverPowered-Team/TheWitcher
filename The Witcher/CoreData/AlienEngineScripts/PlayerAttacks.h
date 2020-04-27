@@ -5,6 +5,7 @@
 
 class PlayerController;
 class AttackEffect;
+class CameraShake;
 
 class Attack {
 	friend class PlayerAttacks;
@@ -22,6 +23,7 @@ public:
 		int activation_frame = 0;
 		std::string next_light = "";
 		std::string next_heavy = "";
+		int shake = 0;
 	};
 public:
 
@@ -69,8 +71,7 @@ public:
 	void OnDrawGizmosSelected();
 	bool CanBeInterrupted();
 
-	void OnAnimationEnd(const char* name);
-
+	void AttackShake();
 	float GetCurrentDMG();
 	Attack* GetCurrentAttack();
 
@@ -99,7 +100,7 @@ protected:
 	GameObject* current_target = nullptr;
 	PlayerController* player_controller = nullptr;
 	ComponentBoxCollider* collider = nullptr;
-
+	CameraShake* shake = nullptr;
 	std::vector<Attack*> attacks;
 	std::vector<Attack*> spells;
 
@@ -124,6 +125,6 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AllowCombo, player_attacks);
-
+	SHOW_VOID_FUNCTION(PlayerAttacks::AttackShake, player_attacks);
 	return player_attacks;
 } 

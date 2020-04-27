@@ -185,14 +185,17 @@ void NilfgaardSoldier::UpdateEnemy()
 	case Enemy::EnemyState::IDLE:
 		if (distance < stats["VisionRange"].GetValue()) {
 			state = Enemy::EnemyState::MOVE;
-			m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
-			m_controller->has_changed = true;
+			if (m_controller)
+			{
+				m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
+				m_controller->has_changed = true;
+			}
 		}
 		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
 			state = Enemy::EnemyState::FLEE;
 		break;
 	case Enemy::EnemyState::MOVE:
-		if (distance > stats["VisionRange"].GetValue())
+		if (distance > stats["VisionRange"].GetValue() && m_controller)
 		{
 			m_controller->is_combat = false;
 			m_controller->has_changed = true;
@@ -233,8 +236,11 @@ void NilfgaardSoldier::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		audio_emitter->StartSound("SoldierDeath");
 		state = EnemyState::DEAD;
-		m_controller->is_combat = false;
-		m_controller->has_changed = true;
+		if (m_controller)
+		{
+			m_controller->is_combat = false;
+			m_controller->has_changed = true;
+		}
 		break;
 	}
 	case Enemy::EnemyState::DEAD:

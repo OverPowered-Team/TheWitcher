@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "GeraltController",
         "NumStates": 27,
-        "NumTransitions": 50,
+        "NumTransitions": 49,
         "States": [
             {
                 "Name": "Idle",
@@ -66,7 +66,7 @@
             },
             {
                 "Name": "Roll",
-                "Speed": 3,
+                "Speed": 2,
                 "Clip": "3247834789952261777"
             },
             {
@@ -177,7 +177,7 @@
                 "Source": "Idle",
                 "Target": "RCP",
                 "Blend": 0.25,
-                "End": true,
+                "End": false,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -427,32 +427,11 @@
             {
                 "Source": "Roll",
                 "Target": "Idle",
-                "Blend": 0.40000000596046448,
+                "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Roll",
-                "Target": "Run",
-                "Blend": 0.40000000596046448,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
+                "BoolConditions": []
             },
             {
                 "Source": "H",
@@ -1394,6 +1373,24 @@
                 "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "12560278428043101702",
                 "Frame": 30,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AttackShake",
+                "Animation_Id": "15648905613134895705",
+                "Frame": 35,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AttackShake",
+                "Animation_Id": "2185954702925284050",
+                "Frame": 66,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AttackShake",
+                "Animation_Id": "12560278428043101702",
+                "Frame": 31,
                 "Type": 2
             }
         ]

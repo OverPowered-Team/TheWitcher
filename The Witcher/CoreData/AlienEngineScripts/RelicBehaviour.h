@@ -39,6 +39,9 @@ public:
 
 	std::string name = "";
 	std::string description = "";
+	float valor = 0.0;
+	float time = 0.0;
+	float ticks_time = 0.0;
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	std::vector<Effect*> effects;
 
