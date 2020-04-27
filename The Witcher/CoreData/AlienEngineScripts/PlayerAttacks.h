@@ -71,8 +71,6 @@ public:
 	void OnDrawGizmosSelected();
 	bool CanBeInterrupted();
 
-	void OnAnimationEnd(const char* name);
-
 	void AttackShake();
 	float GetCurrentDMG();
 	Attack* GetCurrentAttack();

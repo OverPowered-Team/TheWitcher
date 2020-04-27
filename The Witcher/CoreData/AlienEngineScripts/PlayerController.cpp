@@ -390,16 +390,16 @@ bool PlayerController::CheckForPossibleRevive()
 
 void PlayerController::HitFreeze(float freeze_time)
 {
-	//state = PlayerState::DASHING;
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
+	is_immune = true;
 	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
 }
 
 void PlayerController::RemoveFreeze(float speed)
 {
 	animator->SetCurrentStateSpeed(speed);
-	SetState(StateType::ATTACKING);
+	is_immune = false;
 }
 
 

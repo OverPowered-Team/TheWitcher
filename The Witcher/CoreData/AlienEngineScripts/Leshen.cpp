@@ -20,7 +20,6 @@ void Leshen::StartEnemy()
 	Enemy::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
-	knockback = 0.5;
 }
 
 void Leshen::UpdateEnemy()

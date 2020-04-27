@@ -281,9 +281,18 @@ void Enemy::AddEffect(Effect* new_effect)
 
 void Enemy::HitFreeze(float freeze_time)
 {
-	CancelInvoke();
-	float speed = animator->GetCurrentStateSpeed();
-	animator->SetCurrentStateSpeed(0);
-	ComponentAnimator* anim = animator;
-	Invoke([anim, speed]() -> void {anim->SetCurrentStateSpeed(speed); }, freeze_time);
+	if (!is_frozen)
+	{
+		is_frozen = true;
+		float speed = animator->GetCurrentStateSpeed();
+		animator->SetCurrentStateSpeed(0);
+		ComponentAnimator* anim = animator;
+		Invoke([this, speed]() -> void {Enemy::StopHitFreeze(speed); }, freeze_time);
+	}
+}
+
+void Enemy::StopHitFreeze(float speed)
+{
+	is_frozen = false;
+	animator->SetCurrentStateSpeed(speed);
 }

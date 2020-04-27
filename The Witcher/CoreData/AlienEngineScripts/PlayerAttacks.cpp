@@ -302,14 +302,6 @@ float3 PlayerAttacks::GetMovementVector()
 	return direction_vector;
 }
 
-void PlayerAttacks::OnAnimationEnd(const char* name) {
-	if (current_attack)
-	{
-		current_attack = nullptr;
-
-	}
-}
-
 void PlayerAttacks::AttackShake()
 {
 	if (current_attack->info.shake == 1)
