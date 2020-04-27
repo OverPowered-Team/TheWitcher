@@ -15,9 +15,8 @@ void NilfSoldierRange::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue()) {
+		if (distance < stats["VisionRange"].GetValue())
 			state = NilfgaardSoldierState::MOVE;
-		}
 		else if (distance < stats["FleeRange"].GetValue())
 			state = NilfgaardSoldierState::AUXILIAR;
 		break;
@@ -27,14 +26,12 @@ void NilfSoldierRange::UpdateEnemy()
 		break;
 
 	case NilfgaardSoldierState::ATTACK:
-		float angle = atan2f(direction.z, direction.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-		transform->SetGlobalRotation(rot);
+		RotateSoldier();
 		break;
 
 	case NilfgaardSoldierState::AUXILIAR:
 		Flee();
-		break;
+	break;
 
 	case NilfgaardSoldierState::DYING:
 	{

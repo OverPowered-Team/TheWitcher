@@ -39,6 +39,8 @@ public:
 	void OnDeathHit();
 	void CheckDistance();
 
+	void RotateSoldier();
+
 	void OnAnimationEnd(const char* name) override;
 	void OnTriggerEnter(ComponentCollider* collider);
 
