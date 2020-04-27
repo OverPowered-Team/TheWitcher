@@ -65,12 +65,14 @@ public:
 
 	void EndRootAction(GameObject* root);
 	void EndMeleeAction();
-	void EndCrowsAction(GameObject* crow);
+	void EndCrowsAction();
 	void EndCloudAction();
 
 	//Leshen things
 	void HandleHitCount();
 	void SetRandomDirection();
+
+	void OnAnimationEnd(const char* name);
 };
 
 ALIEN_FACTORY Leshen* CreateLeshen() {
@@ -83,7 +85,6 @@ ALIEN_FACTORY Leshen* CreateLeshen() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->crow_prefab);
 	SHOW_VOID_FUNCTION(Leshen::LaunchRootAction, leshen);
 	SHOW_VOID_FUNCTION(Leshen::LaunchCrowsAction, leshen);
-	SHOW_VOID_FUNCTION(Leshen::EndMeleeAction, leshen);
 
 	return leshen;
 }

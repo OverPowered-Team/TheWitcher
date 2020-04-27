@@ -131,6 +131,7 @@ bool Boss::IsOnAction()
 
 void Boss::LaunchAction()
 {
+	rotate_time = 0.0f;
 }
 
 Boss::ActionState Boss::UpdateAction()
@@ -150,7 +151,11 @@ void Boss::SetStats(const char* json)
 void Boss::OrientToPlayer(int target)
 {
 	direction = -(player_controllers[target]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad());
-	transform->SetGlobalRotation(rot);
+	float desired_angle = atan2f(direction.z, direction.x);
+	desired_angle = -(desired_angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad();
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), desired_angle);
+	Quat current_rot = Quat::Slerp(transform->GetGlobalRotation(), rot, rotate_time);
+	transform->SetGlobalRotation(current_rot);
+	if(rotate_time < time_to_rotate)
+		rotate_time += Time::GetDT();
 }

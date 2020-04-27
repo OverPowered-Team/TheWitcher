@@ -38,6 +38,8 @@ public:
 	float action_time = 0;
 	float action_cooldown = 1.5f;
 	float time_to_action;
+	float time_to_rotate = 1.0f;
+	float rotate_time = 0.0f;
 
 	float player_distance[TOTAL_PLAYERS];
 

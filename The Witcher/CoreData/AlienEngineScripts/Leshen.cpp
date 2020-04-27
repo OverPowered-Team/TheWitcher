@@ -20,8 +20,6 @@ void Leshen::StartEnemy()
 	Boss::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
-
-	knockback = 0.5;
 }
 
 void Leshen::UpdateEnemy()
@@ -70,6 +68,8 @@ bool Leshen::IsOnAction()
 
 void Leshen::LaunchAction()
 {
+	Boss::LaunchAction();
+
 	switch (current_action->type)
 	{
 	case Leshen::ActionType::NONE:
@@ -92,7 +92,6 @@ void Leshen::LaunchAction()
 		else {
 			crows_target = rand() % 1;
 		}
-		OrientToPlayer(crows_target);
 		break;
 	case Leshen::ActionType::CLOUD:
 		LaunchCloudAction();
@@ -118,11 +117,7 @@ void Leshen::LaunchRootAction()
 
 void Leshen::LaunchMeleeAction()
 {
-	if (player_distance[0] < player_distance[1])
-		OrientToPlayer(0);
-	else {
-		OrientToPlayer(1);
-	}
+
 }
 
 void Leshen::LaunchCrowsAction()
@@ -188,12 +183,20 @@ Leshen::ActionState Leshen::UpdateMeleeAction()
 {
 	LOG("UPDATING MELEE ACTION");
 
+	if (player_distance[0] < player_distance[1])
+		OrientToPlayer(0);
+	else {
+		OrientToPlayer(1);
+	}
+
 	return current_action->state;
 }
 
 Leshen::ActionState Leshen::UpdateCrowsAction()
 {
 	LOG("UPDATING CROWS ACTION");
+
+	OrientToPlayer(crows_target);
 
 	return current_action->state;
 }
@@ -233,7 +236,7 @@ void Leshen::EndAction(GameObject* go_ended)
 		EndMeleeAction();
 		break;
 	case Leshen::ActionType::CROWS:
-		EndCrowsAction(go_ended);
+		EndCrowsAction();
 		break;
 	case Leshen::ActionType::CLOUD:
 		EndCloudAction();
@@ -260,9 +263,8 @@ void Leshen::EndMeleeAction()
 	current_action->state = Leshen::ActionState::ENDED;
 }
 
-void Leshen::EndCrowsAction(GameObject* crow)
+void Leshen::EndCrowsAction()
 {
-	Destroy(crow);
 	current_action->state = Leshen::ActionState::ENDED;
 }
 
@@ -314,4 +316,15 @@ void Leshen::SetRandomDirection()
 
 
 	direction = float3(rand_x, 0, rand_z);
+}
+
+void Leshen::OnAnimationEnd(const char* name)
+{
+	if (strcmp(name, "Melee") == 0) {
+		EndMeleeAction();
+	}
+
+	if (strcmp(name, "Crows") == 0) {
+		EndMeleeAction();
+	}
 }
