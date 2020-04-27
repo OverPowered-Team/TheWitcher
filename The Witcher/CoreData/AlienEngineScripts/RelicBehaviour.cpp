@@ -39,29 +39,32 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
 	attack_name = attack_pool[random_index];
 
-	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier(attack_name);
+	AttackEffect* effect = new AttackEffect();
+	effect->SetAttackIdentifier(attack_name);
+	effect->valor = valor;
+	effect->time = time;
+	effect->ticks_time = ticks_time;
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnHit = &ApplyBurnOnHit;
+		effect->OnHit = &ApplyBurnOnHit;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnHit = &ApplyIceOnHit;
+		effect->OnHit = &ApplyIceOnHit;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->AddMultiplicativeModifier(2.0f, "Attack_Damage");
+		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
 		break;
 	case Relic_Effect::LIGHTNING:
-		test_effect->OnHit = &ApplyLightningOnHit;
+		effect->OnHit = &ApplyLightningOnHit;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnHit = &ApplyPoisonOnHit;
+		effect->OnHit = &ApplyPoisonOnHit;
 		break;
 	}
 
-	effects.push_back(test_effect);
+	effects.push_back(effect);
 
 	Relic::OnPickUp(_player, attack_name);
 }
@@ -77,25 +80,25 @@ DashRelic::~DashRelic()
 
 void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
-	Effect* test_effect = new Effect();
+	Effect* effect = new Effect();
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnDash = &ApplyBurnOnDash;
+		effect->OnDash = &ApplyBurnOnDash;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnDash = &ApplyIceOnDash;
+		effect->OnDash = &ApplyIceOnDash;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->OnDash = &ApplyEarthOnDash;
+		effect->OnDash = &ApplyEarthOnDash;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnDash = &ApplyPoisonOnDash;
+		effect->OnDash = &ApplyPoisonOnDash;
 		break;
 	}
 
-	effects.push_back(test_effect);
+	effects.push_back(effect);
 
 	Relic::OnPickUp(_player);
 }

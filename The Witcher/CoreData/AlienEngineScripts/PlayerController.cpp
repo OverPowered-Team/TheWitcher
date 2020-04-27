@@ -684,7 +684,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 			AttackEffect* a_effect = (AttackEffect*)(*it);
 			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
 			{
-				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size());
+				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size(), a_effect);
 			}
 		}
 	}
