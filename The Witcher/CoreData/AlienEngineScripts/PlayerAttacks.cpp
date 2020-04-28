@@ -352,6 +352,7 @@ void PlayerAttacks::CreateAttacks()
 			info.next_light = attack_combo->GetString("next_attack_light");
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
 			info.shake = attack_combo->GetNumber("cam_shake");
+			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 

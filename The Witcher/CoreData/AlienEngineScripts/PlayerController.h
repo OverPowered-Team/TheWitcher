@@ -68,7 +68,7 @@ public:
 	void Revive();
 	void ActionRevive();
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
-
+	void PlayAllowParticle();
 	//Relics
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
@@ -164,6 +164,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
+	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 

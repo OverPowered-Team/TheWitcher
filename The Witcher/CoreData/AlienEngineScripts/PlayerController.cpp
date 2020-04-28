@@ -246,6 +246,16 @@ void PlayerController::PlayAttackParticle()
 	}
 }
 
+void PlayerController::PlayAllowParticle()
+{
+	if (attacks->GetCurrentAttack())
+	{
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);
+
+	}
+}
+
 #pragma region PlayerActions
 void PlayerController::Jump()
 {

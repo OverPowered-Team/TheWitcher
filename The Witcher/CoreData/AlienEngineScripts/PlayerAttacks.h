@@ -24,6 +24,7 @@ public:
 		std::string next_light = "";
 		std::string next_heavy = "";
 		int shake = 0;
+		std::string allow_combo_p_name = "";
 	};
 public:
 
