@@ -146,6 +146,8 @@ update_status ModuleInput::PreUpdate(float dt)
 		(*item).second->joystick_left.valueY = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_LEFTY);
 		(*item).second->joystick_right.valueX = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_RIGHTX);
 		(*item).second->joystick_right.valueY = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_RIGHTY);
+		(*item).second->left_trigger = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+		(*item).second->right_trigger = GetControllerAxis((*item).second, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 
 		SetJoystickState((*item).second->joystick_left.valueX, &(*item).second->joystick_left.joystick_state_right, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT);
 		SetJoystickState((*item).second->joystick_left.valueX, &(*item).second->joystick_left.joystick_state_left, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT);

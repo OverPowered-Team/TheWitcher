@@ -66,6 +66,7 @@ private:
 	bool drawEmmitter = false;
 	int shapeSelected = 0;
 	int bbTypeSelected = 0;
+	int meshTypeSelected = 8; // 8 - None mesh
 	int matTypeSelected = 0;
 	int eqTypeSelected = 0;
 	int funcTypeSource = 6;
