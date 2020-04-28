@@ -39,26 +39,27 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
 	attack_name = attack_pool[random_index];
 
-	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier(attack_name);
-	test_effect->on_hit_effect = effect_to_apply;
+	AttackEffect* effect = new AttackEffect();
+	effect->SetAttackIdentifier(attack_name);
+	effect->on_hit_effect = effect_to_apply;
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::EARTH:
+		effect->OnHit = &ApplyEffectOnHit;
 		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
 		break;
 	case Relic_Effect::LIGHTNING:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	}
 

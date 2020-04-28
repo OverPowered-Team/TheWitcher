@@ -780,6 +780,18 @@ GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position
 	return nullptr;
 }
 
+GameObject* GameObject::Instantiate(const char* prefab, const float3& position, bool check_child, GameObject* parent)
+{
+	OPTICK_EVENT();
+	for (auto item = App->resources->resources.begin(); item != App->resources->resources.end(); ++item) {
+		if ((*item)->GetType() == ResourceType::RESOURCE_PREFAB && strcmp(prefab, (*item)->GetName()) == 0) {
+			dynamic_cast<ResourcePrefab*>(*item)->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
+			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
+		}
+	}
+	return nullptr;
+}
+
 GameObject* GameObject::CloneObject(GameObject* to_clone, GameObject* parent)
 {
 	GameObject* clone = new GameObject((parent == nullptr) ? to_clone->parent : parent);
@@ -984,6 +996,23 @@ GameObject* GameObject::GetGameObjectByID(const u64 & id)
 	return ret;
 }
 
+GameObject* GameObject::GetGameObjectByIDReverse(const u64& id)
+{
+	GameObject* ret = nullptr;
+	if (id == this->ID) {
+		return this;
+	}
+	auto item = children.rbegin();
+	for (; item != children.rend(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->GetGameObjectByID(id);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
 GameObject* GameObject::FindTag(const char* tag_to_find)
 {
 	GameObject* ret = nullptr;
@@ -1155,7 +1184,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");
-	if (!force_no_selected && to_load->GetBoolean("Selected")) {
+	if (!force_no_selected && to_load->GetBoolean("Selected") && !App->objects->inPrefabCreation) {
 		App->objects->SetNewSelectedObject(this, false);
 	}
 	prefab_locked = to_load->GetBoolean("PrefabLocked");

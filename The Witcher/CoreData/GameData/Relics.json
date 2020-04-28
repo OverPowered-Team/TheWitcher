@@ -3,42 +3,27 @@
     {
       "effect": 6,
       "name": "Nature Soul",
-      "description": "Increases life regeneration by X",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Increases life regeneration by X"
     },
     {
       "effect": 7,
       "name": "Sea Soul",
-      "description": "Increases chaos regeneration by X",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Increases chaos regeneration by X"
     },
     {
       "effect": 8,
       "name": "Djinn Jar",
-      "description": "Invulnerable to first enemy attack",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Invulnerable to first enemy attack"
     },
     {
       "effect": 9,
       "name": "Strigas Claws",
-      "description": "Increases attack speed when you use different combos",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Increases attack speed when you use different combos"
     },
     {
       "effect": 10,
       "name": "Witcher Rage",
-      "description": "Relic that revives the player an extra life with the 50% of hp",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Relic that revives the player an extra life with the 50% of hp"
     }
   ],
   "ATTACK": [
@@ -46,83 +31,91 @@
       "effect": 1,
       "name": "Fire Runestone",
       "description": "burns enemies",
-	  "hit_effect":{
-		"name": "Burn_On_Hit",
-		"time": 0.5,
-		"ticks_time": 1.0,
-		"flat_modifiers":[
-			{
-				"identifier":"Health",
-				"value":-20
-			}
-		]
-	  }
+	    "hit_effect":{
+        "name": "fire_runestone",
+        "time": 0.5,
+        "ticks_time": 1.0,
+        "flat_modifiers":[
+          {
+            "identifier":"Health",
+            "value":-5
+          }
+        ]
+      }
     },
     {
       "effect": 2,
       "name": "Ice Runestone",
       "description": "slows enemies hit",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "hit_effect": {
+        "name": "ice_runestone",
+        "time": 0.2,
+        "ticks_time": 0.0,
+        "multiplicative_modifiers": [
+          {
+            "identifier": "Agility",
+            "value": 0.5
+          }
+        ]
+      }
     },
     {
       "effect": 3,
       "name": "Earth Runestone",
       "description": "does double damage",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "hit_effect": {
+        "name": "earth_runestone",
+        "time": 0.0,
+        "ticks_time": 0.0
+      }
     },
     {
       "effect": 4,
       "name": "Lightning Runestone",
       "description": "stuns enemies hit",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "hit_effect": {
+        "name": "lightning_runestone",
+        "time": 0.5,
+        "ticks_time": 0.0
+      }
     },
     {
       "effect": 5,
       "name": "Poison Runestone",
       "description": "poisons enemies hit",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "hit_effect": {
+        "name": "poison_runestone",
+        "time": 0.5,
+        "ticks_time": 0.0,
+        "flat_modifiers": [
+          {
+            "identifier": "Health",
+            "value": -5
+          }
+        ]
+      }
     }
   ],
   "DASH": [
     {
       "effect": 1,
       "name": "Fire Oil",
-      "description": "Dodge leaves a burning trail",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Dodge leaves a burning trail"
     },
     {
       "effect": 2,
       "name": "Ice Oil",
-      "description": "Dodge leaves a icy trail",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Dodge leaves a icy trail"
     },
     {
       "effect": 3,
       "name": "Earth Oil",
-      "description": "Dodge leaves a rock traps",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Dodge leaves a rock traps"
     },
     {
       "effect": 5,
       "name": "Poison Oil",
-      "description": "Dodge leaves a poisonous trail",
-      "valor": 0.0,
-      "time": 0.0,
-      "ticks_time": 0.0
+      "description": "Dodge leaves a poisonous trail"
     }
   ]
 }
