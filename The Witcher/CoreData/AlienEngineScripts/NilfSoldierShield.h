@@ -32,6 +32,7 @@ ALIEN_FACTORY NilfSoldierShield* CreateNilfSoldierShield() {
 	NilfSoldierShield* nilfgaard = new NilfSoldierShield();
 
 	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldierState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->head_position);

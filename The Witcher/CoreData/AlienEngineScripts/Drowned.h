@@ -21,7 +21,7 @@ public:
 		STUNNED,
 		HIT,
 		DYING,
-		DEATH);
+		DEAD);
 
 	Drowned();
 	virtual ~Drowned();
@@ -30,6 +30,7 @@ public:
 	void SetStats(const char* json) override;
 
 	void Stun(float time) override;
+	bool IsDead() override;
 
 public:
 	DrownedState state = DrownedState::NONE;

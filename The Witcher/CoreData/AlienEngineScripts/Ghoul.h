@@ -33,6 +33,7 @@ public:
 	void JumpImpulse();
 
 	void Stun(float time) override;
+	bool IsDead() override;
 
 	void OnAnimationEnd(const char* name) override;
 

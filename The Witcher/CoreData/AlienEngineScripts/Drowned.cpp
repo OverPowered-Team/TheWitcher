@@ -11,6 +11,7 @@ Drowned::~Drowned()
 void Drowned::StartEnemy()
 {
 	type = EnemyType::DROWNED;
+	state = DrownedState::IDLE;
 	Enemy::StartEnemy();
 }
 
@@ -59,5 +60,10 @@ void Drowned::Stun(float time)
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
 	}
+}
+
+bool Drowned::IsDead()
+{
+	return (state == DrownedState::DEAD ? true : false);
 }
 

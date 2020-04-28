@@ -37,6 +37,7 @@ public:
 	void CleanUpEnemy() override;
 
 	void Stun(float time) override;
+	bool IsDead() override;
 
 	void OnDeathHit();
 	void CheckDistance();
