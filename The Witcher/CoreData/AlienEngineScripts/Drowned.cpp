@@ -50,3 +50,14 @@ void Drowned::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
+void Drowned::Stun(float time)
+{
+	if (state != DrownedState::STUNNED)
+	{
+		state = DrownedState::STUNNED;
+		animator->PlayState("Dizzy");
+		current_stun_time = Time::GetGameTime();
+		stun_time = time;
+	}
+}
+

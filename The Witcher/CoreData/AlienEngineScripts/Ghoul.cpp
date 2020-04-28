@@ -53,6 +53,12 @@ void Ghoul::UpdateEnemy()
     case GhoulState::JUMP:
         JumpImpulse();
         break;
+    case GhoulState::STUNNED:
+        if (Time::GetGameTime() - current_stun_time > stun_time)
+        {
+            state = GhoulState::IDLE;
+        }
+        break;
     case GhoulState::DYING:
     {
         EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
@@ -113,6 +119,17 @@ void Ghoul::JumpImpulse()
     {
         animator->PlayState("Slash");
         state = GhoulState::ATTACK;
+    }
+}
+
+void Ghoul::Stun(float time)
+{
+    if (state != GhoulState::STUNNED)
+    {
+        state = GhoulState::STUNNED;
+        //animator->PlayState("Dizzy");
+        current_stun_time = Time::GetGameTime();
+        stun_time = time;
     }
 }
 

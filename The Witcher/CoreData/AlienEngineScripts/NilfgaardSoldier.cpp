@@ -148,6 +148,17 @@ void NilfgaardSoldier::CleanUpEnemy()
 	}
 }
 
+void NilfgaardSoldier::Stun(float time)
+{
+	if (state != NilfgaardSoldierState::STUNNED)
+	{
+		state = NilfgaardSoldierState::STUNNED;
+		animator->PlayState("Dizzy");
+		current_stun_time = Time::GetGameTime();
+		stun_time = time;
+	}
+}
+
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {

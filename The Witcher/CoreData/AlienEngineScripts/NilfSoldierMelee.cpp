@@ -24,6 +24,13 @@ void NilfSoldierMelee::UpdateEnemy()
 		Move(direction);
 		break;
 
+	case NilfgaardSoldierState::STUNNED:
+		if (Time::GetGameTime() - current_stun_time > stun_time)
+		{
+			state = NilfgaardSoldierState::IDLE;
+		}
+		break;
+
 	case NilfgaardSoldierState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();

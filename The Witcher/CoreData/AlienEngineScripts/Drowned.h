@@ -18,6 +18,7 @@ public:
 		ATTACK,
 		GETOFF,
 		HIDE,
+		STUNNED,
 		HIT,
 		DYING,
 		DEATH);
@@ -27,6 +28,8 @@ public:
 	
 	void StartEnemy() override;
 	void SetStats(const char* json) override;
+
+	void Stun(float time) override;
 
 public:
 	DrownedState state = DrownedState::NONE;

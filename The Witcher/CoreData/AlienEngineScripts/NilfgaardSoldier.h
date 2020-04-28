@@ -12,6 +12,7 @@ enum(NilfgaardSoldierState,
 	MOVE,
 	ATTACK,
 	AUXILIAR,
+	STUNNED,
 	HIT,
 	DYING,
 	DEAD
@@ -34,6 +35,8 @@ public:
 	void SetStats(const char* json) override;
 	float GetDamaged(float dmg, PlayerController* player);
 	void CleanUpEnemy() override;
+
+	void Stun(float time) override;
 
 	void OnDeathHit();
 	void CheckDistance();

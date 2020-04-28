@@ -39,6 +39,8 @@ public:
 	void ActivateCollider();
 	void DeactivateCollider();
 
+	virtual void Stun(float time) {};
+
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
 
@@ -70,4 +72,6 @@ public:
 
 protected:
 	std::vector<Effect*> effects;
+	float current_stun_time = 0.0f;
+	float stun_time = 0.0f;
 };

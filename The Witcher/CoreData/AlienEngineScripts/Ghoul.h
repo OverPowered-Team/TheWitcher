@@ -14,6 +14,7 @@ public:
 		MOVE,
 		ATTACK,
 		JUMP,
+		STUNNED,
 		HIT,
 		DYING,
 		DEAD);
@@ -30,6 +31,8 @@ public:
 	void Action() override;
 	void CheckDistance() override;
 	void JumpImpulse();
+
+	void Stun(float time) override;
 
 	void OnAnimationEnd(const char* name) override;
 
