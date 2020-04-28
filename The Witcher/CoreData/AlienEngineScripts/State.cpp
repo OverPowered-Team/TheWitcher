@@ -315,6 +315,11 @@ void HitState::OnExit(PlayerController* player)
 {
 }
 
+void RevivingState::Update(PlayerController* player)
+{
+
+}
+
 State* RevivingState::OnAnimationEnd(PlayerController* player, const char* name)
 {
 	if (strcmp(name, "RCP") == 0) {
