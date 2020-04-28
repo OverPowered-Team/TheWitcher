@@ -34,9 +34,17 @@ void NilfSoldierRange::UpdateEnemy()
 		break;
 
 	case NilfgaardSoldierState::AUXILIAR:
-		//if (math::Abs(distance - last_flee_distance) < flee_min_distance)
-		//	state = NilfgaardSoldierState::ATTACK;
+	{
+		current_flee_distance = transform->GetGlobalPosition().LengthSq();
+		LOG("Last flee distance: %f", last_flee_distance);
+		LOG("Current flee distance: %f", current_flee_distance);
+		if (math::Abs(last_flee_distance - current_flee_distance) < flee_min_distance)
+		{
+			Action();
+			LOG("Soy un malote");
+		}
 		Flee();
+	}
 	break;
 
 	case NilfgaardSoldierState::STUNNED:
@@ -68,6 +76,7 @@ void NilfSoldierRange::CheckDistance()
 	else if (distance < stats["FleeRange"].GetValue())
 	{
 		state = NilfgaardSoldierState::AUXILIAR;
+		last_flee_distance = 0.0f;
 	}
 	else if (distance > stats["VisionRange"].GetValue())
 	{
@@ -101,7 +110,8 @@ void NilfSoldierRange::Flee()
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
-	last_flee_distance = distance;
+
+	last_flee_distance = current_flee_distance;
 }
 
 void NilfSoldierRange::ShootAttack()

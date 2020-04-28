@@ -21,7 +21,8 @@ public:
 public:
 	Prefab arrow;
 	float last_flee_distance = 0.0f;
-	float flee_min_distance = 1.0f;
+	float flee_min_distance = 0.01f;
+	float current_flee_distance = 0.0f;
 };
 
 ALIEN_FACTORY NilfSoldierRange* CreateNilfSoldierRange() {
