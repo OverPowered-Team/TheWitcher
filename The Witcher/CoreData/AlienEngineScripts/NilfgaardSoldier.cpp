@@ -40,7 +40,10 @@ void NilfgaardSoldier::SetStats(const char* json)
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 
 		if (nilf_type == NilfgaardType::ARCHER)
+		{
 			stats["FleeRange"] = Stat("FleeRange", stat_weapon->GetNumber("FleeRange"));
+			stats["RecoverRange"] = Stat("RecoverRange", stat_weapon->GetNumber("RecoverRange"));
+		}
 		else if (nilf_type == NilfgaardType::SWORD_SHIELD)
 			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));
 
@@ -178,8 +181,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		}
 	}
-
-	if (strcmp(name, "Hit") == 0) {
+	else if (strcmp(name, "Hit") == 0) {
 		if (stats["Health"].GetValue() == 0.0F) {
 			state = NilfgaardSoldierState::HIT;
 		}
@@ -189,8 +191,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		}
 	}
-
-	if (strcmp(name, "Dizzy") == 0)
+	else if (strcmp(name, "Dizzy") == 0)
 	{
 		state = NilfgaardSoldierState::DYING;
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);

@@ -25,6 +25,8 @@ void NilfSoldierRange::UpdateEnemy()
 
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
+		if (distance < stats["FleeRange"].GetValue())
+			state = NilfgaardSoldierState::AUXILIAR;
 		break;
 
 	case NilfgaardSoldierState::ATTACK:
@@ -32,6 +34,8 @@ void NilfSoldierRange::UpdateEnemy()
 		break;
 
 	case NilfgaardSoldierState::AUXILIAR:
+		//if (math::Abs(distance - last_flee_distance) < flee_min_distance)
+		//	state = NilfgaardSoldierState::ATTACK;
 		Flee();
 	break;
 
@@ -53,6 +57,27 @@ void NilfSoldierRange::UpdateEnemy()
 	}
 }
 
+void NilfSoldierRange::CheckDistance()
+{
+	if ((distance < stats["AttackRange"].GetValue()) && distance > stats["FleeRange"].GetValue())
+	{
+		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		Action();
+	}
+	else if (distance < stats["FleeRange"].GetValue())
+	{
+		state = NilfgaardSoldierState::AUXILIAR;
+	}
+	else if (distance > stats["VisionRange"].GetValue())
+	{
+		state = NilfgaardSoldierState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
+	}
+}
+
 void NilfSoldierRange::Action()
 {
 	animator->PlayState("Shoot");
@@ -61,21 +86,22 @@ void NilfSoldierRange::Action()
 
 void NilfSoldierRange::Flee()
 {
-	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	float3 velocity_vec = -direction * stats["Agility"].GetValue();
 	character_ctrl->Move(velocity_vec * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
-	float angle = atan2f(direction.z, direction.x);
+	float angle = atan2f(-direction.z, -direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
-	if (distance > stats["FleeRange"].GetMaxValue())
+	if (distance > stats["RecoverRange"].GetValue())
 	{
 		state = NilfgaardSoldierState::ATTACK;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
+	last_flee_distance = distance;
 }
 
 void NilfSoldierRange::ShootAttack()
