@@ -14,6 +14,11 @@ State* IdleState::HandleInput(PlayerController* player)
 	{
 		return new RunningState();
 	}
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+		return new JumpingState();
+	}
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
@@ -80,7 +85,11 @@ State* RunningState::HandleInput(PlayerController* player)
 	{
 		return new IdleState();
 	}
-
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+		return new JumpingState();
+	}
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
