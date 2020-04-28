@@ -95,6 +95,7 @@ public:
 class DeadState : public State
 {
 public:
+	GameObject* revive_world_ui = nullptr;
 	DeadState() { type = StateType::DEAD; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	//void Update(PlayerController* player) override;
@@ -108,7 +109,7 @@ public:
 	RevivingState() { type = StateType::REVIVING; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	void Update(PlayerController* player) override;
-	State* OnAnimationEnd(PlayerController* player, const char* name) override;
+	//State* OnAnimationEnd(PlayerController* player, const char* name) override;
 	void OnEnter(PlayerController* player) override;
 	void OnExit(PlayerController* player) override;
 };

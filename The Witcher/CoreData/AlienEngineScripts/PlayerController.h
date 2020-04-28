@@ -66,7 +66,6 @@ public:
 	void PlayAttackParticle();
 	void Die();
 	void Revive(float minigame_value);
-	void ActionRevive();
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 
 	//Relics
@@ -120,6 +119,9 @@ public:
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
 
+	//Revive
+	Prefab revive_world_ui;
+
 	//Input Variables
 	int controller_index = 1;
 	//Keyboard input
@@ -163,9 +165,10 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
-	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	return player;
 }

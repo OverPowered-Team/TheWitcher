@@ -1,7 +1,9 @@
 #include "GameManager.h"
+#include "PlayerManager.h"
 #include "RumblerManager.h"
 #include "EventManager.h"
 
+#include "MiniGame_Revive.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 
@@ -320,23 +322,19 @@ void RevivingState::Update(PlayerController* player)
 
 }
 
-State* RevivingState::OnAnimationEnd(PlayerController* player, const char* name)
-{
-	if (strcmp(name, "RCP") == 0) {
-		player->ActionRevive();
-		return new IdleState();
-	}
-	return nullptr;
-}
-
 void RevivingState::OnEnter(PlayerController* player)
 {
+	player->input_blocked = true;
 	player->player_data.speed = float3::zero();
 	player->animator->SetBool("reviving", true);
+	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
 
 void RevivingState::OnExit(PlayerController* player)
 {
+	player->animator->SetBool("reviving", false);
+	player->player_being_revived = nullptr;
+	player->input_blocked = false;
 }
 
 void DeadState::OnEnter(PlayerController* player)
@@ -346,6 +344,10 @@ void DeadState::OnEnter(PlayerController* player)
 	player->player_data.speed = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
+	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, player->game_object->transform->GetGlobalPosition());
+	revive_world_ui->SetNewParent(player->game_object);
+	revive_world_ui->transform->SetLocalPosition(float3::zero());
+	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
 
 void DeadState::OnExit(PlayerController* player)

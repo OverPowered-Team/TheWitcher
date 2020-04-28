@@ -1,3 +1,6 @@
+#include "GameManager.h"
+#include "PlayerManager.h"
+#include "PlayerController.h"
 #include "MiniGame_Revive.h"
 
 MiniGame_Revive::MiniGame_Revive() : Alien()
@@ -18,23 +21,15 @@ void MiniGame_Revive::Start()
 	game_A = game_object->GetChild("Minigame")->GetChild("Y");
 	text = GameObject::FindWithName("Text");
 	text->SetEnable(false);
+	revive_state = States::PREGAME;
 }
 
 void MiniGame_Revive::Update()
 {
 	switch (revive_state)
 	{
-	case States::PREGAME:
-	{
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_X))
-		{
-			start_X->SetEnable(false);
-			minigame->SetEnable(true);
-
-			revive_state = States::MINIGAME;
-		}
-		break;
-	}
+	case States::PREGAME: {
+	} break;
 	case States::MINIGAME:
 	{
 		if (actual_inputs == input_times)
@@ -73,8 +68,9 @@ void MiniGame_Revive::Update()
 	}
 	case States::POSTGAME:
 	{
-		// Revive player
-		// UI bar updates with revived player life
+		player_dead->Revive(revive_percentatge);
+		player_reviving->SetState(StateType::IDLE);
+		Destroy(this->game_object);
 		break;
 	}
 	}
@@ -116,4 +112,13 @@ void MiniGame_Revive::Effects()
 	moving_part->GetComponent<ComponentImage>()->SetBackgroundColor(1, 1, 0, 1);
 
 	effects_change = true;
+}
+
+void MiniGame_Revive::StartMinigame(PlayerController* player_reviving)
+{
+	start_X->SetEnable(false);
+	minigame->SetEnable(true);
+	this->player_reviving = player_reviving;
+
+	revive_state = States::MINIGAME;
 }

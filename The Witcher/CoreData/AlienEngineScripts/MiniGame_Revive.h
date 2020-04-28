@@ -3,6 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class PlayerController;
 enum(States,
 	PREGAME,
 	MINIGAME,
@@ -23,11 +24,14 @@ public:
 
 	void Effects();
 	void ButtonLerp();
+	void StartMinigame(PlayerController* player_reviving);
 
 	States revive_state = States::PREGAME;
 	float lerp_time = 1.0f;
 	int input_times = 4;
 	float revive_percentatge = 0.0f;
+	PlayerController* player_dead = nullptr;
+	PlayerController* player_reviving = nullptr;
 
 private:
 	GameObject* moving_part = nullptr;

@@ -294,13 +294,6 @@ void PlayerController::Revive(float minigame_value)
 	SetState(StateType::IDLE);
 }
 
-void PlayerController::ActionRevive()
-{
-	player_being_revived->Revive();
-	animator->SetBool("reviving", false);
-	player_being_revived = nullptr;
-}
-
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 {
 	player_data.stats["Health"].DecreaseStat(dmg);
@@ -394,6 +387,8 @@ bool PlayerController::CheckForPossibleRevive()
 			return true;
 		}
 	}
+
+	return false;
 }
 
 void PlayerController::HitFreeze(float freeze_time)
