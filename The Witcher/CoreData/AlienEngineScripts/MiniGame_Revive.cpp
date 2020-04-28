@@ -94,10 +94,6 @@ void MiniGame_Revive::Minigame()
 		points = (1 - Maths::Abs(position_x)) / input_times;
 		++actual_inputs;
 		revive_percentatge += points;
-
-		LOG("Points: %f", points);
-		LOG("Inputs: %i", actual_inputs);
-		LOG("Total Revive: %f", revive_percentatge);
 	}
 
 	if (effects_change && (color_time + 0.1f < Time::GetGameTime()))
