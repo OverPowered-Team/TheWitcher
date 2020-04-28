@@ -1,0 +1,530 @@
+{
+    "Name": "ReviveMinigame",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "ReviveMinigame",
+                "FamilyNumber": 1,
+                "ID": "12643364578685309587",
+                "ParentID": "1323066572654909521",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12635953939663801770"
+                    },
+                    {
+                        "Enabled": true,
+                        "isWorld": false,
+                        "Type": 19,
+                        "BBType": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Revive_Minigame",
+                "FamilyNumber": 2,
+                "ID": "12834140221504856701",
+                "ParentID": "12643364578685309587",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9159484813769898512"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9951927118346018331",
+                        "ResourceID": "13472870288764910229",
+                        "DataName": "MiniGame_Revive",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "lerp_time",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "input_times",
+                                "int": 4
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Start_X",
+                "FamilyNumber": 3,
+                "ID": "12755806818902899165",
+                "ParentID": "12834140221504856701",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            10,
+                            10,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8751291218340508352"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "1039326515147094226",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Minigame",
+                "FamilyNumber": 3,
+                "ID": "6696201578951313995",
+                "ParentID": "12834140221504856701",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            20,
+                            3,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11467817191509760872"
+                    },
+                    {
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "0",
+                        "Color": [
+                            9.9999999747524271e-07,
+                            9.9998999303352321e-07,
+                            9.9998999303352321e-07,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Moving",
+                "FamilyNumber": 4,
+                "ID": "16567833156395638195",
+                "ParentID": "6696201578951313995",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -1,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.029999999329447746,
+                            1.25,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17508414766129189462"
+                    },
+                    {
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "0",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Good_Part",
+                "FamilyNumber": 4,
+                "ID": "13024578070525505958",
+                "ParentID": "6696201578951313995",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.25,
+                            0.5,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15274255659991636923"
+                    },
+                    {
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "0",
+                        "Color": [
+                            0.17646968364715576,
+                            1,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Maybe_Part",
+                "FamilyNumber": 4,
+                "ID": "10959252089946095101",
+                "ParentID": "6696201578951313995",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.5,
+                            0.25,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2100865233996619975"
+                    },
+                    {
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "0",
+                        "Color": [
+                            1,
+                            0.55970114469528198,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Y",
+                "FamilyNumber": 4,
+                "ID": "6369373707001203120",
+                "ParentID": "6696201578951313995",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            3.7780864238739014,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.5,
+                            3.1666660308837891,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9895378941676594658"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "3910731978571418384",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "10804616238813315666",
+                "ParentID": "12834140221504856701",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            17.775999069213867,
+                            -3.3328893184661865,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16045514055984158300"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "10732225660104508709",
+                        "Text": "00",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.93627452850341797,
+                            0.93626517057418823,
+                            0.93626517057418823,
+                            1
+                        ],
+                        "Width": 1365,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Revive",
+                "FamilyNumber": 4,
+                "ID": "218639730661176388",
+                "ParentID": "10804616238813315666",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7132461371187878067",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -970,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11825466371440062875"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "14093460934752387638",
+                        "Text": "Revive",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.96078431606292725,
+                            0.94194543361663818,
+                            0.94194543361663818,
+                            1
+                        ],
+                        "Width": 400,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            }
+        ]
+    }
+}
