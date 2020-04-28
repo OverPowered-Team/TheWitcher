@@ -76,6 +76,9 @@ public:
 	static KEY_STATE GetControllerJoystickLeft(int controller_index, const JOYSTICK_BUTTONS& code);
 	static KEY_STATE GetControllerJoystickRight(int controller_index, const JOYSTICK_BUTTONS& code);
 
+	static float GetControllerTriggerLeft(int controller_index);
+	static float GetControllerTriggerRight(int controller_index);
+
 	static KEY_STATE GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code);
 	static bool GetControllerButtonDown(int controller_index, const CONTROLLER_BUTTONS& code);
 	static bool GetControllerButtonIdle(int controller_index, const CONTROLLER_BUTTONS& code);

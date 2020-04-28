@@ -11,6 +11,8 @@
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
 #include "ResourceMaterial.h"
+#include "ResourceMesh.h"
+#include "ResourceModel.h"
 #include "Optick/include/optick.h"
 #include "ComponentMaterial.h"
 #include "mmgr/mmgr.h"
@@ -105,7 +107,10 @@ void ComponentParticleSystem::DebugDraw()
 void ComponentParticleSystem::Draw()
 {
 	OPTICK_EVENT();
-	particleSystem->DrawParticles();
+
+	if (App->objects->GetSelectedObjects().back() == game_object_attached)
+		particleSystem->DrawParticles();
+
 }
 
 void ComponentParticleSystem::OnEnable()
@@ -120,7 +125,9 @@ void ComponentParticleSystem::OnDisable()
 
 bool ComponentParticleSystem::DrawInspector()
 {
+	
 	//texture = material->material->texture;
+	
 	
 	static bool check;
 
@@ -420,16 +427,22 @@ bool ComponentParticleSystem::DrawInspector()
 			ImGui::Separator();
 			ImGui::Spacing();
 			ImGui::Spacing();
+			
+			ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "PARTICLE BILLBOARD:");
+			ImGui::Spacing();
+			ImGui::Spacing();
 
 			ImGui::Text("Orientation Mode ");
 			ImGui::SameLine(200, 15);
-			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0Velocity Aligned\0None\0\0"))
+			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0Velocity Aligned\0Mesh\0None\0\0"))
 			{
 				particleSystem->SetBillboardType((BillboardType)bbTypeSelected);
 			}
 
 			if (particleSystem->bbType == BillboardType::VELOCITY)
 			{
+				particleSystem->mesh_mode = false;
+
 				ImGui::Spacing();
 				ImGui::Spacing();
 
@@ -441,8 +454,104 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::Text("Speed Scale: "); ImGui::SameLine(200, 15);
 				ImGui::DragFloat("##Speed Scale", &particleSystem->particleInfo.speedScale, 0.0f, 100.0f);
 			}
+			else if (particleSystem->bbType == BillboardType::MESH)
+			{
+				particleSystem->mesh_mode = true;
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "PARTICLE MESH:");
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				ImGui::Text("Mesh ");
+				ImGui::SameLine(200, 15);
+
+				if (ImGui::Combo("Mesh", &meshTypeSelected, "Cube\0Sphere\0Rock\0Dodecahedron\0Octahedron\0Torus\0Icosahedron\0Custom\0None\0\0"))
+				{
+					particleSystem->SetMeshType((PARTICLE_MESH)meshTypeSelected);
+					particleSystem->CreateParticleMesh(particleSystem->meshType);
+				}
+				
+
+				if (particleSystem->meshType == PARTICLE_MESH::CUSTOM)
+				{
+					ImGui::Spacing();
+					ImGui::Text("Custom Mesh ");
+					ImGui::SameLine(200, 15);
+
+					if (!particleSystem->meshes.empty())
+						ImGui::Button(particleSystem->meshes.front()->name.data(), { ImGui::GetWindowWidth() * 0.25F , 0 });
+					else
+						ImGui::Button("none", { ImGui::GetWindowWidth() * 0.25F , 0 });
+
+					//if (node != nullptr && node->type == FileDropType::MODEL3D) {
+					//	std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+					//	path += "_meta.alien";
+
+					//	u64 ID = App->resources->GetIDFromAlienPath(path.data());
+
+					//	std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+
+					//	if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) { // if it goes here it is because this file wasn't imported yet, so import it now
+
+					//		App->importer->LoadModelFile(std::string(node->path + node->name).data(), nullptr);
+					//		ID = App->resources->GetIDFromAlienPath(path.data());
+					//		meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+					//		App->resources->CreateNewModelInstanceOf(meta_path.data());
+					//	}
+					//}
+
+					if (ImGui::BeginDragDropTarget()) {
+						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+
+						if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+							FileNode* node = *(FileNode**)payload->Data;
+							if (node != nullptr && node->type == FileDropType::MODEL3D) {
+
+								if (particleSystem->meshType == PARTICLE_MESH::CUSTOM)
+								{
+									std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+									path += "_meta.alien";
+
+									u64 ID = App->resources->GetIDFromAlienPath(path.data());
+
+									std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+
+
+									if (ID != 0)
+									{
+										ResourceModel* model = (ResourceModel*)App->resources->GetResourceWithID(ID);
+										if (model != nullptr) {
+											
+											vector<ResourceMesh*> tmp = model->meshes_attached;
+											//particleSystem->SetMesh(meshes.back());
+											particleSystem->SetMeshes(tmp);
+										}
+									}
+
+									//if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) { // if it goes here it is because this file wasn't imported yet, so import it now
+
+									//	App->importer->LoadModelFile(std::string(node->path + node->name).data(), nullptr);
+									//	ID = App->resources->GetIDFromAlienPath(path.data());
+									//	meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+									//	App->resources->CreateNewModelInstanceOf(meta_path.data());
+									//}
+								}
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+						ImGui::SameLine();
+						if (ImGui::Button("Delete", { ImGui::GetWindowWidth() * 0.15F , 0 }))
+						{
+							particleSystem->RemoveMesh();
+						}
+				}
+			}
 			else
 			{
+				particleSystem->mesh_mode = false;
 				particleSystem->particleInfo.lengthScale = 1.0f;
 				particleSystem->particleInfo.speedScale = 0.0f;
 			}
@@ -450,7 +559,10 @@ bool ComponentParticleSystem::DrawInspector()
 			ImGui::Spacing();
 			ImGui::Spacing();
 
-			ImGui::Text("Particle Material");
+			ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "PARTICLE MATERIAL: ");
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::Text("Material");
 			ImGui::SameLine(200, 15);
 
 			if (particleSystem->material != nullptr)
@@ -1024,12 +1136,20 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	// --------------- Material Resource Info -------------------- //
 	
 	to_save->SetBoolean("HasMaterial", (particleSystem->material != nullptr) ? true : false);
+
 	if (particleSystem->material != nullptr) {
-		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()).data());
+
+		if(particleSystem->material != particleSystem->default_material)
+			to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()).data());
+		else
+			to_save->SetString("MaterialID", "-1");
+
+
 		//to_save->SetFloat4("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.color);
 		//to_save->SetFloat3("Start.Color", particleSystem->material->shaderInputs.particleShaderProperties.start_color);
 		//to_save->SetFloat3("End.Color", particleSystem->material->shaderInputs.particleShaderProperties.end_color);
 	}
+	
 
 	// ------------------------ Animation Info ------------------------ //
 	to_save->SetBoolean("HasAnimation", (enable_anim) ? true : false);
@@ -1187,8 +1307,12 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	// ---------------------- Resource Info -------------------------- //
 
 	if (to_load->GetBoolean("HasMaterial")) {
+
 		u64 ID = std::stoull(to_load->GetString("MaterialID"));
-		particleSystem->SetMaterial((ResourceMaterial*)App->resources->GetResourceWithID(ID));
+
+		if(ID != -1) // DEFAULT PARTICLE MATERIAL
+			particleSystem->SetMaterial((ResourceMaterial*)App->resources->GetResourceWithID(ID));
+
 		//particleSystem->material->shaderInputs.particleShaderProperties.color = to_load->GetFloat4("Start.Color");
 
 		//particleSystem->material->shaderInputs.particleShaderProperties.start_color = to_load->GetFloat3("Start.Color");

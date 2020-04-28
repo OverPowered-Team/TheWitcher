@@ -8,6 +8,7 @@
 
 #include "ResourceTexture.h"
 #include "ResourceMaterial.h"
+#include "ResourceMesh.h"
 
 class ParticleSystem;
 class ComponentCamera;
@@ -15,6 +16,21 @@ class ComponentCamera;
 
 #define ANGULAR_CAP 200 // angular velocity will be capped at 360 degrees x second
 #define MAX_ANIMATIONS 16
+
+enum class PARTICLE_MESH
+{
+	UNKNOWN = -1,
+	CUBE,
+	SPHERE,
+	ROCK,
+	DODECAHEDRON,
+	OCTAHEDRON,
+	TORUS,
+	ICOSAHEDRON,
+
+	CUSTOM,
+	NONE
+};
 
 
 struct Frame {
@@ -127,7 +143,7 @@ public:
 
 private:
 	//ResourceTexture* resMat = nullptr;
-
+	
 	ParticleSystem* owner = nullptr;
 	ResourceMaterial* p_material = nullptr;
 
