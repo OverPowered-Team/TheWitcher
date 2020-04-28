@@ -175,6 +175,14 @@ void FileNode::ResetPaths()
 					(*item)->prefab_name = std::string(prefab->name);
 				}
 			}
+
+			JSONfilepack* pack = JSONfilepack::GetJSON(prefab->path.data());
+			pack->StartSave();
+			pack->SetString("Name", prefab->name.data());
+			pack->FinishSave();
+			delete pack;
+			remove(prefab->GetLibraryPath());
+			App->file_system->Copy(prefab->GetAssetsPath(), prefab->GetLibraryPath());
 		}
 		break; }
 	case FileDropType::SCENE: {

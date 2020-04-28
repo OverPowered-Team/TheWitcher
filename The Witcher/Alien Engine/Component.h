@@ -103,7 +103,7 @@ protected:
 	virtual void DrawScene() {}
 	virtual void DrawGame() {}
 
-	void ResetIDs();
+	virtual void ResetIDs();
 
 	const ComponentType& GetType() const;
 

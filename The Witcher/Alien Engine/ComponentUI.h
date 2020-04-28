@@ -10,6 +10,7 @@
 
 class ResourceTexture;
 class ReosurceFont;
+class GameObject;
 
 enum UIState {
 	Idle,
@@ -67,7 +68,7 @@ public:
 	virtual void UILogicMouse();
 	virtual void UILogicGamePad();
 	virtual void SetSize(float width, float height);
-
+	void ReSetIDNavigation();
 	//Script
 	void SetBackgroundColor(float r, float g, float b, float a);
 	UIState GetActualState();
@@ -121,6 +122,14 @@ protected:
 	float3 position = float3::zero();
 	float3 angle3D = float3::zero();
 	float3 scale = float3::zero();
+
+private:
+
+	GameObject* save_left = nullptr;
+	GameObject* save_right = nullptr;
+	GameObject* save_up = nullptr;
+	GameObject* save_bottom = nullptr;
+	bool save_getting = true;
 
 };
 
