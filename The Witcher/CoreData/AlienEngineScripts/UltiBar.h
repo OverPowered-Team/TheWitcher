@@ -20,9 +20,13 @@ public:
 
 	GameObject* ultibar = nullptr;
 	GameObject* ultibar_charged = nullptr;
+	ComponentBar* ultimate_bar = nullptr;
 	GameObject* controls = nullptr;
 	GameObject* controls_lb = nullptr;
 	GameObject* controls_rb = nullptr;
+	ComponentImage* lb_image = nullptr;
+	ComponentImage* rb_image = nullptr;
+
 	ComponentBar* normal_ulti = nullptr;
 	ComponentBar* charged_ulti = nullptr;
 
@@ -32,6 +36,8 @@ public:
 private:
 	int shining_count = 0;
 	float actual_time = 0.0f;
+	bool glowing = true;
+	float glow_time = 0.0f;
 	bool controls_lerping = false;
 };
 

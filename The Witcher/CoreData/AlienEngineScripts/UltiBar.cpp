@@ -1,5 +1,4 @@
 #include "UltiBar.h"
-#include "../../Alien Engine/ComponentBar.h"
 
 UltiBar::UltiBar() : Alien()
 {
@@ -13,9 +12,12 @@ void UltiBar::Start()
 {
 	ultibar = game_object->GetChild("Ultibar");
 	ultibar_charged = game_object->GetChild("Ultibar_Charged");
+	ultimate_bar = ultibar_charged->GetComponent<ComponentBar>();
 	controls = game_object->GetChild("Ulti_Controls");
 	controls_lb = controls->GetChild("LB");
 	controls_rb = controls->GetChild("RB");
+	lb_image = controls_lb->GetComponent<ComponentImage>();
+	rb_image = controls_rb->GetComponent<ComponentImage>();
 	controls->SetEnable(false);
 	ultibar->SetEnable(true);
 	normal_ulti = ultibar->GetComponent<ComponentBar>();
@@ -29,12 +31,37 @@ void UltiBar::Update()
 	{
 		controls->SetEnable(true);
 		actual_time = Time::GetGameTime();
+		glow_time = Time::GetGameTime();
 		controls_lerping = true;
+		ultibar_charged->SetEnable(true);
 	}
 
 	if (controls_lerping)
 	{
 		ControlsLerp();
+	}
+
+	if (ultibar_charged->IsEnabled())
+	{
+		float t = (Time::GetGameTime() - glow_time);
+		float color = 0.0f;
+
+		if (glowing)
+		{
+			color = Maths::Lerp(1.f, 0.6f, t);
+		}
+		else
+		{
+			color = Maths::Lerp(0.6f, 1.0f, t);
+		}
+
+		ultimate_bar->SetBarColor(color, color, color, 1);
+
+		if (t >= 1)
+		{
+			glowing = !glowing;
+			glow_time = Time::GetGameTime();
+		}
 	}
 }
 
@@ -55,6 +82,7 @@ void UltiBar::MaxBar()
 	ultibar->SetEnable(false);
 	ultibar_charged->SetEnable(true);
 	controls_lerping = true;
+	glow_time = Time::GetGameTime();
 	actual_time = Time::GetGameTime();
 }
 
@@ -76,9 +104,9 @@ void UltiBar::ControlsLerp()
 	}
 
 	controls_lb->transform->SetLocalScale(scale, scale, 1);
-	controls_lb->GetComponent<ComponentImage>()->SetBackgroundColor(color, color, color, 1);
+	lb_image->SetBackgroundColor(color, color, color, 1);
 	controls_rb->transform->SetLocalScale(scale, scale, 1);
-	controls_rb->GetComponent<ComponentImage>()->SetBackgroundColor(color, color, color, 1);
+	rb_image->SetBackgroundColor(color, color, color, 1);
 
 	if (t >= 1)
 	{
@@ -89,6 +117,7 @@ void UltiBar::ControlsLerp()
 		{
 			shining_count = 0;
 			controls_lerping = false;
+			controls->SetEnable(false);
 		}
 	}
 }
