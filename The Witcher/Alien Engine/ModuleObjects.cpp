@@ -1430,6 +1430,7 @@ void ModuleObjects::SwapReturnZ(bool get_save, bool delete_current)
 
 void ModuleObjects::HotReload()
 {
+	inHotReload = true;
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* json_object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, "Library/ScriptsTEMP.alien");
@@ -1487,6 +1488,7 @@ void ModuleObjects::HotReload()
 			}
 		}
 	}
+	inHotReload = false;
 }
 
 bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
@@ -1960,7 +1962,7 @@ void ModuleObjects::CompareName(std::vector<std::pair<std::string, std::function
 		for (auto scripts = scriptsVec.begin(); scripts != scriptsVec.end(); ++scripts) {
 			for (auto funct = (*scripts)->functionMap.begin(); funct != (*scripts)->functionMap.end(); ++funct) {
 				if ((*funct).first == (*item).first) {
-					(*item).second = (*funct).second;
+					(*item).second = ([funct]() -> void { (*funct).second(); });
 					skip = true;
 					break;
 				}

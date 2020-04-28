@@ -40,6 +40,8 @@ public:
 	void DeactivateCollider();
 
 	virtual void Stun(float time) {};
+	virtual void SetState(std::string state) {};
+	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}

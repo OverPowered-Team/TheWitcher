@@ -26,6 +26,7 @@ ALIEN_FACTORY NilfSoldierRange* CreateNilfSoldierRange() {
 	NilfSoldierRange* nilfgaard = new NilfSoldierRange();
 
 	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldierState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->head_position);

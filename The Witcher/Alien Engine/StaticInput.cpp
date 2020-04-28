@@ -136,6 +136,16 @@ KEY_STATE Input::GetControllerJoystickRight(int controller_index, const JOYSTICK
 	return App->input->GetControllerJoystickRight(controller_index, code);
 }
 
+float Input::GetControllerTriggerLeft(int controller_index)
+{
+	return !App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->left_trigger;
+}
+
+float Input::GetControllerTriggerRight(int controller_index)
+{
+	return !App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->right_trigger;
+}
+
 KEY_STATE Input::GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code)
 {
 	return App->input->GetControllerButton(controller_index, code);

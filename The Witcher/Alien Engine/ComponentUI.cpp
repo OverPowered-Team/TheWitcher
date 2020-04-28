@@ -15,6 +15,7 @@
 #include "ModuleRenderer3D.h"
 #include "Billboard.h"
 #include "StaticInput.h"
+#include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
 ComponentUI::ComponentUI(GameObject* obj) :Component(obj)
@@ -389,7 +390,36 @@ void ComponentUI::SetSize(float width, float height)
 	UpdateVertex();
 }
 
-
+void ComponentUI::ReSetIDNavigation()
+{
+	if (save_getting) {
+		GameObject* root = game_object_attached->FindPrefabRoot();
+		save_left = root->GetGameObjectByID(select_on_left);
+		save_right = root->GetGameObjectByID(select_on_right);
+		save_up = root->GetGameObjectByID(select_on_up);
+		save_bottom = root->GetGameObjectByID(select_on_down);
+	}
+	else {
+		if (save_left != nullptr) {
+			select_on_left = save_left->ID;
+			save_left = nullptr;
+		}
+		if (save_right != nullptr) {
+			select_on_right = save_right->ID;
+			save_right = nullptr;
+		}
+		if(save_up != nullptr) {
+			select_on_up = save_up->ID;
+			save_up = nullptr;
+		}
+		if (save_bottom != nullptr) {
+			select_on_down = save_bottom->ID;
+			save_bottom = nullptr;
+		}
+	}
+	
+	save_getting = !save_getting;
+}
 
 void ComponentUI::UILogicGamePad()
 {

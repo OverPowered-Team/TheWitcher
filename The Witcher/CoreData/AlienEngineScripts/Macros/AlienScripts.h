@@ -28,6 +28,7 @@
 #include "..\..\..\Alien Engine\ComponentButton.h"
 #include "..\..\..\Alien Engine\ComponentText.h"
 #include "..\..\..\Alien Engine\ComponentImage.h"
+#include "..\..\Alien Engine/ComponentBar.h"
 /*-----------------COMPONENTS-------------------*/
 
 /*-----------------MATH-------------------*/

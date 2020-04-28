@@ -10,6 +10,7 @@
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
+	state = NilfgaardSoldierState::IDLE;
 	Enemy::StartEnemy();
 }
 
@@ -157,6 +158,11 @@ void NilfgaardSoldier::Stun(float time)
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
 	}
+}
+
+bool NilfgaardSoldier::IsDead()
+{
+	return (state == NilfgaardSoldierState::DEAD ? true : false);
 }
 
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
