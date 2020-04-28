@@ -69,14 +69,9 @@ void PlayerController::Update()
 		player_data.speed.y = 0;
 	}
 
-
-
-
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
-
-
 }
 
 void PlayerController::UpdateInput()
@@ -281,6 +276,7 @@ void PlayerController::Revive()
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
