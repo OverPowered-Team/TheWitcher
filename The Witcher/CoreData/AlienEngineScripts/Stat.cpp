@@ -19,6 +19,19 @@ void Stat::ApplyEffect(Effect* effect)
     CalculateStat();
 }
 
+void Stat::RemoveEffect(Effect* effect)
+{
+    for (std::vector<Effect*>::iterator it = effects.begin(); it != effects.end(); ++it)
+    {
+        if (effect == (*it))
+        {
+            effects.erase(it);
+            break;
+        }
+    }
+    CalculateStat();
+}
+
 void Stat::CalculateStat()
 {
     float additive_value = 0;
@@ -34,7 +47,11 @@ void Stat::CalculateStat()
     max_value = base_value;
     max_value += additive_value;
     max_value += max_value * mult_value;
-    current_value = (current_value * max_value) / old_max;
+
+    if (old_max != 0)
+        current_value = (current_value * max_value) / old_max;
+    else
+        current_value = max_value;
 }
 
 void Stat::ModifyCurrentStat(Effect* _effect)

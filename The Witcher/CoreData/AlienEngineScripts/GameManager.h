@@ -9,6 +9,7 @@ class DialogueManager;
 class PlayerManager;
 class RelicManager;
 class RumblerManager;
+class EffectsFactory;
 
 class ALIEN_ENGINE_API GameManager : public Alien {
 
@@ -17,12 +18,14 @@ public:
 	virtual ~GameManager();
 
 	static GameManager* instance;
+
 	EventManager* event_manager = nullptr;
 	EnemyManager* enemy_manager = nullptr;
 	DialogueManager* dialogue_manager = nullptr;
 	PlayerManager* player_manager = nullptr;
 	RelicManager* relic_manager = nullptr;
 	RumblerManager* rumbler_manager = nullptr;
+	EffectsFactory* effects_factory = nullptr;
 
 	void Awake();
 	void Start();

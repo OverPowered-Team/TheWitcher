@@ -143,6 +143,10 @@ void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 	}
 }
 
+void PlayerAttacks::OnRemoveAttackEffect(AttackEffect* new_effect)
+{
+}
+
 void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;

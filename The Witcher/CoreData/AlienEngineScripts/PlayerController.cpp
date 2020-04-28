@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "PlayerAttacks.h"
 #include "EventManager.h"
+#include "EffectsFactory.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
 #include "CameraMovement.h"
@@ -13,6 +14,7 @@
 #include "CameraShake.h"
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
+
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -48,7 +50,11 @@ void PlayerController::Start()
 void PlayerController::Update()
 {
 	if (Input::GetKeyDown(SDL_SCANCODE_F1))
-		input_blocked = !input_blocked;
+	{
+		Effect* new_effect = GameManager::instance->effects_factory->CreateEffect("Geralt_Quen");
+		AddEffect(new_effect);
+		GameObject::Instantiate(tmp_quen_effect, float3::zero(), false, game_object);
+	}
 
 	UpdateInput();
 
@@ -229,8 +235,7 @@ void PlayerController::EffectsUpdate()
 		}
 		if ((*it)->to_delete)
 		{
-			delete (*it);
-			it = effects.erase(it);
+			it = RemoveEffect(it);
 			continue;
 		}
 		++it;
@@ -309,6 +314,12 @@ void PlayerController::ActionRevive()
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 {
+	if (player_data.stats["Absorb"].GetValue() > 0)
+	{
+		AbsorbHit();
+		return;
+	}
+
 	player_data.stats["Health"].DecreaseStat(dmg);
 
 	if(HUD)
@@ -330,6 +341,21 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
+
+void PlayerController::AbsorbHit()
+{
+	for (auto it = effects.begin(); it != effects.end();)
+	{
+		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
+		{
+			if (mods->identifier == "Absorb")
+			{
+				RemoveEffect(it);
+				return;
+			}
+		}
+	}
+}
 #pragma endregion PlayerActions
 
 
@@ -349,6 +375,27 @@ void PlayerController::AddEffect(Effect* _effect)
 				it->second.ApplyEffect(_effect);
 		}
 	}
+}
+std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
+{
+	Effect* tmp_effect = (*it);
+	it = effects.erase(it);
+
+	if (dynamic_cast<AttackEffect*>(tmp_effect) != nullptr)
+	{
+		attacks->OnRemoveAttackEffect(((AttackEffect*)tmp_effect));
+	}
+	else
+	{
+		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
+		{
+			if (tmp_effect->AffectsStat(it->second.name))
+				it->second.RemoveEffect(tmp_effect);
+		}
+	}
+
+	delete tmp_effect;
+	return it;
 }
 bool PlayerController::CheckBoundaries()
 {
@@ -452,7 +499,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (!godmode)
 	{
-		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {
+		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
 
 			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
 
@@ -495,22 +542,23 @@ void PlayerController::OnDrawGizmosSelected()
 void PlayerController::LoadStats()
 {
 	std::string character_string = player_data.type == PlayerController::PlayerType::GERALT ? "Geralt" : "Yennefer";
-	std::string json = "GameData/Players/" + character_string + "Stats.json";
+	std::string json_string = "GameData/Players/" + character_string + "Stats.json";
 
-	JSONfilepack* stats_json = JSONfilepack::GetJSON(json.c_str());
+	JSONfilepack* json = JSONfilepack::GetJSON(json_string.c_str());
+	JSONArraypack* stats_json = json->GetArray("Stats");
+
 	if (stats_json)
 	{
-		player_data.stats["Health"] = Stat("Health", stats_json->GetNumber("Health"));
-		player_data.stats["Strength"] = Stat("Strength", stats_json->GetNumber("Strength"));
-		player_data.stats["Chaos"] = Stat("Chaos", stats_json->GetNumber("Chaos"));
-		player_data.stats["Chaos_Regen"] = Stat("Chaos_Regen", stats_json->GetNumber("Chaos_Regen"));
-		player_data.stats["Attack_Speed"] = Stat("Attack_Speed", stats_json->GetNumber("Attack_Speed"));
-		player_data.stats["Movement_Speed"] = Stat("Movement_Speed", stats_json->GetNumber("Movement_Speed"));
-		player_data.stats["Dash_Power"] = Stat("Dash_Power", stats_json->GetNumber("Dash_Power"));
-		player_data.stats["Jump_Power"] = Stat("Jump_Power", stats_json->GetNumber("Jump_Power"));
+		stats_json->GetFirstNode();
+		for (int i = 0; i < stats_json->GetArraySize(); ++i)
+		{
+			Stat stat = Stat(stats_json->GetString("name"), stats_json->GetNumber("value"));
+			player_data.stats.insert(std::pair(stat.name, stat));
+			stats_json->GetAnotherNode();
+		}
 	}
 
-	JSONfilepack::FreeJSON(stats_json);
+	JSONfilepack::FreeJSON(json);
 }
 void PlayerController::InitKeyboardControls()
 {

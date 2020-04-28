@@ -73,6 +73,8 @@ public:
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
 
+
+
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
 	bool CheckForPossibleRevive();
@@ -91,6 +93,8 @@ private:
 	void LoadStats();
 	void InitKeyboardControls();
 	void CalculateAABB();
+	void AbsorbHit();
+	std::vector<Effect*>::iterator RemoveEffect(std::vector<Effect*>::iterator it); //this feels dirty :(
 
 public:
 	State* state;
@@ -102,6 +106,8 @@ public:
 	ComponentCharacterController* controller = nullptr;
 
 	float2 movement_input;
+
+	Prefab tmp_quen_effect;
 
 	bool mov_input = false;
 	bool is_immune = false;
@@ -161,6 +167,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.slow_speed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->tmp_quen_effect);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
