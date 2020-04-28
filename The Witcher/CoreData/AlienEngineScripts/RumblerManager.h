@@ -42,6 +42,7 @@ public:
 
 	//Rumbler
 	void StartRumbler(RumblerType _type, int _index_controller = 0, float _increase_decrease_time = 0.0f);
+	void StartRumbler(std::string _name, int _index_controller);
 	float rumbler_start_time = 0.0f;
 	float rumbler_end_time = 0.0f;
 	bool increase_decrease = false;

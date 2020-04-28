@@ -10,53 +10,26 @@
 static void ApplyEffectOnHit(Enemy* _enemy, uint size, EffectData* data)
 {
     Effect* effect = new Effect(data);
-    effect->time = size * data->time;
 
-    _enemy->AddEffect(effect);
-}
+    if(strcmp(data->name.data(), "poison_runestone") != 0)
+        effect->time = size * data->time;
 
-static void ApplyIceOnHit(Enemy* _enemy, uint size)
-{
-    Effect* effect = new Effect();
-    effect->AddMultiplicativeModifier(0.5, "Agility");
-    effect->name = "Ice On Hit";
-    effect->time = size * 0.2;
-    effect->ticks_time = 0;
-    effect->last_tick_time = Time::GetGameTime();
-    effect->start_time = Time::GetGameTime();
-    _enemy->AddEffect(effect);
-}
-
-static void ApplyLightningOnHit(Enemy* _enemy, uint size)
-{
+    if (strcmp(data->name.data(), "poison_runestone") == 0)
+    {
+        for (int i = 0; i < effect->additive_modifiers.size(); ++i)
+        {
+            if(effect->additive_modifiers[i].identifier == "Health")
+                effect->additive_modifiers[i].amount = data->additive_modifiers[i].amount * size;
+        }
+    }
     
-}
+    if (strcmp(data->name.data(), "lightning_runestone") == 0)
+        _enemy->Stun(effect->time);
 
-static void ApplyPoisonOnHit(Enemy* _enemy, uint size)
-{
-    Effect* effect = new Effect();
-    effect->AddFlatModifier(size * 10.0f, "Health");
-    effect->name = "Poison On Hit";
-    effect->time = 8.0f;
-    effect->ticks_time = 1.0f;
-    effect->last_tick_time = Time::GetGameTime();
-    effect->start_time = Time::GetGameTime();
     _enemy->AddEffect(effect);
 }
 
 //ONDASH
-static void ApplyBurnOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyIceOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyEarthOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyPoisonOnDash(PlayerController* _player)
+static void ApplyEffectOnDash(PlayerController* _player)
 {
 }

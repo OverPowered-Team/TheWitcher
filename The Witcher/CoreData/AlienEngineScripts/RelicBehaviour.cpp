@@ -19,7 +19,7 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	if(GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+	if(GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
 		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
 }
 
@@ -39,30 +39,31 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
 	attack_name = attack_pool[random_index];
 
-	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier(attack_name);
-	test_effect->on_hit_effect = effect_to_apply;
+	AttackEffect* effect = new AttackEffect();
+	effect->SetAttackIdentifier(attack_name);
+	effect->on_hit_effect = effect_to_apply;
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->AddMultiplicativeModifier(2.0f, "Attack_Damage");
+		effect->OnHit = &ApplyEffectOnHit;
+		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
 		break;
 	case Relic_Effect::LIGHTNING:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnHit = &ApplyEffectOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	}
 
-	effects.push_back(test_effect);
+	effects.push_back(effect);
 
 	Relic::OnPickUp(_player, attack_name);
 }
@@ -78,25 +79,25 @@ DashRelic::~DashRelic()
 
 void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
-	Effect* test_effect = new Effect();
+	Effect* effect = new Effect();
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnDash = &ApplyBurnOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnDash = &ApplyIceOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->OnDash = &ApplyEarthOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnDash = &ApplyPoisonOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	}
 
-	effects.push_back(test_effect);
+	effects.push_back(effect);
 
 	Relic::OnPickUp(_player);
 }

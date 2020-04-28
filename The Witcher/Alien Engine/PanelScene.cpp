@@ -201,8 +201,10 @@ void PanelScene::PanelLogic()
 	ImDrawList* list = ImGui::GetWindowDrawList();
 	if (list != nullptr && list->CmdBuffer.size() > 1) {
 		is_window_being_rendered = true;
+		App->camera->scene_viewport->active = true;
 	}
 	else {
+		App->camera->scene_viewport->active = false;
 		is_window_being_rendered = false;
 	}
 

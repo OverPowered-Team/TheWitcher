@@ -50,12 +50,6 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
-	if (Time::IsGamePaused())
-	{
-		LOG("%s", "paused");
-	}
-	else
-		LOG("%s", "going");
 }
 
 void InGame_UI::YouDied()

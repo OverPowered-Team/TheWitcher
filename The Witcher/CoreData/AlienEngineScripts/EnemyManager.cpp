@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "NilfgaardSoldier.h"
+#include "Drowned.h"
 #include "PlayerController.h"
 
 void EnemyManager::Awake()
@@ -74,9 +75,23 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 			break; }
 		default: {
 			LOG("Niflgard type wrong")
-			break; }
+				break; }
 		}
 		break; }
+	case EnemyType::DROWNED:
+		switch ((Drowned::DrownedType)extra_type)
+		{
+		case Drowned::DrownedType::GRAB: {
+			LOG("Drowned Grab");
+			break; }
+		case Drowned::DrownedType::RANGE: {
+			LOG("Drowned Range");
+			break; }
+		default: {
+			LOG("Drowned type wrong")
+				break; }
+		}
+		break;
 	default:
 		break;
 	}

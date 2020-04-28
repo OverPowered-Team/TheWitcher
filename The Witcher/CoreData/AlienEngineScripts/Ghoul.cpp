@@ -10,6 +10,13 @@ Ghoul::~Ghoul()
 {
 }
 
+void Ghoul::StartEnemy()
+{
+    type = EnemyType::GHOUL;
+    state = GhoulState::IDLE;
+    Enemy::StartEnemy();
+}
+
 void Ghoul::SetStats(const char* json)
 {
     std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
@@ -31,55 +38,38 @@ void Ghoul::SetStats(const char* json)
     JSONfilepack::FreeJSON(stat);
 }
 
-void Ghoul::StartEnemy()
-{
-	type = EnemyType::GHOUL;
-    m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
-	Enemy::StartEnemy();
-}
-
 void Ghoul::UpdateEnemy()
 {
     Enemy::UpdateEnemy();
 
-	switch (state)
-	{
-    case Enemy::EnemyState::IDLE:
+    switch (state)
+    {
+    case GhoulState::IDLE:
         if (distance < stats["VisionRange"].GetValue())
-        {
-            state = Enemy::EnemyState::MOVE;
-            m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
-            m_controller->has_changed = true;
-        }
+            state = GhoulState::MOVE;
         break;
-    case Enemy::EnemyState::MOVE:
-        if (distance > stats["VisionRange"].GetValue())
-        {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-        }
+    case GhoulState::MOVE:
         Move(direction);
         break;
-    case Enemy::EnemyState::BLOCK:
-            JumpImpulse();
-            break;
-    case Enemy::EnemyState::ATTACK:
+    case GhoulState::JUMP:
+        JumpImpulse();
         break;
-    case Enemy::EnemyState::DYING:
+    case GhoulState::STUNNED:
+        if (Time::GetGameTime() - current_stun_time > stun_time)
+        {
+            state = GhoulState::IDLE;
+        }
+        break;
+    case GhoulState::DYING:
     {
         EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
         //Ori Ori function sintaxis
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
         audio_emitter->StartSound("GhoulDeath");
-        state = EnemyState::DEAD;
-        m_controller->is_combat = false;
-        m_controller->has_changed = true;
+        state = GhoulState::DEAD;
         break;
     }
-    default:
-        LOG("There's no state");
-        break;
-	}
+    }
 }
 
 void Ghoul::CleanUpEnemy()
@@ -92,12 +82,30 @@ void Ghoul::Action()
     if (distance < stats["AttackRange"].GetValue())
     {
         animator->PlayState("Slash");
-        state = EnemyState::ATTACK;
+        state = GhoulState::ATTACK;
     }
     else if (distance < stats["JumpRange"].GetValue() && distance > stats["AttackRange"].GetValue())
     {
         animator->PlayState("Jump");
-        state = EnemyState::BLOCK;
+        state = GhoulState::JUMP;
+    }
+}
+
+void Ghoul::CheckDistance()
+{
+    if (distance < stats["JumpRange"].GetValue())
+    {
+        animator->SetFloat("speed", 0.0F);
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        Action();
+    }
+
+    if (distance > stats["VisionRange"].GetValue())
+    {
+        state = GhoulState::IDLE;
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        animator->SetFloat("speed", 0.0F);
+        is_combat = false;
     }
 }
 
@@ -111,8 +119,24 @@ void Ghoul::JumpImpulse()
     else
     {
         animator->PlayState("Slash");
-        state = EnemyState::ATTACK;
+        state = GhoulState::ATTACK;
     }
+}
+
+void Ghoul::Stun(float time)
+{
+    if (state != GhoulState::STUNNED)
+    {
+        state = GhoulState::STUNNED;
+        //animator->PlayState("Dizzy");
+        current_stun_time = Time::GetGameTime();
+        stun_time = time;
+    }
+}
+
+bool Ghoul::IsDead()
+{
+    return (state == GhoulState::DEAD ? true : false);
 }
 
 void Ghoul::OnAnimationEnd(const char* name)
@@ -120,29 +144,20 @@ void Ghoul::OnAnimationEnd(const char* name)
     if (strcmp(name, "Slash") == 0) {
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
-            state = Enemy::EnemyState::MOVE;
+            state = GhoulState::MOVE;
         }
         else
         {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-            state = Enemy::EnemyState::IDLE;
+            state = GhoulState::IDLE;
         }
     }
     else if (strcmp(name, "Jump") == 0)
     {
         if (distance < stats["VisionRange"].GetValue())
-        {
-            state = Enemy::EnemyState::MOVE;
-        }
+            state = GhoulState::MOVE;
         else
-        {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-            state = Enemy::EnemyState::IDLE;
-        }
+            state = GhoulState::IDLE;
     }
-    else if (strcmp(name, "Hit") == 0) {
-        state = Enemy::EnemyState::IDLE;
-    }
+    else if (strcmp(name, "Hit") == 0)
+        state = GhoulState::IDLE;
 }
