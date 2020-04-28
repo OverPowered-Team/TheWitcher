@@ -39,28 +39,26 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
 	attack_name = attack_pool[random_index];
 
-	AttackEffect* effect = new AttackEffect();
-	effect->SetAttackIdentifier(attack_name);
-	effect->valor = valor;
-	effect->time = time;
-	effect->ticks_time = ticks_time;
+	AttackEffect* test_effect = new AttackEffect();
+	test_effect->SetAttackIdentifier(attack_name);
+	test_effect->on_hit_effect = effect_to_apply;
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		effect->OnHit = &ApplyBurnOnHit;
+		test_effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::ICE:
-		effect->OnHit = &ApplyIceOnHit;
+		test_effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::EARTH:
 		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
 		break;
 	case Relic_Effect::LIGHTNING:
-		effect->OnHit = &ApplyLightningOnHit;
+		test_effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::POISON:
-		effect->OnHit = &ApplyPoisonOnHit;
+		test_effect->OnHit = &ApplyEffectOnHit;
 		break;
 	}
 
@@ -148,8 +146,7 @@ void RelicBehaviour::Update()
 }
 
 void RelicBehaviour::SetRelic(const char* json_array)
-{
-	
+{	
 	JSONfilepack* relic_json = JSONfilepack::GetJSON("GameData/Relics.json");
 
 	JSONArraypack* type_array = relic_json->GetArray(json_array);
@@ -167,9 +164,42 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		}
 		relic->name = type_array->GetString("name");
 		relic->description = type_array->GetString("description");
-		relic->valor = type_array->GetNumber("valor");
-		relic->time = type_array->GetNumber("time");
-		relic->ticks_time = type_array->GetNumber("ticks_time");
+
+		if (std::strcmp(json_array, "ATTACK") == 0)
+		{
+			EffectData* _effect = new EffectData();
+			_effect->name = type_array->GetString("hit_effect.name");
+			_effect->time = type_array->GetNumber("hit_effect.time");
+			_effect->ticks_time = type_array->GetNumber("hit_effect.ticks_time");
+
+			JSONArraypack* flat_modifiers = type_array->GetArray("hit_effect.flat_modifiers");
+			if (flat_modifiers)
+			{
+				flat_modifiers->GetFirstNode();
+				for (uint i = 0; i < flat_modifiers->GetArraySize(); i++)
+				{
+					Modifier mod;
+					mod.identifier = flat_modifiers->GetString("identifier");
+					mod.amount = flat_modifiers->GetNumber("value");
+					_effect->additive_modifiers.push_back(mod);
+				}
+			}
+
+			JSONArraypack* mult_modifiers = type_array->GetArray("hit_effect.multiplicative_modifiers");
+			if (mult_modifiers)
+			{
+				mult_modifiers->GetFirstNode();
+				for (uint i = 0; i < mult_modifiers->GetArraySize(); i++)
+				{
+					Modifier mod;
+					mod.identifier = mult_modifiers->GetString("identifier");
+					mod.amount = mult_modifiers->GetNumber("value");
+					_effect->multiplicative_modifiers.push_back(mod);
+				}
+			}
+
+			((AttackRelic*)relic)->effect_to_apply = _effect;
+		}
 	}
 
 	JSONfilepack::FreeJSON(relic_json);

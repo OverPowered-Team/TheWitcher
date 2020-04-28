@@ -10,7 +10,7 @@
 #include "RumblerManager.h"
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
-
+#include "CameraShake.h"
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
 #include "PlayerController.h"
@@ -30,6 +30,7 @@ void PlayerController::Start()
 	attacks = GetComponent<PlayerAttacks>();
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
+	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
@@ -46,14 +47,17 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
+	if (Input::GetKeyDown(SDL_SCANCODE_F1))
+		input_blocked = !input_blocked;
+
 	UpdateInput();
 
 	//State Machine-----------------
-	State* new_state = state->HandleInput(this);
-	state->Update(this);
-
+	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
 	if (new_state != nullptr)
 		SwapState(new_state);
+
+	state->Update(this);
 	//------------------------------
 
 	//Effects-----------------------------
@@ -61,15 +65,13 @@ void PlayerController::Update()
 
 	//MOVEMENT
 	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if(CheckBoundaries() && !is_rooted)
+	if(CheckBoundaries() && can_move)
 		controller->Move(player_data.speed * Time::GetDT());
 
 	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
 	{
 		player_data.speed.y = 0;
 	}
-
-
 
 
 	//Update animator variables
@@ -97,13 +99,13 @@ void PlayerController::UpdateInput()
 		keyboardInput.y = 1.f;
 	}
 
-	if (keyboardInput.Length() > 0)
+	if (keyboardInput.Length() > 0 && !input_blocked)
 	{
 		mov_input = true;
 		keyboardInput.Normalize();
 		movement_input = keyboardInput;
 	}
-	else if (joystickInput.Length() > 0) {
+	else if (joystickInput.Length() > 0 && !input_blocked) {
 		mov_input = true;
 		movement_input = joystickInput;
 	}
@@ -166,13 +168,13 @@ void PlayerController::SwapState(State* new_state)
 
 void PlayerController::ApplyRoot(float time)
 {
-	is_rooted = true;
+	can_move = false;
 	Invoke(std::bind(&PlayerController::ReleaseRoot, this), time);
 }
 
 void PlayerController::ReleaseRoot()
 {
-	is_rooted = false;
+	can_move = true;
 }
 
 bool PlayerController::AnyKeyboardInput()
@@ -219,7 +221,10 @@ void PlayerController::EffectsUpdate()
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 					if (player_data.stats["Health"].GetValue() == 0)
+					{
+						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
+					}
 				}
 			}
 			if (particles[(*it)->name])
@@ -303,9 +308,11 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 
 	attacks->CancelAttack();
-
 	if (player_data.stats["Health"].GetValue() == 0)
+	{	
+		shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 		Die();
+	}
 	else
 	{
 		animator->PlayState("Hit");
@@ -426,7 +433,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 			AttackEffect* a_effect = (AttackEffect*)(*it);
 			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
 			{
-				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size(), a_effect);
+				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size(), a_effect->on_hit_effect);
 			}
 		}
 	}

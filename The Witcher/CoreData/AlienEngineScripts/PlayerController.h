@@ -9,7 +9,7 @@ class PlayerAttacks;
 class Relic;
 class Effect;
 class Enemy;
-
+class CameraShake;
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
 	friend class RunningState;
@@ -102,9 +102,11 @@ public:
 	ComponentCharacterController* controller = nullptr;
 
 	float2 movement_input;
+
 	bool mov_input = false;
 	bool is_immune = false;
-	bool is_rooted = false;
+	bool can_move = true;
+	bool input_blocked = false;
 
 	//Relics
 	std::vector<Effect*> effects;
@@ -148,6 +150,7 @@ private:
 
 	ComponentCamera* camera = nullptr;
 	AABB max_aabb;
+	CameraShake* shake = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {

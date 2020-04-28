@@ -10,14 +10,14 @@
 
 State* IdleState::HandleInput(PlayerController* player)
 {
+	if (player->movement_input.Length() > 0)
+	{
+		return new RunningState();
+	}
 	if (!player->controller->isGrounded)
 	{
 		player->Fall();
 		return new JumpingState();
-	}
-	if (player->movement_input.Length() > 0)
-	{
-		return new RunningState();
 	}
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
@@ -64,6 +64,10 @@ State* IdleState::HandleInput(PlayerController* player)
 
 void IdleState::Update(PlayerController* player)
 {
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void IdleState::OnEnter(PlayerController* player)
@@ -77,17 +81,15 @@ void IdleState::OnExit(PlayerController* player)
 
 State* RunningState::HandleInput(PlayerController* player)
 {
+	if (!player->mov_input)
+	{
+		return new IdleState();
+	}
 	if (!player->controller->isGrounded)
 	{
 		player->Fall();
 		return new JumpingState();
 	}
-
-	if (!player->mov_input)
-	{
-		return new IdleState();
-	}
-
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
@@ -136,6 +138,11 @@ void RunningState::Update(PlayerController* player)
 		player->audio->StartSound();
 	}
 	player->HandleMovement();
+
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void RunningState::OnEnter(PlayerController* player)

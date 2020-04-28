@@ -46,9 +46,17 @@
       "effect": 1,
       "name": "Fire Runestone",
       "description": "burns enemies",
-      "valor": 5.0,
-      "time": 0.5,
-      "ticks_time": 1.0
+	  "hit_effect":{
+		"name": "Burn_On_Hit",
+		"time": 0.5,
+		"ticks_time": 1.0,
+		"flat_modifiers":[
+			{
+				"identifier":"Health",
+				"value":-20
+			}
+		]
+	  }
     },
     {
       "effect": 2,
