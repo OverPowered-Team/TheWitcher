@@ -38,18 +38,6 @@ static void ApplyEffectOnHit(Enemy* _enemy, uint size, EffectData* data)
 }
 
 //ONDASH
-static void ApplyBurnOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyIceOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyEarthOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyPoisonOnDash(PlayerController* _player)
+static void ApplyEffectOnDash(PlayerController* _player)
 {
 }

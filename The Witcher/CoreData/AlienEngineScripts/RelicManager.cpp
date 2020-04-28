@@ -29,7 +29,7 @@ void RelicManager::Update()
 
 void RelicManager::DropRelic(float3 position)
 {
-	int random_index = Random::GetRandomIntBetweenTwo(1, 100);
+	int random_index = Random::GetRandomIntBetweenTwo(1, 80);
 	if (random_index > 0 && random_index <= 60)
 	{
 		random_index = Random::GetRandomIntBetweenTwo(1, 5);
