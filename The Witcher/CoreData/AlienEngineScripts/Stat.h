@@ -13,6 +13,8 @@ public:
 	~Stat();
 
 	void ApplyEffect(Effect* effect);
+	void RemoveEffect(Effect* effect);
+
 	void CalculateStat();
 	void ModifyCurrentStat(Effect* _effect);
 	float GetValue() { return current_value; }
