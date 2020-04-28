@@ -22,6 +22,7 @@ public:
 	void Minigame();
 
 	void Effects();
+	void ButtonLerp();
 
 	States revive_state = States::PREGAME;
 	float lerp_time = 1.0f;
@@ -32,12 +33,13 @@ private:
 	GameObject* moving_part = nullptr;
 	GameObject* minigame = nullptr;
 	GameObject* start_X = nullptr;
+	GameObject* game_A = nullptr;
 	GameObject* text = nullptr;
 	float color_time = 0.0f;
 	float time = 0.0f;
 	int sign = 1;
 	int actual_inputs = 0;
-	bool color_changed = false;
+	bool effects_change = false;
 };
 
 ALIEN_FACTORY MiniGame_Revive* CreateMiniGame_Revive() {
