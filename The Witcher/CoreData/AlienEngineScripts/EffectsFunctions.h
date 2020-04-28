@@ -30,10 +30,11 @@ static void ApplyEffectOnHit(Enemy* _enemy, uint size, EffectData* data)
     {
         effect->AddMultiplicativeModifier(data->multiplicative_modifiers[i].amount, data->multiplicative_modifiers[i].identifier);
     }
+
     if (strcmp(data->name.data(), "lightning_runestone") == 0)
-        _enemy->AddEffect(effect);
-    else
-        _enemy->AddEffect(effect);
+        _enemy->Stun(effect->time);
+
+    _enemy->AddEffect(effect);
 }
 
 //ONDASH
