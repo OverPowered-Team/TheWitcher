@@ -52,6 +52,7 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::EARTH:
+		effect->OnHit = &ApplyEffectOnHit;
 		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
 		break;
 	case Relic_Effect::LIGHTNING:

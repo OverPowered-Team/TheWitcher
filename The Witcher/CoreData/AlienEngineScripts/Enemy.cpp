@@ -100,6 +100,7 @@ void Enemy::UpdateEnemy()
 				particles["p_" + (*it)->name]->Restart();
 				
 		}
+
 		if ((*it)->to_delete)
 		{
 			delete (*it);
@@ -175,6 +176,9 @@ float Enemy::GetDamaged(float dmg, PlayerController* player)
 void Enemy::AddEffect(Effect* new_effect)
 {
 	effects.push_back(new_effect);
+
+	if (new_effect->ticks_time == 0 && particles["p_" + new_effect->name])
+		particles["p_" + new_effect->name]->Restart();
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
