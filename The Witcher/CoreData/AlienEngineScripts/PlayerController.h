@@ -65,7 +65,7 @@ public:
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
-	void Revive();
+	void Revive(float minigame_value);
 	void ActionRevive();
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 

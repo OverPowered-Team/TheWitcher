@@ -277,11 +277,11 @@ void PlayerController::PickUpRelic(Relic* _relic)
 		AddEffect(_relic->effects.at(i));
 	}
 }
-void PlayerController::Revive()
+void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
+	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 	is_immune = false;
 
 	if(HUD)
