@@ -102,9 +102,11 @@ public:
 	ComponentCharacterController* controller = nullptr;
 
 	float2 movement_input;
+
 	bool mov_input = false;
 	bool is_immune = false;
-	bool is_rooted = false;
+	bool can_move = true;
+	bool input_blocked = false;
 
 	//Relics
 	std::vector<Effect*> effects;

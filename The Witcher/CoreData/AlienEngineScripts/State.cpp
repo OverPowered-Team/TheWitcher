@@ -10,11 +10,6 @@
 
 State* IdleState::HandleInput(PlayerController* player)
 {
-	if (!player->controller->isGrounded)
-	{
-		player->Fall();
-		return new JumpingState();
-	}
 	if (player->movement_input.Length() > 0)
 	{
 		return new RunningState();
@@ -64,6 +59,10 @@ State* IdleState::HandleInput(PlayerController* player)
 
 void IdleState::Update(PlayerController* player)
 {
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void IdleState::OnEnter(PlayerController* player)
@@ -77,12 +76,6 @@ void IdleState::OnExit(PlayerController* player)
 
 State* RunningState::HandleInput(PlayerController* player)
 {
-	if (!player->controller->isGrounded)
-	{
-		player->Fall();
-		return new JumpingState();
-	}
-
 	if (!player->mov_input)
 	{
 		return new IdleState();
@@ -136,6 +129,11 @@ void RunningState::Update(PlayerController* player)
 		player->audio->StartSound();
 	}
 	player->HandleMovement();
+
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void RunningState::OnEnter(PlayerController* player)
