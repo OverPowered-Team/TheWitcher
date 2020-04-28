@@ -52,13 +52,13 @@ void PlayerController::Update()
 
 	UpdateInput();
 
-	//State Machine-----------------
+	//State Machine--------------------------------------------------------
 	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
 	if (new_state != nullptr)
 		SwapState(new_state);
 
 	state->Update(this);
-	//------------------------------
+	//---------------------------------------------------------------------
 
 	//Effects-----------------------------
 	EffectsUpdate();
@@ -73,12 +73,9 @@ void PlayerController::Update()
 		player_data.speed.y = 0;
 	}
 
-
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
-
-
 }
 
 void PlayerController::UpdateInput()
@@ -397,6 +394,9 @@ bool PlayerController::CheckForPossibleRevive()
 
 void PlayerController::HitFreeze(float freeze_time)
 {
+	if (is_immune)
+		return;
+
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
 	is_immune = true;
