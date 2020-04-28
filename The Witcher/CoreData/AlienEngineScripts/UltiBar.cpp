@@ -14,8 +14,9 @@ void UltiBar::Start()
 	ultibar_charged = game_object->GetChild("Ultibar_Charged");
 	ultimate_bar = ultibar_charged->GetComponent<ComponentBar>();
 	controls = game_object->GetChild("Ulti_Controls");
-	controls_lb = controls->GetChild("LB");
-	controls_rb = controls->GetChild("RB");
+	controls_lb = controls->GetChild("LeftControl");
+	controls_rb = controls->GetChild("RightControl");
+	pre_scale = controls_lb->transform->GetLocalScale().x;
 	lb_image = controls_lb->GetComponent<ComponentImage>();
 	rb_image = controls_rb->GetComponent<ComponentImage>();
 	controls->SetEnable(false);
@@ -94,12 +95,12 @@ void UltiBar::ControlsLerp()
 
 	if ((Time::GetGameTime() - actual_time) < (time_to_lerp * 0.5f))
 	{
-		scale = Maths::Lerp(3.f, 4.f, t);
+		scale = Maths::Lerp(pre_scale, (pre_scale * (1.f + 1.0f / 3.0f)), t);
 		color = Maths::Lerp(0.275f, 0.85f, t);
 	}
 	else
 	{
-		scale = Maths::Lerp(4.f, 3.f, t);
+		scale = Maths::Lerp(pre_scale * (1.f + 1.0f / 3.0f), pre_scale, t);
 		color = Maths::Lerp(0.85f, 0.275f, t);
 	}
 
