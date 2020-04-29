@@ -52,7 +52,9 @@ State* IdleState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
+
+		if(GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
@@ -144,7 +146,8 @@ State* RunningState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
+		if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
@@ -330,13 +333,11 @@ void RollingState::OnEnter(PlayerController* player)
 
 	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
-
-	player->is_immune = true;
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
-	player->is_immune = false;
+
 }
 
 void CastingState::Update(PlayerController* player)

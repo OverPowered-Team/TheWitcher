@@ -89,3 +89,17 @@ void Stat::DecreaseStat(float value)
         current_value = 0;
     }
 }
+
+void Stat::FillStats(std::map<std::string, Stat> &stats, JSONArraypack* json)
+{
+    if (json)
+    {
+        json->GetFirstNode();
+        for (int i = 0; i < json->GetArraySize(); ++i)
+        {
+            Stat stat = Stat(json->GetString("name"), json->GetNumber("value"));
+            stats.insert(std::pair(stat.name, stat));
+            json->GetAnotherNode();
+        }
+    }
+}

@@ -6,7 +6,23 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "PlayerAttacks.h"
+#include "EffectsFactory.h"
 #include "CameraShake.h"
+
+
+static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
+{"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
+{"Earth",Attack_Tags::T_Earth}, {"Lightning",Attack_Tags::T_Lightning}, {"Chaining",Attack_Tags::T_Chaining}, {"Spell",Attack_Tags::T_Spell} };
+
+Attack_Tags GetTag(std::string str)
+{
+	if (auto it = tag_table.find(str); it != tag_table.end()) {
+		return it->second;
+	}
+	return Attack_Tags::T_None;
+}
+
+
 PlayerAttacks::PlayerAttacks() : Alien()
 {
 }
@@ -35,7 +51,7 @@ void PlayerAttacks::StartAttack(AttackType attack)
 
 bool PlayerAttacks::StartSpell(uint spell_index)
 {
-	if (spell_index < spells.size() && player_controller->player_data.stats["Chaos"].GetValue() >= spells[spell_index]->info.cost)
+	if (spell_index < spells.size() && player_controller->player_data.stats["Chaos"].GetValue() >= spells[spell_index]->info.stats["Cost"].GetValue())
 	{
 		LOG("Casting Spell %i", spell_index);
 		if (current_attack)
@@ -51,7 +67,6 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 		}
 
 		current_attack = spells[spell_index];
-		player_controller->player_data.stats["Chaos"].DecreaseStat(spells[spell_index]->info.cost);
 		DoAttack();
 		AttackMovement();
 
@@ -160,7 +175,7 @@ void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 	{
 		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
-			(*it)->info.base_damage.ApplyEffect(new_effect);
+			(*it)->info.stats["Damage"].ApplyEffect(new_effect);
 		}
 	}
 }
@@ -296,6 +311,31 @@ void PlayerAttacks::DeactivateCollider()
 		collider->SetEnable(false);
 }
 
+void PlayerAttacks::CastSpell()
+{
+	if (current_attack)
+	{
+		ActivateCollider();
+		player_controller->PlayAttackParticle();
+
+		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
+
+		if (current_attack->HasTag(Attack_Tags::T_Buff))
+		{
+			player_controller->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
+		}
+	}
+}
+
+void PlayerAttacks::OnHit(Enemy* enemy)
+{
+	if (current_attack->HasTag(Attack_Tags::T_Debuff))
+	{
+		enemy->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
+
+	}
+}
+
 void PlayerAttacks::AllowCombo()
 {
 	can_execute_input = true;
@@ -336,10 +376,10 @@ void PlayerAttacks::AttackShake()
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	if (player_controller->state->type == StateType::ATTACKING)
-		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
+	if (current_attack->HasTag(Attack_Tags::T_Spell))
+		return current_attack->info.stats["Damage"].GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
-		return current_attack->info.base_damage.GetValue();
+		return current_attack->info.stats["Damage"].GetValue();
 }
 
 Attack* PlayerAttacks::GetCurrentAttack()
@@ -371,7 +411,6 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = Stat("Attack_Damage", attack_combo->GetNumber("base_damage"));
 			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
@@ -381,6 +420,8 @@ void PlayerAttacks::CreateAttacks()
 			info.shake = attack_combo->GetNumber("cam_shake");
 			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
 
+			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
+
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 
@@ -388,6 +429,7 @@ void PlayerAttacks::CreateAttacks()
 		}
 		ConnectAttacks();
 	}
+
 	JSONArraypack* spells_json = combo->GetArray("Spells");
 	if (spells_json)
 	{
@@ -404,19 +446,32 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(spells_json->GetNumber("collider.width"),
 				spells_json->GetNumber("collider.height"),
 				spells_json->GetNumber("collider.depth"));
-			info.base_damage = Stat("Attack_Damage", spells_json->GetNumber("base_damage"));
 			info.movement_strength = spells_json->GetNumber("movement_strength");
 			info.activation_frame = spells_json->GetNumber("activation_frame");
 			info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
 			info.freeze_time = spells_json->GetNumber("freeze_time");
-			info.cost = spells_json->GetNumber("cost");
+			info.effect = spells_json->GetString("effect");
 
+			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
+
+			JSONArraypack* tags = spells_json->GetArray("tags");
+			uint num_tags = tags->GetArraySize();
+			if (tags)
+			{
+				tags->GetFirstNode();
+				for (uint j = 0; j < num_tags; j++)
+				{
+					std::string tag_str = tags->GetString("tag");
+					info.tags.push_back(GetTag(tag_str));
+					tags->GetAnotherNode();
+				}
+			}
+			
 			Attack* attack = new Attack(info);
 			spells.push_back(attack);
 
 			spells_json->GetAnotherNode();
 		}
-
 	}
 	JSONfilepack::FreeJSON(combo);
 }
@@ -449,4 +504,3 @@ void PlayerAttacks::ConnectAttacks()
 		}
 	}
 }
-

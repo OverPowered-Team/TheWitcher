@@ -24,6 +24,8 @@ public:
 	void IncreaseStat(float value);
 	void DecreaseStat(float value);
 
+	static void FillStats(std::map<std::string, Stat> &stats, JSONArraypack* json);
+
 	std::string name;
 	std::vector<Effect*> effects;
 

@@ -85,6 +85,9 @@ public:
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
 
+	void StartImmune() { is_immune = true; };
+	void StopImmune() { is_immune = false; };
+
 	void HitFreeze(float freeze_time);
 
 	void RemoveFreeze(float speed);
@@ -174,6 +177,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
+	SHOW_VOID_FUNCTION(PlayerController::StartImmune, player);
+	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 
