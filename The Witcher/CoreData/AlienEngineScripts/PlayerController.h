@@ -107,8 +107,6 @@ public:
 
 	float2 movement_input;
 
-	Prefab tmp_quen_effect;
-
 	bool mov_input = false;
 	bool is_immune = false;
 	bool can_move = true;
@@ -167,8 +165,6 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.gravity);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.slow_speed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
-
-	SHOW_IN_INSPECTOR_AS_PREFAB(player->tmp_quen_effect);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);

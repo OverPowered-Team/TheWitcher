@@ -53,7 +53,6 @@ void PlayerController::Update()
 	{
 		Effect* new_effect = GameManager::instance->effects_factory->CreateEffect("Geralt_Quen");
 		AddEffect(new_effect);
-		GameObject::Instantiate(tmp_quen_effect, float3::zero(), false, game_object);
 	}
 
 	UpdateInput();
@@ -377,6 +376,10 @@ void PlayerController::AddEffect(Effect* _effect)
 				it->second.ApplyEffect(_effect);
 		}
 	}
+
+	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), float3::zero(), false, game_object);
+	if (go)
+		particles.insert(std::pair(_effect->vfx_on_apply, go));
 }
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
@@ -394,6 +397,17 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 			if (tmp_effect->AffectsStat(it->second.name))
 				it->second.RemoveEffect(tmp_effect);
 		}
+	}
+
+	for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (it->first == tmp_effect->vfx_on_apply)
+		{
+			GameObject::Destroy(it->second);
+			it = particles.erase(it);
+		}
+		else
+			++it;
 	}
 
 	delete tmp_effect;
