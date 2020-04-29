@@ -14,13 +14,13 @@ MiniGame_Revive::~MiniGame_Revive()
 void MiniGame_Revive::Start()
 {
 	minigame = game_object->GetChild("Minigame");
-	minigame->SetEnable(false);
 	moving_part = game_object->GetChild("Minigame")->GetChild("Moving");
 	start_X = game_object->GetChild("Start_X");
-	start_X->SetEnable(true);
 	game_A = game_object->GetChild("Minigame")->GetChild("Y");
-	text = GameObject::FindWithName("Text");
-	text->SetEnable(false);
+
+	start_X->SetEnable(true);
+	minigame->SetEnable(false);
+
 	revive_state = States::PREGAME;
 }
 
@@ -35,8 +35,6 @@ void MiniGame_Revive::Update()
 		if (actual_inputs == input_times)
 		{
 			minigame->SetEnable(false);
-			text->SetEnable(true);
-			text->GetComponent<ComponentText>()->SetText(std::to_string(revive_percentatge).c_str());
 
 			revive_state = States::POSTGAME;
 		}
@@ -50,13 +48,18 @@ void MiniGame_Revive::Update()
 				if (color_time + 0.05f > Time::GetGameTime())
 				{
 					float lerp = ((Time::GetGameTime() - color_time) * 20);
+
+					// Button Lerp
 					float scale_x = Maths::Lerp(0.5f, 0.75f, lerp);
 					float scale_y = Maths::Lerp(3.167f, 4.75f, lerp);
 					game_A->transform->SetLocalScale(scale_x, scale_y, 1);
+
 				}
 				else if (color_time + 0.05f <= Time::GetGameTime())
 				{
 					float lerp = (((Time::GetGameTime() - color_time) - 0.05f) * 20);
+
+					// Button Lerp
 					float scale_x = Maths::Lerp(0.75, 0.5f, lerp);
 					float scale_y = Maths::Lerp(4.75f, 3.167f, lerp);
 					game_A->transform->SetLocalScale(scale_x, scale_y, 1);
@@ -82,7 +85,7 @@ void MiniGame_Revive::Minigame()
 
 	moving_part->transform->SetLocalPosition(float3(position_x, 0, 0));
 
-	if (Input::GetKeyDown(SDL_SCANCODE_SPACE) || Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A))
+	if (Input::GetKeyDown(SDL_SCANCODE_SPACE) || Input::GetControllerButtonDown(player_reviving->controller_index, Input::CONTROLLER_BUTTON_A))
 	{
 		Effects();
 
@@ -130,11 +133,15 @@ void MiniGame_Revive::EndMinigame()
 
 void MiniGame_Revive::RestartMinigame()
 {
-	revive_state = States::PREGAME;
+	start_X->SetEnable(true);
+	minigame->SetEnable(false);
+
 	revive_percentatge = 0.0f;
 	time = 0.0f;
 	color_time = 0.0f;
 	actual_inputs = 0;
 	effects_change = false;
 	sign = 1;
+
+	revive_state = States::PREGAME;
 }

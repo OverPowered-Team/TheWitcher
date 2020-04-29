@@ -23,7 +23,7 @@ public:
 	void Minigame();
 
 	void Effects();
-	void ButtonLerp();
+
 	void StartMinigame(PlayerController* player_reviving);
 	void EndMinigame();
 	void RestartMinigame();
@@ -40,7 +40,7 @@ private:
 	GameObject* minigame = nullptr;
 	GameObject* start_X = nullptr;
 	GameObject* game_A = nullptr;
-	GameObject* text = nullptr;
+
 	float color_time = 0.0f;
 	float time = 0.0f;
 	int sign = 1;

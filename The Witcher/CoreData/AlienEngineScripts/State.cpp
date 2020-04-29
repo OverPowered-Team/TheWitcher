@@ -345,9 +345,10 @@ void DeadState::OnEnter(PlayerController* player)
 	player->player_data.speed = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
-	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, player->game_object->transform->GetGlobalPosition());
+	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, player->game_object->transform->GetGlobalPosition() + vector);
 	revive_world_ui->SetNewParent(player->game_object);
-	revive_world_ui->transform->SetLocalPosition(float3::zero());
+	revive_world_ui->transform->SetLocalScale(10, 10, 1);
 	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
 
