@@ -211,6 +211,12 @@ void PlayerController::HandleMovement()
 
 void PlayerController::EffectsUpdate()
 {
+	if (Time::GetGameTime() - last_regen_tick > 1.0f)
+	{
+		player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos_Regen"].GetValue());
+		last_regen_tick = Time::GetGameTime();
+		LOG("Regenerated %f chaos", player_data.stats["Chaos_Regen"].GetValue());
+	}
 	for (auto it = effects.begin(); it != effects.end();)
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)

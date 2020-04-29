@@ -25,23 +25,23 @@ State* IdleState::HandleInput(PlayerController* player)
 
 		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
 		{
-			player->attacks->StartSpell(0);
-			return new AttackingState();
+			if (player->attacks->StartSpell(0))
+				return new AttackingState();
 		}
 		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
 		{
-			player->attacks->StartSpell(1);
-			return new AttackingState();
+			if (player->attacks->StartSpell(1))
+				return new AttackingState();
 		}
 		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
 		{
-			player->attacks->StartSpell(2);
-			return new AttackingState();
+			if (player->attacks->StartSpell(2))
+				return new AttackingState();
 		}
 		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
 		{
-			player->attacks->StartSpell(3);
-			return new AttackingState();
+			if (player->attacks->StartSpell(3))
+				return new AttackingState();
 		}
 	}
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
@@ -117,23 +117,23 @@ State* RunningState::HandleInput(PlayerController* player)
 
 		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
 		{
-			player->attacks->StartSpell(0);
-			return new AttackingState();
+			if(player->attacks->StartSpell(0))
+				return new AttackingState();
 		}
 		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
 		{
-			player->attacks->StartSpell(1);
-			return new AttackingState();
+			if (player->attacks->StartSpell(1))
+				return new AttackingState();
 		}
 		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
 		{
-			player->attacks->StartSpell(2);
-			return new AttackingState();
+			if (player->attacks->StartSpell(2))
+				return new AttackingState();
 		}
 		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
 		{
-			player->attacks->StartSpell(3);
-			return new AttackingState();
+			if (player->attacks->StartSpell(3))
+				return new AttackingState();
 		}
 	}
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)

@@ -7,6 +7,17 @@ class PlayerController;
 class AttackEffect;
 class CameraShake;
 
+enum Attack_Tags {
+	T_Projectile,
+	T_AOE,
+	T_Trap,
+	T_Buff,
+	T_Debuff,
+	T_Fire,
+	T_Ice,
+	T_Earth
+};
+
 class Attack {
 	friend class PlayerAttacks;
 public:
@@ -14,17 +25,23 @@ public:
 		std::string name = "";
 		std::string input = "";
 		std::string particle_name = "";
-		float3 collider_position;
-		float3 collider_size;
+		std::string effect_name = "";
+		std::string allow_combo_p_name = "";
+
 		Stat base_damage;
-		float movement_strength = 0.0f;
-		float max_snap_distance = 0.0f;
-		float freeze_time = 0.0f;
-		int activation_frame = 0;
+		Stat knock_back;
+		float cost = 0.0f;
+
 		std::string next_light = "";
 		std::string next_heavy = "";
+
+		float3 collider_position;
+		float3 collider_size;
+		float freeze_time = 0.0f;
+		float movement_strength = 0.0f;
+		float max_snap_distance = 0.0f;
 		int shake = 0;
-		std::string allow_combo_p_name = "";
+		int activation_frame = 0;
 	};
 public:
 
@@ -58,7 +75,7 @@ public:
 	
 	void Start();
 	void StartAttack(AttackType attack);
-	void StartSpell(uint spell_index); //maybe have enum for spells?
+	bool StartSpell(uint spell_index); //maybe have enum for spells instead of index?
 	void UpdateCurrentAttack();
 	void ReceiveInput(AttackType attack, int spell_index = 0);
 	void CleanUp();

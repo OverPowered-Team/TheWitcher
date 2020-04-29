@@ -10,6 +10,7 @@ class Relic;
 class Effect;
 class Enemy;
 class CameraShake;
+
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
 	friend class RunningState;
@@ -69,11 +70,10 @@ public:
 	void ActionRevive();
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 	void PlayAllowParticle();
+
 	//Relics
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);
-
-
 
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
@@ -126,6 +126,7 @@ public:
 
 	//Input Variables
 	int controller_index = 1;
+
 	//Keyboard input
 	SDL_Scancode keyboard_move_up;
 	SDL_Scancode keyboard_move_left;
@@ -138,6 +139,7 @@ public:
 	SDL_Scancode keyboard_spell;
 	SDL_Scancode keyboard_revive;
 	SDL_Scancode keyboard_ultimate;
+
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
@@ -150,15 +152,18 @@ public:
 private:
 	float angle = 0.0f;
 	float timer = 0.f;
-	ComponentAudioEmitter* audio = nullptr;
 
+	ComponentAudioEmitter* audio = nullptr;
 	ComponentCamera* camera = nullptr;
+
 	AABB max_aabb;
 	CameraShake* shake = nullptr;
+	float last_regen_tick = 0.0f;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
+
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.type);

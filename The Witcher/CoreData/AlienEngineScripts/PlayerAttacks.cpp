@@ -33,10 +33,11 @@ void PlayerAttacks::StartAttack(AttackType attack)
 	AttackMovement();
 }
 
-void PlayerAttacks::StartSpell(uint spell_index)
+bool PlayerAttacks::StartSpell(uint spell_index)
 {
-	if (spell_index < spells.size())
+	if (spell_index < spells.size() && player_controller->player_data.stats["Chaos"].GetValue() >= spells[spell_index]->info.cost)
 	{
+		LOG("Casting Spell %i", spell_index);
 		if (current_attack)
 		{
 			//take the links of the attack we were doing so we can continue the combo after the spell.
@@ -50,9 +51,15 @@ void PlayerAttacks::StartSpell(uint spell_index)
 		}
 
 		current_attack = spells[spell_index];
+		player_controller->player_data.stats["Chaos"].DecreaseStat(spells[spell_index]->info.cost);
 		DoAttack();
 		AttackMovement();
+
+		return true;
 	}
+
+	LOG("Not enough Chaos to cast Spell %i", spell_index);
+	return false;
 }
 
 void PlayerAttacks::UpdateCurrentAttack()
@@ -402,6 +409,7 @@ void PlayerAttacks::CreateAttacks()
 			info.activation_frame = spells_json->GetNumber("activation_frame");
 			info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
 			info.freeze_time = spells_json->GetNumber("freeze_time");
+			info.cost = spells_json->GetNumber("cost");
 
 			Attack* attack = new Attack(info);
 			spells.push_back(attack);
