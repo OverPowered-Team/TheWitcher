@@ -71,7 +71,8 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	else
 	{
 		// UI
-		ulti_bar->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+		float new_value = (float)collective_ultimate_charge / (float)max_ultimate_charge;
+		ulti_bar->UpdateBar(new_value);
 	}
 }
 
