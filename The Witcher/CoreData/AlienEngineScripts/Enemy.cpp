@@ -91,8 +91,7 @@ void Enemy::UpdateEnemy()
 				{
 					if (stats["Health"].GetValue() == 0)
 					{
-						//state = EnemyState::DYING;
-						animator->PlayState("Death");
+						SetState("Dying");
 					}
 				}
 			}

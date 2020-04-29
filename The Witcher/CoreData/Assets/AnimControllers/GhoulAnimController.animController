@@ -7,38 +7,38 @@
             {
                 "Name": "Idle",
                 "Speed": 1,
-                "Clip": "17597294058179667036"
+                "Clip": "5274429494783861281"
             },
             {
-                "Name": "Run",
+                "Name": "Wal",
                 "Speed": 1,
-                "Clip": "15614024080544662546"
+                "Clip": "14742750107754546426"
             },
             {
                 "Name": "Jump",
                 "Speed": 2,
-                "Clip": "2461403856463709162"
+                "Clip": "8825609739987625586"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
-                "Clip": "9090936577813051920"
+                "Clip": "13979874026336244549"
             },
             {
                 "Name": "Slash",
                 "Speed": 1,
-                "Clip": "2909912792962758385"
+                "Clip": "3994899575366276425"
             },
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "18125317178253250943"
+                "Clip": "13979874026336244549"
             }
         ],
         "Transitions": [
             {
                 "Source": "Idle",
-                "Target": "Run",
+                "Target": "Wal",
                 "Blend": 0.25,
                 "End": false,
                 "IntConditions": [],
@@ -53,7 +53,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Run",
+                "Source": "Wal",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": false,
@@ -86,7 +86,7 @@
             },
             {
                 "Source": "Slash",
-                "Target": "Run",
+                "Target": "Wal",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -118,7 +118,7 @@
             },
             {
                 "Source": "Jump",
-                "Target": "Run",
+                "Target": "Wal",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],

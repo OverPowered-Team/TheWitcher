@@ -34,6 +34,7 @@ public:
 
 	void Stun(float time) override;
 	bool IsDead() override;
+	void SetState(const char* state_str) override;
 
 	void OnAnimationEnd(const char* name) override;
 
