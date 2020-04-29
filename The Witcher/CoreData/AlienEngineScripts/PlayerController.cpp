@@ -356,7 +356,7 @@ bool PlayerController::CheckBoundaries()
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
 				p_tmp.maxPoint += cam->players[i]->transform->GetGlobalPosition();
 
-				if (!fake_frustum.Contains(p_tmp))
+				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					player_data.speed = float3::zero();
@@ -370,9 +370,12 @@ bool PlayerController::CheckBoundaries()
 		return true;
 	}
 	else {
-		player_data.speed = float3::zero();
-		return false;
+		if (transform->GetGlobalPosition().Distance(fake_frustum.CenterPoint()) < next_pos.Distance(fake_frustum.CenterPoint())) {
+			player_data.speed = float3::zero();
+			return false;
+		}
 	}
+	return true;
 }
 bool PlayerController::CheckForPossibleRevive()
 {
