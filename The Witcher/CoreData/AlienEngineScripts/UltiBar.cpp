@@ -33,6 +33,15 @@ void UltiBar::Start()
 
 void UltiBar::Update()
 {
+	if (Input::GetKeyDown(SDL_SCANCODE_SPACE))
+	{
+		MaxBar();
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT))
+	{
+		UpdateBar(0);
+	}
+
 	// Bar Charges With Lerp
 	if (bar_charging)
 	{
@@ -44,6 +53,22 @@ void UltiBar::Update()
 		if (t >= 1)
 		{
 			bar_charging = false;
+
+			if (is_max)
+			{
+				// Data Setting
+				is_max = false;
+				controls_lerping = true;
+
+				// Enables Setting
+				ultibar->SetEnable(false);
+				controls->SetEnable(true);
+				ultibar_charged->SetEnable(true);
+
+				// Lerping Time Settings
+				glow_time = Time::GetGameTime();
+				actual_time = Time::GetGameTime();
+			}
 		}
 	}
 
@@ -81,6 +106,11 @@ void UltiBar::UpdateBar(float actual_value)
 {
 	if (actual_value == 0)
 	{
+		if (controls->IsEnabled())
+		{
+			controls->SetEnable(false);
+		}
+
 		ultibar->SetEnable(true);
 		ultibar_charged->SetEnable(false);
 	}
@@ -93,18 +123,9 @@ void UltiBar::UpdateBar(float actual_value)
 
 void UltiBar::MaxBar()
 {
-	// Enables Setting
-	ultibar->SetEnable(false);
-	controls->SetEnable(true);
-	ultibar_charged->SetEnable(true);
-
 	// Values Setting
-	normal_ulti->SetBarValue(1);
-	controls_lerping = true;
-
-	// Lerping Time Settings
-	glow_time = Time::GetGameTime();
-	actual_time = Time::GetGameTime();
+	is_max = true;
+	UpdateBar(1);
 }
 
 void UltiBar::ControlsLerp()

@@ -47,6 +47,7 @@ private:
 	// Ultibar Glowing
 	bool glowing = true;
 	float glow_time = 0.0f;
+	bool is_max = false;
 
 	// Ultibar Charging Lerp
 	bool bar_charging = false;
