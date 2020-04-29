@@ -37,6 +37,18 @@ void PlayerAttacks::StartSpell(uint spell_index)
 {
 	if (spell_index < spells.size())
 	{
+		if (current_attack)
+		{
+			//take the links of the attack we were doing so we can continue the combo after the spell.
+			spells[spell_index]->heavy_attack_link = current_attack->heavy_attack_link;
+			spells[spell_index]->light_attack_link = current_attack->light_attack_link;
+		}
+		else
+		{
+			spells[spell_index]->heavy_attack_link = nullptr;
+			spells[spell_index]->light_attack_link = nullptr;
+		}
+
 		current_attack = spells[spell_index];
 		DoAttack();
 		AttackMovement();
@@ -69,7 +81,10 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
-		StartAttack(next_attack);
+		if (next_attack == AttackType::SPELL)
+			StartSpell(next_spell);
+		else
+			StartAttack(next_attack);
 	}
 }
 
@@ -226,9 +241,10 @@ bool PlayerAttacks::FindSnapTarget()
 	return false;
 }
 
-void PlayerAttacks::ReceiveInput(AttackType attack)
+void PlayerAttacks::ReceiveInput(AttackType attack, int spell_index)
 {
 	next_attack = attack;
+	next_spell = spell_index;
 }
 
 void PlayerAttacks::CleanUp()
@@ -357,6 +373,7 @@ void PlayerAttacks::CreateAttacks()
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
 			info.shake = attack_combo->GetNumber("cam_shake");
 			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
+
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 
@@ -367,26 +384,31 @@ void PlayerAttacks::CreateAttacks()
 	JSONArraypack* spells_json = combo->GetArray("Spells");
 	if (spells_json)
 	{
-		Attack::AttackInfo info;
+		spells_json->GetFirstNode();
+		for (uint i = 0; i < spells_json->GetArraySize(); i++)
+		{
+			Attack::AttackInfo info;
 
-		info.name = spells_json->GetString("name");
-		info.particle_name = spells_json->GetString("particle_name");
-		info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
-			spells_json->GetNumber("collider.pos_y"),
-			spells_json->GetNumber("collider.pos_z"));
-		info.collider_size = float3(spells_json->GetNumber("collider.width"),
-			spells_json->GetNumber("collider.height"),
-			spells_json->GetNumber("collider.depth"));
-		info.base_damage = Stat("Attack_Damage", spells_json->GetNumber("base_damage"));
-		info.movement_strength = spells_json->GetNumber("movement_strength");
-		info.activation_frame = spells_json->GetNumber("activation_frame");
-		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
-		info.freeze_time = spells_json->GetNumber("freeze_time");
+			info.name = spells_json->GetString("name");
+			info.particle_name = spells_json->GetString("particle_name");
+			info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
+				spells_json->GetNumber("collider.pos_y"),
+				spells_json->GetNumber("collider.pos_z"));
+			info.collider_size = float3(spells_json->GetNumber("collider.width"),
+				spells_json->GetNumber("collider.height"),
+				spells_json->GetNumber("collider.depth"));
+			info.base_damage = Stat("Attack_Damage", spells_json->GetNumber("base_damage"));
+			info.movement_strength = spells_json->GetNumber("movement_strength");
+			info.activation_frame = spells_json->GetNumber("activation_frame");
+			info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
+			info.freeze_time = spells_json->GetNumber("freeze_time");
 
-		Attack* attack = new Attack(info);
-		spells.push_back(attack);
+			Attack* attack = new Attack(info);
+			spells.push_back(attack);
 
-		spells_json->GetAnotherNode();
+			spells_json->GetAnotherNode();
+		}
+
 	}
 	JSONfilepack::FreeJSON(combo);
 }

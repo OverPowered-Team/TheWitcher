@@ -48,6 +48,7 @@ public:
 	enum (AttackType,
 		LIGHT,
 		HEAVY,
+		SPELL,
 		NONE
 	);
 
@@ -59,7 +60,7 @@ public:
 	void StartAttack(AttackType attack);
 	void StartSpell(uint spell_index); //maybe have enum for spells?
 	void UpdateCurrentAttack();
-	void ReceiveInput(AttackType attack);
+	void ReceiveInput(AttackType attack, int spell_index = 0);
 	void CleanUp();
 
 	std::vector<std::string> GetFinalAttacks();
@@ -113,6 +114,7 @@ protected:
 
 	bool can_execute_input = false;
 	AttackType next_attack = AttackType::NONE;
+	int next_spell = 0;
 };
 
 ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
