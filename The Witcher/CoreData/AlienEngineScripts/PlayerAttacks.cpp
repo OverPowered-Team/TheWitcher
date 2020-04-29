@@ -200,7 +200,7 @@ void PlayerAttacks::SnapToTarget()
 			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
 	}
 
-	float3 velocity = transform->forward * speed * Time::GetDT();
+	float3 velocity = transform->forward * speed;
 	distance_snapped += velocity.Length();
 
 	player_controller->transform->SetGlobalRotation(rot);
