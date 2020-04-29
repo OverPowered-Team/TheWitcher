@@ -25,6 +25,8 @@ public:
 	void Effects();
 	void ButtonLerp();
 	void StartMinigame(PlayerController* player_reviving);
+	void EndMinigame();
+	void RestartMinigame();
 
 	States revive_state = States::PREGAME;
 	float lerp_time = 1.0f;

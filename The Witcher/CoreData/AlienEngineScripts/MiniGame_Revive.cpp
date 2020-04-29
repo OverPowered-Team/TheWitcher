@@ -70,7 +70,7 @@ void MiniGame_Revive::Update()
 	{
 		player_dead->Revive(revive_percentatge);
 		player_reviving->SetState(StateType::IDLE);
-		Destroy(this->game_object);
+		EndMinigame();
 		break;
 	}
 	}
@@ -121,4 +121,20 @@ void MiniGame_Revive::StartMinigame(PlayerController* player_reviving)
 	this->player_reviving = player_reviving;
 
 	revive_state = States::MINIGAME;
+}
+
+void MiniGame_Revive::EndMinigame()
+{
+	Destroy(this->game_object);
+}
+
+void MiniGame_Revive::RestartMinigame()
+{
+	revive_state = States::PREGAME;
+	revive_percentatge = 0.0f;
+	time = 0.0f;
+	color_time = 0.0f;
+	actual_inputs = 0;
+	effects_change = false;
+	sign = 1;
 }
