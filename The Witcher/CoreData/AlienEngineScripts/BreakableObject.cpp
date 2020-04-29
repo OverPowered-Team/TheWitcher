@@ -10,14 +10,8 @@ BreakableObject::~BreakableObject()
 {
 }
 
-void BreakableObject::Start()
-{
-	
-}
-
 void BreakableObject::Explode()
 {
-	
 	GameObject* new_obj = GameObject::Instantiate(object_broken, transform->GetGlobalPosition());
 	new_obj->GetComponent<ExplodeChildren>()->SetVars(force, time_to_despawn);
 	new_obj->transform->SetLocalScale(transform->GetLocalScale());
@@ -36,7 +30,7 @@ void BreakableObject::OnTriggerEnter(ComponentCollider* collider)
 {
 	if(collider->game_object_attached->IsEnabled())
 		if (strcmp("PlayerAttack", collider->game_object_attached->GetTag()) == 0) {
-			collider->game_object_attached->parent->GetComponent<ComponentAudioEmitter>()->StartSound("Play_FenceDestroy");
 			Explode();
+			collider->game_object_attached->parent->GetComponent<ComponentAudioEmitter>()->StartSound("Play_FenceDestroy");
 		}
 }

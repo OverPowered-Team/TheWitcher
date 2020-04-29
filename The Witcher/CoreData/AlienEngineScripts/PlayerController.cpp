@@ -298,6 +298,7 @@ void PlayerController::Revive()
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
