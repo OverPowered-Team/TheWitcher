@@ -188,11 +188,14 @@ void MiniGame_Revive::RestartMinigame()
 	start_X->SetEnable(true);
 	minigame->SetEnable(false);
 
+	good_part->transform->SetLocalScale(original_scale_green, good_part->transform->GetLocalScale().y, good_part->transform->GetLocalScale().z);
 	revive_percentatge = 0.0f;
 	time = 0.0f;
 	color_time = 0.0f;
 	actual_inputs = 0;
 	effects_change = false;
+	correct_inputs = 0;
+	green_reducing = false;
 	sign = 1;
 
 	this->player_reviving = nullptr;
