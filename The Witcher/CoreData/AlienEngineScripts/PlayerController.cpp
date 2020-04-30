@@ -41,6 +41,8 @@ void PlayerController::Start()
 	CalculateAABB();
 	InitKeyboardControls();
 
+	// TP to last checkpoint or level start
+
 	state = new IdleState();
 	state->OnEnter(this);
 }
@@ -437,7 +439,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
 	{
 		is_near_bonfire = true;
-		LOG("Me quemo");
+		last_checkpoint_position = col->game_object_attached->GetComponent<Bonfire>()->checkpoint->transform->GetGlobalPosition();
 	}
 
 	if (!godmode)
@@ -467,7 +469,6 @@ void PlayerController::OnTriggerExit(ComponentCollider* col)
 	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
 	{
 		is_near_bonfire = false;
-		LOG("Ufuf Ya no me quemo");
 	}
 }
 

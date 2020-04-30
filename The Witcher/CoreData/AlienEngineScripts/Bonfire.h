@@ -12,14 +12,10 @@ public:
 	
 	void Start();
 
-	void OnTriggerEnter(ComponentCollider* collider) override;
-
-	void ManageTrigger();
-
 public:
 	// GameObject
 	GameObject* ui_bonfire = nullptr;
-
+	GameObject* checkpoint = nullptr;
 };
 
 ALIEN_FACTORY Bonfire* CreateBonfire() {
