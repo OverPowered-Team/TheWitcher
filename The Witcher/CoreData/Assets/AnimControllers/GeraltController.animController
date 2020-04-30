@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GeraltController",
-        "NumStates": 28,
-        "NumTransitions": 51,
+        "NumStates": 29,
+        "NumTransitions": 53,
         "States": [
             {
                 "Name": "Idle",
@@ -143,6 +143,11 @@
                 "Name": "Aard",
                 "Speed": 1,
                 "Clip": "12180050432665512495"
+            },
+            {
+                "Name": "Quen",
+                "Speed": 1,
+                "Clip": "3206340720122339941"
             }
         ],
         "Transitions": [
@@ -902,6 +907,36 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "Quen",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Quen",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -1432,6 +1467,18 @@
                 "Event_Id": "PlayerAttacks::CastSpell",
                 "Animation_Id": "12180050432665512495",
                 "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "3206340720122339941",
+                "Frame": 14,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3206340720122339941",
+                "Frame": 26,
                 "Type": 2
             }
         ]

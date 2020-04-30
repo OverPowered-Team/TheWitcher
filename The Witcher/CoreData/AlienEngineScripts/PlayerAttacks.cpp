@@ -53,7 +53,6 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 {
 	if (spell_index < spells.size() && player_controller->player_data.stats["Chaos"].GetValue() >= spells[spell_index]->info.stats["Cost"].GetValue())
 	{
-		LOG("Casting Spell %i", spell_index);
 		if (current_attack)
 		{
 			//take the links of the attack we were doing so we can continue the combo after the spell.
@@ -315,7 +314,10 @@ void PlayerAttacks::CastSpell()
 {
 	if (current_attack)
 	{
-		ActivateCollider();
+		LOG("Casting Spell %s", current_attack->info.name.c_str());
+		if(current_attack->HasTag(Attack_Tags::T_AOE))
+			ActivateCollider();
+
 		player_controller->PlayAttackParticle();
 
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
@@ -332,7 +334,6 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 	if (current_attack->HasTag(Attack_Tags::T_Debuff))
 	{
 		enemy->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
-
 	}
 }
 

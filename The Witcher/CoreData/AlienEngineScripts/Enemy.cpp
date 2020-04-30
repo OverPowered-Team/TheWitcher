@@ -85,7 +85,7 @@ void Enemy::UpdateEnemy()
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
 			{
 				it_stats->second.ModifyCurrentStat((*it));
-
+				
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
