@@ -31,10 +31,18 @@ void NilfSoldierMelee::UpdateEnemy()
 		}
 		break;
 
+	case NilfgaardSoldierState::HIT:
+	{
+		velocity += velocity * knock_slow * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+	}
+	break;
+
 	case NilfgaardSoldierState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
 		state = NilfgaardSoldierState::DEAD;
 		break;

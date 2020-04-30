@@ -25,6 +25,8 @@ void NilfSoldierRange::UpdateEnemy()
 
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
+		if (distance < stats["FleeRange"].GetValue())
+			state = NilfgaardSoldierState::AUXILIAR;
 		break;
 
 	case NilfgaardSoldierState::ATTACK:
@@ -32,7 +34,17 @@ void NilfSoldierRange::UpdateEnemy()
 		break;
 
 	case NilfgaardSoldierState::AUXILIAR:
+	{
+		current_flee_distance = transform->GetGlobalPosition().LengthSq();
+		LOG("Last flee distance: %f", last_flee_distance);
+		LOG("Current flee distance: %f", current_flee_distance);
+		if (math::Abs(last_flee_distance - current_flee_distance) < flee_min_distance)
+		{
+			Action();
+			LOG("Soy un malote");
+		}
 		Flee();
+	}
 	break;
 
 	case NilfgaardSoldierState::STUNNED:
@@ -46,10 +58,33 @@ void NilfSoldierRange::UpdateEnemy()
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
 		state = NilfgaardSoldierState::DEAD;
 		break;
 	}
+	}
+}
+
+void NilfSoldierRange::CheckDistance()
+{
+	if ((distance < stats["AttackRange"].GetValue()) && distance > stats["FleeRange"].GetValue())
+	{
+		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		Action();
+	}
+	else if (distance < stats["FleeRange"].GetValue())
+	{
+		state = NilfgaardSoldierState::AUXILIAR;
+		last_flee_distance = 0.0f;
+	}
+	else if (distance > stats["VisionRange"].GetValue())
+	{
+		state = NilfgaardSoldierState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
 	}
 }
 
@@ -61,21 +96,23 @@ void NilfSoldierRange::Action()
 
 void NilfSoldierRange::Flee()
 {
-	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	float3 velocity_vec = -direction * stats["Agility"].GetValue();
 	character_ctrl->Move(velocity_vec * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
-	float angle = atan2f(direction.z, direction.x);
+	float angle = atan2f(-direction.z, -direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
-	if (distance > stats["FleeRange"].GetMaxValue())
+	if (distance > stats["RecoverRange"].GetValue())
 	{
 		state = NilfgaardSoldierState::ATTACK;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
 		Action();
 	}
+
+	last_flee_distance = current_flee_distance;
 }
 
 void NilfSoldierRange::ShootAttack()

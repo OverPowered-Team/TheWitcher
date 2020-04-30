@@ -6,8 +6,10 @@
 class PlayerController;
 class AttackEffect;
 class CameraShake;
+class Enemy;
 
-enum Attack_Tags {
+enum class Attack_Tags {
+	T_Spell,
 	T_Projectile,
 	T_AOE,
 	T_Trap,
@@ -15,7 +17,10 @@ enum Attack_Tags {
 	T_Debuff,
 	T_Fire,
 	T_Ice,
-	T_Earth
+	T_Earth,
+	T_Lightning,
+	T_Chaining,
+	T_None
 };
 
 class Attack {
@@ -25,12 +30,11 @@ public:
 		std::string name = "";
 		std::string input = "";
 		std::string particle_name = "";
-		std::string effect_name = "";
+		std::string effect = "";
 		std::string allow_combo_p_name = "";
 
-		Stat base_damage;
-		Stat knock_back;
-		float cost = 0.0f;
+		std::map<std::string, Stat> stats;
+		std::vector<Attack_Tags> tags;
 
 		std::string next_light = "";
 		std::string next_heavy = "";
@@ -43,6 +47,7 @@ public:
 		int shake = 0;
 		int activation_frame = 0;
 	};
+
 public:
 
 	Attack() {};
@@ -51,6 +56,14 @@ public:
 		this->info = info;
 	}
 	bool IsLast() { return (light_attack_link == nullptr && heavy_attack_link == nullptr); }
+	bool HasTag(Attack_Tags tag) {
+		for (int i = 0; i < info.tags.size(); ++i)
+		{
+			if (info.tags[i] == tag)
+				return true;
+		}
+		return false;
+	}
 public:
 	AttackInfo info;
 
@@ -86,6 +99,9 @@ public:
 	void CancelAttack();
 	void ActivateCollider();
 	void DeactivateCollider();
+	void CastSpell();
+
+	void OnHit(Enemy* enemy);
 
 	void AllowCombo();
 	void OnDrawGizmosSelected();
@@ -121,6 +137,7 @@ protected:
 	PlayerController* player_controller = nullptr;
 	ComponentBoxCollider* collider = nullptr;
 	CameraShake* shake = nullptr;
+
 	std::vector<Attack*> attacks;
 	std::vector<Attack*> spells;
 
@@ -145,6 +162,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::CastSpell, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AllowCombo, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AttackShake, player_attacks);
 	return player_attacks;

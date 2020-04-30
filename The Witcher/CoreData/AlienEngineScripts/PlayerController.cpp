@@ -503,6 +503,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
 	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+	attacks->OnHit(enemy);
 
 	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
@@ -569,16 +570,7 @@ void PlayerController::LoadStats()
 	JSONfilepack* json = JSONfilepack::GetJSON(json_string.c_str());
 	JSONArraypack* stats_json = json->GetArray("Stats");
 
-	if (stats_json)
-	{
-		stats_json->GetFirstNode();
-		for (int i = 0; i < stats_json->GetArraySize(); ++i)
-		{
-			Stat stat = Stat(stats_json->GetString("name"), stats_json->GetNumber("value"));
-			player_data.stats.insert(std::pair(stat.name, stat));
-			stats_json->GetAnotherNode();
-		}
-	}
+	Stat::FillStats(player_data.stats, stats_json);
 
 	JSONfilepack::FreeJSON(json);
 }
