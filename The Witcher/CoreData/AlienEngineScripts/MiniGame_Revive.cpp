@@ -73,7 +73,7 @@ void MiniGame_Revive::Minigame()
 
 		float points = 0.0f;
 
-		if ((good_part->transform->GetLocalScale().x * 0.5f) >= position_x)
+		if ((good_part->transform->GetLocalScale().x) >= Maths::Abs(position_x))
 		{
 			++correct_inputs;
 			points = 1.f / input_times;
