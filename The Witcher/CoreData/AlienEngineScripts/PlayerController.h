@@ -82,6 +82,7 @@ public:
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
+	void OnTriggerExit(ComponentCollider* col);
 
 	void HitFreeze(float freeze_time);
 
@@ -140,6 +141,9 @@ public:
 	Input::CONTROLLER_BUTTONS controller_spell = Input::CONTROLLER_BUTTON_DPAD_UP;
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
+
+	// Bonfire
+	bool is_near_bonfire = false;
 
 private:
 	float angle = 0.0f;

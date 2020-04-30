@@ -436,7 +436,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
 	{
-		col->game_object_attached->GetComponent<Bonfire>()->ManageTrigger();
+		is_near_bonfire = true;
 		LOG("Me quemo");
 	}
 
@@ -461,6 +461,16 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 }
+
+void PlayerController::OnTriggerExit(ComponentCollider* col)
+{
+	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	{
+		is_near_bonfire = false;
+		LOG("Ufuf Ya no me quemo");
+	}
+}
+
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
