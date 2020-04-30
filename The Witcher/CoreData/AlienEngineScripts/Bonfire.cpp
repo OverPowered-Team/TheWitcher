@@ -1,4 +1,6 @@
 #include "Bonfire.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
 
 Bonfire::Bonfire() : Alien()
 {
@@ -10,13 +12,15 @@ Bonfire::~Bonfire()
 
 void Bonfire::Start()
 {
+	ui_bonfire = game_object->GetChild("Interact");
 }
 
-void Bonfire::Update()
+void Bonfire::OnTriggerEnter(ComponentCollider* collider)
 {
+
 }
 
-void Bonfire::OnDrawGizmos()
+void Bonfire::ManageTrigger()
 {
-	Gizmos::DrawWireSphere(game_object->transform->GetLocalPosition(), bonfire_radius, Color::Orange());
+
 }

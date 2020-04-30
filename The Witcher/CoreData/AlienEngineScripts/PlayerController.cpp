@@ -10,6 +10,7 @@
 #include "RumblerManager.h"
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
+#include "Bonfire.h"
 
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
@@ -433,6 +434,12 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 }
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
+	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	{
+		col->game_object_attached->GetComponent<Bonfire>()->ManageTrigger();
+		LOG("Me quemo");
+	}
+
 	if (!godmode)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {

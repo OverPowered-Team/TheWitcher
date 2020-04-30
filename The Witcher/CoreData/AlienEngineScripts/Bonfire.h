@@ -11,20 +11,20 @@ public:
 	virtual ~Bonfire();
 	
 	void Start();
-	void Update();
 
-	void OnDrawGizmos() override;
+	void OnTriggerEnter(ComponentCollider* collider) override;
+
+	void ManageTrigger();
 
 public:
+	// GameObject
+	GameObject* ui_bonfire = nullptr;
 
-	float bonfire_radius = 2.0f;
 };
 
 ALIEN_FACTORY Bonfire* CreateBonfire() {
 	Bonfire* alien = new Bonfire();
 	// To show in inspector here
-
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->bonfire_radius);
 
 	return alien;
 } 

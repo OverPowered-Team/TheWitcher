@@ -1,15 +1,14 @@
 {
-    "Name": "Bonfire",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "Bonfire",
                 "FamilyNumber": 1,
-                "ID": "18072084301623647940",
+                "ID": "7114847765893383324",
                 "ParentID": "10855570166845790896",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -36,33 +35,53 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7371534708645709059"
+                        "ID": "11119091061682773297"
                     },
                     {
-                        "Type": 29,
-                        "ID": "2373025802767058370",
-                        "ResourceID": "16808167208792193774",
-                        "DataName": "Bonfire",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "bonfire_radius",
-                                "float": 2
-                            }
-                        ]
+                        "Enabled": true,
+                        "Type": 8,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Radius": 2
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
                     }
                 ]
             },
             {
                 "Name": "Model_xd",
                 "FamilyNumber": 2,
-                "ID": "15755593344632175959",
-                "ParentID": "18072084301623647940",
+                "ID": "2479876795854949101",
+                "ParentID": "7114847765893383324",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -88,7 +107,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11646295317769296020"
+                        "ID": "9802155499514294673"
                     },
                     {
                         "Enabled": true,
@@ -117,12 +136,12 @@
             {
                 "Name": "Logs",
                 "FamilyNumber": 3,
-                "ID": "2731269258733730013",
-                "ParentID": "15755593344632175959",
+                "ID": "901802389809132200",
+                "ParentID": "2479876795854949101",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -148,7 +167,7 @@
                             0.20000000298023224
                         ],
                         "ScaleNegative": false,
-                        "ID": "3542271740686204032"
+                        "ID": "8165496549921357931"
                     },
                     {
                         "Type": 1,
@@ -158,7 +177,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "17725874475571827225",
+                        "ID": "14959923296015020205",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 5,
@@ -166,7 +185,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1587329850465901779",
+                        "ID": "15348718146274992238",
                         "HasMaterial": true,
                         "MaterialID": "12565647866873130753",
                         "Enabled": true
@@ -176,12 +195,12 @@
             {
                 "Name": "Fire",
                 "FamilyNumber": 4,
-                "ID": "10587787504793381406",
-                "ParentID": "2731269258733730013",
+                "ID": "10747195368241423585",
+                "ParentID": "901802389809132200",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -207,7 +226,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12342447348092022532"
+                        "ID": "4318530644458617234"
                     },
                     {
                         "Type": 1,
@@ -217,7 +236,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3132877884788503818",
+                        "ID": "14034054925134302391",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -225,7 +244,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6577146000049452193",
+                        "ID": "11341425417888339114",
                         "HasMaterial": true,
                         "MaterialID": "12021644403805349879",
                         "Enabled": true
@@ -233,7 +252,7 @@
                     {
                         "Type": 5,
                         "Enabled": true,
-                        "ID": "16806506017383195580",
+                        "ID": "1617588502374082270",
                         "PrintIcon": true,
                         "Intensity": 1,
                         "Position": [
@@ -265,12 +284,12 @@
             {
                 "Name": "ParticlesSmoke",
                 "FamilyNumber": 5,
-                "ID": "13107029318023090122",
-                "ParentID": "10587787504793381406",
+                "ID": "11938748540935010263",
+                "ParentID": "10747195368241423585",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -296,17 +315,17 @@
                             5.0000004768371582
                         ],
                         "ScaleNegative": false,
-                        "ID": "15570308336026478510"
+                        "ID": "14249905590084611126"
                     },
                     {
                         "Type": 15,
-                        "ID": "12285506548577090718",
+                        "ID": "4306840901458918258",
                         "Billboard": 1,
                         "Start": {
                             "Position": [
-                                -1.0121916532516479,
-                                -0.85081857442855835,
-                                -1.6766160726547241
+                                -0.97081339359283447,
+                                -0.87450641393661499,
+                                -1.6727986335754395
                             ],
                             "Rotation": [
                                 0,
@@ -392,7 +411,7 @@
                                 0.20000000298023224
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 5.9070000648498535,
+                            "CurrentLife": 8.8099956512451172,
                             "SpawnRate": 1,
                             "Delay": 2,
                             "Loop": true,
@@ -443,7 +462,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15271785302363470535",
+                        "ID": "5349409359206989179",
                         "HasMaterial": true,
                         "MaterialID": "10067504781387735383",
                         "Enabled": true
@@ -453,12 +472,12 @@
             {
                 "Name": "Interact",
                 "FamilyNumber": 2,
-                "ID": "3808612169280613670",
-                "ParentID": "18072084301623647940",
+                "ID": "12747522619491508444",
+                "ParentID": "7114847765893383324",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -484,10 +503,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6343076942588876469"
+                        "ID": "13577986931574772954"
                     }
                 ]
             }
         ]
-    }
+    },
+    "Name": "Bonfire"
 }
