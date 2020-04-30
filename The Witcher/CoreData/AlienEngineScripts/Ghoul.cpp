@@ -65,6 +65,7 @@ void Ghoul::UpdateEnemy()
         EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
         //Ori Ori function sintaxis
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+        animator->PlayState("Death");
         audio_emitter->StartSound("GhoulDeath");
         state = GhoulState::DEAD;
         break;
@@ -137,6 +138,28 @@ void Ghoul::Stun(float time)
 bool Ghoul::IsDead()
 {
     return (state == GhoulState::DEAD ? true : false);
+}
+
+void Ghoul::SetState(const char* state_str)
+{
+    if (state_str == "Idle")
+        state = GhoulState::IDLE;
+    else if (state_str == "Move")
+        state = GhoulState::MOVE;
+    else if (state_str == "Attack")
+        state = GhoulState::ATTACK;
+    else if (state_str == "Jump")
+        state = GhoulState::JUMP;
+    else if (state_str == "Hit")
+        state = GhoulState::HIT;
+    else if (state_str == "Dying")
+        state = GhoulState::DYING;
+    else if (state_str == "Dead")
+        state = GhoulState::DEAD;
+    else if (state_str == "Stunned")
+        state = GhoulState::STUNNED;
+    else
+        LOG("Incorrect state name: %s", state_str);
 }
 
 void Ghoul::OnAnimationEnd(const char* name)

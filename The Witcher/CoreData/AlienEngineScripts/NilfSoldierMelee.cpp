@@ -35,6 +35,7 @@ void NilfSoldierMelee::UpdateEnemy()
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
 		state = NilfgaardSoldierState::DEAD;
 		break;
