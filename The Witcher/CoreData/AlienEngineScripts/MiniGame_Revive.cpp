@@ -38,11 +38,17 @@ void MiniGame_Revive::Update()
 			{
 				if ((*i)->CheckForPossibleRevive())
 				{
-					start_X->SetEnable(true);
+					if (!start_X->IsEnabled())
+					{
+						start_X->SetEnable(true);
+					}
 				}
 				else
 				{
-					start_X->SetEnable(false);
+					if (start_X->IsEnabled())
+					{
+						start_X->SetEnable(false);
+					}
 				}
 			}
 		}
