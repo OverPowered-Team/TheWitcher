@@ -189,5 +189,7 @@ void MiniGame_Revive::RestartMinigame()
 	effects_change = false;
 	sign = 1;
 
+	this->player_reviving = nullptr;
+
 	revive_state = States::PREGAME;
 }

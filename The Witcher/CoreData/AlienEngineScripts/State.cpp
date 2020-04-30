@@ -311,10 +311,8 @@ State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void HitState::OnEnter(PlayerController* player)
 {
-	if (player->player_being_revived != nullptr) 
-	{
-		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
-	}
+	if(((DeadState*)player->player_being_revived->state)->revive_world_ui != nullptr)
+			((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
 }
 
 void HitState::OnExit(PlayerController* player)
@@ -337,7 +335,7 @@ void RevivingState::OnEnter(PlayerController* player)
 void RevivingState::OnExit(PlayerController* player)
 {
 	player->animator->SetBool("reviving", false);
-	player->player_being_revived = nullptr;
+	if(player->player_being_revived->state->type != StateType::DEAD)player->player_being_revived = nullptr;
 	player->input_blocked = false;
 }
 
