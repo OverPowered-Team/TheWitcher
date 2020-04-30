@@ -214,9 +214,9 @@ void PlayerAttacks::SnapToTarget()
 		if (distance > current_attack->info.max_snap_distance)
 			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
 	}
-
+	
 	float3 velocity = transform->forward * speed;
-	distance_snapped += velocity.Length();
+	distance_snapped += velocity.Length() * Time::GetDT();
 
 	player_controller->transform->SetGlobalRotation(rot);
 	player_controller->player_data.speed = velocity;
@@ -376,7 +376,7 @@ void PlayerAttacks::AttackShake()
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	if (current_attack->HasTag(Attack_Tags::T_Spell))
+	if (!current_attack->HasTag(Attack_Tags::T_Spell))
 		return current_attack->info.stats["Damage"].GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
 		return current_attack->info.stats["Damage"].GetValue();
