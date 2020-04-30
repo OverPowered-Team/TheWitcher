@@ -164,10 +164,19 @@ void Enemy::DeactivateCollider()
 	}
 }
 
+void Enemy::KnockBack(PlayerController* player)
+{
+	float3 direction = (player->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+	velocity = -direction * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+	velocity.y = 0;
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
+
+	KnockBack(player);
 
 	return aux_health - stats["Health"].GetValue();
 }

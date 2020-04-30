@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GeraltController",
-        "NumStates": 27,
-        "NumTransitions": 49,
+        "NumStates": 28,
+        "NumTransitions": 51,
         "States": [
             {
                 "Name": "Idle",
@@ -138,6 +138,11 @@
                 "Name": "LLHL",
                 "Speed": 1,
                 "Clip": "0"
+            },
+            {
+                "Name": "Aard",
+                "Speed": 1,
+                "Clip": "12180050432665512495"
             }
         ],
         "Transitions": [
@@ -865,6 +870,36 @@
                         "Type": "bool",
                         "CompText": "True",
                         "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Aard",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Aard",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
                     }
                 ]
             }
