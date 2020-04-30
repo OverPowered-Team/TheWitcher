@@ -383,7 +383,7 @@ void PlayerController::AddEffect(Effect* _effect)
 		}
 	}
 
-	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), float3::zero(), false, game_object);
+	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
 	if (go)
 		particles.insert(std::pair(_effect->vfx_on_apply, go));
 }
@@ -499,6 +499,7 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	if (new_state != nullptr)
 		SwapState(new_state);
 }
+
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
@@ -518,6 +519,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 		}
 	}
 }
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (!godmode)
@@ -541,11 +543,13 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 }
+
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }
+
 void PlayerController::OnUltimateActivation(float value)
 {
 	animator->IncreaseAllStateSpeeds(2.0f);

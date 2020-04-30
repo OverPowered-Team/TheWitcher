@@ -49,6 +49,7 @@ public:
 
 	virtual float GetDamaged(float dmg, PlayerController* player);
 	void AddEffect(Effect* new_effect);
+	void RemoveEffect(Effect* _effect);
 
 	void HitFreeze(float freeze_time);
 	void StopHitFreeze(float speed);
