@@ -29,8 +29,26 @@ void MiniGame_Revive::Update()
 {
 	switch (revive_state)
 	{
-	case States::PREGAME: {
-	} break;
+	case States::PREGAME: 
+	{
+		auto i = GameManager::instance->player_manager->players.begin();
+		for (; i != GameManager::instance->player_manager->players.end(); ++i)
+		{
+			if (player_dead != (*i))
+			{
+				if ((*i)->CheckForPossibleRevive())
+				{
+					start_X->SetEnable(true);
+				}
+				else
+				{
+					start_X->SetEnable(false);
+				}
+			}
+		}
+
+		break;
+	}
 	case States::MINIGAME:
 	{
 		if (actual_inputs == input_times)
