@@ -87,6 +87,8 @@ RumblerType RumblerManager::GetType(std::string _name_type)
 		type = RumblerType::RECEIVE_HIT;
 	else if (strcmp(_name_type.data(), "HEAVY_ATTACK") == 0)
 		type = RumblerType::HEAVY_ATTACK;
+	else if (strcmp(_name_type.data(), "LAST_ATTACK") == 0)
+		type = RumblerType::LAST_ATTACK;
 	else if (strcmp(_name_type.data(), "REVIVE") == 0)
 		type = RumblerType::REVIVE;
 	else if (strcmp(_name_type.data(), "INCREASING") == 0)

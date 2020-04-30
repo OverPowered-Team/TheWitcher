@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 #include "State.h"
 #include "Effect.h"
+#include "RumblerManager.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "GameManager.h"
@@ -376,7 +377,11 @@ float3 PlayerAttacks::GetMovementVector()
 void PlayerAttacks::AttackShake()
 {
 	if (current_attack->info.shake == 1)
-		shake->Shake(0.13f, 0.9, 5.f,  0.1f, 0.1f, 0.1f);
+	{
+		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+		if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);
+	}
 }
 
 float PlayerAttacks::GetCurrentDMG()
