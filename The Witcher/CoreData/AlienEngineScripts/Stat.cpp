@@ -46,7 +46,8 @@ void Stat::CalculateStat()
     float old_max = max_value;
     max_value = base_value;
     max_value += additive_value;
-    max_value += max_value * mult_value;
+    if(mult_value > 0)
+        max_value *= mult_value;
 
     if (old_max != 0)
         current_value = (current_value * max_value) / old_max;

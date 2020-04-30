@@ -32,6 +32,7 @@ public:
 		std::string particle_name = "";
 		std::string effect = "";
 		std::string allow_combo_p_name = "";
+		std::string prefab_to_spawn = "";
 
 		std::map<std::string, Stat> stats;
 		std::vector<Attack_Tags> tags;

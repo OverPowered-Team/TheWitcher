@@ -326,6 +326,10 @@ void PlayerAttacks::CastSpell()
 		{
 			player_controller->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
 		}
+		if (current_attack->HasTag(Attack_Tags::T_Trap))
+		{
+			GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(), this->transform->GetGlobalPosition());
+		}
 	}
 }
 
@@ -452,6 +456,7 @@ void PlayerAttacks::CreateAttacks()
 			info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
 			info.freeze_time = spells_json->GetNumber("freeze_time");
 			info.effect = spells_json->GetString("effect");
+			info.prefab_to_spawn = spells_json->GetString("prefab_to_spawn");
 
 			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 

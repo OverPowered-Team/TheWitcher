@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GeraltController",
-        "NumStates": 29,
-        "NumTransitions": 53,
+        "NumStates": 30,
+        "NumTransitions": 55,
         "States": [
             {
                 "Name": "Idle",
@@ -51,7 +51,7 @@
             },
             {
                 "Name": "LLL",
-                "Speed": 1,
+                "Speed": 1.7000000476837158,
                 "Clip": "7425335695216091952"
             },
             {
@@ -71,12 +71,12 @@
             },
             {
                 "Name": "H",
-                "Speed": 2,
+                "Speed": 1.7000000476837158,
                 "Clip": "500007145238598693"
             },
             {
                 "Name": "HH",
-                "Speed": 2,
+                "Speed": 1.3999999761581421,
                 "Clip": "3522760949302926187"
             },
             {
@@ -111,12 +111,12 @@
             },
             {
                 "Name": "LHL",
-                "Speed": 1,
+                "Speed": 1.7999999523162842,
                 "Clip": "8559991752706635001"
             },
             {
                 "Name": "HL",
-                "Speed": 2,
+                "Speed": 1.5,
                 "Clip": "16098445893649691647"
             },
             {
@@ -148,6 +148,11 @@
                 "Name": "Quen",
                 "Speed": 1,
                 "Clip": "3206340720122339941"
+            },
+            {
+                "Name": "Yrden",
+                "Speed": 1,
+                "Clip": "2505874860201445061"
             }
         ],
         "Transitions": [
@@ -937,6 +942,36 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "Yrden",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Yrden",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -987,12 +1022,6 @@
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "16813058118423146582",
                 "Frame": 28,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "16813058118423146582",
-                "Frame": 29,
                 "Type": 2
             },
             {
@@ -1183,18 +1212,6 @@
             },
             {
                 "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "3522760949302926187",
-                "Frame": 36,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "500007145238598693",
-                "Frame": 27,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "16861371117791152562",
                 "Frame": 40,
                 "Type": 2
@@ -1257,12 +1274,6 @@
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "7425335695216091952",
                 "Frame": 19,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "7425335695216091952",
-                "Frame": 22,
                 "Type": 2
             },
             {
@@ -1434,12 +1445,6 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerController::PlayAllowParticle",
-                "Animation_Id": "16813058118423146582",
-                "Frame": 30,
-                "Type": 2
-            },
-            {
                 "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "12180050432665512495",
                 "Frame": 21,
@@ -1491,6 +1496,48 @@
                 "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "3206340720122339941",
                 "Frame": 26,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "2505874860201445061",
+                "Frame": 16,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "2505874860201445061",
+                "Frame": 36,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "500007145238598693",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3522760949302926187",
+                "Frame": 39,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7425335695216091952",
+                "Frame": 25,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16813058118423146582",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAllowParticle",
+                "Animation_Id": "16813058118423146582",
+                "Frame": 35,
                 "Type": 2
             }
         ]

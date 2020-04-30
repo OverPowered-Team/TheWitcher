@@ -195,6 +195,25 @@ void Enemy::AddEffect(Effect* new_effect)
 	}
 }
 
+void Enemy::RemoveEffect(Effect* _effect)
+{
+	for (auto it = stats.begin(); it != stats.end(); ++it)
+	{
+		if (_effect->AffectsStat(it->second.name))
+			it->second.RemoveEffect(_effect);
+	}
+
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it) == _effect)
+		{
+			delete _effect;
+			effects.erase(it);
+			return;
+		}
+	}
+}
+
 void Enemy::HitFreeze(float freeze_time)
 {
 	if (!is_frozen)
