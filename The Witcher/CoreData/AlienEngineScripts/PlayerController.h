@@ -143,7 +143,7 @@ public:
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
 	// Bonfire
-	float3 last_checkpoint_position = float3(0.f, 0.f, 0.f);
+	float3 last_checkpoint_position = float3::inf();
 	bool is_near_bonfire = false;
 
 private:

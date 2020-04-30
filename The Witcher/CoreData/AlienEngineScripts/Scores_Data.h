@@ -15,4 +15,4 @@ int Scores_Data::player2_kills = 10;
 bool Scores_Data::won_level1 = false;
 bool Scores_Data::won_level2 = false;
 bool Scores_Data::dead = false;
-float3 Scores_Data::last_checkpoint_position = float3(0.f, 0.f, 0.f);
+float3 Scores_Data::last_checkpoint_position = float3::inf();

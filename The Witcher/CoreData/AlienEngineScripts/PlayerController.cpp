@@ -11,9 +11,9 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "Bonfire.h"
+#include "Scores_Data.h"
 
 #include "UI_Char_Frame.h"
-#include "InGame_UI.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -42,6 +42,10 @@ void PlayerController::Start()
 	InitKeyboardControls();
 
 	// TP to last checkpoint or level start
+	if (Scores_Data::last_checkpoint_position.IsFinite())
+	{
+		this->transform->SetGlobalPosition(Scores_Data::last_checkpoint_position);
+	}
 
 	state = new IdleState();
 	state->OnEnter(this);
