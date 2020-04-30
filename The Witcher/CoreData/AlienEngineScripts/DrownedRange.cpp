@@ -21,7 +21,7 @@ void DrownedRange::UpdateEnemy()
 		{
 			animator->SetFloat("speed", 0.0F);
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-			animator->PlayState("GetOffGround");
+			animator->PlayState("GetOff");
 			state = DrownedState::ATTACK;
 			is_hide = false;
 		}
@@ -56,7 +56,7 @@ void DrownedRange::UpdateEnemy()
 
 void DrownedRange::OnAnimationEnd(const char* name)
 {
-	if (strcmp(name, "GetOffGround") == 0)
+	if (strcmp(name, "GetOff") == 0)
 	{
 		state = DrownedState::ATTACK;
 		animator->PlayState("Attack");
