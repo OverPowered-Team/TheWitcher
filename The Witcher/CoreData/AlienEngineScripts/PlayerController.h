@@ -82,6 +82,7 @@ public:
 	void OnUltimateActivation(float value);
 	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
+	void UpdateDashEffect();
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
 
@@ -118,6 +119,10 @@ public:
 	//Relics
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
+
+	//DashCollider
+	Prefab dash_collider;
+	float3 last_dash_position = float3::zero();
 
 	//UI 
 	GameObject* HUD = nullptr;
@@ -181,6 +186,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
 
 	return player;
 }

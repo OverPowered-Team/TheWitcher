@@ -14,6 +14,7 @@
 #include "CameraShake.h"
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
+#include "DashCollider.h"
 
 #include "PlayerController.h"
 
@@ -239,6 +240,7 @@ void PlayerController::EffectsUpdate()
 			if (particles[(*it)->name])
 				particles[(*it)->name]->SetEnable(true);
 		}
+
 		if ((*it)->to_delete)
 		{
 			it = RemoveEffect(it);
@@ -518,6 +520,27 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 		}
 	}
 }
+
+void PlayerController::UpdateDashEffect()
+{
+	if (this->transform->GetGlobalPosition().DistanceSq(last_dash_position) >= 0.25)
+	{
+		last_dash_position = this->transform->GetGlobalPosition();
+		for (auto it = effects.begin(); it != effects.end(); ++it)
+		{
+			if (dynamic_cast<DashEffect*>(*it) != nullptr)
+			{
+				GameObject* go = GameObject::Instantiate(dash_collider, this->transform->GetGlobalPosition());
+				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
+				DashCollider* dash_coll = go->GetComponent<DashCollider>();
+				dash_coll->effect = (DashEffect*)(*it);
+				if (dash_coll->dash_particles[(*it)->name])
+					dash_coll->dash_particles[(*it)->name]->SetEnable(true);
+			}
+		}
+	}
+}
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (!godmode)

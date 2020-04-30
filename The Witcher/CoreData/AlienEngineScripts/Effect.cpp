@@ -139,4 +139,11 @@ std::string AttackEffect::GetAttackIdentifier()
     return attack_name;
 }
 
+// DashEffect
+DashEffect::DashEffect()
+{
+}
 
+DashEffect::~DashEffect()
+{
+}

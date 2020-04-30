@@ -302,6 +302,7 @@ void AttackingState::OnExit(PlayerController* player)
 void RollingState::Update(PlayerController* player)
 {
 	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->UpdateDashEffect();
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -333,6 +334,7 @@ void RollingState::OnEnter(PlayerController* player)
 
 	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
+	player->last_dash_position = player->transform->GetGlobalPosition();
 }
 
 void RollingState::OnExit(PlayerController* player)

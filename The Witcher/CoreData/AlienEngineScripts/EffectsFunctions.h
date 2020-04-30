@@ -30,6 +30,8 @@ static void ApplyEffectOnHit(Enemy* _enemy, uint size, EffectData* data)
 }
 
 //ONDASH
-static void ApplyEffectOnDash(PlayerController* _player)
+static void ApplyEffectOnDash(Enemy* _enemy, EffectData* data)
 {
+    Effect* effect = new Effect(data);
+    _enemy->AddEffect(effect);
 }

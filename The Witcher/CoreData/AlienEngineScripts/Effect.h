@@ -50,7 +50,7 @@ public:
 	bool to_delete = false;
 
 	void (*OnHit)(Enemy* enemy, uint size, EffectData* data);
-	void (*OnDash)(PlayerController* player);
+	void (*OnDash)(Enemy* _enemy, EffectData* data);
 
 };
 
@@ -65,6 +65,14 @@ public:
 
 	std::string attack_name = "";
 	EffectData* on_hit_effect = nullptr;
+};
+
+class DashEffect : public Effect {
+public:
+	DashEffect();
+	virtual ~DashEffect();
+
+	EffectData* on_dash_effect = nullptr;
 };
 
 
