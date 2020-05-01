@@ -396,6 +396,9 @@ void ComponentButton::HandleAlienEvent(const AlienEvent& e)
 	switch (e.type)
 	{
 	case AlienEventType::SCRIPT_DELETED: {
+		if (App->objects->inHotReload) {
+			break;
+		}
 		ComponentScript* script = (ComponentScript*)e.object;
 		if (script->game_object_attached == game_object_attached)
 		{

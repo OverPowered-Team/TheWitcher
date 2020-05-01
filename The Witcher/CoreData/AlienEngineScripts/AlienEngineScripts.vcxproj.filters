@@ -37,16 +37,10 @@
     <ClCompile Include="Stat.cpp">
       <Filter>Scripts\Stats and Effects</Filter>
     </ClCompile>
-    <ClCompile Include="ArrowScript.cpp">
-      <Filter>Scripts\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
-      <Filter>Scripts\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="NilfgaardSoldier.cpp">
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Extra_Menus.cpp">
@@ -102,9 +96,6 @@
     </ClCompile>
     <ClCompile Include="RockFall.cpp">
       <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Ghoul.cpp">
-      <Filter>Scripts\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="RelicManager.cpp">
       <Filter>Scripts\Stats and Effects</Filter>
@@ -193,11 +184,50 @@
     <ClCompile Include="Boss.cpp">
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="NilfgaardSoldier.cpp">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrowScript.cpp">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="NilfSoldierMelee.cpp">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="NilfSoldierRange.cpp">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="NilfSoldierShield.cpp">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClCompile>
     <ClCompile Include="State.cpp">
       <Filter>Scripts\Player</Filter>
     </ClCompile>
     <ClCompile Include="Ciri.cpp">
       <Filter>Scripts\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Drowned.cpp">
+      <Filter>Scripts\Enemies\Drowned</Filter>
+    </ClCompile>
+    <ClCompile Include="DrownedRange.cpp">
+      <Filter>Scripts\Enemies\Drowned</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghoul.cpp">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClCompile>
+    <ClCompile Include="CloudLeshen.cpp">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClCompile>
+    <ClCompile Include="CrowsLeshen.cpp">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClCompile>
+    <ClCompile Include="Leshen.cpp">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeLeshen.cpp">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClCompile>
+    <ClCompile Include="RootLeshen.cpp">
+      <Filter>Scripts\Enemies\Leshen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,16 +267,10 @@
     <ClInclude Include="Stat.h">
       <Filter>Scripts\Stats and Effects</Filter>
     </ClInclude>
-    <ClInclude Include="ArrowScript.h">
-      <Filter>Scripts\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Scripts\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
-      <Filter>Scripts\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="NilfgaardSoldier.h">
       <Filter>Scripts\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Extra_Menus.h">
@@ -308,9 +332,6 @@
     </ClInclude>
     <ClInclude Include="RockFall.h">
       <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Ghoul.h">
-      <Filter>Scripts\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="RelicManager.h">
       <Filter>Scripts\Stats and Effects</Filter>
@@ -405,11 +426,47 @@
     <ClInclude Include="Boss.h">
       <Filter>Scripts\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="NilfgaardSoldier.h">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowScript.h">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClInclude>
+    <ClInclude Include="NilfSoldierMelee.h">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClInclude>
+    <ClInclude Include="NilfSoldierRange.h">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClInclude>
+    <ClInclude Include="NilfSoldierShield.h">
+      <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
+    </ClInclude>
     <ClInclude Include="State.h">
       <Filter>Scripts\Player</Filter>
     </ClInclude>
     <ClInclude Include="Ciri.h">
       <Filter>Scripts\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Drowned.h">
+      <Filter>Scripts\Enemies\Drowned</Filter>
+    </ClInclude>
+    <ClInclude Include="DrownedRange.h">
+      <Filter>Scripts\Enemies\Drowned</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghoul.h">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClInclude>
+    <ClInclude Include="CloudLeshen.h">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClInclude>
+    <ClInclude Include="CrowsLeshen.h">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClInclude>
+    <ClInclude Include="Leshen.h">
+      <Filter>Scripts\Enemies\Leshen</Filter>
+    </ClInclude>
+    <ClInclude Include="RootLeshen.h">
+      <Filter>Scripts\Enemies\Leshen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +511,18 @@
     </Filter>
     <Filter Include="Scripts\UI\Buttons">
       <UniqueIdentifier>{f93cdcf6-5f41-4046-8018-b95261895855}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Enemies\NilfgaardSoldier">
+      <UniqueIdentifier>{c5f096cc-8f1f-4228-93e0-09cafe4cdb34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Enemies\Drowned">
+      <UniqueIdentifier>{f55fa272-c18f-49cd-bfe0-509b57205c1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Enemies\Ghoul">
+      <UniqueIdentifier>{2af96abb-4b10-42dc-a8fb-9010c0177982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Enemies\Leshen">
+      <UniqueIdentifier>{aa9f3c92-5866-4017-810c-01715c2b2a73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

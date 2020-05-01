@@ -375,7 +375,7 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 			case InspectorScriptData::DataType::GAMEOBJECT: {
 				if (inspector_variables[i].obj != nullptr) {
 					GameObject* obj = *inspector_variables[i].obj;
-					if (obj != nullptr && (!App->objects->is_saving_prefab || (game_object_attached->Exists(obj)))) {
+					if (obj != nullptr && (!App->objects->is_saving_prefab || (game_object_attached->FindPrefabRoot()->Exists(obj)))) {
 						inspector->SetString("gameobject", std::to_string((*inspector_variables[i].obj)->ID).data());
 					}
 					else {

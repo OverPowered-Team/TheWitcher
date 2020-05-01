@@ -10,6 +10,7 @@ enum class BillboardType
 	WORLD,
 	AXIS,
 	VELOCITY,
+	MESH,
 	// ----
 
 	NONE

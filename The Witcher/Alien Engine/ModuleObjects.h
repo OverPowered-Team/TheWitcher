@@ -209,7 +209,8 @@ private:
 	void CompareName(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::vector<ComponentScript*>& scriptsVec);
 
 public:
-
+	bool inPrefabCreation = false;
+	bool inHotReload = false;
 	u64 scene_active = 0;
 
 	//Focus

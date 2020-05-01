@@ -30,27 +30,70 @@
     {
       "effect": 1,
       "name": "Fire Runestone",
-      "description": "burns enemies"
+      "description": "burns enemies",
+	    "hit_effect":{
+        "name": "fire_runestone",
+        "time": 0.5,
+        "ticks_time": 1.0,
+        "flat_modifiers":[
+          {
+            "identifier":"Health",
+            "value":-5
+          }
+        ]
+      }
     },
     {
       "effect": 2,
       "name": "Ice Runestone",
-      "description": "slows enemies hit"
+      "description": "slows enemies hit",
+      "hit_effect": {
+        "name": "ice_runestone",
+        "time": 0.2,
+        "ticks_time": 0.0,
+        "multiplicative_modifiers": [
+          {
+            "identifier": "Agility",
+            "value": 0.5
+          }
+        ]
+      }
     },
     {
       "effect": 3,
       "name": "Earth Runestone",
-      "description": "does double damage"
+      "description": "does double damage",
+      "hit_effect": {
+        "name": "earth_runestone",
+        "time": 0.0,
+        "ticks_time": 0.0
+      }
     },
     {
       "effect": 4,
       "name": "Lightning Runestone",
-      "description": "stuns enemies hit"
+      "description": "stuns enemies hit",
+      "hit_effect": {
+        "name": "lightning_runestone",
+        "time": 0.5,
+        "ticks_time": 0.0
+      }
     },
     {
       "effect": 5,
       "name": "Poison Runestone",
-      "description": "poisons enemies hit"
+      "description": "poisons enemies hit",
+      "hit_effect": {
+        "name": "poison_runestone",
+        "time": 0.5,
+        "ticks_time": 0.0,
+        "flat_modifiers": [
+          {
+            "identifier": "Health",
+            "value": -5
+          }
+        ]
+      }
     }
   ],
   "DASH": [

@@ -319,9 +319,7 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		(node->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0), (!node->IsEnabled() || !node->IsUpWardsEnabled()));
 	if (node->IsPrefab() && node->FindPrefabRoot() != node)
 		ImGui::PopStyleColor();
-	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0)) {
-		App->objects->SetNewSelectedObject(node, App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT);
-	}
+
 	if (ImGui::IsItemHovered()) {
 		object_hovered = node;
 	}
@@ -356,6 +354,10 @@ void PanelHierarchy::PrintNode(GameObject* node)
 		ImGui::EndDragDropTarget();
 	}
 	
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0)) {
+		App->objects->SetNewSelectedObject(node, App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT);
+	}
+
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover)) {
 		ImGui::SetDragDropPayload(DROP_ID_HIERARCHY_NODES, &node, sizeof(GameObject), ImGuiCond_Once);
 		ImGui::Text(node->GetName());

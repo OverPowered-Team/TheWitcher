@@ -188,20 +188,21 @@ bool PlayerController::AnyKeyboardInput()
 void PlayerController::HandleMovement()
 {
 	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
+
+	float speed_y = player_data.speed.y;
+	player_data.speed = -direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
+	player_data.speed.y = speed_y;
+
 	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
 	direction_vector.y = 0.f;
 
 	//rotate
-	if (mov_input) //temporal solution
+	if (mov_input)
 	{
-		float angle = atan2f(direction_vector.z, direction_vector.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
 	}
-
-	float speed_y = player_data.speed.y;
-	player_data.speed = direction_vector * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;
 }
 
 void PlayerController::EffectsUpdate()
@@ -426,7 +427,7 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 			AttackEffect* a_effect = (AttackEffect*)(*it);
 			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
 			{
-				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size());
+				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size(), a_effect->on_hit_effect);
 			}
 		}
 	}

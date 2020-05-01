@@ -17,6 +17,7 @@ Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo
 	owner->destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
 	currentFrame = owner->currentFrame;
 
+
 	if (owner->material != nullptr) 
 	{
 		p_material = new ResourceMaterial();
@@ -164,7 +165,7 @@ void Particle::Draw()
 {
 	
 	// -------- ATTITUDE -------- //
-	float4x4 particleLocal = float4x4::FromTRS(particleInfo.position, particleInfo.rotation, float3(particleInfo.size, particleInfo.size * (particleInfo.lengthScale + particleInfo.velocityScale), 1.f));
+	float4x4 particleLocal = float4x4::FromTRS(particleInfo.position, particleInfo.rotation, float3(particleInfo.size, particleInfo.size * (particleInfo.lengthScale + particleInfo.velocityScale), particleInfo.size));
 	float4x4 particleGlobal = particleLocal;
 
 	if (!particleInfo.globalTransform)
@@ -218,6 +219,7 @@ void Particle::Draw()
 
 	
 	//glBlendFunc(owner->sourceFactor, owner->destinationFactor);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	switch (owner->eqBlend)
 	{
@@ -238,13 +240,14 @@ void Particle::Draw()
 
 	
 	// ------ VAO BUFFER ------ //
-	glBindVertexArray(owner->vao);
-	// --- VERTEX BUFFER ---- //
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, owner->id_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// ---- INDEX BUFFER ---- //
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->id_index);
+	
+	
+	//// --- VERTEX BUFFER ---- //
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, owner->id_vertex);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+
 
 
 
@@ -254,9 +257,9 @@ void Particle::Draw()
 		owner->DeactivateLight();
 
 		// ---- TEXTCOORD BUFFER ----- //
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		/*glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, owner->id_uv);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
 
 		// --------- MATERIAL -------- //
 		p_material->ApplyMaterial();
@@ -278,24 +281,47 @@ void Particle::Draw()
 	owner->ActivateLight();
 	
 
-	// ----- DRAW QUAD ------ //
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	// ---- INDEX BUFFER ---- //
+
+
+
+	// ----- DRAW ------ //
+
+	if (owner->mesh_mode) // MESH DRAWING
+	{
+
+		if(!owner->meshes.empty())
+		{
+			for (int i = 0; i < owner->meshes.size(); ++i)
+			{
+				glBindVertexArray(owner->meshes.at(i)->vao);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->meshes.at(i)->id_index);
+				glDrawElements(GL_TRIANGLES, owner->meshes.at(i)->num_index, GL_UNSIGNED_INT, NULL);
+			}
+		}
+	}
+	else // QUAD DRAWING
+	{
+		glBindVertexArray(owner->vao);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, owner->id_index);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
 
 	
 	// ---- DISABLE STUFF --- //
-	/*glDisable(GL_BLEND);
-	glDisable(GL_ALPHA_TEST);*/
+	//glDisable(GL_BLEND);
+	//glDisable(GL_ALPHA_TEST);
 
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if (owner->material != nullptr && p_material != nullptr)
 		p_material->used_shader->Unbind();
 
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 	owner->DeactivateLight();
 	glPopMatrix();
 	glColor4f(1.f, 1.f, 1.f, 1.f);
@@ -324,7 +350,10 @@ void Particle::Orientate(ComponentCamera* camera)
 
 	case BillboardType::VELOCITY:
 		particleInfo.rotation = Billboard::AlignToVelocity(camera, particleInfo.position, particleInfo.velocity);
+		break;
 
+	case BillboardType::MESH:
+		particleInfo.rotation = Quat::identity();
 		break;
 
 	case BillboardType::NONE:

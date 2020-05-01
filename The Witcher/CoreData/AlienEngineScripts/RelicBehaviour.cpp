@@ -19,7 +19,7 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	if(GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+	if(GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
 		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
 }
 
@@ -39,29 +39,31 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	int random_index = Random::GetRandomIntBetweenTwo(0, attack_pool.size() - 1);
 	attack_name = attack_pool[random_index];
 
-	AttackEffect* test_effect = new AttackEffect();
-	test_effect->SetAttackIdentifier(attack_name);
+	AttackEffect* effect = new AttackEffect();
+	effect->SetAttackIdentifier(attack_name);
+	effect->on_hit_effect = effect_to_apply;
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnHit = &ApplyBurnOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnHit = &ApplyIceOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->AddMultiplicativeModifier(2.0f, "Attack_Damage");
+		effect->OnHit = &ApplyEffectOnHit;
+		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
 		break;
 	case Relic_Effect::LIGHTNING:
-		test_effect->OnHit = &ApplyLightningOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnHit = &ApplyPoisonOnHit;
+		effect->OnHit = &ApplyEffectOnHit;
 		break;
 	}
 
-	effects.push_back(test_effect);
+	effects.push_back(effect);
 
 	Relic::OnPickUp(_player, attack_name);
 }
@@ -77,25 +79,25 @@ DashRelic::~DashRelic()
 
 void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
-	Effect* test_effect = new Effect();
+	Effect* effect = new Effect();
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		test_effect->OnDash = &ApplyBurnOnDash;
+		effect->OnDash = &ApplyBurnOnDash;
 		break;
 	case Relic_Effect::ICE:
-		test_effect->OnDash = &ApplyIceOnDash;
+		effect->OnDash = &ApplyIceOnDash;
 		break;
 	case Relic_Effect::EARTH:
-		test_effect->OnDash = &ApplyEarthOnDash;
+		effect->OnDash = &ApplyEarthOnDash;
 		break;
 	case Relic_Effect::POISON:
-		test_effect->OnDash = &ApplyPoisonOnDash;
+		effect->OnDash = &ApplyPoisonOnDash;
 		break;
 	}
 
-	effects.push_back(test_effect);
+	effects.push_back(effect);
 
 	Relic::OnPickUp(_player);
 }
@@ -145,8 +147,7 @@ void RelicBehaviour::Update()
 }
 
 void RelicBehaviour::SetRelic(const char* json_array)
-{
-	
+{	
 	JSONfilepack* relic_json = JSONfilepack::GetJSON("GameData/Relics.json");
 
 	JSONArraypack* type_array = relic_json->GetArray(json_array);
@@ -164,6 +165,42 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		}
 		relic->name = type_array->GetString("name");
 		relic->description = type_array->GetString("description");
+
+		if (std::strcmp(json_array, "ATTACK") == 0)
+		{
+			EffectData* _effect = new EffectData();
+			_effect->name = type_array->GetString("hit_effect.name");
+			_effect->time = type_array->GetNumber("hit_effect.time");
+			_effect->ticks_time = type_array->GetNumber("hit_effect.ticks_time");
+
+			JSONArraypack* flat_modifiers = type_array->GetArray("hit_effect.flat_modifiers");
+			if (flat_modifiers)
+			{
+				flat_modifiers->GetFirstNode();
+				for (uint i = 0; i < flat_modifiers->GetArraySize(); i++)
+				{
+					Modifier mod;
+					mod.identifier = flat_modifiers->GetString("identifier");
+					mod.amount = flat_modifiers->GetNumber("value");
+					_effect->additive_modifiers.push_back(mod);
+				}
+			}
+
+			JSONArraypack* mult_modifiers = type_array->GetArray("hit_effect.multiplicative_modifiers");
+			if (mult_modifiers)
+			{
+				mult_modifiers->GetFirstNode();
+				for (uint i = 0; i < mult_modifiers->GetArraySize(); i++)
+				{
+					Modifier mod;
+					mod.identifier = mult_modifiers->GetString("identifier");
+					mod.amount = mult_modifiers->GetNumber("value");
+					_effect->multiplicative_modifiers.push_back(mod);
+				}
+			}
+
+			((AttackRelic*)relic)->effect_to_apply = _effect;
+		}
 	}
 
 	JSONfilepack::FreeJSON(relic_json);
