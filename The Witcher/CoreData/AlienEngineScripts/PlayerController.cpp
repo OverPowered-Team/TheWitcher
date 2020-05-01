@@ -47,7 +47,11 @@ void PlayerController::Start()
 	// TP to last checkpoint if checkpoint exist
 	if (Scores_Data::last_checkpoint_position.IsFinite())
 	{
-		this->controller->SetPosition(Scores_Data::last_checkpoint_position);
+		this->controller->SetPosition(float3(
+			Scores_Data::last_checkpoint_position.x + (controller_index - 1),
+			Scores_Data::last_checkpoint_position.y, 
+			Scores_Data::last_checkpoint_position.z)
+		);
 	}
 
 	state = new IdleState();
@@ -459,10 +463,26 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 }
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
-	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	if ((strcmp("Bonfire", col->game_object_attached->GetName()) == 0))
 	{
-		is_near_bonfire = true;
-		last_checkpoint_position = col->game_object_attached->GetComponent<Bonfire>()->checkpoint->transform->GetGlobalPosition();
+		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
+
+		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(controller_index))
+		{
+			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+			{
+				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+				// UI: Checkpoint Saved!
+			}
+
+			// Heal
+			player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
+			// Player Used this Bonfire
+			bonfire->SetBonfireUsed(this->controller_index);
+			LOG("Player %i used this bonfire", controller_index);
+		}
 	}
 
 	if (!godmode)
@@ -484,14 +504,6 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				}
 			}
 		}
-	}
-}
-
-void PlayerController::OnTriggerExit(ComponentCollider* col)
-{
-	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
-	{
-		is_near_bonfire = false;
 	}
 }
 

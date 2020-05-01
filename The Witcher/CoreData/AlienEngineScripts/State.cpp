@@ -7,10 +7,6 @@
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 
-#include "UI_Char_Frame.h"
-
-#include "Scores_Data.h"
-
 #include "State.h"
 
 State* IdleState::HandleInput(PlayerController* player)
@@ -61,15 +57,6 @@ State* IdleState::HandleInput(PlayerController* player)
 			player->player_data.speed = float3::zero();
 			player->animator->SetBool("reviving", true);
 			return new RevivingState();
-		}
-		else if (player->is_near_bonfire)
-		{
-			// Checkpoint
-			Scores_Data::last_checkpoint_position = player->last_checkpoint_position;
-
-			// Rest
-			player->player_data.stats["Health"].IncreaseStat(player->player_data.stats["Health"].GetMaxValue());
-			player->HUD->GetComponent<UI_Char_Frame>()->LifeChange(player->player_data.stats["Health"].GetValue(), player->player_data.stats["Health"].GetMaxValue());
 		}
 	}
 

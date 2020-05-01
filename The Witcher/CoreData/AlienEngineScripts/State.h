@@ -12,7 +12,6 @@ enum (StateType,
 	REVIVING,
 	HIT,
 	ROOT,
-	CHILLING,
 	MAX
 	);
 
@@ -125,15 +124,3 @@ public:
 	void OnEnter(PlayerController* player) override;
 	void OnExit(PlayerController* player) override;
 };
-
-class ChillingState : public State
-{
-public:
-	ChillingState() { type = StateType::CHILLING; }
-	//void HandleInput(PlayerController* player, float2 movement_input) override;
-	void Update(PlayerController* player) override;
-	State* OnAnimationEnd(PlayerController* player, const char* name) override;
-	void OnEnter(PlayerController* player) override;
-	void OnExit(PlayerController* player) override;
-};
-
