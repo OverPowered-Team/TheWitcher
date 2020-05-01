@@ -65,6 +65,7 @@ public:
 
 	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
+	EffectData* effect_to_apply = nullptr;
 };
 
 class ALIEN_ENGINE_API RelicBehaviour : public Alien {
