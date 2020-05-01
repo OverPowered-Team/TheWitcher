@@ -356,11 +356,15 @@ void PlayerAttacks::CastSpell()
 			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particles[current_attack->info.particle_name]->transform->GetGlobalPosition());
 
-			float angle = atan2f(transform->forward.z, transform->forward.x);
+			/*float angle = atan2f(transform->forward.z, transform->forward.x);
 			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 90) * Maths::Deg2Rad());
-			projectile_go->transform->SetGlobalRotation(rot);
+			projectile_go->transform->SetGlobalRotation(rot);*/
 
-			projectile_go->GetComponent<PlayerProjectile>()->direction = transform->forward;
+			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
+			Quat rot = projectile_go->transform->GetGlobalRotation();
+			rot = rot.LookAt(projectile_go->transform->forward, direction, projectile_go->transform->up, float3::unitY());
+			projectile_go->transform->SetGlobalRotation(rot);
+			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
 
 			if (GameManager::instance->rumbler_manager)
 				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
