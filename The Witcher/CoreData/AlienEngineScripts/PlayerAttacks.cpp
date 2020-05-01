@@ -321,9 +321,9 @@ void PlayerAttacks::CastSpell()
 			if (GameManager::instance->rumbler_manager)
 			{ 
 				if (strcmp("Igni", current_attack->info.name.c_str()) == 0)
-					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
-
-				else GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, player_controller->controller_index);
+					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
+				else 
+					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, player_controller->controller_index, 0.2);
 
 			}
 			
@@ -337,7 +337,7 @@ void PlayerAttacks::CastSpell()
 		{
 			LOG("queen");
 			if (GameManager::instance->rumbler_manager)
-				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
 
 			player_controller->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
 		}
@@ -346,7 +346,7 @@ void PlayerAttacks::CastSpell()
 			LOG("ydern")
 			GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(), this->transform->GetGlobalPosition());
 			if (GameManager::instance->rumbler_manager)
-				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
 		}
 	}
 }
@@ -357,6 +357,10 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 	{
 		enemy->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
 	}
+	if (GameManager::instance->rumbler_manager && current_attack->info.name[current_attack->info.name.size() - 1] == 'H')
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player_controller->controller_index);
+	else if (GameManager::instance->rumbler_manager && current_attack->info.name[current_attack->info.name.size() - 1] == 'L')
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LIGHT_ATTACK, player_controller->controller_index);
 }
 
 void PlayerAttacks::AllowCombo()

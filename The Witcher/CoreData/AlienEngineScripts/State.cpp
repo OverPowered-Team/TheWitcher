@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "RumblerManager.h"
 #include "EventManager.h"
 
 #include "PlayerController.h"
@@ -52,9 +51,6 @@ State* IdleState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-
-		if(GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
@@ -146,8 +142,6 @@ State* RunningState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		if (GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
