@@ -468,7 +468,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	{
 		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
 
-		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(controller_index))
+		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
 		{
 			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
 			{
@@ -481,7 +481,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 
 			// Player Used this Bonfire
-			bonfire->SetBonfireUsed(this->controller_index);
+			bonfire->SetBonfireUsed(this);
 		}
 	}
 

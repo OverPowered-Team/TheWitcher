@@ -3,6 +3,8 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class PlayerController;
+
 class ALIEN_ENGINE_API Bonfire : public Alien {
 
 public:
@@ -12,9 +14,9 @@ public:
 	
 	void Start();
 
-	void SetBonfireUsed(int controller_index);
+	void SetBonfireUsed(PlayerController* player);
 
-	bool HaveThisPlayerUsedThis(int controller_index);
+	bool HaveThisPlayerUsedThis(PlayerController* player);
 
 public:
 	// GameObject
@@ -24,8 +26,7 @@ public:
 	bool is_active = true;
 
 private:
-	int bonfire_used = 0;
-	int first_player_index = -1;
+	PlayerController* first_player = nullptr;
 };
 
 ALIEN_FACTORY Bonfire* CreateBonfire() {

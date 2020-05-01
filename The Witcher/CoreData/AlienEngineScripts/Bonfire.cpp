@@ -14,20 +14,20 @@ void Bonfire::Start()
 	checkpoint = game_object->GetChild("Checkpoint");
 }
 
-void Bonfire::SetBonfireUsed(int player_index)
+void Bonfire::SetBonfireUsed(PlayerController* player)
 {
-	if ((first_player_index != player_index) && first_player_index != -1)
+	if ((first_player != player) && player != nullptr)
 	{
 		game_object->GetChild("Model_xd")->GetChild("Logs")->GetChild("Fire")->SetEnable(false);
 		is_active = false;
 	}
 	else
 	{
-		first_player_index = player_index;
+		first_player = player;
 	}
 }
 
-bool Bonfire::HaveThisPlayerUsedThis(int controller_index)
+bool Bonfire::HaveThisPlayerUsedThis(PlayerController* player)
 {
-	return controller_index == first_player_index;
+	return first_player == player;
 }
