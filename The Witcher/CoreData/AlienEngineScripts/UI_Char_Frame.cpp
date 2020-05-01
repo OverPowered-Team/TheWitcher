@@ -100,7 +100,7 @@ void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 
 	float life_percentate = actual_life / max_life;
 
-	if (life_percentate <= 0.2f)
+	if (life_percentate <= 0.15f)
 	{
 		low_life = true;
 		low_life_glow_time = Time::GetGameTime();
