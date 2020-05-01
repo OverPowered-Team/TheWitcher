@@ -29,15 +29,22 @@ public:
 	float change_time = 0.150f;
 
 private:
+
+	void HitEffect(float lerp_time);
+
+private:
 	// life
 	float life_change = 0.0f;
 	float max_life = 0.0f;
 	bool player_hit = false;
+	bool low_life = false;
 
 	// Lerps
 	float now_life = 0.0f;
 	float time = 0.0f;
 	bool changing_life = false;
+	float low_life_glow_time = 0.0f;
+	int low_life_sign = 1;
 
 	// HUD Components
 	GameObject* geralt_img = nullptr;
