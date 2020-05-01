@@ -69,6 +69,9 @@ public:
 	void ActionRevive();
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 
+	void HitByRock(float time);
+	void RecoverFromRockHit();
+
 	//Relics
 	void PickUpRelic(Relic* _relic);
 	void AddEffect(Effect* _effect);

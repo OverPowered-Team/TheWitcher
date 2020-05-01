@@ -313,8 +313,21 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
+
 #pragma endregion PlayerActions
 
+void PlayerController::HitByRock(float time)
+{
+	//if is vulnerable and not already chiquito
+		//life -= damage
+	Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
+	transform->SetLocalScale(1.f, 0.25f, 1.f);
+}
+
+void PlayerController::RecoverFromRockHit()
+{
+	transform->SetLocalScale(1.f, 1.f, 1.f);
+}
 
 void PlayerController::AddEffect(Effect* _effect)
 {

@@ -46,8 +46,7 @@ void RockDownHill::OnTriggerEnter(ComponentCollider* trigger)
 		PlayerController* player_ctrl = trigger->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl && !player_ctrl->is_immune)
 		{
-			Destroy(game_object);
-			player_ctrl->ReceiveDamage(damage, direction.Normalized() * 0.3f);
+			player_ctrl->HitByRock(5.f);
 		}
 	}
 }
