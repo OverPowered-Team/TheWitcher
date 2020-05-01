@@ -76,4 +76,6 @@ protected:
 	std::vector<Effect*> effects;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
+
+	int current_player = 0;
 };

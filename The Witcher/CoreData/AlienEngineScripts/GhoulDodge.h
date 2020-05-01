@@ -13,6 +13,13 @@ public:
 	
 	void UpdateEnemy() override;
 
+	void Dodge();
+
+	void OnAnimationEnd(const char* name) override;
+
+public: 
+	int rand_num = -1;
+
 };
 
 ALIEN_FACTORY GhoulDodge* CreateGhoulDodge() {

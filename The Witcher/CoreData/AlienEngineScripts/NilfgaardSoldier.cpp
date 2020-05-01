@@ -47,7 +47,6 @@ void NilfgaardSoldier::SetStats(const char* json)
 		else if (nilf_type == NilfgaardType::SWORD_SHIELD)
 			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));
 
-		stat_weapon->GetAnotherNode();
 	}
 
 	JSONfilepack::FreeJSON(stat);

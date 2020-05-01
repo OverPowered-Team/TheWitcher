@@ -14,6 +14,7 @@ public:
 		MOVE,
 		ATTACK,
 		JUMP,
+		DODGE,
 		STUNNED,
 		HIT,
 		DYING,
@@ -37,10 +38,16 @@ public:
 	void Stun(float time) override;
 	bool IsDead() override;
 	void SetState(const char* state_str) override;
+
+	void Action();
+
+	void CheckDistance();
 	
 	float GetDamaged(float dmg, PlayerController* player);
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
+
+	void OnAnimationEnd(const char* name) override;
 
 public:
 	GhoulState state = GhoulState::NONE;

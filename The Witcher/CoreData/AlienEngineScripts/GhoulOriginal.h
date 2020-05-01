@@ -12,10 +12,6 @@ public:
 	virtual ~GhoulOriginal();
 
 	void UpdateEnemy() override;
-	void Action() override;
-	void CheckDistance() override;
-
-	void OnAnimationEnd(const char* name) override;
 
 };
 
