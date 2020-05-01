@@ -15,6 +15,7 @@
 #include "Bonfire.h"
 #include "Scores_Data.h"
 
+#include "InGame_UI.h"
 #include "UI_Char_Frame.h"
 #include "PlayerController.h"
 
@@ -472,7 +473,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
 			{
 				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
-				// UI: Checkpoint Saved!
+				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
 			}
 
 			// Heal
@@ -481,7 +482,6 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 			// Player Used this Bonfire
 			bonfire->SetBonfireUsed(this->controller_index);
-			LOG("Player %i used this bonfire", controller_index);
 		}
 	}
 
