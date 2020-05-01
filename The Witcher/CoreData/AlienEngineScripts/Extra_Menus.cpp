@@ -48,7 +48,8 @@ void Extra_Menus::Start()
 void Extra_Menus::PostUpdate()
 {
 	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) 
-		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
+		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B))
+		&& (Time::IsGamePaused()))
 	{
 		if (game_object->IsEnabled())
 		{

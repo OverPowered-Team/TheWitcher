@@ -39,6 +39,7 @@ private:
 	bool glowing = true;
 	float glow_time = 0.0f;
 	bool controls_lerping = false;
+	float pre_scale = 0.0f;
 };
 
 ALIEN_FACTORY UltiBar* CreateUltiBar() {

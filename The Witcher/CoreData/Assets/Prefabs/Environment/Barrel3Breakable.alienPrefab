@@ -4,11 +4,11 @@
             {
                 "Name": "Barrel3Breakable",
                 "FamilyNumber": 1,
-                "ID": "10383479739956253146",
-                "ParentID": "14312280510082287296",
+                "ID": "6788141213360690791",
+                "ParentID": "2880618096169388761",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -19,10 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            7.3631725311279297,
                             0,
                             0,
-                            -5.2999610900878906
+                            0
                         ],
                         "Rotation": [
                             1.1641534958251043e-10,
@@ -36,7 +35,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "7029357071022452559"
+                        "ID": "4158996685252844238"
                     },
                     {
                         "Type": 1,
@@ -46,7 +45,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "18129255395920214343",
+                        "ID": "440056810929485278",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "1096953912451294089",
@@ -54,34 +53,10 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1759911931387688252",
+                        "ID": "2016097284016391351",
                         "HasMaterial": true,
                         "MaterialID": "18012963031525131083",
                         "Enabled": true
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "1137178280481368879",
-                        "ResourceID": "15754342856731289811",
-                        "DataName": "BreakableObject",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 8,
-                                "Name": "object_broken",
-                                "prefab": "5579701708834442290"
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "force",
-                                "float": 5
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "time_to_despawn",
-                                "float": 5
-                            }
-                        ]
                     },
                     {
                         "Enabled": true,
@@ -116,6 +91,30 @@
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
                         "VertexLimit": 64
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7361263240986878265",
+                        "ResourceID": "6638633781827320816",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "15979115363834589494"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "force",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_despawn",
+                                "float": 5
+                            }
+                        ]
                     }
                 ]
             }
