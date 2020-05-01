@@ -1,5 +1,8 @@
 #include "NilfSoldierShield.h"
 #include "EnemyManager.h"
+#include "PlayerController.h"
+#include "PlayerAttacks.h"
+
 NilfSoldierShield::NilfSoldierShield() : NilfgaardSoldier()
 {
 }
@@ -90,7 +93,7 @@ void NilfSoldierShield::Block()
 	}
 	else if (break_shield_attack >= max_break_shield_attack)
 	{
-		state = NilfgaardSoldierState::ATTACK;
+		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
 		has_been_attacked = false;
 		break_shield_attack = 0;
@@ -109,6 +112,20 @@ void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 			break_shield_attack++;
 			particles["ClinckEmitter"]->Restart();
 			audio_emitter->StartSound("SoldierBlock");
+		}
+		else
+		{
+			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+			if (player)
+			{
+				float dmg_received = player->attacks->GetCurrentDMG();
+				player->OnHit(this, GetDamaged(dmg_received, player));
+
+				if (state == NilfgaardSoldierState::DYING)
+					player->OnEnemyKill();
+
+				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+			}
 		}
 	}
 }

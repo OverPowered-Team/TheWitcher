@@ -16,7 +16,6 @@ public:
 		IDLE,
 		MOVE,
 		ATTACK,
-		GETOFF,
 		HIDE,
 		STUNNED,
 		HIT,

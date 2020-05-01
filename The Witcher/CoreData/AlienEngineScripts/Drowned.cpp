@@ -22,7 +22,7 @@ void Drowned::SetStats(const char* json)
 
 	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
 
-	JSONArraypack* stat_weapon = stat->GetArray("NilfgaardSoldier");
+	JSONArraypack* stat_weapon = stat->GetArray("Drowned");
 	int i = 0;
 	if (stat_weapon)
 	{

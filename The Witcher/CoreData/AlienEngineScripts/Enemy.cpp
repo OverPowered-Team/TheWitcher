@@ -64,11 +64,13 @@ void Enemy::UpdateEnemy()
 
 	if (player_controllers[0]->state->type == StateType::DEAD)
 	{
+		current_player = 1;
 		distance = distance_2;
 		direction = direction_2.Normalized();
 	}
 	else if (player_controllers[1]->state->type == StateType::DEAD)
 	{
+		current_player = 0;
 		distance = distance_1;
 		direction = direction_1.Normalized();
 	}
@@ -76,6 +78,7 @@ void Enemy::UpdateEnemy()
 	{
 		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
 		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
 
 	for (auto it = effects.begin(); it != effects.end(); )
