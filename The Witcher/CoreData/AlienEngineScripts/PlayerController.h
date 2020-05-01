@@ -187,7 +187,6 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
-	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::StartImmune, player);
 	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
