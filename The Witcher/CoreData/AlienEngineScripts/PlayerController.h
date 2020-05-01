@@ -19,6 +19,8 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
+	friend class ChillingState;
+
 public:
 	enum (PlayerType,
 		GERALT,
@@ -66,10 +68,12 @@ public:
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
-	void Revive();
-	void ActionRevive();
+	void Revive(float minigame_value);
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 	void PlayAllowParticle();
+
+	void HitByRock(float time);
+	void RecoverFromRockHit();
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
@@ -132,6 +136,9 @@ public:
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
 
+	//Revive
+	Prefab revive_world_ui;
+
 	//Input Variables
 	int controller_index = 1;
 
@@ -186,8 +193,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
-
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	return player;
 }

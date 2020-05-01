@@ -12,10 +12,14 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-#include "UI_Char_Frame.h"
+
+#include "Bonfire.h"
+#include "Scores_Data.h"
+
 #include "InGame_UI.h"
 #include "DashCollider.h"
 
+#include "UI_Char_Frame.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -43,6 +47,16 @@ void PlayerController::Start()
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
+
+	// TP to last checkpoint if checkpoint exist
+	if (Scores_Data::last_checkpoint_position.IsFinite())
+	{
+		this->controller->SetPosition(float3(
+			Scores_Data::last_checkpoint_position.x + (controller_index - 1),
+			Scores_Data::last_checkpoint_position.y, 
+			Scores_Data::last_checkpoint_position.z)
+		);
+	}
 
 	state = new IdleState();
 	state->OnEnter(this);
@@ -296,11 +310,11 @@ void PlayerController::PickUpRelic(Relic* _relic)
 		AddEffect(_relic->effects.at(i));
 	}
 }
-void PlayerController::Revive()
+void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
+	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 	is_immune = false;
 
 	if(HUD)
@@ -312,13 +326,6 @@ void PlayerController::Revive()
 		GameManager::instance->event_manager->OnPlayerRevive(this);
 
 	SetState(StateType::IDLE);
-}
-
-void PlayerController::ActionRevive()
-{
-	player_being_revived->Revive();
-	animator->SetBool("reviving", false);
-	player_being_revived = nullptr;
 }
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
@@ -367,6 +374,18 @@ void PlayerController::AbsorbHit()
 }
 #pragma endregion PlayerActions
 
+void PlayerController::HitByRock(float time)
+{
+	//if is vulnerable and not already chiquito
+		//life -= damage
+	Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
+	transform->SetLocalScale(1.f, 0.25f, 1.f);
+}
+
+void PlayerController::RecoverFromRockHit()
+{
+	transform->SetLocalScale(1.f, 1.f, 1.f);
+}
 
 void PlayerController::AddEffect(Effect* _effect)
 {
@@ -444,7 +463,7 @@ bool PlayerController::CheckBoundaries()
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
 				p_tmp.maxPoint += cam->players[i]->transform->GetGlobalPosition();
 
-				if (!fake_frustum.Contains(p_tmp))
+				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					player_data.speed = float3::zero();
@@ -458,9 +477,12 @@ bool PlayerController::CheckBoundaries()
 		return true;
 	}
 	else {
-		player_data.speed = float3::zero();
-		return false;
+		if (transform->GetGlobalPosition().Distance(fake_frustum.CenterPoint()) < next_pos.Distance(fake_frustum.CenterPoint())) {
+			player_data.speed = float3::zero();
+			return false;
+		}
 	}
+	return true;
 }
 bool PlayerController::CheckForPossibleRevive()
 {
@@ -471,6 +493,8 @@ bool PlayerController::CheckForPossibleRevive()
 			return true;
 		}
 	}
+
+	return false;
 }
 
 void PlayerController::HitFreeze(float freeze_time)
@@ -544,6 +568,27 @@ void PlayerController::UpdateDashEffect()
 
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
+	if ((strcmp("Bonfire", col->game_object_attached->GetName()) == 0))
+	{
+		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
+
+		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
+		{
+			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+			{
+				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
+			}
+
+			// Heal
+			player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
+			// Player Used this Bonfire
+			bonfire->SetBonfireUsed(this);
+		}
+	}
+
 	if (!godmode)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {

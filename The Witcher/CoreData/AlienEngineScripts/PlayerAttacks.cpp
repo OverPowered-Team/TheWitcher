@@ -154,8 +154,8 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
-	//if(current_attack && current_attack->IsLast())
-		//GameManager::instance->player_manager->IncreaseUltimateCharge(5);
+	if(GameManager::instance->player_manager && current_attack && current_attack->IsLast())
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()

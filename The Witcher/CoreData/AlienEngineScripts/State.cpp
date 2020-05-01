@@ -1,11 +1,12 @@
 #include "GameManager.h"
+#include "PlayerManager.h"
 #include "EventManager.h"
 
+#include "MiniGame_Revive.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 
 #include "State.h"
-
 
 State* IdleState::HandleInput(PlayerController* player)
 {
@@ -371,29 +372,32 @@ State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void HitState::OnEnter(PlayerController* player)
 {
+	if(((DeadState*)player->player_being_revived->state)->revive_world_ui != nullptr)
+			((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
 }
 
 void HitState::OnExit(PlayerController* player)
 {
 }
 
-State* RevivingState::OnAnimationEnd(PlayerController* player, const char* name)
+void RevivingState::Update(PlayerController* player)
 {
-	if (strcmp(name, "RCP") == 0) {
-		player->ActionRevive();
-		return new IdleState();
-	}
-	return nullptr;
+
 }
 
 void RevivingState::OnEnter(PlayerController* player)
 {
+	player->input_blocked = true;
 	player->player_data.speed = float3::zero();
 	player->animator->SetBool("reviving", true);
+	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
 
 void RevivingState::OnExit(PlayerController* player)
 {
+	player->animator->SetBool("reviving", false);
+	if(player->player_being_revived->state->type != StateType::DEAD)player->player_being_revived = nullptr;
+	player->input_blocked = false;
 }
 
 void DeadState::OnEnter(PlayerController* player)
@@ -403,6 +407,11 @@ void DeadState::OnEnter(PlayerController* player)
 	player->player_data.speed = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
+	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, float3(player->game_object->transform->GetGlobalPosition().x + vector.x, player->game_object->transform->GetGlobalPosition().y + vector.y + 1, player->game_object->transform->GetGlobalPosition().z + vector.z));
+	revive_world_ui->SetNewParent(player->game_object);
+	revive_world_ui->transform->SetLocalScale(10, 10, 1);
+	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
 
 void DeadState::OnExit(PlayerController* player)
