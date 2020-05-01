@@ -200,12 +200,9 @@ bool PlayerController::AnyKeyboardInput()
 
 void PlayerController::HandleMovement()
 {
-	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y).Normalized();
+	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
 
-	float3 direction_vector_rot = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-
-	Quat rot = Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY());
-	direction_vector = (rot * direction_vector_rot).Normalized();
+	direction_vector = (Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector).Normalized();
 	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue();
 
 	//rotate
