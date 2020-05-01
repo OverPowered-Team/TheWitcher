@@ -15,8 +15,9 @@ public:
 
 	void LifeChange(float life_change, float max_life);
 	void ManaChange(float mana_change, float max_mana);
-	void XpChange(float xp_change, float max_xp);
-	
+
+public:
+
 	enum(CHARACTER,
 		GERALT,
 		YENNEFER,
@@ -28,8 +29,10 @@ public:
 	float change_time = 0.150f;
 
 private:
+	// life
 	float life_change = 0.0f;
 	float max_life = 0.0f;
+	bool player_hit = false;
 
 	// Lerps
 	float now_life = 0.0f;
@@ -39,6 +42,8 @@ private:
 	// HUD Components
 	GameObject* geralt_img = nullptr;
 	GameObject* yen_img = nullptr;
+	ComponentImage* portrait = nullptr;
+
 	ComponentBar* lifebar = nullptr;
 	ComponentBar* mana_bar = nullptr;
 	ComponentBar* xp_bar = nullptr;

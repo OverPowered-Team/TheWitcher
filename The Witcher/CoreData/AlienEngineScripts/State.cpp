@@ -310,8 +310,10 @@ State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void HitState::OnEnter(PlayerController* player)
 {
-	if(((DeadState*)player->player_being_revived->state)->revive_world_ui != nullptr)
-			((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
+	if (player->player_being_revived != nullptr)
+	{
+		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
+	}
 }
 
 void HitState::OnExit(PlayerController* player)

@@ -310,8 +310,10 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 {
 	player_data.stats["Health"].DecreaseStat(dmg);
 
-	if(HUD)
+	if (HUD)
+	{
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	}
 
 	attacks->CancelAttack();
 	if (player_data.stats["Health"].GetValue() == 0)
