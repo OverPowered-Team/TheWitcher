@@ -9,7 +9,7 @@ class PlayerAttacks;
 class Relic;
 class Effect;
 class Enemy;
-
+class CameraShake;
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
 	friend class RunningState;
@@ -18,6 +18,8 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
+	friend class ChillingState;
+
 public:
 	enum (PlayerType,
 		GERALT,
@@ -65,8 +67,7 @@ public:
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
-	void Revive();
-	void ActionRevive();
+	void Revive(float minigame_value);
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
 
 	void HitByRock(float time);
@@ -85,7 +86,6 @@ public:
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
-
 	void HitFreeze(float freeze_time);
 
 	void RemoveFreeze(float speed);
@@ -105,9 +105,11 @@ public:
 	ComponentCharacterController* controller = nullptr;
 
 	float2 movement_input;
+
 	bool mov_input = false;
 	bool is_immune = false;
-	bool is_rooted = false;
+	bool can_move = true;
+	bool input_blocked = false;
 
 	//Relics
 	std::vector<Effect*> effects;
@@ -120,6 +122,9 @@ public:
 	float delay_footsteps = 0.5f;
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
+
+	//Revive
+	Prefab revive_world_ui;
 
 	//Input Variables
 	int controller_index = 1;
@@ -151,6 +156,7 @@ private:
 
 	ComponentCamera* camera = nullptr;
 	AABB max_aabb;
+	CameraShake* shake = nullptr;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
@@ -163,9 +169,10 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
-	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	return player;
 }

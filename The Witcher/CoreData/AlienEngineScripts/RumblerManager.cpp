@@ -150,4 +150,9 @@ void RumblerManager::StartRumbler(RumblerType _type, int _index_controller, floa
 	
 }
 
+void RumblerManager::StartRumbler(std::string _name, int _index_controller)
+{
+	RumblerType _type = GetType(_name);
+	StartRumbler(_type, _index_controller);
+}
 

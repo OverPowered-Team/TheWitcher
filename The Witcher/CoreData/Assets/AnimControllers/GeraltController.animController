@@ -192,10 +192,16 @@
                 "Source": "RCP",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": true,
+                "End": false,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 3
+                    }
+                ]
             },
             {
                 "Source": "Death",

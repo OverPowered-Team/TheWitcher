@@ -55,7 +55,7 @@ void PlayerAttacks::UpdateCurrentAttack()
 		SnapToTarget();
 	else
 	{
-		player_controller->player_data.speed += player_controller->player_data.speed * -0.1f; //SLOW DOWN
+		player_controller->player_data.speed += player_controller->player_data.speed * player_controller->player_data.slow_speed * Time::GetDT(); //SLOW DOWN
 	}
 		
 	//IF ANIM FINISHED 
@@ -116,8 +116,8 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
-	if(current_attack && current_attack->IsLast())
-		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
+	/*if(current_attack && current_attack->IsLast())
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);*/
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -248,8 +248,7 @@ void PlayerAttacks::AttackMovement()
 		float angle = atan2f(direction.z, direction.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
-
-		float tmp_y = player_controller->player_data.speed.y;
+		
 		player_controller->player_data.speed = direction * current_attack->info.movement_strength;
 	}	
 }

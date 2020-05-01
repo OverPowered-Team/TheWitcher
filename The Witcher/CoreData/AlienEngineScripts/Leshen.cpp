@@ -26,47 +26,47 @@ void Leshen::UpdateEnemy()
 {
 	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
 
-	switch (state)
-	{
-	case Enemy::EnemyState::NONE:
-		break;
-	case Enemy::EnemyState::IDLE:
-		if (player_distance[0] < stats["VisionRange"].GetValue()) {
-			if (time_to_action <= action_cooldown)
-				time_to_action += Time::GetDT();
-			else {
-				SetAttackState();
-			}
-		}
-		break;
-	case Enemy::EnemyState::ATTACK:
-		if (current_action) {
-			if (!UpdateAction()) {
-				SetIdleState();
-			}
-		}
-		else
-			LOG("NO CURRENT ACTION DETECTED");
-		break;
-	case Enemy::EnemyState::HIT:
-		if (current_action)
-			state = EnemyState::ATTACK;
-		else
-			state = EnemyState::IDLE;
-		break;
-	case Enemy::EnemyState::DYING: {
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-		//Ori Ori function sintaxis
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-		audio_emitter->StartSound("SoldierDeath");
-		state = EnemyState::DEAD;
-	}
-		break;
-	case Enemy::EnemyState::DEAD:
-		break;
-	default:
-		break;
-	}
+	//switch (state)
+	//{
+	//case Enemy::EnemyState::NONE:
+	//	break;
+	//case Enemy::EnemyState::IDLE:
+	//	if (player_distance[0] < stats["VisionRange"].GetValue()) {
+	//		if (time_to_action <= action_cooldown)
+	//			time_to_action += Time::GetDT();
+	//		else {
+	//			SetAttackState();
+	//		}
+	//	}
+	//	break;
+	//case Enemy::EnemyState::ATTACK:
+	//	if (current_action) {
+	//		if (!UpdateAction()) {
+	//			SetIdleState();
+	//		}
+	//	}
+	//	else
+	//		LOG("NO CURRENT ACTION DETECTED");
+	//	break;
+	//case Enemy::EnemyState::HIT:
+	//	if (current_action)
+	//		state = EnemyState::ATTACK;
+	//	else
+	//		state = EnemyState::IDLE;
+	//	break;
+	//case Enemy::EnemyState::DYING: {
+	//	EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+	//	//Ori Ori function sintaxis
+	//	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+	//	audio_emitter->StartSound("SoldierDeath");
+	//	state = EnemyState::DEAD;
+	//}
+	//	break;
+	//case Enemy::EnemyState::DEAD:
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void Leshen::CleanUpEnemy()
@@ -155,8 +155,8 @@ void Leshen::FinishAttack()
 
 void Leshen::SetIdleState()
 {
-	current_action = nullptr;
-	state = Enemy::EnemyState::IDLE;
+	/*current_action = nullptr;
+	state = Enemy::EnemyState::IDLE;*/
 }
 
 void Leshen::SetAttackState()
@@ -165,7 +165,7 @@ void Leshen::SetAttackState()
 	SetActionProbabilities();
 	SelectAction();
 	time_to_action = 0.0f;
-	state = Enemy::EnemyState::ATTACK;
+	//state = Enemy::EnemyState::ATTACK;
 	current_action->state = ActionState::LAUNCH;
 	LaunchAction();
 	//animator->PlayState("Action")
@@ -382,10 +382,10 @@ void Leshen::SetActionVariables()
 	player_rooted[0] = false;
 	player_rooted[1] = false;	
 	
-	if (player_controllers[0]->is_rooted) {
+	if (!player_controllers[0]->can_move) {
 		player_rooted[0] = true;
 	}
-	else if (player_controllers[1]->is_rooted) {
+	else if (!player_controllers[1]->can_move) {
 		player_rooted[1] = true;
 	}
 }

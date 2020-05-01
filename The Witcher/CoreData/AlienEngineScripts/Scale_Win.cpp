@@ -47,6 +47,7 @@ void Scale_Win::Start()
 		GameObject::FindWithName("Defeat")->SetEnable(true);
 	}
 
+	// Head Spawns
 	for (int i = 1; i <= Scores_Data::player1_kills; ++i)
 	{
 		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
@@ -82,86 +83,16 @@ void Scale_Win::Start()
 
 void Scale_Win::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_LCTRL))
-	{
-		spawner_l->Spawn(TO_SPAWN::HEAD, spawner_l->transform->GetLocalPosition());
-	}
-
-	if (Input::GetKeyDown(SDL_SCANCODE_RCTRL))
-	{
-		spawner_r->Spawn(TO_SPAWN::HEAD, spawner_r->transform->GetLocalPosition());
-	}
-
-	if (player1_points != current_points1)
-	{
-		int points1 = Maths::Lerp(current_points1, player1_points, (Time::GetGameTime() - time) / time_to_scale);
-		if (((Time::GetGameTime() - time) / time_to_scale) >= 1)
-		{
-			points1 = player1_points;
-			current_points1 = player1_points;
-		}
-		score_text_1->SetText(std::to_string(points1).c_str());
-	}
-
-	if (player2_points != current_points2)
-	{
-		int points2 = Maths::Lerp(current_points2, player2_points, (Time::GetGameTime() - time) / time_to_scale);
-		if (((Time::GetGameTime() - time) / time_to_scale) >= 1)
-		{
-			points2 = player2_points;
-			current_points2 = player2_points;
-		}
-		score_text_2->SetText(std::to_string(points2).c_str());
-	}
+	LerpingText();
 
 	if (!in_place)
 	{
-		left_scale->transform->SetGlobalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
-		right_scale->transform->SetGlobalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
-
-		// Delete this when physics updated rigid body position with GO
-		rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());
-		rigid_body2->SetPosition(right_scale->transform->GetLocalPosition());
-		// ------------------------------------------
-
-		// Connector between plates
-		//float3 vector = (left_scale->transform->GetGlobalPosition() - right_scale->transform->GetGlobalPosition()).Normalized();
-		//Quat quat = Quat::RotateAxisAngle(float3(0, 0, 1), vector.AngleBetweenNorm(connector->transform->right));
-		//connector->transform->SetLocalRotation(quat);
-
-		if (Time::GetGameTime() > time + time_to_scale)
-		{ 
-			in_place = true;
-		}
+		Scale();
 	}
 
 	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y))
 	{
-		if (Scores_Data::dead)
-		{
-			Scores_Data::dead = false;
-			if (Scores_Data::won_level1)
-			{
-				SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-			}
-			else
-			{
-				SceneManager::LoadScene("Lvl_1_Art_Colliders", FadeToBlackType::VERTICAL_CURTAIN);
-			}
-		}
-		else
-		{
-			if (Scores_Data::won_level1)
-			{
-				SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-			}
-			else if (Scores_Data::won_level2)
-			{
-				Scores_Data::won_level1 = false;
-				Scores_Data::won_level2 = false;
-				SceneManager::LoadScene("EndGame_Menu", FadeToBlackType::VERTICAL_CURTAIN);
-			}
-		}
+		HandleSceneLoad();
 	}
 }
 
@@ -209,5 +140,81 @@ void Scale_Win::CalculateInclination()
 
 	in_place = false;
 	time = Time::GetGameTime();
+}
+
+void Scale_Win::LerpingText()
+{
+	if (player1_points != current_points1)
+	{
+		int points1 = Maths::Lerp(current_points1, player1_points, (Time::GetGameTime() - time) / time_to_scale);
+		if (((Time::GetGameTime() - time) / time_to_scale) >= 1)
+		{
+			points1 = player1_points;
+			current_points1 = player1_points;
+		}
+		score_text_1->SetText(std::to_string(points1).c_str());
+	}
+
+	if (player2_points != current_points2)
+	{
+		int points2 = Maths::Lerp(current_points2, player2_points, (Time::GetGameTime() - time) / time_to_scale);
+		if (((Time::GetGameTime() - time) / time_to_scale) >= 1)
+		{
+			points2 = player2_points;
+			current_points2 = player2_points;
+		}
+		score_text_2->SetText(std::to_string(points2).c_str());
+	}
+}
+
+void Scale_Win::Scale()
+{
+	left_scale->transform->SetGlobalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
+	right_scale->transform->SetGlobalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
+
+	// Delete this when physics updated rigid body position with GO
+	rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());
+	rigid_body2->SetPosition(right_scale->transform->GetLocalPosition());
+	// ------------------------------------------
+
+	// Connector between plates
+	//float3 vector = (left_scale->transform->GetGlobalPosition() - right_scale->transform->GetGlobalPosition()).Normalized();
+	//Quat quat = Quat::RotateAxisAngle(float3(0, 0, 1), vector.AngleBetweenNorm(connector->transform->right));
+	//connector->transform->SetLocalRotation(quat);
+
+	if (Time::GetGameTime() > time + time_to_scale)
+	{
+		in_place = true;
+	}
+}
+
+void Scale_Win::HandleSceneLoad()
+{
+	if (Scores_Data::dead)
+	{
+		Scores_Data::dead = false;
+		if (Scores_Data::won_level1)
+		{
+			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+		}
+		else
+		{
+			SceneManager::LoadScene("Lvl_1_Art_Colliders", FadeToBlackType::VERTICAL_CURTAIN);
+		}
+	}
+	else
+	{
+		Scores_Data::last_checkpoint_position = float3::inf();
+		if (Scores_Data::won_level1)
+		{
+			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+		}
+		else if (Scores_Data::won_level2)
+		{
+			Scores_Data::won_level1 = false;
+			Scores_Data::won_level2 = false;
+			SceneManager::LoadScene("EndGame_Menu", FadeToBlackType::VERTICAL_CURTAIN);
+		}
+	}
 }
 
