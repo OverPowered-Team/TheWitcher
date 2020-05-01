@@ -1,12 +1,30 @@
 #include "PlayerController.h"
 #include "State.h"
 #include "Effect.h"
+#include "RumblerManager.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "GameManager.h"
 #include "PlayerManager.h"
+#include "PlayerProjectile.h"
 #include "PlayerAttacks.h"
+#include "EffectsFactory.h"
 #include "CameraShake.h"
+#include "RumblerManager.h"
+
+static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
+{"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
+{"Earth",Attack_Tags::T_Earth}, {"Lightning",Attack_Tags::T_Lightning}, {"Chaining",Attack_Tags::T_Chaining}, {"Spell",Attack_Tags::T_Spell} };
+
+Attack_Tags GetTag(std::string str)
+{
+	if (auto it = tag_table.find(str); it != tag_table.end()) {
+		return it->second;
+	}
+	return Attack_Tags::T_None;
+}
+
+
 PlayerAttacks::PlayerAttacks() : Alien()
 {
 }
@@ -33,14 +51,31 @@ void PlayerAttacks::StartAttack(AttackType attack)
 	AttackMovement();
 }
 
-void PlayerAttacks::StartSpell(uint spell_index)
+bool PlayerAttacks::StartSpell(uint spell_index)
 {
-	if (spell_index < spells.size())
+	if (spell_index < spells.size() && player_controller->player_data.stats["Chaos"].GetValue() >= spells[spell_index]->info.stats["Cost"].GetValue())
 	{
+		if (current_attack)
+		{
+			//take the links of the attack we were doing so we can continue the combo after the spell.
+			spells[spell_index]->heavy_attack_link = current_attack->heavy_attack_link;
+			spells[spell_index]->light_attack_link = current_attack->light_attack_link;
+		}
+		else
+		{
+			spells[spell_index]->heavy_attack_link = nullptr;
+			spells[spell_index]->light_attack_link = nullptr;
+		}
+
 		current_attack = spells[spell_index];
 		DoAttack();
 		AttackMovement();
+
+		return true;
 	}
+
+	LOG("Not enough Chaos to cast Spell %i", spell_index);
+	return false;
 }
 
 void PlayerAttacks::UpdateCurrentAttack()
@@ -69,7 +104,10 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
-		StartAttack(next_attack);
+		if (next_attack == AttackType::SPELL)
+			StartSpell(next_spell);
+		else
+			StartAttack(next_attack);
 	}
 }
 
@@ -116,8 +154,8 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 		}		
 	}
 
-	/*if(current_attack && current_attack->IsLast())
-		GameManager::instance->player_manager->IncreaseUltimateCharge(5);*/
+	if(GameManager::instance->player_manager && current_attack && current_attack->IsLast())
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -138,9 +176,13 @@ void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 	{
 		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
-			(*it)->info.base_damage.ApplyEffect(new_effect);
+			(*it)->info.stats["Damage"].ApplyEffect(new_effect);
 		}
 	}
+}
+
+void PlayerAttacks::OnRemoveAttackEffect(AttackEffect* new_effect)
+{
 }
 
 void PlayerAttacks::CancelAttack()
@@ -173,9 +215,9 @@ void PlayerAttacks::SnapToTarget()
 		if (distance > current_attack->info.max_snap_distance)
 			speed = (current_attack->info.max_snap_distance - distance_snapped) / snap_time;
 	}
-
-	float3 velocity = transform->forward * speed * Time::GetDT();
-	distance_snapped += velocity.Length();
+	
+	float3 velocity = transform->forward * speed;
+	distance_snapped += velocity.Length() * Time::GetDT();
 
 	player_controller->transform->SetGlobalRotation(rot);
 	player_controller->player_data.speed = velocity;
@@ -222,9 +264,10 @@ bool PlayerAttacks::FindSnapTarget()
 	return false;
 }
 
-void PlayerAttacks::ReceiveInput(AttackType attack)
+void PlayerAttacks::ReceiveInput(AttackType attack, int spell_index)
 {
 	next_attack = attack;
+	next_spell = spell_index;
 }
 
 void PlayerAttacks::CleanUp()
@@ -269,6 +312,78 @@ void PlayerAttacks::DeactivateCollider()
 		collider->SetEnable(false);
 }
 
+void PlayerAttacks::CastSpell()
+{
+	if (current_attack)
+	{
+		LOG("Casting Spell %s", current_attack->info.name.c_str());
+		player_controller->PlayAttackParticle();
+		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
+
+		if (current_attack->HasTag(Attack_Tags::T_AOE))
+		{
+			if (GameManager::instance->rumbler_manager)
+			{ 
+				if (strcmp("Igni", current_attack->info.name.c_str()) == 0)
+					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
+				else 
+					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, player_controller->controller_index, 0.2);
+
+			}
+			
+			ActivateCollider();
+		}
+
+		if (current_attack->HasTag(Attack_Tags::T_Buff))
+		{
+			LOG("queen");
+			if (GameManager::instance->rumbler_manager)
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
+
+			player_controller->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
+
+		}
+		if (current_attack->HasTag(Attack_Tags::T_Trap))
+		{
+			LOG("yrden")
+			GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(), this->transform->GetGlobalPosition());
+			if (GameManager::instance->rumbler_manager)
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
+		}
+		if (current_attack->HasTag(Attack_Tags::T_Projectile))
+		{
+			LOG("ROCK")
+			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
+				player_controller->particles[current_attack->info.particle_name]->transform->GetGlobalPosition());
+
+			/*float angle = atan2f(transform->forward.z, transform->forward.x);
+			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 90) * Maths::Deg2Rad());
+			projectile_go->transform->SetGlobalRotation(rot);*/
+
+			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
+			Quat rot = projectile_go->transform->GetGlobalRotation();
+			rot = rot.LookAt(projectile_go->transform->forward, direction, projectile_go->transform->up, float3::unitY());
+			projectile_go->transform->SetGlobalRotation(rot);
+			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
+
+			if (GameManager::instance->rumbler_manager)
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
+		}
+	}
+}
+
+void PlayerAttacks::OnHit(Enemy* enemy)
+{
+	if (current_attack->HasTag(Attack_Tags::T_Debuff))
+	{
+		enemy->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
+	}
+	if (GameManager::instance->rumbler_manager && current_attack->info.name[current_attack->info.name.size() - 1] == 'H')
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player_controller->controller_index);
+	else if (GameManager::instance->rumbler_manager && current_attack->info.name[current_attack->info.name.size() - 1] == 'L')
+		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LIGHT_ATTACK, player_controller->controller_index);
+}
+
 void PlayerAttacks::AllowCombo()
 {
 	can_execute_input = true;
@@ -304,15 +419,19 @@ float3 PlayerAttacks::GetMovementVector()
 void PlayerAttacks::AttackShake()
 {
 	if (current_attack->info.shake == 1)
-		shake->Shake(0.13f, 0.9, 5.f,  0.1f, 0.1f, 0.1f);
+	{
+		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+		if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);
+	}
 }
 
 float PlayerAttacks::GetCurrentDMG()
 {
-	if (player_controller->state->type == StateType::ATTACKING)
-		return current_attack->info.base_damage.GetValue() * player_controller->player_data.stats["Strength"].GetValue();
+	if (!current_attack->HasTag(Attack_Tags::T_Spell))
+		return current_attack->info.stats["Damage"].GetValue() * player_controller->player_data.stats["Strength"].GetValue();
 	else
-		return current_attack->info.base_damage.GetValue();
+		return current_attack->info.stats["Damage"].GetValue();
 }
 
 Attack* PlayerAttacks::GetCurrentAttack()
@@ -344,7 +463,6 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
-			info.base_damage = Stat("Attack_Damage", attack_combo->GetNumber("base_damage"));
 			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
@@ -352,6 +470,10 @@ void PlayerAttacks::CreateAttacks()
 			info.next_light = attack_combo->GetString("next_attack_light");
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
 			info.shake = attack_combo->GetNumber("cam_shake");
+			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
+
+			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
+
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 
@@ -359,29 +481,50 @@ void PlayerAttacks::CreateAttacks()
 		}
 		ConnectAttacks();
 	}
+
 	JSONArraypack* spells_json = combo->GetArray("Spells");
 	if (spells_json)
 	{
-		Attack::AttackInfo info;
+		spells_json->GetFirstNode();
+		for (uint i = 0; i < spells_json->GetArraySize(); i++)
+		{
+			Attack::AttackInfo info;
 
-		info.name = spells_json->GetString("name");
-		info.particle_name = spells_json->GetString("particle_name");
-		info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
-			spells_json->GetNumber("collider.pos_y"),
-			spells_json->GetNumber("collider.pos_z"));
-		info.collider_size = float3(spells_json->GetNumber("collider.width"),
-			spells_json->GetNumber("collider.height"),
-			spells_json->GetNumber("collider.depth"));
-		info.base_damage = Stat("Attack_Damage", spells_json->GetNumber("base_damage"));
-		info.movement_strength = spells_json->GetNumber("movement_strength");
-		info.activation_frame = spells_json->GetNumber("activation_frame");
-		info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
-		info.freeze_time = spells_json->GetNumber("freeze_time");
+			info.name = spells_json->GetString("name");
+			info.particle_name = spells_json->GetString("particle_name");
+			info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
+				spells_json->GetNumber("collider.pos_y"),
+				spells_json->GetNumber("collider.pos_z"));
+			info.collider_size = float3(spells_json->GetNumber("collider.width"),
+				spells_json->GetNumber("collider.height"),
+				spells_json->GetNumber("collider.depth"));
+			info.movement_strength = spells_json->GetNumber("movement_strength");
+			info.activation_frame = spells_json->GetNumber("activation_frame");
+			info.max_snap_distance = spells_json->GetNumber("max_snap_distance");
+			info.freeze_time = spells_json->GetNumber("freeze_time");
+			info.effect = spells_json->GetString("effect");
+			info.prefab_to_spawn = spells_json->GetString("prefab_to_spawn");
 
-		Attack* attack = new Attack(info);
-		spells.push_back(attack);
+			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 
-		spells_json->GetAnotherNode();
+			JSONArraypack* tags = spells_json->GetArray("tags");
+			uint num_tags = tags->GetArraySize();
+			if (tags)
+			{
+				tags->GetFirstNode();
+				for (uint j = 0; j < num_tags; j++)
+				{
+					std::string tag_str = tags->GetString("tag");
+					info.tags.push_back(GetTag(tag_str));
+					tags->GetAnotherNode();
+				}
+			}
+			
+			Attack* attack = new Attack(info);
+			spells.push_back(attack);
+
+			spells_json->GetAnotherNode();
+		}
 	}
 	JSONfilepack::FreeJSON(combo);
 }
@@ -414,4 +557,3 @@ void PlayerAttacks::ConnectAttacks()
 		}
 	}
 }
-

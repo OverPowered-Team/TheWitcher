@@ -4,6 +4,7 @@
 #include "DialogueManager.h"
 #include "PlayerManager.h"
 #include "RelicManager.h"
+#include "EffectsFactory.h"
 #include "RumblerManager.h"
 
 GameManager::GameManager() : Alien()
@@ -13,10 +14,13 @@ GameManager::GameManager() : Alien()
 
 GameManager::~GameManager()
 {
+	delete effects_factory;
 }
 
 void GameManager::Awake()
 {
+	effects_factory = new EffectsFactory();
+
 	event_manager = game_object->GetComponent<EventManager>();
 	enemy_manager = game_object->GetComponent<EnemyManager>();
 	dialogue_manager = game_object->GetComponent<DialogueManager>();
@@ -27,6 +31,7 @@ void GameManager::Awake()
 
 void GameManager::Start()
 {
+
 }
 
 void GameManager::Update()

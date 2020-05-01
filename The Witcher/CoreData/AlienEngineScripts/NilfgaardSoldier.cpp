@@ -40,19 +40,21 @@ void NilfgaardSoldier::SetStats(const char* json)
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 
 		if (nilf_type == NilfgaardType::ARCHER)
+		{
 			stats["FleeRange"] = Stat("FleeRange", stat_weapon->GetNumber("FleeRange"));
+			stats["RecoverRange"] = Stat("RecoverRange", stat_weapon->GetNumber("RecoverRange"));
+		}
 		else if (nilf_type == NilfgaardType::SWORD_SHIELD)
 			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));
 
-		stat_weapon->GetAnotherNode();
 	}
 
 	JSONfilepack::FreeJSON(stat);
 }
 
-float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player)
+float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
-	float damage = Enemy::GetDamaged(dmg, player);
+	float damage = Enemy::GetDamaged(dmg, player, knock);
 
 	if (can_get_interrupted) {
 		state = NilfgaardSoldierState::HIT;
@@ -70,11 +72,9 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player)
 		animator->SetBool("dead", true);
 		OnDeathHit();
 
-		if (player->attacks->GetCurrentAttack()->IsLast())
+		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
 		{
 			state = NilfgaardSoldierState::DYING;
-			animator->PlayState("Death");
-
 			audio_emitter->StartSound("SoldierDeath");
 
 			float3 head_pos = transform->GetGlobalPosition();
@@ -101,6 +101,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player)
 			player->OnEnemyKill();
 		}
 	}
+
 	return damage;
 }
 
@@ -165,6 +166,28 @@ bool NilfgaardSoldier::IsDead()
 	return (state == NilfgaardSoldierState::DEAD ? true : false);
 }
 
+void NilfgaardSoldier::SetState(const char* state_str)
+{
+	if (state_str == "Idle")
+		state = NilfgaardSoldierState::IDLE;
+	else if (state_str == "Move")
+		state = NilfgaardSoldierState::MOVE;
+	else if (state_str == "Attack")
+		state = NilfgaardSoldierState::ATTACK;
+	else if (state_str == "Block" || state_str == "Flee")
+		state = NilfgaardSoldierState::AUXILIAR;
+	else if (state_str == "Hit")
+		state = NilfgaardSoldierState::HIT;
+	else if (state_str == "Dying")
+		state = NilfgaardSoldierState::DYING;
+	else if (state_str == "Dead")
+		state = NilfgaardSoldierState::DEAD;
+	else if (state_str == "Stunned")
+		state = NilfgaardSoldierState::STUNNED;
+	else
+		LOG("Incorrect state name: %s", state_str);
+}
+
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
@@ -178,8 +201,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		}
 	}
-
-	if (strcmp(name, "Hit") == 0) {
+	else if (strcmp(name, "Hit") == 0) {
 		if (stats["Health"].GetValue() == 0.0F) {
 			state = NilfgaardSoldierState::HIT;
 		}
@@ -189,8 +211,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		}
 	}
-
-	if (strcmp(name, "Dizzy") == 0)
+	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
 		state = NilfgaardSoldierState::DYING;
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
@@ -204,7 +225,10 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
-			player->OnHit(this, GetDamaged(dmg_received, player));
+			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+
+			player->OnHit(this, GetDamaged(dmg_received, player, knock));
 
 			if (state == NilfgaardSoldierState::DYING)
 				player->OnEnemyKill();

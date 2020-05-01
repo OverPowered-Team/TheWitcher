@@ -40,14 +40,16 @@ public:
 	void DeactivateCollider();
 
 	virtual void Stun(float time) {};
-	virtual void SetState(std::string state) {};
+	virtual void KnockBack(float3 knock);
+	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
 
-	virtual float GetDamaged(float dmg, PlayerController* player);
+	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	void AddEffect(Effect* new_effect);
+	void RemoveEffect(Effect* _effect);
 
 	void HitFreeze(float freeze_time);
 	void StopHitFreeze(float speed);
@@ -55,6 +57,8 @@ public:
 public:
 	float distance = 0.0F;
 	float3 direction;
+	float3 velocity = float3::zero();
+	float knock_slow = -4.2f;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;
@@ -68,7 +72,6 @@ public:
 	std::map<std::string, ComponentParticleSystem*> particles;
 	std::map<std::string, Stat> stats;
 
-	float knockback = 0.0f;
 	bool is_frozen = false;
 	bool is_combat = false;
 
@@ -76,4 +79,6 @@ protected:
 	std::vector<Effect*> effects;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
+
+	int current_player = 0;
 };

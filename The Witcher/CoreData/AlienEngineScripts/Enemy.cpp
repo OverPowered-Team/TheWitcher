@@ -64,11 +64,13 @@ void Enemy::UpdateEnemy()
 
 	if (player_controllers[0]->state->type == StateType::DEAD)
 	{
+		current_player = 1;
 		distance = distance_2;
 		direction = direction_2.Normalized();
 	}
 	else if (player_controllers[1]->state->type == StateType::DEAD)
 	{
+		current_player = 0;
 		distance = distance_1;
 		direction = direction_1.Normalized();
 	}
@@ -76,6 +78,7 @@ void Enemy::UpdateEnemy()
 	{
 		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
 		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
 
 	for (auto it = effects.begin(); it != effects.end(); )
@@ -85,14 +88,13 @@ void Enemy::UpdateEnemy()
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
 			{
 				it_stats->second.ModifyCurrentStat((*it));
-
+				
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
 					if (stats["Health"].GetValue() == 0)
 					{
-						//state = EnemyState::DYING;
-						animator->PlayState("Death");
+						SetState("Dying");
 					}
 				}
 			}
@@ -103,6 +105,11 @@ void Enemy::UpdateEnemy()
 
 		if ((*it)->to_delete)
 		{
+			for (auto stat_it = stats.begin(); stat_it != stats.end(); ++stat_it)
+			{
+				if ((*it)->AffectsStat(stat_it->second.name))
+					stat_it->second.RemoveEffect((*it));
+			}
 			delete (*it);
 			it = effects.erase(it);
 			continue;
@@ -165,16 +172,34 @@ void Enemy::DeactivateCollider()
 	}
 }
 
-float Enemy::GetDamaged(float dmg, PlayerController* player)
+void Enemy::KnockBack(float3 knock)
+{
+	velocity = knock;
+	velocity.y = 0;
+}
+
+float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
+
+	KnockBack(knock_back);
 
 	return aux_health - stats["Health"].GetValue();
 }
 
 void Enemy::AddEffect(Effect* new_effect)
 {
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it)->name == new_effect->name)
+		{
+			(*it)->start_time = Time::GetGameTime(); //Refresh timer
+			delete new_effect;
+			return;
+		}
+	}
+
 	effects.push_back(new_effect);
 
 	if (new_effect->ticks_time == 0 && particles["p_" + new_effect->name])
@@ -184,6 +209,25 @@ void Enemy::AddEffect(Effect* new_effect)
 	{
 		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
 			it->second.ApplyEffect(new_effect);
+	}
+}
+
+void Enemy::RemoveEffect(Effect* _effect)
+{
+	for (auto it = stats.begin(); it != stats.end(); ++it)
+	{
+		if (_effect->AffectsStat(it->second.name))
+			it->second.RemoveEffect(_effect);
+	}
+
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it) == _effect)
+		{
+			delete _effect;
+			effects.erase(it);
+			return;
+		}
 	}
 }
 

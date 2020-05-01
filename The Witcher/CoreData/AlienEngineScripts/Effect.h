@@ -11,8 +11,12 @@ struct Modifier
 
 struct EffectData {
 	std::string name = "";
+	std::string vfx_on_apply = "";
+	std::string vfx_on_tick = "";
+
 	float time = 0.0f;
 	float ticks_time = 0.0f;
+
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
 };
@@ -20,6 +24,7 @@ struct EffectData {
 class Effect {
 public:
 	Effect();
+	Effect(EffectData* data);
 	virtual ~Effect();
 
 	void AddFlatModifier(float value, std::string identifier);
@@ -33,6 +38,11 @@ public:
 	std::string name = "";
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
+
+	//not sure about this
+	std::string vfx_on_apply = "";
+	std::string vfx_on_tick = "";
+
 	float time = 0.0f;
 	float ticks_time = 0.0f;
 	float last_tick_time = 0.0f;
@@ -40,7 +50,7 @@ public:
 	bool to_delete = false;
 
 	void (*OnHit)(Enemy* enemy, uint size, EffectData* data);
-	void (*OnDash)(PlayerController* player);
+	void (*OnDash)(Enemy* _enemy, EffectData* data);
 
 };
 
@@ -55,6 +65,14 @@ public:
 
 	std::string attack_name = "";
 	EffectData* on_hit_effect = nullptr;
+};
+
+class DashEffect : public Effect {
+public:
+	DashEffect();
+	virtual ~DashEffect();
+
+	EffectData* on_dash_effect = nullptr;
 };
 
 

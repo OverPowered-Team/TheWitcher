@@ -79,12 +79,12 @@ void Leshen::CleanUpEnemy()
 	delete current_action;
 }
 
-float Leshen::GetDamaged(float dmg, PlayerController* player)
+float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
 	HandleHitCount();
 	LOG("health remaining %f", stats["Health"].GetValue());
 	LOG("hitcount %i", times_hitted);
-	return Enemy::GetDamaged(dmg, player);
+	return Enemy::GetDamaged(dmg, player, knock);
 }
 
 void Leshen::OrientToPlayer(int target)

@@ -11,6 +11,7 @@ public:
 	virtual ~NilfSoldierRange();
 	
 	void UpdateEnemy() override;
+	void CheckDistance() override;
 	void Action() override;
 
 	void Flee();
@@ -19,7 +20,9 @@ public:
 
 public:
 	Prefab arrow;
-
+	float last_flee_distance = 0.0f;
+	float flee_min_distance = 0.01f;
+	float current_flee_distance = 0.0f;
 };
 
 ALIEN_FACTORY NilfSoldierRange* CreateNilfSoldierRange() {

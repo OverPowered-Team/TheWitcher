@@ -6,7 +6,7 @@
 
 class MusicController;
 
-class ALIEN_ENGINE_API Ghoul : public Enemy {
+class Ghoul : public Enemy {
 public:
 	enum(GhoulState,
 		NONE = -1,
@@ -14,10 +14,16 @@ public:
 		MOVE,
 		ATTACK,
 		JUMP,
+		DODGE,
 		STUNNED,
 		HIT,
 		DYING,
 		DEAD);
+
+	enum(GhoulType,
+		NONE = -1,
+		ORIGINAL,
+		DODGE);
 
 	Ghoul();
 	virtual ~Ghoul();
@@ -25,27 +31,27 @@ public:
 	void SetStats(const char* json) override;
 	
 	void StartEnemy() override;
-	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
 
-	void Action() override;
-	void CheckDistance() override;
 	void JumpImpulse();
 
 	void Stun(float time) override;
 	bool IsDead() override;
+	void SetState(const char* state_str) override;
+
+	void Action();
+
+	void CheckDistance();
+	
+	float GetDamaged(float dmg, PlayerController* player);
+
+	void OnTriggerEnter(ComponentCollider* collider) override;
 
 	void OnAnimationEnd(const char* name) override;
 
 public:
 	GhoulState state = GhoulState::NONE;
+	GhoulType ghoul_type = GhoulType::NONE;
 };
 
-ALIEN_FACTORY Ghoul* CreateGhoul() {
-	Ghoul* ghoul = new Ghoul();
-	// To show in inspector here
-	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
-	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
 
-	return ghoul;
-} 

@@ -79,21 +79,22 @@ DashRelic::~DashRelic()
 
 void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
-	Effect* effect = new Effect();
+	DashEffect* effect = new DashEffect();
+	effect->on_dash_effect = effect_to_apply;
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
-		effect->OnDash = &ApplyBurnOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	case Relic_Effect::ICE:
-		effect->OnDash = &ApplyIceOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	case Relic_Effect::EARTH:
-		effect->OnDash = &ApplyEarthOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	case Relic_Effect::POISON:
-		effect->OnDash = &ApplyPoisonOnDash;
+		effect->OnDash = &ApplyEffectOnDash;
 		break;
 	}
 
@@ -200,6 +201,41 @@ void RelicBehaviour::SetRelic(const char* json_array)
 			}
 
 			((AttackRelic*)relic)->effect_to_apply = _effect;
+		}
+		else if (std::strcmp(json_array, "DASH") == 0)
+		{
+			EffectData* _effect = new EffectData();
+			_effect->name = type_array->GetString("dash_effect.name");
+			_effect->time = type_array->GetNumber("dash_effect.time");
+			_effect->ticks_time = type_array->GetNumber("dash_effect.ticks_time");
+
+			JSONArraypack* flat_modifiers = type_array->GetArray("dash_effect.flat_modifiers");
+			if (flat_modifiers)
+			{
+				flat_modifiers->GetFirstNode();
+				for (uint i = 0; i < flat_modifiers->GetArraySize(); i++)
+				{
+					Modifier mod;
+					mod.identifier = flat_modifiers->GetString("identifier");
+					mod.amount = flat_modifiers->GetNumber("value");
+					_effect->additive_modifiers.push_back(mod);
+				}
+			}
+
+			JSONArraypack* mult_modifiers = type_array->GetArray("dash_effect.multiplicative_modifiers");
+			if (mult_modifiers)
+			{
+				mult_modifiers->GetFirstNode();
+				for (uint i = 0; i < mult_modifiers->GetArraySize(); i++)
+				{
+					Modifier mod;
+					mod.identifier = mult_modifiers->GetString("identifier");
+					mod.amount = mult_modifiers->GetNumber("value");
+					_effect->multiplicative_modifiers.push_back(mod);
+				}
+			}
+
+			((DashRelic*)relic)->effect_to_apply = _effect;
 		}
 	}
 

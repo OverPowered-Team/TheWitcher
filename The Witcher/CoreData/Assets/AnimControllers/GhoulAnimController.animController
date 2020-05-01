@@ -7,38 +7,38 @@
             {
                 "Name": "Idle",
                 "Speed": 1,
-                "Clip": "17597294058179667036"
+                "Clip": "5274429494783861281"
             },
             {
-                "Name": "Run",
+                "Name": "Walk",
                 "Speed": 1,
-                "Clip": "15614024080544662546"
+                "Clip": "14742750107754546426"
             },
             {
                 "Name": "Jump",
-                "Speed": 2,
-                "Clip": "2461403856463709162"
+                "Speed": 3,
+                "Clip": "8825609739987625586"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
-                "Clip": "9090936577813051920"
+                "Clip": "14145741330722218437"
             },
             {
                 "Name": "Slash",
                 "Speed": 1,
-                "Clip": "2909912792962758385"
+                "Clip": "17144995185292312115"
             },
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "18125317178253250943"
+                "Clip": "14145741330722218437"
             }
         ],
         "Transitions": [
             {
                 "Source": "Idle",
-                "Target": "Run",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": false,
                 "IntConditions": [],
@@ -53,7 +53,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Run",
+                "Source": "Walk",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": false,
@@ -86,7 +86,7 @@
             },
             {
                 "Source": "Slash",
-                "Target": "Run",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -118,7 +118,7 @@
             },
             {
                 "Source": "Jump",
-                "Target": "Run",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -173,6 +173,18 @@
                 "Event_Id": "Ghoul::DeactivateCollider",
                 "Animation_Id": "2909912792962758385",
                 "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateCollider",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 9,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateCollider",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 11,
                 "Type": 2
             }
         ]
