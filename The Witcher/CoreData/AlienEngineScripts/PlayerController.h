@@ -18,6 +18,8 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
+	friend class ChillingState;
+
 public:
 	enum (PlayerType,
 		GERALT,
