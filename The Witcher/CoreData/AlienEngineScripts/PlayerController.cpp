@@ -10,9 +10,10 @@
 #include "RumblerManager.h"
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
+#include "Bonfire.h"
+#include "Scores_Data.h"
 
 #include "UI_Char_Frame.h"
-#include "InGame_UI.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -39,6 +40,12 @@ void PlayerController::Start()
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
+
+	// TP to last checkpoint if checkpoint exist
+	if (Scores_Data::last_checkpoint_position.IsFinite())
+	{
+		this->controller->SetPosition(Scores_Data::last_checkpoint_position);
+	}
 
 	state = new IdleState();
 	state->OnEnter(this);
@@ -446,6 +453,12 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 }
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
+	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	{
+		is_near_bonfire = true;
+		last_checkpoint_position = col->game_object_attached->GetComponent<Bonfire>()->checkpoint->transform->GetGlobalPosition();
+	}
+
 	if (!godmode)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {
@@ -467,6 +480,15 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 }
+
+void PlayerController::OnTriggerExit(ComponentCollider* col)
+{
+	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	{
+		is_near_bonfire = false;
+	}
+}
+
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
