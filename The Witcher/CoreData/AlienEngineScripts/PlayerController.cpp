@@ -41,10 +41,10 @@ void PlayerController::Start()
 	CalculateAABB();
 	InitKeyboardControls();
 
-	// TP to last checkpoint or level start
+	// TP to last checkpoint if checkpoint exist
 	if (Scores_Data::last_checkpoint_position.IsFinite())
 	{
-		this->transform->SetGlobalPosition(Scores_Data::last_checkpoint_position);
+		this->controller->SetPosition(Scores_Data::last_checkpoint_position);
 	}
 
 	state = new IdleState();
