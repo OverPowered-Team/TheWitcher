@@ -21,7 +21,6 @@ public:
 
 	Prefab crow_prefab;
 	GameObject* crows = nullptr;
-	GameObject* meshes = nullptr;
 
 	float3 direction;
 	float melee_range = 3.0f;

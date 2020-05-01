@@ -35,6 +35,9 @@ void Enemy::StartEnemy()
 	case EnemyType::LESHEN:
 		json_str = "leshen";
 		break;
+	case EnemyType::CIRI:
+		json_str = "ciri";
+		break;
 	default:
 		break;
 	}

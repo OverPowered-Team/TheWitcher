@@ -15,7 +15,11 @@ public:
 		ROOT,
 		MELEE,
 		CROWS,
-		CLOUD
+		CLOUD,
+		DASH,
+		COMBO,
+		SCREAM,
+		MINISCREAM
 		);
 
 	enum(ActionState,
@@ -34,6 +38,8 @@ public:
 
 	std::map<std::string, BossAction*> actions;
 	BossAction* current_action;
+
+	GameObject* meshes = nullptr;
 
 	float action_time = 0;
 	float action_cooldown = 1.5f;

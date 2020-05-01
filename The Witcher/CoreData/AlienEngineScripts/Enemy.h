@@ -13,7 +13,8 @@ enum (EnemyType,
 	NONE = -1,
 	GHOUL,
 	NILFGAARD_SOLDIER,
-	LESHEN
+	LESHEN,
+	CIRI
 	);
 
 class Enemy : public Alien {

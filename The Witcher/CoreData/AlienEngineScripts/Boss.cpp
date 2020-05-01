@@ -96,8 +96,6 @@ void Boss::SelectAction()
 	float rand_num = rand() % 100 + 1;
 	float aux = 0.f;
 
-	current_action = actions["Root"];
-
 	for (auto it = actions.begin(); it != actions.end(); ++it) {
 		if (rand_num > aux&& rand_num <= (aux + (*it).second->probability)) {
 			current_action = (*it).second;
