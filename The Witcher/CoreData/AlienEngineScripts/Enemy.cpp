@@ -102,6 +102,11 @@ void Enemy::UpdateEnemy()
 
 		if ((*it)->to_delete)
 		{
+			for (auto stat_it = stats.begin(); stat_it != stats.end(); ++stat_it)
+			{
+				if ((*it)->AffectsStat(stat_it->second.name))
+					stat_it->second.RemoveEffect((*it));
+			}
 			delete (*it);
 			it = effects.erase(it);
 			continue;
@@ -164,19 +169,18 @@ void Enemy::DeactivateCollider()
 	}
 }
 
-void Enemy::KnockBack(PlayerController* player)
+void Enemy::KnockBack(float3 knock)
 {
-	float3 direction = (player->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-	velocity = -direction * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+	velocity = knock;
 	velocity.y = 0;
 }
 
-float Enemy::GetDamaged(float dmg, PlayerController* player)
+float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 
-	KnockBack(player);
+	KnockBack(knock_back);
 
 	return aux_health - stats["Health"].GetValue();
 }

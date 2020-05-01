@@ -71,7 +71,7 @@ public:
 	void StartEnemy() override;
 	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
-	float GetDamaged(float dmg, PlayerController* player) override;
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero()) override;
 
 	void OrientToPlayer(int target);
 

@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "GameManager.h"
 #include "PlayerManager.h"
+#include "PlayerProjectile.h"
 #include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
@@ -316,6 +317,9 @@ void PlayerAttacks::CastSpell()
 	if (current_attack)
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
+		player_controller->PlayAttackParticle();
+		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
+
 		if (current_attack->HasTag(Attack_Tags::T_AOE))
 		{
 			if (GameManager::instance->rumbler_manager)
@@ -329,9 +333,6 @@ void PlayerAttacks::CastSpell()
 			
 			ActivateCollider();
 		}
-		player_controller->PlayAttackParticle();
-
-		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
 
 		if (current_attack->HasTag(Attack_Tags::T_Buff))
 		{
@@ -340,13 +341,29 @@ void PlayerAttacks::CastSpell()
 				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
 
 			player_controller->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
+
 		}
 		if (current_attack->HasTag(Attack_Tags::T_Trap))
 		{
-			LOG("ydern")
+			LOG("yrden")
 			GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(), this->transform->GetGlobalPosition());
 			if (GameManager::instance->rumbler_manager)
 				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
+		}
+		if (current_attack->HasTag(Attack_Tags::T_Projectile))
+		{
+			LOG("ROCK")
+			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
+				player_controller->particles[current_attack->info.particle_name]->transform->GetGlobalPosition());
+
+			float angle = atan2f(transform->forward.z, transform->forward.x);
+			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 90) * Maths::Deg2Rad());
+			projectile_go->transform->SetGlobalRotation(rot);
+
+			projectile_go->GetComponent<PlayerProjectile>()->direction = transform->forward;
+
+			if (GameManager::instance->rumbler_manager)
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
 		}
 	}
 }
