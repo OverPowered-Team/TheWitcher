@@ -185,20 +185,20 @@ void NilfgaardSoldier::UpdateEnemy()
 	case Enemy::EnemyState::IDLE:
 		if (distance < stats["VisionRange"].GetValue()) {
 			state = Enemy::EnemyState::MOVE;
-			if (m_controller)
+			if (m_controller && !is_combat)
 			{
-				m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
-				m_controller->has_changed = true;
+				is_combat = true;
+				m_controller->EnemyInSight((Enemy*)this);
 			}
 		}
 		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
 			state = Enemy::EnemyState::FLEE;
 		break;
 	case Enemy::EnemyState::MOVE:
-		if (distance > stats["VisionRange"].GetValue() && m_controller)
+		if (distance > stats["VisionRange"].GetValue() && m_controller&& is_combat)
 		{
-			m_controller->is_combat = false;
-			m_controller->has_changed = true;
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
 		}
 		Move(direction);
 		break;
@@ -236,10 +236,10 @@ void NilfgaardSoldier::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		audio_emitter->StartSound("SoldierDeath");
 		state = EnemyState::DEAD;
-		if (m_controller)
+		if (m_controller && is_combat)
 		{
-			m_controller->is_combat = false;
-			m_controller->has_changed = true;
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
 		}
 		break;
 	}
@@ -261,8 +261,6 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			state = Enemy::EnemyState::IDLE;
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-			m_controller->is_combat = false;
-			m_controller->has_changed = true;
 		}
 	}
 
