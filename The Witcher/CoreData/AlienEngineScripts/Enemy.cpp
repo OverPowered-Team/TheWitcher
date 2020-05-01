@@ -190,6 +190,16 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 void Enemy::AddEffect(Effect* new_effect)
 {
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it)->name == new_effect->name)
+		{
+			(*it)->start_time = Time::GetGameTime(); //Refresh timer
+			delete new_effect;
+			return;
+		}
+	}
+
 	effects.push_back(new_effect);
 
 	if (new_effect->ticks_time == 0 && particles["p_" + new_effect->name])

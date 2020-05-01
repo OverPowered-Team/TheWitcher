@@ -397,9 +397,7 @@ void PlayerController::AddEffect(Effect* _effect)
 			delete _effect;
 			return;
 		}
-
 	}
-
 
 	effects.push_back(_effect);
 
