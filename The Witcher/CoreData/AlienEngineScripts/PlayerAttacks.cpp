@@ -9,7 +9,7 @@
 #include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
-
+#include "RumblerManager.h"
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
@@ -316,20 +316,37 @@ void PlayerAttacks::CastSpell()
 	if (current_attack)
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
-		if(current_attack->HasTag(Attack_Tags::T_AOE))
-			ActivateCollider();
+		if (current_attack->HasTag(Attack_Tags::T_AOE))
+		{
+			if (GameManager::instance->rumbler_manager)
+			{ 
+				if (strcmp("Igni", current_attack->info.name.c_str()) == 0)
+					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
 
+				else GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, player_controller->controller_index);
+
+			}
+			
+			ActivateCollider();
+		}
 		player_controller->PlayAttackParticle();
 
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
 
 		if (current_attack->HasTag(Attack_Tags::T_Buff))
 		{
+			LOG("queen");
+			if (GameManager::instance->rumbler_manager)
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
+
 			player_controller->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
 		}
 		if (current_attack->HasTag(Attack_Tags::T_Trap))
 		{
+			LOG("ydern")
 			GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(), this->transform->GetGlobalPosition());
+			if (GameManager::instance->rumbler_manager)
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
 		}
 	}
 }
