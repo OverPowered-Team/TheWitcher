@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GeraltController",
-        "NumStates": 30,
-        "NumTransitions": 55,
+        "NumStates": 27,
+        "NumTransitions": 50,
         "States": [
             {
                 "Name": "Idle",
@@ -41,7 +41,7 @@
             },
             {
                 "Name": "L",
-                "Speed": 2,
+                "Speed": 4,
                 "Clip": "16813058118423146582"
             },
             {
@@ -66,17 +66,17 @@
             },
             {
                 "Name": "Roll",
-                "Speed": 2,
+                "Speed": 3,
                 "Clip": "3247834789952261777"
             },
             {
                 "Name": "H",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "500007145238598693"
             },
             {
                 "Name": "HH",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "3522760949302926187"
             },
             {
@@ -111,12 +111,12 @@
             },
             {
                 "Name": "LHL",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "8559991752706635001"
             },
             {
                 "Name": "HL",
-                "Speed": 1,
+                "Speed": 4,
                 "Clip": "16098445893649691647"
             },
             {
@@ -138,21 +138,6 @@
                 "Name": "LLHL",
                 "Speed": 1,
                 "Clip": "0"
-            },
-            {
-                "Name": "Aard",
-                "Speed": 1,
-                "Clip": "12180050432665512495"
-            },
-            {
-                "Name": "Quen",
-                "Speed": 1,
-                "Clip": "3206340720122339941"
-            },
-            {
-                "Name": "Yrden",
-                "Speed": 1,
-                "Clip": "2505874860201445061"
             }
         ],
         "Transitions": [
@@ -192,7 +177,7 @@
                 "Source": "Idle",
                 "Target": "RCP",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -207,16 +192,10 @@
                 "Source": "RCP",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 3
-                    }
-                ]
+                "BoolConditions": []
             },
             {
                 "Source": "Death",
@@ -448,11 +427,32 @@
             {
                 "Source": "Roll",
                 "Target": "Idle",
-                "Blend": 0.10000000149011612,
+                "Blend": 0.40000000596046448,
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Roll",
+                "Target": "Run",
+                "Blend": 0.40000000596046448,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
             },
             {
                 "Source": "H",
@@ -888,96 +888,6 @@
                         "ParameterIndex": 3
                     }
                 ]
-            },
-            {
-                "Source": "Aard",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Aard",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Quen",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Quen",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Yrden",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "Yrden",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
             }
         ],
         "IntParameters": [],
@@ -1028,6 +938,12 @@
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "16813058118423146582",
                 "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16813058118423146582",
+                "Frame": 29,
                 "Type": 2
             },
             {
@@ -1193,9 +1109,21 @@
                 "Type": 2
             },
             {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16098445893649691647",
+                "Frame": 46,
+                "Type": 2
+            },
+            {
                 "Event_Id": "PlayerAttacks::ActivateCollider",
                 "Animation_Id": "12560278428043101702",
                 "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "12560278428043101702",
+                "Frame": 34,
                 "Type": 2
             },
             {
@@ -1214,6 +1142,18 @@
                 "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "13527093266729970175",
                 "Frame": 105,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3522760949302926187",
+                "Frame": 36,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "500007145238598693",
+                "Frame": 27,
                 "Type": 2
             },
             {
@@ -1283,6 +1223,12 @@
                 "Type": 2
             },
             {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7425335695216091952",
+                "Frame": 22,
+                "Type": 2
+            },
+            {
                 "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "7425335695216091952",
                 "Frame": 17,
@@ -1328,6 +1274,18 @@
                 "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "15648905613134895705",
                 "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "12180050432665512495",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "12180050432665512495",
+                "Frame": 11,
                 "Type": 2
             },
             {
@@ -1427,123 +1385,15 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerController::PlayAttackParticle",
-                "Animation_Id": "12560278428043101702",
-                "Frame": 30,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AttackShake",
-                "Animation_Id": "15648905613134895705",
-                "Frame": 35,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AttackShake",
-                "Animation_Id": "2185954702925284050",
-                "Frame": 66,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AttackShake",
-                "Animation_Id": "12560278428043101702",
-                "Frame": 31,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "12180050432665512495",
-                "Frame": 21,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "16098445893649691647",
-                "Frame": 51,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "12560278428043101702",
-                "Frame": 35,
-                "Type": 2
-            },
-            {
                 "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "16098445893649691647",
-                "Frame": 43,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AttackShake",
-                "Animation_Id": "8559991752706635001",
-                "Frame": 31,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AttackShake",
-                "Animation_Id": "18236356071610215831",
-                "Frame": 38,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::CastSpell",
-                "Animation_Id": "12180050432665512495",
-                "Frame": 10,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::CastSpell",
-                "Animation_Id": "3206340720122339941",
-                "Frame": 14,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "3206340720122339941",
-                "Frame": 26,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::CastSpell",
-                "Animation_Id": "2505874860201445061",
-                "Frame": 16,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "2505874860201445061",
-                "Frame": 36,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "500007145238598693",
-                "Frame": 28,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "3522760949302926187",
                 "Frame": 39,
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "7425335695216091952",
-                "Frame": 25,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "16813058118423146582",
-                "Frame": 34,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerController::PlayAllowParticle",
-                "Animation_Id": "16813058118423146582",
-                "Frame": 35,
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "12560278428043101702",
+                "Frame": 30,
                 "Type": 2
             }
         ]

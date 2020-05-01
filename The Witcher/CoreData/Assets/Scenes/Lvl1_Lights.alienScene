@@ -1,0 +1,745 @@
+{
+    "Scene": {
+        "Name": "Lvl1_Lights",
+        "GameObjects": [
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 1,
+                "ID": "9919095507724224537",
+                "ParentID": "15368356414037795945",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -80.115524291992188,
+                            1.7092819213867188,
+                            -48.671600341796875
+                        ],
+                        "Rotation": [
+                            0.11578914523124695,
+                            0.69400268793106079,
+                            -0.066090419888496399,
+                            0.70752048492431641
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8761257550956767464"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.22166953980922699,
+                            0.41810643672943115,
+                            0.60294115543365479,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "7149948223432964019",
+                        "IsGameCamera": false,
+                        "IsSelectedCamera": true,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ],
+                        "Fog": false,
+                        "Density": 0.072999998927116394,
+                        "Gradient": 1.1000000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/13294645959885894553.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/882162789730207050.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    }
+                ]
+            },
+            {
+                "Name": "Light",
+                "FamilyNumber": 1,
+                "ID": "13404754872912102901",
+                "ParentID": "15368356414037795945",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "536226403111135769"
+                    }
+                ]
+            },
+            {
+                "Name": "Cave Light",
+                "FamilyNumber": 2,
+                "ID": "16045235790214504129",
+                "ParentID": "13404754872912102901",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -59.351463317871094,
+                            2.5798492431640625,
+                            -48.860416412353516
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14380233254548469666"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "18262083165641743182",
+                        "PrintIcon": true,
+                        "Intensity": 2,
+                        "Position": [
+                            -59.351463317871094,
+                            2.5798492431640625,
+                            -48.860416412353516
+                        ],
+                        "Ambient": [
+                            0.28921568393707275,
+                            0.28921279311180115,
+                            0.28921279311180115
+                        ],
+                        "Diffuse": [
+                            1,
+                            0.85985970497131348,
+                            0.20588237047195435
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Constant": 0.69999998807907104,
+                        "Linear": 0,
+                        "Quadratic": 0.019999999552965164
+                    }
+                ]
+            },
+            {
+                "Name": "Directional light",
+                "FamilyNumber": 2,
+                "ID": "12582594249081120657",
+                "ParentID": "13404754872912102901",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0.53356629610061646,
+                            0,
+                            0,
+                            0.84575831890106201
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6185428088521800589"
+                    },
+                    {
+                        "Type": 3,
+                        "Enabled": true,
+                        "ID": "2755266146620741827",
+                        "PrintIcon": true,
+                        "Intensity": 1.559999942779541,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Direction": [
+                            0,
+                            -0.90253621339797974,
+                            0.43061399459838867
+                        ],
+                        "Ambient": [
+                            0.25,
+                            0.24999749660491943,
+                            0.24999749660491943
+                        ],
+                        "Diffuse": [
+                            1,
+                            0.98366022109985352,
+                            0.86274510622024536
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Woods Light",
+                "FamilyNumber": 2,
+                "ID": "9085115577283901372",
+                "ParentID": "13404754872912102901",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -2.4734530448913574,
+                            20.944494247436523,
+                            -21.658050537109375
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18112729617914222640"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "8757390747131113909",
+                        "PrintIcon": true,
+                        "Intensity": 2,
+                        "Position": [
+                            -2.4734530448913574,
+                            20.944494247436523,
+                            -21.658050537109375
+                        ],
+                        "Ambient": [
+                            0.27941179275512695,
+                            0.27804213762283325,
+                            0.27804213762283325
+                        ],
+                        "Diffuse": [
+                            0.56862747669219971,
+                            0.49648174643516541,
+                            0.078046903014183044
+                        ],
+                        "Specular": [
+                            0.95631486177444458,
+                            0.98529410362243652,
+                            0
+                        ],
+                        "Constant": 0,
+                        "Linear": 0,
+                        "Quadratic": 0.004999999888241291
+                    }
+                ]
+            },
+            {
+                "Name": "Woods Light2",
+                "FamilyNumber": 2,
+                "ID": "6363642479575741405",
+                "ParentID": "13404754872912102901",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10.577730178833008,
+                            15.974348068237305,
+                            -51.253791809082031
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2187995749093587586"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "8142407568310055208",
+                        "PrintIcon": true,
+                        "Intensity": 2,
+                        "Position": [
+                            10.577730178833008,
+                            15.974348068237305,
+                            -51.253791809082031
+                        ],
+                        "Ambient": [
+                            0.25980395078659058,
+                            0.25980135798454285,
+                            0.25980135798454285
+                        ],
+                        "Diffuse": [
+                            0.20588207244873047,
+                            0,
+                            1
+                        ],
+                        "Specular": [
+                            0.99998998641967773,
+                            0.999991774559021,
+                            1
+                        ],
+                        "Constant": 0,
+                        "Linear": 0,
+                        "Quadratic": 0.004999999888241291
+                    }
+                ]
+            },
+            {
+                "Name": "Boss Light",
+                "FamilyNumber": 2,
+                "ID": "2137496878692428101",
+                "ParentID": "13404754872912102901",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            61.043785095214844,
+                            25.508920669555664,
+                            -17.290634155273438
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14251823041920038630"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "1558041959696624133",
+                        "PrintIcon": true,
+                        "Intensity": 2,
+                        "Position": [
+                            61.043785095214844,
+                            25.508920669555664,
+                            -17.290634155273438
+                        ],
+                        "Ambient": [
+                            0.5098038911819458,
+                            0.50979876518249512,
+                            0.50979876518249512
+                        ],
+                        "Diffuse": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Constant": 0,
+                        "Linear": 0,
+                        "Quadratic": 0.00050000002374872565
+                    }
+                ]
+            },
+            {
+                "Name": "FogZone",
+                "FamilyNumber": 1,
+                "ID": "16467101925518745241",
+                "ParentID": "15368356414037795945",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11519449939513102759",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            13.343255996704102,
+                            4.2068076133728027,
+                            -33.772045135498047
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7111296542118491021"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1094850348772023659",
+                        "ResourceID": "9618936361686501475",
+                        "DataName": "ProgressiveFog",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Zone Radius"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "innerRadius",
+                                "float": 25
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "outterRadius",
+                                "float": 85
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Fog Properties"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "targetFogDensity",
+                                "float": 0.074000000953674316
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "targetFogGradient",
+                                "float": 1.1039999723434448
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Fog Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.x",
+                                "float": 0.22200000286102295
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.y",
+                                "float": 0.47999998927116394
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.z",
+                                "float": 0.6029999852180481
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Current State"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "fogState",
+                                "enumInt": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Outter",
+                "FamilyNumber": 2,
+                "ID": "4567828518634000487",
+                "ParentID": "16467101925518745241",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11519449939513102759",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11668488777633600669"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 8,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Radius": 85
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "10157234080679794677",
+                        "ResourceID": "12680379134327042715",
+                        "DataName": "TriggerFog",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_index",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Inner",
+                "FamilyNumber": 2,
+                "ID": "15214997069209738702",
+                "ParentID": "16467101925518745241",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11519449939513102759",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4741668260130707278"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 8,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Radius": 20
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1804929542701623929",
+                        "ResourceID": "12680379134327042715",
+                        "DataName": "TriggerFog",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_index",
+                                "int": 2
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
