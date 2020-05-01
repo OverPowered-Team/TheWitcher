@@ -11,8 +11,11 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
+
+#include "Bonfire.h"
+#include "Scores_Data.h"
+
 #include "UI_Char_Frame.h"
-#include "InGame_UI.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -40,6 +43,12 @@ void PlayerController::Start()
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
+
+	// TP to last checkpoint if checkpoint exist
+	if (Scores_Data::last_checkpoint_position.IsFinite())
+	{
+		this->controller->SetPosition(Scores_Data::last_checkpoint_position);
+	}
 
 	state = new IdleState();
 	state->OnEnter(this);
@@ -73,12 +82,9 @@ void PlayerController::Update()
 		player_data.speed.y = 0;
 	}
 
-
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
-
-
 }
 
 void PlayerController::UpdateInput()
@@ -286,6 +292,7 @@ void PlayerController::Revive(float minigame_value)
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
@@ -317,8 +324,21 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
+
 #pragma endregion PlayerActions
 
+void PlayerController::HitByRock(float time)
+{
+	//if is vulnerable and not already chiquito
+		//life -= damage
+	Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
+	transform->SetLocalScale(1.f, 0.25f, 1.f);
+}
+
+void PlayerController::RecoverFromRockHit()
+{
+	transform->SetLocalScale(1.f, 1.f, 1.f);
+}
 
 void PlayerController::AddEffect(Effect* _effect)
 {
@@ -360,7 +380,7 @@ bool PlayerController::CheckBoundaries()
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
 				p_tmp.maxPoint += cam->players[i]->transform->GetGlobalPosition();
 
-				if (!fake_frustum.Contains(p_tmp))
+				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					player_data.speed = float3::zero();
@@ -374,9 +394,12 @@ bool PlayerController::CheckBoundaries()
 		return true;
 	}
 	else {
-		player_data.speed = float3::zero();
-		return false;
+		if (transform->GetGlobalPosition().Distance(fake_frustum.CenterPoint()) < next_pos.Distance(fake_frustum.CenterPoint())) {
+			player_data.speed = float3::zero();
+			return false;
+		}
 	}
+	return true;
 }
 bool PlayerController::CheckForPossibleRevive()
 {
@@ -436,6 +459,12 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 }
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
+	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	{
+		is_near_bonfire = true;
+		last_checkpoint_position = col->game_object_attached->GetComponent<Bonfire>()->checkpoint->transform->GetGlobalPosition();
+	}
+
 	if (!godmode)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {
@@ -457,6 +486,15 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 }
+
+void PlayerController::OnTriggerExit(ComponentCollider* col)
+{
+	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	{
+		is_near_bonfire = false;
+	}
+}
+
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;

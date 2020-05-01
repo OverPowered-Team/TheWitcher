@@ -21,6 +21,7 @@
 #include "..\..\..\Alien Engine\ComponentBoxCollider.h"
 #include "..\..\..\Alien Engine\ComponentCapsuleCollider.h"
 #include "..\..\..\Alien Engine\ComponentSphereCollider.h"
+#include "..\..\..\Alien Engine\ComponentConvexHullCollider.h"
 #include "..\..\..\Alien Engine\ComponentLightDirectional.h"
 #include "..\..\..\Alien Engine\ComponentLightPoint.h"
 #include "..\..\..\Alien Engine\ComponentLightSpot.h"

@@ -19,7 +19,7 @@ void PlayerManager::Start()
 		players.push_back((*i)->GetComponent<PlayerController>());
 	}
 
-	ulti_bar = GameObject::FindWithName("Ulti_bar");
+	ulti_bar = GameObject::FindWithName("Ulti_Bar")->GetComponent<UltiBar>();
 }
 
 void PlayerManager::Update()
@@ -66,14 +66,13 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	{
 		collective_ultimate_charge = max_ultimate_charge;
 		// UI
-		if(ulti_bar)
-			ulti_bar->GetComponent<UltiBar>()->MaxBar();
+		ulti_bar->MaxBar();
 	}
 	else
 	{
 		// UI
-		if(ulti_bar)
-			ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+		float new_value = (float)collective_ultimate_charge / (float)max_ultimate_charge;
+		ulti_bar->UpdateBar(new_value);
 	}
 }
 

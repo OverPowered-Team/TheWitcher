@@ -10,7 +10,6 @@ public:
 	BreakableObject();
 	virtual ~BreakableObject();
 	
-	void Start();
 	void Explode();
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
