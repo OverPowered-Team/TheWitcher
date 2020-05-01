@@ -16,8 +16,7 @@ enum (EnemyType,
 	LESHEN,
 	CIRI,
 	DROWNED,
-	SHAELMAR,
-	LESHEN
+	SHAELMAR
 	);
 
 class Enemy : public Alien {

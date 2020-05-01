@@ -9,6 +9,14 @@
 class ALIEN_ENGINE_API Boss : public Enemy {
 
 public:
+	enum(BossState,
+		NONE = -1,
+		IDLE,
+		ATTACK,
+		DYING,
+		HIT,
+		DEAD
+		);
 
 	enum(ActionType,
 		NONE = -1,
@@ -28,6 +36,8 @@ public:
 		UPDATING,
 		ENDED
 		);
+
+	BossState state = BossState::NONE;
 
 	struct BossAction {
 		BossAction(ActionType _type, float _probability);

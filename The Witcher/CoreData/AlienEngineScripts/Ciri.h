@@ -53,7 +53,7 @@ public:
 ALIEN_FACTORY Ciri* CreateCiri() {
 	Ciri* ciri = new Ciri();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, ciri->state);
+	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, ciri->state);
 	SHOW_VOID_FUNCTION(Ciri::ActivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::DeactivateCollider, ciri);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->scream_range);

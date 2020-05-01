@@ -21,9 +21,9 @@ void Boss::UpdateEnemy()
 {
 	switch (state)
 	{
-	case Enemy::EnemyState::NONE:
+	case Boss::BossState::NONE:
 		break;
-	case Enemy::EnemyState::IDLE:
+	case Boss::BossState::IDLE:
 		if (player_distance[0] < stats["VisionRange"].GetValue() || player_distance[1] < stats["VisionRange"].GetValue()) {
 			if (time_to_action <= action_cooldown)
 				time_to_action += Time::GetDT();
@@ -32,7 +32,7 @@ void Boss::UpdateEnemy()
 			}
 		}
 		break;
-	case Enemy::EnemyState::ATTACK:
+	case Boss::BossState::ATTACK:
 		if (current_action) {
 			if (UpdateAction() == ActionState::ENDED) {
 				SetIdleState();
@@ -41,19 +41,19 @@ void Boss::UpdateEnemy()
 		else
 			LOG("NO CURRENT ACTION DETECTED");
 		break;
-	case Enemy::EnemyState::HIT:
+	case Boss::BossState::HIT:
 		if (current_action)
-			state = EnemyState::ATTACK;
+			state = BossState::ATTACK;
 		else
-			state = EnemyState::IDLE;
+			state = BossState::IDLE;
 		break;
-	case Enemy::EnemyState::DYING: {
+	case Boss::BossState::DYING: {
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-		state = EnemyState::DEAD;
+		state = BossState::DEAD;
 	}
 								 break;
-	case Enemy::EnemyState::DEAD:
+	case Boss::BossState::DEAD:
 		break;
 	default:
 		break;
@@ -108,7 +108,7 @@ void Boss::SelectAction()
 void Boss::SetIdleState()
 {
 	current_action = nullptr;
-	state = Enemy::EnemyState::IDLE;
+	state = Boss::BossState::IDLE;
 }
 
 void Boss::SetAttackState()
@@ -117,7 +117,7 @@ void Boss::SetAttackState()
 	SetActionProbabilities();
 	SelectAction();
 	time_to_action = 0.0f;
-	state = Enemy::EnemyState::ATTACK;
+	state = Boss::BossState::ATTACK;
 	current_action->state = ActionState::LAUNCH;
 	LaunchAction();
 }
