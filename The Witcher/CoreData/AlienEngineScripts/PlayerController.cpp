@@ -389,6 +389,18 @@ void PlayerController::RecoverFromRockHit()
 
 void PlayerController::AddEffect(Effect* _effect)
 {
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it)->name == _effect->name)
+		{
+			(*it)->start_time = Time::GetGameTime(); //Refresh timer
+			delete _effect;
+			return;
+		}
+
+	}
+
+
 	effects.push_back(_effect);
 
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
