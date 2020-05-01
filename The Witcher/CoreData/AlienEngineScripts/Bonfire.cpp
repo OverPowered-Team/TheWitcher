@@ -16,7 +16,7 @@ void Bonfire::Start()
 
 void Bonfire::SetBonfireUsed(PlayerController* player)
 {
-	if ((first_player != player) && player != nullptr)
+	if ((first_player != player) && first_player != nullptr)
 	{
 		game_object->GetChild("Model_xd")->GetChild("Logs")->GetChild("Fire")->SetEnable(false);
 		is_active = false;

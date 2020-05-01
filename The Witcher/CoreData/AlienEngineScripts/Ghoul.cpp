@@ -42,21 +42,13 @@ void Ghoul::UpdateEnemy()
 {
     Enemy::UpdateEnemy();
 
-	switch (state)
-	{
-    case Enemy::EnemyState::IDLE:
-        if (m_controller && !is_combat)
-        {
-            is_combat = true;
-            m_controller->EnemyInSight((Enemy*)this);
-        }
+    switch (state)
+    {
+    case GhoulState::IDLE:
+        if (distance < stats["VisionRange"].GetValue())
+            state = GhoulState::MOVE;
         break;
-    case Enemy::EnemyState::MOVE:
-        if (distance > stats["VisionRange"].GetValue() && m_controller&& is_combat)
-        {
-            is_combat = false;
-            m_controller->EnemyLostSight((Enemy*)this);
-        }
+    case GhoulState::MOVE:
         Move(direction);
         break;
     case GhoulState::JUMP:
@@ -74,12 +66,7 @@ void Ghoul::UpdateEnemy()
         //Ori Ori function sintaxis
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
         audio_emitter->StartSound("GhoulDeath");
-        state = EnemyState::DEAD;
-        if (m_controller && is_combat)
-        {
-            is_combat = false;
-            m_controller->EnemyLostSight((Enemy*)this);
-        }
+        state = GhoulState::DEAD;
         break;
     }
     }
@@ -161,9 +148,7 @@ void Ghoul::OnAnimationEnd(const char* name)
         }
         else
         {
-            //m_controller->is_combat = false;
-            //m_controller->has_changed = true;
-            state = Enemy::EnemyState::IDLE;
+            state = GhoulState::IDLE;
         }
     }
     else if (strcmp(name, "Jump") == 0)
@@ -171,14 +156,7 @@ void Ghoul::OnAnimationEnd(const char* name)
         if (distance < stats["VisionRange"].GetValue())
             state = GhoulState::MOVE;
         else
-        {
-            //m_controller->is_combat = false;
-            //m_controller->has_changed = true;
-            state = Enemy::EnemyState::IDLE;
-        }
-    }
-    else if (strcmp(name, "Hit") == 0) {
-        state = Enemy::EnemyState::IDLE;
+            state = GhoulState::IDLE;
     }
     else if (strcmp(name, "Hit") == 0)
         state = GhoulState::IDLE;

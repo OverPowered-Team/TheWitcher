@@ -126,33 +126,12 @@ void NilfgaardSoldier::CheckDistance()
 
 	if (distance > stats["VisionRange"].GetValue())
 	{
-	case Enemy::EnemyState::IDLE:
-		if (distance < stats["VisionRange"].GetValue()) {
-			state = Enemy::EnemyState::MOVE;
-			if (m_controller && !is_combat)
-			{
-				is_combat = true;
-				m_controller->EnemyInSight((Enemy*)this);
-			}
-		}
-		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
-			state = Enemy::EnemyState::FLEE;
-		break;
-	case Enemy::EnemyState::MOVE:
-		if (distance > stats["VisionRange"].GetValue() && m_controller&& is_combat)
-		{
-			is_combat = false;
-			m_controller->EnemyLostSight((Enemy*)this);
-		}
-		Move(direction);
-		break;
-	case Enemy::EnemyState::ATTACK:
-		switch (nilf_type)
-		{
-		case NilfgaardSoldier::NilfgaardType::ARCHER:
-			float angle = atan2f(direction.z, direction.x);
-			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-			transform->SetGlobalRotation(rot);
+		state = NilfgaardSoldierState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
+	}
+}
 
 void NilfgaardSoldier::RotateSoldier()
 {
@@ -165,17 +144,8 @@ void NilfgaardSoldier::CleanUpEnemy()
 {
 	if (decapitated_head)
 	{
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-		//Ori Ori function sintaxis
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-		audio_emitter->StartSound("SoldierDeath");
-		state = EnemyState::DEAD;
-		if (m_controller && is_combat)
-		{
-			is_combat = false;
-			m_controller->EnemyLostSight((Enemy*)this);
-		}
-		break;
+		decapitated_head->ToDelete();
+		decapitated_head = nullptr;
 	}
 }
 
