@@ -53,5 +53,6 @@ void NilfSoldierMelee::UpdateEnemy()
 void NilfSoldierMelee::Action()
 {
 	animator->PlayState("Attack");
+	animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 	state = NilfgaardSoldierState::ATTACK;
 }

@@ -60,6 +60,7 @@ void NilfSoldierShield::Action()
 	if (rand_num == 0)
 	{
 		animator->PlayState("Block");
+		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		current_time = Time::GetGameTime();
 		is_blocked = true;
 		state = NilfgaardSoldierState::AUXILIAR;
@@ -67,6 +68,7 @@ void NilfSoldierShield::Action()
 	else
 	{
 		animator->PlayState("Attack");
+		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::ATTACK;
 	}
 }

@@ -49,6 +49,7 @@ EffectData* EffectsFactory::ReadData(JSONArraypack* effect)
 			mod.identifier = flat_modifiers->GetString("identifier");
 			mod.amount = flat_modifiers->GetNumber("value");
 			data->additive_modifiers.push_back(mod);
+			flat_modifiers->GetAnotherNode();
 		}
 	}
 
@@ -62,6 +63,7 @@ EffectData* EffectsFactory::ReadData(JSONArraypack* effect)
 			mod.identifier = mult_modifiers->GetString("identifier");
 			mod.amount = mult_modifiers->GetNumber("value");
 			data->multiplicative_modifiers.push_back(mod);
+			mult_modifiers->GetAnotherNode();
 		}
 	}
 
