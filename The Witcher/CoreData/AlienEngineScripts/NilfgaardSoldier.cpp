@@ -102,6 +102,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player)
 			player->OnEnemyKill();
 		}
 	}
+
 	return damage;
 }
 

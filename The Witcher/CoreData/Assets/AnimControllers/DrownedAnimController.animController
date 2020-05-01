@@ -1,69 +1,10 @@
 {
     "Controller": {
         "Name": "DrownedAnimController",
-        "NumStates": 6,
-        "NumTransitions": 3,
-        "States": [
-            {
-                "Name": "Idle",
-                "Speed": 1,
-                "Clip": "0"
-            },
-            {
-                "Name": "Hide",
-                "Speed": 1,
-                "Clip": "0"
-            },
-            {
-                "Name": "Death",
-                "Speed": 1,
-                "Clip": "0"
-            },
-            {
-                "Name": "Attack",
-                "Speed": 1,
-                "Clip": "0"
-            },
-            {
-                "Name": "Hit",
-                "Speed": 1,
-                "Clip": "0"
-            },
-            {
-                "Name": "GetOff",
-                "Speed": 1,
-                "Clip": "0"
-            }
-        ],
-        "Transitions": [
-            {
-                "Source": "Hide",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
-            },
-            {
-                "Source": "GetOff",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Hit",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
-            }
-        ],
+        "NumStates": 0,
+        "NumTransitions": 0,
+        "States": [],
+        "Transitions": [],
         "IntParameters": [],
         "FloatParameters": [],
         "BoolParameters": [],

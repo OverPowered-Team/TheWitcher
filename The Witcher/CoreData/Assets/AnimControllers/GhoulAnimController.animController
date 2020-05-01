@@ -10,7 +10,7 @@
                 "Clip": "5274429494783861281"
             },
             {
-                "Name": "Wal",
+                "Name": "Walk",
                 "Speed": 1,
                 "Clip": "14742750107754546426"
             },
@@ -38,7 +38,7 @@
         "Transitions": [
             {
                 "Source": "Idle",
-                "Target": "Wal",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": false,
                 "IntConditions": [],
@@ -53,7 +53,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Wal",
+                "Source": "Walk",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": false,
@@ -86,7 +86,7 @@
             },
             {
                 "Source": "Slash",
-                "Target": "Wal",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -118,7 +118,7 @@
             },
             {
                 "Source": "Jump",
-                "Target": "Wal",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -173,6 +173,18 @@
                 "Event_Id": "Ghoul::DeactivateCollider",
                 "Animation_Id": "2909912792962758385",
                 "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateCollider",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 9,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateCollider",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 11,
                 "Type": 2
             }
         ]
