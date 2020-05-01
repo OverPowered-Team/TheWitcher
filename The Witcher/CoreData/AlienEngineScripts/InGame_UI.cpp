@@ -31,7 +31,7 @@ void InGame_UI::Update()
 
 	if (checkpoint_saved_text->IsEnabled())
 	{
-		if (time_checkpoint + 1.f <= Time::GetGameTime())
+		if (time_checkpoint + 2.f <= Time::GetGameTime())
 		{
 			checkpoint_saved_text->SetEnable(false);
 		}
