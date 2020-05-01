@@ -209,7 +209,9 @@ void PlayerController::HandleMovement()
 	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
 
 	direction_vector = (Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector).Normalized();
+	float tmp_y = player_data.speed.y;
 	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue();
+	player_data.speed.y = tmp_y;
 
 	//rotate
 	if (mov_input)
