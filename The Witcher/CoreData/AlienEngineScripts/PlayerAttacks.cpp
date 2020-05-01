@@ -118,6 +118,7 @@ void PlayerAttacks::DoAttack()
 	next_attack = AttackType::NONE;
 	current_target = nullptr;
 	distance_snapped = 0.0f;
+	current_attack->enemies_hit.clear();
 
 	player_controller->animator->PlayState(current_attack->info.name.c_str());
 
@@ -374,10 +375,34 @@ void PlayerAttacks::CastSpell()
 
 void PlayerAttacks::OnHit(Enemy* enemy)
 {
+	if (!current_attack->CanHit(enemy))
+		return;
+
+	current_attack->enemies_hit.push_back(enemy);
 	if (current_attack->HasTag(Attack_Tags::T_Debuff))
 	{
 		enemy->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));
 	}
+	if (current_attack->HasTag(Attack_Tags::T_Chaining))
+	{
+		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 3);
+		for (auto it = colliders.begin(); it != colliders.end(); ++it)
+		{
+			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
+				auto comps = (*it)->game_object_attached->GetComponents<Alien>();
+				for (auto i = comps.begin(); i != comps.end(); ++i) {
+					Enemy* enemy = dynamic_cast<Enemy*>(*i);
+					if (enemy && current_attack->CanHit(enemy)) {
+						if(!enemy->IsDead())
+							enemy->GetDamaged(GetCurrentDMG(), player_controller);
+
+						OnHit(enemy);
+					}
+				}
+			}
+		}
+	}
+
 	if (GameManager::instance->rumbler_manager && current_attack->info.name[current_attack->info.name.size() - 1] == 'H')
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player_controller->controller_index);
 	else if (GameManager::instance->rumbler_manager && current_attack->info.name[current_attack->info.name.size() - 1] == 'L')

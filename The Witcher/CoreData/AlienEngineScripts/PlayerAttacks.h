@@ -65,8 +65,18 @@ public:
 		}
 		return false;
 	}
+	bool CanHit(Enemy* enemy)
+	{
+		for (auto it = enemies_hit.begin(); it != enemies_hit.end(); ++it)
+		{
+			if (enemy == (*it))
+				return false;
+		}
+		return true;
+	}
 public:
 	AttackInfo info;
+	std::vector<Enemy*> enemies_hit;
 
 private:
 	Attack* light_attack_link = nullptr;

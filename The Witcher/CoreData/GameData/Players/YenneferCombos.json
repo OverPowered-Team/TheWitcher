@@ -528,15 +528,16 @@
 	    {
       "tags": [
         { "tag": "AOE" },
-        { "tag": "Spell" }
+        { "tag": "Spell" },
+		    { "tag": "Chaining" }
       ],
-      "name": "Lightning Chain",
+      "name": "Chain",
       "particle_name": "p_flamethrower",
       "prefab_to_spawn": "",
       "stats": [
         {
           "name": "Damage",
-          "value": 0
+          "value": 20
         },
         {
           "name": "Cost",
@@ -544,16 +545,17 @@
         }
       ],
       "effect": "",
+      "chain_range": 3,
       "activation_frame": 25,
       "movement_strength": 3.0,
       "max_snap_distance": 3,
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 0,
-        "height": 0,
-        "depth": 0
+        "pos_y": 100,
+        "pos_z": 250,
+        "width": 50,
+        "height": 50,
+        "depth": 450
       },
       "freeze_time": 0.1
     },
@@ -561,7 +563,7 @@
       "tags": [
         { "tag": "AOE" },
         { "tag": "Spell" },
-		{ "tag": "Projectile" }
+		    { "tag": "Projectile" }
       ],
       "name": "Rock Throw",
       "particle_name": "p_rock_throw",
@@ -594,7 +596,7 @@
       "tags": [
         { "tag": "AOE" },
         { "tag": "Spell" },
-		{ "tag": "Debuff" }
+		    { "tag": "Debuff" }
       ],
       "name": "Fthrower",
       "particle_name": "p_flamethrower",
