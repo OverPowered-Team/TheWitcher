@@ -31,6 +31,7 @@ public:
 private:
 
 	void HitEffect(float lerp_time);
+	void LowLifeGlow();
 
 private:
 	// life
@@ -39,12 +40,19 @@ private:
 	bool player_hit = false;
 	bool low_life = false;
 
-	// Lerps
+	// Lerps life
 	float now_life = 0.0f;
 	float time = 0.0f;
 	bool changing_life = false;
 	float low_life_glow_time = 0.0f;
 	int low_life_sign = 1;
+
+	// Chaos
+	float actual_chaos = 0.0f;
+	float chaos_change = 0.0f;
+	float max_chaos = 0.0f;
+	float chaos_time = 0.0f;
+	bool changing_chaos = false;
 
 	// HUD Components
 	GameObject* geralt_img = nullptr;
@@ -53,7 +61,6 @@ private:
 
 	ComponentBar* lifebar = nullptr;
 	ComponentBar* mana_bar = nullptr;
-	ComponentBar* xp_bar = nullptr;
 };
 
 ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {

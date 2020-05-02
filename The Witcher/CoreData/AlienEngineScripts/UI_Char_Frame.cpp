@@ -43,7 +43,6 @@ void UI_Char_Frame::Start()
 
 	lifebar = game_object->GetChild("Lifebar")->GetComponent<ComponentBar>();
 	mana_bar = game_object->GetChild("Mana")->GetComponent<ComponentBar>();
-	xp_bar = game_object->GetChild("Xp")->GetComponent<ComponentBar>();
 }
 
 void UI_Char_Frame::Update()
@@ -65,32 +64,25 @@ void UI_Char_Frame::Update()
 		}
 	}
 
-	if (low_life)
+	if (changing_chaos)
 	{
-		float color = 0.0f;
-		float t = (Time::GetGameTime() - low_life_glow_time);
-		
-		if (low_life_sign < 0)
-		{
-			color = Maths::Lerp(1.0f, 0.f, t);
-		}
-		else
-		{
-			color = Maths::Lerp(0.f, 1.f, t);
-		}
-
-		lifebar->SetBarColor(1, color, color, 1);
+		float t = (Time::GetGameTime() - chaos_time) * (1 / change_time);
+		mana_bar->SetBarValue(Maths::Lerp(actual_chaos, chaos_change / max_chaos, t));
 
 		if (t >= 1)
 		{
-			low_life_sign = -low_life_sign;
-			low_life_glow_time = Time::GetGameTime();
+			changing_chaos = false;
 		}
+	}
+
+	if (low_life && (lifebar->GetBarValue() != 0))
+	{
+		LowLifeGlow();
 	}
 
 }
 
-
+// Bar Changes
 void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 {
 	now_life = lifebar->GetBarValue();
@@ -121,9 +113,16 @@ void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 
 void UI_Char_Frame::ManaChange(float mana_change, float max_mana)
 {
-	//mana_bar_comp->SetBarValue(mana_change / max_mana);
+	actual_chaos = mana_bar->GetBarValue();
+
+	chaos_change = mana_change;
+	max_chaos = max_mana;
+
+	changing_chaos = true;
+	chaos_time = Time::GetGameTime();
 }
 
+// Effects
 void UI_Char_Frame::HitEffect(float lerp_time)
 {
 	float lerp_portrait = 0.0f;
@@ -142,4 +141,27 @@ void UI_Char_Frame::HitEffect(float lerp_time)
 
 	portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
 	lifebar->SetBarColor(1.f, lerp_life, lerp_life, 1.f);
+}
+
+void UI_Char_Frame::LowLifeGlow()
+{
+	float color = 0.0f;
+	float t = (Time::GetGameTime() - low_life_glow_time);
+
+	if (low_life_sign < 0)
+	{
+		color = Maths::Lerp(1.0f, 0.f, t);
+	}
+	else
+	{
+		color = Maths::Lerp(0.f, 1.f, t);
+	}
+
+	lifebar->SetBarColor(1, color, color, 1);
+
+	if (t >= 1)
+	{
+		low_life_sign = -low_life_sign;
+		low_life_glow_time = Time::GetGameTime();
+	}
 }

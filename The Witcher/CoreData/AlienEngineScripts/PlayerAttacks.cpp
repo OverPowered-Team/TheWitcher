@@ -11,6 +11,7 @@
 #include "EffectsFactory.h"
 #include "CameraShake.h"
 #include "RumblerManager.h"
+#include "UI_Char_Frame.h"
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
@@ -319,6 +320,7 @@ void PlayerAttacks::CastSpell()
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
 		player_controller->PlayAttackParticle();
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
+		player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
 
 		if (current_attack->HasTag(Attack_Tags::T_AOE))
 		{
