@@ -101,11 +101,21 @@ void NilfSoldierShield::Block()
 	}
 }
 
+bool NilfSoldierShield::CheckPlayerForward()
+{
+	float angle = transform->forward.AngleBetween(player_controllers[current_player]->transform->forward) * RADTODEG;
+	LOG("Angle: %f", angle);
+	if (angle > 120 && angle < 180)
+		return true;
+	else
+		return false;
+}
+
 void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
 
-		if (is_blocked)
+		if (is_blocked && CheckPlayerForward())
 		{
 			has_been_attacked = true;
 			current_time = Time::GetGameTime();

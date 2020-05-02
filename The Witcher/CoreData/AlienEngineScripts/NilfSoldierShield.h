@@ -13,6 +13,7 @@ public:
 	void UpdateEnemy() override;
 	void Action() override;
 	void Block();
+	bool CheckPlayerForward();
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
 public:
