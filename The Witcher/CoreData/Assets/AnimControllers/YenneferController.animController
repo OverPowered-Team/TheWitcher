@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 14,
-        "NumTransitions": 24,
+        "NumStates": 16,
+        "NumTransitions": 28,
         "States": [
             {
                 "Name": "L",
@@ -73,6 +73,16 @@
                 "Name": "Fthrower",
                 "Speed": 2,
                 "Clip": "11452384421895114614"
+            },
+            {
+                "Name": "Ice Nova",
+                "Speed": 2,
+                "Clip": "5470057613373953221"
+            },
+            {
+                "Name": "Rock Throw",
+                "Speed": 2,
+                "Clip": "2659056683821727387"
             }
         ],
         "Transitions": [
@@ -409,10 +419,16 @@
                 "Source": "RCP",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": true,
+                "End": false,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 3
+                    }
+                ]
             },
             {
                 "Source": "Run",
@@ -426,6 +442,66 @@
                         "Type": "bool",
                         "CompText": "True",
                         "ParameterIndex": 3
+                    }
+                ]
+            },
+            {
+                "Source": "Ice Nova",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Rock Throw",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Rock Throw",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Ice Nova",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
                     }
                 ]
             }
@@ -617,6 +693,36 @@
                 "Animation_Id": "9011061221571290379",
                 "Frame": 4,
                 "Type": 0
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "5470057613373953221",
+                "Frame": 54,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "5470057613373953221",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "5470057613373953221",
+                "Frame": 74,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "2659056683821727387",
+                "Frame": 23,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "2659056683821727387",
+                "Frame": 38,
+                "Type": 2
             }
         ]
     }

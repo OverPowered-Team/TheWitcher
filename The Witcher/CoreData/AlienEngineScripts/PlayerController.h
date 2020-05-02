@@ -9,6 +9,7 @@ class PlayerAttacks;
 class Relic;
 class Effect;
 class Enemy;
+class CameraShake;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
@@ -18,6 +19,8 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
+	friend class ChillingState;
+
 public:
 	enum (PlayerType,
 		GERALT,
@@ -65,9 +68,9 @@ public:
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
-	void Revive();
-	void ActionRevive();
+	void Revive(float minigame_value);
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
+	void PlayAllowParticle();
 
 	void HitByRock(float time);
 	void RecoverFromRockHit();
@@ -83,9 +86,12 @@ public:
 	void OnUltimateActivation(float value);
 	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
+	void UpdateDashEffect();
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
-	void OnTriggerExit(ComponentCollider* col);
+
+	void StartImmune() { is_immune = true; };
+	void StopImmune() { is_immune = false; };
 
 	void HitFreeze(float freeze_time);
 
@@ -95,6 +101,8 @@ private:
 	void LoadStats();
 	void InitKeyboardControls();
 	void CalculateAABB();
+	void AbsorbHit();
+	std::vector<Effect*>::iterator RemoveEffect(std::vector<Effect*>::iterator it); //this feels dirty :(
 
 public:
 	State* state;
@@ -106,13 +114,19 @@ public:
 	ComponentCharacterController* controller = nullptr;
 
 	float2 movement_input;
+
 	bool mov_input = false;
 	bool is_immune = false;
-	bool is_rooted = false;
+	bool can_move = true;
+	bool input_blocked = false;
 
 	//Relics
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
+
+	//DashCollider
+	Prefab dash_collider;
+	float3 last_dash_position = float3::zero();
 
 	//UI 
 	GameObject* HUD = nullptr;
@@ -122,8 +136,12 @@ public:
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
 
+	//Revive
+	Prefab revive_world_ui;
+
 	//Input Variables
 	int controller_index = 1;
+
 	//Keyboard input
 	SDL_Scancode keyboard_move_up;
 	SDL_Scancode keyboard_move_left;
@@ -136,6 +154,7 @@ public:
 	SDL_Scancode keyboard_spell;
 	SDL_Scancode keyboard_revive;
 	SDL_Scancode keyboard_ultimate;
+
 	//Joystick input
 	Input::CONTROLLER_BUTTONS controller_jump = Input::CONTROLLER_BUTTON_A;
 	Input::CONTROLLER_BUTTONS controller_dash = Input::CONTROLLER_BUTTON_RIGHTSHOULDER;
@@ -145,21 +164,21 @@ public:
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
-	// Bonfire
-	float3 last_checkpoint_position = float3::inf();
-	bool is_near_bonfire = false;
-
 private:
 	float angle = 0.0f;
 	float timer = 0.f;
-	ComponentAudioEmitter* audio = nullptr;
 
+	ComponentAudioEmitter* audio = nullptr;
 	ComponentCamera* camera = nullptr;
+
 	AABB max_aabb;
+	CameraShake* shake = nullptr;
+	float last_regen_tick = 0.0f;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	PlayerController* player = new PlayerController();
+
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(player->controller_index, 1, 2);
 	SHOW_IN_INSPECTOR_AS_ENUM(PlayerController::PlayerType, player->player_data.type);
@@ -168,9 +187,13 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
-	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
+	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
+	SHOW_VOID_FUNCTION(PlayerController::StartImmune, player);
+	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	return player;
 }

@@ -7,57 +7,31 @@
 #include "PlayerController.h"
 
 //ONHIT
-static void ApplyBurnOnHit(Enemy* _enemy, uint size, Effect* effect)
+static void ApplyEffectOnHit(Enemy* _enemy, uint size, EffectData* data)
 {
-    effect->AddFlatModifier(-effect->valor, "Health");
-    effect->name = "fire_runestone";
-    effect->time = size * effect->time;
-    effect->ticks_time = effect->ticks_time;
-    effect->last_tick_time = Time::GetGameTime();
-    effect->start_time = Time::GetGameTime();
-    _enemy->AddEffect(effect);
-}
+    Effect* effect = new Effect(data);
 
-static void ApplyIceOnHit(Enemy* _enemy, uint size, Effect* effect)
-{
-    effect->AddMultiplicativeModifier(effect->valor, "Agility");
-    effect->name = "Ice On Hit";
-    effect->time = size * effect->time;
-    effect->ticks_time = effect->ticks_time;
-    effect->last_tick_time = Time::GetGameTime();
-    effect->start_time = Time::GetGameTime();
-    _enemy->AddEffect(effect);
-}
+    if(strcmp(data->name.data(), "poison_runestone") != 0)
+        effect->time = size * data->time;
 
-static void ApplyLightningOnHit(Enemy* _enemy, uint size, Effect* effect)
-{
+    if (strcmp(data->name.data(), "poison_runestone") == 0)
+    {
+        for (int i = 0; i < effect->additive_modifiers.size(); ++i)
+        {
+            if(effect->additive_modifiers[i].identifier == "Health")
+                effect->additive_modifiers[i].amount = data->additive_modifiers[i].amount * size;
+        }
+    }
     
-}
+    if (strcmp(data->name.data(), "lightning_runestone") == 0)
+        _enemy->Stun(effect->time);
 
-static void ApplyPoisonOnHit(Enemy* _enemy, uint size, Effect* effect)
-{
-    effect->AddFlatModifier(size * effect->valor, "Health");
-    effect->name = "Poison On Hit";
-    effect->time = effect->time;
-    effect->ticks_time = effect->ticks_time;
-    effect->last_tick_time = Time::GetGameTime();
-    effect->start_time = Time::GetGameTime();
     _enemy->AddEffect(effect);
 }
 
 //ONDASH
-static void ApplyBurnOnDash(PlayerController* _player)
+static void ApplyEffectOnDash(Enemy* _enemy, EffectData* data)
 {
-}
-
-static void ApplyIceOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyEarthOnDash(PlayerController* _player)
-{
-}
-
-static void ApplyPoisonOnDash(PlayerController* _player)
-{
+    Effect* effect = new Effect(data);
+    _enemy->AddEffect(effect);
 }

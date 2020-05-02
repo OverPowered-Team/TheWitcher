@@ -71,7 +71,7 @@ public:
 	void StartEnemy() override;
 	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
-	float GetDamaged(float dmg, PlayerController* player) override;
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero()) override;
 
 	void OrientToPlayer(int target);
 
@@ -118,7 +118,7 @@ public:
 ALIEN_FACTORY Leshen* CreateLeshen() {
 	Leshen* leshen = new Leshen();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, leshen->state);
+	/*SHOW_IN_INSPECTOR_AS_ENUM(Enemy::EnemyState, leshen->state);*/
 	SHOW_VOID_FUNCTION(Leshen::ActivateCollider, leshen);
 	SHOW_VOID_FUNCTION(Leshen::DeactivateCollider, leshen);
 	SHOW_IN_INSPECTOR_AS_PREFAB(leshen->root_prefab);

@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "PlayerAttacks.h"
 #include "EventManager.h"
+#include "EffectsFactory.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
 #include "CameraMovement.h"
@@ -10,8 +11,13 @@
 #include "RumblerManager.h"
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
+#include "CameraShake.h"
+
 #include "Bonfire.h"
 #include "Scores_Data.h"
+
+#include "InGame_UI.h"
+#include "DashCollider.h"
 
 #include "UI_Char_Frame.h"
 #include "PlayerController.h"
@@ -31,6 +37,7 @@ void PlayerController::Start()
 	attacks = GetComponent<PlayerAttacks>();
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
+	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
@@ -44,7 +51,11 @@ void PlayerController::Start()
 	// TP to last checkpoint if checkpoint exist
 	if (Scores_Data::last_checkpoint_position.IsFinite())
 	{
-		this->controller->SetPosition(Scores_Data::last_checkpoint_position);
+		this->controller->SetPosition(float3(
+			Scores_Data::last_checkpoint_position.x + (controller_index - 1),
+			Scores_Data::last_checkpoint_position.y, 
+			Scores_Data::last_checkpoint_position.z)
+		);
 	}
 
 	state = new IdleState();
@@ -53,22 +64,28 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
+	if (Input::GetKeyDown(SDL_SCANCODE_F1))
+	{
+		Effect* new_effect = GameManager::instance->effects_factory->CreateEffect("Geralt_Quen");
+		AddEffect(new_effect);
+	}
+
 	UpdateInput();
 
-	//State Machine-----------------
-	State* new_state = state->HandleInput(this);
-	state->Update(this);
-
+	//State Machine--------------------------------------------------------
+	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
 	if (new_state != nullptr)
 		SwapState(new_state);
-	//------------------------------
+
+	state->Update(this);
+	//---------------------------------------------------------------------
 
 	//Effects-----------------------------
 	EffectsUpdate();
 
 	//MOVEMENT
 	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if(CheckBoundaries() && !is_rooted)
+	if(CheckBoundaries() && can_move)
 		controller->Move(player_data.speed * Time::GetDT());
 
 	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
@@ -99,13 +116,13 @@ void PlayerController::UpdateInput()
 		keyboardInput.y = 1.f;
 	}
 
-	if (keyboardInput.Length() > 0)
+	if (keyboardInput.Length() > 0 && !input_blocked)
 	{
 		mov_input = true;
 		keyboardInput.Normalize();
 		movement_input = keyboardInput;
 	}
-	else if (joystickInput.Length() > 0) {
+	else if (joystickInput.Length() > 0 && !input_blocked) {
 		mov_input = true;
 		movement_input = joystickInput;
 	}
@@ -168,13 +185,13 @@ void PlayerController::SwapState(State* new_state)
 
 void PlayerController::ApplyRoot(float time)
 {
-	is_rooted = true;
+	can_move = false;
 	Invoke(std::bind(&PlayerController::ReleaseRoot, this), time);
 }
 
 void PlayerController::ReleaseRoot()
 {
-	is_rooted = false;
+	can_move = true;
 }
 
 bool PlayerController::AnyKeyboardInput()
@@ -189,26 +206,36 @@ bool PlayerController::AnyKeyboardInput()
 
 void PlayerController::HandleMovement()
 {
-	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
+	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
 
-	float speed_y = player_data.speed.y;
-	player_data.speed = -direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;
-
-	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-	direction_vector.y = 0.f;
+	direction_vector = (Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector).Normalized();
+	float tmp_y = player_data.speed.y;
+	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue();
+	player_data.speed.y = tmp_y;
 
 	//rotate
 	if (mov_input)
 	{
-		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-		transform->SetGlobalRotation(rot);
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
 	}
 }
 
 void PlayerController::EffectsUpdate()
 {
+	if (Time::GetGameTime() - last_regen_tick > 1.0f)
+	{
+		player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos_Regen"].GetValue());
+		player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+
+		if (HUD)
+		{
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+		}
+
+		last_regen_tick = Time::GetGameTime();
+	}
+
 	for (auto it = effects.begin(); it != effects.end();)
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
@@ -222,16 +249,19 @@ void PlayerController::EffectsUpdate()
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 					if (player_data.stats["Health"].GetValue() == 0)
+					{
+						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
+					}
 				}
 			}
 			if (particles[(*it)->name])
 				particles[(*it)->name]->SetEnable(true);
 		}
+
 		if ((*it)->to_delete)
 		{
-			delete (*it);
-			it = effects.erase(it);
+			it = RemoveEffect(it);
 			continue;
 		}
 		++it;
@@ -244,6 +274,16 @@ void PlayerController::PlayAttackParticle()
 	{
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);
+	}
+}
+
+void PlayerController::PlayAllowParticle()
+{
+	if (attacks->GetCurrentAttack())
+	{
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);
+
 	}
 }
 
@@ -274,11 +314,11 @@ void PlayerController::PickUpRelic(Relic* _relic)
 		AddEffect(_relic->effects.at(i));
 	}
 }
-void PlayerController::Revive()
+void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
+	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 	is_immune = false;
 
 	if(HUD)
@@ -292,24 +332,27 @@ void PlayerController::Revive()
 	SetState(StateType::IDLE);
 }
 
-void PlayerController::ActionRevive()
-{
-	player_being_revived->Revive();
-	animator->SetBool("reviving", false);
-	player_being_revived = nullptr;
-}
-
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 {
+	if (player_data.stats["Absorb"].GetValue() > 0)
+	{
+		AbsorbHit();
+		return;
+	}
+
 	player_data.stats["Health"].DecreaseStat(dmg);
 
-	if(HUD)
+	if (HUD)
+	{
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	}
 
 	attacks->CancelAttack();
-
 	if (player_data.stats["Health"].GetValue() == 0)
+	{	
+		shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 		Die();
+	}
 	else
 	{
 		animator->PlayState("Hit");
@@ -321,6 +364,20 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
 }
 
+void PlayerController::AbsorbHit()
+{
+	for (auto it = effects.begin(); it != effects.end();)
+	{
+		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
+		{
+			if (mods->identifier == "Absorb")
+			{
+				RemoveEffect(it);
+				return;
+			}
+		}
+	}
+}
 #pragma endregion PlayerActions
 
 void PlayerController::HitByRock(float time)
@@ -338,6 +395,16 @@ void PlayerController::RecoverFromRockHit()
 
 void PlayerController::AddEffect(Effect* _effect)
 {
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it)->name == _effect->name)
+		{
+			(*it)->start_time = Time::GetGameTime(); //Refresh timer
+			delete _effect;
+			return;
+		}
+	}
+
 	effects.push_back(_effect);
 
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
@@ -352,6 +419,42 @@ void PlayerController::AddEffect(Effect* _effect)
 				it->second.ApplyEffect(_effect);
 		}
 	}
+
+	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
+	if (go)
+		particles.insert(std::pair(_effect->vfx_on_apply, go));
+}
+std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
+{
+	Effect* tmp_effect = (*it);
+	it = effects.erase(it);
+
+	if (dynamic_cast<AttackEffect*>(tmp_effect) != nullptr)
+	{
+		attacks->OnRemoveAttackEffect(((AttackEffect*)tmp_effect));
+	}
+	else
+	{
+		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
+		{
+			if (tmp_effect->AffectsStat(it->second.name))
+				it->second.RemoveEffect(tmp_effect);
+		}
+	}
+
+	for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (it->first == tmp_effect->vfx_on_apply)
+		{
+			GameObject::Destroy(it->second);
+			it = particles.erase(it);
+		}
+		else
+			++it;
+	}
+
+	delete tmp_effect;
+	return it;
 }
 bool PlayerController::CheckBoundaries()
 {
@@ -406,10 +509,15 @@ bool PlayerController::CheckForPossibleRevive()
 			return true;
 		}
 	}
+
+	return false;
 }
 
 void PlayerController::HitFreeze(float freeze_time)
 {
+	if (is_immune)
+		return;
+
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
 	is_immune = true;
@@ -433,10 +541,12 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	if (new_state != nullptr)
 		SwapState(new_state);
 }
+
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
 	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+	attacks->OnHit(enemy);
 
 	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
@@ -446,22 +556,61 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 			AttackEffect* a_effect = (AttackEffect*)(*it);
 			if (a_effect->GetAttackIdentifier() == attacks->GetCurrentAttack()->info.name)
 			{
-				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size(), a_effect);
+				a_effect->OnHit(enemy, attacks->GetCurrentAttack()->info.name.size(), a_effect->on_hit_effect);
 			}
 		}
 	}
 }
+
+void PlayerController::UpdateDashEffect()
+{
+	if (this->transform->GetGlobalPosition().DistanceSq(last_dash_position) >= 0.25)
+	{
+		last_dash_position = this->transform->GetGlobalPosition();
+		for (auto it = effects.begin(); it != effects.end(); ++it)
+		{
+			if (dynamic_cast<DashEffect*>(*it) != nullptr)
+			{
+				GameObject* go = GameObject::Instantiate(dash_collider, this->transform->GetGlobalPosition());
+				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
+				DashCollider* dash_coll = go->GetComponent<DashCollider>();
+				dash_coll->effect = (DashEffect*)(*it);
+				if (dash_coll->dash_particles[(*it)->name])
+					dash_coll->dash_particles[(*it)->name]->SetEnable(true);
+			}
+		}
+	}
+}
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
-	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
+	if ((strcmp("Bonfire", col->game_object_attached->GetName()) == 0))
 	{
-		is_near_bonfire = true;
-		last_checkpoint_position = col->game_object_attached->GetComponent<Bonfire>()->checkpoint->transform->GetGlobalPosition();
+		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
+
+		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
+		{
+			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+			{
+				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
+			}
+
+			// Heal
+			player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+			player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+
+
+			// Player Used this Bonfire
+			bonfire->SetBonfireUsed(this);
+		}
 	}
 
 	if (!godmode)
 	{
-		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {
+		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
 
 			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
 
@@ -481,19 +630,12 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	}
 }
 
-void PlayerController::OnTriggerExit(ComponentCollider* col)
-{
-	if (strcmp("Bonfire", col->game_object_attached->GetName()) == 0)
-	{
-		is_near_bonfire = false;
-	}
-}
-
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }
+
 void PlayerController::OnUltimateActivation(float value)
 {
 	animator->IncreaseAllStateSpeeds(2.0f);
@@ -513,22 +655,14 @@ void PlayerController::OnDrawGizmosSelected()
 void PlayerController::LoadStats()
 {
 	std::string character_string = player_data.type == PlayerController::PlayerType::GERALT ? "Geralt" : "Yennefer";
-	std::string json = "GameData/Players/" + character_string + "Stats.json";
+	std::string json_string = "GameData/Players/" + character_string + "Stats.json";
 
-	JSONfilepack* stats_json = JSONfilepack::GetJSON(json.c_str());
-	if (stats_json)
-	{
-		player_data.stats["Health"] = Stat("Health", stats_json->GetNumber("Health"));
-		player_data.stats["Strength"] = Stat("Strength", stats_json->GetNumber("Strength"));
-		player_data.stats["Chaos"] = Stat("Chaos", stats_json->GetNumber("Chaos"));
-		player_data.stats["Chaos_Regen"] = Stat("Chaos_Regen", stats_json->GetNumber("Chaos_Regen"));
-		player_data.stats["Attack_Speed"] = Stat("Attack_Speed", stats_json->GetNumber("Attack_Speed"));
-		player_data.stats["Movement_Speed"] = Stat("Movement_Speed", stats_json->GetNumber("Movement_Speed"));
-		player_data.stats["Dash_Power"] = Stat("Dash_Power", stats_json->GetNumber("Dash_Power"));
-		player_data.stats["Jump_Power"] = Stat("Jump_Power", stats_json->GetNumber("Jump_Power"));
-	}
+	JSONfilepack* json = JSONfilepack::GetJSON(json_string.c_str());
+	JSONArraypack* stats_json = json->GetArray("Stats");
 
-	JSONfilepack::FreeJSON(stats_json);
+	Stat::FillStats(player_data.stats, stats_json);
+
+	JSONfilepack::FreeJSON(json);
 }
 void PlayerController::InitKeyboardControls()
 {

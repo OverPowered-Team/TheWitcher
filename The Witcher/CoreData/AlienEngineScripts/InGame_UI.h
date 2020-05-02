@@ -14,19 +14,30 @@ public:
 	void Update();
 
 	void PauseMenu(bool to_open);
+	
 	void YouDied();
+	void ShowCheckpointSaved();
+
+public:
+
+	GameObject* in_game = nullptr;
+	GameObject* pause_menu = nullptr;
+
+private:
 
 	bool died = false;
 	bool died_gone = false;
 
-	float time = 0.0;
+	float time = 0.0f;
 	int waiting = 1;
 
-	GameObject* in_game = nullptr;
-	GameObject* pause_menu = nullptr;
 	GameObject* you_died = nullptr;
 	GameObject* relics_panel = nullptr;
 	bool pause_active = false;
+
+	// Checkpoint Saved Text
+	GameObject* checkpoint_saved_text = nullptr;
+	float time_checkpoint = 0.0f;
 };
 
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {

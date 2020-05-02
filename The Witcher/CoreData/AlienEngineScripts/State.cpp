@@ -1,28 +1,50 @@
 #include "GameManager.h"
-#include "RumblerManager.h"
+#include "PlayerManager.h"
 #include "EventManager.h"
 
+#include "MiniGame_Revive.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
-
-#include "UI_Char_Frame.h"
-
-#include "Scores_Data.h"
 
 #include "State.h"
 
 State* IdleState::HandleInput(PlayerController* player)
 {
+	if (player->movement_input.Length() > 0)
+	{
+		return new RunningState();
+	}
 	if (!player->controller->isGrounded)
 	{
 		player->Fall();
 		return new JumpingState();
 	}
-	if (player->movement_input.Length() > 0)
-	{
-		return new RunningState();
+
+	if (Input::GetControllerTriggerLeft(player->controller_index) == 1.0
+		|| Input::GetKeyDown(player->keyboard_spell)) {
+
+		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
+		{
+			if (player->attacks->StartSpell(0))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
+		{
+			if (player->attacks->StartSpell(1))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
+		{
+			if (player->attacks->StartSpell(2))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
+		{
+			if (player->attacks->StartSpell(3))
+				return new AttackingState();
+		}
 	}
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		return new AttackingState();
@@ -30,15 +52,10 @@ State* IdleState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_spell)
-		|| Input::GetKeyDown(player->keyboard_spell)) {
-		player->attacks->StartSpell(0);
-		return new CastingState();
-	}
+	
 
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_dash)
 		|| Input::GetKeyDown(player->keyboard_dash))
@@ -60,15 +77,6 @@ State* IdleState::HandleInput(PlayerController* player)
 			player->animator->SetBool("reviving", true);
 			return new RevivingState();
 		}
-		else if (player->is_near_bonfire)
-		{
-			// Checkpoint
-			Scores_Data::last_checkpoint_position = player->last_checkpoint_position;
-
-			// Rest
-			player->player_data.stats["Health"].IncreaseStat(player->player_data.stats["Health"].GetMaxValue());
-			player->HUD->GetComponent<UI_Char_Frame>()->LifeChange(player->player_data.stats["Health"].GetValue(), player->player_data.stats["Health"].GetMaxValue());
-		}
 	}
 
 	return nullptr;
@@ -76,6 +84,10 @@ State* IdleState::HandleInput(PlayerController* player)
 
 void IdleState::Update(PlayerController* player)
 {
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void IdleState::OnEnter(PlayerController* player)
@@ -89,27 +101,48 @@ void IdleState::OnExit(PlayerController* player)
 
 State* RunningState::HandleInput(PlayerController* player)
 {
+	if (!player->mov_input)
+	{
+		return new IdleState();
+	}
 	if (!player->controller->isGrounded)
 	{
 		player->Fall();
 		return new JumpingState();
 	}
 
-	if (!player->mov_input)
-	{
-		return new IdleState();
-	}
+	if (Input::GetControllerTriggerLeft(player->controller_index) == 1.0
+		|| Input::GetKeyDown(player->keyboard_spell)) {
 
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
+		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
+		{
+			if(player->attacks->StartSpell(0))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
+		{
+			if (player->attacks->StartSpell(1))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
+		{
+			if (player->attacks->StartSpell(2))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
+		{
+			if (player->attacks->StartSpell(3))
+				return new AttackingState();
+		}
+	}
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		return new AttackingState();
 	}
-
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
@@ -148,6 +181,11 @@ void RunningState::Update(PlayerController* player)
 		player->audio->StartSound();
 	}
 	player->HandleMovement();
+
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void RunningState::OnEnter(PlayerController* player)
@@ -196,7 +234,27 @@ void JumpingState::OnExit(PlayerController* player)
 
 State* AttackingState::HandleInput(PlayerController* player)
 {
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
+	if (Input::GetControllerTriggerLeft(player->controller_index) == 1.0
+		|| Input::GetKeyDown(player->keyboard_spell)) {
+
+		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 0);
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 1);
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 2);
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 3);
+		}
+	}
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack))
 		player->attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
@@ -239,6 +297,7 @@ void AttackingState::OnExit(PlayerController* player)
 void RollingState::Update(PlayerController* player)
 {
 	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->UpdateDashEffect();
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -270,13 +329,12 @@ void RollingState::OnEnter(PlayerController* player)
 
 	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
-
-	player->is_immune = true;
+	player->last_dash_position = player->transform->GetGlobalPosition();
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
-	player->is_immune = false;
+
 }
 
 void CastingState::Update(PlayerController* player)
@@ -314,29 +372,34 @@ State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void HitState::OnEnter(PlayerController* player)
 {
+	if (player->player_being_revived != nullptr)
+	{
+		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
+	}
 }
 
 void HitState::OnExit(PlayerController* player)
 {
 }
 
-State* RevivingState::OnAnimationEnd(PlayerController* player, const char* name)
+void RevivingState::Update(PlayerController* player)
 {
-	if (strcmp(name, "RCP") == 0) {
-		player->ActionRevive();
-		return new IdleState();
-	}
-	return nullptr;
+
 }
 
 void RevivingState::OnEnter(PlayerController* player)
 {
+	player->input_blocked = true;
 	player->player_data.speed = float3::zero();
 	player->animator->SetBool("reviving", true);
+	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
 
 void RevivingState::OnExit(PlayerController* player)
 {
+	player->animator->SetBool("reviving", false);
+	if(player->player_being_revived->state->type != StateType::DEAD)player->player_being_revived = nullptr;
+	player->input_blocked = false;
 }
 
 void DeadState::OnEnter(PlayerController* player)
@@ -346,6 +409,11 @@ void DeadState::OnEnter(PlayerController* player)
 	player->player_data.speed = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
+	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, float3(player->game_object->transform->GetGlobalPosition().x + vector.x, player->game_object->transform->GetGlobalPosition().y + vector.y + 1, player->game_object->transform->GetGlobalPosition().z + vector.z));
+	revive_world_ui->transform->SetLocalScale(1, 1, 1);
+	revive_world_ui->SetNewParent(player->game_object);
+	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
 
 void DeadState::OnExit(PlayerController* player)
