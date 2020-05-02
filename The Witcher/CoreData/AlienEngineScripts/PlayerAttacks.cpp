@@ -202,7 +202,7 @@ void PlayerAttacks::SnapToTarget()
 	player_controller->transform->SetGlobalRotation(rot);
 
 	float speed = 0.0f;
-	float distance = transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition());
+	float distance = abs(transform->GetGlobalPosition().Distance(current_target->transform->GetGlobalPosition()));
 
 	if (distance_snapped < current_attack->info.max_distance_traveled && distance > current_attack->info.min_distance_to_target)
 	{
@@ -374,10 +374,8 @@ void PlayerAttacks::CastSpell()
 
 void PlayerAttacks::OnHit(Enemy* enemy)
 {
-	if (!current_attack->CanHit(enemy))
-		return;
-
 	current_attack->enemies_hit.push_back(enemy);
+
 	if (current_attack->HasTag(Attack_Tags::T_Debuff))
 	{
 		enemy->AddEffect(GameManager::instance->effects_factory->CreateEffect(current_attack->info.effect));

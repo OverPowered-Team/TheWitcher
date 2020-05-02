@@ -222,7 +222,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
 		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player)
+		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
 			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
