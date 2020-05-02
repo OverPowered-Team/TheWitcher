@@ -85,41 +85,46 @@ void UI_Char_Frame::Update()
 // Bar Changes
 void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 {
-	now_life = lifebar->GetBarValue();
-
-	life_change = actual_life;
-	this->max_life = max_life;
-
 	float life_percentate = actual_life / max_life;
-
-	if (life_percentate <= 0.15f)
+	if (life_percentate != lifebar->GetBarValue())
 	{
-		low_life = true;
-		low_life_glow_time = Time::GetGameTime();
-	}
-	else
-	{
-		low_life = false;
-	}
+		now_life = lifebar->GetBarValue();
 
-	if (now_life > life_percentate)
-	{
-		player_hit = true;
-	}
+		life_change = actual_life;
+		this->max_life = max_life;
 
-	changing_life = true;
-	time = Time::GetGameTime();
+		if (life_percentate <= 0.15f)
+		{
+			low_life = true;
+			low_life_glow_time = Time::GetGameTime();
+		}
+		else
+		{
+			low_life = false;
+		}
+
+		if (now_life > life_percentate)
+		{
+			player_hit = true;
+		}
+
+		changing_life = true;
+		time = Time::GetGameTime();
+	}
 }
 
 void UI_Char_Frame::ManaChange(float mana_change, float max_mana)
 {
-	actual_chaos = mana_bar->GetBarValue();
+	if ((mana_change / max_mana) != mana_bar->GetBarValue())
+	{
+		actual_chaos = mana_bar->GetBarValue();
 
-	chaos_change = mana_change;
-	max_chaos = max_mana;
+		chaos_change = mana_change;
+		max_chaos = max_mana;
 
-	changing_chaos = true;
-	chaos_time = Time::GetGameTime();
+		changing_chaos = true;
+		chaos_time = Time::GetGameTime();
+	}
 }
 
 // Effects

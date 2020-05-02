@@ -225,11 +225,11 @@ void PlayerController::EffectsUpdate()
 	if (Time::GetGameTime() - last_regen_tick > 1.0f)
 	{
 		player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos_Regen"].GetValue());
-		player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+		//player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
 
 		if (HUD)
 		{
-			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+			//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 			HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
 		}
 
