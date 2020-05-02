@@ -2,23 +2,25 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
+#include "Enemy.h"
 
-
-class Enemy;
-
-class ALIEN_ENGINE_API BlockerObstacle : public Alien {
+class ALIEN_ENGINE_API BlockerObstacle : public Enemy {
 
 public:
 
 	BlockerObstacle();
 	virtual ~BlockerObstacle();
-	
+	void SetStats(const char* json) override;
+
+	void StartEnemy() override;
+	void UpdateEnemy() override;
+	void CleanUpEnemy() override;
+
 	void Start();
 	void Update();
 	void CleanUp();
 	void LookForMyChildren();
 	void ManageHealth();
-	void OnTriggerEnter(ComponentCollider* collider);
 public:
 	float health = 0.f;
 	float minimum_health = 0.f;
