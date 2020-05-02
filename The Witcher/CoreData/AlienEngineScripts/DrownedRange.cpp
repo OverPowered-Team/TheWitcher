@@ -17,18 +17,28 @@ void DrownedRange::UpdateEnemy()
 	switch (state)
 	{
 	case DrownedState::IDLE:
-		if (distance < stats["AttackRange"].GetValue())
+		if (distance < stats["AttackRange"].GetValue() && distance > stats["HideDistance"].GetValue())
 		{
 			animator->SetFloat("speed", 0.0F);
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 			animator->PlayState("GetOff");
-			state = DrownedState::ATTACK;
+			state = DrownedState::GETOFF;
 			is_hide = false;
 		}
 		break;
 
+	case DrownedState::GETOFF:
+		if (transform->GetGlobalScale().y < 0.006)
+			transform->AddScale(float3(0.0f, 0.0001f, 0.0f));
+		else
+		{
+			state = DrownedState::ATTACK;
+			animator->PlayState("Attack");
+		}
+		break;
+
 	case DrownedState::ATTACK:
-		if (distance < stats["HideDistance"].GetValue())
+		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
 		{
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
@@ -39,6 +49,7 @@ void DrownedRange::UpdateEnemy()
 		if (Time::GetGameTime() - current_hide_time > max_hide_time)
 		{
 			animator->PlayState("Hide");
+			transform->AddScale(float3(0.0f, -0.005f, 0.0f));
 			state = DrownedState::IDLE;
 			is_hide = true;
 		}
@@ -56,12 +67,7 @@ void DrownedRange::UpdateEnemy()
 
 void DrownedRange::OnAnimationEnd(const char* name)
 {
-	if (strcmp(name, "GetOff") == 0)
-	{
-		state = DrownedState::ATTACK;
-		animator->PlayState("Attack");
-	}
-	else if (strcmp(name, "Attack") == 0)
+	if (strcmp(name, "Attack") == 0)
 	{
 		state = DrownedState::ATTACK;
 		animator->PlayState("Attack");

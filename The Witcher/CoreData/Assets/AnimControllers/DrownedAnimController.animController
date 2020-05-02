@@ -1,13 +1,80 @@
 {
     "Controller": {
         "Name": "DrownedAnimController",
-        "NumStates": 0,
-        "NumTransitions": 0,
-        "States": [],
-        "Transitions": [],
+        "NumStates": 6,
+        "NumTransitions": 2,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "6535522296308659848"
+            },
+            {
+                "Name": "GetOff",
+                "Speed": 1,
+                "Clip": "6535522296308659848"
+            },
+            {
+                "Name": "Attack",
+                "Speed": 1,
+                "Clip": "8670259325049152291"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "11546414413718116826"
+            },
+            {
+                "Name": "Dizzy",
+                "Speed": 1,
+                "Clip": "7795381935914547974"
+            },
+            {
+                "Name": "Hide",
+                "Speed": 1,
+                "Clip": "6535522296308659848"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Dizzy",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Death",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            }
+        ],
         "IntParameters": [],
         "FloatParameters": [],
-        "BoolParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            }
+        ],
         "Events": []
     }
 }

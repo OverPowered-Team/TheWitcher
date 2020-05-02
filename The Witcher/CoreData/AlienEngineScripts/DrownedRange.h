@@ -19,15 +19,14 @@ public:
 public:
 	float current_hide_time = 0.0f;
 	float max_hide_time = 3.0f;
-
-private:
-	bool is_hide = true;
 };
 
 ALIEN_FACTORY DrownedRange* CreateDrownedRange() {
 	DrownedRange* drowned = new DrownedRange();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(drowned->max_hide_time);
+	SHOW_IN_INSPECTOR_AS_ENUM(Drowned::DrownedType, drowned->drowned_type);
+	SHOW_IN_INSPECTOR_AS_ENUM(Drowned::DrownedState, drowned->state);
 
 	return drowned;
 } 

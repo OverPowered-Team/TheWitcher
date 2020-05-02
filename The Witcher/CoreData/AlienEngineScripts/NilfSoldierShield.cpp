@@ -105,7 +105,7 @@ bool NilfSoldierShield::CheckPlayerForward()
 {
 	float angle = transform->forward.AngleBetween(player_controllers[current_player]->transform->forward) * RADTODEG;
 	LOG("Angle: %f", angle);
-	if (angle > 120 && angle < 180)
+	if (angle > 100 && angle < 200)
 		return true;
 	else
 		return false;
