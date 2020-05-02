@@ -2,7 +2,8 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
-#include "Enemy.h"
+
+class Enemy;
 
 class ALIEN_ENGINE_API MusicController : public Alien {
 
@@ -21,7 +22,6 @@ public:
 	bool is_combat = false;
 	bool has_changed = false;
 	std::string last_music;
-	//int enemies_in_sight = 0;
 	std::list<Enemy*>enemies_in_sight;
 };
 
