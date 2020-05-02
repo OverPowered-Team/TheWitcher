@@ -32,7 +32,7 @@ void Leshen::CleanUpEnemy()
 	Boss::CleanUpEnemy();
 }
 
-float Leshen::GetDamaged(float dmg, PlayerController* player)
+float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
 	HandleHitCount();
 	return Boss::GetDamaged(dmg, player);

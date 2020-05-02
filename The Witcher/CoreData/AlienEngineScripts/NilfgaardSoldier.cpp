@@ -53,9 +53,9 @@ void NilfgaardSoldier::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player)
+float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
-	float damage = Enemy::GetDamaged(dmg, player);
+	float damage = Enemy::GetDamaged(dmg, player, knock);
 
 	if (can_get_interrupted) {
 		state = NilfgaardSoldierState::HIT;
@@ -73,7 +73,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player)
 		animator->SetBool("dead", true);
 		OnDeathHit();
 
-		if (player->attacks->GetCurrentAttack()->IsLast())
+		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
 		{
 			state = NilfgaardSoldierState::DYING;
 			audio_emitter->StartSound("SoldierDeath");
@@ -225,7 +225,10 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 		if (player)
 		{
 			float dmg_received = player->attacks->GetCurrentDMG();
-			player->OnHit(this, GetDamaged(dmg_received, player));
+			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+
+			player->OnHit(this, GetDamaged(dmg_received, player, knock));
 
 			if (state == NilfgaardSoldierState::DYING)
 				player->OnEnemyKill();

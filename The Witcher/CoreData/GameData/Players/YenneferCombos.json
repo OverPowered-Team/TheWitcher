@@ -492,13 +492,14 @@
     }
   ],
   "Spells": [
-    {
+      {
       "tags": [
         { "tag": "AOE" },
-        { "tag": "Spell" }
+        { "tag": "Spell" },
+		{ "tag": "Debuff" }
       ],
-      "name": "Fthrower",
-      "particle_name": "p_flamethrower",
+      "name": "Ice Nova",
+      "particle_name": "p_ice_nova",
       "prefab_to_spawn": "",
       "stats": [
         {
@@ -507,56 +508,24 @@
         },
         {
           "name": "Cost",
-          "value": 85
+          "value": 100
         }
       ],
-      "effect": "",
-      "activation_frame": 13,
-      "movement_strength": 0.6,
-      "max_snap_distance": 1,
-      "collider": {
-        "pos_x": -11,
-        "pos_y": 0,
-        "pos_z": 380,
-        "width": 100,
-        "height": 100,
-        "depth": 550
-      },
-      "freeze_time": 0.1
-    },
-    {
-      "tags": [
-        { "tag": "AOE" },
-        { "tag": "Spell" }
-      ],
-      "name": "Earth Projectile",
-      "particle_name": "p_flamethrower",
-      "prefab_to_spawn": "",
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 20
-        },
-        {
-          "name": "Cost",
-          "value": 85
-        }
-      ],
-      "effect": "",
+      "effect": "Ice_Nova_Slow",
       "activation_frame": 25,
-      "movement_strength": 3.0,
-      "max_snap_distance": 3,
+      "movement_strength": 0,
+      "max_snap_distance": 0,
       "collider": {
         "pos_x": 0,
-        "pos_y": 0,
+        "pos_y": 375,
         "pos_z": 0,
-        "width": 200,
-        "height": 200,
-        "depth": 200
+        "width": 1500,
+        "height": 750,
+        "depth": 1500
       },
       "freeze_time": 0.1
     },
-    {
+	    {
       "tags": [
         { "tag": "AOE" },
         { "tag": "Spell" }
@@ -591,25 +560,26 @@
     {
       "tags": [
         { "tag": "AOE" },
-        { "tag": "Spell" }
+        { "tag": "Spell" },
+		{ "tag": "Projectile" }
       ],
-      "name": "Ice Area",
+      "name": "Rock Throw",
       "particle_name": "p_flamethrower",
-      "prefab_to_spawn": "",
+      "prefab_to_spawn": "Yenn_Rock_Projectile",
       "stats": [
         {
           "name": "Damage",
-          "value": 0
+          "value": 20
         },
         {
           "name": "Cost",
-          "value": 100
+          "value": 85
         }
       ],
       "effect": "",
       "activation_frame": 25,
-      "movement_strength": 3.0,
-      "max_snap_distance": 3,
+      "movement_strength": 0,
+      "max_snap_distance": 5,
       "collider": {
         "pos_x": 0,
         "pos_y": 0,
@@ -617,6 +587,38 @@
         "width": 0,
         "height": 0,
         "depth": 0
+      },
+      "freeze_time": 0.1
+    },
+	{
+      "tags": [
+        { "tag": "AOE" },
+        { "tag": "Spell" }
+      ],
+      "name": "Fthrower",
+      "particle_name": "p_flamethrower",
+      "prefab_to_spawn": "",
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 20
+        },
+        {
+          "name": "Cost",
+          "value": 85
+        }
+      ],
+      "effect": "",
+      "activation_frame": 13,
+      "movement_strength": 0.6,
+      "max_snap_distance": 1,
+      "collider": {
+        "pos_x": -11,
+        "pos_y": 0,
+        "pos_z": 380,
+        "width": 100,
+        "height": 100,
+        "depth": 550
       },
       "freeze_time": 0.1
     }

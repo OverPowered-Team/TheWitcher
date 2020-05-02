@@ -41,14 +41,14 @@ public:
 	void DeactivateCollider();
 
 	virtual void Stun(float time) {};
-	virtual void KnockBack(PlayerController* player);
+	virtual void KnockBack(float3 knock);
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
 
-	virtual float GetDamaged(float dmg, PlayerController* player);
+	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	void AddEffect(Effect* new_effect);
 	void RemoveEffect(Effect* _effect);
 
