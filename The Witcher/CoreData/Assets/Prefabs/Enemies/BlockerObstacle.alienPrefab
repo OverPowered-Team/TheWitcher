@@ -1,0 +1,155 @@
+{
+    "Name": "BlockerObstacle",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "BlockerObstacle",
+                "FamilyNumber": 1,
+                "ID": "6285560399417630752",
+                "ParentID": "11028302901365829920",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8098719037413561835",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            13.590080261230469,
+                            2.4770481586456299,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2192764249519586675"
+                    },
+                    {
+                        "Type": 13,
+                        "SlopeLimit": 45,
+                        "StepOffset": 0.5,
+                        "SkinWidth": 0.10000000149011612,
+                        "MinMoveDistance": 0.0010000000474974513,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "CharacterRadius": 0.5,
+                        "CharacterHeight": 2,
+                        "Gravity": 20,
+                        "ForceGravity": true,
+                        "ForceMove": false,
+                        "CollisionLayer": "Default"
+                    },
+                    {
+                        "ID": "16308645511181815619",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    },
+                    {
+                        "Type": 14,
+                        "ID": "5911576262516379707",
+                        "ControllerID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7561435079474234596",
+                        "ResourceID": "4581215173429975826",
+                        "DataName": "BlockerObstacle",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "EnemyAttack",
+                "FamilyNumber": 2,
+                "ID": "9079591918863154421",
+                "ParentID": "6285560399417630752",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8098719037413561835",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -1.4323797225952148,
+                            -2.477046012878418,
+                            -1.2114095687866211
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1.0193040370941162,
+                            1.0193040370941162,
+                            1.0193040370941162
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2566042118786155462"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

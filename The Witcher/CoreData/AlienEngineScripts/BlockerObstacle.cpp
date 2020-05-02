@@ -1,5 +1,7 @@
 #include "BlockerObstacle.h"
 #include "EnemyManager.h"
+#include "PlayerController.h"
+#include "PlayerAttacks.h"
 
 BlockerObstacle::BlockerObstacle() : Enemy()
 {
@@ -23,38 +25,37 @@ void BlockerObstacle::SetStats(const char* json)
 
 	JSONfilepack::FreeJSON(stat);
 
-	LOG("MY LIFE: %d", stats["Health"].GetValue());
+	LOG("MY LIFE: %f", stats["Health"].GetValue());
 }
 
 void BlockerObstacle::StartEnemy()
 {
 	type = EnemyType::BLOCKER_OBSTACLE;
 	Enemy::StartEnemy();
+	state = ObstacleState::IDLE;
+	children_enemies = this->game_object->GetChildren();
 }
 
 void BlockerObstacle::UpdateEnemy()
 {
 	Enemy::UpdateEnemy();
-	LOG("MY LIFE: %d", stats["Health"].GetValue());
+	LOG("MY LIFE: %f", stats["Health"].GetValue());
 	switch (state)
 	{
-	case Enemy::EnemyState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+	case ObstacleState::IDLE: {
+		//if (distance < stats["VisionRange"].GetValue())
 			//LookForMyChildren();
-		break;
-	case Enemy::EnemyState::MOVE:
-		break;
-	case Enemy::EnemyState::BLOCK:
-		break;
-	case Enemy::EnemyState::ATTACK:
-		break;
-	case Enemy::EnemyState::DYING:
+			break;
+	}
+	case ObstacleState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-		state = EnemyState::DEAD;
+		state = ObstacleState::DEAD;
 		break;
 	}
+	case ObstacleState::DEAD:
+		break;
 	default:
 		LOG("There's no state");
 		break;
@@ -66,22 +67,18 @@ void BlockerObstacle::CleanUpEnemy()
 	children_enemies.clear();
 }
 
-void BlockerObstacle::Start()
+float BlockerObstacle::GetDamaged(float dmg, PlayerController* player)
 {
-	children_enemies = this->game_object->GetChildren();
-	LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
-	LOG("NEW HEALTH: %f", health);
-}
+	float damage = Enemy::GetDamaged(dmg, player);
+	if (stats["Health"].GetValue() == 0.0F) {
 
-void BlockerObstacle::Update()
-{
-	//THIS HAS TO BE WITHIN A RANGE OR RADIUS 
-	
-}
-
-void BlockerObstacle::CleanUp()
-{
-
+		//animator->SetBool("dead", true);
+		//OnDeathHit();
+		state = ObstacleState::DYING;
+		/*audio_emitter->StartSound("GhoulDeath");*/
+		player->OnEnemyKill();
+	}
+	return damage;
 }
 
 void BlockerObstacle::LookForMyChildren()
@@ -89,7 +86,7 @@ void BlockerObstacle::LookForMyChildren()
 	auto iter = children_enemies.begin();
 	while(iter != children_enemies.end())
 	{
-		if ((*iter)->GetComponent<Enemy>()->state == Enemy::EnemyState::DEAD)
+		if ((*iter)->GetComponent<Enemy>()->IsDead())
 		{
 			iter = children_enemies.erase(iter);
 			ManageHealth();
@@ -103,10 +100,26 @@ void BlockerObstacle::LookForMyChildren()
 
 void BlockerObstacle::ManageHealth()
 {
-	if (health <= minimum_health || children_enemies.size() <= 0)
-		return;
-	//FOR NOW THIS WILL BE A THREE RULE CALCULATION
-	health -= ((health - minimum_health) / children_enemies.size());
-	LOG("NEW HEALTH: %f", health);
+	//if (health <= minimum_health || children_enemies.size() <= 0)
+	//	return;
+	////FOR NOW THIS WILL BE A THREE RULE CALCULATION
+	//health -= ((health - minimum_health) / children_enemies.size());
+	//LOG("NEW HEALTH: %f", health);
 }
 
+void BlockerObstacle::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != ObstacleState::DEAD) {
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+		if (player)
+		{
+			float dmg_received = player->attacks->GetCurrentDMG();
+			player->OnHit(this, GetDamaged(dmg_received, player));
+
+			if (state == ObstacleState::DYING)
+				player->OnEnemyKill();
+
+			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+		}
+	}
+}
