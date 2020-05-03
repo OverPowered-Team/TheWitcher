@@ -7,7 +7,6 @@ enum (StateType,
 	ATTACKING,
 	JUMPING,
 	ROLLING,
-	CASTING,
 	DEAD,
 	REVIVING,
 	HIT,
@@ -75,17 +74,6 @@ class AttackingState : public State
 public:
 	AttackingState() { type = StateType::ATTACKING; }
 	State* HandleInput(PlayerController* player) override;
-	void Update(PlayerController* player) override;
-	State* OnAnimationEnd(PlayerController* player, const char* name) override;
-	void OnEnter(PlayerController* player) override;
-	void OnExit(PlayerController* player) override;
-};
-
-class CastingState : public State
-{
-public:
-	CastingState() { type = StateType::CASTING; }
-	//State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
 	void OnEnter(PlayerController* player) override;

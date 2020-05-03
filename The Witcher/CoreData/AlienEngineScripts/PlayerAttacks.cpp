@@ -7,6 +7,7 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "PlayerProjectile.h"
+#include "ParticlePool.h"
 #include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
@@ -105,6 +106,7 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
+		player_controller->ReleaseAttackParticle();
 		if (next_attack == AttackType::SPELL)
 			StartSpell(next_spell);
 		else
@@ -189,6 +191,7 @@ void PlayerAttacks::OnRemoveAttackEffect(AttackEffect* new_effect)
 
 void PlayerAttacks::CancelAttack()
 {
+	player_controller->ReleaseAttackParticle();
 	current_attack = nullptr;
 	collider->SetEnable(false);
 }
@@ -472,6 +475,9 @@ void PlayerAttacks::CreateAttacks()
 			info.name = attack_combo->GetString("name");
 			info.input = attack_combo->GetString("button");
 			info.particle_name = attack_combo->GetString("particle_name");
+			info.particle_pos = float3(attack_combo->GetNumber("particle_pos.pos_x"),
+				attack_combo->GetNumber("particle_pos.pos_y"),
+				attack_combo->GetNumber("particle_pos.pos_z"));
 			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
 				attack_combo->GetNumber("collider.pos_y"),
 				attack_combo->GetNumber("collider.pos_z"));
@@ -509,6 +515,9 @@ void PlayerAttacks::CreateAttacks()
 
 			info.name = spells_json->GetString("name");
 			info.particle_name = spells_json->GetString("particle_name");
+			info.particle_pos = float3(spells_json->GetNumber("particle_pos.pos_x"),
+				spells_json->GetNumber("particle_pos.pos_y"),
+				spells_json->GetNumber("particle_pos.pos_z"));
 			info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
 				spells_json->GetNumber("collider.pos_y"),
 				spells_json->GetNumber("collider.pos_z"));

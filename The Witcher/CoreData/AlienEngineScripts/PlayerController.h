@@ -19,7 +19,6 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
-	friend class ChillingState;
 
 public:
 	enum (PlayerType,
@@ -72,6 +71,8 @@ public:
 	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 }, bool knock = true);
 	void PlayAllowParticle();
 
+	void ReleaseAttackParticle();
+
 	void HitByRock(float time, float damage);
 	void RecoverFromRockHit();
 
@@ -95,7 +96,6 @@ public:
 	void StopImmune() { is_immune = false; };
 
 	void HitFreeze(float freeze_time);
-
 	void RemoveFreeze(float speed);
 
 private:

@@ -1,51 +1,52 @@
 {
+    "Name": "LHL_particle",
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "p_yen_atk_2",
+                "Name": "LHL_particle",
                 "FamilyNumber": 1,
-                "ID": "2989551502241360289",
-                "ParentID": "7492335773276314438",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": true,
+                "ID": "15757559526701543856",
+                "ParentID": "11076846761849497833",
+                "Enabled": false,
+                "ParentEnabled": false,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "11439447693902362164",
+                "PrefabID": "2549028814011947924",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -4.3126220703125,
-                            81.487327575683594,
-                            89.0115966796875
+                            -0.93564224243164063,
+                            3.9052462577819824,
+                            12.037518501281738
                         ],
                         "Rotation": [
                             0,
                             0,
-                            1,
-                            -4.3711391839451608e-08
+                            0,
+                            1
                         ],
                         "Scale": [
-                            166.66667175292969,
-                            166.66667175292969,
-                            166.66667175292969
+                            9.9999685287475586,
+                            9.9999904632568359,
+                            9.9999608993530273
                         ],
                         "ScaleNegative": false,
-                        "ID": "13812767703557520291"
+                        "ID": "9723780728064043671"
                     },
                     {
                         "Type": 15,
-                        "ID": "13777399363673828059",
+                        "ID": "5811080127585938870",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -4.7991113662719727,
-                                0.40386486053466797,
-                                7.9174504280090332
+                                5.8360257148742676,
+                                0.905417799949646,
+                                1.9633713960647583
                             ],
                             "Rotation": [
                                 0,
@@ -57,18 +58,43 @@
                             "Velocity": [
                                 0,
                                 0,
-                                5
+                                0
                             ],
                             "Force": [
                                 0,
                                 0,
                                 0
                             ],
-                            "Speed": 5,
+                            "Speed": 0,
                             "Color": [
                                 1,
+                                1,
+                                1,
+                                1
+                            ],
+                            "Size": 5,
+                            "LightColor": [
                                 0,
-                                0.80000001192092896
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 0.40000000596046448,
+                            "AxisRotationStart": false,
+                            "Angle3D": [
+                                0,
+                                0,
+                                67.199996948242188
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "Color": [
+                                1,
+                                1,
+                                1,
+                                0.83443707227706909
                             ],
                             "Size": 0.20000000298023224,
                             "LightColor": [
@@ -77,32 +103,9 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 0.20000000298023224,
-                            "AxisRotationStart": false,
-                            "Angle3D": [
-                                0,
-                                0,
-                                0
-                            ],
-                            "ChangeOverLifeTime": false,
-                            "RotateOverLifeTime": true
-                        },
-                        "End": {
-                            "Color": [
-                                1,
-                                1,
-                                1
-                            ],
-                            "Size": 1,
-                            "LightColor": [
-                                0,
-                                0,
-                                0,
-                                0
-                            ],
                             "Force": [
                                 0,
-                                -10,
+                                0,
                                 0
                             ],
                             "AxisRotation": false,
@@ -118,24 +121,25 @@
                             ]
                         },
                         "Emmitter": {
-                            "Shape": 2,
+                            "Shape": 3,
                             "Zone": 0,
+                            "Distance": 20,
                             "Radius": 5,
                             "OutRadius": 10,
                             "CubeSize": [
-                                2.5,
-                                0.5,
-                                0.5
+                                10,
+                                5,
+                                10
                             ],
-                            "MaxLife": 0.5,
-                            "CurrentLife": 0,
-                            "SpawnRate": 14.999999046325684,
+                            "MaxLife": 0.30000001192092896,
+                            "CurrentLife": 1.9570000171661377,
+                            "SpawnRate": 0,
                             "Delay": 0,
-                            "Loop": true,
+                            "Loop": false,
                             "Position": [
-                                -4.9242572784423828,
-                                0.48892396688461304,
-                                7.9575533866882324
+                                5.8360257148742676,
+                                0.905417799949646,
+                                1.9633713960647583
                             ],
                             "RelativePosition": [
                                 0,
@@ -145,7 +149,7 @@
                             "Rotation": [
                                 -0,
                                 0,
-                                -179.99998474121094
+                                -0
                             ],
                             "RelativeRotation": [
                                 -0,
@@ -159,7 +163,11 @@
                             ]
                         },
                         "Bursts": {
-                            "Size": 0
+                            "Size": 1
+                        },
+                        "Burst": {
+                            "TimeBurst-0": 0,
+                            "PartsInstanciate-0": 1
                         },
                         "Blending": {
                             "Source": 6,
@@ -167,11 +175,18 @@
                             "Equation": 0
                         },
                         "HasMaterial": true,
-                        "MaterialID": "12013289404933274423"
+                        "MaterialID": "9943630612837717951",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "p_yen_atk_2"
+    }
 }
