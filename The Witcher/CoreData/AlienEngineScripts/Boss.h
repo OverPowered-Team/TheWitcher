@@ -63,7 +63,7 @@ public:
 	virtual void StartEnemy() override;
 	virtual void UpdateEnemy() override;
 	virtual void CleanUpEnemy() override;
-	virtual float GetDamaged(float dmg, PlayerController* player) override;
+	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero()) override;
 
 	virtual void SetActionVariables();
 	virtual void SetActionProbabilities();

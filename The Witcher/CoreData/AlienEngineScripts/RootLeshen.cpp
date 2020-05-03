@@ -26,6 +26,9 @@ void RootLeshen::Update()
 		direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 		direction.y = 0;
 		transform->AddPosition(direction * speed);
+		float angle = atan2f(direction.z, direction.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 180) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
 
 		if (life_time <= total_life_time)
 			life_time += Time::GetDT();

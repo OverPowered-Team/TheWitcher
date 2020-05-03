@@ -32,9 +32,9 @@ void Ciri::CleanUpEnemy()
 	Boss::CleanUpEnemy();
 }
 
-float Ciri::GetDamaged(float dmg, PlayerController* player)
+float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	return Boss::GetDamaged(dmg, player);;
+	return Boss::GetDamaged(dmg, player);
 }
 
 void Ciri::SetActionProbabilities()

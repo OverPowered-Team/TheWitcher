@@ -72,7 +72,7 @@ void Boss::CleanUpEnemy()
 	delete current_action;
 }
 
-float Boss::GetDamaged(float dmg, PlayerController* player)
+float Boss::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	return Enemy::GetDamaged(dmg, player);
 }
