@@ -136,11 +136,20 @@ void UI_Char_Frame::HitEffect(float lerp_time)
 
 	if (lerp_time <= 0.5f)
 	{
+		/*
+		lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time*2);
+		lerp_life = Maths::Lerp(1.0f, 0.575f, lerp_time*2);
+		*/
+
 		lerp_portrait = Maths::Lerp(1.0f, 0.f, lerp_time);
 		lerp_life = Maths::Lerp(1.0f, 0.150f, lerp_time);
 	}
 	else
 	{
+		/*
+		lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time-0.5f)*2);
+		lerp_life = Maths::Lerp(0.575f, 1.0f, (lerp_time-0.5f)*2);
+		*/
 		lerp_portrait = Maths::Lerp(0.f, 1.0f, lerp_time);
 		lerp_life = Maths::Lerp(0.150f, 1.f, lerp_time);
 	}
