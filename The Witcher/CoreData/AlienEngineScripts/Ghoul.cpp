@@ -172,7 +172,7 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
 {
     if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != GhoulState::DEAD) {
         PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-        if (player)
+        if (player && player->attacks->GetCurrentAttack()->CanHit(this))
         {
             float dmg_received = player->attacks->GetCurrentDMG();
             player->OnHit(this, GetDamaged(dmg_received, player));

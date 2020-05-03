@@ -118,7 +118,7 @@ void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 		else
 		{
 			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player)
+			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
 				player->OnHit(this, GetDamaged(dmg_received, player));
