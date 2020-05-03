@@ -256,7 +256,7 @@ void Leshen::LaunchCloudAction()
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	particles["Cloud"]->game_object_attached->SetEnable(true);
+	particles["Cloud"]->SetEnable(true);
 }
 
 Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
@@ -365,7 +365,7 @@ void Leshen::EndCrowsAction(GameObject* crow)
 void Leshen::EndCloudAction()
 {
 	meshes->SetEnable(true);
-	particles["Cloud"]->game_object_attached->SetEnable(false);
+	particles["Cloud"]->SetEnable(false);
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
 	times_switched = 0;

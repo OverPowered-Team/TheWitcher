@@ -1,6 +1,7 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowScript.h"
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
@@ -62,8 +63,8 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 	}
 
 	audio_emitter->StartSound("SoldierHit");
-	if(particles["hit_particle"])
-		particles["hit_particle"]->Restart();
+	particles.insert(std::pair("hit_particle",
+		GameManager::instance->particle_pool->GetInstance("hit_particle", float3::zero(), this->game_object, true)));
 
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -84,7 +85,8 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				particles["decapitation_particle"]->Restart();
+				particles.insert(std::pair("decapitation_particle",
+					GameManager::instance->particle_pool->GetInstance("decapitation_particle", float3::zero(), this->game_object, true)));
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
@@ -145,6 +147,9 @@ void NilfgaardSoldier::CleanUpEnemy()
 {
 	if (decapitated_head)
 	{
+		GameManager::instance->particle_pool->ReleaseInstance("decapitation_particle", particles["decapitation_particle"]);
+		particles.erase("decapitation_particle");
+
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
@@ -202,6 +207,9 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		}
 	}
 	else if (strcmp(name, "Hit") == 0) {
+		GameManager::instance->particle_pool->ReleaseInstance("hit_particle", particles["hit_particle"]);
+		particles.erase("hit_particle");
+
 		if (stats["Health"].GetValue() == 0.0F) {
 			state = NilfgaardSoldierState::HIT;
 		}

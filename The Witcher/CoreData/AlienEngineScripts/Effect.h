@@ -39,6 +39,8 @@ public:
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
 
+	GameObject* spawned_particle = nullptr;
+
 	//not sure about this
 	std::string vfx_on_apply = "";
 	std::string vfx_on_tick = "";

@@ -171,6 +171,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		{
 			EffectData* _effect = new EffectData();
 			_effect->name = type_array->GetString("hit_effect.name");
+			_effect->vfx_on_apply = type_array->GetString("hit_effect.vfx_on_apply");
 			_effect->time = type_array->GetNumber("hit_effect.time");
 			_effect->ticks_time = type_array->GetNumber("hit_effect.ticks_time");
 

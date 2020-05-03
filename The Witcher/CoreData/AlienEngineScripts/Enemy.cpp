@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
@@ -43,7 +44,7 @@ void Enemy::StartEnemy()
 
 	SetStats(json_str.data());
 
-	if (game_object->GetChild("Particles"))
+	/*if (game_object->GetChild("Particles"))
 	{
 		std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
 
@@ -51,7 +52,7 @@ void Enemy::StartEnemy()
 			particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
 			(*it)->OnStop();
 		}
-	}
+	}*/
 }
 
 void Enemy::UpdateEnemy()
@@ -98,13 +99,20 @@ void Enemy::UpdateEnemy()
 					}
 				}
 			}
-			if (particles["p_" + (*it)->name])
-				particles["p_" + (*it)->name]->Restart();
+			if ((*it)->spawned_particle != nullptr)
+			{
+				(*it)->spawned_particle->SetEnable(false);
+				(*it)->spawned_particle->SetEnable(true);
+			}
 				
 		}
 
 		if ((*it)->to_delete)
 		{
+			if ((*it)->spawned_particle != nullptr)
+			{
+				GameManager::instance->particle_pool->ReleaseInstance((*it)->vfx_on_apply, (*it)->spawned_particle);
+			}
 			for (auto stat_it = stats.begin(); stat_it != stats.end(); ++stat_it)
 			{
 				if ((*it)->AffectsStat(stat_it->second.name))
@@ -202,8 +210,8 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	effects.push_back(new_effect);
 
-	if (new_effect->ticks_time == 0 && particles["p_" + new_effect->name])
-		particles["p_" + new_effect->name]->Restart();
+	if (std::strcmp(new_effect->vfx_on_apply.c_str(), "") != 0)
+		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply, float3::zero(), this->game_object, true);
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{

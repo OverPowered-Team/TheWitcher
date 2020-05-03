@@ -257,8 +257,12 @@ void PlayerController::EffectsUpdate()
 					}
 				}
 			}
-			/*if (particles[(*it)->name])
-				particles[(*it)->name]->SetEnable(true);*/
+			if ((*it)->spawned_particle != nullptr)
+			{
+				(*it)->spawned_particle->SetEnable(false);
+				(*it)->spawned_particle->SetEnable(true);
+			}
+
 		}
 
 		if ((*it)->to_delete)
@@ -440,6 +444,9 @@ void PlayerController::AddEffect(Effect* _effect)
 
 	effects.push_back(_effect);
 
+	if (std::strcmp(_effect->vfx_on_apply.c_str(), "") != 0)
+		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply, float3::zero(), this->game_object, true);
+
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
 		attacks->OnAddAttackEffect(((AttackEffect*)_effect));
@@ -453,8 +460,10 @@ void PlayerController::AddEffect(Effect* _effect)
 		}
 	}
 
+
+
 	//GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
-	particles.insert(std::pair(_effect->vfx_on_apply, GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply)));
+	//particles.insert(std::pair(_effect->vfx_on_apply, GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply)));
 }
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
@@ -474,7 +483,12 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-	for (auto it = particles.begin(); it != particles.end();)
+	if (tmp_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
+	}
+
+	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == tmp_effect->vfx_on_apply)
 		{
@@ -483,7 +497,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 		else
 			++it;
-	}
+	}*/
 
 	delete tmp_effect;
 	return it;

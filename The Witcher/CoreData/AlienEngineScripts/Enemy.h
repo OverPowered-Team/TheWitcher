@@ -69,7 +69,7 @@ public:
 
 	std::vector<PlayerController*> player_controllers;
 
-	std::map<std::string, ComponentParticleSystem*> particles;
+	std::map<std::string, GameObject*> particles;
 	std::map<std::string, Stat> stats;
 
 	bool is_frozen = false;

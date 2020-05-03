@@ -329,7 +329,8 @@ void PlayerAttacks::CastSpell()
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
 		player_controller->PlayAttackParticle();
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
-		player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
+		if(player_controller->HUD)
+			player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
 
 		if (current_attack->HasTag(Attack_Tags::T_AOE))
 		{
