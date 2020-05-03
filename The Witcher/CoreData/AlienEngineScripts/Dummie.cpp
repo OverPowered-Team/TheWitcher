@@ -41,13 +41,15 @@ void Dummie::OnTriggerEnter(ComponentCollider* col)
 				DestroyCombo();
 			}
 
+			float position = current_buttons.size() * 5.f - 10.f;
+
 			if (col->game_object_attached->parent->GetComponent<PlayerAttacks>()->GetCurrentAttack()->info.name.back() == 'L')
 			{
-				current_buttons.push_back(GameObject::Instantiate(button_x, float3((float)current_buttons.size(), 0, 0), false, game_object->GetChild("Combo_UI")));
+				current_buttons.push_back(GameObject::Instantiate(button_x, float3(position, 0, 0), false, game_object->GetChild("Combo_UI")));
 			}
 			else
 			{
-				current_buttons.push_back(GameObject::Instantiate(button_y, float3((float)current_buttons.size(), 0, 0), false, game_object->GetChild("Combo_UI")));
+				current_buttons.push_back(GameObject::Instantiate(button_y, float3(position, 0, 0), false, game_object->GetChild("Combo_UI")));
 
 			}
 
