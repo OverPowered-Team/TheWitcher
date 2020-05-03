@@ -101,6 +101,7 @@ void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 		else
 		{
 			low_life = false;
+			lifebar->SetBarColor(1, 1, 1, 1);
 		}
 
 		if (now_life > life_percentate)
