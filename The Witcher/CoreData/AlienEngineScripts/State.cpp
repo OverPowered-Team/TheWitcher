@@ -316,18 +316,19 @@ State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void RollingState::OnEnter(PlayerController* player)
 {
-	float3 direction_vector = float3::zero();
-
 	if (player->mov_input)
 	{
-		direction_vector = float3(player->movement_input.x, 0.f, player->movement_input.y);
-		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-		direction_vector.y = 0.f;
+		float3 direction_vector = player->GetDirectionVector();
+
+		player->player_data.speed = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
+
+		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		player->transform->SetGlobalRotation(rot);
 	}
 	else
-		direction_vector = player->transform->forward;
+		player->player_data.speed = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
-	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
 }

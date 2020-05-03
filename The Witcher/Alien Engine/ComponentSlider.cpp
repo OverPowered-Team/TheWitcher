@@ -789,85 +789,93 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 	}
 	App->objects->first_assigned_selected = false;
 }
+
+void ComponentSlider::SetActive(bool active)
+{
+	this->active_ui = active;
+	if (active) {
+		current_color = idle_color;
+		slider_current_color = slider_idle_color;
+	}
+	else {
+		current_color = disabled_color;
+		slider_current_color = slider_disabled_color;
+	}
+}
+
+
 bool ComponentSlider::OnIdle()
 {
-	current_color = idle_color;
-	slider_current_color = slider_idle_color;
+	if (active)
+	{
+		current_color = idle_color;
+		slider_current_color = slider_idle_color;
+	}
 	return true;
 }
 bool ComponentSlider::OnHover()
 {
-	current_color = hover_color;
-	slider_current_color = slider_hover_color;
+	if (active)
+	{
+		current_color = hover_color;
+		slider_current_color = slider_hover_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnClick()
 {
-	ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
-	if (emitter != nullptr)
+	if (active)
 	{
-		emitter->StartSound(click_event.c_str());
-	}
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound(click_event.c_str());
+		}
 
-	current_color = clicked_color;
-	slider_current_color = slider_clicked_color;
+		current_color = clicked_color;
+		slider_current_color = slider_clicked_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnPressed()
 {
-	/*ComponentTransform* trans = game_object_attached->GetComponent<ComponentTransform>();
-	float width = (sliderX + ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (sliderX - ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
-	float width_bg = (x + ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (x - ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
-	
-	int xmotion = App->input->GetMouseXMotion();
-	
-	if (xmotion > 0)
+	if (active)
 	{
-		factor += (0.01f* xmotion);
-	}
-	if (xmotion < 0)
-	{
-		factor += (0.01f* xmotion);
-	}
-	if (factor>=1.0f)
-	{
-		factor = 1.0f;
-	}
-	if (factor <= 0.0f)
-	{
-		factor = 0.0f;
-	}*/
 
-	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT) == KEY_REPEAT)
-	{
-		factor += (0.01f);
-	}
-	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT) == KEY_REPEAT)
-	{
-		factor -= (0.01f);
-	}
+		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT) == KEY_REPEAT)
+		{
+			factor += (0.01f);
+		}
+		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT) == KEY_REPEAT)
+		{
+			factor -= (0.01f);
+		}
 
 
-	if (factor >= 1.0f)
-	{
-		factor = 1.0f;
-	}
-	if (factor <= 0.0f)
-	{
-		factor = 0.0f;
-	}
+		if (factor >= 1.0f)
+		{
+			factor = 1.0f;
+		}
+		if (factor <= 0.0f)
+		{
+			factor = 0.0f;
+		}
 
-	current_color = pressed_color;
-	slider_current_color = slider_pressed_color;
+		current_color = pressed_color;
+		slider_current_color = slider_pressed_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnRelease()
 {
-	current_color = hover_color;
-	slider_current_color = slider_hover_color;
+	if (active)
+	{
+		current_color = hover_color;
+		slider_current_color = slider_hover_color;
+	}
 	return true;
 }
 

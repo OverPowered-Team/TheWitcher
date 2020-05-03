@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 16,
-        "NumTransitions": 28,
+        "NumStates": 17,
+        "NumTransitions": 30,
         "States": [
             {
                 "Name": "L",
@@ -82,6 +82,11 @@
             {
                 "Name": "Rock Throw",
                 "Speed": 2,
+                "Clip": "2659056683821727387"
+            },
+            {
+                "Name": "Chain",
+                "Speed": 1,
                 "Clip": "2659056683821727387"
             }
         ],
@@ -492,6 +497,36 @@
             },
             {
                 "Source": "Ice Nova",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Chain",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 1
+                    }
+                ]
+            },
+            {
+                "Source": "Chain",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": true,

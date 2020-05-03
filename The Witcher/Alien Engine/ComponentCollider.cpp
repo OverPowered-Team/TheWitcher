@@ -163,7 +163,7 @@ void ComponentCollider::LoadComponent(JSONArraypack* to_load)
 	SetBouncing(to_load->GetNumber("Bouncing"));
 	SetStaticFriction(to_load->GetNumber("StaticFriction"));
 	SetDynamicFriction(to_load->GetNumber("DynamicFriction"));
-	SetCollisionLayer(to_load->GetString("CollisionLayer"));
+	SetCollisionLayer(to_load->GetString("CollisionLayer", "Default"));
 	EndUpdateShape(true);
 }
 
@@ -187,7 +187,7 @@ void ComponentCollider::OnDisable()
 		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DISABLED);
 }
 
-void ComponentCollider::DrawScene()
+void ComponentCollider::DrawScene(ComponentCamera* camera)
 {
 	if (enabled == true && (game_object_attached->IsSelected() || App->physx->debug_physics))
 	{

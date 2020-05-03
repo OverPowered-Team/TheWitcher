@@ -25,6 +25,9 @@ private:
 	void Update() override;
 	void PostUpdate() override;
 
+	void DrawScene(ComponentCamera* camera) override;
+	void DrawGame(ComponentCamera* camera) override;
+
 	void DebugDraw();
 	void Draw();
 
