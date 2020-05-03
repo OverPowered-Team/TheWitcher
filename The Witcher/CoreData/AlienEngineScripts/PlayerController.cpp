@@ -207,13 +207,12 @@ bool PlayerController::AnyKeyboardInput()
 void PlayerController::HandleMovement()
 {
 	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-
-	float speed_y = player_data.speed.y;
-	player_data.speed = -direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;
-
 	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
 	direction_vector.y = 0.f;
+
+	float speed_y = player_data.speed.y;
+	player_data.speed = direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
+	player_data.speed.y = speed_y;
 
 	//rotate
 	if (mov_input)
@@ -602,20 +601,15 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	if (!godmode)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
+			Enemy* enemy = col->game_object_attached->GetComponentInParent<Enemy>();
+			if (enemy) {
+				//Calculate Knockback
+				float3 direction = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
+				knock_speed.y = 0;
 
-			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
-
-			for (auto i = comps.begin(); i != comps.end(); ++i) {
-				Enemy* enemy = dynamic_cast<Enemy*>(*i);
-				if (enemy) {
-					//Calculate Knockback
-					float3 direction = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-					float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
-					knock_speed.y = 0;
-
-					ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
-					return;
-				}
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				return;
 			}
 		}
 	}

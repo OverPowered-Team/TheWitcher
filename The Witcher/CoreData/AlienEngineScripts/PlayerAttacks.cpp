@@ -190,7 +190,6 @@ void PlayerAttacks::CancelAttack()
 {
 	current_attack = nullptr;
 	collider->SetEnable(false);
-	player_controller->player_data.speed = float3::zero();
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -386,15 +385,12 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 		for (auto it = colliders.begin(); it != colliders.end(); ++it)
 		{
 			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
-				auto comps = (*it)->game_object_attached->GetComponents<Alien>();
-				for (auto i = comps.begin(); i != comps.end(); ++i) {
-					Enemy* enemy = dynamic_cast<Enemy*>(*i);
-					if (enemy && current_attack->CanHit(enemy)) {
-						if(!enemy->IsDead())
-							enemy->GetDamaged(GetCurrentDMG(), player_controller);
+				Enemy* enemy_close = (*it)->game_object_attached->GetComponent<Enemy>();
+				if (enemy_close && current_attack->CanHit(enemy_close)) {
+					if (!enemy_close->IsDead())
+						enemy_close->GetDamaged(GetCurrentDMG(), player_controller);
 
-						OnHit(enemy);
-					}
+					OnHit(enemy_close);
 				}
 			}
 		}
