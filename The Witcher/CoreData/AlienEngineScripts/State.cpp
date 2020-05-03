@@ -316,13 +316,9 @@ State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void RollingState::OnEnter(PlayerController* player)
 {
-	float3 direction_vector = float3::zero();
-
 	if (player->mov_input)
 	{
-		float3 direction_vector = float3(player->movement_input.x, 0.f, player->movement_input.y);
-		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-		direction_vector.y = 0.f;
+		float3 direction_vector = player->GetDirectionVector();
 
 		player->player_data.speed = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
 
@@ -333,7 +329,6 @@ void RollingState::OnEnter(PlayerController* player)
 	else
 		player->player_data.speed = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
-	LOG("SPEED ON ENTER OF ROLL IS %f %f %f  MAGNITUDE %f", player->player_data.speed.x, player->player_data.speed.y, player->player_data.speed.z, player->player_data.speed.Length());
 	player->animator->PlayState("Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
 }

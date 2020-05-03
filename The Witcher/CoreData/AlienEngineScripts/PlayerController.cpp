@@ -203,7 +203,6 @@ bool PlayerController::AnyKeyboardInput()
 
 void PlayerController::HandleMovement()
 {
-
 	/*float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
 	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
 	direction_vector.y = 0.f;
@@ -211,11 +210,10 @@ void PlayerController::HandleMovement()
 	float speed_y = player_data.speed.y;
 	player_data.speed = direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
 	player_data.speed.y = speed_y;*/
-	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
+	float3 direction_vector = GetDirectionVector();
 
-	direction_vector = (Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector).Normalized();
 	float tmp_y = player_data.speed.y;
-	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue();
+	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
 	player_data.speed.y = tmp_y;
 
 
@@ -655,7 +653,13 @@ void PlayerController::OnDrawGizmosSelected()
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
 }
 #pragma endregion Events
+float3 PlayerController::GetDirectionVector()
+{
+	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
+	direction_vector = Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector;
 
+	return direction_vector;
+}
 #pragma region Init
 void PlayerController::LoadStats()
 {

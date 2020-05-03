@@ -81,6 +81,7 @@ public:
 
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
+	float3 GetDirectionVector();
 	bool CheckForPossibleRevive();
 
 	void OnUltimateActivation(float value);
