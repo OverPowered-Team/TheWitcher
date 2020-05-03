@@ -595,7 +595,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 
-	if (!godmode)
+	if (!godmode && !is_immune)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
 			Enemy* enemy = col->game_object_attached->GetComponentInParent<Enemy>();
