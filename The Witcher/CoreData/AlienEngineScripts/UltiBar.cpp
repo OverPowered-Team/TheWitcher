@@ -33,15 +33,6 @@ void UltiBar::Start()
 
 void UltiBar::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_SPACE))
-	{
-		MaxBar();
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT))
-	{
-		UpdateBar(0);
-	}
-
 	// Bar Charges With Lerp
 	if (bar_charging)
 	{
