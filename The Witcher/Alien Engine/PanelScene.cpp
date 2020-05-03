@@ -16,6 +16,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleResources.h"
 #include "ModuleImporter.h"
+#include "ComponentCurve.h"
 #include "ModuleUI.h"
 #include "ModuleRenderer3D.h"
 #include "Time.h"
@@ -234,45 +235,49 @@ void PanelScene::GuizmosLogic()
 {
 	if (!App->objects->GetSelectedObjects().empty()) 
 	{
-		std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		if (gizmo_curve) {
+			GizmoCurve();
+		}
+		else {
+			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 
-		float4x4 view_transposed = float4x4(App->camera->fake_camera->frustum.ViewMatrix()).Transposed();
-		float4x4 projection_transposed = float4x4(App->camera->fake_camera->frustum.ProjectionMatrix()).Transposed();
-		math::float4x4 object_transform_matrix;
-		math::float3 globalPosition = float3::zero();
-		math::float3 globalSize = float3::zero();
-		
+			float4x4 view_transposed = float4x4(App->camera->fake_camera->frustum.ViewMatrix()).Transposed();
+			float4x4 projection_transposed = float4x4(App->camera->fake_camera->frustum.ProjectionMatrix()).Transposed();
+			math::float4x4 object_transform_matrix;
+			math::float3 globalPosition = float3::zero();
+			math::float3 globalSize = float3::zero();
 
-		if (selected.size() > 1)
-		{
-			for (auto item = selected.begin(); item != selected.end(); ++item)
+
+			if (selected.size() > 1)
 			{
-				if (*item != nullptr)
+				for (auto item = selected.begin(); item != selected.end(); ++item)
 				{
-					if ((*item)->is_static)
-						return;
+					if (*item != nullptr)
+					{
+						if ((*item)->is_static)
+							return;
 
-					globalPosition += (*item)->transform->GetGlobalMatrix().TranslatePart();
-					globalSize += (*item)->transform->GetGlobalMatrix().GetScale();
+						globalPosition += (*item)->transform->GetGlobalMatrix().TranslatePart();
+						globalSize += (*item)->transform->GetGlobalMatrix().GetScale();
+					}
 				}
+
+				globalPosition /= selected.size();
+				globalSize /= selected.size();
+				object_transform_matrix = float4x4::FromTRS(globalPosition, math::Quat::identity(), globalSize).Transposed();
+			}
+			else
+			{
+				object_transform_matrix = (*selected.begin())->transform->GetGlobalMatrix().Transposed();
 			}
 
-			globalPosition /= selected.size();
-			globalSize /= selected.size();
-			object_transform_matrix = float4x4::FromTRS(globalPosition, math::Quat::identity(), globalSize).Transposed();
-		}
-		else
-		{
-			object_transform_matrix = (*selected.begin())->transform->GetGlobalMatrix().Transposed();
-		}
+			ImGuizmo::SetRect(viewport_min.x, viewport_min.y, current_viewport_size.x, current_viewport_size.y);
+			ImGuizmo::SetDrawlist();
 
-		ImGuizmo::SetRect(viewport_min.x, viewport_min.y, current_viewport_size.x, current_viewport_size.y);
-		ImGuizmo::SetDrawlist();
+			ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, (guizmo_operation != ImGuizmo::OPERATION::SCALE) ? guizmo_mode : ImGuizmo::MODE::LOCAL, object_transform_matrix.ptr());
 
-		ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation,  (guizmo_operation!= ImGuizmo::OPERATION::SCALE) ? guizmo_mode : ImGuizmo::MODE::LOCAL, object_transform_matrix.ptr());
-		
-		static bool guizmo_return = true;
-		static bool duplicate = false;
+			static bool guizmo_return = true;
+			static bool duplicate = false;
 
 			if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && ImGui::IsWindowFocused())
 			{
@@ -288,11 +293,11 @@ void PanelScene::GuizmosLogic()
 					math::float3 transformScale = object_transform_matrix.GetScale();
 
 					for (auto item = selected.begin(); item != selected.end(); ++item) {
-						if (*item != nullptr) 
+						if (*item != nullptr)
 						{
 							if (guizmo_return)
 								ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*item)->transform);
-							
+
 							math::float3 finalPos, finalScale;
 							math::Quat finalRot;
 
@@ -305,29 +310,50 @@ void PanelScene::GuizmosLogic()
 							(*item)->transform->SetGlobalTransformation(math::float4x4::FromTRS(finalPos, finalRot, finalScale));
 
 						}
-						if (guizmo_return && (*item) == selected.back()) 
+						if (guizmo_return && (*item) == selected.back())
 							guizmo_return = false;
-						
+
 					}
 				}
 				else
 				{
-					if (guizmo_return) 
+					if (guizmo_return)
 						ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, (*selected.begin())->transform);
-			
+
 					(*selected.begin())->transform->SetGlobalTransformation((*selected.begin())->parent->transform->global_transformation.Inverted() * object_transform_matrix.Transposed());
 
 					if (guizmo_return) {
 						guizmo_return = false;
 					}
 				}
-			
+
 			}
 			else if (!guizmo_return) {
 				guizmo_return = true;
 				duplicate = false;
 			}
+		}
 		
+	}
+}
+
+void PanelScene::GizmoCurve()
+{
+	float4x4 view_transposed = float4x4(App->camera->fake_camera->frustum.ViewMatrix()).Transposed();
+	float4x4 projection_transposed = float4x4(App->camera->fake_camera->frustum.ProjectionMatrix()).Transposed();
+	math::float4x4 object_transform_matrix = float4x4::FromTRS(curve->curve.GetControlPoints()[curve_index],Quat::identity(), float3::one()).Transposed();
+
+	ImGuizmo::SetRect(viewport_min.x, viewport_min.y, current_viewport_size.x, current_viewport_size.y);
+	ImGuizmo::SetDrawlist();
+
+	ImGuizmo::Manipulate(view_transposed.ptr(), projection_transposed.ptr(), guizmo_operation, (guizmo_operation != ImGuizmo::OPERATION::SCALE) ? guizmo_mode : ImGuizmo::MODE::LOCAL, object_transform_matrix.ptr());
+
+	if (!ImGui::IsAnyPopupActive() && ImGuizmo::IsUsing() && ImGui::IsWindowFocused())
+	{
+		object_transform_matrix.Transpose();
+		math::float3 transformPos = object_transform_matrix.TranslatePart();
+
+		curve->curve.SetControlPointAt(curve_index, transformPos);
 	}
 }
 

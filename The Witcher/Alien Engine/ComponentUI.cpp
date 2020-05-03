@@ -83,36 +83,43 @@ void ComponentUI::Update()
 
 		//UILogicMouse();
 
-		switch (state)
+		(game_object_attached->enabled) ? active = true : active = false;
+
+		if (active)
+			(canvas->game_object_attached->enabled) ? active = true : active = false;
+
+		if (active)
 		{
-		case Idle: {
-			OnIdle();
-			break; }
-		case Hover: {
-			OnHover();
-			break; }
-		case Click: {
-			OnClick();
-			break; }
-		case Pressed: {
-			OnPressed();
-			break; }
-		case Release: {
-			OnRelease();
-			break; }
-		case Exit: {
-			OnExit();
-			break; }
-		case Enter: {
-			OnEnter();
-			break; }
-		default: {
-			break; }
+			switch (state)
+			{
+			case Idle: {
+				OnIdle();
+				break; }
+			case Hover: {
+				OnHover();
+				break; }
+			case Click: {
+				OnClick();
+				break; }
+			case Pressed: {
+				OnPressed();
+				break; }
+			case Release: {
+				OnRelease();
+				break; }
+			case Exit: {
+				OnExit();
+				break; }
+			case Enter: {
+				OnEnter();
+				break; }
+			default: {
+				break; }
+			}
+
+			if (canvas->game_object_attached->enabled && canvas->allow_navigation)
+				UILogicGamePad();
 		}
-
-		if (canvas->game_object_attached->enabled || canvas->allow_navigation)
-			UILogicGamePad();
-
 
 	}
 }
@@ -194,10 +201,10 @@ void ComponentUI::Draw(bool isGame)
 
 		scale.x = matrix[0][0];
 		scale.y = matrix[1][1];
-		scale.z = 1.0f;
+		scale.z = matrix[2][2];
 
 
-		float4x4 uiLocal = float4x4::FromTRS(position, rotation, scale);
+		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
 		float4x4 uiGlobal = uiLocal;
 
 		/*	if (!particleInfo.globalTransform)
@@ -339,39 +346,49 @@ void ComponentUI::CheckFirstSelected()
 
 void ComponentUI::Orientate(ComponentCamera* camera)
 {
-	if (camera == nullptr)
-		return;
-
-	switch (canvas->bbtype)
+	if (canvas->isWorld)
 	{
-	case BillboardType::SCREEN:
-		rotation = Billboard::AlignToScreen(camera);
-		break;
+		if (camera == nullptr)
+			return;
+		if (game_object_attached->parent != nullptr && game_object_attached->parent == canvas->game_object_attached)
+		{
 
-	case BillboardType::WORLD:
-		rotation = Billboard::AlignToWorld(camera, position);
-		break;
+			switch (canvas->bbtype)
+			{
+			case BillboardType::SCREEN:
+				rotation = Billboard::AlignToScreen(camera);
+				break;
 
-	case BillboardType::AXIS:
-		rotation = Billboard::AlignToAxis(camera, position);
+			case BillboardType::WORLD:
+				rotation = Billboard::AlignToWorld(camera, position);
+				break;
 
-		break;
+			case BillboardType::AXIS:
+				rotation = Billboard::AlignToAxis(camera, position);
+				break;
 
-	case BillboardType::NONE:
-		rotation = Quat::identity();
-		break;
+			case BillboardType::NONE:
+				rotation = Quat::identity();
+				break;
 
-	default:
-		break;
+			default:
+				break;
+			}
+		}
 	}
 	
 }
 
 void ComponentUI::Rotate()
 {
-	rotation = rotation.Mul(Quat::RotateX(math::DegToRad(angle3D.x)));
-	rotation = rotation.Mul(Quat::RotateY(math::DegToRad(angle3D.y)));
-	rotation = rotation.Mul(Quat::RotateZ(math::DegToRad(angle3D.z)));
+	if (canvas->isWorld && game_object_attached->parent != nullptr && game_object_attached->parent == canvas->game_object_attached)
+	{
+		rotation = rotation.Mul(Quat::RotateX(math::DegToRad(angle3D.x)));
+		rotation = rotation.Mul(Quat::RotateY(math::DegToRad(angle3D.y)));
+		rotation = rotation.Mul(Quat::RotateZ(math::DegToRad(angle3D.z)));
+
+		game_object_attached->transform->SetGlobalRotation(rotation);
+	}
 }
 
 void ComponentUI::SetSize(float width, float height)

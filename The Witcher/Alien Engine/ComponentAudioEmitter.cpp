@@ -233,6 +233,11 @@ void ComponentAudioEmitter::SetState(const char* state_group, const char* new_st
 		source->ChangeState(state_group, new_state);
 }
 
+void ComponentAudioEmitter::SetRTPCValue(const char* RTPC, float value)
+{
+	source->SetRTPCValue(RTPC, value, source->GetID());
+}
+
 WwiseT::AudioSource* ComponentAudioEmitter::GetSource() const
 {
 	return source;

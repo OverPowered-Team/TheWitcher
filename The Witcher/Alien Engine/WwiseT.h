@@ -42,6 +42,7 @@ namespace WwiseT
 		void SetVolume(float new_volume);
 		void SetPanLeft(float value);
 		void SetPanRight(float value);
+		void SetRTPCValue(const char* ev, float value, u32 ID);
 		void SetMono();
 		void SetStereo();
 		void SetPitch(float value);

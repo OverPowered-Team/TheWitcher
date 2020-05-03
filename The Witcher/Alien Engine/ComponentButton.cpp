@@ -31,7 +31,6 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Height", size.y);
 
 	to_save->SetBoolean("Enabled", enabled);
-	to_save->SetNumber("Type", (int)type);
 
 	to_save->SetNumber("UIType", (int)ui_type);
 
@@ -45,8 +44,16 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 	to_save->SetString("ClickEvent", click_event.data());
 	to_save->SetString("MoveEvent", move_event.data());
 
-	to_save->SetBoolean("Loop", loop);
-	to_save->SetNumber("AnimSpeed", speed);
+	to_save->SetBoolean("LoopIdle", idle_info.loop);
+	to_save->SetNumber("AnimSpeedIdle", idle_info.speed);
+	to_save->SetBoolean("LoopHover", hover_info.loop);
+	to_save->SetNumber("AnimSpeedHover", hover_info.speed);
+	to_save->SetBoolean("LoopClicked", clicked_info.loop);
+	to_save->SetNumber("AnimSpeedClicked", clicked_info.speed);
+	to_save->SetBoolean("LoopPressed", pressed_info.loop);
+	to_save->SetNumber("AnimSpeedPressed", pressed_info.speed);
+	to_save->SetBoolean("LoopDisabled", disabled_info.loop);
+	to_save->SetNumber("AnimSpeedDisabled", disabled_info.speed);
 	//---------------------------------------------------------
 
 	to_save->SetBoolean("HasAnimatedIdleImages", !idle_info.tex_array.empty());
@@ -181,11 +188,30 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 	pressed_color = to_load->GetColor("ColorPressed");
 	disabled_color = to_load->GetColor("ColorDisabled");
 
-	click_event = to_load->GetString("ClickEvent");
-	move_event = to_load->GetString("MoveEvent");
+	click_event = to_load->GetString("ClickEvent", "none");
+	move_event = to_load->GetString("MoveEvent", "none");
 
-	loop = to_load->GetBoolean("Loop");
-	speed = to_load->GetNumber("AnimSpeed");
+	idle_info.loop = to_load->GetBoolean("LoopIdle");
+	idle_info.speed = to_load->GetNumber("AnimSpeedIdle");
+	hover_info.loop = to_load->GetBoolean("LoopHover");
+	hover_info.speed = to_load->GetNumber("AnimSpeedHover");
+	clicked_info.loop = to_load->GetBoolean("LoopClicked");
+	clicked_info.speed = to_load->GetNumber("AnimSpeedClicked");
+	pressed_info.loop = to_load->GetBoolean("LoopPressed");
+	pressed_info.speed = to_load->GetNumber("AnimSpeedPressed");
+	disabled_info.loop = to_load->GetBoolean("LoopDisabled");
+	disabled_info.speed = to_load->GetNumber("AnimSpeedDisabled");
+
+	idle_info.loop = to_load->GetBoolean("LoopIdle");
+	idle_info.speed = to_load->GetNumber("AnimSpeedIdle");
+	hover_info.loop = to_load->GetBoolean("LoopHover");
+	hover_info.speed = to_load->GetNumber("AnimSpeedHover");
+	clicked_info.loop = to_load->GetBoolean("LoopClicked");
+	clicked_info.speed = to_load->GetNumber("AnimSpeedClicked");
+	pressed_info.loop = to_load->GetBoolean("LoopPressed");
+	pressed_info.speed = to_load->GetNumber("AnimSpeedPressed");
+	disabled_info.loop = to_load->GetBoolean("LoopDisabled");
+	disabled_info.speed = to_load->GetNumber("AnimSpeedDisabled");
 
 	//-----------------------------------------------------------
 
@@ -380,14 +406,52 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 	App->objects->first_assigned_selected = false;
 }
 
-void ComponentButton::SetAnimSpeed(float speed)
+void ComponentButton::SetAnimSpeed(float speed, UIState type)
 {
-	this->speed = speed;
+	switch (type)
+	{
+	case Idle: {
+		idle_info.speed = speed;
+		break; }
+	case Hover: {
+		hover_info.speed = speed;
+		break; }
+	case Click: {
+		clicked_info.speed = speed;
+		break; }
+	case Pressed: {
+		pressed_info.speed = speed;
+		break; }
+	case Disabled: {
+		disabled_info.speed = speed;
+		break; }
+	default: {
+		break; }
+	}
 }
 
-float ComponentButton::GetAnimSpeed()
+float ComponentButton::GetAnimSpeed(UIState type)
 {
-	return speed;
+	switch (type)
+	{
+	case Idle: {
+		return idle_info.speed;
+		break; }
+	case Hover: {
+		return hover_info.speed;
+		break; }
+	case Click: {
+		return clicked_info.speed;
+		break; }
+	case Pressed: {
+		return pressed_info.speed;
+		break; }
+	case Disabled: {
+		return disabled_info.speed;
+		break; }
+	default: {
+		break; }
+	}
 }
 
 void ComponentButton::HandleAlienEvent(const AlienEvent& e)
@@ -981,13 +1045,72 @@ bool ComponentButton::DrawInspector()
 
 		if (ImGui::TreeNode("Animation Settings")) {
 
-			ImGui::Text("Loop");
-			ImGui::SameLine(125);
-			ImGui::Checkbox("##Loop", &loop);
-			ImGui::Spacing();
-			ImGui::Text("Speed");
-			ImGui::SameLine(125);
-			ImGui::DragFloat("##Speed", &speed, 0.5F, 0.1f, 100.0f, "%.1f");
+			if (ImGui::TreeNode("Idle Settings")) {
+
+				ImGui::Text("Loop");
+				ImGui::SameLine(125);
+				ImGui::Checkbox("##Loop", &idle_info.loop);
+				ImGui::Spacing();
+				ImGui::Text("Speed");
+				ImGui::SameLine(125);
+				ImGui::DragFloat("##Speed", &idle_info.speed, 0.5F, 0.1f, 100.0f, "%.1f");
+
+				ImGui::Spacing();
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Hover Settings")) {
+
+				ImGui::Text("Loop");
+				ImGui::SameLine(125);
+				ImGui::Checkbox("##Loop", &hover_info.loop);
+				ImGui::Spacing();
+				ImGui::Text("Speed");
+				ImGui::SameLine(125);
+				ImGui::DragFloat("##Speed", &hover_info.speed, 0.5F, 0.1f, 100.0f, "%.1f");
+
+				ImGui::Spacing();
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Clicked Settings")) {
+
+				ImGui::Text("Loop");
+				ImGui::SameLine(125);
+				ImGui::Checkbox("##Loop", &clicked_info.loop);
+				ImGui::Spacing();
+				ImGui::Text("Speed");
+				ImGui::SameLine(125);
+				ImGui::DragFloat("##Speed", &clicked_info.speed, 0.5F, 0.1f, 100.0f, "%.1f");
+
+				ImGui::Spacing();
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Pressed Settings")) {
+
+				ImGui::Text("Loop");
+				ImGui::SameLine(125);
+				ImGui::Checkbox("##Loop", &pressed_info.loop);
+				ImGui::Spacing();
+				ImGui::Text("Speed");
+				ImGui::SameLine(125);
+				ImGui::DragFloat("##Speed", &pressed_info.speed, 0.5F, 0.1f, 100.0f, "%.1f");
+
+				ImGui::Spacing();
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Disabled Settings")) {
+
+				ImGui::Text("Loop");
+				ImGui::SameLine(125);
+				ImGui::Checkbox("##Loop", &disabled_info.loop);
+				ImGui::Spacing();
+				ImGui::Text("Speed");
+				ImGui::SameLine(125);
+				ImGui::DragFloat("##Speed", &disabled_info.speed, 0.5F, 0.1f, 100.0f, "%.1f");
+
+				ImGui::Spacing();
+				ImGui::TreePop();
+			}
+			
 
 			ImGui::TreePop();
 		}
@@ -1642,20 +1765,20 @@ void ComponentButton::Draw(bool isGame)
 
 		scale.x = matrix[0][0];
 		scale.y = matrix[1][1];
-		scale.z = 1.0f;
+		scale.z = matrix[2][2];
 
 
-		float4x4 uiLocal = float4x4::FromTRS(position, rotation, scale);
+		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
 		float4x4 uiGlobal = uiLocal;
 
-		/*	if (!particleInfo.globalTransform)
-			{
-				float4x4 parentGlobal = owner->emmitter.GetGlobalTransform();
-				particleGlobal = parentGlobal * particleLocal;
-			}*/
+		/*if (game_object_attached->parent->GetComponent<ComponentCanvas>() != nullptr)
+		{
+			float4x4 parentGlobal = canvas->GetGlobalTransform();
+			uiGlobal = parentGlobal * uiLocal;
+		}*/
 
 		glPushMatrix();
-		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
+		glMultMatrixf(uiGlobal.Transposed().ptr());
 
 	}
 
@@ -1693,7 +1816,6 @@ bool ComponentButton::OnEnter()
 {
 	if (active)
 	{
-		//baina loka
 		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
 		if (emitter != nullptr)
 		{
@@ -1710,7 +1832,7 @@ bool ComponentButton::OnIdle()
 		current_color = idle_color;
 
 		SetCurrentTexArray(&idle_info);
-
+		
 	}
 	return true;
 }
@@ -1720,9 +1842,9 @@ bool ComponentButton::OnHover()
 	if (active) {
 
 		current_color = hover_color;
-
+		
 		SetCurrentTexArray(&hover_info);
-
+		
 		CallListeners(&listenersOnHover);
 	}
 	return true;
@@ -1737,11 +1859,11 @@ bool ComponentButton::OnClick()
 		{
 			emitter->StartSound(click_event.c_str());
 		}
-
+		
 		current_color = clicked_color;
-
+		
 		SetCurrentTexArray(&clicked_info);
-
+		
 		CallListeners(&listenersOnClick);
 	}
 	return true;
@@ -1751,9 +1873,9 @@ bool ComponentButton::OnPressed()
 {
 	if (active) {
 		current_color = pressed_color;
-
+		
 		SetCurrentTexArray(&pressed_info);
-
+		
 		CallListeners(&listenersOnClickRepeat);
 	}
 	return true;
@@ -1829,7 +1951,7 @@ void ComponentButton::SetCurrentTexArray(AnimationInfo* new_tex)
 			(*item)->DecreaseReferences();
 		}
 	}
-
+	
 	current_tex_array = new_tex;
 	if (!new_tex->tex_array.empty())
 	{
@@ -1841,15 +1963,15 @@ void ComponentButton::SetCurrentTexArray(AnimationInfo* new_tex)
 			}
 		}
 	}
-
+	
 }
 
 ResourceTexture* ComponentButton::GetCurrentFrame(float dt)
 {
-	current_tex_array->current_frame += speed * dt;
+	current_tex_array->current_frame += current_tex_array->speed * dt;
 	if (current_tex_array->current_frame >= current_tex_array->last_frame)
 	{
-		current_tex_array->current_frame = (loop) ? 0.0f : current_tex_array->last_frame - 1;
+		current_tex_array->current_frame = (current_tex_array->loop) ? 0.0f : current_tex_array->last_frame - 1;
 		current_tex_array->loops++;
 	}
 	return current_tex_array->tex_array.at((int)current_tex_array->current_frame);
@@ -1875,8 +1997,8 @@ int ComponentButton::SeeCurrentFrame()
 
 void ComponentButton::SetActive(bool active)
 {
-	this->active = active;
-	if (active) {
+	this->active_ui = active;
+	if (active_ui) {
 		current_color = idle_color;
 
 		if (!idle_info.tex_array.empty())
