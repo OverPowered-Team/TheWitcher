@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "CiriFightController.h"
 #include "Ciri.h"
 
 
@@ -20,6 +21,8 @@ void Ciri::StartEnemy()
 	Boss::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
+
+	fight_controller = GameObject::FindWithName("CiriOriginal")->GetComponent<CiriFightController>();
 }
 
 void Ciri::UpdateEnemy()

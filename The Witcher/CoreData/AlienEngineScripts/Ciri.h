@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "Boss.h"
 
+class CiriFightController;
+
 class ALIEN_ENGINE_API Ciri : public Boss {
 public:
 	float combo_range = 3.0f;
@@ -15,6 +17,8 @@ public:
 	float dash_speed = 50.0f;
 	float dash_time = 0.1f;
 	float dash_timer = 0.0f;
+
+	CiriFightController* fight_controller = nullptr;
 public:
 
 	void StartEnemy() override;
