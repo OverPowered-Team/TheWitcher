@@ -19,7 +19,7 @@ public:
 	void Update();
 	void CleanUp();
 
-	Enemy* CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type = -1);
+	Enemy* CreateEnemy(EnemyType type, const float3& position, ExtraEnumType extra_type = -1, GameObject* parent = nullptr);
 
 	void AddEnemy(Enemy* enemy);
 	void DeleteEnemy(Enemy* enemy);
@@ -28,6 +28,15 @@ public:
 	GameObject* player1 = nullptr;
 	GameObject* player2 = nullptr;
 
+	Prefab nilf_melee;
+	Prefab nilf_range;
+	Prefab nilf_shield;
+
+	Prefab ghoul_original;
+	Prefab ghoul_dodge;
+
+	Prefab drowned_range;
+	Prefab drowned_grab;
 
 private:
 	std::vector<Enemy*> enemies;

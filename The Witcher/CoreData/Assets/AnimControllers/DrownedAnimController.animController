@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "DrownedAnimController",
-        "NumStates": 6,
-        "NumTransitions": 2,
+        "NumStates": 7,
+        "NumTransitions": 3,
         "States": [
             {
                 "Name": "Idle",
@@ -17,7 +17,7 @@
             {
                 "Name": "Attack",
                 "Speed": 1,
-                "Clip": "8670259325049152291"
+                "Clip": "3313610826098254409"
             },
             {
                 "Name": "Death",
@@ -33,6 +33,11 @@
                 "Name": "Hide",
                 "Speed": 1,
                 "Clip": "6535522296308659848"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 1,
+                "Clip": "13193819018923853663"
             }
         ],
         "Transitions": [
@@ -62,6 +67,21 @@
                     {
                         "Type": "bool",
                         "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
                         "ParameterIndex": 0
                     }
                 ]
