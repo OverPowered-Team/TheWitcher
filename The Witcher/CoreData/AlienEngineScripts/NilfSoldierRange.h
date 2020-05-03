@@ -16,7 +16,6 @@ public:
 
 	void Flee();
 	void ShootAttack();
-	Quat RotateArrow();
 
 public:
 	Prefab arrow;

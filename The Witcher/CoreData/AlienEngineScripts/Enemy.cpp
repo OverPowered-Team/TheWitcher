@@ -175,6 +175,20 @@ void Enemy::DeactivateCollider()
 	}
 }
 
+Quat Enemy::RotateProjectile()
+{
+	float3 front = -float3::unitZ(); //front of the object
+	Quat rot1 = Quat::RotateFromTo(front, direction);
+
+	float3 desiredUp = float3::unitY();
+	float3 right = Cross(direction, desiredUp);
+	desiredUp = Cross(right, direction);
+
+	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
+	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
+	return rot2 * rot1;
+}
+
 void Enemy::KnockBack(float3 knock)
 {
 	velocity = knock;

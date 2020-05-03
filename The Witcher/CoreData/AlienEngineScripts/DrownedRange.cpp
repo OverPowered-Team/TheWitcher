@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "ArrowScript.h"
 
 DrownedRange::DrownedRange() : Drowned()
 {
@@ -90,4 +91,15 @@ void DrownedRange::OnTriggerEnter(ComponentCollider* collider)
 			}
 		}
 	}
+}
+
+void DrownedRange::ShootSlime()
+{
+	float3 slime_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
+	GameObject* arrow_go = GameObject::Instantiate(slime, slime_pos);
+	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
+	audio_emitter->StartSound("SoldierShoot");
+	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
+	arrow_rb->SetRotation(RotateProjectile());
+	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
 }

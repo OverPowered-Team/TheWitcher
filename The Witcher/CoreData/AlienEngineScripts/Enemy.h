@@ -39,6 +39,7 @@ public:
 	virtual void Action() {}
 	void ActivateCollider();
 	void DeactivateCollider();
+	Quat RotateProjectile();
 
 	virtual void Stun(float time) {};
 	virtual void KnockBack(float3 knock);
