@@ -209,9 +209,7 @@ void PlayerController::HandleMovement()
 	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
 
 	direction_vector = (Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector).Normalized();
-	float tmp_y = player_data.speed.y;
 	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue();
-	player_data.speed.y = tmp_y;
 
 	//rotate
 	if (mov_input)
@@ -332,7 +330,7 @@ void PlayerController::Revive(float minigame_value)
 	SetState(StateType::IDLE);
 }
 
-void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
+void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 {
 	if (player_data.stats["Absorb"].GetValue() > 0)
 	{
@@ -348,16 +346,18 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 	}
 
 	attacks->CancelAttack();
-	if (player_data.stats["Health"].GetValue() == 0)
-	{	
-		shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-		Die();
-	}
-	else
-	{
-		animator->PlayState("Hit");
-		player_data.speed = knock_speed;
-		SetState(StateType::HIT);
+	if (knock) {
+		if (player_data.stats["Health"].GetValue() == 0)
+		{
+			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+			Die();
+		}
+		else
+		{
+			animator->PlayState("Hit");
+			player_data.speed = knock_speed;
+			SetState(StateType::HIT);
+		}
 	}
 
 	if(GameManager::instance->rumbler_manager)
@@ -380,16 +380,21 @@ void PlayerController::AbsorbHit()
 }
 #pragma endregion PlayerActions
 
-void PlayerController::HitByRock(float time)
+void PlayerController::HitByRock(float time, float dmg)
 {
-	//if is vulnerable and not already chiquito
-		//life -= damage
-	Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
-	transform->SetLocalScale(1.f, 0.25f, 1.f);
+	if (state->type != StateType::DEAD || !is_immune) {
+		ReceiveDamage(dmg, float3::zero(), false);
+		Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
+		transform->SetLocalScale(1.f, 0.25f, 1.f);
+		if (state->type != StateType::DEAD) {
+			is_immune = true;
+		}
+	}
 }
 
 void PlayerController::RecoverFromRockHit()
 {
+	is_immune = false;
 	transform->SetLocalScale(1.f, 1.f, 1.f);
 }
 
