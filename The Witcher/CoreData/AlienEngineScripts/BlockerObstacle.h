@@ -24,6 +24,8 @@ public:
 	void LookForMyChildren();
 	void ManageHealth();
 	void OnTriggerEnter(ComponentCollider* collider) override;
+	void OnDrawGizmosSelected() override;
+	bool IsDead() override;
 public:
 	//float health = 0.f;
 	//float minimum_health = 0.f;

@@ -33,24 +33,24 @@ void BlockerObstacle::StartEnemy()
 	type = EnemyType::BLOCKER_OBSTACLE;
 	Enemy::StartEnemy();
 	state = ObstacleState::IDLE;
-	children_enemies = this->game_object->GetChildren();
+	children_enemies = this->game_object->GetChild("ChildEnemies")->GetChildren();
 }
 
 void BlockerObstacle::UpdateEnemy()
 {
 	Enemy::UpdateEnemy();
-	LOG("MY LIFE: %f", stats["Health"].GetValue());
+	//LOG("MY LIFE: %f", stats["Health"].GetValue());
 	switch (state)
 	{
 	case ObstacleState::IDLE: {
-		//if (distance < stats["VisionRange"].GetValue())
-			//LookForMyChildren();
+		if (distance < stats["VisionRange"].GetValue())
+			LookForMyChildren();
 			break;
 	}
 	case ObstacleState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 1);
 		state = ObstacleState::DEAD;
 		break;
 	}
@@ -66,14 +66,15 @@ void BlockerObstacle::CleanUpEnemy()
 {
 	children_enemies.clear();
 }
-
+void BlockerObstacle::OnDrawGizmosSelected()
+{
+	/*float range = stats["VisionRange"].GetValue();
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 25, Color::Blue());*/
+}
 float BlockerObstacle::GetDamaged(float dmg, PlayerController* player)
 {
 	float damage = Enemy::GetDamaged(dmg, player);
 	if (stats["Health"].GetValue() == 0.0F) {
-
-		//animator->SetBool("dead", true);
-		//OnDeathHit();
 		state = ObstacleState::DYING;
 		/*audio_emitter->StartSound("GhoulDeath");*/
 		player->OnEnemyKill();
@@ -86,7 +87,7 @@ void BlockerObstacle::LookForMyChildren()
 	auto iter = children_enemies.begin();
 	while(iter != children_enemies.end())
 	{
-		if ((*iter)->GetComponent<Enemy>()->IsDead())
+		if ((*iter)->GetComponent<Enemy>()->IsDead() || (*iter) == nullptr)
 		{
 			iter = children_enemies.erase(iter);
 			ManageHealth();
@@ -100,11 +101,10 @@ void BlockerObstacle::LookForMyChildren()
 
 void BlockerObstacle::ManageHealth()
 {
-	//if (health <= minimum_health || children_enemies.size() <= 0)
-	//	return;
-	////FOR NOW THIS WILL BE A THREE RULE CALCULATION
-	//health -= ((health - minimum_health) / children_enemies.size());
-	//LOG("NEW HEALTH: %f", health);
+	if (children_enemies.size() <= 0) {
+		stats["Health"].SetBaseStat(1.f);
+		LOG("MATEME PORFAVOR");
+	}
 }
 
 void BlockerObstacle::OnTriggerEnter(ComponentCollider* collider)
@@ -122,4 +122,9 @@ void BlockerObstacle::OnTriggerEnter(ComponentCollider* collider)
 			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 		}
 	}
+}
+
+bool BlockerObstacle::IsDead()
+{
+	return (state == ObstacleState::DEAD ? true : false);
 }
