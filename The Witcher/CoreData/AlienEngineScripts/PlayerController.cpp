@@ -203,20 +203,26 @@ bool PlayerController::AnyKeyboardInput()
 
 void PlayerController::HandleMovement()
 {
-	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
+
+	/*float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
 	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
 	direction_vector.y = 0.f;
 
 	float speed_y = player_data.speed.y;
 	player_data.speed = direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;
+	player_data.speed.y = speed_y;*/
+	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
+
+	direction_vector = (Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector).Normalized();
+	float tmp_y = player_data.speed.y;
+	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue();
+	player_data.speed.y = tmp_y;
+
 
 	//rotate
 	if (mov_input)
 	{
-		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-		transform->SetGlobalRotation(rot);
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
 	}
 }
 
@@ -225,9 +231,17 @@ void PlayerController::EffectsUpdate()
 	if (Time::GetGameTime() - last_regen_tick > 1.0f)
 	{
 		player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos_Regen"].GetValue());
-		player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+		//player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+
+		if (HUD)
+		{
+			//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+		}
+
 		last_regen_tick = Time::GetGameTime();
 	}
+
 	for (auto it = effects.begin(); it != effects.end();)
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
@@ -334,8 +348,10 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 
 	player_data.stats["Health"].DecreaseStat(dmg);
 
-	if(HUD)
+	if (HUD)
+	{
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	}
 
 	attacks->CancelAttack();
 	if (player_data.stats["Health"].GetValue() == 0)
@@ -578,20 +594,27 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	{
 		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
 
+		if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+		{
+			Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+			HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
+		}
+
 		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
 		{
-			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+			if (player_data.stats["Health"].GetMaxValue() > player_data.stats["Health"].GetValue()
+				|| player_data.stats["Chaos"].GetMaxValue() > player_data.stats["Chaos"].GetValue())
 			{
-				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
-				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
+				// Heal
+				player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+				player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+				HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+				HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+
+
+				// Player Used this Bonfire
+				bonfire->SetBonfireUsed(this);
 			}
-
-			// Heal
-			player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
-			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-
-			// Player Used this Bonfire
-			bonfire->SetBonfireUsed(this);
 		}
 	}
 
