@@ -30,7 +30,7 @@ public:
 	float time_despawn = 9.f;
 
 	float damage = 5.f;
-	float time_shmashed = 3.f;
+	float time_smashed = 3.f;
 
 private:
 	float timer = 0.f;
@@ -53,7 +53,7 @@ ALIEN_FACTORY RockSpawner* CreateRockSpawner() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(alien->rock);
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->damage);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_shmashed);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_smashed);
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->min_time_btw);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->max_time_btw);
