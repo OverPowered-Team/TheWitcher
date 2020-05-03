@@ -18,6 +18,7 @@ public:
 
 	void OnPlayerDead(PlayerController* dead_player);
 	void OnPlayerRevive(PlayerController* revived_player);
+	void BlockInput(bool block);
 
 	int max_ultimate_charge = 200;
 	float ultimate_time = 5.0f;

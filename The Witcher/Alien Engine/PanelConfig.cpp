@@ -4,6 +4,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
 #include "imgui/imgui.h"
 #include "gpudetect/DeviceId.h"
 
@@ -205,6 +206,18 @@ void PanelConfig::PanelLogic()
 		ImGui::InputFloat("Camera Zoom Speed", &App->camera->camera_zoom_speed, 1, 5, 2);
 		ImGui::InputFloat("Camera Rotation Speed", &App->camera->camera_rotation_speed, 1, 5, 2);
 		ImGui::InputFloat("Camera Orbit Speed", &App->camera->camera_orbit_speed, 1, 5, 2);
+
+		ImGui::Separator();
+		ImGui::ColorEdit3("Background Color", &App->renderer3D->scene_fake_camera->camera_color_background, ImGuiColorEditFlags_Float);
+		ImGui::Checkbox("Camera Fog", &App->renderer3D->scene_fake_camera->activeFog);
+		if (App->renderer3D->scene_fake_camera->activeFog)
+		{
+			ImGui::DragFloat("Fog Density", &App->renderer3D->scene_fake_camera->fogDensity, 0.001f, 0.0f, 10.f);
+			ImGui::DragFloat("Fog Gradient", &App->renderer3D->scene_fake_camera->fogGradient, 0.02f, 0.0f, 10.f);
+		}
+		if (ImGui::Button("Reset Camera Properties"))
+			App->renderer3D->scene_fake_camera->Reset();
+
 	}
 	if (ImGui::CollapsingHeader("Input")) 
 	{

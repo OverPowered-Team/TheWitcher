@@ -347,6 +347,11 @@ void WwiseT::AudioSource::SetPanRight(float value)
 	AK::SoundEngine::SetRTPCValue("PanRight", value, id);
 }
 
+void WwiseT::AudioSource::SetRTPCValue(const char* ev, float value, u32 ID)
+{
+	AK::SoundEngine::SetRTPCValue(ev, value, ID);
+}
+
 void WwiseT::AudioSource::SetMono()
 {
 	AkChannelConfig cfg;

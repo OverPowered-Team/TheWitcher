@@ -82,69 +82,81 @@ void PanelHierarchy::PanelLogic()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-	}
 
-	object_hovered = nullptr;
-	if (!App->objects->GetGlobalRoot()->children.empty()) {
-		std::vector<GameObject*>::iterator item = App->objects->GetGlobalRoot()->children.begin();
-		for (; item != App->objects->GetGlobalRoot()->children.end(); ++item)
-		{
-			if (App->objects->GetGlobalRoot()->children.size() > 1 && (*item)->ID == App->objects->scene_active) {
-				ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Header, ImGui::GetColorU32(ImGuiCol_HeaderActive));
+		object_hovered = nullptr;
+		if (!App->objects->GetGlobalRoot()->children.empty()) {
+			std::vector<GameObject*>::iterator item = App->objects->GetGlobalRoot()->children.begin();
+			for (; item != App->objects->GetGlobalRoot()->children.end(); ++item)
+			{
+				PrintNode(*item);
 			}
+		}
 
-			ImGui::PushID(*item);
-			if (ImGui::CollapsingHeader((*item)->name, ImGuiTreeNodeFlags_DefaultOpen)) {
-
+	}
+	else {
+		object_hovered = nullptr;
+		if (!App->objects->GetGlobalRoot()->children.empty()) {
+			std::vector<GameObject*>::iterator item = App->objects->GetGlobalRoot()->children.begin();
+			for (; item != App->objects->GetGlobalRoot()->children.end(); ++item)
+			{
 				if (App->objects->GetGlobalRoot()->children.size() > 1 && (*item)->ID == App->objects->scene_active) {
-					ImGui::PopStyleColor();
+					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Header, ImGui::GetColorU32(ImGuiCol_HeaderActive));
 				}
 
-				RightClickSceneNode(*item);
-				
-				if (ImGui::BeginDragDropTarget()) {
-					const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
-					if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
-						GameObject* obj = *(GameObject**)payload->Data;
-						std::vector<GameObject*> objects;
-						if (!obj->IsSelected()) {
-							objects.push_back(obj);
-						}
-						else {
-							objects.assign(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end());
-						}
-						for (auto it = objects.begin(); it != objects.end(); ++it) {
-							if ((*it)->parent != *item) {
-								if ((*it)->IsPrefab() && (*it)->FindPrefabRoot() != (*it) && !App->objects->prefab_scene) {
-									popup_move_child_outof_root_prefab_scene = true;
-								}
-								else if (!(*it)->is_static) {
-									App->objects->ReparentGameObject((*it),*item);
-								}
-								else {
-									LOG_ENGINE("Objects static can not be reparented");
+				ImGui::PushID(*item);
+				if (ImGui::CollapsingHeader((*item)->name, ImGuiTreeNodeFlags_DefaultOpen)) {
+
+					if (App->objects->GetGlobalRoot()->children.size() > 1 && (*item)->ID == App->objects->scene_active) {
+						ImGui::PopStyleColor();
+					}
+
+					RightClickSceneNode(*item);
+
+					if (ImGui::BeginDragDropTarget()) {
+						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_HIERARCHY_NODES, ImGuiDragDropFlags_SourceNoDisableHover);
+						if (payload != nullptr && payload->IsDataType(DROP_ID_HIERARCHY_NODES)) {
+							GameObject* obj = *(GameObject**)payload->Data;
+							std::vector<GameObject*> objects;
+							if (!obj->IsSelected()) {
+								objects.push_back(obj);
+							}
+							else {
+								objects.assign(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end());
+							}
+							for (auto it = objects.begin(); it != objects.end(); ++it) {
+								if ((*it)->parent != *item) {
+									if ((*it)->IsPrefab() && (*it)->FindPrefabRoot() != (*it) && !App->objects->prefab_scene) {
+										popup_move_child_outof_root_prefab_scene = true;
+									}
+									else if (!(*it)->is_static) {
+										App->objects->ReparentGameObject((*it), *item);
+									}
+									else {
+										LOG_ENGINE("Objects static can not be reparented");
+									}
 								}
 							}
+							ImGui::ClearDragDrop();
 						}
-						ImGui::ClearDragDrop();
+						ImGui::EndDragDropTarget();
 					}
-					ImGui::EndDragDropTarget();
-				}
 
-				for (auto it = (*item)->children.begin(); it != (*item)->children.end(); ++it) {
-					PrintNode(*it);
+					for (auto it = (*item)->children.begin(); it != (*item)->children.end(); ++it) {
+						PrintNode(*it);
+					}
 				}
-			}
-			else {
-				if (App->objects->GetGlobalRoot()->children.size() > 1 && (*item)->ID == App->objects->scene_active) {
-					ImGui::PopStyleColor();
+				else {
+					if (App->objects->GetGlobalRoot()->children.size() > 1 && (*item)->ID == App->objects->scene_active) {
+						ImGui::PopStyleColor();
+					}
+					RightClickSceneNode(*item);
 				}
-				RightClickSceneNode(*item);
-			}
-			ImGui::PopID();
+				ImGui::PopID();
 
+			}
 		}
 	}
+	
 	RightClickMenu();
 	right_click_scene = false;
 

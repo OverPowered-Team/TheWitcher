@@ -69,10 +69,10 @@ public:
 	void PlayAttackParticle();
 	void Die();
 	void Revive(float minigame_value);
-	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
+	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 }, bool knock = true);
 	void PlayAllowParticle();
 
-	void HitByRock(float time);
+	void HitByRock(float time, float damage);
 	void RecoverFromRockHit();
 
 	//Relics
@@ -81,6 +81,7 @@ public:
 
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
+	float3 GetDirectionVector();
 	bool CheckForPossibleRevive();
 
 	void OnUltimateActivation(float value);

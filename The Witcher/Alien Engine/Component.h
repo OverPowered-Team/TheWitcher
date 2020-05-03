@@ -41,8 +41,9 @@ enum class ComponentType {
 	DEFORMABLE_MESH = 27,
 	BONE = 28,
 	SCRIPT = 29,
-	UI = 30,
+	CURVE = 30,
 
+	UI, // SECOND LAST LAST LAST
 	MAX //LAST LAST LAST
 };
 
@@ -100,8 +101,9 @@ protected:
 	virtual void PreUpdate() {}
 	virtual void Update() {}
 	virtual void PostUpdate() {}
-	virtual void DrawScene() {}
-	virtual void DrawGame() {}
+
+	virtual void DrawScene(ComponentCamera* camera) {}
+	virtual void DrawGame(ComponentCamera* camera) {}
 
 	virtual void ResetIDs();
 

@@ -29,7 +29,7 @@ protected:
 	virtual void OnDisable(){}
 	virtual bool DrawInspector() { return true; }
 	virtual void HandleAlienEvent(const AlienEvent& e) {}
-	virtual void DrawScene() {}
+	virtual void DrawScene(ComponentCamera* camera) override {}
 
 	virtual void SetComponent(Component* component) {}
 	virtual void SaveComponent(JSONArraypack* to_save) {}
