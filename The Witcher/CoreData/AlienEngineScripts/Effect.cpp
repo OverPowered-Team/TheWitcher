@@ -7,6 +7,28 @@ Effect::Effect()
 	
 }
 
+Effect::Effect(EffectData* data)
+{
+    name = data->name;
+    time = data->time;
+    ticks_time = data->ticks_time;
+
+    last_tick_time = Time::GetGameTime();
+    start_time = Time::GetGameTime();
+
+    vfx_on_apply = data->vfx_on_apply;
+    vfx_on_tick = data->vfx_on_tick;
+
+    for (int i = 0; i < data->additive_modifiers.size(); ++i)
+    {
+        AddFlatModifier(data->additive_modifiers[i].amount, data->additive_modifiers[i].identifier);
+    }
+    for (int i = 0; i < data->multiplicative_modifiers.size(); ++i)
+    {
+        AddMultiplicativeModifier(data->multiplicative_modifiers[i].amount, data->multiplicative_modifiers[i].identifier);
+    }
+}
+
 Effect::~Effect()
 {
 }

@@ -34,6 +34,9 @@ void Enemy::StartEnemy()
 	case EnemyType::LESHEN:
 		json_str = "leshen";
 		break;
+	case EnemyType::CIRI:
+		json_str = "ciri";
+		break;
 	case EnemyType::DROWNED:
 		json_str = "drowned";
 		break;
@@ -88,7 +91,7 @@ void Enemy::UpdateEnemy()
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
 			{
 				it_stats->second.ModifyCurrentStat((*it));
-
+				
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
@@ -105,6 +108,11 @@ void Enemy::UpdateEnemy()
 
 		if ((*it)->to_delete)
 		{
+			for (auto stat_it = stats.begin(); stat_it != stats.end(); ++stat_it)
+			{
+				if ((*it)->AffectsStat(stat_it->second.name))
+					stat_it->second.RemoveEffect((*it));
+			}
 			delete (*it);
 			it = effects.erase(it);
 			continue;
@@ -167,10 +175,18 @@ void Enemy::DeactivateCollider()
 	}
 }
 
-float Enemy::GetDamaged(float dmg, PlayerController* player)
+void Enemy::KnockBack(float3 knock)
+{
+	velocity = knock;
+	velocity.y = 0;
+}
+
+float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
+
+	KnockBack(knock_back);
 
 	return aux_health - stats["Health"].GetValue();
 }
@@ -186,6 +202,25 @@ void Enemy::AddEffect(Effect* new_effect)
 	{
 		if (new_effect->AffectsStat(it->second.name) && new_effect->ticks_time == 0)
 			it->second.ApplyEffect(new_effect);
+	}
+}
+
+void Enemy::RemoveEffect(Effect* _effect)
+{
+	for (auto it = stats.begin(); it != stats.end(); ++it)
+	{
+		if (_effect->AffectsStat(it->second.name))
+			it->second.RemoveEffect(_effect);
+	}
+
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it) == _effect)
+		{
+			delete _effect;
+			effects.erase(it);
+			return;
+		}
 	}
 }
 

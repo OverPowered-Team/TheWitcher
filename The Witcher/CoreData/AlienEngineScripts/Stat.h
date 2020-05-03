@@ -13,6 +13,8 @@ public:
 	~Stat();
 
 	void ApplyEffect(Effect* effect);
+	void RemoveEffect(Effect* effect);
+
 	void CalculateStat();
 	void ModifyCurrentStat(Effect* _effect);
 	float GetValue() { return current_value; }
@@ -21,6 +23,8 @@ public:
 	void SetMaxValue(float _value);
 	void IncreaseStat(float value);
 	void DecreaseStat(float value);
+
+	static void FillStats(std::map<std::string, Stat> &stats, JSONArraypack* json);
 
 	std::string name;
 	std::vector<Effect*> effects;

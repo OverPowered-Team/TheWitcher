@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "PlayerAttacks.h"
 #include "EventManager.h"
+#include "EffectsFactory.h"
 #include "RelicBehaviour.h"
 #include "Effect.h"
 #include "CameraMovement.h"
@@ -10,9 +11,10 @@
 #include "RumblerManager.h"
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
-
+#include "CameraShake.h"
 #include "UI_Char_Frame.h"
 #include "InGame_UI.h"
+
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -30,6 +32,7 @@ void PlayerController::Start()
 	attacks = GetComponent<PlayerAttacks>();
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
+	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
@@ -46,22 +49,28 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
+	if (Input::GetKeyDown(SDL_SCANCODE_F1))
+	{
+		Effect* new_effect = GameManager::instance->effects_factory->CreateEffect("Geralt_Quen");
+		AddEffect(new_effect);
+	}
+
 	UpdateInput();
 
-	//State Machine-----------------
-	State* new_state = state->HandleInput(this);
-	state->Update(this);
-
+	//State Machine--------------------------------------------------------
+	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
 	if (new_state != nullptr)
 		SwapState(new_state);
-	//------------------------------
+
+	state->Update(this);
+	//---------------------------------------------------------------------
 
 	//Effects-----------------------------
 	EffectsUpdate();
 
 	//MOVEMENT
 	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if(CheckBoundaries() && !is_rooted)
+	if(CheckBoundaries() && can_move)
 		controller->Move(player_data.speed * Time::GetDT());
 
 	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
@@ -69,14 +78,9 @@ void PlayerController::Update()
 		player_data.speed.y = 0;
 	}
 
-
-
-
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
-
-
 }
 
 void PlayerController::UpdateInput()
@@ -97,13 +101,13 @@ void PlayerController::UpdateInput()
 		keyboardInput.y = 1.f;
 	}
 
-	if (keyboardInput.Length() > 0)
+	if (keyboardInput.Length() > 0 && !input_blocked)
 	{
 		mov_input = true;
 		keyboardInput.Normalize();
 		movement_input = keyboardInput;
 	}
-	else if (joystickInput.Length() > 0) {
+	else if (joystickInput.Length() > 0 && !input_blocked) {
 		mov_input = true;
 		movement_input = joystickInput;
 	}
@@ -166,13 +170,13 @@ void PlayerController::SwapState(State* new_state)
 
 void PlayerController::ApplyRoot(float time)
 {
-	is_rooted = true;
+	can_move = false;
 	Invoke(std::bind(&PlayerController::ReleaseRoot, this), time);
 }
 
 void PlayerController::ReleaseRoot()
 {
-	is_rooted = false;
+	can_move = true;
 }
 
 bool PlayerController::AnyKeyboardInput()
@@ -207,6 +211,12 @@ void PlayerController::HandleMovement()
 
 void PlayerController::EffectsUpdate()
 {
+	if (Time::GetGameTime() - last_regen_tick > 1.0f)
+	{
+		player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos_Regen"].GetValue());
+		player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+		last_regen_tick = Time::GetGameTime();
+	}
 	for (auto it = effects.begin(); it != effects.end();)
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
@@ -220,7 +230,10 @@ void PlayerController::EffectsUpdate()
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 					if (player_data.stats["Health"].GetValue() == 0)
+					{
+						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
+					}
 				}
 			}
 			if (particles[(*it)->name])
@@ -228,8 +241,7 @@ void PlayerController::EffectsUpdate()
 		}
 		if ((*it)->to_delete)
 		{
-			delete (*it);
-			it = effects.erase(it);
+			it = RemoveEffect(it);
 			continue;
 		}
 		++it;
@@ -242,6 +254,16 @@ void PlayerController::PlayAttackParticle()
 	{
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);
+	}
+}
+
+void PlayerController::PlayAllowParticle()
+{
+	if (attacks->GetCurrentAttack())
+	{
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);
+
 	}
 }
 
@@ -281,6 +303,7 @@ void PlayerController::Revive()
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
@@ -298,15 +321,23 @@ void PlayerController::ActionRevive()
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 {
+	if (player_data.stats["Absorb"].GetValue() > 0)
+	{
+		AbsorbHit();
+		return;
+	}
+
 	player_data.stats["Health"].DecreaseStat(dmg);
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 
 	attacks->CancelAttack();
-
 	if (player_data.stats["Health"].GetValue() == 0)
+	{	
+		shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 		Die();
+	}
 	else
 	{
 		animator->PlayState("Hit");
@@ -316,6 +347,21 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+}
+
+void PlayerController::AbsorbHit()
+{
+	for (auto it = effects.begin(); it != effects.end();)
+	{
+		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
+		{
+			if (mods->identifier == "Absorb")
+			{
+				RemoveEffect(it);
+				return;
+			}
+		}
+	}
 }
 #pragma endregion PlayerActions
 
@@ -336,6 +382,42 @@ void PlayerController::AddEffect(Effect* _effect)
 				it->second.ApplyEffect(_effect);
 		}
 	}
+
+	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
+	if (go)
+		particles.insert(std::pair(_effect->vfx_on_apply, go));
+}
+std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
+{
+	Effect* tmp_effect = (*it);
+	it = effects.erase(it);
+
+	if (dynamic_cast<AttackEffect*>(tmp_effect) != nullptr)
+	{
+		attacks->OnRemoveAttackEffect(((AttackEffect*)tmp_effect));
+	}
+	else
+	{
+		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
+		{
+			if (tmp_effect->AffectsStat(it->second.name))
+				it->second.RemoveEffect(tmp_effect);
+		}
+	}
+
+	for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (it->first == tmp_effect->vfx_on_apply)
+		{
+			GameObject::Destroy(it->second);
+			it = particles.erase(it);
+		}
+		else
+			++it;
+	}
+
+	delete tmp_effect;
+	return it;
 }
 bool PlayerController::CheckBoundaries()
 {
@@ -391,6 +473,9 @@ bool PlayerController::CheckForPossibleRevive()
 
 void PlayerController::HitFreeze(float freeze_time)
 {
+	if (is_immune)
+		return;
+
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
 	is_immune = true;
@@ -414,10 +499,12 @@ void PlayerController::OnAnimationEnd(const char* name) {
 	if (new_state != nullptr)
 		SwapState(new_state);
 }
+
 void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 {
 	player_data.total_damage_dealt += dmg_dealt;
 	HitFreeze(attacks->GetCurrentAttack()->info.freeze_time);
+	attacks->OnHit(enemy);
 
 	//EFFECT ONHIT
 	for (auto it = effects.begin(); it != effects.end(); ++it)
@@ -432,11 +519,12 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 		}
 	}
 }
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
 	if (!godmode)
 	{
-		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0 && !is_immune) {
+		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
 
 			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
 
@@ -455,11 +543,13 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 }
+
 void PlayerController::OnEnemyKill()
 {
 	player_data.total_kills++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }
+
 void PlayerController::OnUltimateActivation(float value)
 {
 	animator->IncreaseAllStateSpeeds(2.0f);
@@ -479,22 +569,14 @@ void PlayerController::OnDrawGizmosSelected()
 void PlayerController::LoadStats()
 {
 	std::string character_string = player_data.type == PlayerController::PlayerType::GERALT ? "Geralt" : "Yennefer";
-	std::string json = "GameData/Players/" + character_string + "Stats.json";
+	std::string json_string = "GameData/Players/" + character_string + "Stats.json";
 
-	JSONfilepack* stats_json = JSONfilepack::GetJSON(json.c_str());
-	if (stats_json)
-	{
-		player_data.stats["Health"] = Stat("Health", stats_json->GetNumber("Health"));
-		player_data.stats["Strength"] = Stat("Strength", stats_json->GetNumber("Strength"));
-		player_data.stats["Chaos"] = Stat("Chaos", stats_json->GetNumber("Chaos"));
-		player_data.stats["Chaos_Regen"] = Stat("Chaos_Regen", stats_json->GetNumber("Chaos_Regen"));
-		player_data.stats["Attack_Speed"] = Stat("Attack_Speed", stats_json->GetNumber("Attack_Speed"));
-		player_data.stats["Movement_Speed"] = Stat("Movement_Speed", stats_json->GetNumber("Movement_Speed"));
-		player_data.stats["Dash_Power"] = Stat("Dash_Power", stats_json->GetNumber("Dash_Power"));
-		player_data.stats["Jump_Power"] = Stat("Jump_Power", stats_json->GetNumber("Jump_Power"));
-	}
+	JSONfilepack* json = JSONfilepack::GetJSON(json_string.c_str());
+	JSONArraypack* stats_json = json->GetArray("Stats");
 
-	JSONfilepack::FreeJSON(stats_json);
+	Stat::FillStats(player_data.stats, stats_json);
+
+	JSONfilepack::FreeJSON(json);
 }
 void PlayerController::InitKeyboardControls()
 {

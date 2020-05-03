@@ -10,16 +10,41 @@
 
 State* IdleState::HandleInput(PlayerController* player)
 {
+	if (player->movement_input.Length() > 0)
+	{
+		return new RunningState();
+	}
 	if (!player->controller->isGrounded)
 	{
 		player->Fall();
 		return new JumpingState();
 	}
-	if (player->movement_input.Length() > 0)
-	{
-		return new RunningState();
+
+	if (Input::GetControllerTriggerLeft(player->controller_index) == 1.0
+		|| Input::GetKeyDown(player->keyboard_spell)) {
+
+		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
+		{
+			if (player->attacks->StartSpell(0))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
+		{
+			if (player->attacks->StartSpell(1))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
+		{
+			if (player->attacks->StartSpell(2))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
+		{
+			if (player->attacks->StartSpell(3))
+				return new AttackingState();
+		}
 	}
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		return new AttackingState();
@@ -27,15 +52,13 @@ State* IdleState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
+
+		if(GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_spell)
-		|| Input::GetKeyDown(player->keyboard_spell)) {
-		player->attacks->StartSpell(0);
-		return new CastingState();
-	}
+	
 
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_dash)
 		|| Input::GetKeyDown(player->keyboard_dash))
@@ -64,6 +87,10 @@ State* IdleState::HandleInput(PlayerController* player)
 
 void IdleState::Update(PlayerController* player)
 {
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void IdleState::OnEnter(PlayerController* player)
@@ -77,27 +104,50 @@ void IdleState::OnExit(PlayerController* player)
 
 State* RunningState::HandleInput(PlayerController* player)
 {
+	if (!player->mov_input)
+	{
+		return new IdleState();
+	}
 	if (!player->controller->isGrounded)
 	{
 		player->Fall();
 		return new JumpingState();
 	}
 
-	if (!player->mov_input)
-	{
-		return new IdleState();
-	}
+	if (Input::GetControllerTriggerLeft(player->controller_index) == 1.0
+		|| Input::GetKeyDown(player->keyboard_spell)) {
 
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
+		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
+		{
+			if(player->attacks->StartSpell(0))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
+		{
+			if (player->attacks->StartSpell(1))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
+		{
+			if (player->attacks->StartSpell(2))
+				return new AttackingState();
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
+		{
+			if (player->attacks->StartSpell(3))
+				return new AttackingState();
+		}
+	}
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::LIGHT);
 		return new AttackingState();
 	}
-
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
+		if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
@@ -136,6 +186,11 @@ void RunningState::Update(PlayerController* player)
 		player->audio->StartSound();
 	}
 	player->HandleMovement();
+
+	if (!player->controller->isGrounded)
+	{
+		player->Fall();
+	}
 }
 
 void RunningState::OnEnter(PlayerController* player)
@@ -184,7 +239,27 @@ void JumpingState::OnExit(PlayerController* player)
 
 State* AttackingState::HandleInput(PlayerController* player)
 {
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
+	if (Input::GetControllerTriggerLeft(player->controller_index) == 1.0
+		|| Input::GetKeyDown(player->keyboard_spell)) {
+
+		if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 0);
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 1);
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 2);
+		}
+		else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack))
+		{
+			player->attacks->ReceiveInput(PlayerAttacks::AttackType::SPELL, 3);
+		}
+	}
+	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_light_attack)
 		|| Input::GetKeyDown(player->keyboard_light_attack))
 		player->attacks->ReceiveInput(PlayerAttacks::AttackType::LIGHT);
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
@@ -258,13 +333,11 @@ void RollingState::OnEnter(PlayerController* player)
 
 	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
-
-	player->is_immune = true;
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
-	player->is_immune = false;
+
 }
 
 void CastingState::Update(PlayerController* player)
