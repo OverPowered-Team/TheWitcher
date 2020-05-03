@@ -59,3 +59,8 @@ void MusicController::EnemyLostSight(Enemy* en)
 	has_changed = true;
 	enemies_in_sight.remove(en);
 }
+
+void MusicController::DecreaseMusicVolume()
+{
+//AQUI LLAMAR VALOR RTPC
+}
