@@ -64,11 +64,8 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_F1))
-	{
-		Effect* new_effect = GameManager::instance->effects_factory->CreateEffect("Geralt_Quen");
-		AddEffect(new_effect);
-	}
+	if (Time::IsGamePaused())
+		return;
 
 	UpdateInput();
 
