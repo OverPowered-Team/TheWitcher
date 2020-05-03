@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "YenneferController",
-        "NumStates": 17,
-        "NumTransitions": 30,
+        "NumStates": 18,
+        "NumTransitions": 32,
         "States": [
             {
                 "Name": "L",
@@ -88,6 +88,11 @@
                 "Name": "Chain",
                 "Speed": 1,
                 "Clip": "2659056683821727387"
+            },
+            {
+                "Name": "H",
+                "Speed": 1,
+                "Clip": "1585462205760988383"
             }
         ],
         "Transitions": [
@@ -539,6 +544,24 @@
                         "ParameterIndex": 1
                     }
                 ]
+            },
+            {
+                "Source": "H",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "H",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
