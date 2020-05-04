@@ -4,6 +4,7 @@
 #include "Macros/AlienScripts.h"
 
 class PlayerController;
+class InGame_UI;
 class UltiBar;
 
 class ALIEN_ENGINE_API PlayerManager : public Alien {
@@ -40,7 +41,8 @@ private:
 private:
 
 	// UI ultibar
-	UltiBar* ulti_bar = nullptr;
+	InGame_UI* in_game_ui = nullptr;
+	UltiBar* ultibar = nullptr;
 
 };
 

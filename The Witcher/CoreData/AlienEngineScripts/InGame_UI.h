@@ -4,6 +4,7 @@
 #include "Macros/AlienScripts.h"
 
 class PlayerController;
+class UltiBar;
 
 enum(UI_Particle_Type,
 	ULTI,
@@ -20,6 +21,7 @@ public:
 	GameObject* particle = nullptr;
 	PlayerController* player = nullptr;
 	float time_passed = 0.0f;
+	UI_Particle_Type type = UI_Particle_Type::ANY;
 };
 
 class ALIEN_ENGINE_API InGame_UI : public Alien {
@@ -69,7 +71,7 @@ private:
 
 	// Charging ultibar particles
 	std::vector<UI_Particles*> particles;
-	UI_Particle_Type type = UI_Particle_Type::ANY;
+	UltiBar* ulti_bar = nullptr;
 };
 
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {

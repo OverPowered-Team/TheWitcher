@@ -1,6 +1,9 @@
 #include "InGame_UI.h"
 #include "PlayerController.h"
 #include "UI_Char_Frame.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
+#include "UltiBar.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -20,7 +23,7 @@ void InGame_UI::Start()
 	relics_panel->SetEnable(false);
 	you_died->SetEnable(false);
 	in_game->SetEnable(true);
-
+	ulti_bar = game_object->GetChild("InGame")->GetChild("Ulti_Bar")->GetComponent<UltiBar>();
 	checkpoint_saved_text = in_game->GetChild("NewCheckpoint");
 	checkpoint_saved_text->SetEnable(false);
 }
@@ -71,7 +74,7 @@ void InGame_UI::Update()
 
 			if (lerp >= 1)
 			{
-				if ((*particle)->player != nullptr)
+				if ((*particle)->player != nullptr && (*particle)->type == UI_Particle_Type::KILL_COUNT)
 				{
 					if ((*particle)->player->player_data.total_kills >= 10)
 					{
@@ -84,6 +87,19 @@ void InGame_UI::Update()
 						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetText(kills.c_str());
 					}
 				}
+				else if((*particle)->type == UI_Particle_Type::ULTI)
+				{
+					float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / (float)GameManager::instance->player_manager->max_ultimate_charge;
+					if (new_value != 1)
+					{
+						ulti_bar->UpdateBar(new_value);
+					}
+					else
+					{
+						ulti_bar->MaxBar();
+					}
+				}
+
 				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;
 				particles.erase(particle);
@@ -118,7 +134,9 @@ void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type
 	// not working very well but it's the best I accomplished
 	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
+
 	particle->origin_position = float3(0, 0, 0);
+	particle->type = type;
 
 	switch (type)
 	{
