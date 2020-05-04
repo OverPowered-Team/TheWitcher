@@ -365,8 +365,8 @@ void PlayerAttacks::CastSpell()
 		}
 		if (current_attack->HasTag(Attack_Tags::T_Projectile))
 		{
-			/*GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
-				player_controller->particles[current_attack->info.particle_name]->transform->GetGlobalPosition());
+			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
+				player_controller->particle_spawn_positions[1]->transform->GetGlobalPosition());
 
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
 			Quat rot = projectile_go->transform->GetGlobalRotation();
@@ -375,7 +375,7 @@ void PlayerAttacks::CastSpell()
 			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
 
 			if (GameManager::instance->rumbler_manager)
-				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);*/
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
 		}
 	}
 }
