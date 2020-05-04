@@ -41,9 +41,9 @@ enum class ComponentType {
 	DEFORMABLE_MESH = 27,
 	BONE = 28,
 	SCRIPT = 29,
-	CURVE = 30,
+	UI = 30,
+	CURVE = 31,
 
-	UI, // SECOND LAST LAST LAST
 	MAX //LAST LAST LAST
 };
 

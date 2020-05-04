@@ -1,3 +1,5 @@
+#include "GameManager.h"
+#include "ParticlePool.h"
 #include "NilfSoldierShield.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
@@ -78,6 +80,8 @@ void NilfSoldierShield::Block()
 	float b_time = (has_been_attacked) ? block_attack_time : block_time;
 	if (Time::GetGameTime() - current_time > b_time)
 	{
+		ReleaseParticle("ClinckEmitter");
+
 		if (stats["AttackRange"].GetValue() < distance)
 		{
 			state = NilfgaardSoldierState::IDLE;
@@ -95,6 +99,8 @@ void NilfSoldierShield::Block()
 	}
 	else if (break_shield_attack >= max_break_shield_attack)
 	{
+		ReleaseParticle("ClinckEmitter");
+
 		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
 		has_been_attacked = false;
@@ -112,7 +118,7 @@ void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 			has_been_attacked = true;
 			current_time = Time::GetGameTime();
 			break_shield_attack++;
-			particles["ClinckEmitter"]->Restart();
+			SpawnParticle("ClinckEmitter", particle_spawn_positions[1]->transform->GetLocalPosition()); // 1 is body position
 			audio_emitter->StartSound("SoldierBlock");
 		}
 		else

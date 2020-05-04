@@ -1,3 +1,5 @@
+#include "GameManager.h"
+#include "ParticlePool.h"
 #include "Ghoul.h"
 #include "MusicController.h"
 #include "EnemyManager.h"
@@ -151,8 +153,7 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
     }
 
     audio_emitter->StartSound("GhoulHit");
-    if (particles["hit_particle"])
-        particles["hit_particle"]->Restart();
+    SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
 
     character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -205,7 +206,11 @@ void Ghoul::OnAnimationEnd(const char* name)
             state = GhoulState::IDLE;
     }
     else if (strcmp(name, "Hit") == 0)
+    {
+        ReleaseParticle("hit_particle");
+
         state = GhoulState::IDLE;
+    }
 }
 
 

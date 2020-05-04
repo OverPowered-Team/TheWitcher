@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
+#include "ParticlePool.h"
 #include "PlayerAttacks.h"
 #include "EventManager.h"
 #include "EffectsFactory.h"
@@ -38,11 +39,12 @@ void PlayerController::Start()
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
-	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
+	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
 		(*it)->SetEnable(false);
-	}
+	}*/
 
 	LoadStats();
 	CalculateAABB();
@@ -152,9 +154,6 @@ void PlayerController::SetState(StateType new_state)
 	case StateType::ROLLING:
 		state = new RollingState();
 		break;
-	case StateType::CASTING:
-		state = new CastingState();
-		break;
 	case StateType::DEAD:
 		state = new DeadState();
 		break;
@@ -259,8 +258,12 @@ void PlayerController::EffectsUpdate()
 					}
 				}
 			}
-			if (particles[(*it)->name])
-				particles[(*it)->name]->SetEnable(true);
+			if ((*it)->spawned_particle != nullptr)
+			{
+				(*it)->spawned_particle->SetEnable(false);
+				(*it)->spawned_particle->SetEnable(true);
+			}
+
 		}
 
 		if ((*it)->to_delete)
@@ -276,8 +279,10 @@ void PlayerController::PlayAttackParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);
+		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
+		
+		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
 }
 
@@ -285,10 +290,34 @@ void PlayerController::PlayAllowParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);
-
+		SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+		/*particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+				transform->GetGlobalPosition(), this->game_object)));*/
+		/*particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);*/
 	}
+}
+
+void PlayerController::ReleaseAttackParticle()
+{
+	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+	/*for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.particle_name, it->second);
+			it = particles.erase(it);
+		}
+		if (it->first == attacks->GetCurrentAttack()->info.allow_combo_p_name)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name, it->second);
+			it = particles.erase(it);
+		}
+		else
+			++it;
+	}*/
 }
 
 #pragma region PlayerActions
@@ -418,6 +447,10 @@ void PlayerController::AddEffect(Effect* _effect)
 
 	effects.push_back(_effect);
 
+	if (std::strcmp(_effect->vfx_on_apply.c_str(), "") != 0)
+		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply, 
+			particle_spawn_positions[_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
+
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
 		attacks->OnAddAttackEffect(((AttackEffect*)_effect));
@@ -431,9 +464,10 @@ void PlayerController::AddEffect(Effect* _effect)
 		}
 	}
 
-	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
-	if (go)
-		particles.insert(std::pair(_effect->vfx_on_apply, go));
+
+
+	//GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
+	//particles.insert(std::pair(_effect->vfx_on_apply, GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply)));
 }
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
@@ -453,16 +487,21 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-	for (auto it = particles.begin(); it != particles.end();)
+	if (tmp_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
+	}
+
+	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == tmp_effect->vfx_on_apply)
 		{
-			GameObject::Destroy(it->second);
+			GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, it->second);
 			it = particles.erase(it);
 		}
 		else
 			++it;
-	}
+	}*/
 
 	delete tmp_effect;
 	return it;
@@ -539,6 +578,56 @@ void PlayerController::RemoveFreeze(float speed)
 {
 	animator->SetCurrentStateSpeed(speed);
 	is_immune = false;
+}
+
+void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			(*it)->SetEnable(false);
+			(*it)->SetEnable(true);
+			return;
+		}
+	}
+
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+	particles.push_back(new_particle);
+	/*if (particles[particle_name])
+	{
+		particles[particle_name]->SetEnable(false);
+		particles[particle_name]->SetEnable(true);
+	}
+	else
+	{
+		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
+		particles.insert(std::pair(particle_name, new_particle));
+	}*/
+}
+
+void PlayerController::ReleaseParticle(std::string particle_name)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
+			particles.erase(it);
+			return;
+		}
+	}
+	/*if (particles[particle_name])
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
+		particles.erase(particle_name);
+	}*/
 }
 
 

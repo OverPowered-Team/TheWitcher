@@ -16,6 +16,7 @@ struct EffectData {
 
 	float time = 0.0f;
 	float ticks_time = 0.0f;
+	uint vfx_position = 0;
 
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
@@ -38,6 +39,9 @@ public:
 	std::string name = "";
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
+
+	GameObject* spawned_particle = nullptr;
+	uint vfx_position = 0;
 
 	//not sure about this
 	std::string vfx_on_apply = "";

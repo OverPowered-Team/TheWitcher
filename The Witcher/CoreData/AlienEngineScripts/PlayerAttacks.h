@@ -42,6 +42,7 @@ public:
 
 		float3 collider_position;
 		float3 collider_size;
+		float3 particle_pos;
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
 		float max_distance_traveled = 0.0f;

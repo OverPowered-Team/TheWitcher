@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "EventManager.h"
 
@@ -146,12 +147,6 @@ State* RunningState::HandleInput(PlayerController* player)
 		return new AttackingState();
 	}
 
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_spell)
-		|| Input::GetKeyDown(player->keyboard_spell)) {
-		player->attacks->StartSpell(0);
-		return new CastingState();
-	}
-
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_dash)
 		|| Input::GetKeyDown(player->keyboard_dash))
 	{
@@ -190,14 +185,22 @@ void RunningState::Update(PlayerController* player)
 
 void RunningState::OnEnter(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(true);
+	player->SpawnParticle("p_run");
 	player->audio->StartSound();
 	player->timer = Time::GetGameTime();
 }
 
 void RunningState::OnExit(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(false);
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_run") == 0)
+		{
+			(*it)->SetEnable(false);
+			break;
+		}
+	}
+	//player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)
@@ -336,24 +339,6 @@ void RollingState::OnEnter(PlayerController* player)
 void RollingState::OnExit(PlayerController* player)
 {
 
-}
-
-void CastingState::Update(PlayerController* player)
-{
-	player->attacks->UpdateCurrentAttack();
-}
-
-State* CastingState::OnAnimationEnd(PlayerController* player, const char* name)
-{
-	return nullptr;
-}
-
-void CastingState::OnEnter(PlayerController* player)
-{
-}
-
-void CastingState::OnExit(PlayerController* player)
-{
 }
 
 void HitState::Update(PlayerController* player)

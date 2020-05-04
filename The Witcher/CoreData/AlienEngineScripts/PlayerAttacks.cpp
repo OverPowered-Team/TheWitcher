@@ -7,6 +7,7 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "PlayerProjectile.h"
+#include "ParticlePool.h"
 #include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
@@ -105,6 +106,7 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
+		player_controller->ReleaseAttackParticle();
 		if (next_attack == AttackType::SPELL)
 			StartSpell(next_spell);
 		else
@@ -189,8 +191,12 @@ void PlayerAttacks::OnRemoveAttackEffect(AttackEffect* new_effect)
 
 void PlayerAttacks::CancelAttack()
 {
-	current_attack = nullptr;
-	collider->SetEnable(false);
+	if (current_attack != nullptr)
+	{
+		player_controller->ReleaseAttackParticle();
+		current_attack = nullptr;
+		collider->SetEnable(false);
+	}
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -326,7 +332,8 @@ void PlayerAttacks::CastSpell()
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
 		player_controller->PlayAttackParticle();
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
-		player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
+		if(player_controller->HUD)
+			player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
 
 		if (current_attack->HasTag(Attack_Tags::T_AOE))
 		{
@@ -358,7 +365,7 @@ void PlayerAttacks::CastSpell()
 		}
 		if (current_attack->HasTag(Attack_Tags::T_Projectile))
 		{
-			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
+			/*GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particles[current_attack->info.particle_name]->transform->GetGlobalPosition());
 
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
@@ -368,7 +375,7 @@ void PlayerAttacks::CastSpell()
 			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
 
 			if (GameManager::instance->rumbler_manager)
-				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);*/
 		}
 	}
 }
@@ -472,6 +479,9 @@ void PlayerAttacks::CreateAttacks()
 			info.name = attack_combo->GetString("name");
 			info.input = attack_combo->GetString("button");
 			info.particle_name = attack_combo->GetString("particle_name");
+			info.particle_pos = float3(attack_combo->GetNumber("particle_pos.pos_x"),
+				attack_combo->GetNumber("particle_pos.pos_y"),
+				attack_combo->GetNumber("particle_pos.pos_z"));
 			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
 				attack_combo->GetNumber("collider.pos_y"),
 				attack_combo->GetNumber("collider.pos_z"));
@@ -509,6 +519,9 @@ void PlayerAttacks::CreateAttacks()
 
 			info.name = spells_json->GetString("name");
 			info.particle_name = spells_json->GetString("particle_name");
+			info.particle_pos = float3(spells_json->GetNumber("particle_pos.pos_x"),
+				spells_json->GetNumber("particle_pos.pos_y"),
+				spells_json->GetNumber("particle_pos.pos_z"));
 			info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
 				spells_json->GetNumber("collider.pos_y"),
 				spells_json->GetNumber("collider.pos_z"));
