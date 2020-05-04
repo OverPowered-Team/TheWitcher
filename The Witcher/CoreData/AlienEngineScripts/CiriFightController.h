@@ -15,7 +15,6 @@ public:
 
 	int phase = 1;
 
-	Prefab ciri_clone;
 	std::vector<GameObject*> clone_positions;
 public:
 
@@ -30,7 +29,6 @@ public:
 ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
 
 	CiriFightController* cirifightcontroller = new CiriFightController();
-	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->ciri_clone);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(cirifightcontroller->ciri_clones_scream_cd);
 
 	return cirifightcontroller;

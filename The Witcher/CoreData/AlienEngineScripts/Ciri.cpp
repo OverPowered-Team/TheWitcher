@@ -44,13 +44,13 @@ void Ciri::SetActionProbabilities()
 	Boss::SetActionProbabilities();
 
 
-	if (player_distance[0] <= mini_scream_range && player_distance[1] <= mini_scream_range) {
+	if (player_distance[0] <= mini_scream_range && player_distance[1] <= mini_scream_range && fight_controller->can_mini_scream) {
 		actions.find("MiniScream")->second->probability = 100.0f;
 		action_cooldown = 3.0f;
 		return;
 	}else if (player_distance[0] <= combo_range || player_distance[1] <= combo_range) {
 		actions.find("Combo")->second->probability = 100.0f;
-		action_cooldown = 3.0f;
+		action_cooldown = 5.0f;
 		return;
 	}
 	else{
@@ -114,6 +114,8 @@ void Ciri::LaunchMiniScreamAction()
 		float3 knockbak_direction = (player_controllers[1]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 		player_controllers[1]->ReceiveDamage(mini_scream_damage, knockbak_direction * mini_scream_force);
 	}
+
+	fight_controller->can_mini_scream = false;
 }
 
 Boss::ActionState Ciri::UpdateAction()

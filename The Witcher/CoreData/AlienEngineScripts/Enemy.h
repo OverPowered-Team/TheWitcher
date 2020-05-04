@@ -18,7 +18,6 @@ enum (EnemyType,
 	CIRI_CLONE,
 	DROWNED,
 	SHAELMAR,
-	LESHEN,
 	BLOCKER_OBSTACLE
 	);
 
