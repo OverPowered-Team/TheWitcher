@@ -14,16 +14,14 @@ public:
 	
 	void Start();
 
-	void SetBonfireUsed(PlayerController* player);
-
-	bool HaveThisPlayerUsedThis(PlayerController* player);
+	void SetBonfireUsed();
 
 public:
 	// GameObject
 	GameObject* ui_bonfire = nullptr;
 	GameObject* checkpoint = nullptr;
 
-	bool is_active = true;
+	bool has_been_used = false;
 
 private:
 	PlayerController* first_player = nullptr;

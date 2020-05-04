@@ -688,27 +688,35 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	{
 		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
 
-		if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+		if (!bonfire->has_been_used)
 		{
-			Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
-			HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
-		}
-
-		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
-		{
-			if (player_data.stats["Health"].GetMaxValue() > player_data.stats["Health"].GetValue()
-				|| player_data.stats["Chaos"].GetMaxValue() > player_data.stats["Chaos"].GetValue())
+			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
 			{
-				// Heal
-				player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
-				player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
-				HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-				HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
-
-
-				// Player Used this Bonfire
-				bonfire->SetBonfireUsed(this);
+				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
 			}
+
+			auto player = GameManager::instance->player_manager->players.begin();
+			for (; player != GameManager::instance->player_manager->players.end(); ++player)
+			{
+				if (!GameManager::instance->player_manager->players_dead.empty() && GameManager::instance->player_manager->players_dead[0] == (*player))
+				{
+					(*player)->Revive(1);
+					GameObject::Destroy((*player)->game_object->GetChild("ReviveMinigame"));
+					(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+					(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+					continue;
+				}
+
+				// Heal
+				(*player)->player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+				(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+			}
+
+			// Player Used this Bonfire
+			bonfire->SetBonfireUsed();
 		}
 	}
 
