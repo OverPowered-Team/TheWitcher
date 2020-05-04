@@ -98,8 +98,6 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
 				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
 			}
-
-			player->OnEnemyKill();
 		}
 	}
 
@@ -236,9 +234,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
 
 			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-
-			if (state == NilfgaardSoldierState::DYING)
-				player->OnEnemyKill();
+			last_player_hit = player;
 
 			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 		}

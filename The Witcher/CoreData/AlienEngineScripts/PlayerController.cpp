@@ -739,6 +739,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 void PlayerController::OnEnemyKill()
 {
+	LOG("ENEMY KILL");
 	player_data.total_kills++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 }

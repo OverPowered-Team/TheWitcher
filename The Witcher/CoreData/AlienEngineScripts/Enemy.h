@@ -81,6 +81,7 @@ public:
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
+	PlayerController* last_player_hit;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
 
