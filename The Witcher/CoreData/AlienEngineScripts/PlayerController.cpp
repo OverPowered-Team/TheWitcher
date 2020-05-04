@@ -699,6 +699,15 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 			auto player = GameManager::instance->player_manager->players.begin();
 			for (; player != GameManager::instance->player_manager->players.end(); ++player)
 			{
+				if (!GameManager::instance->player_manager->players_dead.empty() && GameManager::instance->player_manager->players_dead[0] == (*player))
+				{
+					(*player)->Revive(1);
+					GameObject::Destroy((*player)->game_object->GetChild("ReviveMinigame"));
+					(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+					(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+					continue;
+				}
+
 				// Heal
 				(*player)->player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
 				(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
