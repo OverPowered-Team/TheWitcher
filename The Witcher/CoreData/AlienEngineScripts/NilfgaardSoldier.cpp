@@ -85,8 +85,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				particles.insert(std::pair("decapitation_particle",
-					GameManager::instance->particle_pool->GetInstance("decapitation_particle", float3::zero(), this->game_object, true)));
+				SpawnParticle("decapitation_particle");
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
@@ -147,8 +146,10 @@ void NilfgaardSoldier::CleanUpEnemy()
 {
 	if (decapitated_head)
 	{
-		GameManager::instance->particle_pool->ReleaseInstance("decapitation_particle", particles["decapitation_particle"]);
-		particles.erase("decapitation_particle");
+		for (auto it = particles.begin(); it != particles.end(); ++it)
+		{
+			ReleaseParticle((*it)->GetName());
+		}
 
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;

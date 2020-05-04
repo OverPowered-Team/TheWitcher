@@ -210,7 +210,7 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	effects.push_back(new_effect);
 
-	if (std::strcmp(new_effect->vfx_on_apply.c_str(), "") != 0)
+	if (new_effect->vfx_on_apply != "")
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply, float3::zero(), this->game_object, true);
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
@@ -259,24 +259,36 @@ void Enemy::StopHitFreeze(float speed)
 
 void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
 {
-	if (particles[particle_name])
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
-		particles[particle_name]->SetEnable(false);
-		particles[particle_name]->SetEnable(true);
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			(*it)->SetEnable(false);
+			(*it)->SetEnable(true);
+			return;
+		}
 	}
-	else
-	{
-		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
-		particles.insert(std::pair(particle_name, new_particle));
-	}
+
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+	particles.push_back(new_particle);
 }
 
 void Enemy::ReleaseParticle(std::string particle_name)
 {
-	if (particles[particle_name])
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
-		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
-		particles.erase(particle_name);
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
+			particles.erase(it);
+			return;
+		}
 	}
 }
 	

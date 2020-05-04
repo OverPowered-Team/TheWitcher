@@ -153,8 +153,7 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
     }
 
     audio_emitter->StartSound("GhoulHit");
-    particles.insert(std::pair("hit_particle",
-        GameManager::instance->particle_pool->GetInstance("hit_particle", float3::zero(), this->game_object, true)));
+    SpawnParticle("hit_particle");
 
     character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -208,8 +207,7 @@ void Ghoul::OnAnimationEnd(const char* name)
     }
     else if (strcmp(name, "Hit") == 0)
     {
-        GameManager::instance->particle_pool->ReleaseInstance("hit_particle", particles["hit_particle"]);
-        particles.erase("hit_particle");
+        ReleaseParticle("hit_particle");
 
         state = GhoulState::IDLE;
     }

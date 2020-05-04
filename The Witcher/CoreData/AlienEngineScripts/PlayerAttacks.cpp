@@ -191,9 +191,12 @@ void PlayerAttacks::OnRemoveAttackEffect(AttackEffect* new_effect)
 
 void PlayerAttacks::CancelAttack()
 {
-	player_controller->ReleaseAttackParticle();
-	current_attack = nullptr;
-	collider->SetEnable(false);
+	if (current_attack != nullptr)
+	{
+		player_controller->ReleaseAttackParticle();
+		current_attack = nullptr;
+		collider->SetEnable(false);
+	}
 }
 
 void PlayerAttacks::SnapToTarget()
@@ -362,7 +365,7 @@ void PlayerAttacks::CastSpell()
 		}
 		if (current_attack->HasTag(Attack_Tags::T_Projectile))
 		{
-			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
+			/*GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particles[current_attack->info.particle_name]->transform->GetGlobalPosition());
 
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
@@ -372,7 +375,7 @@ void PlayerAttacks::CastSpell()
 			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
 
 			if (GameManager::instance->rumbler_manager)
-				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);*/
 		}
 	}
 }

@@ -192,7 +192,15 @@ void RunningState::OnEnter(PlayerController* player)
 
 void RunningState::OnExit(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(false);
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_run") == 0)
+		{
+			(*it)->SetEnable(false);
+			break;
+		}
+	}
+	//player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)

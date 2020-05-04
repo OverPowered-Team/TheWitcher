@@ -289,9 +289,10 @@ void PlayerController::PlayAllowParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+		SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+		/*particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
 			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name,
-				transform->GetGlobalPosition(), this->game_object)));
+				transform->GetGlobalPosition(), this->game_object)));*/
 		/*particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);*/
 	}
@@ -299,7 +300,9 @@ void PlayerController::PlayAllowParticle()
 
 void PlayerController::ReleaseAttackParticle()
 {
-	for (auto it = particles.begin(); it != particles.end();)
+	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
 		{
@@ -313,7 +316,7 @@ void PlayerController::ReleaseAttackParticle()
 		}
 		else
 			++it;
-	}
+	}*/
 }
 
 #pragma region PlayerActions
@@ -580,7 +583,19 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 	if (particle_name == "")
 		return;
 
-	if (particles[particle_name])
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			(*it)->SetEnable(false);
+			(*it)->SetEnable(true);
+			return;
+		}
+	}
+
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+	particles.push_back(new_particle);
+	/*if (particles[particle_name])
 	{
 		particles[particle_name]->SetEnable(false);
 		particles[particle_name]->SetEnable(true);
@@ -589,7 +604,7 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 	{
 		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
 		particles.insert(std::pair(particle_name, new_particle));
-	}
+	}*/
 }
 
 void PlayerController::ReleaseParticle(std::string particle_name)
@@ -597,11 +612,20 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	if (particle_name == "")
 		return;
 
-	if (particles[particle_name])
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
+			particles.erase(it);
+			return;
+		}
+	}
+	/*if (particles[particle_name])
 	{
 		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
 		particles.erase(particle_name);
-	}
+	}*/
 }
 
 
