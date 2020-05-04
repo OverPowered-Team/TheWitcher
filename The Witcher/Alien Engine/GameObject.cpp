@@ -15,6 +15,7 @@
 #include "ComponentCanvas.h"
 #include "ComponentText.h"
 #include "ComponentButton.h"
+#include "ComponentCurve.h"
 #include "RandomHelper.h"
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
@@ -42,6 +43,8 @@
 
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
+#include "ModuleUI.h"
+#include "PanelScene.h"
 #include "Alien.h"
 #include "ComponentCapsuleCollider.h"
 #include "ComponentConvexHullCollider.h"
@@ -91,6 +94,9 @@ GameObject::~GameObject()
 {
 	if (std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
 		App->objects->DeselectObject(this);
+		App->ui->panel_scene->gizmo_curve = false;
+		App->ui->panel_scene->curve = nullptr;
+		App->ui->panel_scene->curve_index = 0;
 	}
 
 	App->objects->octree.Remove(this);
@@ -168,13 +174,41 @@ bool GameObject::IsEnabled() const
 	return enabled;
 }
 
-void GameObject::DrawScene(ComponentCamera* camera)
+void GameObject::PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
 {
 	OPTICK_EVENT();
-	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	
+
+	if (mesh == nullptr) //not sure if this is the best solution
+		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
+
+
+	if (mesh != nullptr && mesh->IsEnabled())
+	{
+		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
+			glColor3f(1, 1, 1);
+		if (!mesh->wireframe)
+			mesh->PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
+	}
+}
+
+void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
+{
+	OPTICK_EVENT();
+
+	for (Component* component : components)
+	{
+		component->DrawScene(camera);
+	}
+}
+
+void GameObject::PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
+{
+	OPTICK_EVENT();
+	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
+
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	if (mesh == nullptr) //not sure if this is the best solution
 		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
 
@@ -187,58 +221,26 @@ void GameObject::DrawScene(ComponentCamera* camera)
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
 			glColor3f(1, 1, 1);
-		if (!mesh->wireframe)
-			mesh->DrawPolygon(camera);
-		/*if ((selected || parent_selected) && App->objects->outline)
-			mesh->DrawOutLine();*/
-		if (mesh->view_mesh || mesh->wireframe)
-			mesh->DrawMesh();
-		if (mesh->view_vertex_normals)
-			mesh->DrawVertexNormals();
-		if (mesh->view_face_normals)
-			mesh->DrawFaceNormals();
-		if (mesh->draw_AABB)
-			mesh->DrawGlobalAABB(camera);
-		if (mesh->draw_OBB)
-			mesh->DrawOBB(camera);
-	}
+		mesh->PreDrawPolygonForShadows(camera, ViewMat, ProjMatrix, position);
 
-
-	for (Component* component : components)
-	{
-		component->DrawScene();
 	}
 }
 
-
-void GameObject::DrawGame(ComponentCamera* camera)
+void GameObject::DrawGame(ComponentCamera* camera, const float4& clip_plane)
 {
 	OPTICK_EVENT();
-	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
-	
-	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	if(mesh == nullptr) //not sure if this is the best solution
-		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
 
-	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
+	for (Component* component : components)
 	{
-		material->BindTexture();
-	}*/
-
-	if (mesh != nullptr && mesh->IsEnabled())
-	{
-		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
-			glColor3f(1, 1, 1);
-		mesh->DrawPolygon(camera);
+		component->DrawGame(camera);
 	}
+
 }
 
 void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {
-
-	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
-	ComponentCamera* camera_ = (ComponentCamera*)GetComponent(ComponentType::CAMERA);
-
+	OPTICK_EVENT();
+	// TODO: HUGE TODO!: REVIEW THIS FUNCTION 
 	if (!is_static) {
 		ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 		if (mesh == nullptr) //not sure if this is the best solution
@@ -246,79 +248,17 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 
 		if (mesh != nullptr && mesh->mesh != nullptr) {
 			if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
-				float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+				float3 obj_pos = transform->GetGlobalPosition();
 				float distance = camera->frustum.pos.Distance(obj_pos);
 				to_draw->push_back({ distance, this });
 			}
 		}
 		else
 		{
-			float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+			float3 obj_pos = transform->GetGlobalPosition();
 			float distance = camera->frustum.pos.Distance(obj_pos);
 			to_draw->push_back({ distance, this });
 		}
-	}
-
-	// Lights
-	ComponentLightDirectional* light_dir = (ComponentLightDirectional*)GetComponent(ComponentType::LIGHT_DIRECTIONAL);
-	if (light_dir != nullptr && light_dir->IsEnabled())
-	{
-		light_dir->LightLogic();
-	}
-	ComponentLightSpot* light_spot = (ComponentLightSpot*)GetComponent(ComponentType::LIGHT_SPOT);
-	if (light_spot != nullptr && light_spot->IsEnabled())
-	{
-		light_spot->LightLogic();
-	}
-	ComponentLightPoint* light_point = (ComponentLightPoint*)GetComponent(ComponentType::LIGHT_POINT);
-	if (light_point != nullptr && light_point->IsEnabled())
-	{
-		light_point->LightLogic();
-	}
-
-	if (camera_ != nullptr && camera_->IsEnabled()) 
-	{
-		if (App->objects->printing_scene && App->objects->draw_frustum && std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
-			camera_->DrawFrustum();
-		}
-		camera_->frustum.pos = transform->GetGlobalPosition();
-		camera_->frustum.front = transform->GetGlobalRotation().WorldZ();
-		camera_->frustum.up = transform->GetGlobalRotation().WorldY();
-	}
-
-	ComponentParticleSystem* partSystem = (ComponentParticleSystem*)GetComponent(ComponentType::PARTICLES);
-	
-	if(partSystem != nullptr)
-	{
-		partSystem->Draw();
-	}
-
-
-	if (App->objects->printing_scene)
-	{
-		if (camera_ != nullptr && camera_->IsEnabled())
-		{
-			//camera_->DrawIconCamera();
-		}
-
-		/* TOFIX / DO. Light does not exist anymore here
-		if (light != nullptr && light->IsEnabled())
-		{
-			//light->DrawIconLight();
-		}
-		*/
-
-		if (partSystem != nullptr)
-		{
-			partSystem->DebugDraw();
-		}
-	}
-
-	ComponentCanvas* canvas = GetComponent<ComponentCanvas>();
-
-	if (canvas != nullptr && canvas->IsEnabled())
-	{
-		canvas->Draw();
 	}
 
 	std::vector<GameObject*>::iterator child = children.begin();
@@ -332,10 +272,10 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw
 
 	if (ui != nullptr && ui->IsEnabled())
 	{
-		float3 obj_pos = static_cast<ComponentTransform*>(GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+		float3 obj_pos = transform->GetGlobalPosition();
 		float distance = obj_pos.z;
 		//ui->Draw(!App->objects->printing_scene);
-		to_draw_ui->push_back({distance, this });
+		to_draw_ui->push_back({ distance, this });
 	}
 }
 
@@ -480,6 +420,8 @@ const char* GameObject::GetTag() const
 
 Component* GameObject::GetComponent(const ComponentType& type)
 {
+	OPTICK_EVENT();
+
 	if (type == ComponentType::UI_BUTTON || type == ComponentType::UI_IMAGE || type == ComponentType::UI_CHECKBOX || type == ComponentType::UI_BAR || type == ComponentType::UI_SLIDER || type == ComponentType::UI_ANIMATED_IMAGE || type == ComponentType::UI_TEXT) {
 		std::vector<Component*>::iterator item = components.begin();
 		for (; item != components.end(); ++item) {
@@ -780,6 +722,18 @@ GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position
 	return nullptr;
 }
 
+GameObject* GameObject::Instantiate(const char* prefab, const float3& position, bool check_child, GameObject* parent)
+{
+	OPTICK_EVENT();
+	for (auto item = App->resources->resources.begin(); item != App->resources->resources.end(); ++item) {
+		if ((*item)->GetType() == ResourceType::RESOURCE_PREFAB && strcmp(prefab, (*item)->GetName()) == 0) {
+			dynamic_cast<ResourcePrefab*>(*item)->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
+			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
+		}
+	}
+	return nullptr;
+}
+
 GameObject* GameObject::CloneObject(GameObject* to_clone, GameObject* parent)
 {
 	GameObject* clone = new GameObject((parent == nullptr) ? to_clone->parent : parent);
@@ -984,6 +938,23 @@ GameObject* GameObject::GetGameObjectByID(const u64 & id)
 	return ret;
 }
 
+GameObject* GameObject::GetGameObjectByIDReverse(const u64& id)
+{
+	GameObject* ret = nullptr;
+	if (id == this->ID) {
+		return this;
+	}
+	auto item = children.rbegin();
+	for (; item != children.rend(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->GetGameObjectByID(id);
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
 GameObject* GameObject::FindTag(const char* tag_to_find)
 {
 	GameObject* ret = nullptr;
@@ -1070,7 +1041,7 @@ AABB GameObject::GetBB()
 		else
 		{
 			ComponentUI* ui = (ComponentUI*)GetComponent(ComponentType::UI);
-
+			ComponentCurve* curve = GetComponent<ComponentCurve>();
 			if (ui != nullptr) {
 				AABB aabb_ui;
 				ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -1079,6 +1050,16 @@ AABB GameObject::GetBB()
 				aabb_ui.SetFromCenterAndSize(pos, { scale.x * 2,scale.y * 2,2 });
 				return aabb_ui;
 			}
+			else if (curve != nullptr) {
+				AABB aabb;
+				aabb.SetNegativeInfinity();
+				for (uint i = 0; i < curve->curve.GetControlPoints().size(); ++i) {
+					aabb.maxPoint = float3(max(aabb.maxPoint.x, curve->curve.GetControlPoints()[i].x), max(aabb.maxPoint.y, curve->curve.GetControlPoints()[i].y), max(aabb.maxPoint.z, curve->curve.GetControlPoints()[i].z));
+					aabb.minPoint = float3(min(aabb.minPoint.x, curve->curve.GetControlPoints()[i].x), min(aabb.minPoint.y, curve->curve.GetControlPoints()[i].y), min(aabb.minPoint.z, curve->curve.GetControlPoints()[i].z));
+				}
+				return aabb;
+			}
+			
 
 			AABB aabb_null;
 			ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
@@ -1155,7 +1136,7 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	parent_enabled = to_load->GetBoolean("ParentEnabled");
-	if (!force_no_selected && to_load->GetBoolean("Selected")) {
+	if (!force_no_selected && to_load->GetBoolean("Selected") && !App->objects->inPrefabCreation) {
 		App->objects->SetNewSelectedObject(this, false);
 	}
 	prefab_locked = to_load->GetBoolean("PrefabLocked");
@@ -1240,6 +1221,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				ComponentAudioListener* listener = new ComponentAudioListener(this);
 				listener->LoadComponent(components_to_load);
 				AddComponent(listener);
+				break; }
+			case (int)ComponentType::CURVE: {
+				ComponentCurve* curve = new ComponentCurve(this);
+				curve->LoadComponent(components_to_load);
+				AddComponent(curve);
 				break; }
 			case (int)ComponentType::PARTICLES: {
 				ComponentParticleSystem* particleSystem = new ComponentParticleSystem(this);

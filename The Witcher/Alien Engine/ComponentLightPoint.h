@@ -28,6 +28,8 @@ public:
 
 private:
 	void LightLogic();
+	void Update() override;
+	void DrawScene(ComponentCamera* camera) override; 
 
 	bool DrawInspector();
 	void OnDisable();

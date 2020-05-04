@@ -17,6 +17,11 @@ public:
 
 	void CalculateInclination();
 
+	void LerpingText();
+	void Scale();
+
+	void HandleSceneLoad();
+
 public:
 
 	float max_Y = 4.5f;

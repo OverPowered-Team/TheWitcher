@@ -47,6 +47,9 @@
 #include "Alien.h"
 #include "Event.h"
 #include "PanelProject.h"
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/type_ptr.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
 #include "ComponentAnimator.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
@@ -64,6 +67,8 @@ ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 ModuleObjects::~ModuleObjects()
 {
 	DeleteReturns();
+
+	RELEASE(wfbos);
 }
 
 bool ModuleObjects::Init()
@@ -99,8 +104,10 @@ bool ModuleObjects::Start()
 	LOG_ENGINE("Starting Module Objects");
 	bool ret = true;
 
-
 	game_viewport = new Viewport(nullptr);
+
+	wfbos = new WaterFrameBuffers();
+
 #ifndef GAME_VERSION
 	GameObject* scene_root = new GameObject();
 	scene_root->ID = App->resources->GetRandomID();
@@ -213,7 +220,6 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
-
 	OPTICK_EVENT();
 	base_game_object->Update();
 	if (!functions_to_call.empty()) {
@@ -241,14 +247,22 @@ update_status ModuleObjects::PostUpdate(float dt)
 	ScriptsPostUpdate();
 
 #ifndef GAME_VERSION
+
+	static bool light_view = false;
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		light_view = !light_view;
 	for (Viewport* viewport : viewports) {
 		if (!viewport->active || !viewport->CanRender() || (App->renderer3D->selected_game_camera == nullptr) && viewport == App->camera->selected_viewport)
 			continue;
 
+		current_viewport = viewport;
 		viewport->BeginViewport();
 		printing_scene = (viewport == App->camera->scene_viewport) ? true : false;
 		bool isGameCamera = (viewport == game_viewport) ? true : false;
-		if (printing_scene) {
+
+		viewport->BeginViewport();
+		if (printing_scene)
+		{
 			if (draw_ray)
 				DrawRay();
 
@@ -257,6 +271,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 			if (render_octree)
 				octree.Draw();
+
 			if (prefab_scene) {
 				static float light_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 				static float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -279,6 +294,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 			std::vector<std::pair<float, GameObject*>> to_draw;
 			std::vector<std::pair<float, GameObject*>> to_draw_ui;
+			std::vector<std::pair<float, GameObject*>> ui_2d;
+			std::vector<std::pair<float, GameObject*>> ui_world;
 
 			ComponentCamera* frustum_camera = viewport->GetCamera();
 
@@ -300,29 +317,82 @@ update_status ModuleObjects::PostUpdate(float dt)
 			if (isGameCamera) {
 				OnPreRender(viewport->GetCamera());
 			}
+			
+			for (std::list<DirLightProperties*>::const_iterator iter = directional_light_properites.begin(); iter != directional_light_properites.end(); iter++)
+			{
+				if (!(*iter)->light->castShadows)
+					continue; 
+
+				glViewport(0, 0, 1024, 1024);
+				glBindFramebuffer(GL_FRAMEBUFFER, (*iter)->depthMapFBO);
+				glClear(GL_DEPTH_BUFFER_BIT);
+			
+				std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+				for (; it != to_draw.end(); ++it) {
+					if ((*it).second != nullptr) {
+						if (printing_scene)
+							(*it).second->PreDrawScene(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);
+						else
+						{
+							(*iter)->light->sizefrustrum = viewport->GetCamera()->frustum.farPlaneDistance *0.25;
+							float3 camera_pos = viewport->GetCamera()->frustum.CenterPoint() / (*iter)->light->sizefrustrum;
+							camera_pos.z = -camera_pos.z;
+							float3 camera_direction = viewport->GetCamera()->frustum.front;
+							float halfFarPlaneD = (*iter)->light->distance_far_plane;
+							float3 light_pos = float3((camera_pos.x - (*iter)->direction.x * halfFarPlaneD), (camera_pos.y - (*iter)->direction.y * halfFarPlaneD), (camera_pos.z - (*iter)->direction.z * halfFarPlaneD));
+
+							glm::mat4 viewMatrix = glm::lookAt(glm::vec3((float)(viewport->GetCamera()->GetCameraPosition().x/ (*iter)->light->sizefrustrum), (float)(viewport->GetCamera()->GetCameraPosition().y / (*iter)->light->sizefrustrum), (float)(viewport->GetCamera()->GetCameraPosition().z / -(*iter)->light->sizefrustrum)),
+								glm::vec3((float)light_pos.x , (float)light_pos.y, (float)-light_pos.z ),
+								glm::vec3(0.0, 1.0, 0.0));
+
+							(*iter)->viewMat.Set(&viewMatrix[0][0]);
+
+							(*iter)->fake_position = light_pos;
+							(*it).second->PreDrawGame(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);	
+						}
+					}
+				}
+			}
+			glViewport(0, 0, current_viewport->GetSize().x, current_viewport->GetSize().y);
+			glBindFramebuffer(GL_FRAMEBUFFER, current_viewport->GetFBO());
 
 			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+						
+			viewport->GetCamera()->DrawSkybox(); 
+
 			for (; it != to_draw.end(); ++it) {
 				if ((*it).second != nullptr) {
 					if (printing_scene)
-						(*it).second->DrawScene(viewport->GetCamera());
+						(*it).second->DrawScene(viewport->GetCamera(),float4(0.0f,-1.0f,0.0f,100000.0f));
 					else
-						(*it).second->DrawGame(viewport->GetCamera());
+						(*it).second->DrawGame(viewport->GetCamera(), float4(0.0f, -1.0f, 0.0f, 100000.0f));
 				}
 			}
+			
+			UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
-
-			std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortUIToDraw);
-			if (!printing_scene) {
-				std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
-			}
+			
 			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
-			std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
-			for (; it_ui != to_draw_ui.end(); ++it_ui) {
-				if ((*it_ui).second != nullptr) {
-					ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+
+			std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
+			for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
+				if ((*it_ui_2d).second != nullptr) {
+					ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
 					if (ui != nullptr && ui->IsEnabled())
 					{			
+						/*ui->Orientate(mainCamera);
+						ui->Rotate();*/
+						ui->Draw(!printing_scene);
+
+					}
+				}
+			}
+			std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
+			for (; it_ui_world != ui_world.end(); ++it_ui_world) {
+				if ((*it_ui_world).second != nullptr) {
+					ComponentUI* ui = (*it_ui_world).second->GetComponent<ComponentUI>();
+					if (ui != nullptr && ui->IsEnabled())
+					{
 						ui->Orientate(mainCamera);
 						ui->Rotate();
 						ui->Draw(!printing_scene);
@@ -342,6 +412,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 	}
 
 #else
+	static bool light_view;
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	light_view = !light_view;
 
 	if (!game_viewport->active || !game_viewport->CanRender() || game_viewport->GetCamera() == nullptr)
 		return UPDATE_CONTINUE;
@@ -353,6 +426,8 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		std::vector<std::pair<float, GameObject*>> to_draw;
 		std::vector<std::pair<float, GameObject*>> to_draw_ui;
+		std::vector<std::pair<float, GameObject*>> ui_2d;
+		std::vector<std::pair<float, GameObject*>> ui_world;
 
 		ComponentCamera* frustum_camera = game_viewport->GetCamera();
 
@@ -369,22 +444,73 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		OnPreRender(game_viewport->GetCamera());
 
+		for (std::list<DirLightProperties*>::const_iterator iter = directional_light_properites.begin(); iter != directional_light_properites.end(); iter++)
+		{
+	
+			glViewport(0, 0, 1024, 1024);
+			glBindFramebuffer(GL_FRAMEBUFFER, (*iter)->depthMapFBO);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			
+			(*iter)->light->sizefrustrum = game_viewport->GetCamera()->frustum.farPlaneDistance;
+			float3 camera_pos = game_viewport->GetCamera()->frustum.CenterPoint() / (*iter)->light->sizefrustrum;
+			camera_pos.z = -camera_pos.z;
+			float3 camera_direction = game_viewport->GetCamera()->frustum.front;
+			float halfFarPlaneD = (*iter)->light->distance_far_plane;
+			float3 light_pos = float3((camera_pos.x - (*iter)->direction.x * halfFarPlaneD), (camera_pos.y - (*iter)->direction.y * halfFarPlaneD), (camera_pos.z - (*iter)->direction.z * halfFarPlaneD));
+
+			glm::mat4 viewMatrix = glm::lookAt(glm::vec3((float)(camera_pos.x), (float)(camera_pos.y), (float)(camera_pos.z)),
+				glm::vec3((float)light_pos.x, (float)light_pos.y, (float)light_pos.z),
+				glm::vec3(0.0, 1.0, 0.0));
+
+			(*iter)->viewMat.Set(&viewMatrix[0][0]);
+
+			(*iter)->fake_position = light_pos;
+			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+			for (; it != to_draw.end(); ++it) {
+				if ((*it).second != nullptr) {				
+						(*it).second->PreDrawGame(game_viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);
+
+				}
+			}
+		}
+		
+		glViewport(0, 0, game_viewport->GetSize().x, game_viewport->GetSize().y);
+		glBindFramebuffer(GL_FRAMEBUFFER, game_viewport->GetFBO());
 		std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+
+		game_viewport->GetCamera()->DrawSkybox();
+
 		for (; it != to_draw.end(); ++it) {
 			if ((*it).second != nullptr) {
-				(*it).second->DrawGame(App->renderer3D->actual_game_camera);
+				(*it).second->DrawGame(game_viewport->GetCamera(), float4(0.0f, -1.0f, 0.0f, 100000.0f));
 			}
 		}
 
 		OnPostRender(game_viewport->GetCamera());
 
-		std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
-		std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
-		for (; it_ui != to_draw_ui.end(); ++it_ui) {
-			if ((*it_ui).second != nullptr) {
-				ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+		UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
+
+		ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
+		for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
+			if ((*it_ui_2d).second != nullptr) {
+				ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
 				if (ui != nullptr && ui->IsEnabled())
 				{
+					ui->Draw(!printing_scene);
+
+				}
+			}
+		}
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
+		for (; it_ui_world != ui_world.end(); ++it_ui_world) {
+			if ((*it_ui_world).second != nullptr) {
+				ComponentUI* ui = (*it_ui_world).second->GetComponent<ComponentUI>();
+				if (ui != nullptr && ui->IsEnabled())
+				{
+					ui->Orientate(mainCamera);
+					ui->Rotate();
 					ui->Draw(!printing_scene);
 
 				}
@@ -1225,6 +1351,34 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 				delete scene;
 
 				if (change_scene) {
+					struct stat file;
+					stat(path.data(), &file);
+
+					// refresh prefabs if are not locked
+					std::vector<GameObject*> prefab_roots;
+					base_game_object->GetAllPrefabRoots(prefab_roots);
+
+					for (uint i = 0; i < prefab_roots.size(); ++i) {
+						if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
+							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
+							if (prefab != nullptr && prefab->GetID() != 0) {
+								struct stat prefab_file;
+								// TODO: when passing to library change
+								if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
+									if (prefab_file.st_mtime > file.st_mtime) {
+										auto find = prefab_roots[i]->parent->children.begin();
+										for (; find != prefab_roots[i]->parent->children.end(); ++find) {
+											if (*find == prefab_roots[i]) {
+												prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
+												prefab_roots[i]->ToDelete();
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 					DeleteReturns();
 				}
 
@@ -1430,6 +1584,7 @@ void ModuleObjects::SwapReturnZ(bool get_save, bool delete_current)
 
 void ModuleObjects::HotReload()
 {
+	inHotReload = true;
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* json_object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, "Library/ScriptsTEMP.alien");
@@ -1487,15 +1642,18 @@ void ModuleObjects::HotReload()
 			}
 		}
 	}
+	inHotReload = false;
 }
 
 bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
 {
+	//orders from near to far
 	return first.first > last.first;
 }
 
 bool ModuleObjects::SortUIToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
 {
+	//orders from far to near
 	return first.first < last.first;
 }
 
@@ -1810,7 +1968,7 @@ void ModuleObjects::DeleteReturns()
 
 void ModuleObjects::UpdateGamePadInput()
 {
-	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed && (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas->allow_navigation))
+	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas->allow_navigation && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->active)
 	{
 		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_UP) || App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || /*Input::GetControllerVerticalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_UP) == KEY_DOWN)
 		{
@@ -1952,6 +2110,39 @@ ComponentCanvas* ModuleObjects::GetCanvas()
 	return canvas;
 }
 
+void ModuleObjects::UIOrdering(std::vector<std::pair<float, GameObject*>>* current, std::vector<std::pair<float, GameObject*>>* ui_2d, std::vector<std::pair<float, GameObject*>>* ui_world)
+{
+	std::vector<std::pair<float, GameObject*>>::iterator it_ui = current->begin();
+	for (; it_ui != current->end(); ++it_ui)
+	{
+		if ((*it_ui).second != nullptr)
+		{
+			ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+			if (ui->canvas != nullptr && !ui->canvas->isWorld)
+				ui_2d->push_back((*it_ui));
+
+			else if (ui->canvas != nullptr && ui->canvas->isWorld)
+				ui_world->push_back((*it_ui));
+		}
+	}
+
+#ifndef GAME_VERSION
+	std::sort(ui_2d->begin(), ui_2d->end(), ModuleObjects::SortUIToDraw);
+	if (!printing_scene) {
+		std::sort(ui_2d->begin(), ui_2d->end(), ModuleObjects::SortGameObjectToDraw);
+	}
+
+	std::sort(ui_world->begin(), ui_world->end(), ModuleObjects::SortUIToDraw);
+#else
+	std::sort(ui_2d->begin(), ui_2d->end(), ModuleObjects::SortGameObjectToDraw);
+	std::sort(ui_world->begin(), ui_world->end(), ModuleObjects::SortUIToDraw);
+
+#endif
+
+}
+
+
+
 void ModuleObjects::CompareName(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::vector<ComponentScript*>& scriptsVec)
 {
 	auto item = listeners->begin();
@@ -1960,7 +2151,7 @@ void ModuleObjects::CompareName(std::vector<std::pair<std::string, std::function
 		for (auto scripts = scriptsVec.begin(); scripts != scriptsVec.end(); ++scripts) {
 			for (auto funct = (*scripts)->functionMap.begin(); funct != (*scripts)->functionMap.end(); ++funct) {
 				if ((*funct).first == (*item).first) {
-					(*item).second = (*funct).second;
+					(*item).second = ([funct]() -> void { (*funct).second(); });
 					skip = true;
 					break;
 				}

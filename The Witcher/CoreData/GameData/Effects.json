@@ -1,0 +1,68 @@
+{
+	"Effects": [
+		{
+			"name": "Geralt_Quen",
+			"time": 5.0,
+			"ticks_time": 0.0,
+			"vfx_on_apply": "FresnelShield",
+			"vfx_position": 1,
+			"vfx_on_tick": "",
+			"flat_modifiers": [
+				{
+					"identifier": "Absorb",
+					"value": 1
+				}
+			]
+		},
+		{
+			"name": "Spell_Burn",
+			"time": 2.0,
+			"ticks_time": 1.0,
+			"vfx_on_apply": "p_fire_runestone",
+			"vfx_position": 0,
+			"vfx_on_tick": "p_fire_runestone",
+			"flat_modifiers": [
+				{
+					"identifier": "Health",
+					"value": -5
+				}
+			]
+		},
+		{
+			"name": "Yrden_Slow",
+			"time": 999,
+			"ticks_time": 0.0,
+			"vfx_on_apply": "",
+			"vfx_on_tick": "",
+			"vfx_position": 0,
+			"multiplicative_modifiers": [
+				{
+					"identifier": "Agility",
+					"value": 0.3
+				},
+				{
+					"identifier": "AttackSpeed",
+					"value": 0.5
+				}
+			]
+		},
+		{
+			"name": "Ice_Nova_Slow",
+			"time": 5,
+			"ticks_time": 0.0,
+			"vfx_on_apply": "",
+			"vfx_on_tick": "",
+			"vfx_position": 0,
+			"multiplicative_modifiers": [
+				{
+					"identifier": "Agility",
+					"value": 0.3
+				},
+				{
+					"identifier": "AttackSpeed",
+					"value": 0.5
+				}
+			]
+		}
+	]
+}

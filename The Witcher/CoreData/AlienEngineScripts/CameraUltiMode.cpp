@@ -15,16 +15,25 @@ void CameraUltiMode::Start()
 
 void CameraUltiMode::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_O))
-	{
-		is_dejavouing = true;
-		prev_fov = camera->GetVerticalFov();
-	}
+	//if (Input::GetKeyDown(SDL_SCANCODE_O))
+	//{
+	//	SetDejavou(120.f, 0.1f, 1.f);
+	//	
+	//}
 
 	if (is_dejavouing)
 	{
 		DejaVou();
 	}
+}
+
+void CameraUltiMode::SetDejavou(const float zoom_out, const float speed, const float staying_time)
+{
+	prev_fov = camera->GetVerticalFov();
+	this->zoom_out_fov = zoom_out;
+	this->speed = speed;
+	this->staying_time = staying_time;
+	is_dejavouing = true;
 }
 
 void CameraUltiMode::DejaVou()

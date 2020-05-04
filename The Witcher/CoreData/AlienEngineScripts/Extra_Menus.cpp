@@ -22,6 +22,15 @@ void Extra_Menus::Start()
 	B->SetEnable(false);
 	settings->SetEnable(false);
 
+	// Main Menu or InGame
+	if (strcmp(SceneManager::GetCurrentScene(), "Main_Menu") == 0)
+	{
+		previous_menu = GameObject::FindWithName("Main_Menu_UI");
+	}
+	else
+	{
+		previous_menu = GameObject::FindWithName("Pause_Menu")->GetChild("Menu");
+	}
 
 	/*Geralt_data = (PlayerController*)Geralt->GetComponentScript("PlayerController");
 	damage1=(ComponentText*)game_object->GetChildRecursive("Damage_t1");
@@ -41,10 +50,13 @@ void Extra_Menus::PostUpdate()
 	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) 
 		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
 	{
-		if (game_object->IsEnabled())
+		if ((strcmp(SceneManager::GetCurrentScene(), "Main_Menu")) == 0 || (Time::IsGamePaused()))
 		{
-			previous_menu->SetEnable(true);
-			game_object->SetEnable(false);
+			if (game_object->IsEnabled())
+			{
+				previous_menu->SetEnable(true);
+				game_object->SetEnable(false);
+			}
 		}
 	}
 }

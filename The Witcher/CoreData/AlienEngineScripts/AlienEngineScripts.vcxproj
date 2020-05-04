@@ -176,7 +176,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArrowScript.h" />
-    <ClInclude Include="Audio_Button.h" />
+    <ClInclude Include="BlockerObstacle.h" />
+    <ClInclude Include="Bonfire.h" />
     <ClInclude Include="BreakableObject.h" />
     <ClInclude Include="CameraEnterExit.h" />
     <ClInclude Include="CameraLimits.h" />
@@ -185,16 +186,28 @@
     <ClInclude Include="CameraUltiMode.h" />
     <ClInclude Include="CloudLeshen.h" />
     <ClInclude Include="CrowsLeshen.h" />
+    <ClInclude Include="DashCollider.h" />
+    <ClInclude Include="Dummie.h" />
+    <ClInclude Include="EffectsFactory.h" />
+    <ClInclude Include="Drowned.h" />
+    <ClInclude Include="DrownedRange.h" />
+    <ClInclude Include="GhoulDodge.h" />
+    <ClInclude Include="GhoulOriginal.h" />
     <ClInclude Include="Leshen.h" />
     <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="CheckPoints_Manager.h" />
     <ClInclude Include="FadeImages.h" />
     <ClInclude Include="Ghoul.h" />
+    <ClInclude Include="MiniGame_Revive.h" />
     <ClInclude Include="MoveImages.h" />
     <ClInclude Include="MusicController.h" />
     <ClInclude Include="Head_Script.h" />
+    <ClInclude Include="NilfSoldierMelee.h" />
+    <ClInclude Include="NilfSoldierRange.h" />
+    <ClInclude Include="NilfSoldierShield.h" />
+    <ClInclude Include="ParticlePool.h" />
+    <ClInclude Include="ParticleRelease.h" />
     <ClInclude Include="PlayerManager.h" />
-    <ClInclude Include="Check_EndMenu.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="DialogueManager.h" />
     <ClInclude Include="DialogueTriggerSimple.h" />
@@ -212,6 +225,7 @@
     <ClInclude Include="PauseMenu_Buttons.h" />
     <ClInclude Include="NilfgaardSoldier.h" />
     <ClInclude Include="PlayerAttacks.h" />
+    <ClInclude Include="PlayerProjectile.h" />
     <ClInclude Include="ProgressiveFog.h" />
     <ClInclude Include="RelicBehaviour.h" />
     <ClInclude Include="Relic_Notification.h" />
@@ -225,9 +239,11 @@
     <ClInclude Include="RockSpawner.h" />
     <ClInclude Include="Scale_Win.h" />
     <ClInclude Include="Scores_Data.h" />
+    <ClInclude Include="EffectArea.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="RumblerManager.h" />
     <ClInclude Include="Stat.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="Subtitle.h" />
     <ClInclude Include="TeleportLevel.h" />
     <ClInclude Include="TriggerFog.h" />
@@ -241,11 +257,11 @@
     <ClInclude Include="TriggerCamera.h" />
     <ClInclude Include="TriggerEnvironment.h" />
     <ClInclude Include="TriggerFootsteps.h" />
-    <ClInclude Include="Win_lose_menu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrowScript.cpp" />
-    <ClCompile Include="Audio_Button.cpp" />
+    <ClCompile Include="BlockerObstacle.cpp" />
+    <ClCompile Include="Bonfire.cpp" />
     <ClCompile Include="BreakableObject.cpp" />
     <ClCompile Include="CameraEnterExit.cpp" />
     <ClCompile Include="CameraLimits.cpp" />
@@ -254,17 +270,29 @@
     <ClCompile Include="CameraUltiMode.cpp" />
     <ClCompile Include="CloudLeshen.cpp" />
     <ClCompile Include="CrowsLeshen.cpp" />
+    <ClCompile Include="DashCollider.cpp" />
+    <ClCompile Include="Dummie.cpp" />
+    <ClCompile Include="EffectsFactory.cpp" />
+    <ClCompile Include="Drowned.cpp" />
+    <ClCompile Include="DrownedRange.cpp" />
+    <ClCompile Include="GhoulDodge.cpp" />
+    <ClCompile Include="GhoulOriginal.cpp" />
     <ClCompile Include="Leshen.cpp" />
     <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="CheckPoints_Manager.cpp" />
     <ClCompile Include="FadeImages.cpp" />
     <ClCompile Include="Ghoul.cpp" />
     <ClCompile Include="MeleeLeshen.cpp" />
+    <ClCompile Include="MiniGame_Revive.cpp" />
     <ClCompile Include="MoveImages.cpp" />
     <ClCompile Include="MusicController.cpp" />
     <ClCompile Include="Head_Script.cpp" />
+    <ClCompile Include="NilfSoldierMelee.cpp" />
+    <ClCompile Include="NilfSoldierRange.cpp" />
+    <ClCompile Include="NilfSoldierShield.cpp" />
+    <ClCompile Include="ParticlePool.cpp" />
+    <ClCompile Include="ParticleRelease.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
-    <ClCompile Include="Check_EndMenu.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="DialogueManager.cpp" />
     <ClCompile Include="DialogueTriggerSimple.cpp" />
@@ -281,6 +309,7 @@
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="NilfgaardSoldier.cpp" />
     <ClCompile Include="PlayerAttacks.cpp" />
+    <ClCompile Include="PlayerProjectile.cpp" />
     <ClCompile Include="ProgressiveFog.cpp" />
     <ClCompile Include="RelicBehaviour.cpp" />
     <ClCompile Include="Relic_Notification.cpp" />
@@ -293,9 +322,11 @@
     <ClCompile Include="RootLeshen.cpp" />
     <ClCompile Include="RockSpawner.cpp" />
     <ClCompile Include="Scale_Win.cpp" />
+    <ClCompile Include="EffectArea.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="RumblerManager.cpp" />
     <ClCompile Include="Stat.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="Subtitle.cpp" />
     <ClCompile Include="TeleportLevel.cpp" />
     <ClCompile Include="TriggerFog.cpp" />
@@ -309,7 +340,6 @@
     <ClCompile Include="TriggerCamera.cpp" />
     <ClCompile Include="TriggerEnvironment.cpp" />
     <ClCompile Include="TriggerFootsteps.cpp" />
-    <ClCompile Include="Win_lose_menu.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

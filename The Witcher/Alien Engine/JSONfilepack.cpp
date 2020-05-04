@@ -63,9 +63,14 @@ void JSONfilepack::SetNumber(const char* name, const double& number)
 	json_object_dotset_number(save_object, name, number);
 }
 
-double JSONfilepack::GetNumber(const char* name)
+double JSONfilepack::GetNumber(const char* name, double default_value)
 {
-	return json_object_dotget_number(object, name);
+	try {
+		return json_object_dotget_number(object, name);
+	}
+	catch (...) {
+		return default_value;
+	}
 }
 
 void JSONfilepack::SetBoolean(const char* name, const bool& boolean)
@@ -73,9 +78,14 @@ void JSONfilepack::SetBoolean(const char* name, const bool& boolean)
 	json_object_dotset_boolean(save_object, name, boolean);
 }
 
-bool JSONfilepack::GetBoolean(const char* name)
+bool JSONfilepack::GetBoolean(const char* name, bool default_value)
 {
-	return json_object_dotget_boolean(object, name);
+	try {
+		return json_object_dotget_boolean(object, name);
+	}
+	catch (...) {
+		return default_value;
+	}
 }
 
 void JSONfilepack::SetColor(const char* name, const Color& color)
@@ -95,17 +105,22 @@ void JSONfilepack::SetColor(const char* name, const Color& color)
 	json_array_append_number(arr, color.a);
 }
 
-Color JSONfilepack::GetColor(const char* name)
+Color JSONfilepack::GetColor(const char* name, Color default_color)
 {
-	JSON_Array* arr = json_object_dotget_array(object, name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(object, name);
 
-	Color color;
-	color.r = json_array_get_number(arr, 0);
-	color.g = json_array_get_number(arr, 1);
-	color.b = json_array_get_number(arr, 2);
-	color.a = json_array_get_number(arr, 3);
+		Color color;
+		color.r = json_array_get_number(arr, 0);
+		color.g = json_array_get_number(arr, 1);
+		color.b = json_array_get_number(arr, 2);
+		color.a = json_array_get_number(arr, 3);
 
-	return color;
+		return color;
+	}
+	catch (...) {
+		return default_color;
+	}
 }
 
 void JSONfilepack::SetFloat3(const char* name, const float3& numbers)
@@ -124,16 +139,21 @@ void JSONfilepack::SetFloat3(const char* name, const float3& numbers)
 	json_array_append_number(arr, numbers.z);
 }
 
-float3 JSONfilepack::GetFloat3(const char* name)
+float3 JSONfilepack::GetFloat3(const char* name, const float3& default_float3)
 {
-	JSON_Array* arr = json_object_dotget_array(object, name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(object, name);
 
-	float3 numbers;
-	numbers.x = json_array_get_number(arr, 0);
-	numbers.y = json_array_get_number(arr, 1);
-	numbers.z = json_array_get_number(arr, 2);
+		float3 numbers;
+		numbers.x = json_array_get_number(arr, 0);
+		numbers.y = json_array_get_number(arr, 1);
+		numbers.z = json_array_get_number(arr, 2);
 
-	return numbers;
+		return numbers;
+	}
+	catch (...) {
+		return default_float3;
+	}
 }
 
 void JSONfilepack::SetFloat4(const char* name, const float4& numbers)
@@ -153,17 +173,22 @@ void JSONfilepack::SetFloat4(const char* name, const float4& numbers)
 	json_array_append_number(arr, numbers.w);
 }
 
-float4 JSONfilepack::GetFloat4(const char* name)
+float4 JSONfilepack::GetFloat4(const char* name, const float4& default_float4)
 {
-	JSON_Array* arr = json_object_dotget_array(object, name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(object, name);
 
-	float4 numbers;
-	numbers.x = json_array_get_number(arr, 0);
-	numbers.y = json_array_get_number(arr, 1);
-	numbers.z = json_array_get_number(arr, 2);
-	numbers.w = json_array_get_number(arr, 3);
+		float4 numbers;
+		numbers.x = json_array_get_number(arr, 0);
+		numbers.y = json_array_get_number(arr, 1);
+		numbers.z = json_array_get_number(arr, 2);
+		numbers.w = json_array_get_number(arr, 3);
 
-	return numbers;
+		return numbers;
+	}
+	catch (...) {
+		return default_float4;
+	}
 }
 
 void JSONfilepack::SetQuat(const char* name, const Quat& numbers)
@@ -183,17 +208,22 @@ void JSONfilepack::SetQuat(const char* name, const Quat& numbers)
 	json_array_append_number(arr, numbers.w);
 }
 
-Quat JSONfilepack::GetQuat(const char* name)
+Quat JSONfilepack::GetQuat(const char* name, const Quat& default_quat)
 {
-	JSON_Array* arr = json_object_dotget_array(object, name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(object, name);
 
-	Quat quat;
-	quat.x = json_array_get_number(arr, 0);
-	quat.y = json_array_get_number(arr, 1);
-	quat.z = json_array_get_number(arr, 2);
-	quat.w = json_array_get_number(arr, 3);
+		Quat quat;
+		quat.x = json_array_get_number(arr, 0);
+		quat.y = json_array_get_number(arr, 1);
+		quat.z = json_array_get_number(arr, 2);
+		quat.w = json_array_get_number(arr, 3);
 
-	return quat;
+		return quat;
+	}
+	catch (...) {
+		return default_quat;
+	}
 }
 
 void JSONfilepack::SetNumberArray(const char* name, float* numbers, uint size)
@@ -344,9 +374,14 @@ void JSONfilepack::SetString(const char* name, const char* string_parameter)
 	json_object_dotset_string(save_object, name, string_parameter);
 }
 
-const char* JSONfilepack::GetString(const char* name)
+const char* JSONfilepack::GetString(const char* name, const std::string& default_string)
 {
-	return json_object_dotget_string(object, name);
+	try {
+		return json_object_dotget_string(object, name);
+	}
+	catch (...) {
+		return default_string.data();
+	}
 }
 
 JSONArraypack* JSONfilepack::InitNewArray(const char* name)
@@ -403,9 +438,14 @@ void JSONArraypack::SetNumber(const char* name, const double& number)
 	json_array_append_value(arr, value);
 }
 
-double JSONArraypack::GetNumber(const char* name)
+double JSONArraypack::GetNumber(const char* name, double default_value)
 {
-	return json_object_dotget_number(json_value_get_object(value), name);
+	try {
+		return json_object_dotget_number(json_value_get_object(value), name);
+	}
+	catch (...) {
+		return default_value;
+	}
 }
 
 void JSONArraypack::SetBoolean(const char* name, const bool& boolean)
@@ -413,9 +453,14 @@ void JSONArraypack::SetBoolean(const char* name, const bool& boolean)
 	json_object_dotset_boolean(json_value_get_object(value), name, boolean);
 }
 
-bool JSONArraypack::GetBoolean(const char* name)
+bool JSONArraypack::GetBoolean(const char* name, bool default_value)
 {
-	return json_object_dotget_boolean(json_value_get_object(value), name);
+	try {
+		return json_object_dotget_boolean(json_value_get_object(value), name);
+	}
+	catch (...) {
+		return default_value;
+	}
 }
 
 void JSONArraypack::SetColor(const char* name, const Color& color)
@@ -435,17 +480,22 @@ void JSONArraypack::SetColor(const char* name, const Color& color)
 	json_array_append_number(arr, color.a);
 }
 
-Color JSONArraypack::GetColor(const char* name)
+Color JSONArraypack::GetColor(const char* name, Color default_color)
 {
-	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
-	Color color;
-	color.r = json_array_get_number(arr, 0);
-	color.g = json_array_get_number(arr, 1);
-	color.b = json_array_get_number(arr, 2);
-	color.a = json_array_get_number(arr, 3);
+		Color color;
+		color.r = json_array_get_number(arr, 0);
+		color.g = json_array_get_number(arr, 1);
+		color.b = json_array_get_number(arr, 2);
+		color.a = json_array_get_number(arr, 3);
 
-	return color;
+		return color;
+	}
+	catch (...) {
+		return default_color;
+	}
 }
 
 void JSONArraypack::SetFloat3(const char* name, const float3& numbers)
@@ -464,18 +514,22 @@ void JSONArraypack::SetFloat3(const char* name, const float3& numbers)
 	json_array_append_number(arr, numbers.z);
 }
 
-float3 JSONArraypack::GetFloat3(const char* name)
+float3 JSONArraypack::GetFloat3(const char* name, const float3& default_float3)
 {
-	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
-	float3 numbers;
-	numbers.x = json_array_get_number(arr, 0);
-	numbers.y = json_array_get_number(arr, 1);
-	numbers.z = json_array_get_number(arr, 2);
+		float3 numbers;
+		numbers.x = json_array_get_number(arr, 0);
+		numbers.y = json_array_get_number(arr, 1);
+		numbers.z = json_array_get_number(arr, 2);
 
-	return numbers;
+		return numbers;
+	}
+	catch (...) {
+		return default_float3;
+	}
 }
-
 
 void JSONArraypack::SetFloat4(const char* name, const float4& numbers)
 {
@@ -494,17 +548,22 @@ void JSONArraypack::SetFloat4(const char* name, const float4& numbers)
 	json_array_append_number(arr, numbers.w);
 }
 
-float4 JSONArraypack::GetFloat4(const char* name)
+float4 JSONArraypack::GetFloat4(const char* name, const float4& default_float4)
 {
-	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
-	float4 numbers;
-	numbers.x = json_array_get_number(arr, 0);
-	numbers.y = json_array_get_number(arr, 1);
-	numbers.z = json_array_get_number(arr, 2);
-	numbers.w = json_array_get_number(arr, 3);
+		float4 numbers;
+		numbers.x = json_array_get_number(arr, 0);
+		numbers.y = json_array_get_number(arr, 1);
+		numbers.z = json_array_get_number(arr, 2);
+		numbers.w = json_array_get_number(arr, 3);
 
-	return numbers;
+		return numbers;
+	}
+	catch (...) {
+		return default_float4;
+	}
 }
 
 void JSONArraypack::SetQuat(const char* name, const Quat& numbers)
@@ -524,17 +583,22 @@ void JSONArraypack::SetQuat(const char* name, const Quat& numbers)
 	json_array_append_number(arr, numbers.w);
 }
 
-Quat JSONArraypack::GetQuat(const char* name)
+Quat JSONArraypack::GetQuat(const char* name, const Quat& default_quat)
 {
-	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
+	try {
+		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
-	Quat quat;
-	quat.x = json_array_get_number(arr, 0);
-	quat.y = json_array_get_number(arr, 1);
-	quat.z = json_array_get_number(arr, 2);
-	quat.w = json_array_get_number(arr, 3);
+		Quat quat;
+		quat.x = json_array_get_number(arr, 0);
+		quat.y = json_array_get_number(arr, 1);
+		quat.z = json_array_get_number(arr, 2);
+		quat.w = json_array_get_number(arr, 3);
 
-	return quat;
+		return quat;
+	}
+	catch (...) {
+		return default_quat;
+	}
 }
 
 void JSONArraypack::SetAnotherNode()
@@ -578,9 +642,15 @@ void JSONArraypack::SetString(const char* name, const char* string_parameter)
 	json_object_dotset_string(json_value_get_object(value), name, string_parameter);
 }
 
-const char* JSONArraypack::GetString(const char* name)
+const char* JSONArraypack::GetString(const char* name, std::string default_string)
 {
-	return json_object_dotget_string(json_value_get_object(value), name);
+	try {
+		const char* ret = json_object_dotget_string(json_value_get_object(value), name);
+		return ret;
+	}
+	catch (...) {
+		return default_string.data();
+	}
 }
 
 JSONArraypack* JSONArraypack::InitNewArray(const char* name)

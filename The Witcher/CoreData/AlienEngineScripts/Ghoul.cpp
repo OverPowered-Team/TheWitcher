@@ -1,6 +1,10 @@
+#include "GameManager.h"
+#include "ParticlePool.h"
 #include "Ghoul.h"
 #include "MusicController.h"
 #include "EnemyManager.h"
+#include "PlayerAttacks.h"
+#include "PlayerController.h"
 
 Ghoul::Ghoul() : Enemy()
 {
@@ -10,95 +14,46 @@ Ghoul::~Ghoul()
 {
 }
 
+void Ghoul::StartEnemy()
+{
+    type = EnemyType::GHOUL;
+    state = GhoulState::IDLE;
+    Enemy::StartEnemy();
+}
+
 void Ghoul::SetStats(const char* json)
 {
     std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
     LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
 
     JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
-    if (stat)
+
+    JSONArraypack* stat_weapon = stat->GetArray("Ghoul");
+    int i = 0;
+    if (stat_weapon)
     {
-        stats["Health"] = Stat("Health", stat->GetNumber("Health"));
-        stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
-        stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
-        stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
-        stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
-        stats["JumpRange"] = Stat("JumpRange", stat->GetNumber("JumpAttackRange"));
-        stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
-        stats["JumpForce"] = Stat("JumpForce", stat->GetNumber("JumpForce"));
+        stat_weapon->GetFirstNode();
+        for (int i = 0; i < stat_weapon->GetArraySize(); ++i)
+            if (stat_weapon->GetNumber("Type") != (int)ghoul_type)
+                stat_weapon->GetAnotherNode();
+            else
+                break;
+
+        stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
+        stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+        stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
+        stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+        stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
     }
 
     JSONfilepack::FreeJSON(stat);
 }
 
-void Ghoul::StartEnemy()
-{
-	type = EnemyType::GHOUL;
-    m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
-	Enemy::StartEnemy();
-}
-
-void Ghoul::UpdateEnemy()
-{
-    Enemy::UpdateEnemy();
-
-	switch (state)
-	{
-    case Enemy::EnemyState::IDLE:
-        if (distance < stats["VisionRange"].GetValue())
-        {
-            state = Enemy::EnemyState::MOVE;
-            m_controller->is_combat = true; //Note: This should be placed to every enemy type and not especifically in each enemy
-            m_controller->has_changed = true;
-        }
-        break;
-    case Enemy::EnemyState::MOVE:
-        if (distance > stats["VisionRange"].GetValue())
-        {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-        }
-        Move(direction);
-        break;
-    case Enemy::EnemyState::BLOCK:
-            JumpImpulse();
-            break;
-    case Enemy::EnemyState::ATTACK:
-        break;
-    case Enemy::EnemyState::DYING:
-    {
-        EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-        //Ori Ori function sintaxis
-        Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-        audio_emitter->StartSound("GhoulDeath");
-        state = EnemyState::DEAD;
-        m_controller->is_combat = false;
-        m_controller->has_changed = true;
-        break;
-    }
-    default:
-        LOG("There's no state");
-        break;
-	}
-}
-
 void Ghoul::CleanUpEnemy()
 {
-}
-
-void Ghoul::Action() 
-{
-    // Check if inside range or just entered
-    if (distance < stats["AttackRange"].GetValue())
-    {
-        animator->PlayState("Slash");
-        state = EnemyState::ATTACK;
-    }
-    else if (distance < stats["JumpRange"].GetValue() && distance > stats["AttackRange"].GetValue())
-    {
-        animator->PlayState("Jump");
-        state = EnemyState::BLOCK;
-    }
 }
 
 void Ghoul::JumpImpulse()
@@ -111,7 +66,120 @@ void Ghoul::JumpImpulse()
     else
     {
         animator->PlayState("Slash");
-        state = EnemyState::ATTACK;
+        animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
+        state = GhoulState::ATTACK;
+    }
+}
+
+void Ghoul::Stun(float time)
+{
+    if (state != GhoulState::STUNNED)
+    {
+        state = GhoulState::STUNNED;
+        //animator->PlayState("Dizzy");
+        current_stun_time = Time::GetGameTime();
+        stun_time = time;
+    }
+}
+
+bool Ghoul::IsDead()
+{
+    return (state == GhoulState::DEAD ? true : false);
+}
+
+void Ghoul::SetState(const char* state_str)
+{
+    if (state_str == "Idle")
+        state = GhoulState::IDLE;
+    else if (state_str == "Move")
+        state = GhoulState::MOVE;
+    else if (state_str == "Attack")
+        state = GhoulState::ATTACK;
+    else if (state_str == "Jump")
+        state = GhoulState::JUMP;
+    else if (state_str == "Hit")
+        state = GhoulState::HIT;
+    else if (state_str == "Dying")
+        state = GhoulState::DYING;
+    else if (state_str == "Dead")
+        state = GhoulState::DEAD;
+    else if (state_str == "Stunned")
+        state = GhoulState::STUNNED;
+    else
+        LOG("Incorrect state name: %s", state_str);
+}
+
+void Ghoul::Action()
+{
+    // Check if inside range or just entered
+    if (distance < stats["AttackRange"].GetValue())
+    {
+        animator->PlayState("Slash");
+        animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
+        state = GhoulState::ATTACK;
+    }
+    else if (distance < stats["JumpRange"].GetValue() && distance > stats["AttackRange"].GetValue())
+    {
+        animator->PlayState("Jump");
+        state = GhoulState::JUMP;
+    }
+}
+
+void Ghoul::CheckDistance()
+{
+    if (distance < stats["JumpRange"].GetValue())
+    {
+        animator->SetFloat("speed", 0.0F);
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        Action();
+    }
+
+    if (distance > stats["VisionRange"].GetValue())
+    {
+        state = GhoulState::IDLE;
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        animator->SetFloat("speed", 0.0F);
+        is_combat = false;
+    }
+}
+
+float Ghoul::GetDamaged(float dmg, PlayerController* player)
+{
+    float damage = Enemy::GetDamaged(dmg, player);
+
+    if (can_get_interrupted) {
+        state = GhoulState::HIT;
+        animator->PlayState("Hit");
+    }
+
+    audio_emitter->StartSound("GhoulHit");
+    SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
+
+    character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+    if (stats["Health"].GetValue() == 0.0F) {
+
+        animator->SetBool("dead", true);
+        OnDeathHit();
+        state = GhoulState::DYING;
+        audio_emitter->StartSound("GhoulDeath");
+    }
+
+    return damage;
+}
+
+void Ghoul::OnTriggerEnter(ComponentCollider* collider)
+{
+    if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != GhoulState::DEAD) {
+        PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+        if (player && player->attacks->GetCurrentAttack()->CanHit(this))
+        {
+            float dmg_received = player->attacks->GetCurrentDMG();
+            player->OnHit(this, GetDamaged(dmg_received, player));
+            last_player_hit = player;
+
+            HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+        }
     }
 }
 
@@ -120,29 +188,26 @@ void Ghoul::OnAnimationEnd(const char* name)
     if (strcmp(name, "Slash") == 0) {
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
-            state = Enemy::EnemyState::MOVE;
+            state = GhoulState::MOVE;
         }
         else
         {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-            state = Enemy::EnemyState::IDLE;
+            state = GhoulState::IDLE;
         }
     }
     else if (strcmp(name, "Jump") == 0)
     {
         if (distance < stats["VisionRange"].GetValue())
-        {
-            state = Enemy::EnemyState::MOVE;
-        }
+            state = GhoulState::MOVE;
         else
-        {
-            m_controller->is_combat = false;
-            m_controller->has_changed = true;
-            state = Enemy::EnemyState::IDLE;
-        }
+            state = GhoulState::IDLE;
     }
-    else if (strcmp(name, "Hit") == 0) {
-        state = Enemy::EnemyState::IDLE;
+    else if (strcmp(name, "Hit") == 0)
+    {
+        ReleaseParticle("hit_particle");
+
+        state = GhoulState::IDLE;
     }
 }
+
+

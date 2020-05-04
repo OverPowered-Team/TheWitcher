@@ -16,6 +16,7 @@ public:
 
 	void SetVars(float force, float time_despawn);
 
+	void Fall();
 	void DeleteMyself();
 
 	std::map<std::string, ComponentParticleSystem*> particles;

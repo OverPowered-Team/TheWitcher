@@ -12,16 +12,17 @@
 
 ParticleSystem::ParticleSystem()
 {
+	
 	particles.reserve(MAX_PARTICLES);
 	emmitter.particleSystem = this;
 
 	
 	default_material = new ResourceMaterial();
 	default_material->SetName("Particle Material");
-	default_material->color = particleInfo.color;
+	//default_material->color = particleInfo.color;
 	SetMaterial(default_material);
 	material->SetShader(App->resources->default_particle_shader);
-	//material->color = float4(1.0f, 0.0f, 0.8f, 1.0f);
+	material->color = particleInfo.color;
 	
 	float vertex[] =
 	{
@@ -97,6 +98,8 @@ ParticleSystem::ParticleSystem()
 	// LIGHTS
 	light_id = GL_LIGHT0;
 	InitLight();
+
+	//Stop();
 }
 
 
@@ -284,6 +287,12 @@ void ParticleSystem::SetBillboardType(BillboardType type)
 	bbType = type;
 }
 
+void ParticleSystem::SetMeshType(PARTICLE_MESH type)
+{
+	meshType = type;
+}
+
+
 BillboardType ParticleSystem::GetBillboardType() const
 {
 	return bbType;
@@ -292,6 +301,53 @@ BillboardType ParticleSystem::GetBillboardType() const
 uint ParticleSystem::GetTotalParticles() const
 {
 	return totalParticles;
+}
+
+void ParticleSystem::CreateParticleMesh(PARTICLE_MESH type)
+{
+
+	ResourceMesh* tmp = nullptr;
+	
+	switch (type) {
+	case PARTICLE_MESH::CUBE: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::CUBE);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::SPHERE: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::SPHERE_ALIEN);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::DODECAHEDRON: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::DODECAHEDRON);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::ICOSAHEDRON: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::ICOSAHEDRON);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::OCTAHEDRON: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::OCTAHEDRON);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::ROCK: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::ROCK);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::TORUS: {
+		tmp = App->resources->GetPrimitive(PrimitiveType::TORUS);
+		SetMesh(tmp);
+		break; }
+	case PARTICLE_MESH::CUSTOM: {
+		RemoveMesh();
+		break; }
+	case PARTICLE_MESH::NONE: {
+		RemoveMesh();
+		break; }
+	default:
+		break;
+	}
+
+
 }
 
 bool ParticleSystem::isSystemActive() const
@@ -444,6 +500,64 @@ void ParticleSystem::RemoveMaterial()
 	material = nullptr;
 }
 
+void ParticleSystem::SetMesh(ResourceMesh* m)
+{
+
+	if (m == nullptr)
+		return;
+
+	if (this->meshes.size() > 0)
+	{
+		for (int i = 0; i < this->meshes.size(); ++i)
+		{
+			this->meshes.at(i)->DecreaseReferences();
+		}
+		this->meshes.clear();
+
+	}
+
+	this->meshes.push_back(m);
+	this->meshes.back()->IncreaseReferences();
+
+}
+
+void ParticleSystem::SetMeshes(std::vector<ResourceMesh*> m)
+{
+	if (m.size() <= 0)
+		return;
+
+	if (this->meshes.size() > 0)
+	{
+		for (int i = 0; i < this->meshes.size(); ++i)
+		{
+			this->meshes.at(i)->DecreaseReferences();
+		}
+		this->meshes.clear();
+
+	}
+
+	this->meshes = m;
+
+	for (int i = 0; i < this->meshes.size(); ++i)
+	{
+		this->meshes.at(i)->IncreaseReferences();
+	}
+}
+
+void ParticleSystem::RemoveMesh()
+{
+	if (!meshes.empty()) {
+
+		for (int i = 0; i < this->meshes.size(); ++i)
+		{
+			this->meshes.at(i)->DecreaseReferences();
+		}
+		this->meshes.clear();
+
+	}
+	
+}
+
 
 
 //
@@ -594,7 +708,9 @@ void ParticleSystem::CalculateParticleUV(int rows, int columns, float speed, int
 		currentFrame = 0;
 	}
 
-	ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(material->texturesID[(int)TextureType::DIFFUSE]);
+	ResourceTexture* tex = material->GetTexture(TextureType::DIFFUSE);
+	//ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(material->texturesID[(int)TextureType::DIFFUSE]);
+
 	if (tex != nullptr)
 	{
 		LoadUVs(rows, columns, tex);

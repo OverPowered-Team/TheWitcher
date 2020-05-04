@@ -23,6 +23,7 @@ public:
 
 	void AddEnemy(Enemy* enemy);
 	void DeleteEnemy(Enemy* enemy);
+	const std::vector<Enemy*>&GetEnemies();
 
 public:
 	GameObject* player1 = nullptr;
@@ -31,8 +32,6 @@ public:
 
 private:
 	std::vector<Enemy*> enemies;
-
-	bool is_combat_enemies = false;
 
 };
 

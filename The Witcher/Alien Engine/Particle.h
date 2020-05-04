@@ -8,6 +8,7 @@
 
 #include "ResourceTexture.h"
 #include "ResourceMaterial.h"
+#include "ResourceMesh.h"
 
 class ParticleSystem;
 class ComponentCamera;
@@ -15,6 +16,21 @@ class ComponentCamera;
 
 #define ANGULAR_CAP 200 // angular velocity will be capped at 360 degrees x second
 #define MAX_ANIMATIONS 16
+
+enum class PARTICLE_MESH
+{
+	UNKNOWN = -1,
+	CUBE,
+	SPHERE,
+	ROCK,
+	DODECAHEDRON,
+	OCTAHEDRON,
+	TORUS,
+	ICOSAHEDRON,
+
+	CUSTOM,
+	NONE
+};
 
 
 struct Frame {
@@ -44,9 +60,11 @@ struct ParticleInfo
 
 	float4 color = float4(1.0f, 0.0f, 0.8f, 1.0f); // default pink
 	float size = 1.f;
+	float3 size3D = float3(1.f, 1.f, 1.f);
 	float4 lightColor = float4::zero;
 
 	float maxLifeTime = 5.f;
+	float changedTime = 5.f;
 
 	bool globalTransform = true;
 	bool changeOverLifeTime = false;
@@ -54,7 +72,7 @@ struct ParticleInfo
 	bool rotateOverTime = false;
 	bool axisRot3D = false;
 	bool axisRot3DStart = false;
-
+	bool size3DStart = false;
 	
 	// Animation
 	UVpoint UVs[4];
@@ -80,15 +98,17 @@ struct ParticleMutableInfo
 		size = p.size;
 		lightColor = p.lightColor;
 		force = p.force;
-		
+		speed = p.speed;
+		size3D = p.size3D;
 	}
 
 	float4 color = float4(1.0f, 1.0f, 1.0f, 1.0f);
 	float size = 1.f;
+	float3 size3D = float3(1.f, 1.f, 1.f);
 	float4 lightColor;
 	float3 force = float3(0.f, -10.f, 0.f);  // float3::zero;	
+	float speed = 1.0f;
 	
-
 	
 };
 
@@ -127,7 +147,7 @@ public:
 
 private:
 	//ResourceTexture* resMat = nullptr;
-
+	
 	ParticleSystem* owner = nullptr;
 	ResourceMaterial* p_material = nullptr;
 
@@ -138,7 +158,7 @@ private:
 	float currentLifeTime = 0.f;
 	float animationTime = 0.f;
 	int currentFrame = 0;
-	
+
 	// -------- Lerping -------------
 
 	float rateToLerp = 0.f;

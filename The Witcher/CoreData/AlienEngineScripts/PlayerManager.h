@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 
 class PlayerController;
+class InGame_UI;
+class UltiBar;
 
 class ALIEN_ENGINE_API PlayerManager : public Alien {
 
@@ -17,6 +19,7 @@ public:
 
 	void OnPlayerDead(PlayerController* dead_player);
 	void OnPlayerRevive(PlayerController* revived_player);
+	void BlockInput(bool block);
 
 	int max_ultimate_charge = 200;
 	float ultimate_time = 5.0f;
@@ -38,7 +41,8 @@ private:
 private:
 
 	// UI ultibar
-	GameObject* ulti_bar = nullptr;
+	InGame_UI* in_game_ui = nullptr;
+	UltiBar* ultibar = nullptr;
 
 };
 

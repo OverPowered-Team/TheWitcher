@@ -3,7 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "DialogueManager.h"
-
+#include "Effect.h"
 
 class PlayerController;
 class Effect;
@@ -39,6 +39,9 @@ public:
 
 	std::string name = "";
 	std::string description = "";
+	float valor = 0.0;
+	float time = 0.0;
+	float ticks_time = 0.0;
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	std::vector<Effect*> effects;
 
@@ -52,7 +55,7 @@ public:
 	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
 	std::string attack_name = "";
-
+	EffectData* effect_to_apply = nullptr;
 };
 
 class DashRelic : public Relic {
@@ -62,6 +65,7 @@ public:
 
 	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
+	EffectData* effect_to_apply = nullptr;
 };
 
 class ALIEN_ENGINE_API RelicBehaviour : public Alien {

@@ -1,8 +1,8 @@
 #include "PlayerController.h"
 #include "PlayerManager.h"
-#include "UltiBar.h"
 #include "InGame_UI.h"
 #include "Scores_Data.h"
+#include "UltiBar.h"
 
 PlayerManager::PlayerManager() : Alien()
 {
@@ -19,7 +19,7 @@ void PlayerManager::Start()
 		players.push_back((*i)->GetComponent<PlayerController>());
 	}
 
-	ulti_bar = GameObject::FindWithName("Ulti_bar");
+	in_game_ui = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetComponent<InGame_UI>();
 }
 
 void PlayerManager::Update()
@@ -38,8 +38,9 @@ void PlayerManager::OnPlayerDead(PlayerController* dead_player)
 	{
 		Scores_Data::player1_kills = players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = players[1]->player_data.total_kills;
+
 		Scores_Data::dead = true;
-		GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->YouDied(); 
+		in_game_ui->YouDied(); 
 	}
 }
 
@@ -53,6 +54,13 @@ void PlayerManager::OnPlayerRevive(PlayerController* revived_player)
 	}
 }
 
+void PlayerManager::BlockInput(bool block)
+{
+	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
+		(*it)->input_blocked = block;
+;	}
+}
+
 void PlayerManager::IncreaseUltimateCharge(uint value)
 {
 	if (ultimate_is_active)
@@ -63,14 +71,10 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	if (collective_ultimate_charge >= max_ultimate_charge)
 	{
 		collective_ultimate_charge = max_ultimate_charge;
-		// UI
-		ulti_bar->GetComponent<UltiBar>()->MaxBar();
 	}
-	else
-	{
-		// UI
-		ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
-	}
+	
+	// UI
+	in_game_ui->StartLerpParticle(float3(0, 0, 0), UI_Particle_Type::ULTI);
 }
 
 void PlayerManager::ActivateUltimate()
@@ -85,7 +89,7 @@ void PlayerManager::ActivateUltimate()
 	}
 
 	// UI
-	ulti_bar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge);
+	ultibar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge);
 }
 
 void PlayerManager::CancelUltimate()

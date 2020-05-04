@@ -4,8 +4,8 @@
             {
                 "Name": "Main Camera",
                 "FamilyNumber": 1,
-                "ID": "6050037959027664833",
-                "ParentID": "14312280510082287296",
+                "ID": "338082864772108265",
+                "ParentID": "10064075594271230102",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,7 +35,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14963697637628422388"
+                        "ID": "5521596132164181056"
                     },
                     {
                         "Enabled": true,
@@ -51,7 +51,7 @@
                         "FarPlane": 200,
                         "NearPlane": 0.10000000149011612,
                         "isFovHori": 0,
-                        "ID": "15488025407622835434",
+                        "ID": "2229761183721583676",
                         "IsGameCamera": true,
                         "IsSelectedCamera": true,
                         "PrintIcon": true,
@@ -72,7 +72,7 @@
                         "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds"
                     },
                     {
-                        "ID": "17944392903365802351",
+                        "ID": "6838567499580490017",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 0.69499999284744263,
@@ -82,16 +82,15 @@
                         "PlayOnAwake": true
                     },
                     {
-                        "Type": 29,
-                        "ID": "18148832040767228662",
-                        "ResourceID": "15315061940140258404",
-                        "DataName": "MusicController",
-                        "HasInspector": false
+                        "Type": 17,
+                        "Enabled": true,
+                        "ID": "2974745085751285497",
+                        "ListenerID": "2166763358"
                     },
                     {
                         "Type": 29,
-                        "ID": "13741950110068236594",
-                        "ResourceID": "5217879656618584496",
+                        "ID": "11522695991765154892",
+                        "ResourceID": "10408381955680660573",
                         "DataName": "CameraMovement",
                         "HasInspector": true,
                         "Inspector": [
@@ -107,17 +106,17 @@
                             {
                                 "VarType": 3,
                                 "Name": "distance",
-                                "float": 7
+                                "float": 10
                             },
                             {
                                 "VarType": 3,
                                 "Name": "hor_angle",
-                                "float": 183
+                                "float": 0
                             },
                             {
                                 "VarType": 3,
                                 "Name": "vert_angle",
-                                "float": 45
+                                "float": 35
                             },
                             {
                                 "VarType": 14,
@@ -137,13 +136,73 @@
                         ]
                     },
                     {
-                        "Type": 17,
-                        "Enabled": true,
-                        "ID": "1676198290790393122",
-                        "ListenerID": "1450393156"
+                        "Type": 29,
+                        "ID": "8687867910518886944",
+                        "ResourceID": "8894711529836489338",
+                        "DataName": "CameraShake",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "traumaDecayDef",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxYaw",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxPitch",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxRoll",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "off_set",
+                                "float": 5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7804609622825015210",
+                        "ResourceID": "16057303148137039602",
+                        "DataName": "CameraUltiMode",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "zoom_out_fov",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "staying_time",
+                                "float": 0
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16262966561490800640",
+                        "ResourceID": "3479373960671141251",
+                        "DataName": "MusicController",
+                        "HasInspector": false
                     }
                 ]
             }
         ]
-    }
+    },
+    "Name": "Main Camera"
 }

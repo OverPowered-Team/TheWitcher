@@ -27,6 +27,7 @@ public:
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+	void SetActive(bool active);
 
 public:
 	bool OnIdle();
@@ -66,8 +67,8 @@ public:
 	Color slider_pressed_color	= { 0.75f,0.75f,0.75f,1.0f };
 	Color slider_disabled_color = { 0.3f,0.3f,0.3f,1.0f };
 
-private:
-	bool active = true;
+	bool active_ui = true;
+
 };
 
 #endif // !_COMPONENT_SLIDER_H_

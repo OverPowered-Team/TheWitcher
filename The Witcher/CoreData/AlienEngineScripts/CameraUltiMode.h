@@ -18,7 +18,7 @@ public:
 
 	void Start();
 	void Update();
-
+	void SetDejavou(const float zoom_out, const float speed, const float staying_time);
 	void DejaVou();
 public:
 	ComponentCamera* camera = nullptr;

@@ -11,6 +11,8 @@
 #include "imgui/imgui_internal.h"
 #include "PanelProject.h"
 #include "ResourceMaterial.h"
+#include "ResourceMesh.h"
+#include "ResourceModel.h"
 #include "Optick/include/optick.h"
 #include "ComponentMaterial.h"
 #include "mmgr/mmgr.h"
@@ -96,16 +98,39 @@ void ComponentParticleSystem::PostUpdate()
 		particleSystem->PostUpdate(Time::GetCurrentDT());
 }
 
+void ComponentParticleSystem::DrawScene(ComponentCamera* camera)
+{
+	OPTICK_EVENT();
+
+	if (game_object_attached->selected)
+	{
+		Draw();
+		DebugDraw();
+	}
+}
+
+void ComponentParticleSystem::DrawGame(ComponentCamera* camera)
+{
+	OPTICK_EVENT();
+
+	Draw();
+}
+
 void ComponentParticleSystem::DebugDraw()
 {
-	if (drawEmmitter && App->objects->GetSelectedObjects().back() == game_object_attached)
+	OPTICK_EVENT();
+
+	if (drawEmmitter) 
 		particleSystem->DrawEmmitter();
+
 }
 
 void ComponentParticleSystem::Draw()
 {
 	OPTICK_EVENT();
+
 	particleSystem->DrawParticles();
+
 }
 
 void ComponentParticleSystem::OnEnable()
@@ -120,7 +145,9 @@ void ComponentParticleSystem::OnDisable()
 
 bool ComponentParticleSystem::DrawInspector()
 {
+	
 	//texture = material->material->texture;
+	
 	
 	static bool check;
 
@@ -292,7 +319,30 @@ bool ComponentParticleSystem::DrawInspector()
 				else
 					ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);*/
 
-				ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX);
+				//ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX);
+
+				if (ImGui::Checkbox("3D Size", &particleSystem->particleInfo.size3DStart)){
+					particleSystem->particleInfo.size = particleSystem->particleInfo.size3D.x;
+					particleSystem->particleInfo.size3D = float3(particleSystem->particleInfo.size, particleSystem->particleInfo.size, particleSystem->particleInfo.size);
+
+					particleSystem->endInfo.size = particleSystem->endInfo.size3D.x;
+					particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
+					
+				}
+				ImGui::Spacing();
+				if (particleSystem->particleInfo.size3DStart)
+				{
+					ImGui::Text("3D Size: "); ImGui::SameLine(200, 15);
+					if (ImGui::DragFloat3("##size3D", (float*)&particleSystem->particleInfo.size3D, 0.1f, 0.0f, FLT_MAX)) {
+					}
+				}
+				else
+				{
+					if (ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX)) {
+						particleSystem->particleInfo.size3D = float3(particleSystem->particleInfo.size, particleSystem->particleInfo.size, particleSystem->particleInfo.size);
+					}
+				
+				}
 
 
 				if (ImGui::Checkbox("Start 3D Rotation", &particleSystem->particleInfo.axisRot3DStart))
@@ -320,7 +370,9 @@ bool ComponentParticleSystem::DrawInspector()
 			{
 				if (ImGui::TreeNodeEx("Final State", ImGuiTreeNodeFlags_DefaultOpen))
 				{
-
+					ImGui::DragFloat("Final Time", &particleSystem->particleInfo.changedTime, 0.1f, 0.0f, particleSystem->particleInfo.maxLifeTime);
+					ImGui::Spacing();
+					ImGui::Spacing();
 					ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
 
 					/*if (particleSystem->material != nullptr)
@@ -330,7 +382,41 @@ bool ComponentParticleSystem::DrawInspector()
 						ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
 							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);*/
 
-					ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX);
+					ImGui::DragFloat("Speed", &particleSystem->endInfo.speed, 0.2f);
+					//ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX);
+					
+					
+					/*if (ImGui::Checkbox("3D Size", &particleSystem->particleInfo.size3DStart))
+					{
+						particleSystem->endInfo.size = particleSystem->endInfo.size3D.x;
+						particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
+					}*/
+					ImGui::Spacing();
+					if (particleSystem->particleInfo.size3DStart)
+					{
+						ImGui::Text("3D Size: "); ImGui::SameLine(200, 15);
+						ImGui::DragFloat3("##size3D", (float*)&particleSystem->endInfo.size3D, 0.1f, 0.0f, FLT_MAX);
+					}
+					else
+					{
+						if (ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX)) {
+							particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
+						}
+
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					ImGui::DragFloat3("Gravity", (float*)&particleSystem->endInfo.force);
 					ImVec2 size = ImGui::GetItemRectSize();
 					if (ImGui::Button("Equalize Values", size))
@@ -420,16 +506,22 @@ bool ComponentParticleSystem::DrawInspector()
 			ImGui::Separator();
 			ImGui::Spacing();
 			ImGui::Spacing();
+			
+			ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "PARTICLE BILLBOARD:");
+			ImGui::Spacing();
+			ImGui::Spacing();
 
 			ImGui::Text("Orientation Mode ");
 			ImGui::SameLine(200, 15);
-			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0Velocity Aligned\0None\0\0"))
+			if (ImGui::Combo("Billboard", &bbTypeSelected, "Screen Aligned\0World Aligned\0Axially Aligned\0Velocity Aligned\0Mesh\0None\0\0"))
 			{
 				particleSystem->SetBillboardType((BillboardType)bbTypeSelected);
 			}
 
 			if (particleSystem->bbType == BillboardType::VELOCITY)
 			{
+				particleSystem->mesh_mode = false;
+
 				ImGui::Spacing();
 				ImGui::Spacing();
 
@@ -441,8 +533,104 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::Text("Speed Scale: "); ImGui::SameLine(200, 15);
 				ImGui::DragFloat("##Speed Scale", &particleSystem->particleInfo.speedScale, 0.0f, 100.0f);
 			}
+			else if (particleSystem->bbType == BillboardType::MESH)
+			{
+				particleSystem->mesh_mode = true;
+
+				ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "PARTICLE MESH:");
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				ImGui::Text("Mesh ");
+				ImGui::SameLine(200, 15);
+
+				if (ImGui::Combo("Mesh", &meshTypeSelected, "Cube\0Sphere\0Rock\0Dodecahedron\0Octahedron\0Torus\0Icosahedron\0Custom\0None\0\0"))
+				{
+					particleSystem->SetMeshType((PARTICLE_MESH)meshTypeSelected);
+					particleSystem->CreateParticleMesh(particleSystem->meshType);
+				}
+				
+
+				if (particleSystem->meshType == PARTICLE_MESH::CUSTOM)
+				{
+					ImGui::Spacing();
+					ImGui::Text("Custom Mesh ");
+					ImGui::SameLine(200, 15);
+
+					if (!particleSystem->meshes.empty())
+						ImGui::Button(particleSystem->meshes.front()->name.data(), { ImGui::GetWindowWidth() * 0.25F , 0 });
+					else
+						ImGui::Button("none", { ImGui::GetWindowWidth() * 0.25F , 0 });
+
+					//if (node != nullptr && node->type == FileDropType::MODEL3D) {
+					//	std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+					//	path += "_meta.alien";
+
+					//	u64 ID = App->resources->GetIDFromAlienPath(path.data());
+
+					//	std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+
+					//	if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) { // if it goes here it is because this file wasn't imported yet, so import it now
+
+					//		App->importer->LoadModelFile(std::string(node->path + node->name).data(), nullptr);
+					//		ID = App->resources->GetIDFromAlienPath(path.data());
+					//		meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+					//		App->resources->CreateNewModelInstanceOf(meta_path.data());
+					//	}
+					//}
+
+					if (ImGui::BeginDragDropTarget()) {
+						const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
+
+						if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
+							FileNode* node = *(FileNode**)payload->Data;
+							if (node != nullptr && node->type == FileDropType::MODEL3D) {
+
+								if (particleSystem->meshType == PARTICLE_MESH::CUSTOM)
+								{
+									std::string path = App->file_system->GetPathWithoutExtension(node->path + node->name);
+									path += "_meta.alien";
+
+									u64 ID = App->resources->GetIDFromAlienPath(path.data());
+
+									std::string meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+
+
+									if (ID != 0)
+									{
+										ResourceModel* model = (ResourceModel*)App->resources->GetResourceWithID(ID);
+										if (model != nullptr) {
+											
+											vector<ResourceMesh*> tmp = model->meshes_attached;
+											//particleSystem->SetMesh(meshes.back());
+											particleSystem->SetMeshes(tmp);
+										}
+									}
+
+									//if (!App->resources->CreateNewModelInstanceOf(meta_path.data())) { // if it goes here it is because this file wasn't imported yet, so import it now
+
+									//	App->importer->LoadModelFile(std::string(node->path + node->name).data(), nullptr);
+									//	ID = App->resources->GetIDFromAlienPath(path.data());
+									//	meta_path = LIBRARY_MODELS_FOLDER + std::to_string(ID) + ".alienModel";
+									//	App->resources->CreateNewModelInstanceOf(meta_path.data());
+									//}
+								}
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+						ImGui::SameLine();
+						if (ImGui::Button("Delete", { ImGui::GetWindowWidth() * 0.15F , 0 }))
+						{
+							particleSystem->RemoveMesh();
+						}
+				}
+			}
 			else
 			{
+				particleSystem->mesh_mode = false;
 				particleSystem->particleInfo.lengthScale = 1.0f;
 				particleSystem->particleInfo.speedScale = 0.0f;
 			}
@@ -450,7 +638,10 @@ bool ComponentParticleSystem::DrawInspector()
 			ImGui::Spacing();
 			ImGui::Spacing();
 
-			ImGui::Text("Particle Material");
+			ImGui::TextColored(ImVec4(1.0f, 0.54f, 0.0f, 1.0f), "PARTICLE MATERIAL: ");
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::Text("Material");
 			ImGui::SameLine(200, 15);
 
 			if (particleSystem->material != nullptr)
@@ -909,7 +1100,7 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	// Position
 	to_save->SetFloat3("Start.Position", particleSystem->particleInfo.position);
 	// Rotation
-	to_save->SetQuat("Start.Rotation", particleSystem->particleInfo.rotation); 
+	to_save->SetQuat("Start.Rotation", particleSystem->particleInfo.rotation);
 	// Global / Local
 	to_save->SetBoolean("Start.Global", particleSystem->particleInfo.globalTransform);
 	// Velocity
@@ -921,11 +1112,12 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	// Color
 	to_save->SetFloat4("Start.Color", particleSystem->particleInfo.color);
 
-	
-	
+	// 3D SizeStart
+	to_save->SetBoolean("Start.SizeStart3D", particleSystem->particleInfo.size3DStart);
 	// Size
 	to_save->SetNumber("Start.Size", (float)particleSystem->particleInfo.size);
-	
+	// Size3D
+	to_save->SetFloat3("Start.Size3D", particleSystem->particleInfo.size3D);
 	// LightColor
 	to_save->SetFloat4("Start.LightColor", particleSystem->particleInfo.lightColor);
 	// MaxLifeTime
@@ -938,13 +1130,18 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Start.ChangeOverLifeTime", particleSystem->particleInfo.changeOverLifeTime);
 	// rotateOverLifeTime
 	to_save->SetBoolean("Start.RotateOverLifeTime", particleSystem->particleInfo.rotateOverTime);
-	
-	// ----------------- Particle System End Info -------------------- //
 
+	// ----------------- Particle System End Info -------------------- //
+	// Final Time
+	to_save->SetNumber("End.FinalTime", particleSystem->particleInfo.changedTime);
+	// Speed
+	to_save->SetNumber("End.Speed", particleSystem->endInfo.speed);
 	// Color
 	to_save->SetFloat4("End.Color", particleSystem->endInfo.color);
 	// Size
 	to_save->SetNumber("End.Size", (float)particleSystem->endInfo.size);
+	// Size3D
+	to_save->SetFloat3("End.Size3D", particleSystem->endInfo.size3D);
 	// LightColor
 	to_save->SetFloat4("End.LightColor", particleSystem->endInfo.lightColor);
 	// Force
@@ -1022,7 +1219,7 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Blending.Equation", (int)particleSystem->eqBlend);
 
 	// --------------- Material Resource Info -------------------- //
-	
+
 	to_save->SetBoolean("HasMaterial", (particleSystem->material != nullptr) ? true : false);
 	if (particleSystem->material != nullptr) {
 		to_save->SetString("MaterialID", std::to_string(particleSystem->material->GetID()).data());
@@ -1044,15 +1241,34 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	// EndFrame
 	to_save->SetNumber("Animation.EndFrame", endFrame);
 
+
+	to_save->SetBoolean("HasMesh", (particleSystem->mesh_mode) ? true : false);
+
+	if (particleSystem->mesh_mode)
+	{
+		to_save->SetNumber("Mesh.MeshType", (int)particleSystem->meshType);
+		to_save->SetNumber("Mesh.Size", (int)particleSystem->meshes.size());
+
+		if (particleSystem->meshes.size() > 0)
+		{
+			for (int i = 0; i < particleSystem->meshes.size(); ++i)
+			{
+				std::string tmp = std::to_string(i);
+				to_save->SetString(("Mesh.MeshesAttached.MeshID_" + tmp).data(), std::to_string(particleSystem->meshes.at(i)->GetID()).data());
+			}
+		}
+
+	}
+
 	// --------------- Deprecated -------------------- //
 	/*to_save->SetBoolean("TextureEnabled", texture_activated);
 	to_save->SetString("ID", std::to_string(ID));
 	to_save->SetBoolean("HasTexture", (texture != nullptr) ? true : false);
-	
+
 	if (texture != nullptr) {
 		to_save->SetString("TextureID", std::to_string(texture->GetID()));
 	}*/
-	
+
 }
 
 void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
@@ -1064,7 +1280,7 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	// ----------------------- Billboard Info ----------------------- //
 
 	particleSystem->bbType = (BillboardType)(int)to_load->GetNumber("Billboard");
-
+	bbTypeSelected = (int)to_load->GetNumber("Billboard");
 	// --------------- Particle System Start Info -------------------- //
 
 	// Position
@@ -1082,8 +1298,26 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->particleInfo.speed = to_load->GetNumber("Start.Speed");
 	// Color
 	particleSystem->particleInfo.color = to_load->GetFloat4("Start.Color");
+	try
+	{
+		// SizeStart
+		particleSystem->particleInfo.size3DStart = to_load->GetBoolean("Start.SizeStart3D");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.size3DStart = false;
+	}
 	// Size
 	particleSystem->particleInfo.size = to_load->GetNumber("Start.Size");
+
+	try {
+		// Size 3D
+		particleSystem->particleInfo.size3D = to_load->GetFloat3("Start.Size3D");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.size3D = float3(1.f, 0.f, 0.f);
+	}
 	// LightColor
 	particleSystem->particleInfo.lightColor = to_load->GetFloat4("Start.LightColor");
 	// MaxLifeTime
@@ -1091,18 +1325,42 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	// AxisRot
 	particleSystem->particleInfo.axisRot3DStart = to_load->GetBoolean("Start.AxisRotationStart");
 	// Angle Rotation
-	particleSystem->particleInfo.angle3D =  to_load->GetFloat3("Start.Angle3D");
+	particleSystem->particleInfo.angle3D = to_load->GetFloat3("Start.Angle3D");
 	// changeOverLifeTime
 	particleSystem->particleInfo.changeOverLifeTime = to_load->GetBoolean("Start.ChangeOverLifeTime");
 	// rotateOverLifeTime
 	particleSystem->particleInfo.rotateOverTime = to_load->GetBoolean("Start.rotateOverLifeTime");
 
-	// ----------------- Particle System End Info -------------------- //
 
+	// ----------------- Particle System End Info -------------------- //
+	try {
+	// Final Time
+		particleSystem->particleInfo.changedTime = to_load->GetNumber("End.FinalTime");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.changedTime = 5;
+	}
+	try {
+	// Speed
+		particleSystem->endInfo.speed = to_load->GetNumber("End.Speed");
+	}
+	catch (...)
+	{
+		particleSystem->endInfo.speed = 0.0f;
+	}
 	// Color
 	particleSystem->endInfo.color = to_load->GetFloat4("End.Color");
 	// Size
 	particleSystem->endInfo.size = to_load->GetNumber("End.Size");
+	try {
+		// Size 3D
+		particleSystem->particleInfo.size3D = to_load->GetFloat3("Start.Size3D");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.size3D = float3(1.f, 0.f, 0.f);
+	}
 	// LightColor
 	particleSystem->endInfo.lightColor = to_load->GetFloat4("End.LightColor");
 	// Force
@@ -1195,8 +1453,8 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 		//particleSystem->material->shaderInputs.particleShaderProperties.end_color = to_load->GetFloat3("End.Color");
 	}
 	ID = std::stoull(to_load->GetString("ID"));
-	
-	
+
+
 	// ---------------------- Animation Info -------------------------- //
 
 	if (to_load->GetBoolean("HasAnimation")) {
@@ -1215,13 +1473,60 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 		particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed, startFrame, endFrame);
 	}
 
+	try {
+		particleSystem->mesh_mode = to_load->GetBoolean("HasMesh");
+
+		if (to_load->GetBoolean("HasMesh")) {
+
+			particleSystem->meshType = (PARTICLE_MESH)(int)to_load->GetNumber("Mesh.MeshType");
+			meshTypeSelected = (int)to_load->GetNumber("Mesh.MeshType");
+			particleSystem->CreateParticleMesh((PARTICLE_MESH)particleSystem->meshType);
+
+			if ((PARTICLE_MESH)particleSystem->meshType == PARTICLE_MESH::CUSTOM)
+			{
+				int size = (int)to_load->GetNumber("Mesh.Size");
+
+				if (size > 0)
+				{
+					std::vector<ResourceMesh*> tmp_meshes;
+
+					for (int i = 0; i < size; ++i)
+					{
+						std::string tmp = std::to_string(i);
+						u64 ID = std::stoull(to_load->GetString(("Mesh.MeshesAttached.MeshID_" + tmp).data()));
+
+						if (ID != 0)
+						{
+							ResourceMesh* mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
+							if (mesh != nullptr)
+							{
+								tmp_meshes.push_back(mesh);
+							}
+						}
+
+					}
+					particleSystem->SetMeshes(tmp_meshes);
+				}
+			}
+		}
+
+	}
+	catch (...)
+	{
+		particleSystem->mesh_mode = false;
+	}
+	
+
+	
+
+	
 	// ---------------------- Deprecated -------------------------- //
 	/*texture_activated = to_load->GetBoolean("TextureEnabled");
 
 	if (to_load->GetBoolean("HasTexture")) {
 		u64 ID = std::stoull(to_load->GetString("TextureID"));
 		texture = (ResourceTexture*)App->resources->GetResourceWithID(ID);
-		if (texture != nullptr) 
+		if (texture != nullptr)
 		{
 			texture->IncreaseReferences();
 			particleSystem->texture = texture;

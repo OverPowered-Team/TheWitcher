@@ -20,54 +20,53 @@ void Leshen::StartEnemy()
 	Enemy::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
-	knockback = 0.5;
 }
 
 void Leshen::UpdateEnemy()
 {
 	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
 
-	switch (state)
-	{
-	case Enemy::EnemyState::NONE:
-		break;
-	case Enemy::EnemyState::IDLE:
-		if (player_distance[0] < stats["VisionRange"].GetValue()) {
-			if (time_to_action <= action_cooldown)
-				time_to_action += Time::GetDT();
-			else {
-				SetAttackState();
-			}
-		}
-		break;
-	case Enemy::EnemyState::ATTACK:
-		if (current_action) {
-			if (!UpdateAction()) {
-				SetIdleState();
-			}
-		}
-		else
-			LOG("NO CURRENT ACTION DETECTED");
-		break;
-	case Enemy::EnemyState::HIT:
-		if (current_action)
-			state = EnemyState::ATTACK;
-		else
-			state = EnemyState::IDLE;
-		break;
-	case Enemy::EnemyState::DYING: {
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-		//Ori Ori function sintaxis
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-		audio_emitter->StartSound("SoldierDeath");
-		state = EnemyState::DEAD;
-	}
-		break;
-	case Enemy::EnemyState::DEAD:
-		break;
-	default:
-		break;
-	}
+	//switch (state)
+	//{
+	//case Enemy::EnemyState::NONE:
+	//	break;
+	//case Enemy::EnemyState::IDLE:
+	//	if (player_distance[0] < stats["VisionRange"].GetValue()) {
+	//		if (time_to_action <= action_cooldown)
+	//			time_to_action += Time::GetDT();
+	//		else {
+	//			SetAttackState();
+	//		}
+	//	}
+	//	break;
+	//case Enemy::EnemyState::ATTACK:
+	//	if (current_action) {
+	//		if (!UpdateAction()) {
+	//			SetIdleState();
+	//		}
+	//	}
+	//	else
+	//		LOG("NO CURRENT ACTION DETECTED");
+	//	break;
+	//case Enemy::EnemyState::HIT:
+	//	if (current_action)
+	//		state = EnemyState::ATTACK;
+	//	else
+	//		state = EnemyState::IDLE;
+	//	break;
+	//case Enemy::EnemyState::DYING: {
+	//	EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+	//	//Ori Ori function sintaxis
+	//	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+	//	audio_emitter->StartSound("SoldierDeath");
+	//	state = EnemyState::DEAD;
+	//}
+	//	break;
+	//case Enemy::EnemyState::DEAD:
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void Leshen::CleanUpEnemy()
@@ -80,12 +79,12 @@ void Leshen::CleanUpEnemy()
 	delete current_action;
 }
 
-float Leshen::GetDamaged(float dmg, PlayerController* player)
+float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
 	HandleHitCount();
 	LOG("health remaining %f", stats["Health"].GetValue());
 	LOG("hitcount %i", times_hitted);
-	return Enemy::GetDamaged(dmg, player);
+	return Enemy::GetDamaged(dmg, player, knock);
 }
 
 void Leshen::OrientToPlayer(int target)
@@ -156,8 +155,8 @@ void Leshen::FinishAttack()
 
 void Leshen::SetIdleState()
 {
-	current_action = nullptr;
-	state = Enemy::EnemyState::IDLE;
+	/*current_action = nullptr;
+	state = Enemy::EnemyState::IDLE;*/
 }
 
 void Leshen::SetAttackState()
@@ -166,7 +165,7 @@ void Leshen::SetAttackState()
 	SetActionProbabilities();
 	SelectAction();
 	time_to_action = 0.0f;
-	state = Enemy::EnemyState::ATTACK;
+	//state = Enemy::EnemyState::ATTACK;
 	current_action->state = ActionState::LAUNCH;
 	LaunchAction();
 	//animator->PlayState("Action")
@@ -257,7 +256,7 @@ void Leshen::LaunchCloudAction()
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	particles["Cloud"]->game_object_attached->SetEnable(true);
+	SpawnParticle("Cloud");
 }
 
 Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
@@ -366,7 +365,7 @@ void Leshen::EndCrowsAction(GameObject* crow)
 void Leshen::EndCloudAction()
 {
 	meshes->SetEnable(true);
-	particles["Cloud"]->game_object_attached->SetEnable(false);
+	ReleaseParticle("Cloud");
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
 	times_switched = 0;
@@ -383,10 +382,10 @@ void Leshen::SetActionVariables()
 	player_rooted[0] = false;
 	player_rooted[1] = false;	
 	
-	if (player_controllers[0]->state == PlayerController::PlayerState::ROOT) {
+	if (!player_controllers[0]->can_move) {
 		player_rooted[0] = true;
 	}
-	else if (player_controllers[1]->state == PlayerController::PlayerState::ROOT) {
+	else if (!player_controllers[1]->can_move) {
 		player_rooted[1] = true;
 	}
 }

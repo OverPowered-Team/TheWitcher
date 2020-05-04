@@ -234,10 +234,10 @@ void ComponentAnimatedImage::Draw(bool isGame)
 
 		scale.x = matrix[0][0];
 		scale.y = matrix[1][1];
-		scale.z = 1.0f;
+		scale.z = matrix[2][2];
 
 
-		float4x4 uiLocal = float4x4::FromTRS(position, rotation, scale);
+		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
 		float4x4 uiGlobal = uiLocal;
 
 		/*	if (!particleInfo.globalTransform)

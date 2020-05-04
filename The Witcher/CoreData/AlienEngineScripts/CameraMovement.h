@@ -12,7 +12,7 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, MOVING_TO_DYNAMIC,
+		DYNAMIC, MOVING_TO_DYNAMIC, FREE,
 		STATIC, MOVING_TO_STATIC,
 		AXIS, MOVING_TO_AXIS
 		);
@@ -43,12 +43,16 @@ public:
 	CameraAxis axis = CameraAxis::NONE;
 	float current_transition_time = 0.f;
 
-	float distance = 0.f;
+	float distance = 10.f;
 	float hor_angle = 0.f;
-	float vert_angle = 0.f;
+	float vert_angle = 35.f;
 
 	bool smooth_camera = true;
 	float smooth_cam_vel = 5.f;
+
+	//TEST ALLOW MOVEMENT WHEN OTHER IS BLOCKING
+	float3 prev_middle = float3::zero();
+	CameraState prev_state = CameraState::FREE;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
@@ -57,9 +61,9 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	SHOW_TEXT("First parameters");
 	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraState, alien->state);
 
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->distance, 0, 100);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->hor_angle, -360.f, 360.f);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->vert_angle, -360.f, 360.f);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->distance);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->hor_angle);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->vert_angle);
 	SHOW_IN_INSPECTOR_AS_ENUM(CameraMovement::CameraAxis, alien->axis);
 
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->smooth_camera);

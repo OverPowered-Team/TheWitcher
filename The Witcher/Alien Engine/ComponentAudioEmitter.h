@@ -31,6 +31,7 @@ public:
 	void SetSwitchState(const char* switch_group_id, const char* switch_state_id);
 	void SetReverb(const float& strength, const char* name);
 	void SetState(const char* state_group, const char* new_state);
+	void SetRTPCValue(const char* RTPC, float value);
 	WwiseT::AudioSource* GetSource() const;
 private:
 	void UpdateSourcePos();

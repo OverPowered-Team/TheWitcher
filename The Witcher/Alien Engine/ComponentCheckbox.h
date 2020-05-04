@@ -68,7 +68,6 @@ private:
 	void CallListeners(std::vector<std::pair<std::string, std::function<void()>>>* listeners);
 
 private:
-	bool active = true;
 	bool clicked = false;
 	float crossScaleX = 0.5F;
 	float crossScaleY = 0.5F;
@@ -87,6 +86,8 @@ private:
 
 	ResourceTexture* crossTexture = nullptr;
 	ResourceTexture* tickTexture = nullptr;
+
+	bool active_ui = true;
 };
 
 
