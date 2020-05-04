@@ -17,7 +17,9 @@ enum (EnemyType,
 	CIRI,
 	CIRI_CLONE,
 	DROWNED,
-	SHAELMAR
+	SHAELMAR,
+	LESHEN,
+	BLOCKER_OBSTACLE
 	);
 
 class Enemy : public Alien {

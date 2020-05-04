@@ -249,7 +249,7 @@ void ComponentCurve::LoadComponent(JSONArraypack* to_load)
 	curve.SetPoints(control_points, control_points_normals);
 }
 
-void ComponentCurve::DrawScene()
+void ComponentCurve::DrawScene(ComponentCamera* camera)
 {
 	if (!game_object_attached->IsSelected() && renderOnSelected) {
 		return;

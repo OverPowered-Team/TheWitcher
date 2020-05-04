@@ -46,6 +46,9 @@ void Enemy::StartEnemy()
 	case EnemyType::DROWNED:
 		json_str = "drowned";
 		break;
+	case EnemyType::BLOCKER_OBSTACLE:
+		json_str = "blockerobstacle";
+		break;
 	default:
 		break;
 	}

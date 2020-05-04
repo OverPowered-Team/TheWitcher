@@ -23,13 +23,13 @@ void Extra_Menus::Start()
 	settings->SetEnable(false);
 
 	// Main Menu or InGame
-	if (game_object->parent->GetName() == "HUD_Game")
+	if (strcmp(SceneManager::GetCurrentScene(), "Main_Menu") == 0)
 	{
-		previous_menu = GameObject::FindWithName("Pause_Menu")->GetChild("Menu");
+		previous_menu = GameObject::FindWithName("Main_Menu_UI");
 	}
 	else
 	{
-		previous_menu = GameObject::FindWithName("Main_Menu_UI");
+		previous_menu = GameObject::FindWithName("Pause_Menu")->GetChild("Menu");
 	}
 
 	/*Geralt_data = (PlayerController*)Geralt->GetComponentScript("PlayerController");
@@ -48,13 +48,15 @@ void Extra_Menus::Start()
 void Extra_Menus::PostUpdate()
 {
 	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B) 
-		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B))
-		&& (Time::IsGamePaused()))
+		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
 	{
-		if (game_object->IsEnabled())
+		if ((strcmp(SceneManager::GetCurrentScene(), "Main_Menu")) == 0 || (Time::IsGamePaused()))
 		{
-			previous_menu->SetEnable(true);
-			game_object->SetEnable(false);
+			if (game_object->IsEnabled())
+			{
+				previous_menu->SetEnable(true);
+				game_object->SetEnable(false);
+			}
 		}
 	}
 }

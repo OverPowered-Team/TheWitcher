@@ -63,7 +63,7 @@ public:
 
 private:
 
-	void DrawScene();
+	void DrawScene(ComponentCamera* camera);
 
 	bool DrawInspector();
 
