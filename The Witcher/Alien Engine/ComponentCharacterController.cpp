@@ -182,7 +182,7 @@ void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 	force_gravity = to_load->GetBoolean("ForceGravity");
 	force_move = to_load->GetBoolean("ForceMove");
 
-	SetCollisionLayer(to_load->GetString("CollisionLayer"));
+	SetCollisionLayer(to_load->GetString("CollisionLayer", "Default"));
 }
 
 bool ComponentCharacterController::DrawInspector()
@@ -309,7 +309,7 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	}
 }
 
-void ComponentCharacterController::DrawScene()
+void ComponentCharacterController::DrawScene(ComponentCamera* camera)
 {
 	if (game_object_attached->IsSelected() && App->physx->debug_physics == false)
 	{

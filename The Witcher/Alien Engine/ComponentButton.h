@@ -14,6 +14,8 @@ struct AnimationInfo
 	float current_frame = 0.0f;
 	int last_frame = 0;
 	int loops = 0;
+	bool loop = true;
+	float speed = 1.0f;
 };
 
 class __declspec(dllexport) ComponentButton :public ComponentUI
@@ -42,8 +44,8 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-	void SetAnimSpeed(float speed);
-	float GetAnimSpeed();
+	void SetAnimSpeed(float speed, UIState type);
+	float GetAnimSpeed(UIState type);
 
 protected:
 	void HandleAlienEvent(const AlienEvent& e);
@@ -91,8 +93,6 @@ protected:
 	AnimationInfo disabled_info;
 	AnimationInfo* current_tex_array = nullptr;
 
-	bool loop = true;
-	float speed = 1.0f;
 
 private:
 
@@ -103,7 +103,7 @@ private:
 	std::vector<std::pair<std::string, std::function<void()>>> listenersOnExit;
 	std::vector<std::pair<std::string, std::function<void()>>> listenersOnEnter;
 
-	bool active = true;
+	bool active_ui = true;
 };
 
 
