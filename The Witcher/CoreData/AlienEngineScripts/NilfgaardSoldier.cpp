@@ -64,7 +64,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 
 	audio_emitter->StartSound("SoldierHit");
 
-	SpawnParticle("hit_particle");
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition()); //1 is body position
 
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -85,7 +85,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				SpawnParticle("decapitation_particle");
+				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());

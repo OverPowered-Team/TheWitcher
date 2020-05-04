@@ -39,6 +39,7 @@ void PlayerController::Start()
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
+	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
 	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
@@ -447,7 +448,8 @@ void PlayerController::AddEffect(Effect* _effect)
 	effects.push_back(_effect);
 
 	if (std::strcmp(_effect->vfx_on_apply.c_str(), "") != 0)
-		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply, float3::zero(), this->game_object, true);
+		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply, 
+			particle_spawn_positions[_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
 
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{

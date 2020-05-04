@@ -12,6 +12,8 @@ void Enemy::Awake()
 	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 	attack_collider->SetEnable(false);
+
+	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
 }
 
 void Enemy::StartEnemy()
@@ -211,7 +213,8 @@ void Enemy::AddEffect(Effect* new_effect)
 	effects.push_back(new_effect);
 
 	if (new_effect->vfx_on_apply != "")
-		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply, float3::zero(), this->game_object, true);
+		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
+			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{

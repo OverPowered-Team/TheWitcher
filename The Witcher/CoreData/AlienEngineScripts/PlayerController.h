@@ -115,6 +115,7 @@ public:
 	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
 	std::vector<GameObject*> particles;
+	std::vector<GameObject*> particle_spawn_positions;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 

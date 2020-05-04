@@ -78,6 +78,7 @@ public:
 	bool is_combat = false;
 
 protected:
+	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;

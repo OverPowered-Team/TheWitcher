@@ -153,7 +153,7 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
     }
 
     audio_emitter->StartSound("GhoulHit");
-    SpawnParticle("hit_particle");
+    SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
 
     character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
