@@ -4,9 +4,13 @@
 #include "Macros/AlienScripts.h"
 #include "Boss.h"
 
+class CiriFightController;
+
 class ALIEN_ENGINE_API CiriOriginal : public Boss {
 public:
-
+	CiriFightController* fight_controller = nullptr;
+	Prefab rock;
+	float rock_force = 0.6f;
 public:
 	void StartEnemy() override;
 	void UpdateEnemy() override;
@@ -19,6 +23,8 @@ public:
 
 	void LaunchAction() override;
 
+	void LaunchRockAction();
+
 	ActionState UpdateAction() override;
 
 	void EndAction(GameObject* go_ended) override;
@@ -30,9 +36,10 @@ public:
 };
 
 ALIEN_FACTORY CiriOriginal* CreateCiriOriginal() {
-	CiriOriginal* Ciri_Original = new CiriOriginal();
+	CiriOriginal* cirioriginal = new CiriOriginal();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, Ciri_Original->state);
+	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, cirioriginal->state);
+	SHOW_IN_INSPECTOR_AS_PREFAB(cirioriginal->rock);
 
-	return Ciri_Original;
+	return cirioriginal;
 }

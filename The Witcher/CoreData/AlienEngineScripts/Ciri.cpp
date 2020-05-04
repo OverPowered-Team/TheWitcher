@@ -11,18 +11,17 @@ void Ciri::StartEnemy()
 	actions.emplace("Dash", new BossAction(ActionType::DASH, 0.0f));
 	actions.emplace("Combo", new BossAction(ActionType::COMBO, 0.0f));
 	actions.emplace("MiniScream", new BossAction(ActionType::MINISCREAM, 0.0f));
-	actions.emplace("Scream", new BossAction(ActionType::SCREAM, 0.0f));
 
 	can_get_interrupted = true;
 	action_cooldown = 0.3f;
 
-	type = EnemyType::CIRI;
+	type = EnemyType::CIRI_CLONE;
 
 	Boss::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
 
-	fight_controller = GameObject::FindWithName("CiriOriginal")->GetComponent<CiriFightController>();
+	fight_controller = GameObject::FindWithName("Ciri")->GetComponent<CiriFightController>();
 }
 
 void Ciri::UpdateEnemy()

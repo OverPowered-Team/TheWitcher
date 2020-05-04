@@ -40,6 +40,9 @@ void Enemy::StartEnemy()
 	case EnemyType::CIRI:
 		json_str = "ciri";
 		break;
+	case EnemyType::CIRI_CLONE:
+		json_str = "ciri_clone";
+		break;
 	case EnemyType::DROWNED:
 		json_str = "drowned";
 		break;

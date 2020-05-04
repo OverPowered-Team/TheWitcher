@@ -118,10 +118,15 @@ void Boss::SetAttackState()
 	SetActionVariables();
 	SetActionProbabilities();
 	SelectAction();
-	time_to_action = 0.0f;
-	state = Boss::BossState::ATTACK;
-	current_action->state = ActionState::LAUNCH;
-	LaunchAction();
+	if (current_action) {
+		time_to_action = 0.0f;
+		state = Boss::BossState::ATTACK;
+		current_action->state = ActionState::LAUNCH;
+		LaunchAction();
+	}
+	else {
+		SetIdleState();
+	}
 }
 
 bool Boss::IsOnAction()

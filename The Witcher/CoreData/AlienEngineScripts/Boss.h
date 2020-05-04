@@ -27,7 +27,8 @@ public:
 		DASH,
 		COMBO,
 		SCREAM,
-		MINISCREAM
+		MINISCREAM,
+		ROCKTHROW
 		);
 
 	enum(ActionState,

@@ -13,7 +13,10 @@ public:
 	float scream_cd_timer = 0.0f;
 	bool can_mini_scream = true;
 
-	Prefab* ciri_clone = nullptr;
+	int phase = 1;
+
+	Prefab ciri_clone;
+	std::vector<GameObject*> clone_positions;
 public:
 
 	CiriFightController();
@@ -25,8 +28,10 @@ public:
 };
 
 ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
-	CiriFightController* alien = new CiriFightController();
-	// To show in inspector here
 
-	return alien;
+	CiriFightController* cirifightcontroller = new CiriFightController();
+	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->ciri_clone);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(cirifightcontroller->ciri_clones_scream_cd);
+
+	return cirifightcontroller;
 } 
