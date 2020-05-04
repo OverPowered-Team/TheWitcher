@@ -63,8 +63,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 	}
 
 	//audio_emitter->StartSound("GhoulHit");
-	if (particles["hit_particle"])
-		particles["hit_particle"]->Restart();
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
 
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 

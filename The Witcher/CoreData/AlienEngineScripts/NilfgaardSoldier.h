@@ -50,7 +50,6 @@ public:
 
 public:
 	Prefab head_prefab;
-	GameObject* head_position;
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	NilfgaardSoldierState state = NilfgaardSoldierState::NONE;
 

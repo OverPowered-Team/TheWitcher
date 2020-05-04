@@ -14,6 +14,7 @@ void Enemy::Awake()
 	attack_collider->SetEnable(false);
 
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Attack"));
 }
 
 void Enemy::StartEnemy()
@@ -280,7 +281,10 @@ void Enemy::StopHitFreeze(float speed)
 void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
 {
 	if (particle_name == "")
+	{
+		LOG("There's no particle name. String is empty!");
 		return;
+	}
 
 	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
