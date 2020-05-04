@@ -17,13 +17,13 @@ public:
 
 	ComponentCurve* curve = nullptr;
 
-	float speed = 0.01F;
+	float speed = 300;
 
 };
 
 ALIEN_FACTORY VagoneteMove* CreateVagoneteMove() {
 	VagoneteMove* alien = new VagoneteMove();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->speed);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->speed);
 	return alien;
 } 
