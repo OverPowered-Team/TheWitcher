@@ -42,9 +42,12 @@ public:
 
 		float3 collider_position;
 		float3 collider_size;
+		float3 particle_pos;
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
-		float max_snap_distance = 0.0f;
+		float max_distance_traveled = 0.0f;
+		float min_distance_to_target = 0.0f;
+		float snap_detection_range = 0.0f;
 		int shake = 0;
 		int activation_frame = 0;
 	};
@@ -65,8 +68,18 @@ public:
 		}
 		return false;
 	}
+	bool CanHit(Enemy* enemy)
+	{
+		for (auto it = enemies_hit.begin(); it != enemies_hit.end(); ++it)
+		{
+			if (enemy == (*it))
+				return false;
+		}
+		return true;
+	}
 public:
 	AttackInfo info;
+	std::vector<Enemy*> enemies_hit;
 
 private:
 	Attack* light_attack_link = nullptr;
@@ -105,7 +118,6 @@ public:
 	void OnHit(Enemy* enemy);
 
 	void AllowCombo();
-	void OnDrawGizmosSelected();
 	bool CanBeInterrupted();
 
 	void AttackShake();
@@ -113,9 +125,7 @@ public:
 	Attack* GetCurrentAttack();
 
 public:
-	float snap_detection_range = 5.0f;
 	float max_snap_angle = 0.0f;
-
 	float snap_angle_value = 0.0f;
 	float snap_distance_value = 0.0f;
 
@@ -156,7 +166,6 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	PlayerAttacks* player_attacks = new PlayerAttacks();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_detection_range);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->max_snap_angle);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);

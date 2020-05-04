@@ -7,7 +7,6 @@ enum (StateType,
 	ATTACKING,
 	JUMPING,
 	ROLLING,
-	CASTING,
 	DEAD,
 	REVIVING,
 	HIT,
@@ -81,20 +80,10 @@ public:
 	void OnExit(PlayerController* player) override;
 };
 
-class CastingState : public State
-{
-public:
-	CastingState() { type = StateType::CASTING; }
-	//State* HandleInput(PlayerController* player) override;
-	void Update(PlayerController* player) override;
-	State* OnAnimationEnd(PlayerController* player, const char* name) override;
-	void OnEnter(PlayerController* player) override;
-	void OnExit(PlayerController* player) override;
-};
-
 class DeadState : public State
 {
 public:
+	GameObject* revive_world_ui = nullptr;
 	DeadState() { type = StateType::DEAD; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
 	//void Update(PlayerController* player) override;
@@ -107,8 +96,8 @@ class RevivingState : public State
 public:
 	RevivingState() { type = StateType::REVIVING; }
 	//void HandleInput(PlayerController* player, float2 movement_input) override;
-	//void Update(PlayerController* player) override;
-	State* OnAnimationEnd(PlayerController* player, const char* name) override;
+	void Update(PlayerController* player) override;
+	//State* OnAnimationEnd(PlayerController* player, const char* name) override;
 	void OnEnter(PlayerController* player) override;
 	void OnExit(PlayerController* player) override;
 };
@@ -123,5 +112,3 @@ public:
 	void OnEnter(PlayerController* player) override;
 	void OnExit(PlayerController* player) override;
 };
-
-

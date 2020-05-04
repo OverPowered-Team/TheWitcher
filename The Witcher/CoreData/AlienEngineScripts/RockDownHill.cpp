@@ -30,11 +30,13 @@ void RockDownHill::CalculateDirection(const float3& end_pos)
 	axis_rot = Cross(float3::unitY(), direction);
 }
 
-void RockDownHill::SetMoveAndRotationSpeed(float rot_speed, float speed, float time)
+void RockDownHill::SetMoveAndRotationSpeed(float rot_speed, float speed, float time, float dmg, float time_smash)
 {
 	this->rot_speed = rot_speed;
 	this->speed = speed;
 	this->time = time;
+	this->damage = dmg;
+	this->time_smashed = time_smash;
 }
 
 void RockDownHill::OnTriggerEnter(ComponentCollider* trigger)
@@ -46,8 +48,7 @@ void RockDownHill::OnTriggerEnter(ComponentCollider* trigger)
 		PlayerController* player_ctrl = trigger->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl && !player_ctrl->is_immune)
 		{
-			Destroy(game_object);
-			player_ctrl->ReceiveDamage(damage, direction.Normalized() * 0.3f);
+			player_ctrl->HitByRock(time_smashed, damage);
 		}
 	}
 }

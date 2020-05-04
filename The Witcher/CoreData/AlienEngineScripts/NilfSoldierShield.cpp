@@ -1,3 +1,5 @@
+#include "GameManager.h"
+#include "ParticlePool.h"
 #include "NilfSoldierShield.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
@@ -60,6 +62,7 @@ void NilfSoldierShield::Action()
 	if (rand_num == 0)
 	{
 		animator->PlayState("Block");
+		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		current_time = Time::GetGameTime();
 		is_blocked = true;
 		state = NilfgaardSoldierState::AUXILIAR;
@@ -67,6 +70,7 @@ void NilfSoldierShield::Action()
 	else
 	{
 		animator->PlayState("Attack");
+		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::ATTACK;
 	}
 }
@@ -76,6 +80,8 @@ void NilfSoldierShield::Block()
 	float b_time = (has_been_attacked) ? block_attack_time : block_time;
 	if (Time::GetGameTime() - current_time > b_time)
 	{
+		ReleaseParticle("ClinckEmitter");
+
 		if (stats["AttackRange"].GetValue() < distance)
 		{
 			state = NilfgaardSoldierState::IDLE;
@@ -93,6 +99,8 @@ void NilfSoldierShield::Block()
 	}
 	else if (break_shield_attack >= max_break_shield_attack)
 	{
+		ReleaseParticle("ClinckEmitter");
+
 		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
 		has_been_attacked = false;
@@ -120,13 +128,13 @@ void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 			has_been_attacked = true;
 			current_time = Time::GetGameTime();
 			break_shield_attack++;
-			particles["ClinckEmitter"]->Restart();
+			SpawnParticle("ClinckEmitter", particle_spawn_positions[1]->transform->GetLocalPosition()); // 1 is body position
 			audio_emitter->StartSound("SoldierBlock");
 		}
 		else
 		{
 			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player)
+			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
 				player->OnHit(this, GetDamaged(dmg_received, player));

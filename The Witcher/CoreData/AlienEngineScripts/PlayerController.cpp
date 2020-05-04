@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
+#include "ParticlePool.h"
 #include "PlayerAttacks.h"
 #include "EventManager.h"
 #include "EffectsFactory.h"
@@ -12,9 +13,14 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-#include "UI_Char_Frame.h"
-#include "InGame_UI.h"
 
+#include "Bonfire.h"
+#include "Scores_Data.h"
+
+#include "InGame_UI.h"
+#include "DashCollider.h"
+
+#include "UI_Char_Frame.h"
 #include "PlayerController.h"
 
 PlayerController::PlayerController() : Alien()
@@ -33,15 +39,26 @@ void PlayerController::Start()
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
-	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
+	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
 		(*it)->SetEnable(false);
-	}
+	}*/
 
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
+
+	// TP to last checkpoint if checkpoint exist
+	if (Scores_Data::last_checkpoint_position.IsFinite())
+	{
+		this->controller->SetPosition(float3(
+			Scores_Data::last_checkpoint_position.x + (controller_index - 1),
+			Scores_Data::last_checkpoint_position.y, 
+			Scores_Data::last_checkpoint_position.z)
+		);
+	}
 
 	state = new IdleState();
 	state->OnEnter(this);
@@ -49,11 +66,8 @@ void PlayerController::Start()
 
 void PlayerController::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_F1))
-	{
-		Effect* new_effect = GameManager::instance->effects_factory->CreateEffect("Geralt_Quen");
-		AddEffect(new_effect);
-	}
+	if (Time::IsGamePaused())
+		return;
 
 	UpdateInput();
 
@@ -140,9 +154,6 @@ void PlayerController::SetState(StateType new_state)
 	case StateType::ROLLING:
 		state = new RollingState();
 		break;
-	case StateType::CASTING:
-		state = new CastingState();
-		break;
 	case StateType::DEAD:
 		state = new DeadState();
 		break;
@@ -191,21 +202,24 @@ bool PlayerController::AnyKeyboardInput()
 
 void PlayerController::HandleMovement()
 {
-	float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-
-	float speed_y = player_data.speed.y;
-	player_data.speed = -direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;
-
+	/*float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
 	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
 	direction_vector.y = 0.f;
+
+	float speed_y = player_data.speed.y;
+	player_data.speed = direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
+	player_data.speed.y = speed_y;*/
+	float3 direction_vector = GetDirectionVector();
+
+	float tmp_y = player_data.speed.y;
+	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
+	player_data.speed.y = tmp_y;
+
 
 	//rotate
 	if (mov_input)
 	{
-		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-		transform->SetGlobalRotation(rot);
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
 	}
 }
 
@@ -214,9 +228,17 @@ void PlayerController::EffectsUpdate()
 	if (Time::GetGameTime() - last_regen_tick > 1.0f)
 	{
 		player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos_Regen"].GetValue());
-		player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+		//player_data.stats["Health"].IncreaseStat(player_data.stats["Health_Regen"].GetValue());
+
+		if (HUD)
+		{
+			//HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+			HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+		}
+
 		last_regen_tick = Time::GetGameTime();
 	}
+
 	for (auto it = effects.begin(); it != effects.end();)
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
@@ -236,9 +258,14 @@ void PlayerController::EffectsUpdate()
 					}
 				}
 			}
-			if (particles[(*it)->name])
-				particles[(*it)->name]->SetEnable(true);
+			if ((*it)->spawned_particle != nullptr)
+			{
+				(*it)->spawned_particle->SetEnable(false);
+				(*it)->spawned_particle->SetEnable(true);
+			}
+
 		}
+
 		if ((*it)->to_delete)
 		{
 			it = RemoveEffect(it);
@@ -252,8 +279,10 @@ void PlayerController::PlayAttackParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);
+		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
+		
+		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
 }
 
@@ -261,10 +290,34 @@ void PlayerController::PlayAllowParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);
-
+		SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+		/*particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+				transform->GetGlobalPosition(), this->game_object)));*/
+		/*particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);*/
 	}
+}
+
+void PlayerController::ReleaseAttackParticle()
+{
+	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+	/*for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.particle_name, it->second);
+			it = particles.erase(it);
+		}
+		if (it->first == attacks->GetCurrentAttack()->info.allow_combo_p_name)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name, it->second);
+			it = particles.erase(it);
+		}
+		else
+			++it;
+	}*/
 }
 
 #pragma region PlayerActions
@@ -294,11 +347,11 @@ void PlayerController::PickUpRelic(Relic* _relic)
 		AddEffect(_relic->effects.at(i));
 	}
 }
-void PlayerController::Revive()
+void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
-	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * 0.5);
+	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 	is_immune = false;
 
 	if(HUD)
@@ -312,14 +365,7 @@ void PlayerController::Revive()
 	SetState(StateType::IDLE);
 }
 
-void PlayerController::ActionRevive()
-{
-	player_being_revived->Revive();
-	animator->SetBool("reviving", false);
-	player_being_revived = nullptr;
-}
-
-void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
+void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 {
 	if (player_data.stats["Absorb"].GetValue() > 0)
 	{
@@ -329,20 +375,24 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed)
 
 	player_data.stats["Health"].DecreaseStat(dmg);
 
-	if(HUD)
+	if (HUD)
+	{
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+	}
 
 	attacks->CancelAttack();
-	if (player_data.stats["Health"].GetValue() == 0)
-	{	
-		shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-		Die();
-	}
-	else
-	{
-		animator->PlayState("Hit");
-		player_data.speed = knock_speed;
-		SetState(StateType::HIT);
+	if (knock) {
+		if (player_data.stats["Health"].GetValue() == 0)
+		{
+			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+			Die();
+		}
+		else
+		{
+			animator->PlayState("Hit");
+			player_data.speed = knock_speed;
+			SetState(StateType::HIT);
+		}
 	}
 
 	if(GameManager::instance->rumbler_manager)
@@ -365,10 +415,41 @@ void PlayerController::AbsorbHit()
 }
 #pragma endregion PlayerActions
 
+void PlayerController::HitByRock(float time, float dmg)
+{
+	if (state->type != StateType::DEAD || !is_immune) {
+		ReceiveDamage(dmg, float3::zero(), false);
+		Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
+		transform->SetLocalScale(1.f, 0.25f, 1.f);
+		if (state->type != StateType::DEAD) {
+			is_immune = true;
+		}
+	}
+}
+
+void PlayerController::RecoverFromRockHit()
+{
+	is_immune = false;
+	transform->SetLocalScale(1.f, 1.f, 1.f);
+}
 
 void PlayerController::AddEffect(Effect* _effect)
 {
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it)->name == _effect->name)
+		{
+			(*it)->start_time = Time::GetGameTime(); //Refresh timer
+			delete _effect;
+			return;
+		}
+	}
+
 	effects.push_back(_effect);
+
+	if (std::strcmp(_effect->vfx_on_apply.c_str(), "") != 0)
+		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply, 
+			particle_spawn_positions[_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
 
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
@@ -383,9 +464,10 @@ void PlayerController::AddEffect(Effect* _effect)
 		}
 	}
 
-	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
-	if (go)
-		particles.insert(std::pair(_effect->vfx_on_apply, go));
+
+
+	//GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
+	//particles.insert(std::pair(_effect->vfx_on_apply, GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply)));
 }
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
@@ -405,16 +487,21 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-	for (auto it = particles.begin(); it != particles.end();)
+	if (tmp_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
+	}
+
+	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == tmp_effect->vfx_on_apply)
 		{
-			GameObject::Destroy(it->second);
+			GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, it->second);
 			it = particles.erase(it);
 		}
 		else
 			++it;
-	}
+	}*/
 
 	delete tmp_effect;
 	return it;
@@ -442,7 +529,7 @@ bool PlayerController::CheckBoundaries()
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
 				p_tmp.maxPoint += cam->players[i]->transform->GetGlobalPosition();
 
-				if (!fake_frustum.Contains(p_tmp))
+				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					player_data.speed = float3::zero();
@@ -456,9 +543,12 @@ bool PlayerController::CheckBoundaries()
 		return true;
 	}
 	else {
-		player_data.speed = float3::zero();
-		return false;
+		if (transform->GetGlobalPosition().Distance(fake_frustum.CenterPoint()) < next_pos.Distance(fake_frustum.CenterPoint())) {
+			player_data.speed = float3::zero();
+			return false;
+		}
 	}
+	return true;
 }
 bool PlayerController::CheckForPossibleRevive()
 {
@@ -469,6 +559,8 @@ bool PlayerController::CheckForPossibleRevive()
 			return true;
 		}
 	}
+
+	return false;
 }
 
 void PlayerController::HitFreeze(float freeze_time)
@@ -486,6 +578,56 @@ void PlayerController::RemoveFreeze(float speed)
 {
 	animator->SetCurrentStateSpeed(speed);
 	is_immune = false;
+}
+
+void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			(*it)->SetEnable(false);
+			(*it)->SetEnable(true);
+			return;
+		}
+	}
+
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+	particles.push_back(new_particle);
+	/*if (particles[particle_name])
+	{
+		particles[particle_name]->SetEnable(false);
+		particles[particle_name]->SetEnable(true);
+	}
+	else
+	{
+		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
+		particles.insert(std::pair(particle_name, new_particle));
+	}*/
+}
+
+void PlayerController::ReleaseParticle(std::string particle_name)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
+			particles.erase(it);
+			return;
+		}
+	}
+	/*if (particles[particle_name])
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
+		particles.erase(particle_name);
+	}*/
 }
 
 
@@ -520,25 +662,68 @@ void PlayerController::OnHit(Enemy* enemy, float dmg_dealt)
 	}
 }
 
+void PlayerController::UpdateDashEffect()
+{
+	if (this->transform->GetGlobalPosition().DistanceSq(last_dash_position) >= 0.25)
+	{
+		last_dash_position = this->transform->GetGlobalPosition();
+		for (auto it = effects.begin(); it != effects.end(); ++it)
+		{
+			if (dynamic_cast<DashEffect*>(*it) != nullptr)
+			{
+				GameObject* go = GameObject::Instantiate(dash_collider, this->transform->GetGlobalPosition());
+				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
+				DashCollider* dash_coll = go->GetComponent<DashCollider>();
+				dash_coll->effect = (DashEffect*)(*it);
+				if (dash_coll->dash_particles[(*it)->name])
+					dash_coll->dash_particles[(*it)->name]->SetEnable(true);
+			}
+		}
+	}
+}
+
 void PlayerController::OnTriggerEnter(ComponentCollider* col)
 {
-	if (!godmode)
+	if ((strcmp("Bonfire", col->game_object_attached->GetName()) == 0))
+	{
+		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
+
+		if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+		{
+			Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+			HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
+		}
+
+		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
+		{
+			if (player_data.stats["Health"].GetMaxValue() > player_data.stats["Health"].GetValue()
+				|| player_data.stats["Chaos"].GetMaxValue() > player_data.stats["Chaos"].GetValue())
+			{
+				// Heal
+				player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+				player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+				HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+				HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+
+
+				// Player Used this Bonfire
+				bonfire->SetBonfireUsed(this);
+			}
+		}
+	}
+
+	if (!godmode && !is_immune)
 	{
 		if (strcmp(col->game_object_attached->GetTag(), "EnemyAttack") == 0) {
+			Enemy* enemy = col->game_object_attached->GetComponentInParent<Enemy>();
+			if (enemy) {
+				//Calculate Knockback
+				float3 direction = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
+				knock_speed.y = 0;
 
-			auto comps = col->game_object_attached->parent->GetComponents<Alien>();
-
-			for (auto i = comps.begin(); i != comps.end(); ++i) {
-				Enemy* enemy = dynamic_cast<Enemy*>(*i);
-				if (enemy) {
-					//Calculate Knockback
-					float3 direction = (enemy->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-					float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
-					knock_speed.y = 0;
-
-					ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
-					return;
-				}
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				return;
 			}
 		}
 	}
@@ -564,7 +749,13 @@ void PlayerController::OnDrawGizmosSelected()
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
 }
 #pragma endregion Events
+float3 PlayerController::GetDirectionVector()
+{
+	float3 direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(float3(movement_input.x, 0.f, movement_input.y).Normalized());
+	direction_vector = Quat::RotateFromTo(Camera::GetCurrentCamera()->frustum.up, float3::unitY()) * direction_vector;
 
+	return direction_vector;
+}
 #pragma region Init
 void PlayerController::LoadStats()
 {

@@ -32,7 +32,7 @@ void RockSpawner::Update()
 			float3 new_pos = GetRandomPositionBtw(spawn_0->transform->GetGlobalPosition(), spawn_1->transform->GetGlobalPosition());
 			RockDownHill* obj = GameObject::Instantiate(rock, new_pos, false, game_object)->GetComponent<RockDownHill>();
 			obj->CalculateDirection(new_pos + direction);
-			obj->SetMoveAndRotationSpeed(rocks_rotation, rocks_speed, time_despawn);
+			obj->SetMoveAndRotationSpeed(rocks_speed_rotation, rocks_speed, time_despawn, damage, time_smashed);
 		}
 }
 

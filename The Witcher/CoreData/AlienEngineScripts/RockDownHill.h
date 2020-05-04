@@ -14,14 +14,15 @@ public:
 	void Update();
 
 	void CalculateDirection(const float3& end_pos);
-	void SetMoveAndRotationSpeed(float rot_speed, float speed, float time);
+	void SetMoveAndRotationSpeed(float rot_speed, float speed, float time, float dmg, float time_smash);
 
 	void OnTriggerEnter(ComponentCollider* trigger) override;
 	void OnCollisionEnter(const Collision& trigger) override;
 
 	float3 direction = float3::zero();
 
-	float damage = 1.f;
+	float damage = 5.f;
+	float time_smashed = 5.f;
 
 private:
 	float3 axis_rot = float3::zero();

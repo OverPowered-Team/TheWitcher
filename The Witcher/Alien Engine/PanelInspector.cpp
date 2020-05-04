@@ -9,6 +9,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentLightDirectional.h"
 #include "ComponentLightSpot.h"
+#include "ComponentCurve.h"
 #include "ComponentLightPoint.h"
 #include "ComponentAnimator.h"
 #include "ModuleResources.h"
@@ -452,6 +453,17 @@ void PanelInspector::ButtonAddComponent()
 					if (!selected->HasComponent(ComponentType::LIGHT_DIRECTIONAL))
 					{
 						comp = new ComponentLightDirectional(selected);
+						selected->AddComponent(comp);
+					}
+					else
+						LOG_ENGINE("The selected object already has this component!");
+
+					break; }
+				case ComponentType::CURVE: {
+
+					if (!selected->HasComponent(ComponentType::CURVE))
+					{
+						comp = new ComponentCurve(selected);
 						selected->AddComponent(comp);
 					}
 					else

@@ -56,6 +56,13 @@ void PlayerManager::OnPlayerRevive(PlayerController* revived_player)
 	}
 }
 
+void PlayerManager::BlockInput(bool block)
+{
+	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
+		(*it)->input_blocked = block;
+;	}
+}
+
 void PlayerManager::IncreaseUltimateCharge(uint value)
 {
 	if (ultimate_is_active)
@@ -74,7 +81,10 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	{
 		// UI
 		if (ulti_bar)
-			ulti_bar->UpdateBar(collective_ultimate_charge / max_ultimate_charge);
+		{
+			float new_value = (float)collective_ultimate_charge / (float)max_ultimate_charge;
+			ulti_bar->UpdateBar(new_value);
+		}
 	}
 }
 

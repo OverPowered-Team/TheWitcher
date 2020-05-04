@@ -17,12 +17,15 @@ public:
 	void Update() {};
 	void PostUpdate() {};
 
+	void DrawScene(ComponentCamera* camera) override;
 	bool DrawInspector();
 
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
 	void Draw();
+
+	float3 GetWorldPositionInCanvas(const float3& world_position);
 
 public:
 	uint width = 0, height = 0;

@@ -1,12 +1,13 @@
 #include "GameManager.h"
-#include "RumblerManager.h"
+#include "ParticlePool.h"
+#include "PlayerManager.h"
 #include "EventManager.h"
 
+#include "MiniGame_Revive.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 
 #include "State.h"
-
 
 State* IdleState::HandleInput(PlayerController* player)
 {
@@ -52,9 +53,6 @@ State* IdleState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-
-		if(GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
 	}
 
@@ -146,15 +144,7 @@ State* RunningState::HandleInput(PlayerController* player)
 	else if (Input::GetControllerButtonDown(player->controller_index, player->controller_heavy_attack)
 		|| Input::GetKeyDown(player->keyboard_heavy_attack)) {
 		player->attacks->StartAttack(PlayerAttacks::AttackType::HEAVY);
-		if (GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player->controller_index);
 		return new AttackingState();
-	}
-
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_spell)
-		|| Input::GetKeyDown(player->keyboard_spell)) {
-		player->attacks->StartSpell(0);
-		return new CastingState();
 	}
 
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_dash)
@@ -195,14 +185,22 @@ void RunningState::Update(PlayerController* player)
 
 void RunningState::OnEnter(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(true);
+	player->SpawnParticle("p_run");
 	player->audio->StartSound();
 	player->timer = Time::GetGameTime();
 }
 
 void RunningState::OnExit(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(false);
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_run") == 0)
+		{
+			(*it)->SetEnable(false);
+			break;
+		}
+	}
+	//player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)
@@ -302,6 +300,7 @@ void AttackingState::OnExit(PlayerController* player)
 void RollingState::Update(PlayerController* player)
 {
 	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->UpdateDashEffect();
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -320,42 +319,26 @@ State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void RollingState::OnEnter(PlayerController* player)
 {
-	float3 direction_vector = float3::zero();
-
 	if (player->mov_input)
 	{
-		direction_vector = float3(player->movement_input.x, 0.f, player->movement_input.y);
-		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-		direction_vector.y = 0.f;
+		float3 direction_vector = player->GetDirectionVector();
+
+		player->player_data.speed = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
+
+		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		player->transform->SetGlobalRotation(rot);
 	}
 	else
-		direction_vector = player->transform->forward;
+		player->player_data.speed = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
-	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
+	player->last_dash_position = player->transform->GetGlobalPosition();
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
 
-}
-
-void CastingState::Update(PlayerController* player)
-{
-	player->attacks->UpdateCurrentAttack();
-}
-
-State* CastingState::OnAnimationEnd(PlayerController* player, const char* name)
-{
-	return nullptr;
-}
-
-void CastingState::OnEnter(PlayerController* player)
-{
-}
-
-void CastingState::OnExit(PlayerController* player)
-{
 }
 
 void HitState::Update(PlayerController* player)
@@ -375,29 +358,34 @@ State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void HitState::OnEnter(PlayerController* player)
 {
+	if (player->player_being_revived != nullptr)
+	{
+		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
+	}
 }
 
 void HitState::OnExit(PlayerController* player)
 {
 }
 
-State* RevivingState::OnAnimationEnd(PlayerController* player, const char* name)
+void RevivingState::Update(PlayerController* player)
 {
-	if (strcmp(name, "RCP") == 0) {
-		player->ActionRevive();
-		return new IdleState();
-	}
-	return nullptr;
+
 }
 
 void RevivingState::OnEnter(PlayerController* player)
 {
+	player->input_blocked = true;
 	player->player_data.speed = float3::zero();
 	player->animator->SetBool("reviving", true);
+	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
 
 void RevivingState::OnExit(PlayerController* player)
 {
+	player->animator->SetBool("reviving", false);
+	if(player->player_being_revived->state->type != StateType::DEAD)player->player_being_revived = nullptr;
+	player->input_blocked = false;
 }
 
 void DeadState::OnEnter(PlayerController* player)
@@ -407,6 +395,11 @@ void DeadState::OnEnter(PlayerController* player)
 	player->player_data.speed = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
+	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, float3(player->game_object->transform->GetGlobalPosition().x + vector.x, player->game_object->transform->GetGlobalPosition().y + vector.y + 1, player->game_object->transform->GetGlobalPosition().z + vector.z));
+	revive_world_ui->transform->SetLocalScale(1, 1, 1);
+	revive_world_ui->SetNewParent(player->game_object);
+	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
 
 void DeadState::OnExit(PlayerController* player)

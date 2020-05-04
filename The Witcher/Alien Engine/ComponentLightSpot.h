@@ -30,6 +30,8 @@ public:
 	virtual ~ComponentLightSpot();
 
 private:
+	void Update() override;
+	void DrawScene(ComponentCamera* camera) override;
 	void LightLogic();
 
 	bool DrawInspector();

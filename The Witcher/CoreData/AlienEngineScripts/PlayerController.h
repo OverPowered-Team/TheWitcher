@@ -19,6 +19,7 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
+
 public:
 	enum (PlayerType,
 		GERALT,
@@ -66,10 +67,14 @@ public:
 	void OnAnimationEnd(const char* name);
 	void PlayAttackParticle();
 	void Die();
-	void Revive();
-	void ActionRevive();
-	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
+	void Revive(float minigame_value);
+	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 }, bool knock = true);
 	void PlayAllowParticle();
+
+	void ReleaseAttackParticle();
+
+	void HitByRock(float time, float damage);
+	void RecoverFromRockHit();
 
 	//Relics
 	void PickUpRelic(Relic* _relic);
@@ -77,11 +82,13 @@ public:
 
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
+	float3 GetDirectionVector();
 	bool CheckForPossibleRevive();
 
 	void OnUltimateActivation(float value);
 	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
+	void UpdateDashEffect();
 	void OnEnemyKill();
 	void OnTriggerEnter(ComponentCollider* col);
 
@@ -89,8 +96,11 @@ public:
 	void StopImmune() { is_immune = false; };
 
 	void HitFreeze(float freeze_time);
-
 	void RemoveFreeze(float speed);
+
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+
+	void ReleaseParticle(std::string particle_name);
 
 private:
 	void LoadStats();
@@ -104,7 +114,8 @@ public:
 
 	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
-	std::map<std::string, GameObject*> particles;
+	std::vector<GameObject*> particles;
+	std::vector<GameObject*> particle_spawn_positions;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 
@@ -119,6 +130,10 @@ public:
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;
 
+	//DashCollider
+	Prefab dash_collider;
+	float3 last_dash_position = float3::zero();
+
 	//UI 
 	GameObject* HUD = nullptr;
 
@@ -126,6 +141,9 @@ public:
 	float delay_footsteps = 0.5f;
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
+
+	//Revive
+	Prefab revive_world_ui;
 
 	//Input Variables
 	int controller_index = 1;
@@ -175,12 +193,13 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->player_data.revive_range);
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
-	SHOW_VOID_FUNCTION(PlayerController::ActionRevive, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::StartImmune, player);
 	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
+	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	return player;
 }
