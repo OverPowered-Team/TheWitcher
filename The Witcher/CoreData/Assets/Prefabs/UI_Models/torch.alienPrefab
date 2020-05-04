@@ -2,9 +2,9 @@
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "torch",
+                "Name": "Torch",
                 "FamilyNumber": 1,
-                "ID": "5956674122888289732",
+                "ID": "10626335597792366273",
                 "ParentID": "14905238618353440972",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -14,14 +14,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "8231009396974195011",
+                "PrefabID": "12247728584431947674",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -3.3462140560150146,
-                            5.8740501403808594,
-                            -5.6451687812805176
+                            -4.0974059104919434,
+                            4.128260612487793,
+                            -9.2597227096557617
                         ],
                         "Rotation": [
                             0,
@@ -35,45 +35,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7265387574676413716"
-                    },
-                    {
-                        "Type": 5,
-                        "Enabled": true,
-                        "ID": "13745847884641418121",
-                        "PrintIcon": true,
-                        "Intensity": 2.5,
-                        "Position": [
-                            -3.3462140560150146,
-                            5.8740501403808594,
-                            -5.6451687812805176
-                        ],
-                        "Ambient": [
-                            0.083333313465118408,
-                            0.083333022892475128,
-                            0.083332479000091553
-                        ],
-                        "Diffuse": [
-                            0.94607841968536377,
-                            0.60234743356704712,
-                            0.11130333691835403
-                        ],
-                        "Specular": [
-                            9.9999999747524271e-07,
-                            9.9999647318327334e-07,
-                            9.9998999303352321e-07
-                        ],
-                        "Constant": 1,
-                        "Linear": 0.10000000149011612,
-                        "Quadratic": 0.019999999552965164
+                        "ID": "11918328988919981832"
                     }
                 ]
             },
             {
-                "Name": "Cube",
+                "Name": "WallTorch_LP",
                 "FamilyNumber": 2,
-                "ID": "13220612126467483449",
-                "ParentID": "5956674122888289732",
+                "ID": "4029644026088820164",
+                "ParentID": "10626335597792366273",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -82,28 +52,66 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "8231009396974195011",
+                "PrefabID": "12247728584431947674",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
                             0,
-                            -0.22420120239257813,
-                            -3.4039969444274902
+                            0,
+                            0
                         ],
                         "Rotation": [
-                            0.23246105015277863,
                             0,
                             0,
-                            0.97260570526123047
+                            0,
+                            1
                         ],
                         "Scale": [
-                            0.28841665387153625,
-                            1.4654635190963745,
-                            0.28471693396568298
+                            0.0099999997764825821,
+                            0.0099999997764825821,
+                            0.0099999997764825821
                         ],
                         "ScaleNegative": false,
-                        "ID": "4940128600785720442"
+                        "ID": "508877472715828977"
+                    }
+                ]
+            },
+            {
+                "Name": "WallTorch_Torch_LP",
+                "FamilyNumber": 3,
+                "ID": "9398072162277234486",
+                "ParentID": "4029644026088820164",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12247728584431947674",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.77296441793441772,
+                            35.569549560546875,
+                            35.008941650390625
+                        ],
+                        "Rotation": [
+                            0.73694568872451782,
+                            -0.095723040401935577,
+                            0.089804627001285553,
+                            0.6630861759185791
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13840318687154741891"
                     },
                     {
                         "Type": 1,
@@ -113,44 +121,26 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11563247002835023057",
+                        "ID": "10651362795301838409",
                         "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 0,
+                        "IsPrimitive": false,
+                        "MeshID": "11692568987486382070",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "11918619950902740632",
+                        "ID": "2208529364764942711",
                         "HasMaterial": true,
-                        "MaterialID": "8232905727971335410",
+                        "MaterialID": "17493986084043573113",
                         "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0.5,
-                            0.5,
-                            0.5
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.10000000149011612,
-                        "Friction": 0.5,
-                        "AngularFriction": 0.10000000149011612,
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
             {
-                "Name": "Particle System",
+                "Name": "WallTorch_Support_LP",
                 "FamilyNumber": 3,
-                "ID": "4612840734513867475",
-                "ParentID": "13220612126467483449",
+                "ID": "17054951781912017265",
+                "ParentID": "4029644026088820164",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -159,38 +149,215 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "8231009396974195011",
+                "PrefabID": "12247728584431947674",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.33271121978759766,
-                            0.58863115310668945,
-                            1.4042892456054688
+                            7.6843719482421875,
+                            183.27325439453125,
+                            2.0024166107177734
                         ],
                         "Rotation": [
-                            -0.78628253936767578,
-                            0,
-                            0,
-                            0.617867112159729
+                            4.2146858447722479e-08,
+                            -0.7071068286895752,
+                            7.3055481664141553e-08,
+                            0.70710670948028564
                         ],
                         "Scale": [
-                            3.4672062397003174,
-                            1.7008205652236938,
-                            3.1478278636932373
+                            1,
+                            1,
+                            1.3669739961624146
                         ],
                         "ScaleNegative": false,
-                        "ID": "17994385889626733798"
+                        "ID": "11842295271719063824"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "9739166985806654721",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "561215110262286766",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6075253371108139858",
+                        "HasMaterial": true,
+                        "MaterialID": "17493986084043573113",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "WallTorch_TopRing_LP",
+                "FamilyNumber": 3,
+                "ID": "8522286366017255497",
+                "ParentID": "4029644026088820164",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12247728584431947674",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.78128433227539063,
+                            121.29981994628906,
+                            42.097900390625
+                        ],
+                        "Rotation": [
+                            0.57418811321258545,
+                            -0.46668180823326111,
+                            0.40742278099060059,
+                            0.53527826070785522
+                        ],
+                        "Scale": [
+                            1,
+                            0.99999994039535522,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "122727607491199899"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "14732654707242796646",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "345047940162876039",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "15024037783763214750",
+                        "HasMaterial": true,
+                        "MaterialID": "17493986084043573113",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "WallTorch_BottomRing_LP",
+                "FamilyNumber": 3,
+                "ID": "5382174131131442074",
+                "ParentID": "4029644026088820164",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12247728584431947674",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.78128433227539063,
+                            67.243949890136719,
+                            37.472557067871094
+                        ],
+                        "Rotation": [
+                            0.57889121770858765,
+                            -0.47026064991950989,
+                            0.40328702330589294,
+                            0.53018808364868164
+                        ],
+                        "Scale": [
+                            0.7635919451713562,
+                            0.76359301805496216,
+                            0.76359206438064575
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9187693093344483572"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "6130039679170205596",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "7243134290888816244",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "10475342649636344346",
+                        "HasMaterial": true,
+                        "MaterialID": "17493986084043573113",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Particle System",
+                "FamilyNumber": 2,
+                "ID": "873971177907627734",
+                "ParentID": "10626335597792366273",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12247728584431947674",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.14372777938842773,
+                            1.653038501739502,
+                            0.64048290252685547
+                        ],
+                        "Rotation": [
+                            -0.67446643114089966,
+                            0,
+                            0,
+                            0.73830550909042358
+                        ],
+                        "Scale": [
+                            1,
+                            0.75419408082962036,
+                            4.4871921539306641
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16744082206746493316"
                     },
                     {
                         "Type": 15,
-                        "ID": "832699155148975569",
+                        "ID": "17929495189871407955",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -3.4663887023925781,
-                                6.4215903282165527,
-                                -8.4586191177368164
+                                -3.9269371032714844,
+                                5.7947812080383301,
+                                -8.4917612075805664
                             ],
                             "Rotation": [
                                 0,
@@ -201,7 +368,7 @@
                             "Global": true,
                             "Velocity": [
                                 0,
-                                0.99592465162277222,
+                                0.99592459201812744,
                                 0.09019005298614502
                             ],
                             "Force": [
@@ -212,11 +379,17 @@
                             "Speed": 1,
                             "Color": [
                                 1,
-                                0,
-                                0.80000001192092896,
-                                0
+                                1,
+                                1,
+                                0.27915191650390625
                             ],
+                            "SizeStart3D": false,
                             "Size": 1,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -234,6 +407,8 @@
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "FinalTime": 5,
+                            "Speed": 0,
                             "Color": [
                                 1,
                                 1,
@@ -241,6 +416,11 @@
                                 0
                             ],
                             "Size": 1,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -276,14 +456,14 @@
                                 0.5
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 8.1019916534423828,
+                            "CurrentLife": 0.63400000333786011,
                             "SpawnRate": 20,
                             "Delay": 2,
                             "Loop": true,
                             "Position": [
-                                -3.2502546310424805,
-                                6.2384428977966309,
-                                -8.3024892807006836
+                                -3.9536781311035156,
+                                5.7812991142272949,
+                                -8.6192398071289063
                             ],
                             "RelativePosition": [
                                 0,
@@ -323,18 +503,87 @@
                             "Columns": 1,
                             "StartFrame": 0,
                             "EndFrame": 0
-                        }
+                        },
+                        "HasMesh": false
                     },
                     {
                         "Type": 2,
-                        "ID": "11743766423669782883",
+                        "ID": "11476343039338290018",
                         "HasMaterial": true,
                         "MaterialID": "16799967633806808947",
                         "Enabled": true
                     }
                 ]
+            },
+            {
+                "Name": "TorchLight",
+                "FamilyNumber": 2,
+                "ID": "11974187319863462077",
+                "ParentID": "10626335597792366273",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "12247728584431947674",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.7936587333679199,
+                            0.46743392944335938
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2230592703421522395"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "43060050894295319",
+                        "PrintIcon": true,
+                        "Intensity": 2,
+                        "Position": [
+                            -4.0974059104919434,
+                            5.9219193458557129,
+                            -8.7922887802124023
+                        ],
+                        "Ambient": [
+                            0.88235294818878174,
+                            0.50281113386154175,
+                            0.025951582938432693
+                        ],
+                        "Diffuse": [
+                            0.13235294818878174,
+                            0.13235162198543549,
+                            0.13235162198543549
+                        ],
+                        "Specular": [
+                            9.9999999747524271e-07,
+                            9.9999692793062422e-07,
+                            9.9998999303352321e-07
+                        ],
+                        "Constant": 1,
+                        "Linear": 0.10000000149011612,
+                        "Quadratic": 0.019999999552965164
+                    }
+                ]
             }
         ]
     },
-    "Name": "torch"
+    "Name": "Torch"
 }

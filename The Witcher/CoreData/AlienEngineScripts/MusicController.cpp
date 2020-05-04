@@ -1,4 +1,5 @@
 #include "MusicController.h"
+#include "Enemy.h"
 
 MusicController::MusicController() : Alien()
 {
