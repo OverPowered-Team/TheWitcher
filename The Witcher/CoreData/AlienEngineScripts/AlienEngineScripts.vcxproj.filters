@@ -7,9 +7,6 @@
     <ClCompile Include="EventManager.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Floating.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="ReverbZone.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
     </ClCompile>
     <ClCompile Include="Trigger_Win.cpp">
       <Filter>Scripts\Triggers</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Subtitle.cpp">
       <Filter>Scripts</Filter>
@@ -184,6 +178,9 @@
     <ClCompile Include="Boss.cpp">
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="MiniGame_Revive.cpp">
+      <Filter>Scripts\Player\Revive</Filter>
+    </ClCompile>
     <ClCompile Include="NilfgaardSoldier.cpp">
       <Filter>Scripts\Enemies\NilfgaardSoldier</Filter>
     </ClCompile>
@@ -226,6 +223,15 @@
     <ClCompile Include="RootLeshen.cpp">
       <Filter>Scripts\Enemies\Leshen</Filter>
     </ClCompile>
+    <ClCompile Include="Bonfire.cpp">
+      <Filter>Scripts\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Floating.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="DashCollider.cpp">
+      <Filter>Scripts\Player</Filter>
+    </ClCompile>
     <ClCompile Include="EffectArea.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -238,15 +244,30 @@
     <ClCompile Include="CiriOriginal.cpp">
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="GhoulDodge.cpp">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClCompile>
+    <ClCompile Include="GhoulOriginal.cpp">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClCompile>
+    <ClCompile Include="Dummie.cpp">
+      <Filter>Scripts\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Scripts\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticlePool.cpp">
+      <Filter>Scripts\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleRelease.cpp">
+      <Filter>Scripts\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macros\AlienScripts.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="EventManager.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Floating.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="ReverbZone.h">
@@ -326,9 +347,6 @@
     </ClInclude>
     <ClInclude Include="Trigger_Win.h">
       <Filter>Scripts\Triggers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Subtitle.h">
       <Filter>Scripts</Filter>
@@ -459,6 +477,9 @@
     <ClInclude Include="EffectsFactory.h">
       <Filter>Scripts\Stats and Effects</Filter>
     </ClInclude>
+    <ClInclude Include="MiniGame_Revive.h">
+      <Filter>Scripts\Player\Revive</Filter>
+    </ClInclude>
     <ClInclude Include="Drowned.h">
       <Filter>Scripts\Enemies\Drowned</Filter>
     </ClInclude>
@@ -477,6 +498,15 @@
     <ClInclude Include="RootLeshen.h">
       <Filter>Scripts\Enemies\Leshen</Filter>
     </ClInclude>
+    <ClInclude Include="Bonfire.h">
+      <Filter>Scripts\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Floating.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="DashCollider.h">
+      <Filter>Scripts\Player</Filter>
+    </ClInclude>
     <ClInclude Include="EffectArea.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -488,6 +518,24 @@
     </ClInclude>
     <ClInclude Include="CiriOriginal.h">
       <Filter>Scripts\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GhoulDodge.h">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClInclude>
+    <ClInclude Include="GhoulOriginal.h">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClInclude>
+    <ClInclude Include="Dummie.h">
+      <Filter>Scripts\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Scripts\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticlePool.h">
+      <Filter>Scripts\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleRelease.h">
+      <Filter>Scripts\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -533,6 +581,9 @@
     <Filter Include="Scripts\UI\Buttons">
       <UniqueIdentifier>{f93cdcf6-5f41-4046-8018-b95261895855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Player\Revive">
+      <UniqueIdentifier>{546ad57c-6a02-4b53-941b-0eb50481a441}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Scripts\Enemies\NilfgaardSoldier">
       <UniqueIdentifier>{c5f096cc-8f1f-4228-93e0-09cafe4cdb34}</UniqueIdentifier>
     </Filter>
@@ -544,6 +595,9 @@
     </Filter>
     <Filter Include="Scripts\Enemies\Leshen">
       <UniqueIdentifier>{aa9f3c92-5866-4017-810c-01715c2b2a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Managers">
+      <UniqueIdentifier>{d5371a3f-65cb-4e5b-bf3b-3d907bc5e04d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

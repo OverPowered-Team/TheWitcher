@@ -1062,7 +1062,7 @@ bool ComponentCheckbox::OnEnter()
 
 void ComponentCheckbox::SetActive(bool active)
 {
-	this->active = active;
+	this->active_ui = active;
 	if (active) {
 		current_color = idle_color;
 		checkbox_current_color = checkbox_idle_color;

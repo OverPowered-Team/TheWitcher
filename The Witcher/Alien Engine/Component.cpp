@@ -150,6 +150,9 @@ std::string Component::EnumToString(ComponentType type)
 	case ComponentType::UI:
 		return std::string("UI");
 		break;
+	case ComponentType::CURVE:
+		return std::string("Curve");
+		break;
 	case ComponentType::MAX:
 		return std::string("MAX");
 		break;

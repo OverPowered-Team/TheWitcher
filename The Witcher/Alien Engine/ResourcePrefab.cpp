@@ -8,6 +8,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
 #include "ModuleUI.h"
+#include "ComponentAnimator.h"
 #include "ModuleCamera3D.h"
 #include "ComponentUI.h"
 #include "Time.h"
@@ -319,6 +320,10 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 					if (def_mesh->root_bone != nullptr)
 						def_mesh->AttachSkeleton(def_mesh->root_bone->transform);
 				}
+			}
+			ComponentAnimator* animator = obj2->GetComponent<ComponentAnimator>();
+			if (animator != nullptr) {
+				animator->OnPlay();
 			}
 		}
 

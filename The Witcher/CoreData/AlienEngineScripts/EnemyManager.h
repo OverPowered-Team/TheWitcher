@@ -32,8 +32,6 @@ public:
 private:
 	std::vector<Enemy*> enemies;
 
-	bool is_combat_enemies = false;
-
 };
 
 ALIEN_FACTORY EnemyManager* CreateEnemyManager() {

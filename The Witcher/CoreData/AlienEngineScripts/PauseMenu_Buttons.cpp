@@ -2,6 +2,7 @@
 #include "InGame_UI.h"
 #include "Extra_Menus.h"
 #include "..\..\ComponentText.h"
+#include "Scores_Data.h"
 
 PauseMenu_Buttons::PauseMenu_Buttons() : Alien()
 {
@@ -48,6 +49,7 @@ void PauseMenu_Buttons::Settings()
 
 void PauseMenu_Buttons::RetryLevel()
 {
+	Scores_Data::last_checkpoint_position = float3::inf();
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
 	SceneManager::LoadScene("Lvl_1_Art_Colliders");
 }

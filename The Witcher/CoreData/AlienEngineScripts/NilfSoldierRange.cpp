@@ -91,6 +91,7 @@ void NilfSoldierRange::CheckDistance()
 void NilfSoldierRange::Action()
 {
 	animator->PlayState("Shoot");
+	animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 	state = NilfgaardSoldierState::ATTACK;
 }
 

@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "SoldierAnimController",
         "NumStates": 9,
-        "NumTransitions": 11,
+        "NumTransitions": 12,
         "States": [
             {
                 "Name": "Idle",
@@ -178,7 +178,13 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
             },
             {
                 "Source": "Block",
@@ -211,6 +217,21 @@
                     }
                 ],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
             }
         ],
         "IntParameters": [],

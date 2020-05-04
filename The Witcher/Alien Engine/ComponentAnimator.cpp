@@ -49,6 +49,18 @@ void ComponentAnimator::PlayState(const char* name)
 		animator_controller->Play(name);
 }
 
+void ComponentAnimator::SetStateSpeed(const char* name, float value)
+{
+	std::vector<State*> states = animator_controller->GetStates();
+	for (auto it = states.begin(); it != states.end(); ++it)
+	{
+		if (strcmp((*it)->GetName().c_str(), name) == 0) {
+			(*it)->SetSpeed(value);
+			break;
+		}
+	}
+}
+
 bool ComponentAnimator::IsPlaying(const char* name)
 {
 	bool ret = false;

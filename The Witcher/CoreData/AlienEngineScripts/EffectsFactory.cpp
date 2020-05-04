@@ -38,6 +38,7 @@ EffectData* EffectsFactory::ReadData(JSONArraypack* effect)
 
 	data->vfx_on_apply = effect->GetString("vfx_on_apply");
 	data->vfx_on_tick = effect->GetString("vfx_on_tick");
+	data->vfx_position = effect->GetNumber("vfx_position");
 
 	JSONArraypack* flat_modifiers = effect->GetArray("flat_modifiers");
 	if (flat_modifiers)
@@ -49,6 +50,7 @@ EffectData* EffectsFactory::ReadData(JSONArraypack* effect)
 			mod.identifier = flat_modifiers->GetString("identifier");
 			mod.amount = flat_modifiers->GetNumber("value");
 			data->additive_modifiers.push_back(mod);
+			flat_modifiers->GetAnotherNode();
 		}
 	}
 
@@ -62,6 +64,7 @@ EffectData* EffectsFactory::ReadData(JSONArraypack* effect)
 			mod.identifier = mult_modifiers->GetString("identifier");
 			mod.amount = mult_modifiers->GetNumber("value");
 			data->multiplicative_modifiers.push_back(mod);
+			mult_modifiers->GetAnotherNode();
 		}
 	}
 

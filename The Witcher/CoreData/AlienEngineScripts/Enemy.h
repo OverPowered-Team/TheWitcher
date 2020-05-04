@@ -54,6 +54,8 @@ public:
 
 	void HitFreeze(float freeze_time);
 	void StopHitFreeze(float speed);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+	void ReleaseParticle(std::string particle_name);
 
 public:
 	float distance = 0.0F;
@@ -70,14 +72,17 @@ public:
 
 	std::vector<PlayerController*> player_controllers;
 
-	std::map<std::string, ComponentParticleSystem*> particles;
+	std::vector<GameObject*> particles;
 	std::map<std::string, Stat> stats;
 
 	bool is_frozen = false;
 	bool is_combat = false;
 
 protected:
+	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
+
+	int current_player = 0;
 };

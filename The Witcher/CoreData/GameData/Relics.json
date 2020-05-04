@@ -31,14 +31,16 @@
       "effect": 1,
       "name": "Fire Runestone",
       "description": "burns enemies",
-	    "hit_effect":{
+      "hit_effect": {
         "name": "fire_runestone",
+        "vfx_on_apply": "p_fire_runestone",
+		"vfx_position": 0,
         "time": 0.5,
         "ticks_time": 1.0,
-        "flat_modifiers":[
+        "flat_modifiers": [
           {
-            "identifier":"Health",
-            "value":-5
+            "identifier": "Health",
+            "value": -5
           }
         ]
       }
@@ -49,8 +51,10 @@
       "description": "slows enemies hit",
       "hit_effect": {
         "name": "ice_runestone",
-        "time": 0.2,
+        "time": 0.5,
         "ticks_time": 0.0,
+        "vfx_on_apply": "p_ice_runestone",
+		"vfx_position": 0,
         "multiplicative_modifiers": [
           {
             "identifier": "Agility",
@@ -65,6 +69,8 @@
       "description": "does double damage",
       "hit_effect": {
         "name": "earth_runestone",
+        "vfx_on_apply": "p_earth_runestone",
+		"vfx_position": 0,
         "time": 0.0,
         "ticks_time": 0.0
       }
@@ -75,6 +81,8 @@
       "description": "stuns enemies hit",
       "hit_effect": {
         "name": "lightning_runestone",
+        "vfx_on_apply": "p_lightning_runestone",
+		"vfx_position": 0,
         "time": 0.5,
         "ticks_time": 0.0
       }
@@ -85,8 +93,10 @@
       "description": "poisons enemies hit",
       "hit_effect": {
         "name": "poison_runestone",
-        "time": 0.5,
-        "ticks_time": 0.0,
+        "vfx_on_apply": "p_poison_runestone",
+		"vfx_position": 2,
+        "time": 1.0,
+        "ticks_time": 1.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
@@ -100,22 +110,66 @@
     {
       "effect": 1,
       "name": "Fire Oil",
-      "description": "Dodge leaves a burning trail"
+      "description": "Dodge leaves a burning trail",
+      "dash_effect": {
+        "name": "fire_oil",
+        "time": 3.0,
+        "ticks_time": 2.0,
+        "flat_modifiers": [
+          {
+            "identifier": "Health",
+            "value": -5
+          }
+        ]
+      }
     },
     {
       "effect": 2,
       "name": "Ice Oil",
-      "description": "Dodge leaves a icy trail"
+      "description": "Dodge leaves a icy trail",
+      "dash_effect": {
+        "name": "ice_oil",
+        "time": 3.0,
+        "ticks_time": 0.0,
+        "multiplicative_modifiers": [
+          {
+            "identifier": "Agility",
+            "value": 0.5
+          }
+        ]
+      }
     },
     {
       "effect": 3,
       "name": "Earth Oil",
-      "description": "Dodge leaves a rock traps"
+      "description": "Dodge leaves a rock traps",
+      "dash_effect": {
+        "name": "earth_oil",
+        "time": 3.0,
+        "ticks_time": 2.0,
+        "flat_modifiers": [
+          {
+            "identifier": "Health",
+            "value": -5
+          }
+        ]
+      }
     },
     {
       "effect": 5,
       "name": "Poison Oil",
-      "description": "Dodge leaves a poisonous trail"
+      "description": "Dodge leaves a poisonous trail",
+      "dash_effect": {
+        "name": "poison_oil",
+        "time": 3.0,
+        "ticks_time": 2.0,
+        "flat_modifiers": [
+          {
+            "identifier": "Health",
+            "value": -5
+          }
+        ]
+      }
     }
   ]
 }

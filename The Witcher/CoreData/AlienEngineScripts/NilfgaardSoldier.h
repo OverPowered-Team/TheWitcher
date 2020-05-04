@@ -33,7 +33,7 @@ public:
 
 	void StartEnemy() override;
 	void SetStats(const char* json) override;
-	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
+	float GetDamaged(float dmg, PlayerController* player, float3 knock = float3::zero());
 	void CleanUpEnemy() override;
 
 	void Stun(float time) override;

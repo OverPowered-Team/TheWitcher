@@ -41,7 +41,7 @@ void ComponentPointConstraint::Update()
 
 }
 
-void ComponentPointConstraint::DrawScene()
+void ComponentPointConstraint::DrawScene(ComponentCamera* camera)
 {
 
 
