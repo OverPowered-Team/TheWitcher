@@ -66,6 +66,9 @@ void DialogueManager::Update()
 			audioEmitter->ChangeVolume(0.5f);
 		}
 	}*/
+	//else {
+	//audioEmitter->SetState("GameVolumes", "None");
+	//}
 
 }
 
@@ -132,6 +135,7 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
+	audioEmitter->SetState("GameVolumes", "Dialogues");
 	audioEmitter->ChangeVolume(volume);
 	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str());
 	LOG("Started playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());
