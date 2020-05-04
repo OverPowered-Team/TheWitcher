@@ -142,6 +142,11 @@ void NilfgaardSoldier::RotateSoldier()
 	transform->SetGlobalRotation(rot);
 }
 
+void NilfgaardSoldier::SpawnAttackParticle()
+{
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+}
+
 void NilfgaardSoldier::CleanUpEnemy()
 {
 	if (decapitated_head)
@@ -197,6 +202,7 @@ void NilfgaardSoldier::SetState(const char* state_str)
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
+		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())
 		{
 			state = NilfgaardSoldierState::MOVE;

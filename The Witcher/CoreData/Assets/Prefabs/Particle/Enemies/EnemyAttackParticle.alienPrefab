@@ -1,27 +1,28 @@
 {
+    "Name": "EnemyAttackParticle",
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "p_rock_throw",
+                "Name": "EnemyAttackParticle",
                 "FamilyNumber": 1,
-                "ID": "3653517759465007964",
-                "ParentID": "7407069555159635506",
+                "ID": "2517665773888627531",
+                "ParentID": "2899346851082009407",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "1074792168676713891",
+                "PrefabID": "905513977335083733",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            1.8702595233917236,
+                            1.6797263622283936,
+                            0.77801883220672607
                         ],
                         "Rotation": [
                             0,
@@ -35,17 +36,17 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9912687905548335778"
+                        "ID": "12585121619646880608"
                     },
                     {
                         "Type": 15,
-                        "ID": "15941796616733852792",
+                        "ID": "6932928862009485215",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0,
-                                0,
-                                0
+                                1.8702595233917236,
+                                1.6797263622283936,
+                                0.77801883220672607
                             ],
                             "Rotation": [
                                 0,
@@ -55,28 +56,28 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                4.1214780807495117,
-                                6.8566336631774902,
-                                0
+                                -0,
+                                -0,
+                                -0
                             ],
                             "Force": [
                                 0,
                                 0,
-                                -50
+                                0
                             ],
-                            "Speed": 8,
+                            "Speed": 0,
                             "Color": [
                                 1,
-                                0.99998998641967773,
+                                0.99999958276748657,
                                 0.99998998641967773,
                                 1
                             ],
                             "SizeStart3D": false,
-                            "Size": 0.10000000149011612,
+                            "Size": 1,
                             "Size3D": [
-                                0.10000000149011612,
-                                0.10000000149011612,
-                                0.10000000149011612
+                                1,
+                                1,
+                                1
                             ],
                             "LightColor": [
                                 0,
@@ -84,30 +85,30 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 0.10000000149011612,
+                            "MaxLifeTime": 1,
                             "AxisRotationStart": false,
                             "Angle3D": [
                                 0,
                                 0,
                                 0
                             ],
-                            "ChangeOverLifeTime": true,
-                            "RotateOverLifeTime": true
+                            "ChangeOverLifeTime": false,
+                            "RotateOverLifeTime": false
                         },
                         "End": {
-                            "FinalTime": 0.10000000149011612,
-                            "Speed": 0,
+                            "FinalTime": 5,
+                            "Speed": 1,
                             "Color": [
-                                0.57615894079208374,
-                                0.32051122188568115,
-                                0,
+                                1,
+                                1,
+                                1,
                                 1
                             ],
-                            "Size": 0,
+                            "Size": 1,
                             "Size3D": [
-                                0,
-                                0,
-                                0
+                                1,
+                                1,
+                                1
                             ],
                             "LightColor": [
                                 0,
@@ -117,8 +118,8 @@
                             ],
                             "Force": [
                                 0,
-                                0,
-                                -50
+                                -10,
+                                0
                             ],
                             "AxisRotation": false,
                             "AngularVelocity": [
@@ -133,25 +134,25 @@
                             ]
                         },
                         "Emmitter": {
-                            "Shape": 3,
+                            "Shape": 0,
                             "Zone": 0,
-                            "Distance": 0,
+                            "Distance": 20,
                             "Radius": 5,
-                            "OutRadius": 1.2000000476837158,
+                            "OutRadius": 10,
                             "CubeSize": [
                                 10,
                                 5,
                                 10
                             ],
-                            "MaxLife": 1,
-                            "CurrentLife": 0.15000002086162567,
+                            "MaxLife": 10,
+                            "CurrentLife": 10.015018463134766,
                             "SpawnRate": 0,
                             "Delay": 0,
-                            "Loop": true,
+                            "Loop": false,
                             "Position": [
-                                0,
-                                0,
-                                0
+                                1.8702595233917236,
+                                1.6797263622283936,
+                                0.77801883220672607
                             ],
                             "RelativePosition": [
                                 0,
@@ -175,13 +176,11 @@
                             ]
                         },
                         "Bursts": {
-                            "Size": 2
+                            "Size": 1
                         },
                         "Burst": {
                             "TimeBurst-0": 0,
-                            "PartsInstanciate-0": 60,
-                            "TimeBurst-1": 0.05000000074505806,
-                            "PartsInstanciate-1": 60
+                            "PartsInstanciate-0": 1
                         },
                         "Blending": {
                             "Source": 6,
@@ -189,20 +188,19 @@
                             "Equation": 0
                         },
                         "HasMaterial": true,
-                        "MaterialID": "8581527732549392487",
-                        "HasAnimation": false,
+                        "MaterialID": "3219780705018301772",
+                        "HasAnimation": true,
                         "Animation": {
-                            "AnimSpeed": 0.10000000149011612,
+                            "AnimSpeed": 0.05000000074505806,
                             "Rows": 1,
-                            "Columns": 1,
+                            "Columns": 3,
                             "StartFrame": 0,
-                            "EndFrame": 0
+                            "EndFrame": 3
                         },
                         "HasMesh": false
                     }
                 ]
             }
         ]
-    },
-    "Name": "p_rock_throw"
+    }
 }

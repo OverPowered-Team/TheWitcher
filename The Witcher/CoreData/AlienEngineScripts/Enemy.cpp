@@ -13,8 +13,9 @@ void Enemy::Awake()
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 	attack_collider->SetEnable(false);
 
+	//0.Head 1.Body 2.Feet 3.Attack
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-	particle_spawn_positions.push_back(game_object->GetChildRecursive("Attack"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Sword"));
 }
 
 void Enemy::StartEnemy()

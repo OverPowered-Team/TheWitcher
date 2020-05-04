@@ -45,6 +45,8 @@ public:
 
 	void RotateSoldier();
 
+	void SpawnAttackParticle();
+
 	void OnAnimationEnd(const char* name) override;
 	void OnTriggerEnter(ComponentCollider* collider);
 
