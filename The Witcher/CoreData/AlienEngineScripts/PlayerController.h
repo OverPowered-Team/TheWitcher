@@ -170,6 +170,7 @@ public:
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
+	AABB max_aabb;
 private:
 	float angle = 0.0f;
 	float timer = 0.f;
@@ -177,7 +178,6 @@ private:
 	ComponentAudioEmitter* audio = nullptr;
 	ComponentCamera* camera = nullptr;
 
-	AABB max_aabb;
 	CameraShake* shake = nullptr;
 	float last_regen_tick = 0.0f;
 };
