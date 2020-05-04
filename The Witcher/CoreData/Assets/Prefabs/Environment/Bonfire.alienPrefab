@@ -293,7 +293,7 @@
                 "FamilyNumber": 5,
                 "ID": "10391970303482150139",
                 "ParentID": "5412499570292309464",
-                "Enabled": false,
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
@@ -327,12 +327,12 @@
                     {
                         "Type": 15,
                         "ID": "15415785674035835265",
-                        "Billboard": 1,
+                        "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -6.6300606727600098,
-                                0.6255486011505127,
-                                0.065833553671836853
+                                -6.6998023986816406,
+                                0.64487934112548828,
+                                0.095600292086601257
                             ],
                             "Rotation": [
                                 0,
@@ -354,28 +354,36 @@
                             "Speed": 1,
                             "Color": [
                                 1,
-                                0,
-                                0.80000001192092896,
-                                1
+                                1,
+                                1,
+                                0.94346290826797485
                             ],
-                            "Size": 1,
+                            "SizeStart3D": false,
+                            "Size": 0.5,
+                            "Size3D": [
+                                0.5,
+                                0.5,
+                                0.5
+                            ],
                             "LightColor": [
                                 0,
                                 0,
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 5,
+                            "MaxLifeTime": 0.5,
                             "AxisRotationStart": false,
                             "Angle3D": [
                                 0,
                                 0,
-                                0
+                                180
                             ],
                             "ChangeOverLifeTime": false,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "FinalTime": 0,
+                            "Speed": 0,
                             "Color": [
                                 1,
                                 1,
@@ -383,6 +391,11 @@
                                 1
                             ],
                             "Size": 1,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -418,9 +431,9 @@
                                 0.20000000298023224
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 3.0929999351501465,
-                            "SpawnRate": 1,
-                            "Delay": 2,
+                            "CurrentLife": 8.9580068588256836,
+                            "SpawnRate": 29.999998092651367,
+                            "Delay": 1,
                             "Loop": true,
                             "Position": [
                                 -6.6542038917541504,
@@ -457,7 +470,7 @@
                             "Equation": 0
                         },
                         "HasMaterial": true,
-                        "MaterialID": "-1",
+                        "MaterialID": "16799967633806808947",
                         "HasAnimation": false,
                         "Animation": {
                             "AnimSpeed": 0.10000000149011612,
@@ -465,7 +478,8 @@
                             "Columns": 1,
                             "StartFrame": 0,
                             "EndFrame": 0
-                        }
+                        },
+                        "HasMesh": false
                     },
                     {
                         "Type": 2,
@@ -639,6 +653,5 @@
                 ]
             }
         ]
-    },
-    "Name": "Bonfire"
+    }
 }
