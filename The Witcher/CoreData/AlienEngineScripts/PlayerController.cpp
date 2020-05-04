@@ -518,6 +518,11 @@ bool PlayerController::CheckBoundaries()
 	Frustum fake_frustum = camera->frustum;
 	fake_frustum.pos = next_cam_pos;
 
+	bool contained = false;
+	if (camera->frustum.Contains(fake_aabb)) {
+		contained = true;
+	}
+
 	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponent<CameraMovement>();
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
@@ -532,14 +537,25 @@ bool PlayerController::CheckBoundaries()
 				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					player_data.speed = float3::zero();
-					return false;
+					if (contained) {
+						if (cam->state == CameraMovement::CameraState::FREE)
+							return true;
+
+						cam->prev_state = cam->state;
+						cam->state = CameraMovement::CameraState::FREE;
+						cam->prev_middle = cam->CalculateMidPoint();
+						return true;
+					}
+					else {
+						player_data.speed = float3::zero();
+						return false;
+					}
 				}
 			}
 		}
 	}
 
-	if (camera->frustum.Contains(fake_aabb)) {
+	if (contained) {
 		return true;
 	}
 	else {
@@ -675,8 +691,8 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
-				if (dash_coll->dash_particles[(*it)->name])
-					dash_coll->dash_particles[(*it)->name]->SetEnable(true);
+				if (dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name])
+					dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name]->SetEnable(true);
 			}
 		}
 	}

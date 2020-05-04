@@ -59,6 +59,9 @@ private:
 	GameObject* yen_img = nullptr;
 	ComponentImage* portrait = nullptr;
 
+	GameObject* kill_count = nullptr;
+	ComponentText* kill_count_number = nullptr;
+
 	ComponentBar* lifebar = nullptr;
 	ComponentBar* mana_bar = nullptr;
 };

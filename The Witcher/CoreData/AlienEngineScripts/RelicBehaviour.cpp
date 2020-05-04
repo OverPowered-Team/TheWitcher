@@ -81,6 +81,7 @@ void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
 	DashEffect* effect = new DashEffect();
 	effect->on_dash_effect = effect_to_apply;
+	effect->name = name;
 
 	switch (relic_effect)
 	{

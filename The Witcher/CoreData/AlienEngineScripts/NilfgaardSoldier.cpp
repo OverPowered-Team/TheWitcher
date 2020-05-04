@@ -8,6 +8,8 @@
 #include "EnemyManager.h"
 #include "MusicController.h"
 
+#include "InGame_UI.h"
+
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
@@ -219,6 +221,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
 		state = NilfgaardSoldierState::DYING;
+		GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticle(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 }
