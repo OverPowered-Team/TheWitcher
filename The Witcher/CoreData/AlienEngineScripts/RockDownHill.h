@@ -18,9 +18,10 @@ public:
 
 	void OnTriggerEnter(ComponentCollider* trigger) override;
 	void OnCollisionEnter(const Collision& trigger) override;
+     
+	void Doppler(); 
 
 	float3 direction = float3::zero();
-
 	float damage = 1.f;
 
 private:
@@ -30,6 +31,9 @@ private:
 	float speed = 5.f;
 	float time = 7.f;
 	float timer = 0.f;
+
+	ComponentAudioEmitter* emitter = nullptr; 
+
 };
 
 ALIEN_FACTORY RockDownHill* CreateRockDownHill() {

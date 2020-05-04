@@ -12,6 +12,7 @@ RockDownHill::~RockDownHill()
 void RockDownHill::Start()
 {
 	rb = GetComponent<ComponentRigidBody>();
+	emitter = GetComponent<ComponentAudioEmitter>();
 	timer = Time::GetGameTime();
 }
 
@@ -19,6 +20,8 @@ void RockDownHill::Update()
 {
 	rb->SetPosition(transform->GetGlobalPosition() + direction * speed * Time::GetDT());
 	rb->SetRotation(transform->GetGlobalRotation() * Quat::RotateAxisAngle(axis_rot, rot_speed * Time::GetDT()));
+
+	Doppler(); 
 
 	if (Time::GetGameTime() - timer >= time)
 		Destroy(game_object);
@@ -56,4 +59,24 @@ void RockDownHill::OnCollisionEnter(const Collision& trigger)
 	if (strcmp(trigger.game_object->GetTag(), "RockEnd") == 0) {
 		GameObject::Destroy(game_object);
 	}
+}
+
+void RockDownHill::Doppler()
+{
+	// https://www.audiokinetic.com/qa/1175/how-can-i-create-a-doppler-effects-with-wwise
+	
+	static float distToListenner = 0.0f, lastDistToListenner = 0.0f, approachSpeed = 0.0f, pitchMulti = 0.f; 
+
+	distToListenner = (Camera::GetCurrentCamera()->GetCameraPosition()
+		- game_object->GetComponentTransform()->GetGlobalPosition()).Length(); 
+
+
+	approachSpeed = distToListenner - lastDistToListenner; 
+
+	
+	// TODO: RTPC
+	// emitter->SetRTPCValue("DopplerRocks", approachSpeed); 
+
+
+	lastDistToListenner = distToListenner; 
 }
