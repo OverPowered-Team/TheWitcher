@@ -61,15 +61,15 @@ void InGame_UI::Update()
 		auto particle = particles.begin();
 		for (; particle != particles.end(); ++particle)
 		{
-			float lerp = (Time::GetGameTime() - (**particle).time_passed) / time_lerp_ult_part;
-			float position_x = Maths::Lerp((**particle).origin_position.x, (**particle).final_position.x, lerp);
-			float position_y = Maths::Lerp((**particle).origin_position.y, (**particle).final_position.y, lerp);
+			float lerp = (Time::GetGameTime() - (*particle)->time_passed) / time_lerp_ult_part;
+			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
+			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
-			(**particle).particle->transform->SetLocalPosition(position_x, position_y, 1);
+			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 1);
 
 			if (lerp >= 1)
 			{
-				GameObject::Destroy((**particle).particle);
+				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;
 				particles.erase(particle);
 				--particle;
@@ -97,10 +97,12 @@ void InGame_UI::ShowCheckpointSaved()
 	time_checkpoint = Time::GetGameTime();
 }
 
-void InGame_UI::StartLerpParticle(float3 world_position, UI_Particle_Type type)
+void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type type)
 {
 	UI_Particles* particle = new UI_Particles();
-	particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).Normalized(), 1);
+	// not working very well but it's the best I accomplished
+	particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
+		ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
 	switch (type)
 	{

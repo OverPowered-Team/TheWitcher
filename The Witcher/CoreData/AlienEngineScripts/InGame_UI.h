@@ -34,7 +34,7 @@ public:
 	void YouDied();
 	void ShowCheckpointSaved();
 
-	void StartLerpParticle(float3 world_position,UI_Particle_Type type);
+	void StartLerpParticle(const float3& world_position,UI_Particle_Type type);
 
 public:
 
@@ -44,7 +44,7 @@ public:
 	Prefab ulti_particle;
 	Prefab killcount_particle;
 
-	float time_lerp_ult_part = 1.5f;
+	float time_lerp_ult_part =0.25f;
 
 private:
 
