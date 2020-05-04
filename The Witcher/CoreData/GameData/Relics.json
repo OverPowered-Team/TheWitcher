@@ -31,14 +31,15 @@
       "effect": 1,
       "name": "Fire Runestone",
       "description": "burns enemies",
-	    "hit_effect":{
+      "hit_effect": {
         "name": "fire_runestone",
+        "vfx_on_apply": "p_fire_runestone",
         "time": 0.5,
         "ticks_time": 1.0,
-        "flat_modifiers":[
+        "flat_modifiers": [
           {
-            "identifier":"Health",
-            "value":-5
+            "identifier": "Health",
+            "value": -5
           }
         ]
       }

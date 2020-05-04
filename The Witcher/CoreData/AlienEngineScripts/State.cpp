@@ -185,15 +185,14 @@ void RunningState::Update(PlayerController* player)
 
 void RunningState::OnEnter(PlayerController* player)
 {
-	player->particles.insert(std::pair("p_run", GameManager::instance->particle_pool->GetInstance("p_run", player->transform->GetGlobalPosition(), player->game_object)));
+	player->SpawnParticle("p_run");
 	player->audio->StartSound();
 	player->timer = Time::GetGameTime();
 }
 
 void RunningState::OnExit(PlayerController* player)
 {
-	GameManager::instance->particle_pool->ReleaseInstance("p_run", player->particles["p_run"]);
-	player->particles.erase("p_run");
+	player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)

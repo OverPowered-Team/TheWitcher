@@ -63,8 +63,8 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 	}
 
 	audio_emitter->StartSound("SoldierHit");
-	particles.insert(std::pair("hit_particle",
-		GameManager::instance->particle_pool->GetInstance("hit_particle", float3::zero(), this->game_object, true)));
+
+	SpawnParticle("hit_particle");
 
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -207,9 +207,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		}
 	}
 	else if (strcmp(name, "Hit") == 0) {
-		GameManager::instance->particle_pool->ReleaseInstance("hit_particle", particles["hit_particle"]);
-		particles.erase("hit_particle");
-
+		ReleaseParticle("hit_particle");
 		if (stats["Health"].GetValue() == 0.0F) {
 			state = NilfgaardSoldierState::HIT;
 		}

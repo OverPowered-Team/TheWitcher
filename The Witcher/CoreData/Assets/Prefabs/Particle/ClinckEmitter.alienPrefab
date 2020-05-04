@@ -1,11 +1,12 @@
 {
+    "Name": "ClinckEmitter",
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "hit_particle",
+                "Name": "ClinckEmitter",
                 "FamilyNumber": 1,
-                "ID": "14453631214346087532",
-                "ParentID": "12147686444579634007",
+                "ID": "13202778586495486262",
+                "ParentID": "7300999329504361700",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -14,14 +15,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "12985383288265263477",
+                "PrefabID": "11612236744838851320",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            2.8780386447906494,
-                            0
+                            -17.29815673828125,
+                            79.8380126953125,
+                            91.241943359375
                         ],
                         "Rotation": [
                             0,
@@ -35,17 +36,17 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "739697725481412299"
+                        "ID": "7697059695158329197"
                     },
                     {
                         "Type": 15,
-                        "ID": "13425685836965911355",
+                        "ID": "13112878123551880398",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0,
-                                2.8780386447906494,
-                                0
+                                -0.10378894209861755,
+                                0.47902807593345642,
+                                0.5474516749382019
                             ],
                             "Rotation": [
                                 0,
@@ -55,30 +56,30 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                2.4053678512573242,
-                                -0.56892526149749756,
-                                1.7001557350158691
+                                -0.36089435219764709,
+                                -0.59190875291824341,
+                                0.72069364786148071
                             ],
                             "Force": [
                                 0,
                                 0,
                                 0
                             ],
-                            "Speed": 3,
+                            "Speed": 1,
                             "Color": [
-                                0.40397351980209351,
-                                0.0026753118727356195,
-                                0.0026753118727356195,
+                                0.019648266956210136,
+                                0.11109077930450439,
+                                0.42384105920791626,
                                 1
                             ],
-                            "Size": 0.20000000298023224,
+                            "Size": 0.5,
                             "LightColor": [
                                 0,
                                 0,
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 0.30000001192092896,
+                            "MaxLifeTime": 0.40000000596046448,
                             "AxisRotationStart": false,
                             "Angle3D": [
                                 0,
@@ -90,12 +91,12 @@
                         },
                         "End": {
                             "Color": [
-                                0.52980136871337891,
-                                0.059646524488925934,
-                                0.059646524488925934,
-                                1
+                                1,
+                                1,
+                                1,
+                                0
                             ],
-                            "Size": 0.0099999997764825821,
+                            "Size": 0.80000001192092896,
                             "LightColor": [
                                 0,
                                 0,
@@ -104,7 +105,7 @@
                             ],
                             "Force": [
                                 0,
-                                -10,
+                                0,
                                 0
                             ],
                             "AxisRotation": false,
@@ -120,25 +121,25 @@
                             ]
                         },
                         "Emmitter": {
-                            "Shape": 0,
-                            "Zone": 0,
-                            "Distance": 20,
-                            "Radius": 5,
-                            "OutRadius": 10,
+                            "Shape": 3,
+                            "Zone": 1,
+                            "Distance": 0.60000002384185791,
+                            "Radius": 0.20000000298023224,
+                            "OutRadius": 1.2000000476837158,
                             "CubeSize": [
                                 10,
                                 5,
                                 10
                             ],
-                            "MaxLife": 0.5,
-                            "CurrentLife": 0.50099998712539673,
+                            "MaxLife": 0.40000000596046448,
+                            "CurrentLife": 0.64899998903274536,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
-                                0,
-                                2.8780386447906494,
-                                0
+                                -0.10378894209861755,
+                                0.47902807593345642,
+                                0.5474516749382019
                             ],
                             "RelativePosition": [
                                 0,
@@ -162,11 +163,13 @@
                             ]
                         },
                         "Bursts": {
-                            "Size": 1
+                            "Size": 2
                         },
                         "Burst": {
                             "TimeBurst-0": 0,
-                            "PartsInstanciate-0": 60
+                            "PartsInstanciate-0": 2,
+                            "TimeBurst-1": 0.30000001192092896,
+                            "PartsInstanciate-1": 2
                         },
                         "Blending": {
                             "Source": 6,
@@ -174,19 +177,18 @@
                             "Equation": 0
                         },
                         "HasMaterial": true,
-                        "MaterialID": "7311693966518791074",
-                        "HasAnimation": false,
+                        "MaterialID": "3140724863303334452",
+                        "HasAnimation": true,
                         "Animation": {
-                            "AnimSpeed": 0.10000000149011612,
+                            "AnimSpeed": 0.05000000074505806,
                             "Rows": 1,
-                            "Columns": 1,
+                            "Columns": 3,
                             "StartFrame": 0,
-                            "EndFrame": 0
+                            "EndFrame": 2
                         }
                     }
                 ]
             }
         ]
-    },
-    "Name": "hit_particle"
+    }
 }

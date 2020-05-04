@@ -256,3 +256,27 @@ void Enemy::StopHitFreeze(float speed)
 	is_frozen = false;
 	animator->SetCurrentStateSpeed(speed);
 }
+
+void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+{
+	if (particles[particle_name])
+	{
+		particles[particle_name]->SetEnable(false);
+		particles[particle_name]->SetEnable(true);
+	}
+	else
+	{
+		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+		particles.insert(std::pair(particle_name, new_particle));
+	}
+}
+
+void Enemy::ReleaseParticle(std::string particle_name)
+{
+	if (particles[particle_name])
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
+		particles.erase(particle_name);
+	}
+}
+	

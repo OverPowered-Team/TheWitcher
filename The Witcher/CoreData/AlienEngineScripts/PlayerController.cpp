@@ -278,9 +278,8 @@ void PlayerController::PlayAttackParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles.insert(std::pair(attacks->GetCurrentAttack()->info.particle_name, 
-			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.particle_name, 
-				attacks->GetCurrentAttack()->info.particle_pos, this->game_object, true)));
+		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
+		
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
@@ -574,6 +573,35 @@ void PlayerController::RemoveFreeze(float speed)
 {
 	animator->SetCurrentStateSpeed(speed);
 	is_immune = false;
+}
+
+void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+{
+	if (particle_name == "")
+		return;
+
+	if (particles[particle_name])
+	{
+		particles[particle_name]->SetEnable(false);
+		particles[particle_name]->SetEnable(true);
+	}
+	else
+	{
+		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
+		particles.insert(std::pair(particle_name, new_particle));
+	}
+}
+
+void PlayerController::ReleaseParticle(std::string particle_name)
+{
+	if (particle_name == "")
+		return;
+
+	if (particles[particle_name])
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
+		particles.erase(particle_name);
+	}
 }
 
 

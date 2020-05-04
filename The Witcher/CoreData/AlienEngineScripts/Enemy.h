@@ -53,6 +53,8 @@ public:
 
 	void HitFreeze(float freeze_time);
 	void StopHitFreeze(float speed);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+	void ReleaseParticle(std::string particle_name);
 
 public:
 	float distance = 0.0F;
