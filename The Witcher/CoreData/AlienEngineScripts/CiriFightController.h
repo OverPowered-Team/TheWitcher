@@ -12,6 +12,8 @@ public:
 	float ciri_clones_scream_cd = 15.0f;
 	float scream_cd_timer = 0.0f;
 	bool can_mini_scream = true;
+
+	Prefab* ciri_clone = nullptr;
 public:
 
 	CiriFightController();
