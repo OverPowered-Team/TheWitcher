@@ -29,6 +29,7 @@ GameObject* ParticlePool::GetInstance(std::string particle_type, float3 pos, Gam
     {
         GameObject* instance = GameObject::Instantiate(particle_type.c_str(), pos, false, parent ? parent : nullptr);
         instance->transform->SetGlobalRotation(instance->parent->transform->GetGlobalRotation());
+
         return instance;
     }
 
