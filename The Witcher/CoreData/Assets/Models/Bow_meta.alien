@@ -1,19 +1,21 @@
 {
     "Meta": {
-        "ID": "9394262627706250878",
+        "ID": "2340164851241743873",
         "NumMeshes": 2,
-        "Name": "Bow_LP",
+        "Name": "Bow",
         "NumBones": 0,
         "NumAnimations": 0,
         "Animations": [],
-        "NumMaterials": 0,
+        "NumMaterials": 1,
         "PathMeshes": [
-            "Library\/Meshes\/15993088915059931895.alienMesh",
-            "Library\/Meshes\/8296575565037777905.alienMesh"
+            "Library\/Meshes\/13689797181634885335.alienMesh",
+            "Library\/Meshes\/5666763850312618700.alienMesh"
         ],
         "PathAnimations": [],
         "PathBones": [],
-        "PathMaterials": []
+        "PathMaterials": [
+            "Library\/Materials\/6667525648047716867.material"
+        ]
     },
     "Nodes": [
         {
@@ -33,11 +35,11 @@
                 0,
                 1
             ],
-            "nodeNum": 2,
-            "parentNum": 1,
-            "nodeName": "Cone007",
-            "parentName": "Bow_LP",
-            "meshIndex": 0,
+            "nodeNum": 3,
+            "parentNum": 2,
+            "nodeName": "Cylinder001",
+            "parentName": "Bow",
+            "meshIndex": 1,
             "materialIndex": 0,
             "numBones": 0,
             "bonesIndex": []
@@ -61,9 +63,9 @@
             ],
             "nodeNum": 2,
             "parentNum": 1,
-            "nodeName": "Cylinder001",
-            "parentName": "Bow_LP",
-            "meshIndex": 1,
+            "nodeName": "Bow",
+            "parentName": "Bow",
+            "meshIndex": 0,
             "materialIndex": 0,
             "numBones": 0,
             "bonesIndex": []

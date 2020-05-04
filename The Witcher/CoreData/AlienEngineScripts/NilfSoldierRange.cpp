@@ -118,6 +118,7 @@ void NilfSoldierRange::Flee()
 
 void NilfSoldierRange::ShootAttack()
 {
+	SpawnAttackParticle();
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();

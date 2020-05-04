@@ -278,7 +278,7 @@ void Enemy::HitFreeze(float freeze_time)
 void Enemy::SpawnAttackParticle()
 {
 	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
-	HitFreeze(0.1);
+	HitFreeze(0.05);
 	can_get_interrupted = false;
 	// Sonidito de clinck de iluminacion espada maestra
 }
