@@ -43,6 +43,8 @@ void UI_Char_Frame::Start()
 
 	lifebar = game_object->GetChild("Lifebar")->GetComponent<ComponentBar>();
 	mana_bar = game_object->GetChild("Mana")->GetComponent<ComponentBar>();
+	kill_count = game_object->GetChild("Killcount");
+	kill_count_number = kill_count->GetComponent<ComponentText>();
 }
 
 void UI_Char_Frame::Update()

@@ -100,7 +100,7 @@ void InGame_UI::ShowCheckpointSaved()
 void InGame_UI::StartLerpParticle(float3 world_position, UI_Particle_Type type)
 {
 	UI_Particles* particle = new UI_Particles();
-	particle->origin_position = canvas->GetWorldPositionInCanvas(world_position);
+	particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).Normalized(), 1);
 
 	switch (type)
 	{

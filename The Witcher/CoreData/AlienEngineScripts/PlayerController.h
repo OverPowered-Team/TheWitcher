@@ -10,6 +10,7 @@ class Relic;
 class Effect;
 class Enemy;
 class CameraShake;
+class InGame_UI;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
