@@ -9,17 +9,28 @@ void VagoneteMove::Update()
 {
 	float3 currentPos = curve->curve.ValueAt(actual_pos);
 	float3 nextPos = curve->curve.ValueAt(actual_pos + ((1 / (float)curve->curve.detail) * Time::GetDT() * speed) * 10);
-	
-	float3 vector = (nextPos - currentPos).Normalized();
-	float angle = atan2f(vector.y, math::Sqrt((vector.z * vector.z) + (vector.x * vector.x)));
 
-	float3 normal = curve->curve.NormalAt(actual_pos);
+	//Pitch (slope)
+	float3 railVector = (currentPos - nextPos).Normalized();
+	Quat rot = Quat::LookAt(float3::unitX(), railVector, float3::unitY(), float3::unitY());
 
-	Quat myDesiredRotUp = Quat::RotateFromTo(Quat::identity().WorldY(), normal);
-	Quat myDesiredRotForward = Quat::RotateZ(angle);
+	float3 inclinationVector = curve->curve.NormalAt(actual_pos).Normalized();
+	Quat inclinationRot = Quat::RotateFromTo(float3::unitY(), inclinationVector);
+	inclinationRot.Inverse();
 
-	transform->SetLocalRotation(myDesiredRotForward * myDesiredRotUp);
+	transform->SetLocalRotation(rot * inclinationRot);
 	transform->SetLocalPosition(currentPos);
+
+	//APPROACH 3
+	//float3 vector = (nextPos - currentPos).Normalized();
+
+	//float3 normal = curve->curve.NormalAt(actual_pos).Normalized();
+	//float3 Y = vector.Cross(normal);
+
+	//float3x3 rot = float3x3(vector, normal, Y);
+
+	//transform->SetLocalRotation(rot.ToQuat());
+	//transform->SetLocalPosition(currentPos);
 
 	actual_pos += (1/(float)curve->curve.detail) * Time::GetDT() * speed;
 
