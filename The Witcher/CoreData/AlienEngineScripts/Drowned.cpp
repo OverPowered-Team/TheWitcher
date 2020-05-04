@@ -1,4 +1,5 @@
 #include "Drowned.h"
+#include "PlayerController.h"
 
 Drowned::Drowned() : Enemy()
 {
@@ -39,6 +40,7 @@ void Drowned::SetStats(const char* json)
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		stats["HideDistance"] = Stat("HideDistance", stat_weapon->GetNumber("HideDistance"));
 
 		if (drowned_type == DrownedType::RANGE)
 			stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
@@ -49,6 +51,32 @@ void Drowned::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
+}
+
+float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
+{
+	float damage = Enemy::GetDamaged(dmg, player);
+
+	if (can_get_interrupted) {
+		state = DrownedState::HIT;
+		animator->PlayState("Hit");
+	}
+
+	//audio_emitter->StartSound("GhoulHit");
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
+
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+	if (stats["Health"].GetValue() == 0.0F) {
+
+		animator->SetBool("dead", true);
+		OnDeathHit();
+		state = DrownedState::DYING;
+		//audio_emitter->StartSound("GhoulDeath");
+		player->OnEnemyKill();
+	}
+
+	return damage;
 }
 
 void Drowned::Stun(float time)

@@ -123,20 +123,6 @@ void NilfSoldierRange::ShootAttack()
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
 	audio_emitter->StartSound("SoldierShoot");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
-	arrow_rb->SetRotation(RotateArrow());
+	arrow_rb->SetRotation(RotateProjectile());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
-}
-
-Quat NilfSoldierRange::RotateArrow()
-{
-	float3 front = -float3::unitZ(); //front of the object
-	Quat rot1 = Quat::RotateFromTo(front, direction);
-
-	float3 desiredUp = float3::unitY();
-	float3 right = Cross(direction, desiredUp);
-	desiredUp = Cross(right, direction);
-
-	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
-	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
-	return rot2 * rot1;
 }

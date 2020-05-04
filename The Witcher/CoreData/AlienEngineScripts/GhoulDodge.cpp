@@ -81,7 +81,7 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         {
             state = GhoulState::IDLE;
         }
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Jump") == 0)
     {
@@ -90,12 +90,12 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         else
             state = GhoulState::IDLE;
 
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Hit") == 0)
     {
         state = GhoulState::IDLE;
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
 }
 
