@@ -12,16 +12,13 @@ void VagoneteMove::Update()
 	
 	float3 vector = (nextPos - currentPos).Normalized();
 	float angle = atan2f(vector.y, vector.x);
-	LOG("%f", angle);
-	Quat myRot = transform->GetLocalRotation();
+
 	float3 normal = curve->curve.NormalAt(actual_pos);
-	Quat myDesiredRotUp = Quat::RotateFromTo(myRot.WorldY(), normal);
+
+	Quat myDesiredRotUp = Quat::RotateFromTo(Quat::identity().WorldY(), normal);
 	Quat myDesiredRotForward = Quat::RotateZ(angle);
 
-	// myDesiredRotForward
-	// myDesiredRotUp * myRot
-
-	transform->SetGlobalRotation(myDesiredRotUp * myDesiredRotForward);
+	transform->SetLocalRotation(myDesiredRotForward * myDesiredRotUp);
 	transform->SetLocalPosition(currentPos);
 
 	actual_pos += (1/(float)curve->curve.detail) * Time::GetDT() * speed;
