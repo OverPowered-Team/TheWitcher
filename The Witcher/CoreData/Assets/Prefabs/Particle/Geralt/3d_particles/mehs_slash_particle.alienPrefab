@@ -2,10 +2,10 @@
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "thin slash",
+                "Name": "mehs_slash_particle",
                 "FamilyNumber": 1,
-                "ID": "17821343558357592272",
-                "ParentID": "6180591917414153205",
+                "ID": "17197638639073481437",
+                "ParentID": "8384416007899365902",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -14,7 +14,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "10436066753399238555",
+                "PrefabID": "2506593857964432606",
                 "Components": [
                     {
                         "Type": 0,
@@ -27,7 +27,7 @@
                             0,
                             0,
                             0,
-                            1
+                            0
                         ],
                         "Scale": [
                             1,
@@ -35,12 +35,12 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7106864766202939488"
+                        "ID": "16914230115981487940"
                     },
                     {
                         "Type": 15,
-                        "ID": "10038627291436290869",
-                        "Billboard": 0,
+                        "ID": "18298483174911734805",
+                        "Billboard": 4,
                         "Start": {
                             "Position": [
                                 0,
@@ -57,7 +57,7 @@
                             "Velocity": [
                                 0,
                                 0,
-                                0
+                                -0
                             ],
                             "Force": [
                                 0,
@@ -67,16 +67,16 @@
                             "Speed": 0,
                             "Color": [
                                 1,
-                                1,
-                                1,
+                                0.99998998641967773,
+                                0.99998998641967773,
                                 1
                             ],
-                            "SizeStart3D": false,
-                            "Size": 3,
+                            "SizeStart3D": true,
+                            "Size": 0.10000000149011612,
                             "Size3D": [
-                                3,
-                                3,
-                                3
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
                             ],
                             "LightColor": [
                                 0,
@@ -84,30 +84,30 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 0.40000000596046448,
-                            "AxisRotationStart": false,
+                            "MaxLifeTime": 1,
+                            "AxisRotationStart": true,
                             "Angle3D": [
                                 0,
                                 0,
-                                90
+                                180
                             ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
-                            "FinalTime": 0.40000000596046448,
+                            "FinalTime": 1,
                             "Speed": 0,
                             "Color": [
                                 1,
-                                1,
-                                1,
-                                0.83443707227706909
+                                0.99998998641967773,
+                                0.99998998641967773,
+                                1
                             ],
-                            "Size": 0.20000000298023224,
+                            "Size": 3,
                             "Size3D": [
-                                20000000298023224,
-                                20000000298023224,
-                                20000000298023224
+                                1,
+                                1,
+                                1
                             ],
                             "LightColor": [
                                 0,
@@ -120,11 +120,11 @@
                                 0,
                                 0
                             ],
-                            "AxisRotation": false,
+                            "AxisRotation": true,
                             "AngularVelocity": [
                                 0,
                                 0,
-                                0
+                                360
                             ],
                             "AngularAcceleration": [
                                 0,
@@ -133,7 +133,7 @@
                             ]
                         },
                         "Emmitter": {
-                            "Shape": 3,
+                            "Shape": 0,
                             "Zone": 0,
                             "Distance": 20,
                             "Radius": 5,
@@ -143,11 +143,11 @@
                                 5,
                                 10
                             ],
-                            "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 0.30000001192092896,
+                            "MaxLife": 1,
+                            "CurrentLife": 0.44999995827674866,
                             "SpawnRate": 0,
                             "Delay": 0,
-                            "Loop": false,
+                            "Loop": true,
                             "Position": [
                                 0,
                                 0,
@@ -187,7 +187,7 @@
                             "Equation": 0
                         },
                         "HasMaterial": true,
-                        "MaterialID": "9943630612837717951",
+                        "MaterialID": "16537018469730987030",
                         "HasAnimation": false,
                         "Animation": {
                             "AnimSpeed": 0.10000000149011612,
@@ -196,11 +196,18 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": true,
+                        "Mesh": {
+                            "MeshType": 7,
+                            "Size": 1,
+                            "MeshesAttached": {
+                                "MeshID_0": "5631635232209896837"
+                            }
+                        }
                     }
                 ]
             }
         ]
     },
-    "Name": "thin slash"
+    "Name": "mehs_slash_particle"
 }
