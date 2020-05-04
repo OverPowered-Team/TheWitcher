@@ -1,4 +1,6 @@
 #include "InGame_UI.h"
+#include "PlayerController.h"
+#include "UI_Char_Frame.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -69,6 +71,19 @@ void InGame_UI::Update()
 
 			if (lerp >= 1)
 			{
+				if ((*particle)->player != nullptr)
+				{
+					if ((*particle)->player->player_data.total_kills >= 10)
+					{
+						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetText(
+							std::to_string((*particle)->player->player_data.total_kills).c_str());
+					}
+					else
+					{
+						std::string kills = "0" + std::to_string((*particle)->player->player_data.total_kills);
+						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetText(kills.c_str());
+					}
+				}
 				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;
 				particles.erase(particle);
@@ -97,12 +112,13 @@ void InGame_UI::ShowCheckpointSaved()
 	time_checkpoint = Time::GetGameTime();
 }
 
-void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type type)
+void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type type, PlayerController* player)
 {
 	UI_Particles* particle = new UI_Particles();
 	// not working very well but it's the best I accomplished
-	particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
-		ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
+	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
+		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
+	particle->origin_position = float3(0, 0, 0);
 
 	switch (type)
 	{
@@ -114,8 +130,9 @@ void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type
 	}
 	case UI_Particle_Type::KILL_COUNT:
 	{
-		particle->final_position = game_object->GetChild("InGame")->GetChild("UI_Char_Frame")->GetChild("Kill_Count")->transform->GetGlobalPosition();
+		particle->final_position = player->HUD->GetChild("Killcount")->transform->GetGlobalPosition();
 		particle->particle = GameObject::Instantiate(killcount_particle, particle->origin_position, false, in_game);
+		particle->player = player;
 		break;
 	}
 	}

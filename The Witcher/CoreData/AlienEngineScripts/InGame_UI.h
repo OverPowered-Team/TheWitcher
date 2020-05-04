@@ -3,6 +3,8 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class PlayerController;
+
 enum(UI_Particle_Type,
 	ULTI,
 	KILL_COUNT,
@@ -16,7 +18,8 @@ public:
 	float3 final_position = float3(0, 0, 0);
 	float3 origin_position = float3(0, 0, 0);
 	GameObject* particle = nullptr;
-	float time_passed= 0.0f;
+	PlayerController* player = nullptr;
+	float time_passed = 0.0f;
 };
 
 class ALIEN_ENGINE_API InGame_UI : public Alien {
@@ -34,7 +37,7 @@ public:
 	void YouDied();
 	void ShowCheckpointSaved();
 
-	void StartLerpParticle(const float3& world_position,UI_Particle_Type type);
+	void StartLerpParticle(const float3& world_position, UI_Particle_Type type, PlayerController* player = nullptr);
 
 public:
 
@@ -44,7 +47,7 @@ public:
 	Prefab ulti_particle;
 	Prefab killcount_particle;
 
-	float time_lerp_ult_part =0.25f;
+	float time_lerp_ult_part = 0.75f;
 
 private:
 

@@ -28,6 +28,10 @@ public:
 	// Lerps
 	float change_time = 0.150f;
 
+	// KillCount
+	GameObject* kill_count = nullptr;
+	ComponentText* kill_count_number = nullptr;
+
 private:
 
 	void HitEffect(float lerp_time);
@@ -58,9 +62,6 @@ private:
 	GameObject* geralt_img = nullptr;
 	GameObject* yen_img = nullptr;
 	ComponentImage* portrait = nullptr;
-
-	GameObject* kill_count = nullptr;
-	ComponentText* kill_count_number = nullptr;
 
 	ComponentBar* lifebar = nullptr;
 	ComponentBar* mana_bar = nullptr;
