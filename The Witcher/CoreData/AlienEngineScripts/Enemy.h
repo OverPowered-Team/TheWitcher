@@ -15,7 +15,8 @@ enum (EnemyType,
 	NILFGAARD_SOLDIER,
 	DROWNED,
 	SHAELMAR,
-	LESHEN
+	LESHEN,
+	BLOCKER_OBSTACLE
 	);
 
 class Enemy : public Alien {

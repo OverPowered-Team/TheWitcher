@@ -10,7 +10,8 @@ public:
 	enum (GroundMaterial,
 		MUD,
 		SAND,
-		STONE
+		STONE,
+		VEGETATION
 		);
 	TriggerFootsteps();
 	virtual ~TriggerFootsteps();
