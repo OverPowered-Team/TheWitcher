@@ -128,7 +128,7 @@ void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 			has_been_attacked = true;
 			current_time = Time::GetGameTime();
 			break_shield_attack++;
-			SpawnParticle("ClinckEmitter", particle_spawn_positions[1]->transform->GetLocalPosition()); // 1 is body position
+			SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition()); // 1 is body position
 			audio_emitter->StartSound("SoldierBlock");
 		}
 		else

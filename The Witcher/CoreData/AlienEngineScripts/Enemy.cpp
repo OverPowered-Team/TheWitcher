@@ -15,7 +15,6 @@ void Enemy::Awake()
 
 	//0.Head 1.Body 2.Feet 3.Attack
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-	particle_spawn_positions.push_back(game_object->GetChildRecursive("Sword"));
 }
 
 void Enemy::StartEnemy()
@@ -88,6 +87,9 @@ void Enemy::UpdateEnemy()
 		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
 		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
+
+	//MOVEMENT
+	character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
@@ -272,6 +274,15 @@ void Enemy::HitFreeze(float freeze_time)
 		Invoke([this, speed]() -> void {Enemy::StopHitFreeze(speed); }, freeze_time);
 	}
 }
+
+void Enemy::SpawnAttackParticle()
+{
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+	HitFreeze(0.1);
+	can_get_interrupted = false;
+	// Sonidito de clinck de iluminacion espada maestra
+}
+
 
 void Enemy::StopHitFreeze(float speed)
 {

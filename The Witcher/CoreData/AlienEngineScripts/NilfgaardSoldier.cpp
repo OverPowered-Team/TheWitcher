@@ -57,12 +57,15 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 {
 	float damage = Enemy::GetDamaged(dmg, player, knock);
 
-	if (can_get_interrupted) {
+	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
+		audio_emitter->StartSound("SoldierHit");
 	}
-
-	audio_emitter->StartSound("SoldierHit");
+	//else
+	//{
+	//	//Quizas que haga sonidito de ataque pero le han hecho pupita
+	//}
 
 	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition()); //1 is body position
 
@@ -142,11 +145,6 @@ void NilfgaardSoldier::RotateSoldier()
 	transform->SetGlobalRotation(rot);
 }
 
-void NilfgaardSoldier::SpawnAttackParticle()
-{
-	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
-}
-
 void NilfgaardSoldier::CleanUpEnemy()
 {
 	if (decapitated_head)
@@ -202,6 +200,7 @@ void NilfgaardSoldier::SetState(const char* state_str)
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
+		can_get_interrupted = true;
 		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())
 		{
