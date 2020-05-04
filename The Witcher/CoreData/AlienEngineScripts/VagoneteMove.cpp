@@ -14,6 +14,7 @@ void VagoneteMove::Update()
 	float3 railVector = (currentPos - nextPos).Normalized();
 	Quat rot = Quat::LookAt(float3::unitX(), railVector, float3::unitY(), float3::unitY());
 
+	//Inclination (normals + players)
 	float3 inclinationVector = curve->curve.NormalAt(actual_pos).Normalized();
 	Quat inclinationRot = Quat::RotateFromTo(float3::unitY(), inclinationVector);
 	inclinationRot.Inverse();
