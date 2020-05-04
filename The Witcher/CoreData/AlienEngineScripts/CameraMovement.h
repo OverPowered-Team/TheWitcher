@@ -12,7 +12,7 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, MOVING_TO_DYNAMIC,
+		DYNAMIC, MOVING_TO_DYNAMIC, FREE,
 		STATIC, MOVING_TO_STATIC,
 		AXIS, MOVING_TO_AXIS
 		);
@@ -49,6 +49,10 @@ public:
 
 	bool smooth_camera = true;
 	float smooth_cam_vel = 5.f;
+
+	//TEST ALLOW MOVEMENT WHEN OTHER IS BLOCKING
+	float3 prev_middle = float3::zero();
+	CameraState prev_state = CameraState::FREE;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
