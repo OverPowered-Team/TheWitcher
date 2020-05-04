@@ -11,10 +11,14 @@ void VagoneteMove::Update()
 
 	transform->SetLocalPosition(curve->curve.ValueAt(actual_pos));
 
-	Quat quat = transform->GetLocalRotation();
-	Quat quat2 = Quat::RotateFromTo(transform->up, curve->curve.NormalAt(actual_pos));
+	Quat myRot = transform->GetLocalRotation();
+	float3 normal = curve->curve.NormalAt(actual_pos);
 
-	transform->SetLocalRotation(quat2);
+	Quat myDesiredRotUp = Quat::RotateFromTo(transform->up, normal);
+
+	transform->SetLocalRotation(myDesiredRotUp * myRot);
+
+
 	actual_pos += (1/(float)curve->curve.detail) * Time::GetDT() * speed;
 
 	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
