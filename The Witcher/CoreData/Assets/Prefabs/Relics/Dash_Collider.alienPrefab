@@ -4,8 +4,8 @@
             {
                 "Name": "Dash_Collider",
                 "FamilyNumber": 1,
-                "ID": "4454270153440831253",
-                "ParentID": "12340510851851357190",
+                "ID": "13904048447009519283",
+                "ParentID": "4223400107082955272",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,7 +35,7 @@
                             0.99962544441223145
                         ],
                         "ScaleNegative": false,
-                        "ID": "10021155336320862561"
+                        "ID": "1257643114201852556"
                     },
                     {
                         "Enabled": true,
@@ -54,7 +54,7 @@
                         "Bouncing": 0.5,
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
-                        "CollisionLayer": "Default",
+                        "CollisionLayer": "Dash",
                         "Size": [
                             1,
                             0.5,
@@ -63,7 +63,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "14107178817833818672",
+                        "ID": "11911729485278309427",
                         "ResourceID": "17654421374910214326",
                         "DataName": "DashCollider",
                         "HasInspector": false
@@ -73,8 +73,8 @@
             {
                 "Name": "p_poison_oil",
                 "FamilyNumber": 2,
-                "ID": "9309619127476818809",
-                "ParentID": "4454270153440831253",
+                "ID": "9683698739314940748",
+                "ParentID": "13904048447009519283",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -104,17 +104,17 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "10785392017690868073"
+                        "ID": "4071319497995961037"
                     },
                     {
                         "Type": 15,
-                        "ID": "10236991846512194829",
+                        "ID": "6106122877379691009",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.14965438842773438,
-                                0.022424977272748947,
-                                -0.04519876092672348
+                                0.045243922621011734,
+                                0.036791320890188217,
+                                -0.16068540513515472
                             ],
                             "Rotation": [
                                 0,
@@ -140,7 +140,13 @@
                                 0.13170474767684937,
                                 1
                             ],
+                            "SizeStart3D": true,
                             "Size": 0.10000000149011612,
+                            "Size3D": [
+                                0,
+                                0,
+                                0
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -158,6 +164,8 @@
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "FinalTime": 0,
+                            "Speed": 0,
                             "Color": [
                                 0.047344498336315155,
                                 0.22935777902603149,
@@ -165,6 +173,11 @@
                                 0.14220184087753296
                             ],
                             "Size": 0.05000000074505806,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -200,7 +213,7 @@
                                 0.10000000149011612
                             ],
                             "MaxLife": 3,
-                            "CurrentLife": 3.0009989738464355,
+                            "CurrentLife": 3.0169990062713623,
                             "SpawnRate": 100,
                             "Delay": 0,
                             "Loop": false,
@@ -247,6 +260,14 @@
                             "Columns": 1,
                             "StartFrame": 0,
                             "EndFrame": 0
+                        },
+                        "HasMesh": true,
+                        "Mesh": {
+                            "MeshType": 0,
+                            "Size": 1,
+                            "MeshesAttached": {
+                                "MeshID_0": "0"
+                            }
                         }
                     }
                 ]
@@ -254,8 +275,8 @@
             {
                 "Name": "p_ice_oil",
                 "FamilyNumber": 2,
-                "ID": "7098096202586853888",
-                "ParentID": "4454270153440831253",
+                "ID": "6394003890566931253",
+                "ParentID": "13904048447009519283",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -285,17 +306,17 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12204380276253999837"
+                        "ID": "12433229553444379769"
                     },
                     {
                         "Type": 15,
-                        "ID": "12794426285909944675",
+                        "ID": "16751014801490204881",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -0.40079662203788757,
-                                -0.042518042027950287,
-                                -0.011464450508356094
+                                0.25957465171813965,
+                                -0.031670976430177689,
+                                0.153171107172966
                             ],
                             "Rotation": [
                                 0,
@@ -321,7 +342,13 @@
                                 0.96528661251068115,
                                 1
                             ],
+                            "SizeStart3D": true,
                             "Size": 0.10000000149011612,
+                            "Size3D": [
+                                0,
+                                0,
+                                0
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -339,6 +366,8 @@
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "FinalTime": 0,
+                            "Speed": 0,
                             "Color": [
                                 0.093889392912387848,
                                 0.88990825414657593,
@@ -346,6 +375,11 @@
                                 0.092715203762054443
                             ],
                             "Size": 0.10000000149011612,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -381,7 +415,7 @@
                                 0.10000000149011612
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0059995651245117,
+                            "CurrentLife": 2,
                             "SpawnRate": 100,
                             "Delay": 0,
                             "Loop": false,
@@ -428,6 +462,14 @@
                             "Columns": 1,
                             "StartFrame": 0,
                             "EndFrame": 0
+                        },
+                        "HasMesh": true,
+                        "Mesh": {
+                            "MeshType": 0,
+                            "Size": 1,
+                            "MeshesAttached": {
+                                "MeshID_0": "0"
+                            }
                         }
                     }
                 ]
@@ -435,8 +477,8 @@
             {
                 "Name": "p_fire_oil",
                 "FamilyNumber": 2,
-                "ID": "9522572730639448517",
-                "ParentID": "4454270153440831253",
+                "ID": "7106371915253647341",
+                "ParentID": "13904048447009519283",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -466,17 +508,17 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "7553015905981495586"
+                        "ID": "6080225349406327094"
                     },
                     {
                         "Type": 15,
-                        "ID": "15411305135685285676",
+                        "ID": "5691023226907510637",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.05240887776017189,
-                                0.049514990299940109,
-                                -0.073035001754760742
+                                0.45025914907455444,
+                                -0.029125060886144638,
+                                -0.071899585425853729
                             ],
                             "Rotation": [
                                 0,
@@ -502,7 +544,13 @@
                                 0.87574487924575806,
                                 1
                             ],
+                            "SizeStart3D": true,
                             "Size": 0.40000000596046448,
+                            "Size3D": [
+                                0,
+                                0,
+                                0
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -520,6 +568,8 @@
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "FinalTime": 0,
+                            "Speed": 0,
                             "Color": [
                                 0.1376146674156189,
                                 0.0018937787972390652,
@@ -527,6 +577,11 @@
                                 0.32568806409835815
                             ],
                             "Size": 0.30000001192092896,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -562,7 +617,7 @@
                                 0.10000000149011612
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0059995651245117,
+                            "CurrentLife": 2,
                             "SpawnRate": 100,
                             "Delay": 0,
                             "Loop": false,
@@ -609,6 +664,14 @@
                             "Columns": 1,
                             "StartFrame": 0,
                             "EndFrame": 0
+                        },
+                        "HasMesh": true,
+                        "Mesh": {
+                            "MeshType": 0,
+                            "Size": 1,
+                            "MeshesAttached": {
+                                "MeshID_0": "0"
+                            }
                         }
                     }
                 ]
@@ -616,8 +679,8 @@
             {
                 "Name": "p_earth_oil",
                 "FamilyNumber": 2,
-                "ID": "5225678409689665357",
-                "ParentID": "4454270153440831253",
+                "ID": "14183475013711974703",
+                "ParentID": "13904048447009519283",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -647,17 +710,17 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "4641105502120707981"
+                        "ID": "17120759707532430638"
                     },
                     {
                         "Type": 15,
-                        "ID": "8024937640073642484",
+                        "ID": "15124581908067017169",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.15143090486526489,
-                                0.01591271348297596,
-                                0.037552207708358765
+                                0.33260703086853027,
+                                -0.045040275901556015,
+                                0.035023950040340424
                             ],
                             "Rotation": [
                                 0,
@@ -683,7 +746,13 @@
                                 0.16885225474834442,
                                 1
                             ],
+                            "SizeStart3D": true,
                             "Size": 0.10000000149011612,
+                            "Size3D": [
+                                0,
+                                0,
+                                0
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -701,6 +770,8 @@
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "FinalTime": 0,
+                            "Speed": 0,
                             "Color": [
                                 0.37614679336547852,
                                 0.34607023000717163,
@@ -708,6 +779,11 @@
                                 0.79816514253616333
                             ],
                             "Size": 0.10000000149011612,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
                             "LightColor": [
                                 0,
                                 0,
@@ -743,7 +819,7 @@
                                 0.10000000149011612
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0059995651245117,
+                            "CurrentLife": 2,
                             "SpawnRate": 300,
                             "Delay": 0,
                             "Loop": false,
@@ -790,11 +866,18 @@
                             "Columns": 1,
                             "StartFrame": 0,
                             "EndFrame": 0
+                        },
+                        "HasMesh": true,
+                        "Mesh": {
+                            "MeshType": 0,
+                            "Size": 1,
+                            "MeshesAttached": {
+                                "MeshID_0": "0"
+                            }
                         }
                     }
                 ]
             }
         ]
-    },
-    "Name": "Dash_Collider"
+    }
 }
