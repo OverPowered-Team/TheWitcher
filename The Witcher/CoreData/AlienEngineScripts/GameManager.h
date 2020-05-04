@@ -10,6 +10,7 @@ class PlayerManager;
 class RelicManager;
 class RumblerManager;
 class EffectsFactory;
+class ParticlePool;
 
 class ALIEN_ENGINE_API GameManager : public Alien {
 
@@ -26,6 +27,7 @@ public:
 	RelicManager* relic_manager = nullptr;
 	RumblerManager* rumbler_manager = nullptr;
 	EffectsFactory* effects_factory = nullptr;
+	ParticlePool* particle_pool = nullptr;
 
 	void Awake();
 	void Start();

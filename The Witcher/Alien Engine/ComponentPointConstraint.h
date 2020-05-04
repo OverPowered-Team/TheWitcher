@@ -26,7 +26,7 @@ public:
 protected:
 
 	void Update();
-	void DrawScene();
+	void DrawScene(ComponentCamera* camera) override;
 	bool DrawInspector();
 
 	void RecreateConstraint();

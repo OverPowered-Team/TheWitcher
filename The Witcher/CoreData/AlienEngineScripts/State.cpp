@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "EventManager.h"
 
@@ -146,12 +147,6 @@ State* RunningState::HandleInput(PlayerController* player)
 		return new AttackingState();
 	}
 
-	if (Input::GetControllerButtonDown(player->controller_index, player->controller_spell)
-		|| Input::GetKeyDown(player->keyboard_spell)) {
-		player->attacks->StartSpell(0);
-		return new CastingState();
-	}
-
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_dash)
 		|| Input::GetKeyDown(player->keyboard_dash))
 	{
@@ -190,14 +185,22 @@ void RunningState::Update(PlayerController* player)
 
 void RunningState::OnEnter(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(true);
+	player->SpawnParticle("p_run");
 	player->audio->StartSound();
 	player->timer = Time::GetGameTime();
 }
 
 void RunningState::OnExit(PlayerController* player)
 {
-	player->particles["p_run"]->SetEnable(false);
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_run") == 0)
+		{
+			(*it)->SetEnable(false);
+			break;
+		}
+	}
+	//player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)
@@ -316,18 +319,19 @@ State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void RollingState::OnEnter(PlayerController* player)
 {
-	float3 direction_vector = float3::zero();
-
 	if (player->mov_input)
 	{
-		direction_vector = float3(player->movement_input.x, 0.f, player->movement_input.y);
-		direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-		direction_vector.y = 0.f;
+		float3 direction_vector = player->GetDirectionVector();
+
+		player->player_data.speed = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
+
+		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		player->transform->SetGlobalRotation(rot);
 	}
 	else
-		direction_vector = player->transform->forward;
+		player->player_data.speed = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
-	player->player_data.speed = direction_vector * player->player_data.stats["Dash_Power"].GetValue();
 	player->animator->PlayState("Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
 }
@@ -335,24 +339,6 @@ void RollingState::OnEnter(PlayerController* player)
 void RollingState::OnExit(PlayerController* player)
 {
 
-}
-
-void CastingState::Update(PlayerController* player)
-{
-	player->attacks->UpdateCurrentAttack();
-}
-
-State* CastingState::OnAnimationEnd(PlayerController* player, const char* name)
-{
-	return nullptr;
-}
-
-void CastingState::OnEnter(PlayerController* player)
-{
-}
-
-void CastingState::OnExit(PlayerController* player)
-{
 }
 
 void HitState::Update(PlayerController* player)

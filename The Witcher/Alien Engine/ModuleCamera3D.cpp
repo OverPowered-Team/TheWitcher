@@ -11,6 +11,7 @@
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "Viewport.h"
+#include "ComponentCurve.h"
 #include "mmgr/mmgr.h"
 
 #include "Optick/include/optick.h"
@@ -309,6 +310,9 @@ void ModuleCamera3D::CreateRay()
 
 	if (!hit) {
 		App->objects->DeselectObjects();
+		App->ui->panel_scene->gizmo_curve = false;
+		App->ui->panel_scene->curve = nullptr;
+		App->ui->panel_scene->curve_index = 0;
 	}
 
 	hit = false;
@@ -397,14 +401,35 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 					obj = obj->parent;
 				}
 				App->objects->SetNewSelectedObject(object, false);
+				App->ui->panel_scene->gizmo_curve = false;
+				App->ui->panel_scene->curve = nullptr;
+				App->ui->panel_scene->curve_index = 0;
 				ret = true;
 				break;
 			}
 		}
 	}
 	else if (object->children.empty()){
-		App->objects->SetNewSelectedObject(object, false);
-		ret = true;
+		ComponentCurve* curve = object->GetComponent<ComponentCurve>();
+		if (curve == nullptr) {
+			App->objects->SetNewSelectedObject(object, false);
+			App->ui->panel_scene->gizmo_curve = false;
+			App->ui->panel_scene->curve = nullptr;
+			App->ui->panel_scene->curve_index = 0;
+			ret = true;
+		}
+		else {
+			for (uint i = 0; i < curve->curve.GetControlPoints().size(); ++i) {
+				if (ray.Intersects(AABB::FromCenterAndSize(curve->curve.GetControlPoints()[i], { 1,1,1 }))) {
+					App->ui->panel_scene->gizmo_curve = true;
+					App->ui->panel_scene->curve = curve;
+					App->ui->panel_scene->curve_index = i;
+					ret = true;
+					App->objects->SetNewSelectedObject(object, false);
+					break;
+				}
+			}
+		}
 	}
 	return ret;
 }

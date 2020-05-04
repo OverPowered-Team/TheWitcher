@@ -47,10 +47,17 @@ protected:
 
 	void SetResourceMesh(ResourceMesh* resource);
 
+	void DrawScene(ComponentCamera* camera) override;
+	void DrawGame(ComponentCamera* camera) override;
+
 	virtual void DrawPolygon(ComponentCamera* camera);
+	virtual void PreDrawPolygonForShadows(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position);
 	virtual void DrawOutLine();
 	virtual void DrawMesh();
-	virtual void SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera);
+
+	virtual void SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera);
+	virtual void SetShadowUniforms(ResourceMaterial* resource_material, ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position);
+
 
 	void DrawVertexNormals();
 	void DrawFaceNormals();

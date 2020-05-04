@@ -56,6 +56,13 @@ void PlayerManager::OnPlayerRevive(PlayerController* revived_player)
 	}
 }
 
+void PlayerManager::BlockInput(bool block)
+{
+	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
+		(*it)->input_blocked = block;
+;	}
+}
+
 void PlayerManager::IncreaseUltimateCharge(uint value)
 {
 	if (ultimate_is_active)

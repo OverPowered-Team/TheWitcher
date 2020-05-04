@@ -19,7 +19,6 @@ class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class CastingState;
 	friend class RevivingState;
 	friend class HitState;
-	friend class ChillingState;
 
 public:
 	enum (PlayerType,
@@ -69,10 +68,12 @@ public:
 	void PlayAttackParticle();
 	void Die();
 	void Revive(float minigame_value);
-	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 });
+	void ReceiveDamage(float dmg, float3 knock_speed = { 0,0,0 }, bool knock = true);
 	void PlayAllowParticle();
 
-	void HitByRock(float time);
+	void ReleaseAttackParticle();
+
+	void HitByRock(float time, float damage);
 	void RecoverFromRockHit();
 
 	//Relics
@@ -81,6 +82,7 @@ public:
 
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
+	float3 GetDirectionVector();
 	bool CheckForPossibleRevive();
 
 	void OnUltimateActivation(float value);
@@ -94,8 +96,11 @@ public:
 	void StopImmune() { is_immune = false; };
 
 	void HitFreeze(float freeze_time);
-
 	void RemoveFreeze(float speed);
+
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+
+	void ReleaseParticle(std::string particle_name);
 
 private:
 	void LoadStats();
@@ -109,7 +114,8 @@ public:
 
 	PlayerAttacks* attacks = nullptr;
 	PlayerData player_data;
-	std::map<std::string, GameObject*> particles;
+	std::vector<GameObject*> particles;
+	std::vector<GameObject*> particle_spawn_positions;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 

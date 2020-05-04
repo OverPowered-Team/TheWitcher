@@ -127,11 +127,20 @@ void UltiBar::ControlsLerp()
 
 	if ((Time::GetGameTime() - actual_time) < (time_to_lerp_controls * 0.5f))
 	{
+		/*
+		scale = Maths::Lerp(pre_scale, (pre_scale * (1.f + 1.0f / 6.0f)), t * 2);
+		color = Maths::Lerp(0.275f, 0.425f, t * 2);
+		*/
 		scale = Maths::Lerp(pre_scale, (pre_scale * (1.f + 1.0f / 3.0f)), t);
 		color = Maths::Lerp(0.275f, 0.85f, t);
 	}
 	else
 	{
+		/*
+		scale = Maths::Lerp(pre_scale * (1.f + 1.0f / 6.0f), pre_scale, (t - 0.5f)*2);
+		color = Maths::Lerp(0.425f, 0.275f, (t - 0.5f)*2);
+		*/
+
 		scale = Maths::Lerp(pre_scale * (1.f + 1.0f / 3.0f), pre_scale, t);
 		color = Maths::Lerp(0.85f, 0.275f, t);
 	}

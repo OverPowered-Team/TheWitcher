@@ -42,6 +42,7 @@ enum class ComponentType {
 	BONE = 28,
 	SCRIPT = 29,
 	UI = 30,
+	CURVE = 31,
 
 	MAX //LAST LAST LAST
 };
@@ -100,8 +101,9 @@ protected:
 	virtual void PreUpdate() {}
 	virtual void Update() {}
 	virtual void PostUpdate() {}
-	virtual void DrawScene() {}
-	virtual void DrawGame() {}
+
+	virtual void DrawScene(ComponentCamera* camera) {}
+	virtual void DrawGame(ComponentCamera* camera) {}
 
 	virtual void ResetIDs();
 

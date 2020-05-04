@@ -12,6 +12,7 @@
 #include "ModuleUI.h"
 #include "ModuleResources.h"
 #include "PanelProject.h"
+#include "ComponentCurve.h"
 #include "Alien.h"
 #include "mmgr/mmgr.h"
 
@@ -309,6 +310,11 @@ void ComponentTransform::RecalculateTransform()
 	if (mesh != nullptr)
 	{
 		mesh->RecalculateAABB_OBB();
+	}
+
+	ComponentCurve* curve = game_object_attached->GetComponent<ComponentCurve>();
+	if (curve != nullptr) {
+		curve->UpdatePosition(GetGlobalPosition());
 	}
 }
 
