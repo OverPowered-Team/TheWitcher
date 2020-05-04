@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
 
+class EnemyManager;
+
 class ALIEN_ENGINE_API BlockerObstacle : public Enemy {
 
 public:
@@ -24,7 +26,6 @@ public:
 	void LookForMyChildren();
 	void ManageHealth();
 	void OnTriggerEnter(ComponentCollider* collider) override;
-	void OnDrawGizmosSelected() override;
 	bool IsDead() override;
 public:
 	//float health = 0.f;
@@ -34,6 +35,7 @@ private:
 	std::vector<GameObject*>children_enemies;
 	int beginning_enemies = 0.f;
 	ComponentRigidBody* r_body = nullptr;
+	EnemyManager* manager = nullptr;
 };
 
 ALIEN_FACTORY BlockerObstacle* CreateBlockerObstacle() {
