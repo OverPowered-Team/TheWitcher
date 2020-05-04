@@ -11,22 +11,31 @@ MusicController::~MusicController()
 void MusicController::Start()
 {
 	emitter = this->GetComponent<ComponentAudioEmitter>();
-	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
+	emitter->SetState("Interactive_Music_Lvl1", "Combat");
 	last_music = "Quiet";
+	t1 = Time::GetGameTime();
 }
 
 void MusicController::Update()
 {
-	if (is_combat && has_changed && enemies_in_sight.size() == 1)
+	if (Input::GetKeyDown(SDL_SCANCODE_U))
+		emitter->SetState("Interactive_Music_Lvl1", "Mountain");
+
+	if (is_combat)
 	{
-		emitter->SetState("Interactive_Music_Lvl1", "Combat");
-		has_changed = !has_changed;
+		if (has_changed && enemies_in_sight.size() == 1) {
+			emitter->SetState("Interactive_Music_Lvl1", "Combat");
+			has_changed = !has_changed;
+		}
+		DecreaseMusicVolume();
 	}
 	else if(!is_combat && has_changed && enemies_in_sight.size() <= 0)
 	{
 		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str());
 		has_changed = !has_changed;
+		already_minium = false;
 	}
+	
 }
 
 void MusicController::CleanUp()
@@ -63,4 +72,16 @@ void MusicController::EnemyLostSight(Enemy* en)
 void MusicController::DecreaseMusicVolume()
 {
 //AQUI LLAMAR VALOR RTPC
+	if (Time::GetGameTime() - t1 >= 1.f && !already_minium) {
+		dist += 0.1;
+		emitter->SetRTPCValue("CombatDistance", dist);
+		if (dist >= 100) {
+			dist = 0.f;
+			t1 = Time::GetGameTime();
+			LOG("Minimum combat volume");
+			already_minium = true;
+			return;
+		}
+			
+	}
 }

@@ -26,6 +26,10 @@ public:
 	std::list<Enemy*>enemies_in_sight;
 	float minimum_volume = 0.f;
 	float time_start_decrease = 1.f;
+private:
+	float dist = 0.f;
+	float t1 = 0.f;
+	bool already_minium = false;
 };
 
 ALIEN_FACTORY MusicController* CreateMusicController() {

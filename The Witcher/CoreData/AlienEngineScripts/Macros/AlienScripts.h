@@ -15,6 +15,8 @@
 #include "..\..\..\Alien Engine\ParticleSystem.h"
 #include "..\..\..\Alien Engine\ParticleEmitter.h"
 #include "..\..\..\Alien Engine\ComponentDeformableMesh.h"
+#include "..\..\..\Alien Engine\ComponentConvexHullCollider.h"
+#include "..\..\..\Alien Engine\ComponentBar.h"
 // physix ----
 #include "..\..\..\Alien Engine\ComponentRigidBody.h"
 #include "..\..\..\Alien Engine\ComponentCharacterController.h"
