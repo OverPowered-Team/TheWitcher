@@ -12,7 +12,7 @@ MusicController::~MusicController()
 void MusicController::Start()
 {
 	emitter = this->GetComponent<ComponentAudioEmitter>();
-	emitter->SetState("Interactive_Music_Lvl1", "Combat");
+	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
 	last_music = "Quiet";
 	t1 = Time::GetGameTime();
 }
