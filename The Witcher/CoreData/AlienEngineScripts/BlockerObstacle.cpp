@@ -24,8 +24,6 @@ void BlockerObstacle::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
-
-	LOG("MY LIFE: %f", stats["Health"].GetValue());
 }
 
 void BlockerObstacle::StartEnemy()
@@ -34,6 +32,7 @@ void BlockerObstacle::StartEnemy()
 	Enemy::StartEnemy();
 	state = ObstacleState::IDLE;
 	children_enemies = this->game_object->GetChild("ChildEnemies")->GetChildren();
+	manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 }
 
 void BlockerObstacle::UpdateEnemy()
@@ -66,11 +65,7 @@ void BlockerObstacle::CleanUpEnemy()
 {
 	children_enemies.clear();
 }
-void BlockerObstacle::OnDrawGizmosSelected()
-{
-	/*float range = stats["VisionRange"].GetValue();
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), 25, Color::Blue());*/
-}
+
 float BlockerObstacle::GetDamaged(float dmg, PlayerController* player)
 {
 	float damage = Enemy::GetDamaged(dmg, player);
@@ -84,12 +79,22 @@ float BlockerObstacle::GetDamaged(float dmg, PlayerController* player)
 
 void BlockerObstacle::LookForMyChildren()
 {
+	
+	//for (auto i = children_enemies.begin(); i != children_enemies.end(); ++i) {
+
+	//	if (std::find(manager->GetEnemies().begin(), manager->GetEnemies().end(), (*i)->GetComponent<Enemy>()) == manager->GetEnemies().end()) {			
+	//		children_enemies.erase(i);
+	//		ManageHealth();
+	//		LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
+	//	}
+	//		
+	//}
 	auto iter = children_enemies.begin();
 	while(iter != children_enemies.end())
 	{
-		if ((*iter)->GetComponent<Enemy>()->IsDead() || (*iter) == nullptr)
+		if (std::find(manager->GetEnemies().begin(), manager->GetEnemies().end(), (*iter)->GetComponent<Enemy>()) == manager->GetEnemies().end())
 		{
-			iter = children_enemies.erase(iter);
+			children_enemies.erase(iter);
 			ManageHealth();
 			LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
 		}
