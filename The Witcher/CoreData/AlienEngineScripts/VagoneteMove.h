@@ -14,7 +14,7 @@ public:
 	void Update();
 
 public:
-
+	float actual_pos = 0.0F;
 	ComponentCurve* curve = nullptr;
 
 	float speed = 300;
