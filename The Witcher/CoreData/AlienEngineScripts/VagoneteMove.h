@@ -1,0 +1,29 @@
+#pragma once
+
+#include "..\..\Alien Engine\Alien.h"
+#include "Macros/AlienScripts.h"
+
+class ALIEN_ENGINE_API VagoneteMove : public Alien {
+
+public:
+
+	VagoneteMove() {}
+	virtual ~VagoneteMove() {}
+	
+	void Start();
+	void Update();
+
+public:
+
+	ComponentCurve* curve = nullptr;
+
+	float speed = 0.01F;
+
+};
+
+ALIEN_FACTORY VagoneteMove* CreateVagoneteMove() {
+	VagoneteMove* alien = new VagoneteMove();
+	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->speed);
+	return alien;
+} 
