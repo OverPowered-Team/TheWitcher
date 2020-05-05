@@ -383,39 +383,42 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 	SetUniform1i("num_space_matrix", dirLights.size());
 	for (std::list<DirLightProperties*>::const_iterator iter = dirLights.begin(); iter != dirLights.end(); iter++)
 	{
-		char cname[128];
-		sprintf_s(cname, tmp_name.c_str(), i);
-
-		// All uniforms
-		std::string cintensity = std::string(cname).append(".intensity");
-		SetUniform1f(cintensity, (*iter)->intensity);
-
-		// Variables Array 
-		float3 variablesVec3[5] = { (*iter)->position,(*iter)->ambient, (*iter)->diffuse,(*iter)->specular, (*iter)->direction };
-
-		std::string variablesLocation = std::string(cname).append(".dirLightProperties");
-		SetUniformFloat3v(variablesLocation, variablesVec3, 5);
-
-		std::string cshadow = std::string(cname).append(".castShadow");
-		if ((*iter)->light->castShadows)
+		if ((*iter)->light->IsEnabled())
 		{
-			SetUniform1i(cshadow, 1);
-			glActiveTexture(GL_TEXTURE4);
-			glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
-			std::string cdepthmap = std::string(cname).append(".depthMap");
-			SetUniform1i(cdepthmap, 4);
+			char cname[128];
+			sprintf_s(cname, tmp_name.c_str(), i);
+
+			// All uniforms
+			std::string cintensity = std::string(cname).append(".intensity");
+			SetUniform1f(cintensity, (*iter)->intensity);
+
+			// Variables Array 
+			float3 variablesVec3[5] = { (*iter)->position,(*iter)->ambient, (*iter)->diffuse,(*iter)->specular, (*iter)->direction };
+
+			std::string variablesLocation = std::string(cname).append(".dirLightProperties");
+			SetUniformFloat3v(variablesLocation, variablesVec3, 5);
+
+			std::string cshadow = std::string(cname).append(".castShadow");
+			if ((*iter)->light->castShadows)
+			{
+				SetUniform1i(cshadow, 1);
+				glActiveTexture(GL_TEXTURE4);
+				glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
+				std::string cdepthmap = std::string(cname).append(".depthMap");
+				SetUniform1i(cdepthmap, 4);
+			}
+			else
+				SetUniform1i(cshadow, 0);
+
+			char clightspaceM[128];
+			sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);
+			SetUniformMat4f(clightspaceM, (*iter)->projMat * (*iter)->viewMat);
+
+			std::string clightPos = std::string(cname).append(".lightPos");
+			SetUniformFloat3(clightPos, (*iter)->fake_position);
+
+			++i;
 		}
-		else 
-			SetUniform1i(cshadow, 0);
-
-		char clightspaceM[128];
-		sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);
-		SetUniformMat4f(clightspaceM, (*iter)->projMat * (*iter)->viewMat);
-
-		std::string clightPos = std::string(cname).append(".lightPos");
-		SetUniformFloat3(clightPos , (*iter)->fake_position);
-
-		++i;
 	}
 }
 
@@ -428,29 +431,32 @@ void ResourceShader::SetPointLights(const std::string& name, const std::list<Poi
 	tmp_name.append("[%i]");
 	for (std::list<PointLightProperties*>::const_iterator iter = pointLights.begin(); iter != pointLights.end(); iter++)
 	{
-		char cname[128];
-		sprintf_s(cname, tmp_name.c_str(), i);
+		if ((*iter)->light->IsEnabled())
+		{
+			char cname[128];
+			sprintf_s(cname, tmp_name.c_str(), i);
 
-		// All uniforms
-		std::string cintensity = std::string(cname).append(".intensity");
-		SetUniform1f(cintensity, (*iter)->intensity);
-		
-		std::string cconstant = std::string(cname).append(".constant");
-		SetUniform1f(cconstant, (*iter)->constant);
+			// All uniforms
+			std::string cintensity = std::string(cname).append(".intensity");
+			SetUniform1f(cintensity, (*iter)->intensity);
 
-		std::string clinear = std::string(cname).append(".linear");
-		SetUniform1f(clinear, (*iter)->linear);
+			std::string cconstant = std::string(cname).append(".constant");
+			SetUniform1f(cconstant, (*iter)->constant);
 
-		std::string cquadratic = std::string(cname).append(".quadratic");
-		SetUniform1f(cquadratic, (*iter)->quadratic);
+			std::string clinear = std::string(cname).append(".linear");
+			SetUniform1f(clinear, (*iter)->linear);
 
-		// Variables Array 
-		float3 variablesVec3[4] = { (*iter)->position,(*iter)->ambient, (*iter)->diffuse,(*iter)->specular };
+			std::string cquadratic = std::string(cname).append(".quadratic");
+			SetUniform1f(cquadratic, (*iter)->quadratic);
 
-		std::string variablesLocation = std::string(cname).append(".pointLightProperties");
-		SetUniformFloat3v(variablesLocation, variablesVec3, 4);
-		
-		++i;
+			// Variables Array 
+			float3 variablesVec3[4] = { (*iter)->position,(*iter)->ambient, (*iter)->diffuse,(*iter)->specular };
+
+			std::string variablesLocation = std::string(cname).append(".pointLightProperties");
+			SetUniformFloat3v(variablesLocation, variablesVec3, 4);
+
+			++i;
+		}
 	}
 }
 
@@ -463,37 +469,40 @@ void ResourceShader::SetSpotLights(const std::string& name, const std::list<Spot
 	tmp_name.append("[%i]");
 	for (std::list<SpotLightProperties*>::const_iterator iter = spotLights.begin(); iter != spotLights.end(); iter++)
 	{
-		char cname[128];
-		sprintf_s(cname, tmp_name.c_str(), i);
+		if ((*iter)->light->IsEnabled())
+		{
+			char cname[128];
+			sprintf_s(cname, tmp_name.c_str(), i);
 
-		// All uniforms
+			// All uniforms
 
-		std::string cintensity = std::string(cname).append(".intensity");
-		SetUniform1f(cintensity, (*iter)->intensity);
+			std::string cintensity = std::string(cname).append(".intensity");
+			SetUniform1f(cintensity, (*iter)->intensity);
 
-		std::string cconstant = std::string(cname).append(".constant");
-		SetUniform1f(cconstant, (*iter)->constant);
+			std::string cconstant = std::string(cname).append(".constant");
+			SetUniform1f(cconstant, (*iter)->constant);
 
-		std::string clinear = std::string(cname).append(".linear");
-		SetUniform1f(clinear, (*iter)->linear);
+			std::string clinear = std::string(cname).append(".linear");
+			SetUniform1f(clinear, (*iter)->linear);
 
-		std::string cquadratic = std::string(cname).append(".quadratic");
-		SetUniform1f(cquadratic, (*iter)->quadratic);
+			std::string cquadratic = std::string(cname).append(".quadratic");
+			SetUniform1f(cquadratic, (*iter)->quadratic);
 
-		std::string ccutoff = std::string(cname).append(".cut_off");
-		SetUniform1f(ccutoff, cos(math::DegToRad((*iter)->cut_off)));
+			std::string ccutoff = std::string(cname).append(".cut_off");
+			SetUniform1f(ccutoff, cos(math::DegToRad((*iter)->cut_off)));
 
-		std::string coutercutoff = std::string(cname).append(".outer_cut_off");
-		SetUniform1f(coutercutoff, cos(math::DegToRad((*iter)->outer_cut_off)));
+			std::string coutercutoff = std::string(cname).append(".outer_cut_off");
+			SetUniform1f(coutercutoff, cos(math::DegToRad((*iter)->outer_cut_off)));
 
-		// Variables Array 
+			// Variables Array 
 
-		float3 variablesVec3[5] = { (*iter)->position,(*iter)->ambient, (*iter)->diffuse,(*iter)->specular, (*iter)->direction };
+			float3 variablesVec3[5] = { (*iter)->position,(*iter)->ambient, (*iter)->diffuse,(*iter)->specular, (*iter)->direction };
 
-		std::string cposition = std::string(cname).append(".spotLightProperties");
-		SetUniformFloat3v(cposition, variablesVec3, 5);
+			std::string cposition = std::string(cname).append(".spotLightProperties");
+			SetUniformFloat3v(cposition, variablesVec3, 5);
 
-		++i;
+			++i;
+		}
 	}
 }
 

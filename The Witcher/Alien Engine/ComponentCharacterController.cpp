@@ -414,7 +414,7 @@ void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 	{
 		//_hit.controller = (ComponentCharacterController*)col; // only onControllerHit
 		_hit.gameObject = (GameObject*)col->game_object_attached;
-		_hit.rigidbody = col->physics->rigid_body;
+		_hit.rigidbody = col->physics->GetRigidBody();
 		_hit.transform = _hit.gameObject->transform;
 	}
 
@@ -433,7 +433,7 @@ void UserControllerHitReport::onControllerHit(const PxControllersHit& hit)
 	_hit.controller = (ComponentCharacterController*)hit.other->getUserData();
 	_hit.collider = (ComponentCollider*)_hit.controller;
 	_hit.gameObject = _hit.controller->game_object_attached;
-	_hit.rigidbody = _hit.collider->physics->rigid_body;
+	_hit.rigidbody = _hit.collider->physics->GetRigidBody();
 	_hit.transform = _hit.gameObject->transform;
 	
 	_hit.moveDirection = PXVEC3_TO_F3(hit.dir);

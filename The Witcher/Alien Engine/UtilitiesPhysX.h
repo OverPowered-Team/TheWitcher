@@ -4,8 +4,11 @@
 #include "physx\include\PxPhysicsAPI.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/float2.h"
 #include "MathGeoLib/include/Math/Quat.h"
 #include "ComponentCollider.h"
+#include "ComponentRigidBody.h"
+#include "ComponentTransform.h"
 
 #define PX_RELEASE(x)	if(x)	{ x->release(); x = NULL;}
 #define APP_BIN_DIR "DLLs"
@@ -110,3 +113,44 @@ public:
 	const char* ontrigger_names[3] = { "OnTriggerEnter()", "OnTriggerStay()", "OnTriggerExit()" };
 };
 
+class ContactPoint
+{
+public:
+	ContactPoint(const float3& normal, const float3& point, float separation, ComponentCollider* this_collider, ComponentCollider* other_collider);
+
+	float3				normal = float3(0.f, 0.f, 0.f);
+	float3				point = float3(0.f, 0.f, 0.f);
+	float				separation = 0.f;
+	ComponentCollider*	this_collider = nullptr;
+	ComponentCollider*	other_collider = nullptr;
+};
+
+class Collision
+{
+public:
+	Collision(ComponentCollider* collider, ComponentRigidBody* rigid_body, ComponentTransform* transform, const std::vector<ContactPoint>& contancts, uint num_contact, GameObject* game_object, const float3& impulse, const float3& relative_velocity);
+
+	ComponentCollider*			collider = nullptr;
+	ComponentRigidBody*			rigid_body = nullptr;
+	ComponentTransform*			transform = nullptr;
+	std::vector<ContactPoint>	contancts;
+	uint						num_contact = 0u;
+	GameObject*					game_object = nullptr;
+	float3                      impulse = float3::zero();
+	float3                      relative_velocity = float3::zero();
+};
+
+class RaycastHit {
+	friend class ModulePhysX;
+private:
+	void SetRaycastHit(const PxRaycastHit& _hit);
+public:
+	ComponentCollider*		collider = nullptr;
+	ComponentRigidBody*		rigid_body = nullptr;
+	ComponentTransform*		transform = nullptr;
+	float					distance = 0.f;
+	float3					normal = float3::zero();
+	float3					point = float3::zero();
+	float2                  texture_coords = float2::zero();
+	float3					baricentric_coordinate = float3::zero();
+};

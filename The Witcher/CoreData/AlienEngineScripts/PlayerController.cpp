@@ -290,7 +290,7 @@ void PlayerController::PlayAllowParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+		//SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
 		/*particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
 			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name,
 				transform->GetGlobalPosition(), this->game_object)));*/
