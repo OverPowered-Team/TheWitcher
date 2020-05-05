@@ -207,6 +207,8 @@ State* JumpingState::HandleInput(PlayerController* player)
 {
 	if (player->controller->isGrounded)
 	{
+		player->game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Player_Fall");
+
 		if (!player->mov_input)
 		{
 			return new IdleState();
