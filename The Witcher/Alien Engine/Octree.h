@@ -35,6 +35,8 @@ private:
 	bool AddToChildren(GameObject* obj, const AABB& sect);
 	void SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
 
+	void SetAllStaticObjects(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
+
 public:
 
 	AABB section;
@@ -71,6 +73,8 @@ public:
 	void Recalculate(GameObject* new_object);
 
 	void SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
+
+	void ShowAllStaticObjects(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
 
 	uint bucket = 2;
 	OctreeNode* root = nullptr;

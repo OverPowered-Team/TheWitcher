@@ -285,7 +285,7 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
-		matrix[2][3] = 0.0f;
+		//matrix[2][3] = 0.0f;
 	}
 
 	if (tex != nullptr) {

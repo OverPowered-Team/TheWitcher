@@ -459,6 +459,11 @@ void ParticleSystem::SetParticleInitialForce(const float3& initialForce)
 	particleInfo.force = initialForce;
 }
 
+void ParticleSystem::SetParticleInitialAngle(const float3& initialAngle)
+{
+	particleInfo.angle3D = initialAngle;
+}
+
 
 // -------- Final Properties ----------
 

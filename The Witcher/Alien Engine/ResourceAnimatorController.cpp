@@ -1428,7 +1428,6 @@ void ResourceAnimatorController::Play()
 		}
 		else
 		{
-			
 			LOG_ENGINE("Resource Animator COntroller %s: Clip not found", this->name);
 			return;
 		}

@@ -105,9 +105,8 @@ public:
 
 	// Functionality
 	void ApplyMaterial();
-	void UnbindMaterial();
-
 	void ApplyPreRenderShadows();
+	void UnbindMaterial();
 
 	void SetTexture(ResourceTexture* texture, TextureType texType = TextureType::DIFFUSE);
 	const ResourceTexture* GetTexture(TextureType texType = TextureType::DIFFUSE) const;
@@ -134,13 +133,12 @@ public:
 	float4 color = float4::one;
 
 	bool textureActivated = true;
-	bool recive_shadow = false;
 	std::pair<u64, ResourceTexture*> textures[(uint)TextureType::MAX];
 	TextureType selectedType = TextureType::NONE;
 	ShaderInputs shaderInputs;
 	u64 used_shader_ID = 0;
-	ResourceShader* simple_depth_shader = nullptr; 
-	ResourceShader* used_shader = nullptr;
+	ResourceShader* used_shader = nullptr; 
+	ResourceShader* simple_depth_shader = nullptr;
 	const char* selectedShader = nullptr;
 	ResourceTexture* selected_texture = nullptr;
 	bool change_texture_menu = false;

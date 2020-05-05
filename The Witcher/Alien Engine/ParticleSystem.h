@@ -102,7 +102,7 @@ public:
 	void SetParticleInitialSize(float3 size);
 	void SetParticleInitialColor(const float4& initialColor);
 	void SetParticleInitialForce(const float3& initialForce);
-
+	void SetParticleInitialAngle(const float3& initialAngle);
 	// -------- Final Properties ----------
 
 	void SetParticleFinalSize(float3 size);

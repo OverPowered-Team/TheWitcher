@@ -28,11 +28,8 @@ protected:
 	void DrawGame(ComponentCamera* camera) override; 
 
 	void DrawPolygon(ComponentCamera* camera) override;
-	void PreDrawPolygonForShadows(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position) override;
-
-	void SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera) override;
+	void SetUniforms(ResourceMaterial*, ComponentCamera* camera) override;
 	void SetShadowUniforms(ResourceMaterial* resource_material, ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position) override;
-
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 	void SendWeightsAndID();

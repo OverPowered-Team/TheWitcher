@@ -299,14 +299,14 @@ uint Viewport::GetMSAA()
 	return fbo->GetMSAA();
 }
 
-uint Viewport::GetTexture()
-{
-	return fbo->GetFBOTexture();
-}
-
 uint Viewport::GetFBO()
 {
 	return fbo->GetFBO();
+}
+
+uint Viewport::GetTexture()
+{
+	return fbo->GetFBOTexture();
 }
 
 bool Viewport::CanRender()

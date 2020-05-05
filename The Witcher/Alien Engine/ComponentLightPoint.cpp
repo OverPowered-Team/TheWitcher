@@ -20,7 +20,7 @@ ComponentLightPoint::ComponentLightPoint(GameObject* attach) : Component(attach)
 	App->objects->AddNumOfPointLights();
 
 	light_props.light = this;
-
+	light_props.enabled = enabled;
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
@@ -120,11 +120,13 @@ bool ComponentLightPoint::DrawInspector()
 void ComponentLightPoint::OnEnable()
 {
 	enabled = true;
+	light_props.enabled = true;
 }
 
 void ComponentLightPoint::OnDisable()
 {
 	enabled = false;
+	light_props.enabled = false;
 }
 
 void ComponentLightPoint::Clone(Component* clone)

@@ -187,10 +187,10 @@ private:
 	void OnStop();
 
 	// here we call Component Mesh, Material & light
+	void DrawScene(ComponentCamera* camera);
+	void DrawGame(ComponentCamera* camera);
 	void PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position);
 	void PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position);
-	void DrawGame(ComponentCamera* camera, const float4& clip_plane);
-	void DrawScene(ComponentCamera* camera, const float4& clip_plane);
 	void SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera);
 
 	ComponentCanvas* GetCanvas();
@@ -285,7 +285,7 @@ public:
 
 	GameObject* parent = nullptr;
 	ComponentTransform* transform = nullptr;
-
+	bool cast_shadow = true;
 private:
 	bool to_delete = false; 
 	u64 prefabID = 0;
