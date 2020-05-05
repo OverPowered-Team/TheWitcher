@@ -85,6 +85,8 @@ void InGame_UI::Update()
 					{
 						std::string kills = "0" + std::to_string((*particle)->player->player_data.total_kills);
 						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetText(kills.c_str());
+						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetBackgroundColor(0.961f, 0.961f, 0.961f, 1);
+						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount();
 					}
 				}
 				else if((*particle)->type == UI_Particle_Type::ULTI)
@@ -150,6 +152,7 @@ void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type
 	{
 		particle->final_position = player->HUD->GetChild("Killcount")->transform->GetGlobalPosition();
 		particle->particle = GameObject::Instantiate(killcount_particle, particle->origin_position, false, in_game);
+		player->HUD->GetComponent<UI_Char_Frame>()->kill_count->SetEnable(true);
 		particle->player = player;
 		break;
 	}

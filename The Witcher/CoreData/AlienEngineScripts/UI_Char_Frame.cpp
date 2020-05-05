@@ -45,6 +45,7 @@ void UI_Char_Frame::Start()
 	mana_bar = game_object->GetChild("Mana")->GetComponent<ComponentBar>();
 	kill_count = game_object->GetChild("Killcount");
 	kill_count_number = kill_count->GetComponent<ComponentText>();
+	kill_count->SetEnable(false);
 }
 
 void UI_Char_Frame::Update()
@@ -82,6 +83,19 @@ void UI_Char_Frame::Update()
 		LowLifeGlow();
 	}
 
+	if (is_showing_kill_count)
+	{
+		float t = (Time::GetGameTime() - killcount_lerp_time) / 2.f;
+		float lerp = Maths::Lerp(1.f, 0.0f, t);
+
+		kill_count_number->SetBackgroundColor(0.961f, 0.961f, 0.961f, lerp);
+
+		if (t >= 1)
+		{
+			is_showing_kill_count = false;
+			kill_count->SetEnable(false);
+		}
+	}
 }
 
 // Bar Changes
@@ -128,6 +142,12 @@ void UI_Char_Frame::ManaChange(float mana_change, float max_mana)
 		changing_chaos = true;
 		chaos_time = Time::GetGameTime();
 	}
+}
+
+void UI_Char_Frame::StartFadeKillCount()
+{
+	is_showing_kill_count = true;
+	killcount_lerp_time = Time::GetGameTime();
 }
 
 // Effects

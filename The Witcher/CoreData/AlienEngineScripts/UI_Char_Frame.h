@@ -16,6 +16,8 @@ public:
 	void LifeChange(float life_change, float max_life);
 	void ManaChange(float mana_change, float max_mana);
 
+	void StartFadeKillCount();
+
 public:
 
 	enum(CHARACTER,
@@ -57,6 +59,10 @@ private:
 	float max_chaos = 0.0f;
 	float chaos_time = 0.0f;
 	bool changing_chaos = false;
+
+	// Kill Count
+	bool is_showing_kill_count = false;
+	float killcount_lerp_time = 0.0f;
 
 	// HUD Components
 	GameObject* geralt_img = nullptr;
