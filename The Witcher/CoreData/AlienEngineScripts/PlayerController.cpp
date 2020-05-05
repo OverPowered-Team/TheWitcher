@@ -543,7 +543,13 @@ bool PlayerController::CheckBoundaries()
 
 						cam->prev_state = cam->state;
 						cam->state = CameraMovement::CameraState::FREE;
-						cam->prev_middle = cam->CalculateMidPoint();
+						if (cam->players[0]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition()) > cam->players[1]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition())) {
+							cam->closest_player = 1;
+						}
+						else
+							cam->closest_player = 0;
+
+						cam->prev_middle = cam->transform->GetGlobalPosition() - cam->players[cam->closest_player]->transform->GetGlobalPosition();
 						return true;
 					}
 					else {
