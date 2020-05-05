@@ -35,7 +35,7 @@ void SpawnEnemyManager::CheckForPlayers()
 
 	for (int i = 0; i < colliders.size(); ++i)
 	{
-		if (colliders[i]->game_object_attached->GetTag() == "Player")
+		if (strcmp(colliders[i]->game_object_attached->GetTag(),"Player"))
 		{
 			SpawnEnemies();
 			has_spawned = true;

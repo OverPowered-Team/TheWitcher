@@ -46,6 +46,15 @@ private:
 ALIEN_FACTORY EnemyManager* CreateEnemyManager() {
 	EnemyManager* manager = new EnemyManager();
 	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->nilf_melee);
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->nilf_range);
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->nilf_shield);
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->ghoul_original);
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->ghoul_dodge);
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->drowned_range);
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->drowned_grab);
 
 	return manager;
 } 
