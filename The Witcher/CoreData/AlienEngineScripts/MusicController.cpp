@@ -19,9 +19,6 @@ void MusicController::Start()
 
 void MusicController::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_U))
-		emitter->SetState("Interactive_Music_Lvl1", "Mountain");
-
 	if (is_combat)
 	{
 		if (has_changed && enemies_in_sight.size() == 1) {
@@ -36,7 +33,6 @@ void MusicController::Update()
 		has_changed = !has_changed;
 		already_minium = false;
 	}
-	
 }
 
 void MusicController::CleanUp()
@@ -72,7 +68,6 @@ void MusicController::EnemyLostSight(Enemy* en)
 
 void MusicController::DecreaseMusicVolume()
 {
-//AQUI LLAMAR VALOR RTPC
 	if (Time::GetGameTime() - t1 >= 1.f && !already_minium) {
 		dist += 0.1;
 		emitter->SetRTPCValue("CombatDistance", dist);

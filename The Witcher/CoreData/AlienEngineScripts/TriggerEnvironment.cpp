@@ -44,7 +44,7 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 			}
 		}
 		if (emitter != nullptr && player_counter == 2) {
-			emitter->SetState("Env_Lvl1", GetNameByEnum(environment).c_str());
+			//emitter->SetState("Env_Lvl1", GetNameByEnum(environment).c_str());
 
 			LOG("ENTER");
 		}
@@ -74,19 +74,52 @@ void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 	}
 }
 
-std::string TriggerEnvironment::GetNameByEnum(Environment mat)
+std::string TriggerEnvironment::GetNameByEnum(AudioEffects eff)
 {
 	std::string name;
-	switch (mat)
+	switch (eff)
 	{
-	case Environment::WIND:
+	case AudioEffects::WIND:
 		return name = "Wind";
 		break;
-	case Environment::FOREST:
+	case AudioEffects::FOREST:
 		return name = "Forest";
 		break;
-	case Environment::BIRDS_WIND:
-		return name = "Birds_Wind";
+	case AudioEffects::BIRDS:
+		return name = "Bird";
+		break;
+	case AudioEffects::CROWS:
+		return name = "Crows";
+		break;
+	case AudioEffects::SQUIRRELS:
+		return name = "Squirrels";
+		break;
+	case AudioEffects::BATS:
+		return name = "Bats";
+		break;
+	case AudioEffects::CAVE:
+		return name = "Cave";
+		break;
+	case AudioEffects::GLOOMY:
+		return name = "Gloomy";
+		break;
+	case AudioEffects::INSECTS:
+		return name = "Insects";
+		break;
+	case AudioEffects::QUIET:
+		return name = "Quiet";
+		break;
+	case AudioEffects::RIVER:
+		return name = "River";
+		break;
+	case AudioEffects::TREES_SQUEAKING:
+		return name = "Trees_Squeaking";
+		break;
+	case AudioEffects::TREE_FALL:
+		return name = "Tree_Fall";
+		break;
+	case AudioEffects::WOLF_HOWLING:
+		return name = "Wolf_Howling";
 		break;
 	}
 }
