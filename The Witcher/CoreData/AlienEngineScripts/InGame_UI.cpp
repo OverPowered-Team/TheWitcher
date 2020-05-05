@@ -74,34 +74,18 @@ void InGame_UI::Update()
 
 			if (lerp >= 1)
 			{
-				if ((*particle)->player != nullptr && (*particle)->type == UI_Particle_Type::KILL_COUNT)
-				{
-					if ((*particle)->player->player_data.total_kills >= 10)
-					{
-						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetText(
-							std::to_string((*particle)->player->player_data.total_kills).c_str());
-					}
-					else
-					{
-						std::string kills = "0" + std::to_string((*particle)->player->player_data.total_kills);
-						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetText(kills.c_str());
-						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->kill_count_number->SetBackgroundColor(0.961f, 0.961f, 0.961f, 1);
-						(*particle)->player->HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount();
-					}
-				}
-				else if((*particle)->type == UI_Particle_Type::ULTI)
-				{
-					float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / (float)GameManager::instance->player_manager->max_ultimate_charge;
-					if (new_value != 1)
-					{
-						ulti_bar->UpdateBar(new_value);
-					}
-					else
-					{
-						ulti_bar->MaxBar();
-					}
-				}
+				float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / 
+					(float)GameManager::instance->player_manager->max_ultimate_charge;
 
+				if (new_value != 1)
+				{
+					ulti_bar->UpdateBar(new_value);
+				}
+				else
+				{
+					ulti_bar->MaxBar();
+				}
+				
 				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;
 				particles.erase(particle);
@@ -130,7 +114,7 @@ void InGame_UI::ShowCheckpointSaved()
 	time_checkpoint = Time::GetGameTime();
 }
 
-void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type type, PlayerController* player)
+void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 {
 	UI_Particles* particle = new UI_Particles();
 	// not working very well but it's the best I accomplished
@@ -138,26 +122,8 @@ void InGame_UI::StartLerpParticle(const float3& world_position, UI_Particle_Type
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
 	particle->origin_position = float3(0, 0, 0);
-	particle->type = type;
-
-	switch (type)
-	{
-	case UI_Particle_Type::ULTI:
-	{
-		particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
-		particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
-		break;
-	}
-	case UI_Particle_Type::KILL_COUNT:
-	{
-		particle->final_position = player->HUD->GetChild("Killcount")->transform->GetGlobalPosition();
-		particle->particle = GameObject::Instantiate(killcount_particle, particle->origin_position, false, in_game);
-		player->HUD->GetComponent<UI_Char_Frame>()->kill_count->SetEnable(true);
-		particle->player = player;
-		break;
-	}
-	}
-	
+	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
+	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
 	particle->time_passed = Time::GetGameTime();
 
 	particles.push_back(particle);

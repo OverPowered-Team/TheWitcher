@@ -757,9 +757,9 @@ void PlayerController::OnEnemyKill()
 {
 	LOG("ENEMY KILL");
 	player_data.total_kills++;
-	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticle(transform->GetGlobalPosition(), UI_Particle_Type::KILL_COUNT, this);
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
-	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticle(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
 void PlayerController::OnUltimateActivation(float value)
