@@ -20,6 +20,8 @@ struct __declspec(dllexport) SpotLightProperties
 	float quadratic = 0.01f;
 	float cut_off = 1.75f;
 	float outer_cut_off = 15.0f;
+
+	ComponentLightSpot* light = nullptr;
 };
 
 class __declspec(dllexport) ComponentLightSpot : public Component {
@@ -35,6 +37,7 @@ private:
 	void LightLogic();
 
 	bool DrawInspector();
+	void OnEnable();
 	void OnDisable();
 
 	void Clone(Component* clone);

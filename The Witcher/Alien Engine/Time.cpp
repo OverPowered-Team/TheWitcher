@@ -148,6 +148,7 @@ void Time::SetScaleTime(const float& scale)
 void Time::SetDT(const float& dt)
 {
 	delta_time = dt;
+	delta_time = Clamp<float>(delta_time, 0.f, MAX_GAME_DT);
 }
 
 float Time::GetCurrentDT()

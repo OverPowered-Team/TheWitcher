@@ -92,12 +92,14 @@ GameObject::GameObject(bool ignore_transform)
 
 GameObject::~GameObject()
 {
+#ifndef GAME_VERSION
 	if (std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
 		App->objects->DeselectObject(this);
 		App->ui->panel_scene->gizmo_curve = false;
 		App->ui->panel_scene->curve = nullptr;
 		App->ui->panel_scene->curve_index = 0;
 	}
+#endif
 
 	App->objects->octree.Remove(this);
 
@@ -139,15 +141,20 @@ GameObject* GameObject::GetChild(const int& index)
 
 GameObject* GameObject::GetChildRecursive(const char* child_name)
 {
+	GameObject* ret = nullptr;
 	auto item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
+			if (ret != nullptr) {
+				return ret;
+			}
 			if (App->StringCmp((*item)->name, child_name)) {
 				return (*item);
 			}
-			(*item)->GetChildRecursive(child_name);
+			ret = (*item)->GetChildRecursive(child_name);
 		}
 	}
+	return ret;
 }
 
 std::vector<GameObject*>& GameObject::GetChildren()
