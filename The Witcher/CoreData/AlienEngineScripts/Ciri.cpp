@@ -113,6 +113,7 @@ void Ciri::LaunchMiniScreamAction()
 	if (player_distance[1] <= mini_scream_range) {
 		float3 knockbak_direction = (player_controllers[1]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 		player_controllers[1]->ReceiveDamage(mini_scream_damage, knockbak_direction * mini_scream_force);
+
 	}
 
 	fight_controller->can_mini_scream = false;

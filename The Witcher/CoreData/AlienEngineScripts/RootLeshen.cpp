@@ -38,7 +38,7 @@ void RootLeshen::Update()
 		}
 	}
 	else if (state == ROOTSTATE::ROOT) {
-		transform->AddPosition(rooted_effect_direction * root_speed);
+		//transform->AddPosition(rooted_effect_direction * root_speed);
 		if (root_time <= total_root_time)
 			root_time += Time::GetDT();
 		else {
@@ -63,8 +63,8 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 			LOG("There's no Player Controller in GO in ArrowScript!");
 		}
 	}
-	else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
-	{
-		GameObject::Destroy(game_object);
-	}
+	//else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
+	//{
+	//	GameObject::Destroy(game_object);
+	//}
 }
