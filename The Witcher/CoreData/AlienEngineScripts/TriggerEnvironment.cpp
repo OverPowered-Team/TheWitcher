@@ -12,15 +12,26 @@ TriggerEnvironment::~TriggerEnvironment()
 
 void TriggerEnvironment::Start()
 {
-	
-	camera = Camera::GetCurrentCamera()->game_object_attached;
-	cam_script = camera->GetComponent<CameraMovement>();
 	emitter = game_object->GetComponent<ComponentAudioEmitter>();
+	//I know this is ugly but right now we can't do it dynamically to show in inspector
 	emitter->SetState("Env_Lvl1", "Quiet");
+	env_elements.push_back(audio1);
+	env_elements.push_back(audio2);
+	env_elements.push_back(audio3);
+	env_elements.push_back(audio4);
+	env_elements.push_back(audio5);
+	PrepareEnvironmentElements();
+
 }
 
 void TriggerEnvironment::Update()
 {
+	PlayEnvironment();
+}
+
+void TriggerEnvironment::CleanUp()
+{
+	env_elements.clear();
 }
 
 void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
@@ -44,8 +55,7 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 			}
 		}
 		if (emitter != nullptr && player_counter == 2) {
-			//emitter->SetState("Env_Lvl1", GetNameByEnum(environment).c_str());
-
+			emitter->SetState("Env_Lvl1", GetZoneByEnum(zone).c_str());
 			LOG("ENTER");
 		}
 	}
@@ -74,52 +84,158 @@ void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 	}
 }
 
-std::string TriggerEnvironment::GetNameByEnum(AudioEffects eff)
+void TriggerEnvironment::OnDrawGizmosSelected()
+{
+	for (auto iter = env_elements.begin(); iter != env_elements.end(); ++iter) {
+		if (iter->spatial)
+		{
+			Color c;
+			switch (iter - env_elements.begin())
+			{
+			case 0:
+				c = Color::Blue();
+				break;
+			case 1:
+				c = Color::Cyan();
+				break;
+			case 2:
+				c = Color::Green();
+				break;
+			case 3:
+				c = Color::Magenta();
+				break;
+			case 4:
+				c = Color::Orange();
+				break;
+			}
+			Gizmos::DrawWireSphere(iter->spatial_place->transform->GetGlobalPosition(), 0.2, c);
+		}
+	}
+}
+
+std::string TriggerEnvironment::GetAudioElementByEnum(AudioEffects eff)
 {
 	std::string name;
 	switch (eff)
 	{
 	case AudioEffects::WIND:
-		return name = "Wind";
+		return name = "Play_Wind";
 		break;
 	case AudioEffects::FOREST:
-		return name = "Forest";
+		return name = "Play_Forest";
 		break;
 	case AudioEffects::BIRDS:
-		return name = "Bird";
+		return name = "Play_Bird";
 		break;
 	case AudioEffects::CROWS:
-		return name = "Crows";
+		return name = "Play_Crows";
 		break;
 	case AudioEffects::SQUIRRELS:
-		return name = "Squirrels";
+		return name = "Play_Squirrels";
 		break;
 	case AudioEffects::BATS:
-		return name = "Bats";
+		return name = "Play_Bats";
 		break;
 	case AudioEffects::CAVE:
-		return name = "Cave";
+		return name = "Play_Cave";
 		break;
 	case AudioEffects::GLOOMY:
-		return name = "Gloomy";
+		return name = "Play_Gloomy";
 		break;
 	case AudioEffects::INSECTS:
-		return name = "Insects";
+		return name = "Play_Insects";
 		break;
 	case AudioEffects::QUIET:
 		return name = "Quiet";
 		break;
 	case AudioEffects::RIVER:
-		return name = "River";
+		return name = "Play_River";
 		break;
 	case AudioEffects::TREES_SQUEAKING:
-		return name = "Trees_Squeaking";
+		return name = "Play_Trees_Squeaking";
 		break;
 	case AudioEffects::TREE_FALL:
-		return name = "Tree_Fall";
+		return name = "Play_Tree_Fall";
 		break;
 	case AudioEffects::WOLF_HOWLING:
-		return name = "Wolf_Howling";
+		return name = "Play_Wolf_Howling";
 		break;
+	}
+}
+
+std::string TriggerEnvironment::GetZoneByEnum(EnvironmentZone zone)
+{
+	std::string name;
+	switch (zone)
+	{
+	case EnvironmentZone::QUIET:
+		return name = "Quiet";
+		break;
+	case EnvironmentZone::AFTER_BOSS:
+		return name = "After_Boss";
+		break;
+	case EnvironmentZone::CAVE:
+		return name = "Cave";
+		break;
+	case EnvironmentZone::DROWNERS:
+		return name = "Drowners";
+		break;
+	case EnvironmentZone::FORTRESS:
+		return name = "Fortress";
+		break;
+	case EnvironmentZone::GHOUL_NESTS:
+		return name = "Ghoul_Nests";
+		break;
+	case EnvironmentZone::MIDDLE_AREA:
+		return name = "Middle_Area";
+		break;
+	case EnvironmentZone::PRE_BOSS:
+		return name = "Pre_Boss";
+		break;
+	case EnvironmentZone::RAVINE:
+		return name = "Ravine";
+		break;
+	case EnvironmentZone::SLOPE_TO_CAVE:
+		return name = "Slope_To_Cave";
+		break;
+	}
+}
+
+void TriggerEnvironment::PrepareEnvironmentElements()
+{
+	for (int iter = 0; iter <= env_elements.size(); ++iter)
+	{
+		std::string spt = "Spatial";	
+		spt += std::to_string(iter);
+		env_elements[iter].spatial_place = this->game_object->GetChild(spt.c_str());
+		env_elements[iter].event_name = GetAudioElementByEnum(env_elements[iter].type);
+		if (env_elements[iter].spatial_place != nullptr)
+			env_elements[iter].el_emitter = env_elements[iter].spatial_place->GetComponent<ComponentAudioEmitter>();
+
+		if (!env_elements[iter].random && std::strcmp(env_elements[iter].event_name.c_str(), "QUIET") != 0 && env_elements[iter].el_emitter != nullptr) { //Play of the constant sounds ex: Wind
+			env_elements[iter].el_emitter->StartSound(env_elements[iter].event_name.c_str());
+		}
+		else
+		{
+			env_elements[iter].timer_play = Time::GetGameTime();
+			env_elements[iter].time_to_play = Random::GetRandomFloatBetweenTwo(1.f, env_elements[iter].max_time_between_plays);
+		}
+	}
+	
+}
+
+void TriggerEnvironment::PlayEnvironment()
+{
+	for (auto iter = env_elements.begin(); iter != env_elements.end(); ++iter)
+	{
+		if (iter->random)
+		{
+			if (Time::GetGameTime() - iter->timer_play >= iter->time_to_play && iter->el_emitter != nullptr) //We play the random sounds given the seconds previously clamped between the selected values
+			{
+				iter->el_emitter->StartSound(iter->event_name.c_str());
+				iter->timer_play = Time::GetGameTime();
+				iter->time_to_play = Random::GetRandomFloatBetweenTwo(iter->min_time_between_plays, iter->max_time_between_plays);
+			}
+		}
 	}
 }
