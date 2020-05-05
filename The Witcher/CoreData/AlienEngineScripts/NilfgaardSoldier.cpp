@@ -39,6 +39,8 @@ void NilfgaardSoldier::SetStats(const char* json)
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
 		if (nilf_type == NilfgaardType::ARCHER)
 		{
@@ -61,7 +63,17 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
 		audio_emitter->StartSound("SoldierHit");
+		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
+
+	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	{
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		can_get_interrupted = false;
+	}
+
 	//else
 	//{
 	//	//Quizas que haga sonidito de ataque pero le han hecho pupita
@@ -200,6 +212,7 @@ void NilfgaardSoldier::SetState(const char* state_str)
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		can_get_interrupted = true;
 		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())

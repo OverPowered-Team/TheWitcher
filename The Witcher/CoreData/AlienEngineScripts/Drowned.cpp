@@ -41,6 +41,8 @@ void Drowned::SetStats(const char* json)
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 		stats["HideDistance"] = Stat("HideDistance", stat_weapon->GetNumber("HideDistance"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
 		if (drowned_type == DrownedType::RANGE)
 			stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
@@ -60,9 +62,18 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 	if (can_get_interrupted) {
 		state = DrownedState::HIT;
 		animator->PlayState("Hit");
+		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		//audio_emitter->StartSound("GhoulHit");
 	}
 
-	//audio_emitter->StartSound("GhoulHit");
+	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	{
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		can_get_interrupted = false;
+	}
+
 	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
 
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
@@ -99,6 +110,8 @@ void Drowned::OnAnimationEnd(const char* name)
 {
 	if (strcmp(name, "Attack") == 0) {
 		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
 }
 

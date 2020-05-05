@@ -64,6 +64,7 @@ public:
 	float3 direction;
 	float3 velocity = float3::zero();
 	float knock_slow = -4.2f;
+	float increase_hit_animation = 1.0f;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;
