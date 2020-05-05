@@ -1316,7 +1316,7 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	}
 	catch (...)
 	{
-		particleSystem->particleInfo.size3D = float3(1.f, 0.f, 0.f);
+		particleSystem->particleInfo.size3D = float3(1.f, 1.f, 1.f);
 	}
 	// LightColor
 	particleSystem->particleInfo.lightColor = to_load->GetFloat4("Start.LightColor");
@@ -1355,11 +1355,11 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->endInfo.size = to_load->GetNumber("End.Size");
 	try {
 		// Size 3D
-		particleSystem->particleInfo.size3D = to_load->GetFloat3("Start.Size3D");
+		particleSystem->endInfo.size3D = to_load->GetFloat3("End.Size3D");
 	}
 	catch (...)
 	{
-		particleSystem->particleInfo.size3D = float3(1.f, 0.f, 0.f);
+		particleSystem->endInfo.size3D = float3(1.f, 1.f, 1.f);
 	}
 	// LightColor
 	particleSystem->endInfo.lightColor = to_load->GetFloat4("End.LightColor");

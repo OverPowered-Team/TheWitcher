@@ -151,9 +151,14 @@ bool ComponentLightDirectional::DrawInspector()
 	return true;
 }
 
+void ComponentLightDirectional::OnEnable()
+{
+	enabled = true;
+}
+
 void ComponentLightDirectional::OnDisable()
 {
-
+	enabled = false;
 }
 
 void ComponentLightDirectional::Clone(Component* clone)

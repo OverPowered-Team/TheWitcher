@@ -115,9 +115,14 @@ bool ComponentLightSpot::DrawInspector()
 	return true;
 }
 
+void ComponentLightSpot::OnEnable()
+{
+	enabled = true;
+}
+
 void ComponentLightSpot::OnDisable()
 {
-
+	enabled = false;
 }
 
 void ComponentLightSpot::Clone(Component* clone)

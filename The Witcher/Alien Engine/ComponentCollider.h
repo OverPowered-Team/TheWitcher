@@ -120,32 +120,3 @@ protected:
 	const char* mode_names[4] = { "Average","Minimum","Multiply","Maximum" };
 };
 
-class ContactPoint
-{
-public:
-
-	ContactPoint(const float3& normal, const float3& point, float separation, ComponentCollider* this_collider, ComponentCollider* other_collider);
-
-	float3				normal = float3(0.f, 0.f, 0.f);
-	float3				point = float3(0.f, 0.f, 0.f);
-	float				separation = 0.f;
-	ComponentCollider* this_collider = nullptr;
-	ComponentCollider* other_collider = nullptr;
-};
-
-class Collision
-{
-public:
-
-	Collision(ComponentCollider* collider, ComponentRigidBody* rigid_body, ComponentTransform* transform, const std::vector<ContactPoint>& contancts, uint num_contact, GameObject* game_object, const float3& impulse, const float3& relative_velocity);
-
-	ComponentCollider*	collider = nullptr;
-	ComponentRigidBody* rigid_body = nullptr;
-	ComponentTransform* transform = nullptr;
-	std::vector<ContactPoint>	contancts;
-	uint						num_contact = 0u;
-	GameObject* game_object = nullptr;
-	float3                      impulse = float3(0.f, 0.f, 0.f);
-	float3                      relative_velocity = float3(0.f, 0.f, 0.f);
-
-};
