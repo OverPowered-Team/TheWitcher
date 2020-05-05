@@ -23,6 +23,7 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulState, ghoul->state);
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
+	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
 
 	return ghoul;
 }

@@ -95,3 +95,10 @@ bool Drowned::IsDead()
 	return (state == DrownedState::DEAD ? true : false);
 }
 
+void Drowned::OnAnimationEnd(const char* name)
+{
+	if (strcmp(name, "Attack") == 0) {
+		can_get_interrupted = true;
+	}
+}
+

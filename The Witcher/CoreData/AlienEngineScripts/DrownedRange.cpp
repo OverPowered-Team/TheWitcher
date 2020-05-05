@@ -67,10 +67,6 @@ void DrownedRange::UpdateEnemy()
 	}
 }
 
-void DrownedRange::OnAnimationEnd(const char* name)
-{
-
-}
 
 void DrownedRange::OnTriggerEnter(ComponentCollider* collider)
 {
