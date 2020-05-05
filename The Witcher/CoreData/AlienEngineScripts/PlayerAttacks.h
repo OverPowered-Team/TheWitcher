@@ -132,6 +132,7 @@ public:
 protected:
 	void CreateAttacks();
 	void ConnectAttacks();
+	void SpawnChainParticle(float3 from, float3 to);
 	void DoAttack();
 	void AttackMovement();
 	void SelectAttack(AttackType attack);

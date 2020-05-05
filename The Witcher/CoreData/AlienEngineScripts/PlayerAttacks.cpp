@@ -8,6 +8,7 @@
 #include "PlayerManager.h"
 #include "PlayerProjectile.h"
 #include "ParticlePool.h"
+#include "..\..\Alien Engine\ParticleEmitter.h"
 #include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
@@ -390,12 +391,17 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 	}
 	if (current_attack->HasTag(Attack_Tags::T_Chaining))
 	{
+		if (current_attack->enemies_hit.size() == 1)
+		{
+			SpawnChainParticle(this->game_object->transform->GetGlobalPosition() , enemy->transform->GetGlobalPosition());
+		}
 		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 3);
 		for (auto it = colliders.begin(); it != colliders.end(); ++it)
 		{
 			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
 				Enemy* enemy_close = (*it)->game_object_attached->GetComponent<Enemy>();
 				if (enemy_close && current_attack->CanHit(enemy_close)) {
+					SpawnChainParticle(enemy->transform->GetGlobalPosition(), enemy_close->transform->GetGlobalPosition());
 					if (!enemy_close->IsDead())
 						enemy_close->GetDamaged(GetCurrentDMG(), player_controller);
 
@@ -589,4 +595,17 @@ void PlayerAttacks::ConnectAttacks()
 			}
 		}
 	}
+}
+
+void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
+{
+	float3 mid_point = float3((from.x + to.x) / 2, 1.0f, (from.z + to.z) / 2);
+	float distance = from.DistanceSq(to);
+
+	float angle = math::RadToDeg(float3::unitX().AngleBetween(to));
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.particle_name, mid_point);
+	ComponentParticleSystem* p_system = new_particle->GetComponent<ComponentParticleSystem>();
+	p_system->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.5f, 1));
+	p_system->GetSystem()->SetRelativeRotation(float3(0, angle, 90));
+	player_controller->particles.push_back(new_particle);
 }
