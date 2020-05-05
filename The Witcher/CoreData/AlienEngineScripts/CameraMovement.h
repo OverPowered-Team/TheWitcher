@@ -52,6 +52,7 @@ public:
 
 	//TEST ALLOW MOVEMENT WHEN OTHER IS BLOCKING
 	float3 prev_middle = float3::zero();
+	int closest_player = -1;
 	CameraState prev_state = CameraState::FREE;
 };
 

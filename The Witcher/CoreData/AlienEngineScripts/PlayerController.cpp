@@ -543,7 +543,13 @@ bool PlayerController::CheckBoundaries()
 
 						cam->prev_state = cam->state;
 						cam->state = CameraMovement::CameraState::FREE;
-						cam->prev_middle = cam->CalculateMidPoint();
+						if (cam->players[0]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition()) > cam->players[1]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition())) {
+							cam->closest_player = 1;
+						}
+						else
+							cam->closest_player = 0;
+
+						cam->prev_middle = cam->transform->GetGlobalPosition() - cam->players[cam->closest_player]->transform->GetGlobalPosition();
 						return true;
 					}
 					else {
@@ -759,9 +765,9 @@ void PlayerController::OnEnemyKill()
 {
 	LOG("ENEMY KILL");
 	player_data.total_kills++;
-	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticle(transform->GetGlobalPosition(), UI_Particle_Type::KILL_COUNT, this);
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
-	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticle(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
 void PlayerController::OnUltimateActivation(float value)

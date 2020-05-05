@@ -35,6 +35,9 @@ void CameraMovement::Update()
         break;
     }
     case CameraState::FREE: {
+
+        transform->SetGlobalPosition(players[closest_player]->transform->GetGlobalPosition() + prev_middle);
+
         bool inside = true;
         float3 pos = CalculateMidPoint() + trg_offset;
         Frustum frus = GetComponent<ComponentCamera>()->frustum;

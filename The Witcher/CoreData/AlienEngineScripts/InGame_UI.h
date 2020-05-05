@@ -6,13 +6,6 @@
 class PlayerController;
 class UltiBar;
 
-enum(UI_Particle_Type,
-	ULTI,
-	KILL_COUNT,
-
-	ANY = -1
-	);
-
 class UI_Particles
 {
 public:
@@ -21,7 +14,6 @@ public:
 	GameObject* particle = nullptr;
 	PlayerController* player = nullptr;
 	float time_passed = 0.0f;
-	UI_Particle_Type type = UI_Particle_Type::ANY;
 };
 
 class ALIEN_ENGINE_API InGame_UI : public Alien {
@@ -39,7 +31,7 @@ public:
 	void YouDied();
 	void ShowCheckpointSaved();
 
-	void StartLerpParticle(const float3& world_position, UI_Particle_Type type, PlayerController* player = nullptr);
+	void StartLerpParticleUltibar(const float3& world_position);
 
 public:
 
