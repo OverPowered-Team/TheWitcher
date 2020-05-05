@@ -407,7 +407,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 	static float percentage = 0.f, thresholdPercentage = 0.3f; 
 	static bool playing = false; 
 
-	percentage = player_data.stats["Health"].GetValue() / player_data.stats["MaxHealth"].GetValue(); 
+	percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue(); 
 	if (playing == false)
 	{
 		if (percentage <= thresholdPercentage)
