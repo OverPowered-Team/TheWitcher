@@ -194,7 +194,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 	OPTICK_EVENT();
 
 	switch (shaderType) {
-	case SHADER_TEMPLATE::DEFAULT: { 
+	case SHADER_TEMPLATE::DEFAULT: {
 		SetUniform4f("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
 		SetUniform1f("objectMaterial.smoothness", inputs.standardShaderProperties.smoothness);
 		SetUniform1f("objectMaterial.metalness", inputs.standardShaderProperties.metalness);
@@ -333,6 +333,24 @@ void ResourceShader::SetUniformFloat3v(const std::string& name, const float3* ve
 		glUniform3fv(location, count, vec[0].ptr());
 }
 
+void ResourceShader::SetUniformFloatv(const std::string& name, const float* vec, uint count)
+{
+	OPTICK_EVENT();
+
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniform1fv(location,count, vec);
+}
+
+void ResourceShader::SetUniformIntv(const std::string& name, const int* vec, uint count)
+{
+	OPTICK_EVENT();
+
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniform1iv(location, count, vec);
+}
+
 void ResourceShader::SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3)
 {
 	OPTICK_EVENT();
@@ -380,6 +398,9 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 	std::string clightSpaceMatrix("lightSpaceMatrix");
 	clightSpaceMatrix.append("[%i]");
 
+	std::string clightSpaceMatrixBaked("lightSpaceMatrixBaked");
+	clightSpaceMatrixBaked.append("[%i]");
+
 	SetUniform1i("num_space_matrix", dirLights.size());
 	for (std::list<DirLightProperties*>::const_iterator iter = dirLights.begin(); iter != dirLights.end(); iter++)
 	{
@@ -389,6 +410,9 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 			sprintf_s(cname, tmp_name.c_str(), i);
 
 			// All uniforms
+			std::string cenabled = std::string(cname).append(".enabled");
+			SetUniform1f(cenabled, (*iter)->enabled);
+
 			std::string cintensity = std::string(cname).append(".intensity");
 			SetUniform1f(cintensity, (*iter)->intensity);
 
@@ -398,24 +422,39 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 			std::string variablesLocation = std::string(cname).append(".dirLightProperties");
 			SetUniformFloat3v(variablesLocation, variablesVec3, 5);
 
-			std::string cshadow = std::string(cname).append(".castShadow");
-			if ((*iter)->light->castShadows)
-			{
-				SetUniform1i(cshadow, 1);
-				glActiveTexture(GL_TEXTURE4);
-				glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
-				std::string cdepthmap = std::string(cname).append(".depthMap");
-				SetUniform1i(cdepthmap, 4);
-			}
-			else
-				SetUniform1i(cshadow, 0);
+		std::string cshadow = std::string(cname).append(".castShadow");
+		if ((*iter)->light->castShadows)
+		{
+			SetUniform1i(cshadow, 1);
+			glActiveTexture(GL_TEXTURE4);
+			glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
+			std::string cdepthmap = std::string(cname).append(".depthMap");
+			SetUniform1i(cdepthmap, 4);
+
+			(*iter)->light->BindForReading();
+			int bakedDepthMap[3] = { 5,6,7 };
+			std::string cdepthmapbaked = std::string(cname).append(".bakeShadows");
+			SetUniformIntv(cdepthmapbaked, bakedDepthMap, 3);
+		}
+		else
+			SetUniform1i(cshadow, 0);
 
 			char clightspaceM[128];
 			sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);
 			SetUniformMat4f(clightspaceM, (*iter)->projMat * (*iter)->viewMat);
 
-			std::string clightPos = std::string(cname).append(".lightPos");
-			SetUniformFloat3(clightPos, (*iter)->fake_position);
+		std::string clightPos = std::string(cname).append(".lightPos");
+		SetUniformFloat3(clightPos, (*iter)->fake_position);
+
+		std::string clightPosBaked = std::string(cname).append(".lightPosBaked");
+		SetUniformFloat3v(clightPosBaked, (*iter)->fake_position_baked, 3);
+		
+		for (int it = 0; it < 3; ++it)
+		{
+			char clightspaceMB[128];
+			sprintf_s(clightspaceMB, clightSpaceMatrixBaked.c_str(), i*3 + it);
+			SetUniformMat4f(clightspaceMB, (*iter)->light->projMatrix * (*iter)->light->viewMatrix[it]);
+		}
 
 			++i;
 		}
@@ -437,6 +476,9 @@ void ResourceShader::SetPointLights(const std::string& name, const std::list<Poi
 			sprintf_s(cname, tmp_name.c_str(), i);
 
 			// All uniforms
+			std::string cenabled = std::string(cname).append(".enabled");
+			SetUniform1f(cenabled, (*iter)->enabled);
+
 			std::string cintensity = std::string(cname).append(".intensity");
 			SetUniform1f(cintensity, (*iter)->intensity);
 
@@ -475,6 +517,8 @@ void ResourceShader::SetSpotLights(const std::string& name, const std::list<Spot
 			sprintf_s(cname, tmp_name.c_str(), i);
 
 			// All uniforms
+			std::string cenabled = std::string(cname).append(".enabled");
+			SetUniform1f(cenabled, (*iter)->enabled);
 
 			std::string cintensity = std::string(cname).append(".intensity");
 			SetUniform1f(cintensity, (*iter)->intensity);

@@ -1421,7 +1421,16 @@ void ResourceAnimatorController::Play()
 	if (default_state)
 	{
 		current_state = default_state;
-		previous_key_time = current_state->GetClip()->start_tick;
+		ResourceAnimation* clip = current_state->GetClip();
+		if (clip != nullptr)
+		{
+			previous_key_time = clip->start_tick;
+		}
+		else
+		{
+			LOG_ENGINE("Resource Animator COntroller %s: Clip not found", this->name);
+			return;
+		}
 	}
 }
 
