@@ -560,11 +560,6 @@ void ComponentText::Draw(bool isGame)
 	glDisable(GL_BLEND);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_CULL_FACE);
-
-	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-	{
-		SetBackgroundColor(0.0f, 1.0f, 0.0f, 0.5f);
-	}
 }
 
 void ComponentText::Reset()
