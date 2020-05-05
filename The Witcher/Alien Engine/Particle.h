@@ -14,7 +14,7 @@ class ParticleSystem;
 class ComponentCamera;
 
 
-#define ANGULAR_CAP 200 // angular velocity will be capped at 360 degrees x second
+#define ANGULAR_CAP 2000 // angular velocity will be capped at 360 degrees x second
 #define MAX_ANIMATIONS 16
 
 enum class PARTICLE_MESH

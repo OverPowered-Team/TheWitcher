@@ -143,8 +143,8 @@ float3 ComponentCanvas::GetWorldPositionInCanvas(const float3& world_position)
 	float2 position = ComponentCamera::WorldToScreenPoint(world_position);
 
 	return float3(
-		game_object_attached->transform->GetGlobalPosition().x + (position.x * width / App->objects->game_viewport->GetSize().x),
-		game_object_attached->transform->GetGlobalPosition().y + (position.y * height / App->objects->game_viewport->GetSize().y),
+		game_object_attached->transform->GetGlobalPosition().x + (position.x * width / App->objects->current_viewport->GetSize().x),
+		game_object_attached->transform->GetGlobalPosition().y + (position.y * height / App->objects->current_viewport->GetSize().y),
 		game_object_attached->transform->GetGlobalPosition().z
 		);
 }
