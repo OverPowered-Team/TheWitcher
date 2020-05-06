@@ -29,6 +29,8 @@ public:
 	bool specificEntity = false;
 	bool Geralt = false;  // we need to change this for an enity name (?)
 
+private: 
+	EventManager* eventManager = nullptr; 
 };
 
 ALIEN_FACTORY DialogueTriggerSimple* CreateDialogueTriggerSimple() {

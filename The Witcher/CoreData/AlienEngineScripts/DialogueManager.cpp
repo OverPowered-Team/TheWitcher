@@ -42,7 +42,7 @@ void DialogueManager::LoadJSONDialogues()
 			std::string subtitles = dialogues->GetString("subtitles");
 			float time = dialogues->GetNumber("time");
 
-			dialogueData.push_back(std::make_tuple(eventName, subtitles, time));
+			dialogueData.push_back(std::make_tuple(eventName, subtitles, time)); // TODO: a dialogue
 
 		} while (dialogues->GetAnotherNode());
 	}

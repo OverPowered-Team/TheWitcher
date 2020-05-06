@@ -10,6 +10,8 @@ class PlayerController;
 class EventManager;
 
 
+bool CheckKills(Dialogue& dialogue);
+
 class ALIEN_ENGINE_API DialogueEventChecker : public Alien {
 
 public:
@@ -23,14 +25,13 @@ private:
 	void LoadJSONLogicalDialogues();
 
 	// TODO: add chekers
-	void CheckKills(Dialogue& dialogue);
 
 private:
 	// vector of cheker functions and their associated dialogue data
-	std::vector<std::tuple<void(*)(Dialogue), Dialogue>> checkers;
+	std::vector<bool(*)(Dialogue&)> checkers;
 	DialogueManager* dialogueManager; 
 	EventManager* eventManager; 
-	std::vector <std::tuple<std::string, std::string, float>> logicalDialogueData;
+	std::vector<Dialogue> logicalDialogueData;
 };
 
 ALIEN_FACTORY DialogueEventChecker* CreateDialogueEventChecker() {

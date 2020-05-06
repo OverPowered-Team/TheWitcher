@@ -15,14 +15,10 @@ void DialogueEventChecker::Start()
 {
 	dialogueManager = (DialogueManager*)GetComponentScript("DialogueManager");
 	eventManager = (EventManager*)GetComponentScript("EventManager");
-     
-	// TODO: this right now refers to one player
-	Dialogue dialogue; 
-	dialogue.audioData.eventName = std::get<0>(logicalDialogueData.at(0));
-	dialogue.subtitlesText = std::get<1>(logicalDialogueData.at(0));
-	dialogue.subtitlesTime.totalTime = std::get<2>(logicalDialogueData.at(0));
 
-    // TODO: push to logicalDialogueData 
+	// FUNCTIONS MUST BE IN THE SAME ORDER AS DIALOGUES IN THE JSON !!!
+	LoadJSONLogicalDialogues(); 
+	checkers.push_back(&CheckKills);
 }
 
 void DialogueEventChecker::LoadJSONLogicalDialogues() // TODO
@@ -47,7 +43,12 @@ void DialogueEventChecker::LoadJSONLogicalDialogues() // TODO
 			std::string subtitles = dialogues->GetString("subtitles");
 			float time = dialogues->GetNumber("time");
 
-			logicalDialogueData.push_back(std::make_tuple(eventName, subtitles, time));
+			Dialogue d; 
+			d.audioData.eventName = eventName; 
+			d.subtitlesText = subtitles; 
+			d.subtitlesTime.totalTime = time; 
+
+			logicalDialogueData.push_back(d); 
 
 		} while (dialogues->GetAnotherNode());
 	}
@@ -60,19 +61,21 @@ void DialogueEventChecker::LoadJSONLogicalDialogues() // TODO
 
 void DialogueEventChecker::Update()
 {
+	// TODO: check priority with current one and don't call function
 	for (int i = 0; i < checkers.size(); ++i)
 	{
-		auto value = checkers.at(i);
-		// TODO: check priority with current one and don't call function
-		Dialogue dialogue = std::get<1>(value); 
-		std::get<0>(value)(dialogue);
+		auto func = checkers.at(i);
+		Dialogue dialogue = logicalDialogueData.at(i); 
+	
+		if(func(dialogue))
+			eventManager->ReceiveDialogueEvent(dialogue);
 	}
 
 
 }
 
 // Chekers
-void DialogueEventChecker::CheckKills(Dialogue& dialogue)
+bool CheckKills(Dialogue& dialogue)
 {
 	static float checkTime = 3.0f, currentTimeGeralt = 0.0f, currentTimeYennefer = 0.0f;
 	static uint checkKills = 5;
@@ -89,7 +92,7 @@ void DialogueEventChecker::CheckKills(Dialogue& dialogue)
 		if ((currentTime += Time::GetDT()) >= checkTime)
 		{
 			if (streak >= checkKills)
-				eventManager->ReceiveDialogueEvent(dialogue);
+				return true; 
 	
 			currentTime = 0.f;
 			streak = 0;
@@ -98,8 +101,9 @@ void DialogueEventChecker::CheckKills(Dialogue& dialogue)
 		lastKills = totalKills;
 	};
 
-
+	// TODO: Yennefer, which is the attack button on keyboard? XD
 	Calculate(Geralt, geraltLastKills, Geralt->player_data.total_kills, geraltStreak, currentTimeGeralt); 
-	Calculate(Yennefer, YenneferLastKills, Yennefer->player_data.total_kills, YenneferStreak, currentTimeYennefer);
+	//Calculate(Yennefer, YenneferLastKills, Yennefer->player_data.total_kills, YenneferStreak, currentTimeYennefer);
 
+	return false; 
 }

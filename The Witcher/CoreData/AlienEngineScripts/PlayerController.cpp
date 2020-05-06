@@ -384,7 +384,7 @@ void PlayerController::Update()
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
-					((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+//					((UI_Char_Frame*)HUD->GetComponentScript("UI_Char_Frame"))->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
 					if (player_data.stats["Health"].GetValue() == 0)
 						Die();
 				}

@@ -62,5 +62,6 @@ void EventManager::ReceiveDialogueEvent(int index, float volume) const
 	else if (volume > 1.0f)
 		volume = 1.0f;
 
-	GameManager::manager->dialogue_manager->InputNewDialogue(index, volume);
+	auto dialogueManager = (DialogueManager*)GetComponentScript("DialogueManager"); 
+	dialogueManager->InputNewDialogue(index, volume);
 }
