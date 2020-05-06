@@ -26,6 +26,9 @@ void RootLeshen::Update()
 		direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 		direction.y = 0;
 		transform->AddPosition(direction * speed);
+		float angle = atan2f(direction.z, direction.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 180) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
 
 		if (life_time <= total_life_time)
 			life_time += Time::GetDT();
@@ -52,7 +55,9 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 			state = ROOTSTATE::ROOT;
 			transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
 			player_ctrl->ApplyRoot(total_root_time);
-			leshen->EndRootAction(game_object);
+			leshen->EndAction(game_object);
+			game_object->SetNewParent(player_ctrl->game_object);
+			game_object->transform->SetLocalPosition(float3::zero());
 		}
 		else {
 			LOG("There's no Player Controller in GO in ArrowScript!");
