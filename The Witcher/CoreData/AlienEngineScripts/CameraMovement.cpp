@@ -35,25 +35,31 @@ void CameraMovement::Update()
         break;
     }
     case CameraState::FREE: {
-
-        transform->SetGlobalPosition(players[closest_player]->transform->GetGlobalPosition() + prev_middle);
-
+        float3 pos = players[closest_player]->transform->GetGlobalPosition() + prev_middle;
+        auto frustum = GetComponent<ComponentCamera>()->frustum;
+        frustum.pos = pos;
         bool inside = true;
-        float3 pos = CalculateMidPoint() + trg_offset;
-        Frustum frus = GetComponent<ComponentCamera>()->frustum;
-        frus.pos = pos;
+        AABB aabbs[2] = { players[0]->GetComponent<PlayerController>()->max_aabb, players[1]->GetComponent<PlayerController>()->max_aabb };
         for (int i = 0; i < players.size(); ++i)
         {
-            PlayerController* p = players[i]->GetComponent<PlayerController>();
-            if (p != nullptr) {
-                AABB p_tmp = p->max_aabb;
-                p_tmp.minPoint += players[i]->transform->GetGlobalPosition();
-                p_tmp.maxPoint += players[i]->transform->GetGlobalPosition();
+            aabbs[i].minPoint += players[i]->transform->GetGlobalPosition();
+            aabbs[i].maxPoint += players[i]->transform->GetGlobalPosition();
+            if (!frustum.Contains(aabbs[i]))
+            {
+                inside = false;
+            }
+        }
+        if (inside)
+            transform->SetGlobalPosition(pos);
 
-                if (!frus.Contains(p_tmp))
-                {
-                    inside = false;
-                }
+        inside = true;
+        pos = CalculateMidPoint() + trg_offset;
+        frustum.pos = pos;
+        for (int i = 0; i < players.size(); ++i)
+        {
+            if (!frustum.Contains(aabbs[i]))
+            {
+                inside = false;
             }
         }
         if (inside) {

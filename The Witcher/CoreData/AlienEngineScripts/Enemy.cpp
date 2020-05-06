@@ -13,6 +13,7 @@ void Enemy::Awake()
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 	attack_collider->SetEnable(false);
 
+	//0.Head 1.Body 2.Feet 3.Attack
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
 }
 
@@ -36,6 +37,9 @@ void Enemy::StartEnemy()
 		break;
 	case EnemyType::LESHEN:
 		json_str = "leshen";
+		break;
+	case EnemyType::CIRI:
+		json_str = "ciri";
 		break;
 	case EnemyType::DROWNED:
 		json_str = "drowned";
@@ -87,6 +91,9 @@ void Enemy::UpdateEnemy()
 		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
 
+	//MOVEMENT
+	character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
+
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
@@ -109,6 +116,9 @@ void Enemy::UpdateEnemy()
 				(*it)->spawned_particle->SetEnable(false);
 				(*it)->spawned_particle->SetEnable(true);
 			}
+
+			std::string audio_name = "Play_" + (*it)->name;
+			audio_emitter->StartSound(audio_name.c_str());
 				
 		}
 
@@ -185,6 +195,20 @@ void Enemy::DeactivateCollider()
 	}
 }
 
+Quat Enemy::RotateProjectile()
+{
+	float3 front = -float3::unitZ(); //front of the object
+	Quat rot1 = Quat::RotateFromTo(front, direction);
+
+	float3 desiredUp = float3::unitY();
+	float3 right = Cross(direction, desiredUp);
+	desiredUp = Cross(right, direction);
+
+	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
+	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
+	return rot2 * rot1;
+}
+
 void Enemy::KnockBack(float3 knock)
 {
 	velocity = knock;
@@ -257,6 +281,15 @@ void Enemy::HitFreeze(float freeze_time)
 	}
 }
 
+void Enemy::SpawnAttackParticle()
+{
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+	HitFreeze(0.05);
+	can_get_interrupted = false;
+	// Sonidito de clinck de iluminacion espada maestra
+}
+
+
 void Enemy::StopHitFreeze(float speed)
 {
 	is_frozen = false;
@@ -266,7 +299,10 @@ void Enemy::StopHitFreeze(float speed)
 void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
 {
 	if (particle_name == "")
+	{
+		LOG("There's no particle name. String is empty!");
 		return;
+	}
 
 	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{

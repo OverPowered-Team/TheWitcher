@@ -35,10 +35,12 @@ public:
 
 	// Lerps
 	float change_time = 0.150f;
+	float killcount_time_to_lerp = 0.5f;
 
 	// KillCount
 	GameObject* kill_count = nullptr;
 	ComponentText* kill_count_number = nullptr;
+	ComponentText* kill_count_number_X = nullptr;
 
 private:
 
@@ -86,6 +88,7 @@ ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {
 
 	SHOW_IN_INSPECTOR_AS_ENUM(UI_Char_Frame::CHARACTER, alien->character);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->change_time);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->killcount_time_to_lerp);
 
 	return alien;
 } 

@@ -14,15 +14,12 @@ public:
 	void Update();
 
 	void UpdateBar(float actual_value);
-	void MaxBar();
 
 	void ControlsLerp();
 
 	// GameObjects
 	GameObject* ultibar = nullptr;
 	ComponentBar* normal_ulti = nullptr;
-	GameObject* ultibar_charged = nullptr;
-	ComponentBar* ultimate_bar = nullptr;
 
 	// Effects
 	GameObject* controls = nullptr;
@@ -48,6 +45,7 @@ private:
 	bool glowing = true;
 	float glow_time = 0.0f;
 	bool is_max = false;
+	bool is_bar_charged = false;
 
 	// Ultibar Charging Lerp
 	bool bar_charging = false;

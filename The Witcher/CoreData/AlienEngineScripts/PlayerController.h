@@ -158,7 +158,10 @@ public:
 	SDL_Scancode keyboard_dash;
 	SDL_Scancode keyboard_light_attack;
 	SDL_Scancode keyboard_heavy_attack;
-	SDL_Scancode keyboard_spell;
+	SDL_Scancode keyboard_spell_1;
+	SDL_Scancode keyboard_spell_2;
+	SDL_Scancode keyboard_spell_3;
+	SDL_Scancode keyboard_spell_4;
 	SDL_Scancode keyboard_revive;
 	SDL_Scancode keyboard_ultimate;
 
