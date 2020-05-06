@@ -89,6 +89,12 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	skybox_shader->Bind();
 	skybox_shader->SetUniform1i("skybox", 0);
 	skybox_shader->Unbind();
+
+#ifndef GAME_VERSION
+	if(attach != nullptr)
+		App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCamera::DrawScene, this));
+#endif // !GAME_VERSION
+
 }
 
 ComponentCamera::~ComponentCamera()
@@ -139,6 +145,11 @@ ComponentCamera::~ComponentCamera()
 
 	RELEASE(skybox);
 	RELEASE(cubemap);
+
+#ifndef GAME_VERSION
+	if (game_object_attached != nullptr)
+		App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 bool ComponentCamera::DrawInspector()
@@ -301,8 +312,10 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_pos_x = App->file_system->GetBaseFileName(cubemap->pos_x.c_str());
 		ResourceTexture* tex_pos_x = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_x));
-		if(tex_pos_x)
+		if (tex_pos_x)
 			ImGui::Image((ImTextureID)tex_pos_x->id, ImVec2(100.0f, 100.0f));
+		else
+			LOG_ENGINE("Component Camera skybox image not found");
 		
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -424,8 +437,9 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_neg_y = App->file_system->GetBaseFileName(cubemap->neg_y.c_str());
 		ResourceTexture* tex_neg_y = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_y));
-		if(tex_neg_y)
+		if (tex_neg_y)
 			ImGui::Image((ImTextureID)tex_neg_y->id, ImVec2(100.0f, 100.0f));
+		
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -567,7 +581,7 @@ void ComponentCamera::Update()
 	frustum.up = game_object_attached->transform->GetGlobalRotation().WorldY();
 }
 
-void ComponentCamera::DrawScene(ComponentCamera* camera)
+void ComponentCamera::DrawScene()
 {
 	
 	OPTICK_EVENT();

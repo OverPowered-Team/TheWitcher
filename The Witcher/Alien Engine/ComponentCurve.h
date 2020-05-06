@@ -15,7 +15,7 @@ public:
 	float3 NormalAt(float at);
 
 	const std::vector<float3>& GetControlPoints();
-	//const std::vector<float3>& GetControlPointsNormals();
+	const std::vector<float3>& GetControlPointsNormals();
 
 	void SetControlPointAt(int index, const float3& value);
 	void SetControlPointNormalAt(int index, const float3& value);
@@ -43,7 +43,7 @@ public:
 private:
 
 	std::vector<float3> control_points;
-	//std::vector<float3> control_points_normals;
+	std::vector<float3> control_points_normals;
 
 	float3 position = float3::zero();
 };

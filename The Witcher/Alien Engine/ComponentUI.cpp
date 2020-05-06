@@ -84,9 +84,9 @@ void ComponentUI::Update()
 		//UILogicMouse();
 
 		(game_object_attached->enabled) ? active = true : active = false;
-
+		
 		if (active)
-			(canvas->game_object_attached->enabled) ? active = true : active = false;
+			(game_object_attached->IsUpWardsEnabled()) ? active = true : active = false;
 
 		if (active)
 		{
@@ -150,7 +150,7 @@ void ComponentUI::Draw(bool isGame)
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 #ifndef GAME_VERSION
-		glOrtho(0, App->ui->panel_game->width, App->ui->panel_game->height, 0,'F', 'F');
+		glOrtho(0, App->ui->panel_game->width, App->ui->panel_game->height, 0,App->renderer3D->actual_game_camera->frustum.farPlaneDistance, App->renderer3D->actual_game_camera->frustum.farPlaneDistance);
 		/*glPushMatrix();
 		glMultMatrixf(ortho_matrix.ptr());
 		glPopMatrix();*/

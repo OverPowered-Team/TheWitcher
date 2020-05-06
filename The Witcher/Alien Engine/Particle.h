@@ -134,7 +134,7 @@ public:
 	ResourceMaterial* GetMaterial() const;
 
 	float Lerp(float v0, float v1, float t);
-	void SetUniform(ResourceMaterial* resource_material, ComponentCamera* camera, float4x4 globalMatrix);
+	void SetUniform(ResourceMaterial* resource_material, float4x4 globalMatrix);
 
 	//Animation
 	void UpdateUVs();

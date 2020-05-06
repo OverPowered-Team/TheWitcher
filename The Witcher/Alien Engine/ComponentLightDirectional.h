@@ -44,7 +44,7 @@ public:
 
 private:
 	void LightLogic();
-	void DrawScene(ComponentCamera* camera) override;
+	void DrawScene() override;
 
 
 	bool DrawInspector();
