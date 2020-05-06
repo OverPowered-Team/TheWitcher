@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "CiriCloneController",
-        "NumStates": 7,
-        "NumTransitions": 5,
+        "NumStates": 8,
+        "NumTransitions": 6,
         "States": [
             {
                 "Name": "Idle",
@@ -21,23 +21,28 @@
             },
             {
                 "Name": "Combo",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "7248207069647093727"
             },
             {
                 "Name": "Combo2",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "18170072330846271788"
             },
             {
                 "Name": "Combo3",
-                "Speed": 1,
+                "Speed": 2,
                 "Clip": "14815255185429996614"
             },
             {
                 "Name": "Scream",
                 "Speed": 3,
                 "Clip": "10301984109761866307"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 2,
+                "Clip": "2539962578311142380"
             }
         ],
         "Transitions": [
@@ -79,6 +84,15 @@
             },
             {
                 "Source": "Scream",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,

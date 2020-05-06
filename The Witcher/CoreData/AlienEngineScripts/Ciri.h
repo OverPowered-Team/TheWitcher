@@ -8,7 +8,7 @@ class CiriFightController;
 
 class ALIEN_ENGINE_API Ciri : public Boss {
 public:
-	float combo_range = 3.0f;
+	float combo_range = 2.0f;
 	float mini_scream_range = 5.0f;
 	float mini_scream_damage = 5.0f;
 	float mini_scream_force = 7.0f;
