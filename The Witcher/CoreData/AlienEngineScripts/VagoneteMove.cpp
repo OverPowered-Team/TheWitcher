@@ -3,6 +3,7 @@
 Quat VagoneteInputs::playerRotation = Quat::identity();
 float VagoneteInputs::inclination4player = 0.0F;
 float VagoneteInputs::speedInclination = 0.0F;
+VagoneteInputs::State VagoneteInputs::globalState = VagoneteInputs::State::IDLE;
 
 VagoneteMove::VagoneteMove()
 {
@@ -28,9 +29,18 @@ void VagoneteMove::Start()
 void VagoneteMove::Update()
 {
 	for (auto item = players.begin(); item != players.end(); ++item) {
-		(*item)->UpdateInputs();
+		(*item)->Update();
 	}
 
+	FollowCurve();
+
+	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
+		actual_pos = 0;
+	}
+}
+
+void VagoneteMove::FollowCurve()
+{
 	float3 currentPos = curve->curve.ValueAt(actual_pos);
 	float3 nextPos = curve->curve.ValueAt(actual_pos + speed * Time::GetDT() * 5);
 
@@ -49,14 +59,12 @@ void VagoneteMove::Update()
 
 	actual_pos += speed * Time::GetDT();
 	VagoneteInputs::playerRotation = Quat::identity();
-
-	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
-		actual_pos = 0;
-	}
 }
 
 VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 {
+	globalState = State::IDLE;
+
 	switch (type)
 	{
 	case PlayerController::PlayerType::GERALT: {
@@ -80,18 +88,100 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 	state = State::IDLE;
 }
 
+void VagoneteInputs::Update()
+{
+	UpdateInputs();
+	DoAction();
+}
+
 void VagoneteInputs::UpdateInputs()
 {
-	Inclination();
+	switch (globalState) {
+	case VagoneteInputs::State::IDLE: {
+
+		break; }
+	case VagoneteInputs::State::JUMP: {
+
+		break; }
+	case VagoneteInputs::State::JUMPING: {
+
+		break; }
+	case VagoneteInputs::State::COVER: {
+
+		break; }
+	case VagoneteInputs::State::INCLINATION: {
+
+		break; }
+	}
+
+	switch (state)
+	{
+	case VagoneteInputs::State::IDLE: {
+		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
+		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
+		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump);
+		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
+
+		if (rightInclinationInput || leftInclinationInput) {
+			inclinationZone = (rightInclinationInput) ? 1 : -1;
+			state = State::INCLINATION;
+		}
+		else if (jumpInput) {
+			state = State::JUMP;
+		}
+		else if (coverInput) {
+			state = State::COVER;
+		}
+		break; }
+	case VagoneteInputs::State::JUMP: {
+		state = State::IDLE;
+		break; }
+	case VagoneteInputs::State::JUMPING: {
+		state = State::IDLE;
+		break; }
+	case VagoneteInputs::State::INCLINATION: {
+		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
+		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
+
+		if (rightInclinationInput || leftInclinationInput) {
+			inclinationZone = (rightInclinationInput) ? 1 : -1;
+		}
+		else {
+			inclinationZone = 0;
+		}
+
+		if (currentInclination == 0) {
+			state = State::IDLE;
+		}
+		break; }
+	case VagoneteInputs::State::COVER: {
+		state = State::IDLE;
+		break; }
+	default: {
+		break; }
+	}
+}
+
+void VagoneteInputs::DoAction()
+{
+	switch (state)
+	{
+	case VagoneteInputs::State::JUMP: {
+		break; }
+	case VagoneteInputs::State::JUMPING: {
+		break; }
+	case VagoneteInputs::State::INCLINATION: {
+		Inclination();
+		break; }
+	case VagoneteInputs::State::COVER: {
+		break; }
+	}
 }
 
 void VagoneteInputs::Inclination()
 {
-	if (Input::GetKeyRepeat(keyboardInput.inclinationLeft)) {
-		currentInclination -= speedInclination * Time::GetDT();
-	}
-	else if (Input::GetKeyRepeat(keyboardInput.inclinationRight)) {
-		currentInclination += speedInclination * Time::GetDT();
+	if (inclinationZone != 0) {
+		currentInclination += speedInclination * Time::GetDT() * inclinationZone;
 	}
 	else {
 		if (currentInclination < 0) {

@@ -9,6 +9,7 @@ public:
 	enum class State {
 		IDLE,
 		JUMP,
+		JUMPING,
 		INCLINATION,
 		COVER
 	};
@@ -17,10 +18,12 @@ public:
 
 	VagoneteInputs(PlayerController::PlayerType type);
 
-	void UpdateInputs();
+	void Update();
 
 private:
 
+	void UpdateInputs();
+	void DoAction();
 	void Inclination();
 
 public:
@@ -28,6 +31,7 @@ public:
 	State state = State::IDLE;
 
 	float currentInclination = 0.0F;
+	int inclinationZone = 1;
 
 	struct {
 		SDL_Scancode jump = SDL_SCANCODE_UNKNOWN;
@@ -41,6 +45,7 @@ public:
 	static Quat playerRotation;
 	static float inclination4player;
 	static float speedInclination;
+	static State globalState;
 };
 
 class ALIEN_ENGINE_API VagoneteMove : public Alien {
@@ -58,6 +63,10 @@ public:
 	ComponentCurve* curve = nullptr;
 
 	float speed = 1;
+
+private:
+
+	void FollowCurve();
 
 private:
 
