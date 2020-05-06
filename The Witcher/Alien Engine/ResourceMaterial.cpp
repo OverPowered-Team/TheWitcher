@@ -12,6 +12,9 @@
 #include "glew/include/glew.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
+
 ResourceMaterial::ResourceMaterial() : Resource()
 {
 	type = ResourceType::RESOURCE_MATERIAL;
@@ -21,12 +24,11 @@ ResourceMaterial::ResourceMaterial() : Resource()
 		textures[i].first = NO_TEXTURE_ID;
 		textures[i].second = nullptr;
 	}
-
-	simple_depth_shader = App->resources->simple_depth_shader;
+	simple_depth_shader = App->resources->shadow_shader;
 	if (simple_depth_shader != nullptr)
 		simple_depth_shader->IncreaseReferences();
 	else
-		LOG_ENGINE("There was an error. Could not find the default shader");
+		LOG_ENGINE("There was an error. Could not find the seimple depht shader");
 
 	used_shader = App->resources->default_shader;
 	if (used_shader != nullptr)
@@ -39,13 +41,13 @@ ResourceMaterial::~ResourceMaterial()
 {
 	for (uint texType = 0; texType < (uint)TextureType::MAX; ++texType)
 	{
-		textures[texType].first = NO_TEXTURE_ID; 
-		
+		textures[texType].first = NO_TEXTURE_ID;
+
 		if (!App->IsQuiting())
 		{
 			if (textures[texType].second != nullptr)
 			{
-				textures[texType].second->DecreaseReferences(); 
+				textures[texType].second->DecreaseReferences();
 			}
 		}
 
@@ -60,7 +62,7 @@ bool ResourceMaterial::LoadMemory()
 		if (textures[iter].first != NO_TEXTURE_ID)
 		{
 			if (textures[iter].second != nullptr)
-				textures[iter].second->IncreaseReferences(); 
+				textures[iter].second->IncreaseReferences();
 		}
 	}
 
@@ -324,11 +326,6 @@ void ResourceMaterial::ApplyPreRenderShadows()
 	// Bind the actual shader
 	simple_depth_shader->Bind();
 
-	if (!recive_shadow)
-	{
-		simple_depth_shader->has_shadow = true;
-	}
-	// Bind textures
 
 	// Update uniforms
 	shaderInputs.standardShaderProperties.diffuse_color = color;
@@ -341,7 +338,7 @@ void ResourceMaterial::UnbindMaterial()
 	used_shader->Unbind();
 	
 	if (textures[(uint)TextureType::SPECULAR].first != NO_TEXTURE_ID)
-	{	
+	{
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

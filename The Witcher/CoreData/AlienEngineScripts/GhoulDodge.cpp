@@ -55,6 +55,7 @@ void GhoulDodge::UpdateEnemy()
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
         animator->PlayState("Death");
         audio_emitter->StartSound("GhoulDeath");
+        last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
         break;
     }

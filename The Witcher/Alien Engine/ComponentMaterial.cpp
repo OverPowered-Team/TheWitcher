@@ -44,8 +44,10 @@ bool ComponentMaterial::DrawInspector()
 	if (ImGui::CollapsingHeader("Material", &not_destroy))
 	{
 		material->DisplayMaterialOnInspector();
+		
 		RightClickMenu("Material");
 
+		ImGui::Checkbox("Cast shadow:", &game_object_attached->cast_shadow);
 		//InspectorShaderProperties();
 
 		/*ImGui::Spacing();

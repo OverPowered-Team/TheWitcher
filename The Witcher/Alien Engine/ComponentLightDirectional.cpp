@@ -25,18 +25,26 @@ ComponentLightDirectional::ComponentLightDirectional(GameObject* attach) : Compo
 	App->objects->directional_light_properites.push_back(&light_props);
 	App->objects->AddNumOfDirLights();
 	glGenFramebuffers(1, &light_props.depthMapFBO);
+	glGenFramebuffers(1, &light_props.bakedepthMapFBO);
 
 	light_props.light = this;
+	light_props.enabled = enabled;
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
 #endif
 
+	InitFrameBuffers();
+}
+
+void ComponentLightDirectional::InitFrameBuffers()
+{
+	//dynamic shadows
 	glBindFramebuffer(GL_FRAMEBUFFER, light_props.depthMapFBO);
 	glGenTextures(1, &light_props.depthMap);
 	glBindTexture(GL_TEXTURE_2D, light_props.depthMap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-		1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		2048, 2048, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -44,9 +52,27 @@ ComponentLightDirectional::ComponentLightDirectional(GameObject* attach) : Compo
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-
 	glBindFramebuffer(GL_FRAMEBUFFER, light_props.depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, light_props.depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//static shadows
+	glBindFramebuffer(GL_FRAMEBUFFER, light_props.bakedepthMapFBO);
+	glGenTextures(num_of_static_shadowMap, light_props.bakedepthMap);
+	for (uint i = 0; i < num_of_static_shadowMap; ++i) {
+		glBindTexture(GL_TEXTURE_2D, light_props.bakedepthMap[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+			2048, 2048, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, light_props.bakedepthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, light_props.bakedepthMap[0], 0);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -64,25 +90,43 @@ ComponentLightDirectional::~ComponentLightDirectional()
 }
 
 void ComponentLightDirectional::PostUpdate()
-{	
+{
 	OPTICK_EVENT();
 
-	float near_plane = sizefrustrum;
 	glm::mat4 projectionMatrix = glm::ortho(-sizefrustrum, sizefrustrum, -sizefrustrum, sizefrustrum,
-		-near_plane,
+		-sizefrustrum,
 		sizefrustrum);
 
 	light_props.projMat.Set(&projectionMatrix[0][0]);
-	
+
 	LightLogic();
+}
+
+void ComponentLightDirectional::BindForWriting(uint cascadeIndex)
+{
+	assert(cascadeIndex < num_of_static_shadowMap);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, light_props.bakedepthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, light_props.bakedepthMap[cascadeIndex], 0);
+}
+
+void ComponentLightDirectional::BindForReading()
+{
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, light_props.bakedepthMap[0]);
+
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, light_props.bakedepthMap[1]);
+
+	glActiveTexture(GL_TEXTURE7);
+	glBindTexture(GL_TEXTURE_2D, light_props.bakedepthMap[2]);
 }
 
 
 void ComponentLightDirectional::LightLogic()
 {
-	OPTICK_EVENT(); 
+	OPTICK_EVENT();
 
-	ComponentTransform* transform=(ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	light_props.position = float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
 	light_props.direction = game_object_attached->transform->GetGlobalRotation().WorldZ();
 }
@@ -98,6 +142,48 @@ void ComponentLightDirectional::DrawScene(ComponentCamera* camera)
 	}
 
 	//DrawLightFrustrum();
+}
+
+void ComponentLightDirectional::CalculateBakedViewMatrix()
+{
+	//Calculate ortographic light frustum position
+	float3 far_position = (light_props.position + float3(2 * sizefrustrumbaked, 0 ,0)) / sizefrustrumbaked;
+	float3 near_position = (light_props.position - float3(2 * sizefrustrumbaked, 0, 0)) / sizefrustrumbaked;
+	float3 center_pos = (light_props.position) / sizefrustrumbaked ;
+
+	//Calculate ortographic light frustum direction
+	float3 center_light_dir = float3((center_pos.x - light_props.direction.x * distance_far_plane), (center_pos.y - light_props.direction.y * distance_far_plane), (center_pos.z - light_props.direction.z * distance_far_plane));
+	float3 far_light_dir = float3((far_position.x - light_props.direction.x * distance_far_plane), (far_position.y - light_props.direction.y * distance_far_plane), (far_position.z - light_props.direction.z * distance_far_plane));
+	float3 near_light_dir = float3((near_position.x - light_props.direction.x * distance_far_plane), (near_position.y - light_props.direction.y * distance_far_plane), (near_position.z - light_props.direction.z * distance_far_plane));
+
+	//calculate ortographic light view matrix
+	glm::mat4 centerviewMat = glm::lookAt(glm::vec3((float)center_pos.x, (float)center_pos.y, (float)center_pos.z),
+		glm::vec3((float)center_light_dir.x, (float)center_light_dir.y, (float)(-center_light_dir.z)),
+		glm::vec3(0.0, 1.0, 0.0));
+
+	glm::mat4 farviewMat = glm::lookAt(glm::vec3((float)far_position.x, (float)far_position.y, (float)far_position.z),
+		glm::vec3((float)far_light_dir.x, (float)far_light_dir.y, (float)(-far_light_dir.z)),
+		glm::vec3(0.0, 1.0, 0.0));
+
+	glm::mat4 nearviewMat = glm::lookAt(glm::vec3((float)near_position.x, (float)near_position.y, (float)near_position.z),
+		glm::vec3((float)near_light_dir.x, (float)near_light_dir.y, (float)(-near_light_dir.z)),
+		glm::vec3(0.0, 1.0, 0.0));
+
+	glm::mat4 projectionMatrixBaked = glm::ortho(-sizefrustrumbaked, sizefrustrumbaked, -sizefrustrumbaked, sizefrustrumbaked,
+		-sizefrustrumbaked,
+		sizefrustrumbaked);
+
+
+	light_props.fake_position_baked[0] = near_light_dir;
+	light_props.fake_position_baked[1] = center_light_dir;
+	light_props.fake_position_baked[2] = far_light_dir;
+
+	projMatrix.Set(&projectionMatrixBaked[0][0]);
+	
+	viewMatrix[0].Set(&nearviewMat[0][0]);
+	viewMatrix[1].Set(&centerviewMat[0][0]);
+	viewMatrix[2].Set(&farviewMat[0][0]);
+
 }
 
 bool ComponentLightDirectional::DrawInspector()
@@ -134,16 +220,22 @@ bool ComponentLightDirectional::DrawInspector()
 		ImGui::ColorEdit3("Ambient", light_props.ambient.ptr());
 		ImGui::ColorEdit3("Diffuse", light_props.diffuse.ptr());
 		ImGui::ColorEdit3("Specular", light_props.specular.ptr());
-		
+
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
 
 		ImGui::Checkbox("Casts Shadows", &castShadows);
 
-		if(castShadows)
-			ImGui::Image((ImTextureID)light_props.depthMap, ImVec2(500, 500),ImVec2(0,1), ImVec2(1,0));
+		ImGui::DragFloat("baked Shadow Map Size", &sizefrustrumbaked);
 
+		ImGui::Text("Baked Depth Map");
+
+		for(int i = 0; i < num_of_static_shadowMap; ++i)
+			ImGui::Image((ImTextureID)light_props.bakedepthMap[i], ImVec2(300, 300));
+
+		if (ImGui::Button("Bake Shadows"))
+			bakeShadows = true;
 	}
 	else
 		RightClickMenu("Light Directional");
@@ -151,9 +243,16 @@ bool ComponentLightDirectional::DrawInspector()
 	return true;
 }
 
+void ComponentLightDirectional::OnEnable()
+{
+	enabled = true;
+	light_props.enabled = true;
+}
+
 void ComponentLightDirectional::OnDisable()
 {
-
+	enabled = false;
+	light_props.enabled = false;
 }
 
 void ComponentLightDirectional::Clone(Component* clone)
@@ -214,7 +313,7 @@ void ComponentLightDirectional::LoadComponent(JSONArraypack* to_load)
 
 void ComponentLightDirectional::DrawIconLight()
 {
-	OPTICK_EVENT(); 
+	OPTICK_EVENT();
 
 	if (bulb != nullptr && print_icon)
 	{
@@ -224,30 +323,5 @@ void ComponentLightDirectional::DrawIconLight()
 		glDisable(GL_LIGHTING);
 		Gizmos::DrawPoly(bulb->mesh, matrix, Color(0.0f, 255.0f, 0.0f));
 		glEnable(GL_LIGHTING);
-	}
-}
-
-void ComponentLightDirectional::DrawLightFrustrum()
-{
-	OPTICK_EVENT();
-
-	if (this->game_object_attached->IsSelected())
-	{
-		App->renderer3D->BeginDebugDraw(math::float4(0.0f, 1.0f, 0.0f, 1.0f));
-		Gizmos::DrawLine(light_props.position + float3(sizefrustrum, sizefrustrum, 0), (light_props.position + float3(sizefrustrum, sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-		Gizmos::DrawLine(light_props.position + float3(-sizefrustrum, sizefrustrum, 0), (light_props.position + float3(-sizefrustrum, sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-		Gizmos::DrawLine(light_props.position + float3(sizefrustrum, -sizefrustrum, 0), (light_props.position + float3(sizefrustrum, -sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-		Gizmos::DrawLine(light_props.position + float3(-sizefrustrum, -sizefrustrum, 0), (light_props.position + float3(-sizefrustrum, -sizefrustrum, 0) + light_props.direction * distance_far_plane ), Color::Green(), 2.0);
-
-		Gizmos::DrawLine((light_props.position + float3(-sizefrustrum, sizefrustrum, 0) + light_props.direction * distance_far_plane), (light_props.position + float3(sizefrustrum, sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-		Gizmos::DrawLine((light_props.position + float3(-sizefrustrum, sizefrustrum, 0) + light_props.direction * distance_far_plane), (light_props.position + float3(-sizefrustrum, -sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-		Gizmos::DrawLine((light_props.position + float3(sizefrustrum, -sizefrustrum, 0) + light_props.direction * distance_far_plane), (light_props.position + float3(sizefrustrum, sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-		Gizmos::DrawLine((light_props.position + float3(sizefrustrum, -sizefrustrum, 0) + light_props.direction * distance_far_plane), (light_props.position + float3(-sizefrustrum, -sizefrustrum, 0) + light_props.direction * distance_far_plane), Color::Green(), 2.0);
-
-		Gizmos::DrawLine((light_props.position + float3(-sizefrustrum, sizefrustrum, 0)), (light_props.position + float3(sizefrustrum, sizefrustrum, 0)), Color::Green(), 2.0);
-		Gizmos::DrawLine((light_props.position + float3(-sizefrustrum, sizefrustrum, 0)), (light_props.position + float3(-sizefrustrum, -sizefrustrum, 0)), Color::Green(), 2.0);
-		Gizmos::DrawLine((light_props.position + float3(sizefrustrum, -sizefrustrum, 0)), (light_props.position + float3(sizefrustrum, sizefrustrum, 0)), Color::Green(), 2.0);
-		Gizmos::DrawLine((light_props.position + float3(sizefrustrum, -sizefrustrum, 0)), (light_props.position + float3(-sizefrustrum, -sizefrustrum, 0)), Color::Green(), 2.0);
-		App->renderer3D->EndDebugDraw();
 	}
 }

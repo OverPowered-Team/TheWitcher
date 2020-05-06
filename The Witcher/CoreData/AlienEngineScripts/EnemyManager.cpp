@@ -63,33 +63,33 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 	case EnemyType::NILFGAARD_SOLDIER: {
 		switch ((NilfgaardSoldier::NilfgaardType)extra_type)
 		{
-		case NilfgaardSoldier::NilfgaardType::ARCHER: {
-			enemy = GameObject::Instantiate(nilf_range, position, false, parent)->GetComponent<Enemy>();
-			LOG("ARCHER");
-			break; }
 		case NilfgaardSoldier::NilfgaardType::SWORD: {
 			enemy = GameObject::Instantiate(nilf_melee, position, false, parent)->GetComponent<Enemy>();
 			LOG("SWORD");
 			break; }
+		case NilfgaardSoldier::NilfgaardType::ARCHER: {
+			enemy = GameObject::Instantiate(nilf_range, position, false, parent)->GetComponent<Enemy>();
+			LOG("ARCHER");
+			break; }
 		case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD: {
-			enemy = GameObject::Instantiate(nilf_melee, position, false, parent)->GetComponent<Enemy>();
+			enemy = GameObject::Instantiate(nilf_shield, position, false, parent)->GetComponent<Enemy>();
 			LOG("SHIELD");
 			break; }
 		default: {
-			LOG("Niflgard type wrong")
+			LOG("Niflgaard type wrong")
 				break; }
 		}
 		break; }
 	case EnemyType::DROWNED: {
 		switch ((Drowned::DrownedType)extra_type)
 		{
-		case Drowned::DrownedType::GRAB: {
-			enemy = GameObject::Instantiate(drowned_grab, position, false, parent)->GetComponent<Enemy>();
-			LOG("Drowned Grab");
-			break; }
 		case Drowned::DrownedType::RANGE: {
 			enemy = GameObject::Instantiate(drowned_range, position, false, parent)->GetComponent<Enemy>();
 			LOG("Drowned Range");
+			break; }
+		case Drowned::DrownedType::GRAB: {
+			enemy = GameObject::Instantiate(drowned_grab, position, false, parent)->GetComponent<Enemy>();
+			LOG("Drowned Grab");
 			break; }
 		default: {
 			LOG("Drowned type wrong")

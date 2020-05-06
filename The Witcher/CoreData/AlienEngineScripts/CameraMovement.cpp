@@ -1,4 +1,5 @@
 #include "CameraMovement.h"
+#include "PlayerController.h"
 
 CameraMovement::CameraMovement() : Alien()
 {
@@ -18,16 +19,46 @@ void CameraMovement::Start()
     LOG("TRG_OFFSET X: %f Y: %f Z: %f", trg_offset.x, trg_offset.y, trg_offset.z);
     LOG("FIRSTPOS X: %f Y: %f Z: %f", first_pos.x, first_pos.y, first_pos.z);
     LookAtMidPoint();
+    prev_state = CameraState::FREE;
 }
 
 void CameraMovement::Update()
 {   
     switch (state) {
     case CameraState::DYNAMIC: {
-        if (smooth_camera)
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateMidPoint() + trg_offset) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+        if (smooth_camera) {
+            float3 pos = transform->GetGlobalPosition();
+            transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
+        }
         else
             transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        break;
+    }
+    case CameraState::FREE: {
+
+        transform->SetGlobalPosition(players[closest_player]->transform->GetGlobalPosition() + prev_middle);
+
+        bool inside = true;
+        float3 pos = CalculateMidPoint() + trg_offset;
+        Frustum frus = GetComponent<ComponentCamera>()->frustum;
+        frus.pos = pos;
+        for (int i = 0; i < players.size(); ++i)
+        {
+            PlayerController* p = players[i]->GetComponent<PlayerController>();
+            if (p != nullptr) {
+                AABB p_tmp = p->max_aabb;
+                p_tmp.minPoint += players[i]->transform->GetGlobalPosition();
+                p_tmp.maxPoint += players[i]->transform->GetGlobalPosition();
+
+                if (!frus.Contains(p_tmp))
+                {
+                    inside = false;
+                }
+            }
+        }
+        if (inside) {
+            state = prev_state;
+        }
         break;
     }
     case CameraState::STATIC:

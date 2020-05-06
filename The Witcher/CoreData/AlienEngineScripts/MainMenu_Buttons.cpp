@@ -26,9 +26,11 @@ void MainMenu_Buttons::Controls()
 	GameObject::FindWithName("Main_Menu_UI")->SetEnable(false);
 }
 
-void MainMenu_Buttons::Settings()
+void MainMenu_Buttons::Credits()
 {
+	SceneManager::LoadScene("CreditsMenu", FadeToBlackType::FADE);
 }
+
 
 void MainMenu_Buttons::Muffin()
 {

@@ -13,9 +13,6 @@ public:
 	
 	void UpdateEnemy() override;
 
-	void OnAnimationEnd(const char* name) override;
-	void OnTriggerEnter(ComponentCollider* collider);
-
 	void ShootSlime();
 
 public:
@@ -32,6 +29,8 @@ ALIEN_FACTORY DrownedRange* CreateDrownedRange() {
 	SHOW_IN_INSPECTOR_AS_ENUM(Drowned::DrownedType, drowned->drowned_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Drowned::DrownedState, drowned->state);
 	SHOW_VOID_FUNCTION(DrownedRange::ShootSlime, drowned);
+	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, drowned);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(drowned->increase_hit_animation);
 
 	return drowned;
 } 

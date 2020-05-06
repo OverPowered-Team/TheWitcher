@@ -1,4 +1,5 @@
 #include "NilfSoldierRange.h"
+#include "PlayerController.h"
 #include "EnemyManager.h"
 #include "ArrowScript.h"
 
@@ -60,6 +61,7 @@ void NilfSoldierRange::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
+		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
 		break;
 	}
@@ -118,6 +120,7 @@ void NilfSoldierRange::Flee()
 
 void NilfSoldierRange::ShootAttack()
 {
+	SpawnAttackParticle();
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();

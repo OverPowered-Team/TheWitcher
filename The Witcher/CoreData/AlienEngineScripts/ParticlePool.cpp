@@ -5,7 +5,7 @@ ParticlePool::~ParticlePool()
     particle_pools.clear();
 }
 
-GameObject* ParticlePool::GetInstance(std::string particle_type, float3 pos, GameObject* parent, bool local)
+GameObject* ParticlePool::GetInstance(std::string particle_type, float3 pos, float3 rotation, GameObject* parent, bool local)
 {
     if (particle_pools[particle_type].size() > 0)
     {
@@ -19,7 +19,7 @@ GameObject* ParticlePool::GetInstance(std::string particle_type, float3 pos, Gam
         else
             instance->transform->SetLocalPosition(pos);
 
-        instance->transform->SetGlobalRotation(instance->parent->transform->GetGlobalRotation());
+        instance->transform->SetGlobalRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
 
         instance->SetEnable(true);
 
