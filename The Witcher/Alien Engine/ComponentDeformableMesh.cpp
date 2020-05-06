@@ -53,6 +53,11 @@ void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)
 	AttachBone(root);
 	
 	material = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
+	if (material == nullptr)
+	{
+		material = new ComponentMaterial(game_object_attached);
+		game_object_attached->AddComponent(material);
+	}
 
 	SendWeightsAndID();
 
