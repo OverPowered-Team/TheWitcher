@@ -119,6 +119,9 @@ void Enemy::UpdateEnemy()
 				(*it)->spawned_particle->SetEnable(false);
 				(*it)->spawned_particle->SetEnable(true);
 			}
+
+			std::string audio_name = "Play_" + (*it)->name;
+			audio_emitter->StartSound(audio_name.c_str());
 				
 		}
 
@@ -242,6 +245,9 @@ void Enemy::AddEffect(Effect* new_effect)
 	if (new_effect->vfx_on_apply != "")
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
 			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
+
+	std::string audio_name = "Play_" + new_effect->name;
+	audio_emitter->StartSound(audio_name.c_str());
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{

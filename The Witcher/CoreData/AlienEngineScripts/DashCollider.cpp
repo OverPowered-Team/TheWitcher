@@ -13,11 +13,6 @@ DashCollider::~DashCollider()
 
 void DashCollider::Start()
 {
-	std::vector<GameObject*> particle_dash = game_object->GetChildren();
-	for (auto it = particle_dash.begin(); it != particle_dash.end(); ++it) {
-		dash_particles.insert(std::pair((*it)->GetName(), (*it)));
-		(*it)->SetEnable(false);
-	}
 	start_time = Time::GetGameTime();
 }
 
