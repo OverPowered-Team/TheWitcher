@@ -15,10 +15,14 @@ public:
 
 	void ShootSlime();
 
+	void OnAnimationEnd(const char* name) override;
+
 public:
 	float current_hide_time = 0.0f;
 	float max_hide_time = 3.0f;
 	Prefab slime;
+
+	bool set_attack = false;
 };
 
 ALIEN_FACTORY DrownedRange* CreateDrownedRange() {
