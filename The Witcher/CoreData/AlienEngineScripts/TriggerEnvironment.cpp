@@ -27,6 +27,7 @@ void TriggerEnvironment::Start()
 void TriggerEnvironment::Update()
 {
 	PlayEnvironment();
+	MoveSpatial();
 }
 
 void TriggerEnvironment::CleanUp()
@@ -109,7 +110,7 @@ void TriggerEnvironment::OnDrawGizmosSelected()
 				c = Color::Orange();
 				break;
 			}
-			Gizmos::DrawWireSphere(iter->spatial_place->transform->GetGlobalPosition(), 0.2, c);
+			Gizmos::DrawWireSphere(iter->spatial_place.spatial_place->transform->GetGlobalPosition(), 0.2, c);
 		}
 	}
 }
@@ -208,13 +209,20 @@ void TriggerEnvironment::PrepareEnvironmentElements()
 	{		
 		std::string spt = "Spatial";
 		spt += std::to_string(iter);
-		env_elements[iter].spatial_place = this->game_object->GetChild(spt.c_str());
+		env_elements[iter].spatial_place.spatial_place = this->game_object->GetChild(spt.c_str());
 		env_elements[iter].event_name = GetAudioElementByEnum(env_elements[iter].type);
-		if (env_elements[iter].spatial_place != nullptr)
-			env_elements[iter].el_emitter = env_elements[iter].spatial_place->GetComponent<ComponentAudioEmitter>();
-
-		if (!env_elements[iter].random && std::strcmp(env_elements[iter].event_name.c_str(), "QUIET") != 0 && env_elements[iter].el_emitter != nullptr && !env_elements[iter].instant) { //Play of the constant sounds ex: Wind
-			env_elements[iter].el_emitter->StartSound(env_elements[iter].event_name.c_str());
+		if (env_elements[iter].spatial_place.spatial_place != nullptr) {
+			env_elements[iter].spatial_place.el_emitter = env_elements[iter].spatial_place.spatial_place->GetComponent<ComponentAudioEmitter>();
+			if (env_elements[iter].spatial_movement)
+			{
+				std::string spt = "SpatialEnd";
+				spt += std::to_string(iter);
+				env_elements[iter].spatial_place.spatial_end = this->game_object->GetChild(spt.c_str());
+				env_elements[iter].spatial_place.begin_pos = env_elements[iter].spatial_place.spatial_place->transform->GetGlobalPosition();
+			}
+		}
+		if (!env_elements[iter].random && std::strcmp(env_elements[iter].event_name.c_str(), "QUIET") != 0 && env_elements[iter].spatial_place.el_emitter != nullptr && !env_elements[iter].instant) { //Play of the constant sounds ex: Wind
+			env_elements[iter].spatial_place.el_emitter->StartSound(env_elements[iter].event_name.c_str());
 		}
 		else
 		{
@@ -231,18 +239,25 @@ void TriggerEnvironment::PlayEnvironment()
 	{
 		if (iter->random)
 		{
-			if (Time::GetGameTime() - iter->timer_play >= iter->time_to_play && iter->el_emitter != nullptr) //We play the random sounds given the seconds previously clamped between the selected values
+			if (iter->spatial_movement && Time::GetGameTime() - iter->timer_play >= iter->time_to_play && iter->spatial_place.el_emitter != nullptr)
 			{
-				iter->el_emitter->StartSound(iter->event_name.c_str());
+				iter->spatial_place.el_emitter->StartSound(iter->event_name.c_str());
+				iter->timer_play = Time::GetGameTime();
+				iter->time_to_play = Random::GetRandomFloatBetweenTwo(iter->min_time_between_plays, iter->max_time_between_plays);
+				iter->spatial_place.move = true;
+			}
+
+			if (!iter->spatial_movement && Time::GetGameTime() - iter->timer_play >= iter->time_to_play && iter->spatial_place.el_emitter != nullptr) //We play the random sounds given the seconds previously clamped between the selected values
+			{
+				iter->spatial_place.el_emitter->StartSound(iter->event_name.c_str());
 				iter->timer_play = Time::GetGameTime();
 				iter->time_to_play = Random::GetRandomFloatBetweenTwo(iter->min_time_between_plays, iter->max_time_between_plays);
 			}
 		}
 		if (iter->instant)
 		{
-			if (Time::GetGameTime() - iter->timer_play_instant >= iter->time_to_play_instant && iter->el_emitter != nullptr && iter->can_play) {
-				//iter->timer_play_instant = 0;
-				iter->el_emitter->StartSound(iter->event_name.c_str());
+			if (Time::GetGameTime() - iter->timer_play_instant >= iter->time_to_play_instant && iter->spatial_place.el_emitter != nullptr && iter->can_play) {
+				iter->spatial_place.el_emitter->StartSound(iter->event_name.c_str());
 				iter->can_play = false;
 			}
 				
@@ -258,6 +273,29 @@ void TriggerEnvironment::PlayInstant()
 		{
 			iter->timer_play_instant = Time::GetGameTime();
 			iter->can_play = true;
+		}
+	}
+}
+
+void TriggerEnvironment::MoveSpatial()
+{
+	for (auto iter = env_elements.begin(); iter != env_elements.end(); ++iter)
+	{
+		if (iter->spatial_movement && iter->spatial_place.move) {
+			float min_dist = 0.1f;
+			iter->spatial_place.curr_move_time += Time::GetDT();
+
+			if ((iter->spatial_place.spatial_end->transform->GetGlobalPosition() - iter->spatial_place.spatial_place->transform->GetGlobalPosition()).Length() < min_dist) {
+				iter->spatial_place.move = false;
+				iter->spatial_place.spatial_place->transform->SetGlobalPosition(iter->spatial_place.begin_pos);
+				iter->spatial_place.curr_move_time = 0.f;
+			}
+			else
+			{
+				float time_percent = (iter->spatial_place.curr_move_time / iter->spatial_place.move_time);
+				//iter->spatial_place.direction_vec = iter->spatial_place.spatial_end - iter->spatial_place_
+				iter->spatial_place.spatial_place->transform->SetGlobalPosition(iter->spatial_place.spatial_place->transform->GetGlobalPosition() + (iter->spatial_place.spatial_end->transform->GetGlobalPosition() - iter->spatial_place.spatial_place->transform->GetGlobalPosition()) * (time_percent));
+			}
 		}
 	}
 }

@@ -6111,7 +6111,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "2878334055627523085",
-                        "ListenerID": "2002771310"
+                        "ListenerID": "4019882643"
                     },
                     {
                         "Type": 29,
@@ -6325,27 +6325,28 @@
             {
                 "Name": "TriggerEnvironment",
                 "FamilyNumber": 1,
-                "ID": "10400412406242757280",
+                "ID": "11985751354766769568",
                 "ParentID": "8232295045223925732",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
                             0,
-                            0,
+                            2.4836006164550781,
                             -38.117210388183594
                         ],
                         "Rotation": [
                             0,
-                            -0.0031707286834716797,
+                            -0.0031708572059869766,
                             0,
                             0.99999505281448364
                         ],
@@ -6355,7 +6356,7 @@
                             4.4162936210632324
                         ],
                         "ScaleNegative": false,
-                        "ID": "43572402544199079"
+                        "ID": "2559888982815503204"
                     },
                     {
                         "Enabled": true,
@@ -6382,7 +6383,7 @@
                         ]
                     },
                     {
-                        "ID": "12390814079780621194",
+                        "ID": "16826864833606228049",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -6393,7 +6394,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "6737774806480320366",
+                        "ID": "13971428410782041808",
                         "ResourceID": "12037526431574568711",
                         "DataName": "TriggerEnvironment",
                         "HasInspector": true,
@@ -6427,7 +6428,21 @@
                             {
                                 "VarType": 7,
                                 "Name": "audio1.spatial",
-                                "bool": 0
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio1.spatial_movement",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio1.spatial_place.move_time",
+                                "float": 20
                             },
                             {
                                 "VarType": 11,
@@ -6446,7 +6461,7 @@
                             {
                                 "VarType": 7,
                                 "Name": "audio1.random",
-                                "bool": 0
+                                "bool": 1
                             },
                             {
                                 "VarType": 10,
@@ -6459,12 +6474,12 @@
                             {
                                 "VarType": 3,
                                 "Name": "audio1.min_time_between_plays",
-                                "float": 1
+                                "float": 3
                             },
                             {
                                 "VarType": 3,
                                 "Name": "audio1.max_time_between_plays",
-                                "float": 1
+                                "float": 9
                             },
                             {
                                 "VarType": 12,
@@ -6483,6 +6498,20 @@
                                 "VarType": 7,
                                 "Name": "audio2.spatial",
                                 "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio2.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio2.spatial_place.move_time",
+                                "float": 1
                             },
                             {
                                 "VarType": 11,
@@ -6537,6 +6566,20 @@
                             },
                             {
                                 "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio3.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio3.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
                                 "Name": "If you choose instant can't be random!"
                             },
                             {
@@ -6585,6 +6628,20 @@
                                 "VarType": 7,
                                 "Name": "audio4.spatial",
                                 "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio4.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio4.spatial_place.move_time",
+                                "float": 1
                             },
                             {
                                 "VarType": 11,
@@ -6639,6 +6696,20 @@
                             },
                             {
                                 "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio5.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio5.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
                                 "Name": "If you choose instant can't be random!"
                             },
                             {
@@ -6677,41 +6748,41 @@
             {
                 "Name": "Spatial0",
                 "FamilyNumber": 2,
-                "ID": "2109699150470203724",
-                "ParentID": "10400412406242757280",
+                "ID": "3603837206485650229",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14523769022876190340",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.04137704148888588,
-                            2.9786803722381592,
-                            4.0405502319335938
+                            0.088387526571750641,
+                            0.0058289766311645508,
+                            8.6308670043945313
                         ],
                         "Rotation": [
                             0,
-                            0.0035417769104242325,
+                            0.0074982079677283764,
                             0,
-                            0.99999380111694336
+                            0.99997198581695557
                         ],
                         "Scale": [
-                            0.36564525961875916,
-                            0.21919010579586029,
-                            0.22644154727458954
+                            0.13369068503379822,
+                            0.048044301569461823,
+                            0.05128154531121254
                         ],
                         "ScaleNegative": false,
-                        "ID": "16812043646878185449"
+                        "ID": "8585977714721883525"
                     },
                     {
-                        "ID": "11462228682985410621",
+                        "ID": "14954339351220983756",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -6719,71 +6790,47 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Sounds",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
             {
                 "Name": "Spatial1",
                 "FamilyNumber": 2,
-                "ID": "9594553278222769696",
-                "ParentID": "10400412406242757280",
+                "ID": "17400857716761818842",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14523769022876190340",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.088383942842483521,
-                            0,
+                            0.088387526571750641,
+                            -0.54438066482543945,
                             8.6308670043945313
                         ],
                         "Rotation": [
                             0,
-                            0.0074975593015551567,
+                            0.011914896778762341,
                             0,
-                            0.99997192621231079
+                            0.99992901086807251
                         ],
                         "Scale": [
-                            0.13369068503379822,
-                            0.048044301569461823,
-                            0.05128154531121254
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
                         ],
                         "ScaleNegative": false,
-                        "ID": "5987181954072300981"
+                        "ID": "4505190773233476589"
                     },
                     {
-                        "ID": "8276254202481885582",
+                        "ID": "190982429752739572",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -6791,71 +6838,47 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Sounds",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
             {
                 "Name": "Spatial2",
                 "FamilyNumber": 2,
-                "ID": "7928706779752622884",
-                "ParentID": "10400412406242757280",
+                "ID": "12118542129881769536",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14523769022876190340",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.088383942842483521,
-                            0,
+                            0.088387526571750641,
+                            -0.54438066482543945,
                             8.6308670043945313
                         ],
                         "Rotation": [
                             0,
-                            0.0074975593015551567,
+                            0.011914896778762341,
                             0,
-                            0.99997192621231079
+                            0.99992901086807251
                         ],
                         "Scale": [
-                            0.13369068503379822,
-                            0.048044301569461823,
-                            0.05128154531121254
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
                         ],
                         "ScaleNegative": false,
-                        "ID": "18064323640415490228"
+                        "ID": "1275447112227466318"
                     },
                     {
-                        "ID": "15926708338509091456",
+                        "ID": "889619968608952520",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -6863,71 +6886,47 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Sounds",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
             {
                 "Name": "Spatial3",
                 "FamilyNumber": 2,
-                "ID": "15368629442263649039",
-                "ParentID": "10400412406242757280",
+                "ID": "2677700538555747",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14523769022876190340",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.088383942842483521,
-                            0,
+                            0.088387526571750641,
+                            -0.54438066482543945,
                             8.6308670043945313
                         ],
                         "Rotation": [
                             0,
-                            0.0074975593015551567,
+                            0.011914896778762341,
                             0,
-                            0.99997192621231079
+                            0.99992901086807251
                         ],
                         "Scale": [
-                            0.13369068503379822,
-                            0.048044301569461823,
-                            0.05128154531121254
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
                         ],
                         "ScaleNegative": false,
-                        "ID": "588169821591762828"
+                        "ID": "15536752270136452486"
                     },
                     {
-                        "ID": "15779166457957396646",
+                        "ID": "2040169541512528623",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -6935,71 +6934,47 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Sounds",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
             {
                 "Name": "Spatial4",
                 "FamilyNumber": 2,
-                "ID": "1584020788539807346",
-                "ParentID": "10400412406242757280",
+                "ID": "16054206008880848044",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14523769022876190340",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.088383942842483521,
-                            0,
+                            0.088387526571750641,
+                            -0.54438066482543945,
                             8.6308670043945313
                         ],
                         "Rotation": [
                             0,
-                            0.0074975593015551567,
+                            0.011914896778762341,
                             0,
-                            0.99997192621231079
+                            0.99992901086807251
                         ],
                         "Scale": [
-                            0.13369068503379822,
-                            0.048044301569461823,
-                            0.05128154531121254
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
                         ],
                         "ScaleNegative": false,
-                        "ID": "6704734737657434105"
+                        "ID": "2653108691063107543"
                     },
                     {
-                        "ID": "6431413315294551609",
+                        "ID": "18325522504195196456",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -7007,38 +6982,52 @@
                         "Bank": "0",
                         "Event": "0",
                         "PlayOnAwake": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Sounds",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
                     }
                 ]
             },
             {
-                "Name": "TriggerFootsteps",
-                "FamilyNumber": 1,
-                "ID": "242098470458205192",
-                "ParentID": "8232295045223925732",
+                "Name": "SpatialEnd0",
+                "FamilyNumber": 2,
+                "ID": "17984715613916370337",
+                "ParentID": "11985751354766769568",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8265563916293339945",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.072621993720531464,
+                            0.15256494283676147,
+                            -7.0912008285522461
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.00088496558601036668,
+                            0,
+                            0.99999964237213135
+                        ],
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8444382286426804456"
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd1",
+                "FamilyNumber": 2,
+                "ID": "17823298606749174405",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -7047,74 +7036,36 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14097118158796311783",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            -15.788633346557617
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
                         ],
                         "Rotation": [
                             0,
+                            -0.00088496552780270576,
                             0,
-                            0,
-                            1
+                            0.99999964237213135
                         ],
                         "Scale": [
-                            39.377246856689453,
-                            32.655399322509766,
-                            23.739839553833008
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
                         ],
                         "ScaleNegative": false,
-                        "ID": "13273080271837277454"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": true,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Default",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "3577680556141480354",
-                        "ResourceID": "11479817035125242678",
-                        "DataName": "TriggerFootsteps",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 14,
-                                "Name": "material_1",
-                                "enumInt": 2
-                            }
-                        ]
+                        "ID": "12818902240057476523"
                     }
                 ]
             },
             {
-                "Name": "TriggerFootsteps",
-                "FamilyNumber": 1,
-                "ID": "16778258794327321559",
-                "ParentID": "8232295045223925732",
+                "Name": "SpatialEnd2",
+                "FamilyNumber": 2,
+                "ID": "17104664026372476511",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -7123,146 +7074,104 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14097118158796311783",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            -46.200878143310547
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
                         ],
                         "Rotation": [
                             0,
+                            -0.00088496552780270576,
                             0,
-                            0,
-                            1
+                            0.99999964237213135
                         ],
                         "Scale": [
-                            39.377246856689453,
-                            32.655399322509766,
-                            35.039131164550781
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
                         ],
                         "ScaleNegative": false,
-                        "ID": "15962339966280313345"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": true,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Default",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "3589873674050938168",
-                        "ResourceID": "11479817035125242678",
-                        "DataName": "TriggerFootsteps",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 14,
-                                "Name": "material_1",
-                                "enumInt": 3
-                            }
-                        ]
+                        "ID": "7766157685282832815"
                     }
                 ]
             },
             {
-                "Name": "TriggerReverb",
-                "FamilyNumber": 1,
-                "ID": "4331171615884065539",
-                "ParentID": "8232295045223925732",
+                "Name": "SpatialEnd3",
+                "FamilyNumber": 2,
+                "ID": "3584951940508772270",
+                "ParentID": "11985751354766769568",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
-                "IsPrefab": false,
+                "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
+                "PrefabID": "8265563916293339945",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            -34.724723815917969
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
                         ],
                         "Rotation": [
                             0,
+                            -0.00088496552780270576,
                             0,
-                            0,
-                            1
+                            0.99999964237213135
                         ],
                         "Scale": [
-                            73.430259704589844,
-                            73.430259704589844,
-                            73.430259704589844
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
                         ],
                         "ScaleNegative": false,
-                        "ID": "10523606690446973282"
-                    },
+                        "ID": "2079547192352654923"
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd4",
+                "FamilyNumber": 2,
+                "ID": "17200019904750398870",
+                "ParentID": "11985751354766769568",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8265563916293339945",
+                "Components": [
                     {
-                        "Enabled": true,
-                        "Type": 7,
-                        "Center": [
-                            0,
-                            0,
-                            0
+                        "Type": 0,
+                        "Position": [
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
                         ],
                         "Rotation": [
                             0,
+                            -0.00088496552780270576,
                             0,
-                            0
+                            0.99999964237213135
                         ],
-                        "IsTrigger": true,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Default",
-                        "Size": [
-                            1,
-                            1,
-                            1
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "3001659088377845991",
-                        "ResourceID": "4280211695965650059",
-                        "DataName": "ReverbZone",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 6,
-                                "Name": "zone_name",
-                                "string": "reverb_cave"
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "strength",
-                                "float": 1
-                            }
-                        ]
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8731657706614426443"
                     }
                 ]
             }
