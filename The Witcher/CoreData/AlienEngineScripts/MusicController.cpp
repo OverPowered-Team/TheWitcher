@@ -9,29 +9,42 @@ MusicController::~MusicController()
 {
 }
 
-void MusicController::Start()
+void MusicController::Awake()
 {
 	emitter = this->GetComponent<ComponentAudioEmitter>();
+	emitter->StartSound("Play_Bad_News_Ahead");
+	emitter->StartSound("Play_Combat_Music");
+	emitter->StartSound("Play_KaerMorhen");
+	emitter->StartSound("Play_Ladies_of_the_Woods");
+	emitter->StartSound("Play_No_Surrender");
+	emitter->StartSound("Play_Random_Level1_Music");
+	emitter->StartSound("Play_Trial_Of_The_Grasses");
 	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
 	last_music = "Quiet";
+}
+
+void MusicController::Start()
+{
+	
 	t1 = Time::GetGameTime();
 }
 
 void MusicController::Update()
 {
+	LOG("CHILDS: %i", enemies_in_sight.size());
 	if (is_combat)
 	{
 		if (has_changed && enemies_in_sight.size() == 1) {
 			emitter->SetState("Interactive_Music_Lvl1", "Combat");
 			has_changed = !has_changed;
 		}
-		DecreaseMusicVolume();
+		//DecreaseMusicVolume();
 	}
 	else if(!is_combat && has_changed && enemies_in_sight.size() <= 0)
 	{
 		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str());
 		has_changed = !has_changed;
-		already_minium = false;
+		//already_minium = false;
 	}
 }
 

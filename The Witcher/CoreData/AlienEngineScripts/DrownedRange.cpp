@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "MusicController.h"
 
 DrownedRange::DrownedRange() : Drowned()
 {
@@ -51,6 +52,11 @@ void DrownedRange::UpdateEnemy()
 		state = DrownedState::DEAD;
 		last_player_hit->OnEnemyKill();
 		//audio_emitter->StartSound("DrownedDeath");
+		//if (m_controller && is_combat)
+		//{
+		//	is_combat = false;
+		//	m_controller->EnemyLostSight((Enemy*)this);
+		//}
 	}
 	}
 }

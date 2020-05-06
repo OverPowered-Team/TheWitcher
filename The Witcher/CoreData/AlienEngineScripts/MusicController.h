@@ -11,7 +11,7 @@ public:
 
 	MusicController();
 	virtual ~MusicController();
-	
+	void Awake();
 	void Start();
 	void Update();
 	void CleanUp();
