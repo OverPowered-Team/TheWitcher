@@ -1,6 +1,7 @@
 #include "NilfSoldierMelee.h"
 #include "PlayerController.h"
 #include "EnemyManager.h"
+#include "MusicController.h"
 
 NilfSoldierMelee::NilfSoldierMelee() : NilfgaardSoldier()
 {
@@ -47,6 +48,11 @@ void NilfSoldierMelee::UpdateEnemy()
 		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 		break;
 	}
 	}
