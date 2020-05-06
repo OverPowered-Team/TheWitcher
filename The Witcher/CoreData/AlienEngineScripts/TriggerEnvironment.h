@@ -35,9 +35,20 @@ public:
 		CAVE,
 		TREES_SQUEAKING
 		);
+	struct MovingSpatial {
+		GameObject* spatial_place = nullptr;
+		GameObject* spatial_end = nullptr;
+		float3 begin_pos;
+		float3 direction_vec;
+		ComponentAudioEmitter* el_emitter = nullptr;
+		bool move = false;
+		float curr_move_time = 0.f;
+		float move_time = 1.f;
+	};
 	struct EnvironmentElement {
 		AudioEffects type = AudioEffects::QUIET;
 		bool spatial = false;
+		bool spatial_movement = false;
 		bool random = false;
 		bool instant = false;
 		bool can_play = false;
@@ -47,8 +58,7 @@ public:
 		float timer_play_instant = 0.f;
 		float time_to_play = 0.f;
 		float time_to_play_instant = 0.f;
-		GameObject* spatial_place = nullptr;
-		ComponentAudioEmitter* el_emitter = nullptr;
+		MovingSpatial spatial_place;
 		std::string event_name;
 	};
 	
@@ -66,6 +76,7 @@ public:
 	void PrepareEnvironmentElements();
 	void PlayEnvironment();
 	void PlayInstant();
+	void MoveSpatial();
 public:
 	EnvironmentElement audio1;
 	EnvironmentElement audio2;
@@ -89,6 +100,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio1");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio1.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio1.spatial);
+	SHOW_TEXT("SpatialMovement only if your spatial audio is selected and it will move");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio1.spatial_movement);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio1.spatial_place.move_time);
 	SHOW_TEXT("If you choose instant can't be random!");
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio1.instant);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio1.time_to_play_instant);
@@ -101,6 +115,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio2");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio2.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio2.spatial);
+	SHOW_TEXT("SpatialMovement only if your spatial audio is selected and it will move");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio2.spatial_movement);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio2.spatial_place.move_time);
 	SHOW_TEXT("If you choose instant can't be random!");
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio2.instant);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio2.time_to_play_instant);
@@ -112,6 +129,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio3");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio3.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio3.spatial);
+	SHOW_TEXT("SpatialMovement only if your spatial audio is selected and it will move");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio3.spatial_movement);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio3.spatial_place.move_time);
 	SHOW_TEXT("If you choose instant can't be random!");
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio3.instant);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio3.time_to_play_instant);
@@ -123,6 +143,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio4");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio4.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio4.spatial);
+	SHOW_TEXT("SpatialMovement only if your spatial audio is selected and it will move");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio4.spatial_movement);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio4.spatial_place.move_time);
 	SHOW_TEXT("If you choose instant can't be random!");
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio4.instant);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio4.time_to_play_instant);
@@ -134,6 +157,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio5");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio5.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio5.spatial);
+	SHOW_TEXT("SpatialMovement only if your spatial audio is selected and it will move");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio5.spatial_movement);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio5.spatial_place.move_time);
 	SHOW_TEXT("If you choose instant can't be random!");
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio5.instant);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio5.time_to_play_instant);
