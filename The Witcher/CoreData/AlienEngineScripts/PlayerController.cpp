@@ -701,8 +701,10 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
-				if (dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name])
-					dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name]->SetEnable(true);
+
+				if (dash_coll->effect->on_dash_effect->name != "")
+					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
+						float3::zero(), float3::zero(), dash_coll->game_object);
 			}
 		}
 	}

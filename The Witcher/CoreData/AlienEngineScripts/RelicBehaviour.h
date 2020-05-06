@@ -89,8 +89,8 @@ public:
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
 
-	Dialogue geraltDialogue;
-	Dialogue YenneferDialogue;
+private:
+	ComponentAudioEmitter* audio_emitter = nullptr;
 
 };
 
