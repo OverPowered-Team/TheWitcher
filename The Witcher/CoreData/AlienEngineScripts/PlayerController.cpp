@@ -303,6 +303,7 @@ void PlayerController::ReleaseAttackParticle()
 {
 	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
