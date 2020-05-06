@@ -43,7 +43,6 @@ void DashCollider::OnTriggerEnter(ComponentCollider* col)
 		for (auto i = comps.begin(); i != comps.end(); ++i) {
 			Enemy* enemy = dynamic_cast<Enemy*>(*i);
 			if (enemy) {
-				LOG("daño enemigo = %f", enemy->stats["Health"].GetValue());
 				OnDash(enemy);
 				return;
 			}
