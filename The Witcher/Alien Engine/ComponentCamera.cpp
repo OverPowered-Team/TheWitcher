@@ -301,7 +301,8 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_pos_x = App->file_system->GetBaseFileName(cubemap->pos_x.c_str());
 		ResourceTexture* tex_pos_x = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_x));
-		ImGui::Image((ImTextureID)tex_pos_x->id, ImVec2(100.0f, 100.0f));
+		if(tex_pos_x)
+			ImGui::Image((ImTextureID)tex_pos_x->id, ImVec2(100.0f, 100.0f));
 		
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -341,7 +342,8 @@ bool ComponentCamera::DrawInspector()
 
 		std::string path_neg_x = App->file_system->GetBaseFileName(cubemap->neg_x.c_str());
 		ResourceTexture* tex_neg_x = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_x));
-		ImGui::Image((ImTextureID)tex_neg_x->id, ImVec2(100.0f, 100.0f));
+		if(tex_neg_x)
+			ImGui::Image((ImTextureID)tex_neg_x->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -381,7 +383,8 @@ bool ComponentCamera::DrawInspector()
 
 		std::string path_pos_y = App->file_system->GetBaseFileName(cubemap->pos_y.c_str());
 		ResourceTexture* tex_pos_y = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_y));
-		ImGui::Image((ImTextureID)tex_pos_y->id, ImVec2(100.0f, 100.0f));
+		if(tex_pos_y)
+			ImGui::Image((ImTextureID)tex_pos_y->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -421,7 +424,8 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_neg_y = App->file_system->GetBaseFileName(cubemap->neg_y.c_str());
 		ResourceTexture* tex_neg_y = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_y));
-		ImGui::Image((ImTextureID)tex_neg_y->id, ImVec2(100.0f, 100.0f));
+		if(tex_neg_y)
+			ImGui::Image((ImTextureID)tex_neg_y->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -461,7 +465,8 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_pos_z = App->file_system->GetBaseFileName(cubemap->pos_z.c_str());
 		ResourceTexture* tex_pos_z = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_z));
-		ImGui::Image((ImTextureID)tex_pos_z->id, ImVec2(100.0f, 100.0f));
+		if(tex_pos_z)
+			ImGui::Image((ImTextureID)tex_pos_z->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -502,7 +507,8 @@ bool ComponentCamera::DrawInspector()
 
 		std::string path_neg_z = App->file_system->GetBaseFileName(cubemap->neg_z.c_str());
 		ResourceTexture* tex_neg_z = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_z));
-		ImGui::Image((ImTextureID)tex_neg_z->id, ImVec2(100.0f, 100.0f));
+		if(tex_neg_z)
+			ImGui::Image((ImTextureID)tex_neg_z->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
