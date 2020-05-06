@@ -36,7 +36,7 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 			Scores_Data::won_level2 = true;
 		}
 
-		SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		SceneManager::LoadScene("NewWin_Menu");
 	}
 	
 }
