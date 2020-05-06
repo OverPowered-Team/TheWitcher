@@ -47,6 +47,8 @@ void Ghoul::SetStats(const char* json)
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
         stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
+        stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+        stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
     }
 
     JSONfilepack::FreeJSON(stat);
@@ -73,10 +75,10 @@ void Ghoul::JumpImpulse()
 
 void Ghoul::Stun(float time)
 {
-    if (state != GhoulState::STUNNED)
+    if (state != GhoulState::STUNNED || state != GhoulState::DEAD)
     {
         state = GhoulState::STUNNED;
-        //animator->PlayState("Dizzy");
+        animator->PlayState("Dizzy");
         current_stun_time = Time::GetGameTime();
         stun_time = time;
     }
@@ -150,9 +152,19 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
     if (can_get_interrupted) {
         state = GhoulState::HIT;
         animator->PlayState("Hit");
+        audio_emitter->StartSound("GhoulHit");
+        stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+        animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
     }
 
-    audio_emitter->StartSound("GhoulHit");
+    if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+    {
+        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+        can_get_interrupted = false;
+    }
+
+
     SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
 
     character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
@@ -186,6 +198,8 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
 void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
+        can_get_interrupted = true;
+        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
             state = GhoulState::MOVE;

@@ -19,10 +19,11 @@ public:
 ALIEN_FACTORY NilfgaardSoldier* CreateNilfSoldierMelee() {
 	NilfSoldierMelee* nilfgaard = new NilfSoldierMelee();
 	// To show in inspector here
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->increase_hit_animation);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldierState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(nilfgaard->head_position);
+	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
 
