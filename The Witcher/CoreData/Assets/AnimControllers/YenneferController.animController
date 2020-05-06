@@ -6,28 +6,28 @@
         "States": [
             {
                 "Name": "L",
-                "Speed": 2,
+                "Speed": 2.2000000476837158,
                 "Clip": "3015327048544619653"
             },
             {
                 "Name": "LL",
-                "Speed": 2,
-                "Clip": "12575178571649699862"
+                "Speed": 1.5,
+                "Clip": "3077246922750918179"
             },
             {
                 "Name": "LLL",
-                "Speed": 2,
+                "Speed": 2.0999999046325684,
                 "Clip": "6013997251988468976"
             },
             {
                 "Name": "LLLLL",
-                "Speed": 2,
+                "Speed": 1.7000000476837158,
                 "Clip": "3737757155993371627"
             },
             {
                 "Name": "LLLL",
-                "Speed": 2,
-                "Clip": "6005326666346996765"
+                "Speed": 1,
+                "Clip": "15363179239809262576"
             },
             {
                 "Name": "Idle",
@@ -116,7 +116,7 @@
             },
             {
                 "Name": "LLH",
-                "Speed": 1,
+                "Speed": 1.3999999761581421,
                 "Clip": "13790815703453017947"
             },
             {
@@ -151,7 +151,7 @@
             },
             {
                 "Name": "HHLL",
-                "Speed": 2,
+                "Speed": 2.5,
                 "Clip": "4050472587394022395"
             }
         ],
@@ -1398,6 +1398,42 @@
                 "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "3015327048544619653",
                 "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3077246922750918179",
+                "Frame": 24,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "3077246922750918179",
+                "Frame": 11,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "3077246922750918179",
+                "Frame": 8,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "15363179239809262576",
+                "Frame": 6,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "15363179239809262576",
+                "Frame": 8,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "15363179239809262576",
+                "Frame": 15,
                 "Type": 2
             }
         ]
