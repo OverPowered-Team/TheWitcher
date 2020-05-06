@@ -5,6 +5,7 @@
 #include "EnemyManager.h"
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 
 Ghoul::Ghoul() : Enemy()
 {
@@ -141,7 +142,17 @@ void Ghoul::CheckDistance()
         state = GhoulState::IDLE;
         character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
         animator->SetFloat("speed", 0.0F);
-        is_combat = false;
+        if (m_controller && is_combat) {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
+    }
+    if (distance < stats["VisionRange"].GetValue()) {
+        if (m_controller && !is_combat)
+        {
+            is_combat = true;
+            m_controller->EnemyInSight((Enemy*)this);
+        }
     }
 }
 

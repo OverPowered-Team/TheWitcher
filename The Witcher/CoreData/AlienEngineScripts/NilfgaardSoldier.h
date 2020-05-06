@@ -52,6 +52,7 @@ public:
 	Prefab head_prefab;
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	NilfgaardSoldierState state = NilfgaardSoldierState::NONE;
+	MusicController* m_controller = nullptr;
 
 protected:
 	GameObject* decapitated_head = nullptr;
