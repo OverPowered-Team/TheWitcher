@@ -528,7 +528,7 @@ bool PlayerController::CheckBoundaries()
 	{
 		if (cam->players[i] != this->game_object)
 		{
-			PlayerController* p = cam->players[i]->GetComponent<PlayerController>();
+			PlayerController* const p = cam->players[i]->GetComponent<PlayerController>();
 			if (p != nullptr) {
 				AABB p_tmp = p->max_aabb;
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
