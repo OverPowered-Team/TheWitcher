@@ -1,0 +1,258 @@
+{
+    "Name": "Mahakam Cameras 3",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Mahakam Cameras 3",
+                "FamilyNumber": 1,
+                "ID": "18056029994075193542",
+                "ParentID": "12135833516257246116",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4816178000432745218",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5771537950338782761"
+                    }
+                ]
+            },
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 2,
+                "ID": "2870452927545229316",
+                "ParentID": "18056029994075193542",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4816178000432745218",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            31.082839965820313,
+                            -88.956771850585938,
+                            -6.4496660232543945
+                        ],
+                        "Rotation": [
+                            0.26289856433868408,
+                            0.72414398193359375,
+                            -0.36340692639350891,
+                            0.52386569976806641
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11316694374966188685"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "17879539482412348360",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Fog": false,
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/17871350930873594524.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/14059935274421270400.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/5118434943308934301.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/14265519993990640998.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/3680900417465944678.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/16155666848095087743.dds"
+                    },
+                    {
+                        "ID": "14933515379758735318",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 0.46399998664855957,
+                        "Mute": false,
+                        "Bank": "3991942870",
+                        "Event": "4145153789",
+                        "PlayOnAwake": true
+                    },
+                    {
+                        "Type": 17,
+                        "Enabled": true,
+                        "ID": "11472802512159836962",
+                        "ListenerID": "3981837322"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "18391180905516995664",
+                        "ResourceID": "10408381955680660573",
+                        "DataName": "CameraMovement",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "First parameters"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 3
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "distance",
+                                "float": 16.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "hor_angle",
+                                "float": 7
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vert_angle",
+                                "float": 35
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "axis",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "smooth_camera",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "smooth_cam_vel",
+                                "float": 5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13390244875056470530",
+                        "ResourceID": "8894711529836489338",
+                        "DataName": "CameraShake",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "traumaDecayDef",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxYaw",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxPitch",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxRoll",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "off_set",
+                                "float": 5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5098805897187003150",
+                        "ResourceID": "16057303148137039602",
+                        "DataName": "CameraUltiMode",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "zoom_out_fov",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "staying_time",
+                                "float": 0
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16932021956274775270",
+                        "ResourceID": "3479373960671141251",
+                        "DataName": "MusicController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "minimum_volume",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_start_decrease",
+                                "float": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

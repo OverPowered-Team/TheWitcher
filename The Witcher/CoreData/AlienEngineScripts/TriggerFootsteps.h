@@ -11,7 +11,8 @@ public:
 		MUD,
 		SAND,
 		STONE,
-		VEGETATION
+		VEGETATION,
+		WOOD
 		);
 	TriggerFootsteps();
 	virtual ~TriggerFootsteps();
