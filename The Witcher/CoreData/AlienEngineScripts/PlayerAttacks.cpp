@@ -394,6 +394,7 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 	}
 	if (current_attack->HasTag(Attack_Tags::T_Chaining))
 	{
+		enemy->Stun(1.0f);
 		if (current_attack->enemies_hit.size() == 1)
 		{
 			SpawnChainParticle(this->game_object->transform->GetGlobalPosition() , enemy->transform->GetGlobalPosition());
