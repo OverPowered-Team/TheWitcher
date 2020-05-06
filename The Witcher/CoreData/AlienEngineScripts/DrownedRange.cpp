@@ -29,8 +29,8 @@ void DrownedRange::UpdateEnemy()
 		break;
 
 	case DrownedState::GETOFF:
-		if (transform->GetGlobalScale().y < 0.006)
-			transform->AddScale(float3(0.0f, 0.0001f, 0.0f));
+		if (transform->GetGlobalScale().y < 0.3)
+			transform->AddScale(float3(0.0f, 0.01f, 0.0f));
 		else
 		{
 			state = DrownedState::ATTACK;
@@ -39,7 +39,7 @@ void DrownedRange::UpdateEnemy()
 		break;
 
 	case DrownedState::ATTACK:
-		if (distance < stats["HideDistance"].GetValue() /*|| distance > stats["AttackRange"].GetValue()*/)
+		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
 		{
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
@@ -50,7 +50,7 @@ void DrownedRange::UpdateEnemy()
 		if (Time::GetGameTime() - current_hide_time > max_hide_time)
 		{
 			animator->PlayState("Hide");
-			transform->AddScale(float3(0.0f, -0.005f, 0.0f));
+			transform->AddScale(float3(0.0f, -0.29f, 0.0f));
 			state = DrownedState::IDLE;
 			is_hide = true;
 		}
