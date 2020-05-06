@@ -331,9 +331,7 @@ void PlayerAttacks::CastSpell()
 	if (current_attack)
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
-		if (!current_attack->HasTag(Attack_Tags::T_Chaining))
-			player_controller->PlayAttackParticle();
-
+		player_controller->PlayAttackParticle();
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
 
 		if(player_controller->HUD)
@@ -399,7 +397,7 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 		{
 			SpawnChainParticle(this->game_object->transform->GetGlobalPosition() , enemy->transform->GetGlobalPosition());
 		}
-		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 4);
+		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), current_attack->info.chain_range);
 
 		for (auto it = colliders.begin(); it != colliders.end(); ++it)
 		{
@@ -559,7 +557,14 @@ void PlayerAttacks::CreateAttacks()
 				for (uint j = 0; j < num_tags; j++)
 				{
 					std::string tag_str = tags->GetString("tag");
-					info.tags.push_back(GetTag(tag_str));
+					Attack_Tags tag = GetTag(tag_str);
+					if (tag == Attack_Tags::T_Chaining)
+					{
+						info.chain_range = spells_json->GetNumber("chain_range");
+						info.chain_particle = spells_json->GetString("chain_particle");
+					}	
+					info.tags.push_back(tag);
+
 					tags->GetAnotherNode();
 				}
 			}
@@ -609,7 +614,9 @@ void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 	float distance = from.DistanceSq(to);
 	
 	float3 direction = (to - from).Normalized();
-	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.particle_name, mid_point);
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.chain_particle, mid_point);
+	if (new_particle == nullptr)
+		return;
 
 	Quat rot = new_particle->transform->GetGlobalRotation().LookAt(new_particle->transform->forward, direction, new_particle->transform->up, float3::unitY());
 	new_particle->transform->SetGlobalRotation(rot);

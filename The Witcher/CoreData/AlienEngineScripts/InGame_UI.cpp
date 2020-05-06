@@ -15,18 +15,18 @@ InGame_UI::~InGame_UI()
 
 void InGame_UI::Start()
 {
-	pause_menu->SetEnable(false);
-	GameObject::FindWithName("Menu")->SetEnable(true);
-	canvas = game_object->GetComponent<ComponentCanvas>();
+	//pause_menu->SetEnable(false);
+	//GameObject::FindWithName("Menu")->SetEnable(true);
+	/*canvas = game_object->GetComponent<ComponentCanvas>();
 	you_died = GameObject::FindWithName("YouDied");
 	relics_panel = GameObject::FindWithName("Relics_Notification");
 	relics_panel->SetEnable(false);
 	you_died->SetEnable(false);
 	in_game->SetEnable(true);
-	ulti_bar = game_object->GetChild("InGame")->GetChild("Ulti_Bar")->GetComponent<UltiBar>();
-	checkpoint_saved_text = in_game->GetChild("NewCheckpoint");
-	component_checkpoint_saved_text = checkpoint_saved_text->GetComponent<ComponentText>();
-	checkpoint_saved_text->SetEnable(false);
+	ulti_bar = game_object->GetChild("InGame")->GetChild("Ulti_Bar")->GetComponent<UltiBar>();*/
+	//checkpoint_saved_text = in_game->GetChild("NewCheckpoint");
+	//component_checkpoint_saved_text = checkpoint_saved_text->GetComponent<ComponentText>();
+	//checkpoint_saved_text->SetEnable(false);
 }
 
 void InGame_UI::Update()
@@ -36,7 +36,7 @@ void InGame_UI::Update()
 		PauseMenu(!Time::IsGamePaused());
 	}
 
-	if (checkpoint_saved_text->IsEnabled())
+	/*if (checkpoint_saved_text->IsEnabled())
 	{
 		float t = (Time::GetGameTime() - time_checkpoint) / 0.5f;
 		float lerp = 0.0f;
@@ -85,7 +85,7 @@ void InGame_UI::Update()
 			}
 			}
 		}
-	}
+	}*/
 
 	if (died)
 	{
