@@ -331,8 +331,11 @@ void PlayerAttacks::CastSpell()
 	if (current_attack)
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
-		player_controller->PlayAttackParticle();
+		if (!current_attack->HasTag(Attack_Tags::T_Chaining))
+			player_controller->PlayAttackParticle();
+
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
+
 		if(player_controller->HUD)
 			player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
 
@@ -395,7 +398,8 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 		{
 			SpawnChainParticle(this->game_object->transform->GetGlobalPosition() , enemy->transform->GetGlobalPosition());
 		}
-		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 3);
+		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 4);
+
 		for (auto it = colliders.begin(); it != colliders.end(); ++it)
 		{
 			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
@@ -601,11 +605,20 @@ void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 {
 	float3 mid_point = float3((from.x + to.x) / 2, 1.0f, (from.z + to.z) / 2);
 	float distance = from.DistanceSq(to);
+	
+	float3 direction = (to - from).Normalized();
+	//float angle = math::RadToDeg(atan2(direction.x, direction.z));
 
-	float angle = math::RadToDeg(float3::unitX().AngleBetween(to));
+	//float angle = math::RadToDeg(float3::unitX().AngleBetween((to - mid_point)));
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.particle_name, mid_point);
+
+	Quat rot = new_particle->transform->GetGlobalRotation();
+	float3 eu_rot = rot.LookAt(float3::unitX(), direction, new_particle->transform->up, float3::unitY()).ToEulerXYZ();
+	float angle = math::RadToDeg(eu_rot.y);
+
 	ComponentParticleSystem* p_system = new_particle->GetComponent<ComponentParticleSystem>();
-	p_system->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.5f, 1));
-	p_system->GetSystem()->SetRelativeRotation(float3(0, angle, 90));
+	p_system->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.3f, 1));
+	p_system->GetSystem()->SetParticleInitialAngle(float3(0, direction.x > 0 ? angle:-angle, 90));
+
 	player_controller->particles.push_back(new_particle);
 }

@@ -638,15 +638,17 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	if (particle_name == "")
 		return;
 
-	for (auto it = particles.begin(); it != particles.end(); ++it)
+	for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
 			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
 			particles.erase(it);
-			return;
 		}
+		else
+			++it;
 	}
+
 	/*if (particles[particle_name])
 	{
 		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
