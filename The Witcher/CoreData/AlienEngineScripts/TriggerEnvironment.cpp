@@ -56,6 +56,7 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 		}
 		if (emitter != nullptr && player_counter == 2) {
 			emitter->SetState("Env_Lvl1", GetZoneByEnum(zone).c_str());
+			PlayInstant();
 			LOG("ENTER");
 		}
 	}
@@ -203,16 +204,16 @@ std::string TriggerEnvironment::GetZoneByEnum(EnvironmentZone zone)
 
 void TriggerEnvironment::PrepareEnvironmentElements()
 {
-	for (int iter = 0; iter <= env_elements.size(); ++iter)
-	{
-		std::string spt = "Spatial";	
+	for (int iter = 0; iter < env_elements.size(); ++iter)
+	{		
+		std::string spt = "Spatial";
 		spt += std::to_string(iter);
 		env_elements[iter].spatial_place = this->game_object->GetChild(spt.c_str());
 		env_elements[iter].event_name = GetAudioElementByEnum(env_elements[iter].type);
 		if (env_elements[iter].spatial_place != nullptr)
 			env_elements[iter].el_emitter = env_elements[iter].spatial_place->GetComponent<ComponentAudioEmitter>();
 
-		if (!env_elements[iter].random && std::strcmp(env_elements[iter].event_name.c_str(), "QUIET") != 0 && env_elements[iter].el_emitter != nullptr) { //Play of the constant sounds ex: Wind
+		if (!env_elements[iter].random && std::strcmp(env_elements[iter].event_name.c_str(), "QUIET") != 0 && env_elements[iter].el_emitter != nullptr && !env_elements[iter].instant) { //Play of the constant sounds ex: Wind
 			env_elements[iter].el_emitter->StartSound(env_elements[iter].event_name.c_str());
 		}
 		else
@@ -236,6 +237,27 @@ void TriggerEnvironment::PlayEnvironment()
 				iter->timer_play = Time::GetGameTime();
 				iter->time_to_play = Random::GetRandomFloatBetweenTwo(iter->min_time_between_plays, iter->max_time_between_plays);
 			}
+		}
+		if (iter->instant)
+		{
+			if (Time::GetGameTime() - iter->timer_play_instant >= iter->time_to_play_instant && iter->el_emitter != nullptr && iter->can_play) {
+				//iter->timer_play_instant = 0;
+				iter->el_emitter->StartSound(iter->event_name.c_str());
+				iter->can_play = false;
+			}
+				
+		}
+	}
+}
+
+void TriggerEnvironment::PlayInstant()
+{
+	for (auto iter = env_elements.begin(); iter != env_elements.end(); ++iter)
+	{
+		if (iter->instant)
+		{
+			iter->timer_play_instant = Time::GetGameTime();
+			iter->can_play = true;
 		}
 	}
 }

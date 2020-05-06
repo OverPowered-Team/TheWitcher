@@ -39,11 +39,14 @@ public:
 		AudioEffects type = AudioEffects::QUIET;
 		bool spatial = false;
 		bool random = false;
-		bool constant = false;
+		bool instant = false;
+		bool can_play = false;
 		float min_time_between_plays = 1.f;
 		float max_time_between_plays = 1.f;
 		float timer_play = 0.f;
+		float timer_play_instant = 0.f;
 		float time_to_play = 0.f;
+		float time_to_play_instant = 0.f;
 		GameObject* spatial_place = nullptr;
 		ComponentAudioEmitter* el_emitter = nullptr;
 		std::string event_name;
@@ -62,6 +65,7 @@ public:
 	std::string GetZoneByEnum(EnvironmentZone zone);
 	void PrepareEnvironmentElements();
 	void PlayEnvironment();
+	void PlayInstant();
 public:
 	EnvironmentElement audio1;
 	EnvironmentElement audio2;
@@ -85,6 +89,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio1");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio1.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio1.spatial);
+	SHOW_TEXT("If you choose instant can't be random!");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio1.instant);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio1.time_to_play_instant);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio1.random);
 	SHOW_TOOLTIP("If it is NOT random we assume that sound will play continuously");
 	SHOW_TEXT("If is Random, maximum and minimum time between plays");
@@ -94,6 +101,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio2");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio2.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio2.spatial);
+	SHOW_TEXT("If you choose instant can't be random!");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio2.instant);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio2.time_to_play_instant);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio2.random);
 	SHOW_TEXT("If is Random, maximum and minimum time between plays");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio2.min_time_between_plays);
@@ -102,6 +112,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio3");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio3.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio3.spatial);
+	SHOW_TEXT("If you choose instant can't be random!");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio3.instant);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio3.time_to_play_instant);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio3.random);
 	SHOW_TEXT("If is Random, maximum and minimum time between plays");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio3.min_time_between_plays);
@@ -110,6 +123,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio4");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio4.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio4.spatial);
+	SHOW_TEXT("If you choose instant can't be random!");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio4.instant);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio4.time_to_play_instant);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio4.random);
 	SHOW_TEXT("If is Random, maximum and minimum time between plays");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio4.min_time_between_plays);
@@ -118,6 +134,9 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("Audio5");
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::AudioEffects, alien->audio5.type);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio5.spatial);
+	SHOW_TEXT("If you choose instant can't be random!");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio5.instant);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio5.time_to_play_instant);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->audio5.random);
 	SHOW_TEXT("If is Random, maximum and minimum time between plays");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio5.min_time_between_plays);
