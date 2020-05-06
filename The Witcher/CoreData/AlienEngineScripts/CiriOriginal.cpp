@@ -12,11 +12,13 @@ void CiriOriginal::StartEnemy()
 	actions.emplace("Scream", new BossAction(ActionType::SCREAM, 0.0f));
 
 	can_get_interrupted = true;
-	action_cooldown = 10.0f;
+	action_cooldown = 0.0f;
 
 	type = EnemyType::CIRI;
 
 	Boss::StartEnemy();
+
+	state = Boss::BossState::NONE;
 
 	meshes = game_object->GetChild("Meshes");
 
@@ -42,7 +44,13 @@ void CiriOriginal::SetActionProbabilities()
 {
 	Boss::SetActionProbabilities();
 
-	actions.find("RockThrow")->second->probability = 100.0f;
+	if (fight_controller->phase_change) {
+		actions.find("Scream")->second->probability = 100.0f;
+	}
+	else if (fight_controller->phase == 2) {
+		action_cooldown = 10.0f;
+		actions.find("RockThrow")->second->probability = 100.0f;
+	}
 }
 
 void CiriOriginal::SetActionVariables()
@@ -67,12 +75,27 @@ void CiriOriginal::LaunchAction()
 		LaunchRockAction();
 		break;
 	case CiriOriginal::ActionType::SCREAM:
+		LaunchScreamAction();
 		break;
 	default:
 		break;
 	}
 
 	current_action->state = ActionState::UPDATING;
+}
+
+void CiriOriginal::Scream()
+{
+	if (player_distance[0] <= scream_range) {
+		float3 knockbak_direction = (player_controllers[0]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+		player_controllers[0]->ReceiveDamage(0, knockbak_direction * scream_force);
+	}
+
+	if (player_distance[1] <= scream_range) {
+		float3 knockbak_direction = (player_controllers[1]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+		player_controllers[1]->ReceiveDamage(0, knockbak_direction * scream_force);
+
+	}
 }
 
 void CiriOriginal::LaunchRockAction()
@@ -86,6 +109,11 @@ void CiriOriginal::LaunchRockAction()
 	rock_->GetComponent<ComponentRigidBody>()->AddForce(throw_direction * distance_force_factor);
 }
 
+void CiriOriginal::LaunchScreamAction()
+{
+	animator->PlayState("Scream");
+}
+
 Boss::ActionState CiriOriginal::UpdateAction()
 {
 	switch (current_action->type)
@@ -96,6 +124,8 @@ Boss::ActionState CiriOriginal::UpdateAction()
 		current_action->state = ActionState::ENDED;
 		break;
 	case CiriOriginal::ActionType::SCREAM:
+		current_action->state = ActionState::ENDED;
+		fight_controller->phase_change = false;
 		break;
 	default:
 		break;

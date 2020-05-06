@@ -17,6 +17,7 @@ public:
 	float dash_speed = 50.0f;
 	float dash_time = 0.1f;
 	float dash_timer = 0.0f;
+	int target = 0;
 
 	CiriFightController* fight_controller = nullptr;
 public:
@@ -35,6 +36,8 @@ public:
 	void LaunchDashAction();
 	void LaunchComboAction();
 	void LaunchMiniScreamAction();
+
+	void MiniScream();
 
 	ActionState UpdateAction() override;
 
@@ -60,6 +63,7 @@ ALIEN_FACTORY Ciri* CreateCiri() {
 	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, ciri->state);
 	SHOW_VOID_FUNCTION(Ciri::ActivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::DeactivateCollider, ciri);
+	SHOW_VOID_FUNCTION(Ciri::MiniScream, ciri);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->mini_scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_speed);

@@ -11,6 +11,8 @@ public:
 	CiriFightController* fight_controller = nullptr;
 	Prefab rock;
 	float rock_force = 0.6f;
+	float scream_range = 20.0f;
+	float scream_force = 7.0f;
 public:
 	void StartEnemy() override;
 	void UpdateEnemy() override;
@@ -22,8 +24,10 @@ public:
 	bool IsOnAction() override;
 
 	void LaunchAction() override;
+	void Scream();
 
 	void LaunchRockAction();
+	void LaunchScreamAction();
 
 	ActionState UpdateAction() override;
 
@@ -40,6 +44,7 @@ ALIEN_FACTORY CiriOriginal* CreateCiriOriginal() {
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, cirioriginal->state);
 	SHOW_IN_INSPECTOR_AS_PREFAB(cirioriginal->rock);
+	SHOW_VOID_FUNCTION(CiriOriginal::Scream, cirioriginal);
 
 	return cirioriginal;
 }

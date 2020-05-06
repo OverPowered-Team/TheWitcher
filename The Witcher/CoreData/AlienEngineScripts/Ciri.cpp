@@ -96,14 +96,24 @@ void Ciri::LaunchAction()
 void Ciri::LaunchDashAction()
 {
 	//dash_direction = (player_controllers[player_distance[0] > player_distance[1] ? 1 : 0]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
-	dash_direction = (player_controllers[Random::GetRandomIntBetweenTwo(0, 1)]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+	target = Random::GetRandomIntBetweenTwo(0, 1);
+	dash_direction = (player_controllers[target]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+	animator->PlayState("Dash");
+	OrientToPlayer(target);
 }
 
 void Ciri::LaunchComboAction()
 {
+	animator->PlayState("Combo");
 }
 
 void Ciri::LaunchMiniScreamAction()
+{
+	fight_controller->can_mini_scream = false;
+	animator->PlayState("Scream");
+}
+
+void Ciri::MiniScream()
 {
 	if (player_distance[0] <= mini_scream_range) {
 		float3 knockbak_direction = (player_controllers[0]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
@@ -115,8 +125,6 @@ void Ciri::LaunchMiniScreamAction()
 		player_controllers[1]->ReceiveDamage(mini_scream_damage, knockbak_direction * mini_scream_force);
 
 	}
-
-	fight_controller->can_mini_scream = false;
 }
 
 Boss::ActionState Ciri::UpdateAction()
@@ -169,7 +177,7 @@ Boss::ActionState Ciri::UpdateComboAction()
 {
 	LOG("UPDATING COMBO ACTION");
 
-	current_action->state = Boss::ActionState::ENDED;
+	OrientToPlayer(target);
 
 	return current_action->state;
 }
@@ -177,8 +185,6 @@ Boss::ActionState Ciri::UpdateComboAction()
 Boss::ActionState Ciri::UpdateMiniScreamAction()
 {
 	LOG("UPDATING MiniScream ACTION");
-
-	current_action->state = Boss::ActionState::ENDED;
 
 	return current_action->state;
 }
@@ -193,6 +199,7 @@ void Ciri::EndDashAction(GameObject* go_ended)
 
 void Ciri::EndComboAction(GameObject* go_ended)
 {
+	current_action->state = Boss::ActionState::ENDED;
 }
 
 void Ciri::EndMiniScreamAction(GameObject* go_ended)
@@ -201,6 +208,12 @@ void Ciri::EndMiniScreamAction(GameObject* go_ended)
 
 void Ciri::OnAnimationEnd(const char* name)
 {
+	if (strcmp(name, "Combo3") == 0) {
+		EndComboAction(nullptr);
+	}
+	if (strcmp(name, "Scream") == 0) {
+		current_action->state = Boss::ActionState::ENDED;
+	}
 }
 
 void Ciri::OnDrawGizmosSelected()
