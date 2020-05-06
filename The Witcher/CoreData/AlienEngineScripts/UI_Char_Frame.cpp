@@ -227,21 +227,21 @@ void UI_Char_Frame::StartFadeKillCount(int new_kill_count)
 // Effects
 void UI_Char_Frame::HitEffect(float lerp_time)
 {
-	float lerp_portrait = 0.0f;
+	//float lerp_portrait = 0.0f;
 	float lerp_life = 0.0f;
 
 	if (lerp_time <= 0.5f)
 	{
-		lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time * 2);
+		//lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time * 2);
 		lerp_life = Maths::Lerp(1.0f, 0.575f, lerp_time * 2);
 	}
 	else
 	{
-		lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time - 0.5f) * 2);
+		//lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time - 0.5f) * 2);
 		lerp_life = Maths::Lerp(0.575f, 1.0f, (lerp_time - 0.5f) * 2);
 	}
 
-	portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
+	//portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
 	lifebar->SetBarColor(1.f, lerp_life, lerp_life, 1.f);
 }
 
