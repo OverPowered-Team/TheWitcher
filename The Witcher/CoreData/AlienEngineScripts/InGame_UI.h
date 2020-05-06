@@ -6,6 +6,11 @@
 class PlayerController;
 class UltiBar;
 
+enum(CP_STATE,
+	FADE_IN,
+	SHOW,
+	FADE_OUT);
+
 class UI_Particles
 {
 public:
@@ -59,6 +64,8 @@ private:
 
 	// Checkpoint Saved Text
 	GameObject* checkpoint_saved_text = nullptr;
+	ComponentText* component_checkpoint_saved_text = nullptr;
+	CP_STATE checkpoint_state = CP_STATE::FADE_IN;
 	float time_checkpoint = 0.0f;
 
 	// Charging ultibar particles

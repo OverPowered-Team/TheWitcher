@@ -10,10 +10,9 @@ UltiBar::~UltiBar()
 
 void UltiBar::Start()
 {
-	/*ultibar = game_object->GetChild("Ultibar");
-	ultibar_charged = game_object->GetChild("Ultibar_Charged");
+	// GameObjects
+	ultibar = game_object->GetChild("Ultibar");
 	normal_ulti = ultibar->GetComponent<ComponentBar>();
-	ultimate_bar = ultibar_charged->GetComponent<ComponentBar>();
 
 	// Controls
 	controls = game_object->GetChild("Ulti_Controls");
@@ -25,10 +24,8 @@ void UltiBar::Start()
 
 	// Enables Setting
 	controls->SetEnable(false);
-	ultibar_charged->SetEnable(false);
 	ultibar->SetEnable(true);
 	normal_ulti->SetBarValue(0);
-	ultibar_charged->SetEnable(false);*/
 }
 
 void UltiBar::Update()
@@ -50,11 +47,10 @@ void UltiBar::Update()
 				// Data Setting
 				is_max = false;
 				controls_lerping = true;
+				is_bar_charged = true;
 
 				// Enables Setting
-				ultibar->SetEnable(false);
 				controls->SetEnable(true);
-				ultibar_charged->SetEnable(true);
 
 				// Lerping Time Settings
 				glow_time = Time::GetGameTime();
@@ -69,7 +65,7 @@ void UltiBar::Update()
 	}
 
 	// Charged Bar Glowing
-	if (ultibar_charged->IsEnabled())
+	if (is_bar_charged)
 	{
 		float t = (Time::GetGameTime() - glow_time);
 		float color = 0.0f;
@@ -83,7 +79,7 @@ void UltiBar::Update()
 			color = Maths::Lerp(0.6f, 1.0f, t);
 		}
 
-		ultimate_bar->SetBarColor(color, color, color, 1);
+		normal_ulti->SetBarColor(color, color, color, 1);
 
 		if (t >= 1)
 		{
@@ -101,22 +97,17 @@ void UltiBar::UpdateBar(float actual_value)
 		{
 			controls->SetEnable(false);
 		}
-
-		ultibar->SetEnable(true);
-		ultibar_charged->SetEnable(false);
+		is_bar_charged = false;
+	}
+	else if (actual_value == 1)
+	{
+		is_max = true;
 	}
 
 	previous_bar_value = normal_ulti->GetBarValue();
 	new_bar_value = actual_value;
 	bar_charging = true;
 	bar_charging_time = Time::GetGameTime();
-}
-
-void UltiBar::MaxBar()
-{
-	// Values Setting
-	is_max = true;
-	UpdateBar(1);
 }
 
 void UltiBar::ControlsLerp()

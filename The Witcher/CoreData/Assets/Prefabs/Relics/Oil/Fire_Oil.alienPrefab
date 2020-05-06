@@ -2,10 +2,10 @@
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "Poison_Runestone",
+                "Name": "Fire_Oil",
                 "FamilyNumber": 1,
-                "ID": "3807098193576063450",
-                "ParentID": "7399177607074989710",
+                "ID": "7629096379848977679",
+                "ParentID": "14046935774256790219",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -14,14 +14,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "915245159270916750",
+                "PrefabID": "4897692966543348103",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -14.998807907104492,
+                            1.3719213008880615,
+                            -5.9779691696166992
                         ],
                         "Rotation": [
                             0,
@@ -35,7 +35,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7450354913094849416"
+                        "ID": "13989994310398141240"
                     },
                     {
                         "Type": 1,
@@ -45,7 +45,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "17822032082401067800",
+                        "ID": "10248339146619199758",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -53,7 +53,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6822917762491005592",
+                        "ID": "10604942322106136033",
                         "HasMaterial": true,
                         "MaterialID": "4067749186061296870",
                         "Enabled": true
@@ -80,7 +80,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "5645511134198693790",
+                        "ID": "715999739052402795",
                         "ResourceID": "14777702257696053657",
                         "DataName": "RelicBehaviour",
                         "HasInspector": true,
@@ -88,18 +88,28 @@
                             {
                                 "VarType": 14,
                                 "Name": "relic_type",
-                                "enumInt": 1
+                                "enumInt": 2
                             },
                             {
                                 "VarType": 14,
                                 "Name": "relic_effect",
-                                "enumInt": 5
+                                "enumInt": 1
                             }
                         ]
+                    },
+                    {
+                        "ID": "9029254966407550901",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "3698921875",
+                        "Event": "3145159334",
+                        "PlayOnAwake": true
                     }
                 ]
             }
         ]
     },
-    "Name": "Poison_Runestone"
+    "Name": "Fire_Oil"
 }

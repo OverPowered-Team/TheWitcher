@@ -116,6 +116,9 @@ void Enemy::UpdateEnemy()
 				(*it)->spawned_particle->SetEnable(false);
 				(*it)->spawned_particle->SetEnable(true);
 			}
+
+			std::string audio_name = "Play_" + (*it)->name;
+			audio_emitter->StartSound(audio_name.c_str());
 				
 		}
 

@@ -20,7 +20,6 @@ public:
 
 	DashEffect* effect = nullptr;
 	float start_time = 0.0;
-	std::map<std::string, GameObject*> dash_particles;
 	
 };
 
