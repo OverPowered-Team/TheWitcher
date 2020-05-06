@@ -32,6 +32,13 @@ public:
 		CONTROLLER_BUTTON_DPAD_RIGHT,
 	};
 
+	enum JOYSTICK_BUTTONS {
+		JOYSTICK_UP,
+		JOYSTICK_DOWN,
+		JOYSTICK_RIGHT,
+		JOYSTICK_LEFT,
+	};
+
 	enum MOUSE_BUTTONS {
 		MOUSE_LEFT_BUTTON = 1,
 		MOUSE_MIDDLE_BUTTON = 2,
@@ -66,6 +73,12 @@ public:
 	static float GetControllerVerticalLeftAxis(int controller_index);
 	static float GetControllerHoritzontalRightAxis(int controller_index);
 	static float GetControllerVerticalRightAxis(int controller_index);
+	static KEY_STATE GetControllerJoystickLeft(int controller_index, const JOYSTICK_BUTTONS& code);
+	static KEY_STATE GetControllerJoystickRight(int controller_index, const JOYSTICK_BUTTONS& code);
+
+	static float GetControllerTriggerLeft(int controller_index);
+	static float GetControllerTriggerRight(int controller_index);
+
 	static KEY_STATE GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code);
 	static bool GetControllerButtonDown(int controller_index, const CONTROLLER_BUTTONS& code);
 	static bool GetControllerButtonIdle(int controller_index, const CONTROLLER_BUTTONS& code);

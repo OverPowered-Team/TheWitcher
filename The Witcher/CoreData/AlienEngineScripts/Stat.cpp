@@ -19,6 +19,19 @@ void Stat::ApplyEffect(Effect* effect)
     CalculateStat();
 }
 
+void Stat::RemoveEffect(Effect* effect)
+{
+    for (std::vector<Effect*>::iterator it = effects.begin(); it != effects.end(); ++it)
+    {
+        if (effect == (*it))
+        {
+            effects.erase(it);
+            break;
+        }
+    }
+    CalculateStat();
+}
+
 void Stat::CalculateStat()
 {
     float additive_value = 0;
@@ -33,8 +46,13 @@ void Stat::CalculateStat()
     float old_max = max_value;
     max_value = base_value;
     max_value += additive_value;
-    max_value += max_value * mult_value;
-    current_value = (current_value * max_value) / old_max;
+    if(mult_value > 0)
+        max_value *= mult_value;
+
+    if (old_max != 0)
+        current_value = (current_value * max_value) / old_max;
+    else
+        current_value = max_value;
 }
 
 void Stat::ModifyCurrentStat(Effect* _effect)
@@ -46,6 +64,16 @@ void Stat::SetBaseStat(float _value)
 {
 	base_value = _value;
 	current_value = base_value;
+}
+
+void Stat::SetCurrentStat(float value)
+{
+    if (value >= base_value && value <= max_value)
+        current_value = value;
+    else if (value < base_value)
+        current_value = base_value;
+    else if (value > max_value)
+        current_value = max_value;
 }
 
 void Stat::SetMaxValue(float _value)
@@ -70,5 +98,19 @@ void Stat::DecreaseStat(float value)
     }
     else {
         current_value = 0;
+    }
+}
+
+void Stat::FillStats(std::map<std::string, Stat> &stats, JSONArraypack* json)
+{
+    if (json)
+    {
+        json->GetFirstNode();
+        for (int i = 0; i < json->GetArraySize(); ++i)
+        {
+            Stat stat = Stat(json->GetString("name"), json->GetNumber("value"));
+            stats.insert(std::pair(stat.name, stat));
+            json->GetAnotherNode();
+        }
     }
 }

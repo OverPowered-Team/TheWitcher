@@ -4,8 +4,8 @@
             {
                 "Name": "GameManager",
                 "FamilyNumber": 1,
-                "ID": "13561618440739704798",
-                "ParentID": "0",
+                "ID": "1531031826443359522",
+                "ParentID": "15225447123514407060",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,13 +35,13 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7329604409442547481"
+                        "ID": "13519296201322789564"
                     },
                     {
-                        "ID": "8253235783908665766",
+                        "ID": "1279741281303117963",
                         "Type": 16,
                         "Enabled": true,
-                        "Volume": 1,
+                        "Volume": 0.5,
                         "Mute": false,
                         "Bank": "1669749310",
                         "Event": "740533573",
@@ -49,36 +49,36 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "10291144159821495436",
+                        "ID": "1091367623521746709",
                         "ResourceID": "17206304544927406460",
                         "DataName": "GameManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "12586857933686261976",
-                        "ResourceID": "10454231044988625899",
-                        "DataName": "DialogueManager",
+                        "ID": "16827149111931317610",
+                        "ResourceID": "15534436528296266079",
+                        "DataName": "EnemyManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "6977999513463066214",
-                        "ResourceID": "12931529595659776773",
+                        "ID": "5579608119627073836",
+                        "ResourceID": "4801428778317409059",
                         "DataName": "EventManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "18200020938673344652",
-                        "ResourceID": "16300709835341546267",
-                        "DataName": "DebugManager",
+                        "ID": "7725767113546239264",
+                        "ResourceID": "787649903663024176",
+                        "DataName": "DialogueManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "7923869352488949774",
-                        "ResourceID": "1616101574407180879",
+                        "ID": "15483238084199054439",
+                        "ResourceID": "15303393684870883886",
                         "DataName": "PlayerManager",
                         "HasInspector": true,
                         "Inspector": [
@@ -96,13 +96,18 @@
                                 "VarType": 3,
                                 "Name": "ultimate_effect_value",
                                 "float": 0.5
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "collective_ultimate_charge",
+                                "int": 0
                             }
                         ]
                     },
                     {
                         "Type": 29,
-                        "ID": "7735517376990597161",
-                        "ResourceID": "10347121337452531063",
+                        "ID": "16573580415324782964",
+                        "ResourceID": "1580541265503908251",
                         "DataName": "RelicManager",
                         "HasInspector": true,
                         "Inspector": [
@@ -180,96 +185,35 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "9412821444914720572",
-                        "ResourceID": "9022960755365003618",
-                        "DataName": "EnemyManager",
+                        "ID": "17981989279391565244",
+                        "ResourceID": "2804845382966326590",
+                        "DataName": "RumblerManager",
                         "HasInspector": false
                     },
                     {
                         "Type": 29,
-                        "ID": "4664481763039798434",
-                        "ResourceID": "583803716554957118",
-                        "DataName": "DialogueEventChecker",
+                        "ID": "1142407755296732533",
+                        "ResourceID": "9450264443412942431",
+                        "DataName": "CheckPoints_Manager",
                         "HasInspector": false
-                    }
-                ]
-            },
-            {
-                "Name": "SpawnRelics",
-                "FamilyNumber": 2,
-                "ID": "8216920655122017216",
-                "ParentID": "13561618440739704798",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "12922817184992308906",
-                "Components": [
+                    },
                     {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "16875396608080884729"
-                    }
-                ]
-            },
-            {
-                "Name": "Relic1",
-                "FamilyNumber": 3,
-                "ID": "6276265391754246734",
-                "ParentID": "8216920655122017216",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "12922817184992308906",
-                "Components": [
+                        "Type": 29,
+                        "ID": "4680440290985576164",
+                        "ResourceID": "12647354737790143244",
+                        "DataName": "DebugManager",
+                        "HasInspector": false
+                    },
                     {
-                        "Type": 0,
-                        "Position": [
-                            -169.87033081054688,
-                            18.669029235839844,
-                            -6.4045705795288086
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "9658558495592226108"
+                        "Type": 29,
+                        "ID": "13514288813606170933",
+                        "ResourceID": "8130078689721872840",
+                        "DataName": "ParticlePool",
+                        "HasInspector": false
                     }
                 ]
             }
         ]
-    }
+    },
+    "Name": "GameManager"
 }

@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "EnemyManager.h"
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
@@ -8,18 +9,20 @@
 
 void Enemy::Awake()
 {
-	GameManager::manager->enemy_manager->AddEnemy(this);
-	attack_collider = (ComponentCollider*)game_object->GetChild("EnemyAttack")->GetComponent(ComponentType::BOX_COLLIDER);
+	GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>()->AddEnemy(this);
+	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
+	attack_collider->SetEnable(false);
+
+	//0.Head 1.Body 2.Feet 3.Attack
+	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
 }
 
 void Enemy::StartEnemy()
 {
-	animator = (ComponentAnimator*)GetComponent(ComponentType::ANIMATOR);
-	character_ctrl = (ComponentCharacterController*)GetComponent(ComponentType::CHARACTER_CONTROLLER);
-	state = EnemyState::IDLE;
+	animator = GetComponent<ComponentAnimator>();
+	character_ctrl = GetComponent<ComponentCharacterController>();
+	audio_emitter = GetComponent<ComponentAudioEmitter>();
 	std::string json_str;
-
-	character_ctrl->SetRotation(Quat::identity());
 
 	switch (type)
 	{
@@ -32,11 +35,33 @@ void Enemy::StartEnemy()
 	case EnemyType::NILFGAARD_SOLDIER:
 		json_str = "nilfgaardsoldier";
 		break;
+	case EnemyType::LESHEN:
+		json_str = "leshen";
+		break;
+	case EnemyType::CIRI:
+		json_str = "ciri";
+		break;
+	case EnemyType::DROWNED:
+		json_str = "drowned";
+		break;
+	case EnemyType::BLOCKER_OBSTACLE:
+		json_str = "blockerobstacle";
+		break;
 	default:
 		break;
 	}
 
 	SetStats(json_str.data());
+
+	/*if (game_object->GetChild("Particles"))
+	{
+		std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
+
+		for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+			particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+			(*it)->OnStop();
+		}
+	}*/
 }
 
 void Enemy::UpdateEnemy()
@@ -47,13 +72,15 @@ void Enemy::UpdateEnemy()
 	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	if (player_controllers[0]->state == PlayerController::PlayerState::DEAD)
+	if (player_controllers[0]->state->type == StateType::DEAD)
 	{
+		current_player = 1;
 		distance = distance_2;
 		direction = direction_2.Normalized();
 	}
-	else if (player_controllers[1]->state == PlayerController::PlayerState::DEAD)
+	else if (player_controllers[1]->state->type == StateType::DEAD)
 	{
+		current_player = 0;
 		distance = distance_1;
 		direction = direction_1.Normalized();
 	}
@@ -61,7 +88,11 @@ void Enemy::UpdateEnemy()
 	{
 		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
 		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
+
+	//MOVEMENT
+	character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
@@ -70,22 +101,38 @@ void Enemy::UpdateEnemy()
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
 			{
 				it_stats->second.ModifyCurrentStat((*it));
-
+				
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
 					if (stats["Health"].GetValue() == 0)
 					{
-						state = EnemyState::DYING;
-						animator->PlayState("Death");
+						SetState("Dying");
 					}
 				}
 			}
-			if (particles[(*it)->name])
-				particles[(*it)->name]->SetEnable(true);
+			if ((*it)->spawned_particle != nullptr)
+			{
+				(*it)->spawned_particle->SetEnable(false);
+				(*it)->spawned_particle->SetEnable(true);
+			}
+
+			std::string audio_name = "Play_" + (*it)->name;
+			audio_emitter->StartSound(audio_name.c_str());
+				
 		}
+
 		if ((*it)->to_delete)
 		{
+			if ((*it)->spawned_particle != nullptr)
+			{
+				GameManager::instance->particle_pool->ReleaseInstance((*it)->vfx_on_apply, (*it)->spawned_particle);
+			}
+			for (auto stat_it = stats.begin(); stat_it != stats.end(); ++stat_it)
+			{
+				if ((*it)->AffectsStat(stat_it->second.name))
+					stat_it->second.RemoveEffect((*it));
+			}
 			delete (*it);
 			it = effects.erase(it);
 			continue;
@@ -97,28 +144,6 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
-	delete animator;
-	animator = nullptr;
-	delete character_ctrl;
-	character_ctrl = nullptr;
-
-	for (auto it_pc = player_controllers.begin(); it_pc != player_controllers.end();)
-	{
-		delete (*it_pc);
-		it_pc = player_controllers.erase(it_pc);
-	}
-	for (auto it_eff = effects.begin(); it_eff != effects.end();)
-	{
-		delete (*it_eff);
-		it_eff = effects.erase(it_eff);
-	}
-
-	if (decapitated_head)
-	{
-		decapitated_head->ToDelete();
-		decapitated_head = nullptr;
-	}
-
 }
 
 void Enemy::SetStats(const char* json)
@@ -135,6 +160,7 @@ void Enemy::SetStats(const char* json)
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
 		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
 	}
 
 	JSONfilepack::FreeJSON(stat);
@@ -142,26 +168,15 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
+	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
+	transform->SetGlobalRotation(rot);
 
-	if (distance < stats["AttackRange"].GetValue())
-	{
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
-		animator->SetFloat("speed", 0.0F);
-		Action();
-	}
-
-	if (distance > stats["VisionRange"].GetValue())
-	{
-		state = Enemy::EnemyState::IDLE;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
-		animator->SetFloat("speed", 0.0F);
-	}
+	CheckDistance();
 }
 
 void Enemy::ActivateCollider()
@@ -180,62 +195,53 @@ void Enemy::DeactivateCollider()
 	}
 }
 
-void Enemy::OnTriggerEnter(ComponentCollider* collider)
+Quat Enemy::RotateProjectile()
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-		PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
-		if (player)
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			player->OnHit(this, GetDamaged(dmg_received, player));
-		}
-	}
+	float3 front = -float3::unitZ(); //front of the object
+	Quat rot1 = Quat::RotateFromTo(front, direction);
+
+	float3 desiredUp = float3::unitY();
+	float3 right = Cross(direction, desiredUp);
+	desiredUp = Cross(right, direction);
+
+	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
+	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
+	return rot2 * rot1;
 }
 
-float Enemy::GetDamaged(float dmg, PlayerController* player)
+void Enemy::KnockBack(float3 knock)
+{
+	velocity = knock;
+	velocity.y = 0;
+}
+
+float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-	
-	state = EnemyState::HIT;
-	animator->PlayState("Hit");
-	character_ctrl->SetWalkDirection(float3::zero());
 
-	if (stats["Health"].GetValue() == 0.0F) {
-		animator->SetBool("dead", true);
-		OnDeathHit();
-
-		if (player->attacks->GetCurrentAttack()->IsLast())
-		{
-			state = EnemyState::DYING;
-			animator->PlayState("Death");
-			GameManager::manager->player_manager->IncreaseUltimateCharge(10);
-
-			decapitated_head = GameObject::Instantiate(head_prefab, game_object->transform->GetGlobalPosition());
-			if (decapitated_head)
-			{
-				game_object->GetChild("Head")->SetEnable(false); //disable old head
-
-				ComponentRigidBody* head_rb = (ComponentRigidBody*)decapitated_head->GetComponent(ComponentType::RIGID_BODY);
-				head_rb->SetRotation(transform->GetGlobalRotation());
-
-				float decapitation_force = 5;
-				float3 decapitation_vector = (transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized() * decapitation_force;
-	
-				head_rb->AddForce(decapitation_vector);
-				head_rb->AddTorque(transform->up * decapitation_force);
-			}
-
-			player->OnEnemyKill();
-		}
-	}
+	KnockBack(knock_back);
 
 	return aux_health - stats["Health"].GetValue();
 }
 
 void Enemy::AddEffect(Effect* new_effect)
 {
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it)->name == new_effect->name)
+		{
+			(*it)->start_time = Time::GetGameTime(); //Refresh timer
+			delete new_effect;
+			return;
+		}
+	}
+
 	effects.push_back(new_effect);
+
+	if (new_effect->vfx_on_apply != "")
+		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
+			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
@@ -243,3 +249,90 @@ void Enemy::AddEffect(Effect* new_effect)
 			it->second.ApplyEffect(new_effect);
 	}
 }
+
+void Enemy::RemoveEffect(Effect* _effect)
+{
+	for (auto it = stats.begin(); it != stats.end(); ++it)
+	{
+		if (_effect->AffectsStat(it->second.name))
+			it->second.RemoveEffect(_effect);
+	}
+
+	for (auto it = effects.begin(); it != effects.end(); ++it)
+	{
+		if ((*it) == _effect)
+		{
+			delete _effect;
+			effects.erase(it);
+			return;
+		}
+	}
+}
+
+void Enemy::HitFreeze(float freeze_time)
+{
+	if (!is_frozen)
+	{
+		is_frozen = true;
+		float speed = animator->GetCurrentStateSpeed();
+		animator->SetCurrentStateSpeed(0);
+		ComponentAnimator* anim = animator;
+		Invoke([this, speed]() -> void {Enemy::StopHitFreeze(speed); }, freeze_time);
+	}
+}
+
+void Enemy::SpawnAttackParticle()
+{
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+	HitFreeze(0.05);
+	can_get_interrupted = false;
+	// Sonidito de clinck de iluminacion espada maestra
+}
+
+
+void Enemy::StopHitFreeze(float speed)
+{
+	is_frozen = false;
+	animator->SetCurrentStateSpeed(speed);
+}
+
+void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
+{
+	if (particle_name == "")
+	{
+		LOG("There's no particle name. String is empty!");
+		return;
+	}
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			(*it)->SetEnable(false);
+			(*it)->SetEnable(true);
+			return;
+		}
+	}
+
+	parent = parent != nullptr ? parent : this->game_object;
+	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
+	particles.push_back(new_particle);
+}
+
+void Enemy::ReleaseParticle(std::string particle_name)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
+			particles.erase(it);
+			return;
+		}
+	}
+}
+	

@@ -16,7 +16,10 @@ public:
 	void Update();
 
 	void PlayState(const char* name);
+	void SetStateSpeed(const char* name, float value);
 	bool IsPlaying(const char* name);
+	void IncreaseAllStateSpeeds(float value);
+	void DecreaseAllStateSpeeds(float value);
 	void UpdateAnimation(GameObject* go_to_update);
 	float GetCurrentStateSpeed();
 	float GetCurrentStateTime();
@@ -34,7 +37,7 @@ public:
 	void SetBool(const char* parameter_name, bool parameter_value);
 	void SetFloat(const char* parameter_name, float parameter_value);
 	void SetInt(const char* parameter_name, int parameter_value);
-
+	void SetCurrentStateSpeed(float speed);
 private:
 	ResourceAnimatorController* animator_controller = nullptr;
 	ResourceAnimatorController* source_animator_controller = nullptr;

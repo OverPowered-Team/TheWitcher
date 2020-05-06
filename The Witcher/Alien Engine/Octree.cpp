@@ -237,6 +237,34 @@ void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* t
 	}
 }
 
+void OctreeNode::SetAllStaticObjects(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
+{
+	
+		if (!game_objects.empty()) {
+			std::vector<GameObject*>::iterator item = game_objects.begin();
+			for (; item != game_objects.end(); ++item) {
+				if (*item != nullptr && (*item)->IsParentEnabled()) {
+					ComponentMesh* mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::MESH);
+					if (mesh == nullptr)
+						mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::DEFORMABLE_MESH);
+					if (mesh != nullptr && mesh->mesh != nullptr) {
+						float3 obj_pos = static_cast<ComponentTransform*>((*item)->GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+						float distance = camera->frustum.pos.Distance(obj_pos);
+						to_draw->push_back({ distance, *item });
+					}
+				}
+			}
+		if (!children.empty()) {
+			std::vector<OctreeNode*>::iterator item = children.begin();
+			for (; item != children.end(); ++item) {
+				if (*item != nullptr) {		
+					(*item)->SetAllStaticObjects(to_draw, camera);
+				}
+			}
+		}
+	}
+}
+
 void OctreeNode::Subdivide()
 {
 	float3 mid_point = section.minPoint + (section.maxPoint - section.minPoint) * 0.5F;
@@ -429,6 +457,15 @@ void Octree::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_dr
 	}
 
 	root->SetStaticDrawList(to_draw, camera);
+}
+
+void Octree::ShowAllStaticObjects(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
+{
+	if (root == nullptr) {
+		return;
+	}
+
+	root->SetAllStaticObjects(to_draw, camera);
 }
 
 bool Octree::Exists(GameObject* object)

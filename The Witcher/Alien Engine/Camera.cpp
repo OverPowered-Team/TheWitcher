@@ -4,7 +4,7 @@
 #include "ModuleObjects.h"
 #include "Viewport.h"
 
-std::vector<ComponentCamera*> Camera::GetAllCameras()
+const std::vector<ComponentCamera*>& Camera::GetAllCameras()
 {
 	return App->objects->game_cameras;
 }

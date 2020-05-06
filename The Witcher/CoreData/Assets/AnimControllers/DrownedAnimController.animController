@@ -1,0 +1,124 @@
+{
+    "Controller": {
+        "Name": "DrownedAnimController",
+        "NumStates": 7,
+        "NumTransitions": 5,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "6542782511744458619"
+            },
+            {
+                "Name": "Hide",
+                "Speed": 1,
+                "Clip": "1762198616440259956"
+            },
+            {
+                "Name": "GetOff",
+                "Speed": 1,
+                "Clip": "18340410648732439690"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "5529202383922436625"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 1,
+                "Clip": "14101932209812305813"
+            },
+            {
+                "Name": "Dizzy",
+                "Speed": 1,
+                "Clip": "1819462398251699905"
+            },
+            {
+                "Name": "Attack",
+                "Speed": 1,
+                "Clip": "14101932209812305813"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Dizzy",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Death",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Dizzy",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Attack",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            }
+        ],
+        "Events": []
+    }
+}

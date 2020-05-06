@@ -34,7 +34,7 @@ struct ShaderInputs
 {
 	struct StandardShaderProperties
 	{
-		float3 diffuse_color = float3::one();
+		float4 diffuse_color = float4::one;
 		float smoothness = DEFAULT_SMOOTHNESS;
 		float metalness = DEFAULT_METALNESS;
 	} standardShaderProperties;
@@ -50,10 +50,29 @@ struct ShaderInputs
 	} iluminatedShaderProperties;
 
 	struct ParticleShaderProperties {
-		float3 color = float3(1.f, 0.f, 0.8f);
-		float3 start_color = float3(1.f, 0.f, 0.8f);
-		float3 end_color = float3(1.f, 1.f, 1.f);
+		float4 color = float4(1.f, 0.f, 0.8f, 1.0f);
+		//float3 start_color = float3(1.f, 0.f, 0.8f);
+		//float3 end_color = float3(1.f, 1.f, 1.f);
 	} particleShaderProperties;
+
+
+	struct ShieldShaderProperties {
+		float3 color = float3(1.f, 1.f, 1.f);
+		float3 hit_position = float3(0.9757f, -0.2074f, -0.0703f);
+	} shieldShaderProperties; 
+
+	struct ShieldFresnelShaderProperties {
+		float4 color = float4(1.f, 1.f, 1.f,1.f);
+		float shieldStrength = 1.0f;
+		float shieldCooldown = 1.0f;
+		float fresnel_exponent = 0.75f;
+		//static const int32_t MAX_SHIELD_HITS = 5;
+		//float3 hitPos[MAX_SHIELD_HITS];
+		//float radii[MAX_SHIELD_HITS];
+		//int numHits = 1;
+
+	} shieldFresnelShaderProperties;
+
 };
 
 class ResourceShader; 
@@ -86,6 +105,7 @@ public:
 
 	// Functionality
 	void ApplyMaterial();
+	void ApplyPreRenderShadows();
 	void UnbindMaterial();
 
 	void SetTexture(ResourceTexture* texture, TextureType texType = TextureType::DIFFUSE);
@@ -105,6 +125,7 @@ public:
 	void TexturesSegment();
 
 	void TextureBrowser(TextureType texType);
+	
 	// ------------------ 
 
 public:
@@ -112,11 +133,12 @@ public:
 	float4 color = float4::one;
 
 	bool textureActivated = true;
-	u64 texturesID[(uint)TextureType::MAX];
+	std::pair<u64, ResourceTexture*> textures[(uint)TextureType::MAX];
 	TextureType selectedType = TextureType::NONE;
 	ShaderInputs shaderInputs;
 	u64 used_shader_ID = 0;
 	ResourceShader* used_shader = nullptr; 
+	ResourceShader* simple_depth_shader = nullptr;
 	const char* selectedShader = nullptr;
 	ResourceTexture* selected_texture = nullptr;
 	bool change_texture_menu = false;

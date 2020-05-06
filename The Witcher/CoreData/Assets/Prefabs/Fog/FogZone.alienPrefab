@@ -1,0 +1,262 @@
+{
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "FogZone",
+                "FamilyNumber": 1,
+                "ID": "8599940341453162681",
+                "ParentID": "7601433438955250839",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11519449939513102759",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14279190638019238516"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17275928039293588307",
+                        "ResourceID": "9618936361686501475",
+                        "DataName": "ProgressiveFog",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Zone Radius"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "innerRadius",
+                                "float": 20
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "outterRadius",
+                                "float": 25
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Fog Properties"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "targetFogDensity",
+                                "float": 0.035000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "targetFogGradient",
+                                "float": 1.3500000238418579
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Fog Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.x",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.y",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "fogColor.z",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Current State"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "fogState",
+                                "enumInt": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Outter",
+                "FamilyNumber": 2,
+                "ID": "13504523893615437372",
+                "ParentID": "8599940341453162681",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11519449939513102759",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11490041396545656707"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 8,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Radius": 25
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "8262088362170743204",
+                        "ResourceID": "12680379134327042715",
+                        "DataName": "TriggerFog",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_index",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Inner",
+                "FamilyNumber": 2,
+                "ID": "535178370705805816",
+                "ParentID": "8599940341453162681",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11519449939513102759",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "28039891130660301"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 8,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Radius": 20
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3011919331238091116",
+                        "ResourceID": "12680379134327042715",
+                        "DataName": "TriggerFog",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_index",
+                                "int": 2
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Name": "FogZone"
+}

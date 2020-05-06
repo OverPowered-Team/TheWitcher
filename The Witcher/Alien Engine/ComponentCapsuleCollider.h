@@ -2,52 +2,43 @@
 
 #include "ComponentCollider.h"
 #include "MathGeoLib/include/Math/MathAll.h"
-#include "Bullet/include/btBulletDynamicsCommon.h"
 
 class GameObject;
-class ModulePhysics;
-
 
 class ComponentCapsuleCollider : public ComponentCollider
 {
 public:
 
 	friend class GameObject;
-	friend class ModulePhysics;
 
 public:
 
-	enum class CapsuleType
-	{
-		X = 0, Y = 1, Z = 2
-	};
+	enum class Orientation { X = 0, Y = 1, Z = 2, MAX =3};
 
 	ComponentCapsuleCollider(GameObject* go);
-	ComponentCapsuleCollider(GameObject* go, bool internal_collider);
-
+	void SetRotation(const float3& value);
 	void SetRadius(float radius);
 	float GetRadius() { return radius; }
 	void SetHeight(float height);
 	float GetHeight() { return height; }
+	void SetOrientation(Orientation value);
+	Orientation GetOrientation() { return orientation; }
 
 private:
 
 	void DrawSpecificInspector();
+	float3 GetOrientationRotation();
 
 	void Reset();
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
-	void CreateDefaultShape();
-	void UpdateShape();
+	void Clone(Component* clone);
 
 private:
 
-	float final_radius = 0.5f;
-	float final_height = 1.f;
 	float radius = 0.5f;
 	float height = 1.f;
 
-	CapsuleType capsule_type = CapsuleType::Y;
-
+	Orientation orientation = Orientation::MAX;
 };

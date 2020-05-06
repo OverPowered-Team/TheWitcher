@@ -10,15 +10,12 @@ TeleportLevel::~TeleportLevel()
 
 void TeleportLevel::Start()
 {
-	ComponentTransform** trans = nullptr;
-	uint size = teleportPrefab.ConvertToGameObject(float3::zero())->GetComponentsInChildren(ComponentType::TRANSFORM, (Component***)&trans, false);
+	auto trans = teleportPrefab.ConvertToGameObject(float3::zero())->GetComponentsInChildren<ComponentTransform>();
 
-	for (uint i = 0u; i < size; ++i) {
-		teleport_pos.push_back(trans[i]->GetGlobalPosition());
-		teleport_rot.push_back(trans[i]->GetGlobalRotation());
+	for (auto i = trans.begin(); i != trans.end(); ++i) {
+		teleport_pos.push_back((*i)->GetGlobalPosition());
+		teleport_rot.push_back((*i)->GetGlobalRotation());
 	}
-
-	GameObject::FreeArrayMemory((void***)&trans);
 }
 
 void TeleportLevel::Update()

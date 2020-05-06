@@ -205,6 +205,8 @@ public:
 	PanelAnimTimeline* panel_animtimeline = nullptr;
 	PanelAnimator* panel_animator = nullptr;
 	PanelPhysics* panel_physics = nullptr;
+	bool update_shortcut = true;
+
 
 	// layouts
 	std::vector<Layout*> layouts;

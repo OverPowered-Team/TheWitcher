@@ -11,12 +11,16 @@
 #include "Gizmos.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ComponentLightPoint::ComponentLightPoint(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT_POINT;
 	App->objects->point_light_properites.push_back(&light_props);
 	App->objects->AddNumOfPointLights();
 
+	light_props.light = this;
+	light_props.enabled = enabled;
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
@@ -36,24 +40,33 @@ ComponentLightPoint::~ComponentLightPoint()
 
 void ComponentLightPoint::LightLogic()
 {
-	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
-	light_props.position = float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
-	
-#ifndef GAME_VERSION
-	if (App->objects->printing_scene)
+	OPTICK_EVENT();
+	light_props.position = float3(game_object_attached->transform->GetGlobalPosition().x, game_object_attached->transform->GetGlobalPosition().y, game_object_attached->transform->GetGlobalPosition().z);
+}
+
+void ComponentLightPoint::Update()
+{
+	OPTICK_EVENT();
+
+	LightLogic();
+}
+
+void ComponentLightPoint::DrawScene(ComponentCamera* camera)
+{
+	OPTICK_EVENT();
+
+	if (this->game_object_attached->IsSelected())
 	{
-		if (this->game_object_attached->IsSelected())
-		{
-			App->renderer3D->RenderCircleAroundZ(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT);
-			App->renderer3D->RenderCircleAroundX(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT);
-		}
-		else
-		{
-			App->renderer3D->RenderCircleAroundZ(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT, 0.1f);
-			App->renderer3D->RenderCircleAroundX(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT, 0.1f);
-		}
+		App->renderer3D->RenderCircleAroundZ(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT);
+		App->renderer3D->RenderCircleAroundX(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT);
 	}
-#endif
+	else if (IsEnabled())
+	{
+		DrawIconLight();
+
+		App->renderer3D->RenderCircleAroundZ(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT, 0.1f);
+		App->renderer3D->RenderCircleAroundX(light_props.position.x, light_props.position.y, light_props.position.z, light_props.intensity * RADIUS_INTENSITY_MULTIPLIE_POINT, 0.1f);
+	}
 }
 
 bool ComponentLightPoint::DrawInspector()
@@ -104,9 +117,16 @@ bool ComponentLightPoint::DrawInspector()
 	return true;
 }
 
+void ComponentLightPoint::OnEnable()
+{
+	enabled = true;
+	light_props.enabled = true;
+}
+
 void ComponentLightPoint::OnDisable()
 {
-
+	enabled = false;
+	light_props.enabled = false;
 }
 
 void ComponentLightPoint::Clone(Component* clone)
@@ -168,6 +188,8 @@ void ComponentLightPoint::LoadComponent(JSONArraypack* to_load)
 
 void ComponentLightPoint::DrawIconLight()
 {
+	OPTICK_EVENT();
+
 	if (bulb != nullptr && print_icon)
 	{
 		ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);

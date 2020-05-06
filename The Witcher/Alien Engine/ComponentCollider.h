@@ -2,31 +2,44 @@
 
 #include <map>
 #include <list>
-#include "Component.h"
+#include "ComponentBasePhysic.h"
 #include "MathGeoLib/include/Math/MathAll.h"
-#include "Bullet/include/btBulletDynamicsCommon.h"
-#include "BulletCollision\CollisionDispatch\btGhostObject.h"
 #include "Event.h"
+#include "PxShape.h"
 
 class GameObject;
-class ModulePhysics;
-class ComponentMesh;
 class ComponentRigidBody;
+class ComponentMesh;
 class ComponentVehicle;
 class ComponentTransform;
+class ComponentPhysics;
 class Alien;
 
-class __declspec(dllexport) ComponentCollider : public Component
+enum class CombineMode
 {
-	friend class GameObject;
-	friend class ReturnZ;
-	friend class CompZ;
+	Average =0,
+	Minimum,
+	Multiply,
+	Maximum,
+	Unknown
+};
 
+
+using namespace physx;
+
+class __declspec(dllexport) ComponentCollider : public ComponentBasePhysic
+{
 	friend class ModuleObjects;
-	friend class ModulePhysics;
+	friend class ModulePhysX;
+
 	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
+	friend class ComponentPhysics;
+
+	friend class SimulationEventCallback;
+	friend class GameObject;
 	friend class MyDispatcher;
+
 public:
 
 	ComponentCollider(GameObject* go);
@@ -34,72 +47,76 @@ public:
 
 	// Colliders values
 
-	virtual void SetCenter(float3 center);
+	//virtual void QueryMesh(ComponentMesh* mesh) {};
+	virtual void SetCenter(const float3& value);
 	float3 GetCenter() { return center; }
+	virtual void SetRotation(const float3& value);
+	float3 GetRotation() { return rotation; }
 	void SetIsTrigger(bool is_trigger);
 	bool GetIsTrigger() { return is_trigger; }
 	void SetBouncing(const float bouncing);
 	float GetBouncing() { return bouncing; }
-	void SetFriction(const float v);
-	float GetFriction() { return friction; }
-	void SetAngularFriction(const float v);
-	float GetAngularFriction() { return angular_friction; }
+
+	void SetStaticFriction(const float v);
+	float GetStaticFriction() { return static_friction; }
+	void SetDynamicFriction(const float v);
+	float GetDynamicFriction() { return dynamic_friction; }
+	void SetFrictionCombineMode(CombineMode mode);
+	CombineMode GetFrictionCombineMode() { return friction_combine; }
+	void SetBouncingCombineMode(CombineMode mode);
+	CombineMode GetBouncingCombineMode() { return friction_combine; }
+
+	virtual void SetCollisionLayer(std::string layer);
+	std::string GetCollisionLayer();
 
 protected:
 
-	float3 GetWorldCenter();
+	void InitCollider();
+	void InitMaterial();
+	inline bool IsController() { return (type == ComponentType::CHARACTER_CONTROLLER); }
+	inline void BeginUpdateShape(bool force_update = false);
+	inline void EndUpdateShape(bool force_update = false);
 
-	void AddToWorld();
-	void RemoveFromWorld();
+	const float3 GetLocalMeshAabbSize() const;
+	const AABB GetLocalMeshAabb() const;
+	const ComponentMesh* GetMesh() const;
 
-	void Init();
-	void Update();
 	void OnEnable();
 	void OnDisable();
+	virtual void Update();
 
 	bool DrawInspector();
+	void DrawLayersCombo();
+	void DrawCombineModeCombo(CombineMode& current_mode, int mode); // 0- friction 1- bouncing
 	void HandleAlienEvent(const AlienEvent& e);
 
 	virtual void DrawSpecificInspector() {}
-	virtual void DrawScene();
+	virtual void DrawScene(ComponentCamera* camera) override;
 	virtual void Reset();
 	virtual void Clone(Component* clone) {}
 	virtual void SetComponent(Component* component) {}
 	virtual void SaveComponent(JSONArraypack* to_save);
 	virtual void LoadComponent(JSONArraypack* to_load);
-
-	virtual void CreateDefaultShape() {};
-	virtual void UpdateShape() {} 	// Adjust shape to scale and other factors
-	virtual void SetScale(float3 scale);
+	virtual void ScaleChanged() {};
 
 protected:
 
-	std::string name = "Collider";
-	ComponentTransform* transform = nullptr;
-	ComponentRigidBody* rigid_body = nullptr;
+	bool force_update = false;
+	std::string layer_name = "Default";
+	int layer_num = 0;
 
-	float3 center = float3::zero();
-	float3 final_center = float3::zero();
-	float3 last_scale = float3::zero();
-	bool is_trigger = false;
-	float bouncing = 0.f;
-	float friction = 0.f;
-	float angular_friction = 0.f;
+	PxShape*    shape = nullptr;
+	float3		center = float3::zero();
+	float3	    rotation = float3::zero();
+	bool		is_trigger = false;
 
-	// Collider shape used in collision simulation
-	btCollisionShape* shape = nullptr;
-	// Used when GameObject has notrigid body in run time
-	btRigidBody* aux_body = nullptr;
-	// Detection body 
-	btPairCachingGhostObject* detector = nullptr;
+	CombineMode friction_combine = CombineMode::Average;
+	CombineMode bouncing_combine = CombineMode::Average;
+	PxMaterial* material = nullptr;
+	float		bouncing = 0.f;
+	float		static_friction = 0.f;
+	float		dynamic_friction = 0.f;
 
-	// Alien Script 
-	std::list<ComponentScript*> alien_scripts;
-	// Collisions
-	std::map<ComponentCollider*, bool> collisions;
-
-	bool first_frame = false;
-	bool internal_collider = false;
-	bool added_to_world = false;
-	int  layer = 0;
+	const char* mode_names[4] = { "Average","Minimum","Multiply","Maximum" };
 };
+

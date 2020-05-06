@@ -367,8 +367,13 @@ void ResourceAnimatorController::Update()
 void ResourceAnimatorController::UpdateState(State* state)
 {
 	ResourceAnimation* animation = state->GetClip();
+	ResourceAnimation* current_clip = current_state->GetClip();
 
-	if (!transitioning)CheckTriggers();
+	if (current_clip == nullptr)
+		return;
+
+	if (!transitioning)
+		CheckTriggers();
 
 	if (animation && (animation->GetDuration()) > 0) {
 
@@ -388,7 +393,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			if (state->GetClip()->loops)
 			{
 				state->time = 0;
-				previous_key_time = current_state->GetClip()->start_tick;
+				previous_key_time = current_clip->start_tick;
 			}
 			else
 				state->time = animation->GetDuration();
@@ -400,7 +405,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 
 		float to_end = state->fade_duration - state->fade_time;
 
-		if (to_end >= 0) {
+		if (to_end > 0) {
 
 			state->fade_time += (Time::GetDT());
 			UpdateState(state->next_state);
@@ -430,7 +435,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			state->fade_time = 0;
 			state->fade_duration = 0;
 			transitioning = false;
-			previous_key_time = current_state->GetClip()->start_tick;
+			previous_key_time = current_clip->start_tick;
 		}
 	}
 }
@@ -1421,7 +1426,16 @@ void ResourceAnimatorController::Play()
 	if (default_state)
 	{
 		current_state = default_state;
-		previous_key_time = current_state->GetClip()->start_tick;
+		ResourceAnimation* clip = current_state->GetClip();
+		if (clip != nullptr)
+		{
+			previous_key_time = clip->start_tick;
+		}
+		else
+		{
+			LOG_ENGINE("Resource Animator COntroller %s: Clip not found", this->name);
+			return;
+		}
 	}
 }
 

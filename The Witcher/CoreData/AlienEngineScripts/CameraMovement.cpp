@@ -1,4 +1,5 @@
 #include "CameraMovement.h"
+#include "PlayerController.h"
 
 CameraMovement::CameraMovement() : Alien()
 {
@@ -14,22 +15,65 @@ void CameraMovement::Start()
     SearchAndAssignPlayers();
     trg_offset = CalculateCameraPos(hor_angle, vert_angle, distance);
     transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+    first_pos = CalculateMidPoint() + trg_offset;
+    LOG("TRG_OFFSET X: %f Y: %f Z: %f", trg_offset.x, trg_offset.y, trg_offset.z);
+    LOG("FIRSTPOS X: %f Y: %f Z: %f", first_pos.x, first_pos.y, first_pos.z);
     LookAtMidPoint();
+    prev_state = CameraState::FREE;
 }
 
 void CameraMovement::Update()
 {   
     switch (state) {
     case CameraState::DYNAMIC: {
-        transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        if (smooth_camera) {
+            float3 pos = transform->GetGlobalPosition();
+            transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
+        }
+        else
+            transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        break;
+    }
+    case CameraState::FREE: {
+
+        transform->SetGlobalPosition(players[closest_player]->transform->GetGlobalPosition() + prev_middle);
+
+        bool inside = true;
+        float3 pos = CalculateMidPoint() + trg_offset;
+        Frustum frus = GetComponent<ComponentCamera>()->frustum;
+        frus.pos = pos;
+        for (int i = 0; i < players.size(); ++i)
+        {
+            PlayerController* p = players[i]->GetComponent<PlayerController>();
+            if (p != nullptr) {
+                AABB p_tmp = p->max_aabb;
+                p_tmp.minPoint += players[i]->transform->GetGlobalPosition();
+                p_tmp.maxPoint += players[i]->transform->GetGlobalPosition();
+
+                if (!frus.Contains(p_tmp))
+                {
+                    inside = false;
+                }
+            }
+        }
+        if (inside) {
+            state = prev_state;
+        }
         break;
     }
     case CameraState::STATIC:
         LookAtMidPoint();
         break;
-    case CameraState::AXIS:
-        transform->SetGlobalPosition(CalculateAxisMidPoint() + trg_offset);
+    case CameraState::AXIS: {
+        if (smooth_camera)
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+        else {
+            transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
+        }
+        LookAtMidPoint();
+        LOG("POSITION X: %f Y: %f Z: %f", transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
         break;
+    }
     case CameraState::MOVING_TO_AXIS: {
         current_transition_time += Time::GetDT();
         float3 trg_pos = CalculateMidPoint() + trg_offset;
@@ -38,6 +82,7 @@ void CameraMovement::Update()
         if ((trg_pos - curr_pos).Length() < min_dist) {
             LOG("Finished transition");
             transform->SetGlobalPosition(trg_pos);
+            first_pos = trg_pos;
             state = CameraState::AXIS;
         }
         else {
@@ -94,21 +139,9 @@ void CameraMovement::Update()
 
 void CameraMovement::LookAtMidPoint()
 {
-    float3 midPoint = CalculateMidPoint();
+    float3 direction = (CalculateMidPoint() - transform->GetGlobalPosition()).Normalized();
 
-    float3 front = float3::unitZ(); //front of the object
-    float3 direction = (midPoint - transform->GetGlobalPosition()).Normalized();
-    
-    Quat rot1 = RotationBetweenVectors(front, direction);
-
-    float3 desiredUp = float3::unitY();
-    float3 right = Cross(direction, desiredUp);
-    desiredUp = Cross(right, direction);
-
-    float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
-    Quat rot2 = RotationBetweenVectors(newUp, desiredUp);
-
-    transform->SetGlobalRotation(rot2 * rot1);
+    transform->SetGlobalRotation(Quat::LookAt(float3::unitZ(), direction, float3::unitY(), float3::unitY()));
 }
 
 float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, const float& dst)
@@ -138,15 +171,12 @@ void CameraMovement::OnDrawGizmos()
 
 void CameraMovement::SearchAndAssignPlayers()
 {
-    GameObject** get_players = nullptr;
-    uint size;
-    size = GameObject::FindGameObjectsWithTag("Player", &get_players);
-    for (int i = 0; i < size; i++) {
-        if (std::find(players.begin(), players.end(), get_players[i]) == players.end())
-            players.push_back(get_players[i]);
+    auto objs = GameObject::FindGameObjectsWithTag("Player");
+    for (auto i = objs.begin(); i != objs.end(); i++) {
+        if (std::find(players.begin(), players.end(), *i) == players.end())
+            players.push_back(*i);
     }
-    GameObject::FreeArrayMemory((void***)&get_players);
-    num_curr_players = size;
+    num_curr_players = objs.size();
     LOG("player num %i", num_curr_players);
 }
 
@@ -171,14 +201,26 @@ float3 CameraMovement::CalculateAxisMidPoint()
     switch ((CameraAxis)axis)
     {
     case CameraAxis::X://X
-        return float3((mid_pos.x) * 0.5f, 0, 0);
+    {
+        float3 mid;
+        mid = float3((mid_pos.x) * 0.5f, 0, 0);
+        return float3(mid.x + trg_offset.x, first_pos.y, first_pos.z);
         break;
+    }
     case CameraAxis::Y://Y
-        return float3(0, (mid_pos.y) * 0.5f, 0);
+    {
+        float3 mid;
+        mid = float3(0, (mid_pos.y) * 0.5f, 0);
+        return float3(first_pos.x, mid.y + trg_offset.y, first_pos.z);
         break;
+    }
     case CameraAxis::Z://Z
-        return float3(0, 0, (mid_pos.z) * 0.5f);
+    {
+        float3 mid;
+        mid = float3(0, 0, (mid_pos.z) * 0.5f);
+        return float3(first_pos.x, first_pos.y, mid.z + trg_offset.z);
         break;
+    }
     }
 }
 Quat CameraMovement::RotationBetweenVectors(math::float3& start, math::float3& dest) // Include in MathGeoLib

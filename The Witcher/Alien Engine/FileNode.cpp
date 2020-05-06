@@ -175,6 +175,14 @@ void FileNode::ResetPaths()
 					(*item)->prefab_name = std::string(prefab->name);
 				}
 			}
+
+			JSONfilepack* pack = JSONfilepack::GetJSON(prefab->path.data());
+			pack->StartSave();
+			pack->SetString("Name", prefab->name.data());
+			pack->FinishSave();
+			delete pack;
+			remove(prefab->GetLibraryPath());
+			App->file_system->Copy(prefab->GetAssetsPath(), prefab->GetLibraryPath());
 		}
 		break; }
 	case FileDropType::SCENE: {
@@ -245,9 +253,12 @@ void FileNode::RemoveResourceOfGameObjects()
 		case FileDropType::SCENE:
 			static char curr_dir[MAX_PATH];
 			GetCurrentDirectoryA(MAX_PATH, curr_dir);
-			if (App->objects->current_scene != nullptr) {
-				if (App->StringCmp(App->file_system->GetBaseFileName(name.data()).data(), App->objects->current_scene->GetName())) {
-					App->objects->current_scene = nullptr;
+			if (!App->objects->current_scenes.empty()) {
+				for (auto item = App->objects->current_scenes.begin(); item != App->objects->current_scenes.end(); ++item) {
+					if (App->StringCmp(App->file_system->GetBaseFileName(name.data()).data(), (*item)->GetName())) {
+						App->objects->current_scenes.erase(item);
+						break;
+					}
 				}
 			}
 			break;

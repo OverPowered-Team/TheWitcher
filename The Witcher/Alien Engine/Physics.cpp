@@ -1,59 +1,38 @@
 #include "Physics.h"
 #include "Application.h"
-#include "ModulePhysics.h"
+#include "ModulePhysX.h"
 
 void Physics::SetGravity(const float3 gravity)
 {
-	App->physics->SetGravity(gravity);
+	App->physx->SetGravity(gravity);
 }
 
 float3 Physics::GetGravity()
 {
-	return App->physics->GetGravity();
+	return App->physx->GetGravity();
 }
 
-uint Physics::RayCastAll(Ray ray, ComponentCollider*** comp_array)
+bool Physics::Raycast(float3 origin, float3 unit_dir, float max_dist)
 {
-	std::vector<ComponentCollider*> found = App->physics->RayCastAll(ray);
-	if (!found.empty()) {
-		(*comp_array) = new ComponentCollider * [found.size()];
-		for (uint i = 0; i < found.size(); ++i) {
-			(*comp_array)[i] = found[i];
-		}
-	}
-	return found.size();
+	return  App->physx->Raycast(origin, unit_dir, max_dist);
 }
 
-ComponentCollider* Physics::RayCastClosest(math::Ray ray)
+bool Physics::Raycast(float3 origin, float3 unit_dir, float max_dist, RaycastHit& hit)
 {
-	return App->physics->RayCastClosest(ray);
+	return  App->physx->Raycast(origin, unit_dir, max_dist, hit);
 }
 
-uint Physics::SphereCast(float3 position, float radius, ComponentCollider*** comp_array)
+const std::vector<RaycastHit>& Physics::RaycastAll(float3 origin, float3 unitDir, float maxDistance)
 {
-	std::vector<ComponentCollider*> found = App->physics->SphereCast(position, radius);
-	if (!found.empty()) {
-		(*comp_array) = new ComponentCollider *[found.size()];
-		for (uint i = 0; i < found.size(); ++i) {
-			(*comp_array)[i] = found[i];
-		}
-	}
-	return found.size();
+	static std::vector<RaycastHit> ret;
+	ret = App->physx->RaycastAll(origin, unitDir, maxDistance);
+	return ret;
 }
 
-uint Physics::BoxCast(float3 size, float3 position, Quat rotation, ComponentCollider*** comp_array)
+// TODO: uncomment this when we have heap change integred
+const std::vector<ComponentCollider*>& Physics::OverlapSphere(float3 center, float radius)
 {
-	auto found = App->physics->BoxCast(size, position, rotation);
-	if (!found.empty()) {
-		(*comp_array) = new ComponentCollider * [found.size()];
-		for (uint i = 0; i < found.size(); ++i) {
-			(*comp_array)[i] = found[i];
-		}
-	}
-	return found.size();
-}
-
-void Physics::FreeArray(ComponentCollider*** comp_array)
-{
-	delete[] * comp_array;
+	static  std::vector<ComponentCollider*> ret;
+	ret = App->physx->OverlapSphere(center, radius);
+	return ret;
 }

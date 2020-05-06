@@ -13,11 +13,11 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	audioEmitter = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
-	text = (ComponentText*)GameObject::FindWithName("SubtitlesText")->GetComponent(ComponentType::UI_TEXT);
+	//audioEmitter = GetComponent<ComponentAudioEmitter>();
+	//text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
 
-	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
-	LoadJSONDialogues();
+	//audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
+	//LoadJSONDialogues();
 }
 
 void DialogueManager::LoadJSONDialogues()
@@ -55,7 +55,7 @@ void DialogueManager::LoadJSONDialogues()
 
 void DialogueManager::Update()
 {
-	if (playing)
+	/*if (playing)
 	{
 		LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
@@ -65,7 +65,10 @@ void DialogueManager::Update()
 			currentDialogue.Reset();
 			audioEmitter->ChangeVolume(0.5f);
 		}
-	}
+	}*/
+	//else {
+	//audioEmitter->SetState("GameVolumes", "None");
+	//}
 
 }
 
@@ -132,6 +135,7 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
+	audioEmitter->SetState("GameVolumes", "Dialogues");
 	audioEmitter->ChangeVolume(volume);
 	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str());
 	LOG("Started playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());

@@ -11,9 +11,13 @@
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "Viewport.h"
+#include "ComponentCurve.h"
+#include "ShortCutManager.h"
 #include "mmgr/mmgr.h"
+#include <functional>
 
 #include "Optick/include/optick.h"
+
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -32,9 +36,15 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 	scene_viewport = new Viewport(fake_camera);
 	selected_viewport = new Viewport(nullptr);
+	App->camera->fake_camera->frustum.pos = { 25,25,25 };
+	final_yaw = current_yaw = 225;
+	final_pitch = current_pitch = 30;
+	Rotate(current_yaw, current_pitch);
+	max_distance = 10;
+
+	focus_short = App->shortcut_manager->AddShortCut("Focus", SDL_SCANCODE_F, std::bind(&ModuleCamera3D::Focus, App->camera));
 	return ret;
 }
-
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
@@ -53,7 +63,10 @@ update_status ModuleCamera3D::Update(float dt)
 
 	speed = camera_speed * dt;
 	zoom_speed = camera_zoom_speed * dt;
-	mouse_speed = camera_mouse_speed * dt;
+
+
+	mouse_motion_x = -App->input->GetMouseXMotion();
+	mouse_motion_y = App->input->GetMouseYMotion();
 
 	if (start_lerp)
 	{
@@ -73,20 +86,50 @@ update_status ModuleCamera3D::Update(float dt)
 		if (is_scene_hovered)
 		{
 			Zoom();
-			if ((App->objects->GetSelectedObjects().empty() || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) {
+			if ((App->objects->GetSelectedObjects().empty() || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			{
 				CreateRay();
 			}
 
-			if (!ImGuizmo::IsUsing()) {
-				Movement();
+			if (!ImGuizmo::IsUsing())
+			{
+				Movement(dt);
 			}
 		}
+		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN)
+		{
+			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+
+			if (selected.size() > 0)
+			{
+				float4x4 trans = float4x4::zero();
+				for (auto item = selected.begin(); item != selected.end(); ++item)
+				{
+					if (*item != nullptr)
+					{
+						trans += (*item)->transform->GetGlobalMatrix();
+					}
+				}
+				trans /= selected.size();
+				reference = trans.TranslatePart();
+			}
+			else
+			{
+				reference = fake_camera->frustum.pos + (fake_camera->frustum.front) * (fake_camera->frustum.pos - reference).Length();
+			}
+		}
+
 		if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && is_scene_hovered)
 		{
-			Rotation(dt);
-		}
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
-			Focus();
+
+			if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+				Orbit(dt);
+
+			else
+			{
+				Rotation(dt);
+			}
+
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
@@ -117,7 +160,7 @@ void ModuleCamera3D::Move(const float3& Movement)
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Movement()
+void ModuleCamera3D::Movement(float dt)
 {
 	OPTICK_EVENT();
 	float3 movement(float3::zero());
@@ -136,19 +179,20 @@ void ModuleCamera3D::Movement()
 		if (!movement.Equals(float3::zero()))
 		{
 			frustum->Translate(movement * speed);
-			reference += movement*speed;
+			reference += movement * speed;
 		}
 	}
 
 	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
 	{
 		movement = float3::zero();
-		
+		float palm_speed = 10.f * dt;
+
 		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 		SDL_SetCursor(cursor);
 
-		movement -= frustum->WorldRight() * App->input->GetMouseXMotion() * mouse_speed;
-		movement += frustum->up * App->input->GetMouseYMotion() * mouse_speed;
+		movement -= frustum->WorldRight() * palm_speed * App->input->GetMouseXMotion();
+		movement += frustum->up * palm_speed * App->input->GetMouseYMotion();
 
 		if (!movement.Equals(float3::zero()))
 		{
@@ -180,19 +224,16 @@ void ModuleCamera3D::Zoom()
 }
 
 void ModuleCamera3D::Rotation(float dt)
-{	
-	float3 distance = fake_camera->frustum.pos - reference;
+{
+	float rotation_speed = camera_rotation_speed * dt;
 
-	Quat rotationy(fake_camera->frustum.up, -App->input->GetMouseXMotion()* dt*0.3F);
-	Quat rotationx(fake_camera->frustum.WorldRight(), -App->input->GetMouseYMotion()* dt*0.3F);
+	final_yaw += mouse_motion_x * rotation_speed;
+	final_pitch += mouse_motion_y * rotation_speed;
 
-	distance = rotationx.Transform(distance);
-	distance = rotationy.Transform(distance);
+	current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
+	current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
 
-	fake_camera->frustum.pos = distance + reference;
-
-	fake_camera->Look(reference);
-	
+	Rotate(current_yaw, current_pitch);
 
 	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 	SDL_SetCursor(cursor);
@@ -205,6 +246,9 @@ void ModuleCamera3D::Rotation(float dt)
 
 void ModuleCamera3D::Focus()
 {
+	if (start_lerp)
+		return;
+
 	if (!App->objects->GetSelectedObjects().empty())
 	{
 		AABB bounding_box;
@@ -234,50 +278,96 @@ void ModuleCamera3D::Focus()
 
 void ModuleCamera3D::CreateRay()
 {
-	if (App->objects->GetRoot(true)->children.empty())
+	if (App->objects->GetGlobalRoot()->children.empty())
 		return;
 
 	float2 origin = { ImGui::GetMousePos().x, ImGui::GetMousePos().y };
-
 	if (!scene_viewport->ScreenPointToViewport(origin))
 		return;
 
 	ray = scene_viewport->GetCamera()->frustum.UnProjectLineSegment(origin.x, origin.y);
+	std::vector<std::pair<float, GameObject*>> hits_aabb;
+	std::vector<std::pair<float, GameObject*>> hits_triangle;
 
-	std::vector<std::pair<float, GameObject*>> hits;
+	// With octree to static objects ----------
+	CreateObjectsHitMap(&hits_aabb, App->objects->octree.root, ray);
 
-	// with octree to static objects
-	CreateObjectsHitMap(&hits, App->objects->octree.root, ray);
-	
-	// without octree for the dynamics
-	std::vector<GameObject*>::iterator item = App->objects->GetRoot(true)->children.begin();
-	for (; item != App->objects->GetRoot(true)->children.end(); ++item) {
+	// Without octree for the dynamics --------
+	std::vector<GameObject*>::iterator item = App->objects->GetGlobalRoot()->children.begin();
+	for (; item != App->objects->GetGlobalRoot()->children.end(); ++item) {
 		if (*item != nullptr && (*item)->IsEnabled()) {
-			CreateObjectsHitMap(&hits, (*item), ray);
+			CreateObjectsHitMap(&hits_aabb, (*item), ray);
 		}
 	}
-	// sort by pos
-	std::sort(hits.begin(), hits.end(), ModuleCamera3D::SortByDistance);
-	static bool hit = false;
-	std::vector<std::pair<float, GameObject*>>::iterator it = hits.begin();
-	for (; it != hits.end(); ++it) {
-		if ((*it).second != nullptr) {
-			if (TestTrianglesIntersections((*it).second, ray)) {
-				hit = true;
-				break;
+	// Sort by distance -----------------------
+	std::sort(hits_aabb.begin(), hits_aabb.end(), ModuleCamera3D::SortByDistance);
+
+	// Push Triangles ------------------------
+	std::vector<std::pair<float, GameObject*>>::iterator it = hits_aabb.begin();
+	float tri_dist = 0.f;
+	float aabb_dist = 0.f;
+
+	for (; it != hits_aabb.end(); ++it) {
+		tri_dist = FLOAT_INF;
+		if (TestTrianglesIntersections((*it).second, ray, tri_dist, (*it).first))
+			hits_triangle.push_back({ tri_dist ,(*it).second });
+	}
+
+	// Add Physic Raycast ------------------------
+	RaycastHit physic_hit;
+	bool collider_found = App->physx->Raycast(ray.a, ray.Dir(), 1000, physic_hit);
+	if (collider_found)
+		hits_triangle.push_back({ physic_hit.distance ,physic_hit.collider->game_object_attached });
+
+	// Sort by distance ---------------------
+	std::sort(hits_triangle.begin(), hits_triangle.end(), ModuleCamera3D::SortByDistance);
+
+	// Get only first and choose btw collider & mesh triangle -----------------------
+
+	GameObject* selected_go = nullptr;
+
+	if (!hits_triangle.empty()) {
+		GameObject* first_hit = hits_triangle[0].second;
+		if (first_hit->children.empty()) {
+			ComponentCurve* curve = first_hit->GetComponent<ComponentCurve>();
+			if (curve == nullptr) {
+				App->ui->panel_scene->gizmo_curve = false;
+				App->ui->panel_scene->curve = nullptr;
+				App->ui->panel_scene->curve_index = 0;
+				selected_go = first_hit;
+			}
+			else {
+				for (uint i = 0; i < curve->curve.GetControlPoints().size(); ++i) {
+					if (ray.Intersects(AABB::FromCenterAndSize(curve->curve.GetControlPoints()[i], { 1,1,1 }))) {
+						App->ui->panel_scene->gizmo_curve = true;
+						App->ui->panel_scene->curve = curve;
+						App->ui->panel_scene->curve_index = i;
+						selected_go = first_hit;
+						break;
+					}
+				}
 			}
 		}
 	}
 
-	if (!hit) {
+	if (!selected_go) {
 		App->objects->DeselectObjects();
+		App->ui->panel_scene->gizmo_curve = false;
+		App->ui->panel_scene->curve = nullptr;
+		App->ui->panel_scene->curve_index = 0;
 	}
-
-	hit = false;
-
+	else
+	{
+		App->objects->SetNewSelectedObject(selected_go, false);
+		GameObject* obj = selected_go->parent;
+		while (obj->parent != nullptr) {
+			obj->open_node = true;
+			obj = obj->parent;
+		}
+	}
 }
 
-void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray)
+void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment& ray)
 {
 	float distance_out = 0.f;
 	float distance = 0.f;
@@ -328,46 +418,42 @@ void ModuleCamera3D::CreateObjectsHitMap(std::vector<std::pair<float, GameObject
 	}
 }
 
-bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSegment& ray)
+bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSegment& ray, float& triangle_dist, float aabb_dist)
 {
 	bool ret = false;
 	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
+	LineSegment local_ray = ray;
+	float3 point = float3::zero();
+	float distance = 0.f;
+	local_ray.Transform(object->transform->global_transformation.Inverted());
 
-	if (mesh != nullptr && mesh->mesh != nullptr)
-	{
+	if (mesh != nullptr && mesh->mesh != nullptr) {
 		ComponentTransform* transform = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);
-		for (uint i = 0; i < mesh->mesh->num_index; i += 3)
-		{
-			uint index_a, index_b, index_c;
 
+		for (uint i = 0; i < mesh->mesh->num_index; i += 3) {
+			uint index_a, index_b, index_c;
 			index_a = mesh->mesh->index[i] * 3;
 			float3 point_a(&mesh->mesh->vertex[index_a]);
-
 			index_b = mesh->mesh->index[i + 1] * 3;
 			float3 point_b(&mesh->mesh->vertex[index_b]);
-
 			index_c = mesh->mesh->index[i + 2] * 3;
 			float3 point_c(&mesh->mesh->vertex[index_c]);
 
 			Triangle triangle_to_check(point_a, point_b, point_c);
-			triangle_to_check.Transform(transform->global_transformation);
-			if (ray.Intersects(triangle_to_check, nullptr, nullptr))
-			{
-				GameObject* obj = object->parent;
-				while (obj->parent != nullptr) {
-					obj->open_node = true;
-					obj = obj->parent;
-				}
-				App->objects->SetNewSelectedObject(object);
+
+			if (local_ray.Intersects(triangle_to_check, nullptr, &point)) {
 				ret = true;
-				break;
+				distance = object->transform->global_transformation.TransformPos(point).Distance(ray.a);
+				if (triangle_dist > distance)
+					triangle_dist = distance;
 			}
 		}
 	}
-	else if (object->children.empty()){
-		App->objects->SetNewSelectedObject(object);
+	else if (object->children.empty()) {
 		ret = true;
+		distance = aabb_dist;
 	}
+
 	return ret;
 }
 
@@ -380,8 +466,31 @@ void ModuleCamera3D::PanelConfigOption()
 {
 	if (fake_camera)
 	{
-		
+
 		ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
 	}
 }
+
+void ModuleCamera3D::Rotate(float yaw, float pitch)
+{
+	Quat rotation = Quat::RotateAxisAngle(float3::unitY(), DegToRad(yaw)) * Quat::RotateAxisAngle(float3::unitX(), DegToRad(pitch));
+
+	fake_camera->frustum.up = rotation.WorldY();
+	fake_camera->frustum.front = rotation.WorldZ();
+
+}
+
+void ModuleCamera3D::Orbit(float dt)
+{
+	float rotation_speed = camera_orbit_speed * dt;
+	float yaw = mouse_motion_x * rotation_speed;
+	float pitch = mouse_motion_y * rotation_speed;
+	float distance = (fake_camera->frustum.pos - reference).Length();
+	current_yaw = final_yaw += yaw;
+	current_pitch = final_pitch += pitch;
+	Rotate(current_yaw, current_pitch);
+	fake_camera->frustum.pos = reference + -fake_camera->frustum.front * distance;
+}
+
+
 

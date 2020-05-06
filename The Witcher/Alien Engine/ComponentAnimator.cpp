@@ -49,6 +49,18 @@ void ComponentAnimator::PlayState(const char* name)
 		animator_controller->Play(name);
 }
 
+void ComponentAnimator::SetStateSpeed(const char* name, float value)
+{
+	std::vector<State*> states = animator_controller->GetStates();
+	for (auto it = states.begin(); it != states.end(); ++it)
+	{
+		if (strcmp((*it)->GetName().c_str(), name) == 0) {
+			(*it)->SetSpeed(value);
+			break;
+		}
+	}
+}
+
 bool ComponentAnimator::IsPlaying(const char* name)
 {
 	bool ret = false;
@@ -57,6 +69,24 @@ bool ComponentAnimator::IsPlaying(const char* name)
 		ret = true;
 
 	return ret;
+}
+
+void ComponentAnimator::IncreaseAllStateSpeeds(float value)
+{
+	std::vector<State*> states = animator_controller->GetStates();
+	for (auto it = states.begin(); it != states.end(); ++it)
+	{
+		(*it)->SetSpeed((*it)->GetSpeed() * value);
+	}
+}
+
+void ComponentAnimator::DecreaseAllStateSpeeds(float value)
+{
+	std::vector<State*> states = animator_controller->GetStates();
+	for (auto it = states.begin(); it != states.end(); ++it)
+	{
+		(*it)->SetSpeed((*it)->GetSpeed() / value);
+	}
 }
 
 void ComponentAnimator::UpdateAnimation(GameObject* go_to_update)
@@ -140,6 +170,11 @@ void ComponentAnimator::SetFloat(const char* parameter_name, float parameter_val
 void ComponentAnimator::SetInt(const char* parameter_name, int parameter_value)
 {
 	animator_controller->SetInt(parameter_name, parameter_value);
+}
+
+void ComponentAnimator::SetCurrentStateSpeed(float speed)
+{
+	animator_controller->GetCurrentNode()->SetSpeed(speed);
 }
 
 float ComponentAnimator::GetCurrentStateDuration()

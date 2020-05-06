@@ -5,11 +5,11 @@
   "SchemaVersion": "11",
   "SoundbankVersion": "128",
   "RootPaths": {
-   "ProjectRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\",
-   "SourceFilesRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
-   "SoundBanksRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
+   "ProjectRoot": "C:\\Users\\jgher\\Documents\\GitHub\\WwiseProject\\TheWitcher\\",
+   "SourceFilesRoot": "C:\\Users\\jgher\\Documents\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
+   "SoundBanksRoot": "C:\\Users\\jgher\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
    "ExternalSourcesInputFile": "",
-   "ExternalSourcesOutputRoot": "E:\\Documentos\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
+   "ExternalSourcesOutputRoot": "C:\\Users\\jgher\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
   },
   "DialogueEvents": [],
   "StreamedFiles": [],
@@ -36,6 +36,11 @@
       "Id": "3778904045",
       "Name": "Play_GeraltJump",
       "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_GeraltJump"
+     },
+     {
+      "Id": "76267673",
+      "Name": "Play_Heartbeats",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_Heartbeats"
      },
      {
       "Id": "511861945",
@@ -68,6 +73,11 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Play_YennShockwave"
      },
      {
+      "Id": "2551268862",
+      "Name": "Player_Fall",
+      "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Player_Fall"
+     },
+     {
       "Id": "2453392179",
       "Name": "Player_Footstep",
       "ObjectPath": "\\Events\\Default Work Unit\\Player_Interactions\\Player_Footstep"
@@ -94,14 +104,8 @@
      {
       "Id": "65317710",
       "Language": "SFX",
-      "ShortName": "damage_received_noscream1.wav",
-      "Path": "SFX\\damage_received_noscream1_1C9C67B2.wem"
-     },
-     {
-      "Id": "69587374",
-      "Language": "SFX",
-      "ShortName": "damage_received_scream3_yennefer.wav",
-      "Path": "SFX\\damage_received_scream3_yennefer_1C9C67B2.wem"
+      "ShortName": "walking_sand2.wav",
+      "Path": "SFX\\walking_sand2_1C9C67B2.wem"
      },
      {
       "Id": "69587374",
@@ -200,6 +204,12 @@
       "Path": "SFX\\yenndeath_1C9C67B2.wem"
      },
      {
+      "Id": "689276962",
+      "Language": "SFX",
+      "ShortName": "wood_footstep.wav",
+      "Path": "SFX\\wood_footstep_1C9C67B2.wem"
+     },
+     {
       "Id": "690941690",
       "Language": "SFX",
       "ShortName": "walking_mud3.wav",
@@ -216,6 +226,12 @@
       "Language": "SFX",
       "ShortName": "walking_sand3.wav",
       "Path": "SFX\\walking_sand3_1C9C67B2.wem"
+     },
+     {
+      "Id": "699775253",
+      "Language": "SFX",
+      "ShortName": "levels\\Ravine\\vegetation_footstep.wav",
+      "Path": "SFX\\levels\\Ravine\\vegetation_footstep_1C9C67B2.wem"
      },
      {
       "Id": "741369655",
@@ -252,6 +268,12 @@
       "Language": "SFX",
       "ShortName": "Shockwave.wav",
       "Path": "SFX\\Shockwave_1C9C67B2.wem"
+     },
+     {
+      "Id": "970877176",
+      "Language": "SFX",
+      "ShortName": "heartbeat.wav",
+      "Path": "SFX\\heartbeat_F17FB28C.wem"
      },
      {
       "Id": "974381289",
@@ -611,12 +633,6 @@
       "Path": "SFX\\GhoulE1_1C9C67B2.wem"
      },
      {
-      "Id": "804804872",
-      "Language": "SFX",
-      "ShortName": "GeraltE8.wav",
-      "Path": "SFX\\GeraltE8_1C9C67B2.wem"
-     },
-     {
       "Id": "983592396",
       "Language": "SFX",
       "ShortName": "GeraltE2.wav",
@@ -649,35 +665,35 @@
     ]
    },
    {
-    "Id": "3529925883",
+    "Id": "3563481019",
     "Language": "SFX",
-    "ObjectPath": "\\SoundBanks\\Default Work Unit\\UI_SXF",
-    "ShortName": "UI_SXF",
-    "Path": "UI_SXF.bnk",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\UI_SFX",
+    "ShortName": "UI_SFX",
+    "Path": "UI_SFX.bnk",
     "IncludedEvents": [
      {
-      "Id": "1291640088",
-      "Name": "Play_MenuMove",
-      "ObjectPath": "\\Events\\Default Work Unit\\UI\\Play_MenuMove"
+      "Id": "1584507803",
+      "Name": "CLICK",
+      "ObjectPath": "\\Events\\Default Work Unit\\UI\\CLICK"
      },
      {
-      "Id": "40516875",
-      "Name": "Play_MenuSelect",
-      "ObjectPath": "\\Events\\Default Work Unit\\UI\\Play_MenuSelect"
+      "Id": "2368844905",
+      "Name": "ENTER",
+      "ObjectPath": "\\Events\\Default Work Unit\\UI\\ENTER"
      }
     ],
     "IncludedMemoryFiles": [
      {
-      "Id": "806850413",
+      "Id": "281608791",
       "Language": "SFX",
-      "ShortName": "menu_move.wav",
-      "Path": "SFX\\menu_move_1C9C67B2.wem"
+      "ShortName": "CLICK.wav",
+      "Path": "SFX\\CLICK_1C9C67B2.wem"
      },
      {
-      "Id": "932025878",
+      "Id": "1012928432",
       "Language": "SFX",
-      "ShortName": "menu_select.wav",
-      "Path": "SFX\\menu_select_1C9C67B2.wem"
+      "ShortName": "ENTER.wav",
+      "Path": "SFX\\ENTER_1C9C67B2.wem"
      }
     ]
    },
@@ -689,17 +705,72 @@
     "Path": "Objects_SFX.bnk",
     "IncludedEvents": [
      {
-      "Id": "3067740349",
-      "Name": "Play_Chest",
-      "ObjectPath": "\\Events\\Default Work Unit\\Object\\Play_Chest"
+      "Id": "3145159334",
+      "Name": "Play_Collect_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Collect_Runestone"
+     },
+     {
+      "Id": "3449845084",
+      "Name": "Play_Earth_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Earth_Runestone"
      },
      {
       "Id": "2372531077",
       "Name": "Play_FenceDestroy",
       "ObjectPath": "\\Events\\Default Work Unit\\Object\\Play_FenceDestroy"
+     },
+     {
+      "Id": "3230728788",
+      "Name": "Play_Fire_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Fire_Runestone"
+     },
+     {
+      "Id": "1709736977",
+      "Name": "Play_Ice_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Ice_Runestone"
+     },
+     {
+      "Id": "928466002",
+      "Name": "Play_Lightning_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Lightning_Runestone"
+     },
+     {
+      "Id": "1352529336",
+      "Name": "Play_Poison_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Poison_Runestone"
      }
     ],
     "IncludedMemoryFiles": [
+     {
+      "Id": "264947119",
+      "Language": "SFX",
+      "ShortName": "fire_runestone.wav",
+      "Path": "SFX\\fire_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "367052369",
+      "Language": "SFX",
+      "ShortName": "collect_runestone.wav",
+      "Path": "SFX\\collect_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "368529329",
+      "Language": "SFX",
+      "ShortName": "earth_runestone.wav",
+      "Path": "SFX\\earth_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "401112432",
+      "Language": "SFX",
+      "ShortName": "poison_runestone.wav",
+      "Path": "SFX\\poison_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "586983686",
+      "Language": "SFX",
+      "ShortName": "ice_runestone.wav",
+      "Path": "SFX\\ice_runestone_1C9C67B2.wem"
+     },
      {
       "Id": "713490204",
       "Language": "SFX",
@@ -707,10 +778,10 @@
       "Path": "SFX\\barrel_destroyed_1C9C67B2.wem"
      },
      {
-      "Id": "976612201",
+      "Id": "948641462",
       "Language": "SFX",
-      "ShortName": "Chest.wav",
-      "Path": "SFX\\Chest_F17FB28C.wem"
+      "ShortName": "lightning_runestone.wav",
+      "Path": "SFX\\lightning_runestone_1C9C67B2.wem"
      }
     ]
    },
@@ -727,24 +798,9 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Bard_Music"
      },
      {
-      "Id": "3155474038",
-      "Name": "Play_Combat_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Combat_Music"
-     },
-     {
       "Id": "1635916389",
       "Name": "Play_End_Music",
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_End_Music"
-     },
-     {
-      "Id": "110125719",
-      "Name": "Play_Lake_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Lake_Music"
-     },
-     {
-      "Id": "29834681",
-      "Name": "Play_Lvl1_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Lvl1_Music"
      },
      {
       "Id": "166541076",
@@ -752,14 +808,9 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_MainMenu_Music"
      },
      {
-      "Id": "3813093503",
-      "Name": "Play_Mountain_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Mountain_Music"
-     },
-     {
-      "Id": "2462691910",
-      "Name": "Play_Quiet_Music",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Quiet_Music"
+      "Id": "4145153789",
+      "Name": "Play_Music_Lvl1",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Music_Lvl1"
      },
      {
       "Id": "3241038393",
@@ -779,12 +830,6 @@
       "Language": "SFX",
       "ShortName": "music_calm_green_lake_serenade.wav",
       "Path": "SFX\\music_calm_green_lake_serenade_F17FB28C.wem"
-     },
-     {
-      "Id": "214870564",
-      "Language": "SFX",
-      "ShortName": "songlvl1.wav",
-      "Path": "SFX\\songlvl1_F17FB28C.wem"
      },
      {
       "Id": "247361237",
@@ -819,6 +864,270 @@
     ]
    },
    {
+    "Id": "4070387514",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Enemy_Interaction",
+    "ShortName": "Enemy_Interaction",
+    "Path": "Enemy_Interaction.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "3827515080",
+      "Name": "GhoulAttack",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\GhoulAttack"
+     },
+     {
+      "Id": "2611108682",
+      "Name": "GhoulDeath",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\GhoulDeath"
+     },
+     {
+      "Id": "1866221083",
+      "Name": "GhoulHit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\GhoulHit"
+     },
+     {
+      "Id": "3766237789",
+      "Name": "Play_Dizzy_Enemy",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Play_Dizzy_Enemy"
+     },
+     {
+      "Id": "2893240346",
+      "Name": "Play_Drowner_Death",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Drowner\\Play_Drowner_Death"
+     },
+     {
+      "Id": "3482939622",
+      "Name": "Play_Drowner_Footstep",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Drowner\\Play_Drowner_Footstep"
+     },
+     {
+      "Id": "807714347",
+      "Name": "Play_Drowner_Hit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Drowner\\Play_Drowner_Hit"
+     },
+     {
+      "Id": "3215858775",
+      "Name": "Play_Drowner_Movement_Water",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Drowner\\Play_Drowner_Movement_Water"
+     },
+     {
+      "Id": "986423755",
+      "Name": "Play_Drowner_Shot_Attack",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Drowner\\Play_Drowner_Shot_Attack"
+     },
+     {
+      "Id": "19954417",
+      "Name": "Play_Drowner_Splash_Water",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Drowner\\Play_Drowner_Splash_Water"
+     },
+     {
+      "Id": "890332400",
+      "Name": "Play_Leshen_Death",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Death"
+     },
+     {
+      "Id": "3936739521",
+      "Name": "Play_Leshen_Hit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Hit"
+     },
+     {
+      "Id": "3930890845",
+      "Name": "Play_Leshen_Melee_Attack",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Melee_Attack"
+     },
+     {
+      "Id": "3931950402",
+      "Name": "Play_Leshen_Raven_Cloud",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Raven_Cloud"
+     },
+     {
+      "Id": "115571181",
+      "Name": "Play_Leshen_Raven_Throw",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Raven_Throw"
+     },
+     {
+      "Id": "1023174917",
+      "Name": "Play_Leshen_Roots",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Roots"
+     },
+     {
+      "Id": "3095980519",
+      "Name": "Play_Leshen_Smoke_Cloud",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Smoke_Cloud"
+     },
+     {
+      "Id": "1718791025",
+      "Name": "Play_Soldier_footstep",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Play_Soldier_footstep"
+     },
+     {
+      "Id": "192287144",
+      "Name": "SoldierBlock",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierBlock"
+     },
+     {
+      "Id": "962204745",
+      "Name": "SoldierDeath",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierDeath"
+     },
+     {
+      "Id": "4199645896",
+      "Name": "SoldierHit",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierHit"
+     },
+     {
+      "Id": "1115497702",
+      "Name": "SoldierShoot",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierShoot"
+     },
+     {
+      "Id": "2142965948",
+      "Name": "SoldierSword",
+      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\SoldierSword"
+     }
+    ],
+    "IncludedMemoryFiles": [
+     {
+      "Id": "47010875",
+      "Language": "SFX",
+      "ShortName": "leshen_death.wav",
+      "Path": "SFX\\leshen_death_1C9C67B2.wem"
+     },
+     {
+      "Id": "149651852",
+      "Language": "SFX",
+      "ShortName": "drowner_splash_water.wav",
+      "Path": "SFX\\drowner_splash_water_1C9C67B2.wem"
+     },
+     {
+      "Id": "160447770",
+      "Language": "SFX",
+      "ShortName": "drowner_movement_water.wav",
+      "Path": "SFX\\drowner_movement_water_1C9C67B2.wem"
+     },
+     {
+      "Id": "171381778",
+      "Language": "SFX",
+      "ShortName": "leshen_smoke_cloud.wav",
+      "Path": "SFX\\leshen_smoke_cloud_1C9C67B2.wem"
+     },
+     {
+      "Id": "224532643",
+      "Language": "SFX",
+      "ShortName": "dizzy_enemy.wav",
+      "Path": "SFX\\dizzy_enemy_1C9C67B2.wem"
+     },
+     {
+      "Id": "251602365",
+      "Language": "SFX",
+      "ShortName": "leshen_raven_throw.wav",
+      "Path": "SFX\\leshen_raven_throw_1C9C67B2.wem"
+     },
+     {
+      "Id": "279893819",
+      "Language": "SFX",
+      "ShortName": "leshen_hit.wav",
+      "Path": "SFX\\leshen_hit_1C9C67B2.wem"
+     },
+     {
+      "Id": "385293872",
+      "Language": "SFX",
+      "ShortName": "drowner_death.wav",
+      "Path": "SFX\\drowner_death_1C9C67B2.wem"
+     },
+     {
+      "Id": "389192671",
+      "Language": "SFX",
+      "ShortName": "ghoulDeath.wav",
+      "Path": "SFX\\ghoulDeath_1C9C67B2.wem"
+     },
+     {
+      "Id": "518579957",
+      "Language": "SFX",
+      "ShortName": "leshen_roots.wav",
+      "Path": "SFX\\leshen_roots_1C9C67B2.wem"
+     },
+     {
+      "Id": "521772631",
+      "Language": "SFX",
+      "ShortName": "leshen_raven_cloud.wav",
+      "Path": "SFX\\leshen_raven_cloud_1C9C67B2.wem"
+     },
+     {
+      "Id": "532431438",
+      "Language": "SFX",
+      "ShortName": "shieldblock.wav",
+      "Path": "SFX\\shieldblock_1C9C67B2.wem"
+     },
+     {
+      "Id": "535572438",
+      "Language": "SFX",
+      "ShortName": "drowner_hit.wav",
+      "Path": "SFX\\drowner_hit_1C9C67B2.wem"
+     },
+     {
+      "Id": "547647646",
+      "Language": "SFX",
+      "ShortName": "ghoulHit.wav",
+      "Path": "SFX\\ghoulHit_1C9C67B2.wem"
+     },
+     {
+      "Id": "593406664",
+      "Language": "SFX",
+      "ShortName": "drowner_shot_attack.wav",
+      "Path": "SFX\\drowner_shot_attack_1C9C67B2.wem"
+     },
+     {
+      "Id": "612787848",
+      "Language": "SFX",
+      "ShortName": "leshen_melee_attack.wav",
+      "Path": "SFX\\leshen_melee_attack_1C9C67B2.wem"
+     },
+     {
+      "Id": "682751301",
+      "Language": "SFX",
+      "ShortName": "soldierHit.wav",
+      "Path": "SFX\\soldierHit_1C9C67B2.wem"
+     },
+     {
+      "Id": "742272358",
+      "Language": "SFX",
+      "ShortName": "drowner_footstep.wav",
+      "Path": "SFX\\drowner_footstep_1C9C67B2.wem"
+     },
+     {
+      "Id": "852443415",
+      "Language": "SFX",
+      "ShortName": "shootArrow.wav",
+      "Path": "SFX\\shootArrow_1C9C67B2.wem"
+     },
+     {
+      "Id": "882909606",
+      "Language": "SFX",
+      "ShortName": "ghoulAttack.wav",
+      "Path": "SFX\\ghoulAttack_1C9C67B2.wem"
+     },
+     {
+      "Id": "888899837",
+      "Language": "SFX",
+      "ShortName": "soldier_footstep.wav",
+      "Path": "SFX\\soldier_footstep_1C9C67B2.wem"
+     },
+     {
+      "Id": "990442094",
+      "Language": "SFX",
+      "ShortName": "enemySwordSwing.wav",
+      "Path": "SFX\\enemySwordSwing_1C9C67B2.wem"
+     },
+     {
+      "Id": "1049390434",
+      "Language": "SFX",
+      "ShortName": "soldierDeath.wav",
+      "Path": "SFX\\soldierDeath_1C9C67B2.wem"
+     }
+    ]
+   },
+   {
     "Id": "4139483824",
     "Language": "SFX",
     "ObjectPath": "\\SoundBanks\\Default Work Unit\\Environment_Lvl1",
@@ -826,19 +1135,34 @@
     "Path": "Environment_Lvl1.bnk",
     "IncludedEvents": [
      {
-      "Id": "1365115432",
-      "Name": "Play_Battle_Boss",
-      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Battle_Boss"
+      "Id": "1543750746",
+      "Name": "Play_Bats",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Bats"
      },
      {
-      "Id": "1598323015",
-      "Name": "Play_Birds_Wind",
-      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Birds_Wind"
+      "Id": "3025897706",
+      "Name": "Play_Birds",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Birds"
      },
      {
-      "Id": "207755397",
-      "Name": "Play_Forest",
-      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Forest"
+      "Id": "3602995889",
+      "Name": "Play_Cave",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Cave"
+     },
+     {
+      "Id": "639442158",
+      "Name": "Play_Crows",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Crows"
+     },
+     {
+      "Id": "2197695643",
+      "Name": "Play_Gloomy",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Gloomy"
+     },
+     {
+      "Id": "1213995237",
+      "Name": "Play_Insects",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Insects"
      },
      {
       "Id": "1498169336",
@@ -846,14 +1170,29 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_River"
      },
      {
-      "Id": "1099345086",
-      "Name": "Play_Suspense",
-      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Suspense"
+      "Id": "2052558220",
+      "Name": "Play_Rocks",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Rocks"
+     },
+     {
+      "Id": "701022914",
+      "Name": "Play_Squirrels",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Squirrels"
+     },
+     {
+      "Id": "3560238346",
+      "Name": "Play_Tree_Fall",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Tree_Fall"
      },
      {
       "Id": "1020223172",
       "Name": "Play_Wind",
       "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Wind"
+     },
+     {
+      "Id": "1297505753",
+      "Name": "Play_Wolf_Howling",
+      "ObjectPath": "\\Events\\Default Work Unit\\Environment Lvl1\\Play_Wolf_Howling"
      },
      {
       "Id": "3184224717",
@@ -869,16 +1208,34 @@
       "Path": "SFX\\Wind_F17FB28C.wem"
      },
      {
+      "Id": "119498566",
+      "Language": "SFX",
+      "ShortName": "levels\\Fortress\\Enviroment sounds\\tree_fall.wav",
+      "Path": "SFX\\levels\\Fortress\\Enviroment sounds\\tree_fall_1C9C67B2.wem"
+     },
+     {
+      "Id": "214377329",
+      "Language": "SFX",
+      "ShortName": "levels\\Cave\\bats_loop.wav",
+      "Path": "SFX\\levels\\Cave\\bats_loop_F17FB28C.wem"
+     },
+     {
+      "Id": "214774002",
+      "Language": "SFX",
+      "ShortName": "levels\\Drowners\\gloomy_sfx.wav",
+      "Path": "SFX\\levels\\Drowners\\gloomy_sfx_F17FB28C.wem"
+     },
+     {
       "Id": "236180510",
       "Language": "SFX",
       "ShortName": "Birds_env.wav",
       "Path": "SFX\\Birds_env_1C9C67B2.wem"
      },
      {
-      "Id": "255918428",
+      "Id": "437446785",
       "Language": "SFX",
-      "ShortName": "Forest.wav",
-      "Path": "SFX\\Forest_F17FB28C.wem"
+      "ShortName": "levels\\Fortress\\Enviroment sounds\\raven_wings.wav",
+      "Path": "SFX\\levels\\Fortress\\Enviroment sounds\\raven_wings_1C9C67B2.wem"
      },
      {
       "Id": "452321188",
@@ -887,16 +1244,34 @@
       "Path": "SFX\\River_F17FB28C.wem"
      },
      {
-      "Id": "704690365",
+      "Id": "531556462",
       "Language": "SFX",
-      "ShortName": "ShortSuspense.wav",
-      "Path": "SFX\\ShortSuspense_1C9C67B2.wem"
+      "ShortName": "Squirrel.wav",
+      "Path": "SFX\\Squirrel_1C9C67B2.wem"
      },
      {
-      "Id": "842888706",
+      "Id": "627373823",
       "Language": "SFX",
-      "ShortName": "Intense.wav",
-      "Path": "SFX\\Intense_1C9C67B2.wem"
+      "ShortName": "RockFalling.wav",
+      "Path": "SFX\\RockFalling_F17FB28C.wem"
+     },
+     {
+      "Id": "661060477",
+      "Language": "SFX",
+      "ShortName": "levels\\MiddleArea\\wolf.wav",
+      "Path": "SFX\\levels\\MiddleArea\\wolf_1C9C67B2.wem"
+     },
+     {
+      "Id": "767438697",
+      "Language": "SFX",
+      "ShortName": "levels\\Fortress\\Enviroment sounds\\insects_wind_loop.wav",
+      "Path": "SFX\\levels\\Fortress\\Enviroment sounds\\insects_wind_loop_F17FB28C.wem"
+     },
+     {
+      "Id": "1000431987",
+      "Language": "SFX",
+      "ShortName": "levels\\Cave\\cave_ambience_loop.wav",
+      "Path": "SFX\\levels\\Cave\\cave_ambience_loop_F17FB28C.wem"
      },
      {
       "Id": "1056131618",

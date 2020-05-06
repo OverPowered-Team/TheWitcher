@@ -13,6 +13,7 @@
 #include "PanelProject.h"
 #include "ComponentCamera.h"
 #include "ComponentTransform.h"
+#include "ComponentAudioEmitter.h"
 #include "ModuleResources.h"
 #include "ModuleUI.h"
 #include "StaticInput.h"
@@ -449,7 +450,38 @@ bool ComponentSlider::DrawInspector()
 			ImGui::TreePop();
 		}
 
-		ImGui::Spacing();
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+
+		if (ImGui::TreeNode("Audio Events"))
+		{
+			ImGui::Text("Move Event");
+			ImGui::SameLine(120);
+
+			static char move_name[30];
+			memcpy(move_name, move_event.c_str(), 30);
+
+			if (ImGui::InputText("##MoveEventName", move_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				move_event = move_name;
+			}
+			ImGui::Spacing();
+
+			ImGui::Text("Click Event");
+			ImGui::SameLine(120);
+
+			static char click_name[30];
+			memcpy(click_name, click_event.c_str(), 30);
+
+			if (ImGui::InputText("##ClickEventName", click_name, 30, ImGuiInputTextFlags_AutoSelectAll))
+			{
+				click_event = click_name;
+			}
+			ImGui::Spacing(); ImGui::Spacing();
+
+
+
+			ImGui::TreePop();
+		}
 
 
 		ImGui::Separator();
@@ -513,6 +545,9 @@ void ComponentSlider::Update()
 		case Exit:
 			OnExit();
 			break;
+		case Enter:
+			OnEnter();
+			break;
 		default:
 			break;
 		}
@@ -569,7 +604,7 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex, bool backgr
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
-		matrix[2][3] = 0.0f;
+		//matrix[2][3] = 0.0f;
 	}
 
 	if (tex != nullptr) {
@@ -673,6 +708,9 @@ void ComponentSlider::SaveComponent(JSONArraypack* to_save)
 	to_save->SetString("SelectOnRight", std::to_string(select_on_right).data());
 	to_save->SetString("SelectOnLeft", std::to_string(select_on_left).data());
 
+	to_save->SetString("ClickEvent", click_event.data());
+	to_save->SetString("MoveEvent", move_event.data());
+
 }
 
 void ComponentSlider::LoadComponent(JSONArraypack* to_load)
@@ -708,6 +746,9 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 	select_on_down = std::stoull(to_load->GetString("SelectOnDown"));
 	select_on_right = std::stoull(to_load->GetString("SelectOnRight"));
 	select_on_left = std::stoull(to_load->GetString("SelectOnLeft"));
+
+	click_event = to_load->GetString("ClickEvent");
+	move_event = to_load->GetString("MoveEvent");
 
 	u64 textureID = std::stoull(to_load->GetString("TextureID"));
 	if (textureID != 0) {
@@ -748,84 +789,113 @@ void ComponentSlider::LoadComponent(JSONArraypack* to_load)
 	}
 	App->objects->first_assigned_selected = false;
 }
+
+void ComponentSlider::SetActive(bool active)
+{
+	this->active_ui = active;
+	if (active) {
+		current_color = idle_color;
+		slider_current_color = slider_idle_color;
+	}
+	else {
+		current_color = disabled_color;
+		slider_current_color = slider_disabled_color;
+	}
+}
+
+
 bool ComponentSlider::OnIdle()
 {
-	current_color = idle_color;
-	slider_current_color = slider_idle_color;
+	if (active)
+	{
+		current_color = idle_color;
+		slider_current_color = slider_idle_color;
+	}
 	return true;
 }
 bool ComponentSlider::OnHover()
 {
-	current_color = hover_color;
-	slider_current_color = slider_hover_color;
+	if (active)
+	{
+		current_color = hover_color;
+		slider_current_color = slider_hover_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnClick()
 {
-	current_color = clicked_color;
-	slider_current_color = slider_clicked_color;
+	if (active)
+	{
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound(click_event.c_str());
+		}
+
+		current_color = clicked_color;
+		slider_current_color = slider_clicked_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnPressed()
 {
-	/*ComponentTransform* trans = game_object_attached->GetComponent<ComponentTransform>();
-	float width = (sliderX + ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (sliderX - ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
-	float width_bg = (x + ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (x - ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
-	
-	int xmotion = App->input->GetMouseXMotion();
-	
-	if (xmotion > 0)
+	if (active)
 	{
-		factor += (0.01f* xmotion);
-	}
-	if (xmotion < 0)
-	{
-		factor += (0.01f* xmotion);
-	}
-	if (factor>=1.0f)
-	{
-		factor = 1.0f;
-	}
-	if (factor <= 0.0f)
-	{
-		factor = 0.0f;
-	}*/
 
-	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || Input::GetControllerHoritzontalLeftAxis(1) < -0.2f)
-	{
-		factor += (0.01f);
-	}
-	if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || Input::GetControllerHoritzontalLeftAxis(1) > 0.2f)
-	{
-		factor -= (0.01f);
-	}
+		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT) == KEY_REPEAT)
+		{
+			factor += (0.01f);
+		}
+		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT) == KEY_REPEAT)
+		{
+			factor -= (0.01f);
+		}
 
 
-	if (factor >= 1.0f)
-	{
-		factor = 1.0f;
-	}
-	if (factor <= 0.0f)
-	{
-		factor = 0.0f;
-	}
+		if (factor >= 1.0f)
+		{
+			factor = 1.0f;
+		}
+		if (factor <= 0.0f)
+		{
+			factor = 0.0f;
+		}
 
-	current_color = pressed_color;
-	slider_current_color = slider_pressed_color;
+		current_color = pressed_color;
+		slider_current_color = slider_pressed_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnRelease()
 {
-	current_color = hover_color;
-	slider_current_color = slider_hover_color;
+	if (active)
+	{
+		current_color = hover_color;
+		slider_current_color = slider_hover_color;
+	}
 	return true;
 }
 
 bool ComponentSlider::OnExit()
 {
+	return true;
+}
+
+bool ComponentSlider::OnEnter()
+{
+
+	if (active)
+	{
+		//baina loka
+		ComponentAudioEmitter* emitter = game_object_attached->GetComponent<ComponentAudioEmitter>();
+		if (emitter != nullptr)
+		{
+			emitter->StartSound(move_event.c_str());
+		}
+	}
 	return true;
 }
 
@@ -859,7 +929,7 @@ void ComponentSlider::UILogicGamePad()
 		//not necessary to do anything
 		break; }
 	case Hover: {
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
 			state = Click;
 		}
@@ -868,13 +938,21 @@ void ComponentSlider::UILogicGamePad()
 		state = Pressed;
 		break; }
 	case Pressed: {
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
 			state = Hover;
 		}
 		break; }
 	case Release: {
 		state = Idle;
+		break; }
+
+	case Exit: {
+		state = Idle;
+		break; }
+
+	case Enter: {
+		state = Hover;
 		break; }
 	}
 }

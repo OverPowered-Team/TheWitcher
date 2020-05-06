@@ -2,37 +2,41 @@
 
 #include "ComponentCollider.h"
 #include "MathGeoLib/include/Math/MathAll.h"
-#include "Bullet/include/btBulletDynamicsCommon.h"
 
 class GameObject;
-class ModulePhysics;
-class C_Mesh;
+class ComponentMesh;
 
 class ComponentSphereCollider : public ComponentCollider
 {
 public:
 
 	friend class GameObject;
-	friend class ModulePhysics;
 
 public:
 
 	ComponentSphereCollider(GameObject* go);
+
+	/*virtual void QueryMesh(ComponentMesh* mesh) override;*/
 	void SetRadius(float radius);
-	float GetRadius() { return radius; }
+
+protected:
+
+	void ScaleChanged();
 
 private:
+
+	void InitializeRadius();
+	const float CalculateRadius();
+	PxShape* RecreateSphereShape();
 
 	void DrawSpecificInspector();
-
-	void Reset();
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
+	void Reset();
 
-	void CreateDefaultShape();
-	void UpdateShape();
+	void Clone(Component* clone);
 
 private:
-	float final_radius = 0.5f;
+
 	float radius = 0.5f;
 };

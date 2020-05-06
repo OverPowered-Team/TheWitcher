@@ -40,10 +40,14 @@ void Time::Update()
 
 void Time::Play()
 {
-	static std::string actual_scene_name;
+	static std::vector<std::string> actual_scene_names;
 	if (state == GameState::NONE) {
 #ifndef GAME_VERSION
-		actual_scene_name = (App->objects->current_scene != nullptr) ? App->objects->current_scene->GetName() : std::string();
+		if (!App->objects->current_scenes.empty()) {
+			for each (ResourceScene * scene in App->objects->current_scenes) {
+				actual_scene_names.push_back(scene->GetName());
+			}
+		}
 		App->objects->SaveScene(nullptr, "Library/play_scene.alienScene");
 		App->objects->ignore_cntrlZ = true;
 		if (App->ui->panel_console->clear_on_play) {
@@ -75,14 +79,27 @@ void Time::Play()
 		remove("Library/play_scene.alienScene");
 #ifndef GAME_VERSION
 		App->objects->errors = false;
-		if (!actual_scene_name.empty()) {
-			ResourceScene* scene = App->resources->GetSceneByName(actual_scene_name.data());
-			if (scene != nullptr) {
-				App->objects->current_scene = scene;
+		if (!actual_scene_names.empty()) {
+			App->objects->current_scenes.clear();
+			for (auto item = actual_scene_names.begin(); item != actual_scene_names.end(); ++item) {
+				ResourceScene* scene = App->resources->GetSceneByName((*item).data());
+				if (scene != nullptr) {
+					bool exists = false;
+					for (auto item = App->objects->current_scenes.begin(); item != App->objects->current_scenes.end(); ++item) {
+						if ((*item) == scene) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists) {
+						App->objects->current_scenes.push_back(scene);
+					}
+				}
 			}
 		}
 		App->ui->panel_console->game_console = false;
 		ImGui::SetWindowFocus(App->ui->panel_scene->GetPanelName().data());
+		actual_scene_names.clear();
 #endif
 	}
 }
@@ -131,6 +148,7 @@ void Time::SetScaleTime(const float& scale)
 void Time::SetDT(const float& dt)
 {
 	delta_time = dt;
+	delta_time = Clamp<float>(delta_time, 0.f, MAX_GAME_DT);
 }
 
 float Time::GetCurrentDT()

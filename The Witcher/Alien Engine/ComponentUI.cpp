@@ -13,7 +13,9 @@
 #include "ModuleInput.h"
 #include "ModuleObjects.h"
 #include "ModuleRenderer3D.h"
+#include "Billboard.h"
 #include "StaticInput.h"
+#include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
 ComponentUI::ComponentUI(GameObject* obj) :Component(obj)
@@ -81,32 +83,44 @@ void ComponentUI::Update()
 
 		//UILogicMouse();
 
-		switch (state)
+		(game_object_attached->enabled) ? active = true : active = false;
+
+		if (active)
+			(canvas->game_object_attached->enabled) ? active = true : active = false;
+
+		if (active)
 		{
-		case Idle: {
-			OnIdle();
-			break; }
-		case Hover: {
-			OnHover();
-			break; }
-		case Click: {
-			OnClick();
-			break; }
-		case Pressed: {
-			OnPressed();
-			break; }
-		case Release: {
-			OnRelease();
-			break; }
-		case Exit: {
-			OnExit();
-			break; }
-		default: {
-			break; }
+			switch (state)
+			{
+			case Idle: {
+				OnIdle();
+				break; }
+			case Hover: {
+				OnHover();
+				break; }
+			case Click: {
+				OnClick();
+				break; }
+			case Pressed: {
+				OnPressed();
+				break; }
+			case Release: {
+				OnRelease();
+				break; }
+			case Exit: {
+				OnExit();
+				break; }
+			case Enter: {
+				OnEnter();
+				break; }
+			default: {
+				break; }
+			}
+
+			if (canvas->game_object_attached->enabled && canvas->allow_navigation)
+				UILogicGamePad();
 		}
 
-		if (canvas->game_object_attached->enabled || canvas->allow_navigation)
-			UILogicGamePad();
 	}
 }
 
@@ -119,18 +133,27 @@ void ComponentUI::Draw(bool isGame)
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	float4x4 matrix = transform->global_transformation;
 
+
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
-	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
+	/*float4x4 ortho_matrix = float4x4((2.0f / App->ui->panel_game->width), 0.0f, 0.0f, -(App->ui->panel_game->width / App->ui->panel_game->width),
+		0.0f, (2.0f / App->ui->panel_game->height), 0.0f, -(App->ui->panel_game->height / App->ui->panel_game->height),
+		0.0f, 0.0f, (-2.0f / 2.0f), -(0.0 / 2.0f),
+		0.0f, 0.0f, 0.0f, 1.0f);*/
+
+	if (isGame && App->renderer3D->actual_game_camera != nullptr && !canvas->isWorld) {
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 #ifndef GAME_VERSION
-		glOrtho(0, App->ui->panel_game->width, App->ui->panel_game->height, 0, App->renderer3D->actual_game_camera->frustum.farPlaneDistance, App->renderer3D->actual_game_camera->frustum.farPlaneDistance);
+		glOrtho(0, App->ui->panel_game->width, App->ui->panel_game->height, 0,'F', 'F');
+		/*glPushMatrix();
+		glMultMatrixf(ortho_matrix.ptr());
+		glPopMatrix();*/
 #else
 		glOrtho(0, App->window->width, App->window->height, 0, App->renderer3D->actual_game_camera->frustum.farPlaneDistance, App->renderer3D->actual_game_camera->frustum.farPlaneDistance);
 #endif
@@ -157,11 +180,12 @@ void ComponentUI::Draw(bool isGame)
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
-		matrix[2][3] = 0.0f;
+		//matrix[2][3] = 0.0f;
 	}
 
+	
+
 	if (texture != nullptr) {
-		//glAlphaFunc(GL_GREATER, 0.0f);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 	}
@@ -171,8 +195,31 @@ void ComponentUI::Draw(bool isGame)
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
 
-	glPushMatrix();
-	glMultMatrixf(matrix.Transposed().ptr());
+	if (!canvas->isWorld)
+	{
+		glPushMatrix();
+		glMultMatrixf(matrix.Transposed().ptr());
+	}
+	else
+	{
+		position.x = matrix[0][3];
+		position.y = matrix[1][3];
+		position.z = matrix[2][3];
+
+		scale.x = matrix[0][0];
+		scale.y = matrix[1][1];
+		scale.z = matrix[2][2];
+
+
+		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
+		float4x4 uiGlobal = uiLocal;
+
+
+		glPushMatrix();
+		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
+
+	}
+	
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -299,6 +346,53 @@ void ComponentUI::CheckFirstSelected()
 	}
 }
 
+void ComponentUI::Orientate(ComponentCamera* camera)
+{
+	if (canvas->isWorld)
+	{
+		if (camera == nullptr)
+			return;
+		if (game_object_attached->parent != nullptr && game_object_attached->parent == canvas->game_object_attached)
+		{
+
+			switch (canvas->bbtype)
+			{
+			case BillboardType::SCREEN:
+				rotation = Billboard::AlignToScreen(camera);
+				break;
+
+			case BillboardType::WORLD:
+				rotation = Billboard::AlignToWorld(camera, position);
+				break;
+
+			case BillboardType::AXIS:
+				rotation = Billboard::AlignToAxis(camera, position);
+				break;
+
+			case BillboardType::NONE:
+				rotation = Quat::identity();
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+	
+}
+
+void ComponentUI::Rotate()
+{
+	if (canvas->isWorld && game_object_attached->parent != nullptr && game_object_attached->parent == canvas->game_object_attached)
+	{
+		rotation = rotation.Mul(Quat::RotateX(math::DegToRad(angle3D.x)));
+		rotation = rotation.Mul(Quat::RotateY(math::DegToRad(angle3D.y)));
+		rotation = rotation.Mul(Quat::RotateZ(math::DegToRad(angle3D.z)));
+
+		game_object_attached->transform->SetGlobalRotation(rotation);
+	}
+}
+
 void ComponentUI::SetSize(float width, float height)
 {
 	size.x = width / 100.0f;
@@ -315,7 +409,36 @@ void ComponentUI::SetSize(float width, float height)
 	UpdateVertex();
 }
 
-
+void ComponentUI::ReSetIDNavigation()
+{
+	if (save_getting) {
+		GameObject* root = game_object_attached->FindPrefabRoot();
+		save_left = root->GetGameObjectByID(select_on_left);
+		save_right = root->GetGameObjectByID(select_on_right);
+		save_up = root->GetGameObjectByID(select_on_up);
+		save_bottom = root->GetGameObjectByID(select_on_down);
+	}
+	else {
+		if (save_left != nullptr) {
+			select_on_left = save_left->ID;
+			save_left = nullptr;
+		}
+		if (save_right != nullptr) {
+			select_on_right = save_right->ID;
+			save_right = nullptr;
+		}
+		if(save_up != nullptr) {
+			select_on_up = save_up->ID;
+			save_up = nullptr;
+		}
+		if (save_bottom != nullptr) {
+			select_on_down = save_bottom->ID;
+			save_bottom = nullptr;
+		}
+	}
+	
+	save_getting = !save_getting;
+}
 
 void ComponentUI::UILogicGamePad()
 {
@@ -326,20 +449,20 @@ void ComponentUI::UILogicGamePad()
 		state = Idle;
 		break; }
 	case Hover: {
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 			state = Click;
 
 		break; }
 	case Click: {
-		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_REPEAT)
+		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 			state = Pressed;
 
-		if (Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
+		if (Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 			state = Release;
 
 		break; }
 	case Pressed: {
-		if (Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
+		if (Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_A) || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 			state = Release;
 
 		break; }
@@ -349,6 +472,10 @@ void ComponentUI::UILogicGamePad()
 
 	case Exit: {
 		state = Idle;
+		break; }
+
+	case Enter: {
+		state = Hover;
 		break; }
 	}
 }

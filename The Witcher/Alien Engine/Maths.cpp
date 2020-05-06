@@ -1,5 +1,7 @@
 #include "Maths.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
+#include "Perlin_Noise/PerlinNoise.h"
+#include "RandomHelper.h"
 
 float Maths::Abs(const float& value)
 {
@@ -127,6 +129,21 @@ double Maths::Max(const double& value1, const double& value2)
 	return (value1 < value2) ? value2 : value1;
 }
 
+float Maths::PerlinNoise(const unsigned int& seed, const double& x, const double& y, const double& z)
+{
+	return PerlinNoise::PerlinNoise(seed).noise(x,y,z);
+}
+
+float Maths::Lerp(const float& start, const float& end, const float& t)
+{
+	return start + t * (end - start);
+}
+
+int Maths::Lerp(const int& start, const int& end, const float& t)
+{
+	return start + int(t * (end - start));
+}
+
 double Maths::PI()
 {
 	return 3.14159265358979f;
@@ -140,4 +157,9 @@ double Maths::Deg2Rad()
 double Maths::Rad2Deg()
 {
 	return 57.295779513082320876f;
+}
+
+float Maths::Map(float s, float a1, float a2, float b1, float b2)
+{
+	return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
 }

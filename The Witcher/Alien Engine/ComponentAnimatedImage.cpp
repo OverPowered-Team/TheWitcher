@@ -173,7 +173,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
-	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
+	if (isGame && App->renderer3D->actual_game_camera != nullptr && !canvas->isWorld) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 #ifndef GAME_VERSION
@@ -221,8 +221,35 @@ void ComponentAnimatedImage::Draw(bool isGame)
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
 
-	glPushMatrix();
-	glMultMatrixf(matrix.Transposed().ptr());
+	if (!canvas->isWorld)
+	{
+		glPushMatrix();
+		glMultMatrixf(matrix.Transposed().ptr());
+	}
+	else
+	{
+		position.x = matrix[0][3];
+		position.y = matrix[1][3];
+		position.z = matrix[2][3];
+
+		scale.x = matrix[0][0];
+		scale.y = matrix[1][1];
+		scale.z = matrix[2][2];
+
+
+		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
+		float4x4 uiGlobal = uiLocal;
+
+		/*	if (!particleInfo.globalTransform)
+			{
+				float4x4 parentGlobal = owner->emmitter.GetGlobalTransform();
+				particleGlobal = parentGlobal * particleLocal;
+			}*/
+
+		glPushMatrix();
+		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
+
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 

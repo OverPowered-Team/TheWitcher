@@ -2,23 +2,18 @@
 
 #include "Component.h"
 #include "MathGeoLib/include/Math/MathAll.h"
-#include "Bullet/include/BulletDynamics/ConstraintSolver/btTypedConstraint.h"
-#include "Bullet/include/BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h"
 
 class GameObject;
-class ModulePhysics;
 class ComponentMesh;
 class ComponentRigidBody;
 class ComponentVehicle;
 class ComponentTransform;
-class btKinematicCharacterController;
 class Alien;
 
 class __declspec(dllexport) ComponentPointConstraint : public Component
 {
 	friend class GameObject;
 	friend class ModuleObjects;
-	friend class ModulePhysics;
 	friend class ReturnZ;
 	friend class CompZ;
 	friend class ComponentRigidBody;
@@ -31,7 +26,7 @@ public:
 protected:
 
 	void Update();
-	void DrawScene();
+	void DrawScene(ComponentCamera* camera) override;
 	bool DrawInspector();
 
 	void RecreateConstraint();
@@ -50,6 +45,6 @@ protected:
 
 	float3 pivotA;
 	float3 pivotB;
-	btPoint2PointConstraint* constraint = nullptr;
+	//btPoint2PointConstraint* constraint = nullptr;
 	bool disable_collision = false;
 };

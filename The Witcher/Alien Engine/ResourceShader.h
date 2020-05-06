@@ -26,7 +26,12 @@ enum class SHADER_TEMPLATE
 	DEFAULT,
 	WAVE,
 	ILUMINATED,
-	PARTICLE
+	PARTICLE,
+	SHIELD,
+	SHIELD_FRESNEL,
+	SHADOW,
+	WATER
+
 };
 
 struct ShaderInputs;
@@ -67,6 +72,7 @@ public:
 	void ApplyLightsUniforms();
 	void Bind() const;
 	void Unbind() const;
+
 	
 	void SetUniform1i(const std::string& name, const int& value);
 	void SetUniform1ui(const std::string& name, const uint& value);
@@ -77,6 +83,10 @@ public:
 	void SetUniformFloat3(const std::string& name, const float3& vec3);
 
 	void SetUniformFloat3v(const std::string& name, const float3* vec, uint count);
+
+	void SetUniformFloatv(const std::string& name, const float* vec, uint count);
+
+	void SetUniformIntv(const std::string& name, const int* vec, uint count);
 
 	void SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3);
 	void SetUniform4f(const std::string& name, const float4& vec);
@@ -89,6 +99,9 @@ public:
 	void SetSpotLights(const std::string& name, const std::list<SpotLightProperties*>& dirLights);
 	void CreateShaderDoc(const int& type, const char* name);
 
+	void CreateDepthMap(DirLightProperties* light);
+	void DrawShadows();
+
 private:
 	SHADER_PROGRAM_SOURCE ParseShader(const std::string& path);
 	uint CreateShader(const std::string& vertex_shader, const std::string& fragment_shader);
@@ -98,10 +111,13 @@ private:
 	int GetUniformLocation(const std::string& name);
 
 private:
-
 	uint shader_id;
 	SHADER_TEMPLATE shaderType = SHADER_TEMPLATE::DEFAULT;
 	std::unordered_map<std::string, int> uniform_location_cache;
+public:
+	bool has_shadow = false;
+	//uint depthMapFBO;
+
 };
 
 #endif /* __RESOURCE_SHADER_H__ */

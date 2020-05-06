@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Panel.h"
 
 class PanelPhysics : public Panel {
@@ -10,6 +9,13 @@ public:
 	virtual ~PanelPhysics();
 
 	void PanelLogic();
+	void PopUpAddLayer();
+	void PopUpRemoveLayer();
+
+private:
+
+	bool open_add_popup = false;
+	bool open_remove_popup = false;
+	int current_layer = 0;
+
 };
-
-

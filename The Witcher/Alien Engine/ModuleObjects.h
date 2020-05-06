@@ -10,6 +10,7 @@
 #include <map>
 #include <utility>
 #include "Octree.h"
+#include "WaterFrameBuffers.h"
 #include "ComponentCamera.h"
 #include <stack>
 #include <functional>
@@ -79,6 +80,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
+	void CalculateShadows(std::vector<std::pair<float, GameObject*>>& dynamic_to_draw, Viewport* viewport, std::vector<std::pair<float, GameObject*>>& static_to_draw, ComponentCamera* frustum_camera);
 	void DrawRay();
 	bool CleanUp();
 
@@ -130,7 +132,7 @@ public:
 	void DeleteAllObjects();
 
 	// select/disselect objects
-	void SetNewSelectedObject(GameObject* selected);
+	void SetNewSelectedObject(GameObject* selected, bool select_children);
 	const std::list<GameObject*>& GetSelectedObjects();
 	void DeselectObjects();
 	void DeselectObject(GameObject* obj);
@@ -166,12 +168,14 @@ public:
 	// scenes
 	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
 	void LoadScene(const char * name, bool change_scene = true);
-	void CreateEmptyScene(ResourceScene* scene);
+	void OpenCoScene(const char* name);
+	void CreateEmptyScene();
 
 	static bool SortByFamilyNumber(std::tuple<uint, u64, uint> pair1, std::tuple<uint, u64, uint> pair2);
 	void SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number);
 
 	GameObject* GetRoot(bool ignore_prefab);
+	GameObject* GetGlobalRoot();
 	void CreateRoot();
 
 	void SwapReturnZ(bool get_save, bool delete_current);
@@ -203,14 +207,21 @@ private:
 	void UpdateGamePadInput();
 	u64 SetNewSelected(std::string neightbour, u64 selected_neightbour);
 	ComponentCanvas* GetCanvas();
+	void UIOrdering(std::vector<std::pair<float, GameObject*>>* current, std::vector<std::pair<float, GameObject*>>* ui_2d, std::vector<std::pair<float, GameObject*>>* ui_world);
 
 	void CompareName(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::vector<ComponentScript*>& scriptsVec);
 
 public:
+	bool inPrefabCreation = false;
+	bool inHotReload = false;
+	u64 scene_active = 0;
+
 	//Focus
 	u64 selected_ui = -1;
 
-	ResourceScene* current_scene = nullptr;
+	std::vector<ResourceScene*> current_scenes;
+
+	Viewport* current_viewport = nullptr;
 
 	std::list<Alien*> current_scripts;
 
@@ -308,10 +319,11 @@ public:
 	std::list<DirLightProperties*> directional_light_properites;
 	std::list<PointLightProperties*> point_light_properites;
 	std::list<SpotLightProperties*> spot_light_properites;
-
 	std::vector<std::pair<u64, GameObject**>> to_add;
 
 	std::string sceneNameToChange;
+
+	WaterFrameBuffers* wfbos = nullptr;
 
 private:
 	// root
@@ -321,7 +333,6 @@ private:
 
 	std::stack<ReturnZ*> save_return_actions;
 	std::stack<ReturnZ*> save_fordward_actions;
-
 
 
 	std::list<InvokeInfo*> invokes;

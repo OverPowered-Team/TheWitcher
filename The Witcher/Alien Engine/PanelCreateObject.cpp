@@ -119,7 +119,7 @@ void PanelCreateObject::PanelLogic()
 			object->AddComponent(material);
 			mesh->RecalculateAABB_OBB();
 			object->AddComponent(collider);
-			App->objects->SetNewSelectedObject(object);
+			App->objects->SetNewSelectedObject(object, false);
 			ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 			create_color = { 1,1,1 };
 			ChangeEnable();

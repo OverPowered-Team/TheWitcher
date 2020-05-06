@@ -26,12 +26,13 @@
 #include "ComponentLightDirectional.h"
 #include "ComponentLightSpot.h"
 #include "ComponentLightPoint.h"
+#include "ComponentMaterial.h"
+#include "ComponentAudioEmitter.h"
 #include "ModuleUI.h"
 #include "ModuleCamera3D.h"
 #include "ModuleFileSystem.h"
-#include "ModulePhysics.h"
+#include "ModuleAudio.h"
 #include "ComponentParticleSystem.h"
-#include "ComponentAnimator.h"
 #include "ReturnZ.h"
 #include "Time.h"
 #include "Prefab.h"
@@ -47,13 +48,23 @@
 #include "Alien.h"
 #include "Event.h"
 #include "PanelProject.h"
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/type_ptr.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
+#include "ComponentAnimator.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include "ResourceScript.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
+#include "ModuleFadeToBlack.h"
+#include "SceneManager.h"
 
-ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/type_ptr.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
+
+ModuleObjects::ModuleObjects(bool start_enabled) :Module(start_enabled)
 {
 	name.assign("ModuleObject");
 }
@@ -61,6 +72,8 @@ ModuleObjects::ModuleObjects(bool start_enabled):Module(start_enabled)
 ModuleObjects::~ModuleObjects()
 {
 	DeleteReturns();
+
+	RELEASE(wfbos);
 }
 
 bool ModuleObjects::Init()
@@ -96,20 +109,28 @@ bool ModuleObjects::Start()
 	LOG_ENGINE("Starting Module Objects");
 	bool ret = true;
 
-
 	game_viewport = new Viewport(nullptr);
+
+	wfbos = new WaterFrameBuffers();
+
 #ifndef GAME_VERSION
-	GameObject* camera = new GameObject(base_game_object);
+	GameObject* scene_root = new GameObject();
+	scene_root->ID = App->resources->GetRandomID();
+	scene_root->is_static = true;
+	scene_root->SetName("Untitled*");
+	scene_root->parent = base_game_object;
+	base_game_object->children.push_back(scene_root);
+	scene_active = scene_root->ID;
+	GameObject* camera = new GameObject(scene_root);
 	camera->SetName("Main Camera");
 	camera->AddComponent(new ComponentCamera(camera));
 
-	GameObject* light = new GameObject(base_game_object);
+	GameObject* light = new GameObject(scene_root);
 	light->SetName("Directional Light");
 	light->AddComponent(new ComponentLightDirectional(light));
 	light->transform->SetGlobalRotation(math::Quat::LookAt(float3::unitZ(), float3(-0.5f, -0.5f, 0.5f), float3::unitY(), float3::unitY()));
 
-	App->camera->fake_camera->frustum.pos = { 25,25,25 };
-	App->camera->fake_camera->Look(float3(0, 0, 0));
+
 
 #else 
 	JSON_Value* value = json_parse_file(BUILD_SETTINGS_PATH);
@@ -125,6 +146,7 @@ bool ModuleObjects::Start()
 		game_viewport->active = true;
 		App->renderer3D->OnResize(App->window->width, App->window->height);
 		Time::Play();
+
 		delete meta;
 	}
 	else {
@@ -138,14 +160,14 @@ bool ModuleObjects::Start()
 update_status ModuleObjects::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
-	
+
 	if (!sceneNameToChange.empty()) {
 		LoadScene(sceneNameToChange.data());
 		sceneNameToChange.clear();
 	}
-	
+
 	// delete objects
-	if (need_to_delete_objects) { 
+	if (need_to_delete_objects) {
 		need_to_delete_objects = false;
 		base_game_object->SearchToDelete();
 	}
@@ -203,6 +225,15 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
+	
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == Input::KEY_DOWN)
+	{
+		if (GetSelectedObjects().front())
+		{
+			App->renderer3D->actual_game_camera->WorldToScreenPoint(GetSelectedObjects().front()->transform->GetGlobalPosition());
+		}
+	}
+
 	OPTICK_EVENT();
 	base_game_object->Update();
 	if (!functions_to_call.empty()) {
@@ -213,12 +244,13 @@ update_status ModuleObjects::Update(float dt)
 			catch (...)
 			{
 				LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS WHEN CALLING A FUNTION IN TIMELINE");
-			}	
+			}
 		}
 		functions_to_call.clear();
 	}
 	UpdateGamePadInput();
 	ScriptsUpdate();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -229,14 +261,22 @@ update_status ModuleObjects::PostUpdate(float dt)
 	ScriptsPostUpdate();
 
 #ifndef GAME_VERSION
+
+	static bool light_view = false;
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		light_view = !light_view;
 	for (Viewport* viewport : viewports) {
 		if (!viewport->active || !viewport->CanRender() || (App->renderer3D->selected_game_camera == nullptr) && viewport == App->camera->selected_viewport)
 			continue;
 
+		current_viewport = viewport;
 		viewport->BeginViewport();
 		printing_scene = (viewport == App->camera->scene_viewport) ? true : false;
 		bool isGameCamera = (viewport == game_viewport) ? true : false;
-		if (printing_scene) {
+
+		viewport->BeginViewport();
+		if (printing_scene)
+		{
 			if (draw_ray)
 				DrawRay();
 
@@ -245,6 +285,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 			if (render_octree)
 				octree.Draw();
+
 			if (prefab_scene) {
 				static float light_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 				static float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -252,11 +293,12 @@ update_status ModuleObjects::PostUpdate(float dt)
 				glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 				glEnable(GL_LIGHT0);
 			}
-			
-			if (App->physics->debug_physics)
-			{
-				App->physics->DrawWorld();
-			}
+
+			// TODO : DELETE ------------------------
+
+			//App->physx->DrawWorld();
+
+			// -------------------------------------
 		}
 
 		if (base_game_object->HasChildren()) {
@@ -265,7 +307,11 @@ update_status ModuleObjects::PostUpdate(float dt)
 			}
 
 			std::vector<std::pair<float, GameObject*>> to_draw;
+			std::vector<std::pair<float, GameObject*>> dynamic_to_draw;
+			std::vector<std::pair<float, GameObject*>> static_to_draw;
 			std::vector<std::pair<float, GameObject*>> to_draw_ui;
+			std::vector<std::pair<float, GameObject*>> ui_2d;
+			std::vector<std::pair<float, GameObject*>> ui_world;
 
 			ComponentCamera* frustum_camera = viewport->GetCamera();
 
@@ -279,16 +325,28 @@ update_status ModuleObjects::PostUpdate(float dt)
 			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 			for (; item != base_game_object->children.end(); ++item) {
 				if (*item != nullptr && (*item)->IsEnabled()) {
-					(*item)->SetDrawList(&to_draw, &to_draw_ui, frustum_camera);
+					(*item)->SetDrawList(&dynamic_to_draw, &to_draw_ui, frustum_camera);
 				}
 			}
 
+			to_draw.insert(to_draw.end(),dynamic_to_draw.begin(), dynamic_to_draw.end());
+
+			std::sort(dynamic_to_draw.begin(), dynamic_to_draw.end(), ModuleObjects::SortGameObjectToDraw);
 			std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
 			if (isGameCamera) {
 				OnPreRender(viewport->GetCamera());
 			}
+			//predraw	
+			CalculateShadows(dynamic_to_draw, viewport, static_to_draw, frustum_camera);
 
+			glViewport(0, 0, viewport->GetSize().x, viewport->GetSize().y);
+			glBindFramebuffer(GL_FRAMEBUFFER, viewport->GetFBO());
+
+			//draw
 			std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+						
+			viewport->GetCamera()->DrawSkybox(); 
+
 			for (; it != to_draw.end(); ++it) {
 				if ((*it).second != nullptr) {
 					if (printing_scene)
@@ -297,18 +355,20 @@ update_status ModuleObjects::PostUpdate(float dt)
 						(*it).second->DrawGame(viewport->GetCamera());
 				}
 			}
+			
+			UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
+			
+			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
 
-			std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortUIToDraw);
-			if (!printing_scene) {
-				std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
-			}
-			std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
-			for (; it_ui != to_draw_ui.end(); ++it_ui) {
-				if ((*it_ui).second != nullptr) {
-					ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+			std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
+			for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
+				if ((*it_ui_2d).second != nullptr) {
+					ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
 					if (ui != nullptr && ui->IsEnabled())
-					{			
+					{
+						ui->Orientate(mainCamera);
+						ui->Rotate();
 						ui->Draw(!printing_scene);
 
 					}
@@ -326,6 +386,9 @@ update_status ModuleObjects::PostUpdate(float dt)
 	}
 
 #else
+	static bool light_view;
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	light_view = !light_view;
 
 	if (!game_viewport->active || !game_viewport->CanRender() || game_viewport->GetCamera() == nullptr)
 		return UPDATE_CONTINUE;
@@ -337,38 +400,74 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		std::vector<std::pair<float, GameObject*>> to_draw;
 		std::vector<std::pair<float, GameObject*>> to_draw_ui;
+		std::vector<std::pair<float, GameObject*>> ui_2d;
+		std::vector<std::pair<float, GameObject*>> ui_world;
+		std::vector<std::pair<float, GameObject*>> dynamic_to_draw;
+		std::vector<std::pair<float, GameObject*>> static_to_draw;
 
 		ComponentCamera* frustum_camera = game_viewport->GetCamera();
 
 		octree.SetStaticDrawList(&to_draw, frustum_camera);
 
+		octree.ShowAllStaticObjects(&static_to_draw, frustum_camera);
+
 		std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 		for (; item != base_game_object->children.end(); ++item) {
 			if (*item != nullptr && (*item)->IsEnabled()) {
-				(*item)->SetDrawList(&to_draw,&to_draw_ui, frustum_camera);
+				(*item)->SetDrawList(&dynamic_to_draw, &to_draw_ui, frustum_camera);
 			}
 		}
 
+		to_draw.insert(to_draw.end(), dynamic_to_draw.begin(), dynamic_to_draw.end());
+
 		std::sort(to_draw.begin(), to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+		std::sort(dynamic_to_draw.begin(), dynamic_to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+		std::sort(static_to_draw.begin(), static_to_draw.end(), ModuleObjects::SortGameObjectToDraw);
 
 		OnPreRender(game_viewport->GetCamera());
 
+		//predraw
+		CalculateShadows(dynamic_to_draw, game_viewport, static_to_draw, frustum_camera);
+
+		glViewport(0, 0, game_viewport->GetSize().x, game_viewport->GetSize().y);
+		glBindFramebuffer(GL_FRAMEBUFFER, game_viewport->GetFBO());
+
+		//draw game
 		std::vector<std::pair<float, GameObject*>>::iterator it = to_draw.begin();
+
+		game_viewport->GetCamera()->DrawSkybox();
+
 		for (; it != to_draw.end(); ++it) {
 			if ((*it).second != nullptr) {
-				(*it).second->DrawGame(App->renderer3D->actual_game_camera);
+				(*it).second->DrawGame(game_viewport->GetCamera());
 			}
 		}
 
 		OnPostRender(game_viewport->GetCamera());
 
-		std::sort(to_draw_ui.begin(), to_draw_ui.end(), ModuleObjects::SortGameObjectToDraw);
-		std::vector<std::pair<float, GameObject*>>::iterator it_ui = to_draw_ui.begin();
-		for (; it_ui != to_draw_ui.end(); ++it_ui) {
-			if ((*it_ui).second != nullptr) {
-				ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+		UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
+
+		ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
+		for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
+			if ((*it_ui_2d).second != nullptr) {
+				ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
 				if (ui != nullptr && ui->IsEnabled())
 				{
+					ui->Draw(!printing_scene);
+
+				}
+			}
+		}
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
+		for (; it_ui_world != ui_world.end(); ++it_ui_world) {
+			if ((*it_ui_world).second != nullptr) {
+				ComponentUI* ui = (*it_ui_world).second->GetComponent<ComponentUI>();
+				if (ui != nullptr && ui->IsEnabled())
+				{
+					ui->Orientate(mainCamera);
+					ui->Rotate();
 					ui->Draw(!printing_scene);
 
 				}
@@ -391,6 +490,67 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 #endif
 	return UPDATE_CONTINUE;
+}
+
+void ModuleObjects::CalculateShadows(std::vector<std::pair<float, GameObject*>>& dynamic_to_draw, Viewport* viewport, std::vector<std::pair<float, GameObject*>>& static_to_draw, ComponentCamera* frustum_camera)
+{
+	OPTICK_EVENT();
+	for (std::list<DirLightProperties*>::const_iterator iter = directional_light_properites.begin(); iter != directional_light_properites.end(); iter++)
+	{
+		if (!(*iter)->light->castShadows)
+			continue;
+
+		glViewport(0, 0, 2048, 2048);
+		glBindFramebuffer(GL_FRAMEBUFFER, (*iter)->depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		std::vector<std::pair<float, GameObject*>>::iterator it = dynamic_to_draw.begin();
+		for (; it != dynamic_to_draw.end(); ++it) {
+			if ((*it).second != nullptr && (*it).second->cast_shadow) {
+				if (!printing_scene)
+				{
+					(*iter)->light->sizefrustrum = viewport->GetCamera()->frustum.farPlaneDistance * 0.5f;
+					float3 camera_pos = viewport->GetCamera()->frustum.CenterPoint() / (*iter)->light->sizefrustrum;
+					float3 camera_direction = viewport->GetCamera()->frustum.front;
+					float halfFarPlaneD = (*iter)->light->sizefrustrum * 0.5f;
+					float3 light_pos = float3((camera_pos.x - (*iter)->direction.x * halfFarPlaneD), (camera_pos.y - (*iter)->direction.y * halfFarPlaneD), (camera_pos.z - (*iter)->direction.z * halfFarPlaneD));
+
+					glm::mat4 viewMatrix = glm::lookAt(glm::vec3((float)camera_pos.x, (float)camera_pos.y, (float)camera_pos.z),
+						glm::vec3((float)light_pos.x, (float)light_pos.y, (float)-light_pos.z), 
+						glm::vec3(0.0, 1.0, 0.0));
+
+					(*iter)->viewMat.Set(&viewMatrix[0][0]);
+
+					(*iter)->fake_position = light_pos;
+
+					(*it).second->PreDrawGame(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);
+				}
+				/*else
+				(*it).second->PreDrawScene(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);*/
+			}
+		}
+
+		if ((*iter)->light->bakeShadows)
+		{
+
+			octree.ShowAllStaticObjects(&static_to_draw, frustum_camera);
+			std::sort(static_to_draw.begin(), static_to_draw.end(), ModuleObjects::SortGameObjectToDraw);
+			(*iter)->light->CalculateBakedViewMatrix();
+			for (uint i = 0; i < 3; ++i)
+			{
+				glViewport(0, 0, 2048, 2048);
+				(*iter)->light->BindForWriting(i);
+				glClear(GL_DEPTH_BUFFER_BIT);
+				std::vector<std::pair<float, GameObject*>>::iterator it2 = static_to_draw.begin();
+				for (; it2 != static_to_draw.end(); ++it2) {
+					if ((*it2).second != nullptr && (*it2).second->cast_shadow) {
+						(*it2).second->PreDrawGame(game_viewport->GetCamera(), (*iter)->light->viewMatrix[i], (*iter)->light->projMatrix, (*iter)->fake_position_baked[i]);
+					}
+				}
+				(*iter)->light->bakeShadows = false;
+			}
+		}
+	}
 }
 
 void ModuleObjects::DrawRay()
@@ -419,7 +579,7 @@ bool ModuleObjects::CleanUp()
 
 	delete base_game_object;
 	base_game_object = nullptr;
-	
+
 	if (octree.root != nullptr) {
 		delete octree.root;
 		octree.root = nullptr;
@@ -430,7 +590,7 @@ bool ModuleObjects::CleanUp()
 	for (Viewport* viewport : viewports) {
 		delete viewport;
 	}
-	
+
 	return true;
 }
 
@@ -446,7 +606,7 @@ void ModuleObjects::ChangeViewMeshMode()
 	base_game_object->ChangeMeshView(view_mesh_mode);
 }
 
-void ModuleObjects::DeleteAllObjects() 
+void ModuleObjects::DeleteAllObjects()
 {
 	std::vector<GameObject*>::iterator item = base_game_object->children.begin();
 	while (item != base_game_object->children.end()) {
@@ -501,7 +661,7 @@ void ModuleObjects::ChangeEnableOBB()
 	base_game_object->ChangeOBB(draw_all_OBB);
 }
 
-void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
+void ModuleObjects::SetNewSelectedObject(GameObject* object_selected, bool select_children)
 {
 	bool exists = std::find(game_objects_selected.begin(), game_objects_selected.end(), object_selected) != game_objects_selected.end();
 
@@ -509,6 +669,25 @@ void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 		object_selected->ChangeSelected(!exists);
 		if (!exists) {
 			game_objects_selected.push_back(object_selected);
+			if (select_children) {
+				object_selected->open_node = true;
+				std::stack<GameObject*> objects;
+				for (auto item = object_selected->children.begin(); item != object_selected->children.end(); ++item) {
+					objects.push(*item);
+				}
+				while (!objects.empty()) {
+					GameObject* obj = objects.top();
+					objects.pop();
+
+					obj->ChangeSelected(true);
+					obj->open_node = true;
+					game_objects_selected.push_back(obj);
+					for (auto item = obj->children.begin(); item != obj->children.end(); ++item) {
+						objects.push(*item);
+					}
+
+				}
+			}
 		}
 		else {
 			game_objects_selected.remove(object_selected);
@@ -526,16 +705,35 @@ void ModuleObjects::SetNewSelectedObject(GameObject* object_selected)
 		if (!exists) {
 			object_selected->ChangeSelected(true);
 		}
+		if (select_children) {
+			object_selected->open_node = true;
+			std::stack<GameObject*> objects;
+			for (auto item = object_selected->children.begin(); item != object_selected->children.end(); ++item) {
+				objects.push(*item);
+			}
+			while (!objects.empty()) {
+				GameObject* obj = objects.top();
+				objects.pop();
+
+				obj->ChangeSelected(true);
+				obj->open_node = true;
+				game_objects_selected.push_back(obj);
+				for (auto item = obj->children.begin(); item != obj->children.end(); ++item) {
+					objects.push(*item);
+				}
+
+			}
+		}
 	}
 	App->renderer3D->selected_game_camera = (ComponentCamera*)object_selected->GetComponent(ComponentType::CAMERA);
 
-	#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 	if (App->ui->panel_project->selected_resource != nullptr)
 	{
 		App->SendAlienEvent(App->ui->panel_project->selected_resource, AlienEventType::RESOURCE_DESELECTED);
 		App->ui->panel_project->selected_resource = nullptr;
 	}
-	#endif // !GAME_VERSION
+#endif // !GAME_VERSION
 
 	App->CastEvent(EventType::ON_GO_SELECT);
 
@@ -550,7 +748,7 @@ void ModuleObjects::DeselectObjects()
 {
 	auto item = game_objects_selected.begin();
 	for (; item != game_objects_selected.end(); ++item) {
-			(*item)->ChangeSelected(false);
+		(*item)->ChangeSelected(false);
 	}
 	game_objects_selected.clear();
 	App->renderer3D->selected_game_camera = nullptr;
@@ -632,9 +830,9 @@ void ModuleObjects::ScriptsPreUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS PREUPDATE");
 					}
-					#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 					App->ui->SetError();
-					#endif
+#endif
 				}
 			}
 		}
@@ -651,7 +849,7 @@ void ModuleObjects::ScriptsUpdate() const
 				try {
 					(*item)->Update();
 				}
-				catch (...)	   
+				catch (...)
 				{
 					try {
 						LOG_ENGINE("CODE ERROR IN THE UPDATE OF THE SCRIPT: %s", (*item)->data_name);
@@ -659,9 +857,9 @@ void ModuleObjects::ScriptsUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS UPDATE");
 					}
-					#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 					App->ui->SetError();
-					#endif
+#endif
 				}
 			}
 		}
@@ -686,9 +884,9 @@ void ModuleObjects::ScriptsPostUpdate() const
 					catch (...) {
 						LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS POSTUPDATE");
 					}
-					#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 					App->ui->SetError();
-					#endif
+#endif
 				}
 			}
 		}
@@ -712,9 +910,9 @@ void ModuleObjects::CleanUpScriptsOnStop() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS CLEANUP");
 				}
-				#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 				App->ui->SetError();
-				#endif
+#endif
 			}
 		}
 	}
@@ -737,9 +935,9 @@ void ModuleObjects::OnDrawGizmos() const
 				catch (...) {
 					LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOS");
 				}
-				#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 				App->ui->SetError();
-				#endif
+#endif
 			}
 		}
 	}
@@ -763,9 +961,9 @@ void ModuleObjects::OnDrawGizmos() const
 							catch (...) {
 								LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONDRAWGIZMOSSELECTED");
 							}
-							#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 							App->ui->SetError();
-							#endif
+#endif
 						}
 					}
 				}
@@ -795,14 +993,14 @@ void ModuleObjects::OnPreCull(ComponentCamera* camera) const
 						catch (...) {
 							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONPRECULL");
 						}
-						#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 						App->ui->SetError();
-						#endif
+#endif
 					}
 				}
 			}
 		}
-	} 
+	}
 }
 
 void ModuleObjects::OnPreRender(ComponentCamera* camera) const
@@ -825,9 +1023,9 @@ void ModuleObjects::OnPreRender(ComponentCamera* camera) const
 						catch (...) {
 							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONPRERENDER");
 						}
-						#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 						App->ui->SetError();
-						#endif
+#endif
 					}
 				}
 			}
@@ -855,9 +1053,9 @@ void ModuleObjects::OnPostRender(ComponentCamera* camera) const
 						catch (...) {
 							LOG_ENGINE("UNKNOWN ERROR IN SCRIPTS ONPOSTRENDER");
 						}
-						#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 						App->ui->SetError();
-						#endif
+#endif
 					}
 				}
 			}
@@ -878,9 +1076,9 @@ GameObject* ModuleObjects::CreateEmptyGameObject(GameObject* parent, bool set_se
 		object = new GameObject(GetRoot(false));
 		object->SetName("Empty GameObject");
 	}
-	
+
 	if (set_selected)
-		SetNewSelectedObject(object);
+		SetNewSelectedObject(object, false);
 
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 
@@ -1018,7 +1216,7 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 	else {
 		meta_path = std::string(force_with_path);
 	}
-	
+
 	json_serialize_to_file_pretty(value, meta_path.data());
 
 	if (value != nullptr && object != nullptr)
@@ -1034,16 +1232,41 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 			scene->SetString("Scene.Name", "NONE");
 		}
 
-		if (!base_game_object->children.empty()) { // if base game objects has children, save them
+		// get scene root
+		GameObject* scene_root = nullptr;
+		if (to_load_scene == nullptr) {
+			scene_root = base_game_object;
+		}
+		else {
+			for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
+				if ((*item)->ID == to_load_scene->GetID()) {
+					scene_root = *item;
+					break;
+				}
+			}
+		}
+
+		if (current_scenes.empty()) {
+			if (to_load_scene != nullptr) {
+				scene_root->SetName(to_load_scene->GetName());
+				scene_root->ID = to_load_scene->GetID();
+				current_scenes.push_back(to_load_scene);
+			}
+			else {
+				scene_root->SetName("Untitled*");
+			}
+		}
+
+		if (!scene_root->children.empty()) { // if scene_root has children, save them
 			JSONArraypack* game_objects = scene->InitNewArray("Scene.GameObjects");
 
 			game_objects->SetAnotherNode();
 
-			std::vector<GameObject*>::iterator item = base_game_object->children.begin();
-			for (; item != base_game_object->children.end(); ++item) {
+			std::vector<GameObject*>::iterator item = scene_root->children.begin();
+			for (; item != scene_root->children.end(); ++item) {
 				if (*item != nullptr) {
 					SaveGameObject(*item, game_objects, 1);
-					if ((*item) != base_game_object->children.back())
+					if ((*item) != scene_root->children.back())
 						game_objects->SetAnotherNode();
 				}
 			}
@@ -1052,8 +1275,6 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 		scene->FinishSave();
 		delete scene;
 		if (force_with_path == nullptr) {
-			current_scene = to_load_scene;
-			//std::experimental::filesystem::copy(to_load_scene->GetAssetsPath(), to_load_scene->GetLibraryPath());
 			App->file_system->Copy(to_load_scene->GetAssetsPath(), to_load_scene->GetLibraryPath());
 		}
 	}
@@ -1062,9 +1283,10 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 	}
 }
 
-void ModuleObjects::LoadScene(const char * name, bool change_scene)
+void ModuleObjects::LoadScene(const char* name, bool change_scene)
 {
 	OPTICK_EVENT();
+	App->audio->Stop();
 	ResourceScene* to_load = App->resources->GetSceneByName(name);
 	if (to_load != nullptr || !change_scene) {
 
@@ -1090,6 +1312,23 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 			base_game_object->ID = 0;
 			base_game_object->is_static = true;
 
+			GameObject* scene_root = nullptr;
+			if (!change_scene) {
+				scene_root = base_game_object;
+			}
+			else {
+				scene_root = new GameObject();
+				scene_root->ID = to_load->GetID();
+				scene_root->is_static = true;
+				scene_root->SetName(name);
+				scene_root->parent = base_game_object;
+				base_game_object->children.push_back(scene_root);
+			}
+
+			if (to_load != nullptr) {
+				scene_active = to_load->GetID();
+			}
+
 			if (Time::IsInGameState()) {
 				CleanUpScriptsOnStop();
 			}
@@ -1100,13 +1339,12 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 			JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
 
 			if (game_objects != nullptr) {
-				std::vector<std::tuple<uint, u64, uint>> objects_to_create;
 				std::vector<GameObject*> objects_created;
 
 				for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
 					GameObject* obj = new GameObject(true);
 					u64 parentID = std::stoull(game_objects->GetString("ParentID"));
-					if (parentID != 0) {
+					if (parentID != scene_root->ID) {
 						std::vector<GameObject*>::iterator objects = objects_created.begin();
 						for (; objects != objects_created.end(); ++objects) {
 							if ((*objects)->ID == parentID) {
@@ -1116,12 +1354,12 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 						}
 					}
 					else {
-						obj->LoadObject(game_objects, base_game_object);
+						obj->LoadObject(game_objects, scene_root);
 					}
 					objects_created.push_back(obj);
 					game_objects->GetAnotherNode();
 				}
-				for each (GameObject* obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+				for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
 				{
 					ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
 					if (def_mesh)
@@ -1131,6 +1369,34 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 				delete scene;
 
 				if (change_scene) {
+					struct stat file;
+					stat(path.data(), &file);
+
+					// refresh prefabs if are not locked
+					std::vector<GameObject*> prefab_roots;
+					base_game_object->GetAllPrefabRoots(prefab_roots);
+
+					for (uint i = 0; i < prefab_roots.size(); ++i) {
+						if (prefab_roots[i] != nullptr && !prefab_roots[i]->prefab_locked) {
+							ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab_roots[i]->GetPrefabID());
+							if (prefab != nullptr && prefab->GetID() != 0) {
+								struct stat prefab_file;
+								// TODO: when passing to library change
+								if (stat(prefab->GetAssetsPath(), &prefab_file) == 0) {
+									if (prefab_file.st_mtime > file.st_mtime) {
+										auto find = prefab_roots[i]->parent->children.begin();
+										for (; find != prefab_roots[i]->parent->children.end(); ++find) {
+											if (*find == prefab_roots[i]) {
+												prefab->ConvertToGameObjects(prefab_roots[i]->parent, find - prefab_roots[i]->parent->children.begin(), (*find)->GetComponent<ComponentTransform>()->GetGlobalPosition());
+												prefab_roots[i]->ToDelete();
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 					DeleteReturns();
 				}
 
@@ -1156,7 +1422,8 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 				}
 			}
 			if (change_scene) {
-				current_scene = to_load;
+				current_scenes.clear();
+				current_scenes.push_back(to_load);
 			}
 		}
 		else {
@@ -1165,21 +1432,101 @@ void ModuleObjects::LoadScene(const char * name, bool change_scene)
 	}
 }
 
-void ModuleObjects::CreateEmptyScene(ResourceScene* scene)
+void ModuleObjects::OpenCoScene(const char* name)
 {
-	if (scene != nullptr) {
-		delete base_game_object;
-		game_objects_selected.clear();
-		base_game_object = new GameObject();
-		base_game_object->ID = 0;
-		base_game_object->is_static = true;
+	OPTICK_EVENT();
+	ResourceScene* to_load = App->resources->GetSceneByName(name);
+	if (to_load != nullptr) {
 
-		current_scene = scene;
+		for (auto item = App->objects->GetGlobalRoot()->children.begin(); item != App->objects->GetGlobalRoot()->children.end(); ++item) {
+			if ((*item)->ID == to_load->GetID()) {
+				return;
+			}
+		}
+
+		JSON_Value* value = json_parse_file(to_load->GetLibraryPath());
+		JSON_Object* object = json_value_get_object(value);
+
+		if (value != nullptr && object != nullptr) {
+			current_scenes.push_back(to_load);
+			GameObject* scene_root = new GameObject();
+			scene_root->ID = to_load->GetID();
+			scene_root->is_static = true;
+			scene_root->SetName(name);
+			scene_root->parent = base_game_object;
+			base_game_object->children.push_back(scene_root);
+
+
+			JSONfilepack* scene = new JSONfilepack(to_load->GetLibraryPath(), object, value);
+
+			JSONArraypack* game_objects = scene->GetArray("Scene.GameObjects");
+
+			if (game_objects != nullptr) {
+				std::vector<GameObject*> objects_created;
+
+				for (uint i = 0; i < game_objects->GetArraySize(); ++i) {
+					GameObject* obj = new GameObject(true);
+					u64 parentID = std::stoull(game_objects->GetString("ParentID"));
+					if (parentID != scene_root->ID) {
+						std::vector<GameObject*>::iterator objects = objects_created.begin();
+						for (; objects != objects_created.end(); ++objects) {
+							if ((*objects)->ID == parentID) {
+								obj->LoadObject(game_objects, *objects);
+								break;
+							}
+						}
+					}
+					else {
+						obj->LoadObject(game_objects, scene_root);
+					}
+					objects_created.push_back(obj);
+					game_objects->GetAnotherNode();
+				}
+				for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+				{
+					ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
+					if (def_mesh)
+						def_mesh->AttachSkeleton();
+				}
+				ReAttachUIScriptEvents();
+				delete scene;
+			}
+		}
+
 	}
+}
+
+void ModuleObjects::CreateEmptyScene()
+{
+	current_scenes.clear();
+
+	delete base_game_object;
+	game_objects_selected.clear();
+	base_game_object = new GameObject();
+	base_game_object->ID = 0;
+	base_game_object->is_static = true;
+
+	GameObject* scene_root = new GameObject();
+	scene_root->ID = App->resources->GetRandomID();
+	scene_root->is_static = true;
+	scene_root->SetName("Untitled*");
+	scene_root->parent = base_game_object;
+	scene_active = scene_root->ID;
+	base_game_object->children.push_back(scene_root);
+
+	GameObject* camera = new GameObject(scene_root);
+	camera->SetName("Main Camera");
+	camera->AddComponent(new ComponentCamera(camera));
+
+	GameObject* light = new GameObject(scene_root);
+	light->SetName("Directional Light");
+	light->AddComponent(new ComponentLightDirectional(light));
+	light->transform->SetGlobalRotation(math::Quat::LookAt(float3::unitZ(), float3(-0.5f, -0.5f, 0.5f), float3::unitY(), float3::unitY()));
 }
 
 void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, const uint& family_number)
 {
+	OPTICK_EVENT();
 	obj->SaveObject(to_save, family_number);
 
 	std::vector<GameObject*>::iterator item = obj->children.begin();
@@ -1191,7 +1538,7 @@ void ModuleObjects::SaveGameObject(GameObject* obj, JSONArraypack* to_save, cons
 	}
 }
 
-GameObject* ModuleObjects::GetRoot(bool ignore_prefab) 
+GameObject* ModuleObjects::GetRoot(bool ignore_prefab)
 {
 	if (prefab_scene && !ignore_prefab) {
 		if (base_game_object->children.size() == 0)
@@ -1199,8 +1546,19 @@ GameObject* ModuleObjects::GetRoot(bool ignore_prefab)
 		else
 			return base_game_object->children.back();
 	}
-	else
-		return base_game_object;
+	else {
+		for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
+			if ((*item)->ID == scene_active) {
+				return *item;
+			}
+		}
+		return nullptr;
+	}
+}
+
+GameObject* ModuleObjects::GetGlobalRoot()
+{
+	return base_game_object;
 }
 
 void ModuleObjects::CreateRoot()
@@ -1244,6 +1602,7 @@ void ModuleObjects::SwapReturnZ(bool get_save, bool delete_current)
 
 void ModuleObjects::HotReload()
 {
+	inHotReload = true;
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* json_object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, "Library/ScriptsTEMP.alien");
@@ -1301,15 +1660,18 @@ void ModuleObjects::HotReload()
 			}
 		}
 	}
+	inHotReload = false;
 }
 
 bool ModuleObjects::SortGameObjectToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
 {
+	//orders from near to far
 	return first.first > last.first;
 }
 
 bool ModuleObjects::SortUIToDraw(std::pair<float, GameObject*> first, std::pair<float, GameObject*> last)
 {
+	//orders from far to near
 	return first.first < last.first;
 }
 
@@ -1397,6 +1759,7 @@ void ModuleObjects::ReAttachUIScriptEvents()
 				CompareName(&button->listenersOnHover, scriptsVec);
 				CompareName(&button->listenersOnRelease, scriptsVec);
 				CompareName(&button->listenersOnExit, scriptsVec);
+				CompareName(&button->listenersOnEnter, scriptsVec);
 			}
 			else {
 				ComponentCheckbox* checkbox = obj->GetComponent<ComponentCheckbox>();
@@ -1405,7 +1768,9 @@ void ModuleObjects::ReAttachUIScriptEvents()
 					CompareName(&checkbox->listenersOnClickRepeat, scriptsVec);
 					CompareName(&checkbox->listenersOnHover, scriptsVec);
 					CompareName(&checkbox->listenersOnRelease, scriptsVec);
-					//CompareName(&checkbox->listenersOnExit, scriptsVec);
+					CompareName(&checkbox->listenersOnExit, scriptsVec);
+					CompareName(&checkbox->listenersOnEnter, scriptsVec);
+
 				}
 			}
 		}
@@ -1621,9 +1986,9 @@ void ModuleObjects::DeleteReturns()
 
 void ModuleObjects::UpdateGamePadInput()
 {
-	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed && (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas->allow_navigation))
+	if (GetGameObjectByID(selected_ui) != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>() != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state != Pressed && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas != nullptr && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->canvas->allow_navigation && GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->active)
 	{
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_UP) || App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || Input::GetControllerVerticalLeftAxis(1) > 0.2f)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_UP) || App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || /*Input::GetControllerVerticalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_UP) == KEY_DOWN)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up != -1)
 			{
@@ -1635,11 +2000,11 @@ void ModuleObjects::UpdateGamePadInput()
 					selected_ui = SetNewSelected("up", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_up);
 					if (selected_ui == -1)
 						selected_ui = safe_selected;
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Enter;
 				}
 			}
 		}
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_DOWN) || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || Input::GetControllerVerticalLeftAxis(1) < -0.2f)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_DOWN) || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || /*Input::GetControllerVerticalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_DOWN) == KEY_DOWN)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down != -1)
 			{
@@ -1651,11 +2016,11 @@ void ModuleObjects::UpdateGamePadInput()
 					selected_ui = SetNewSelected("down", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_down);
 					if (selected_ui == -1)
 						selected_ui = safe_selected;
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Enter;
 				}
 			}
 		}
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || Input::GetControllerHoritzontalLeftAxis(1) < -0.2f)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || /*Input::GetControllerHoritzontalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT) == KEY_DOWN)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right != -1)
 			{
@@ -1667,11 +2032,11 @@ void ModuleObjects::UpdateGamePadInput()
 					selected_ui = SetNewSelected("right", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_right);
 					if (selected_ui == -1)
 						selected_ui = safe_selected;
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Enter;
 				}
 			}
 		}
-		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || Input::GetControllerHoritzontalLeftAxis(1) > 0.2f)
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_DPAD_LEFT) || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || /*Input::GetControllerHoritzontalLeftAxis(1) > 0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_LEFT) == KEY_DOWN)
 		{
 			if (GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left != -1)
 			{
@@ -1683,7 +2048,7 @@ void ModuleObjects::UpdateGamePadInput()
 					selected_ui = SetNewSelected("left", GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->select_on_left);
 					if (selected_ui == -1)
 						selected_ui = safe_selected;
-					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Hover;
+					GetGameObjectByID(selected_ui)->GetComponent<ComponentUI>()->state = Enter;
 				}
 			}
 		}
@@ -1739,7 +2104,7 @@ u64 ModuleObjects::SetNewSelected(std::string neightbour, u64 selected_neightbou
 		else
 		{
 			if (GetGameObjectByID(selected_neightbour)->GetComponent<ComponentUI>()->select_on_left != -1)
-				return SetNewSelected("left",GetGameObjectByID(selected_neightbour)->GetComponent<ComponentUI>()->select_on_left);
+				return SetNewSelected("left", GetGameObjectByID(selected_neightbour)->GetComponent<ComponentUI>()->select_on_left);
 			else
 				return -1;
 		}
@@ -1763,6 +2128,39 @@ ComponentCanvas* ModuleObjects::GetCanvas()
 	return canvas;
 }
 
+void ModuleObjects::UIOrdering(std::vector<std::pair<float, GameObject*>>* current, std::vector<std::pair<float, GameObject*>>* ui_2d, std::vector<std::pair<float, GameObject*>>* ui_world)
+{
+	std::vector<std::pair<float, GameObject*>>::iterator it_ui = current->begin();
+	for (; it_ui != current->end(); ++it_ui)
+	{
+		if ((*it_ui).second != nullptr)
+		{
+			ComponentUI* ui = (*it_ui).second->GetComponent<ComponentUI>();
+			if (ui->canvas != nullptr && !ui->canvas->isWorld)
+				ui_2d->push_back((*it_ui));
+
+			else if (ui->canvas != nullptr && ui->canvas->isWorld)
+				ui_world->push_back((*it_ui));
+		}
+	}
+
+#ifndef GAME_VERSION
+	std::sort(ui_2d->begin(), ui_2d->end(), ModuleObjects::SortUIToDraw);
+	if (!printing_scene) {
+		std::sort(ui_2d->begin(), ui_2d->end(), ModuleObjects::SortGameObjectToDraw);
+	}
+
+	std::sort(ui_world->begin(), ui_world->end(), ModuleObjects::SortUIToDraw);
+#else
+	std::sort(ui_2d->begin(), ui_2d->end(), ModuleObjects::SortGameObjectToDraw);
+	std::sort(ui_world->begin(), ui_world->end(), ModuleObjects::SortUIToDraw);
+
+#endif
+
+}
+
+
+
 void ModuleObjects::CompareName(std::vector<std::pair<std::string, std::function<void()>>>* listeners, const std::vector<ComponentScript*>& scriptsVec)
 {
 	auto item = listeners->begin();
@@ -1771,7 +2169,7 @@ void ModuleObjects::CompareName(std::vector<std::pair<std::string, std::function
 		for (auto scripts = scriptsVec.begin(); scripts != scriptsVec.end(); ++scripts) {
 			for (auto funct = (*scripts)->functionMap.begin(); funct != (*scripts)->functionMap.end(); ++funct) {
 				if ((*funct).first == (*item).first) {
-					(*item).second = (*funct).second;
+					(*item).second = ([funct]() -> void { (*funct).second(); });
 					skip = true;
 					break;
 				}
@@ -1793,12 +2191,12 @@ void ModuleObjects::CompareName(std::vector<std::pair<std::string, std::function
 	}
 }
 
-bool ModuleObjects::SortByFamilyNumber(std::tuple<uint,u64, uint> tuple1, std::tuple<uint, u64, uint> tuple2)
+bool ModuleObjects::SortByFamilyNumber(std::tuple<uint, u64, uint> tuple1, std::tuple<uint, u64, uint> tuple2)
 {
 	return std::get<0>(tuple1) < std::get<0>(tuple2);
 }
 
-void ModuleObjects::LoadConfig(JSONfilepack*& config) 
+void ModuleObjects::LoadConfig(JSONfilepack*& config)
 {
 	wireframe_mode = config->GetBoolean("Configuration.Renderer.Wireframe");
 	view_mesh_mode = config->GetBoolean("Configuration.Renderer.MeshView");
@@ -1891,7 +2289,7 @@ void ModuleObjects::HandleAlienEvent(const AlienEvent& alien_event)
 	{
 		go_stack.push(base_game_object);
 	}
-	
+
 	while (!go_stack.empty())
 	{
 		GameObject* go = go_stack.top();
@@ -1940,11 +2338,11 @@ void ModuleObjects::HandleEvent(EventType eventType)
 		InitScripts();
 	}
 	else if (eventType == EventType::ON_ASSET_DELETE) {
-		#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 		App->ui->panel_project->selected_resource = nullptr;
-		#endif
+#endif
 	}
-	
+
 
 }
 
@@ -1992,7 +2390,7 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	object->AddComponent(mesh);
 	object->AddComponent(material);
 	mesh->SetResourceMesh(resource);
-	
+
 	// Add collider --------------------------------------------
 
 	switch (type) {
@@ -2011,14 +2409,17 @@ void ModuleObjects::CreateBasePrimitive(PrimitiveType type)
 	// ---------------------------------------------------------
 
 
-	SetNewSelectedObject(object);
+	SetNewSelectedObject(object, false);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 }
 
 void ModuleObjects::CreateBaseUI(ComponentType type)
 {
-	GameObject* object = CreateEmptyGameObject(nullptr);
+	GameObject* object = CreateEmptyGameObject(nullptr, false);
 	Component* comp = nullptr;
+	Component* comp_emitter = nullptr;
+	Component* comp_text = nullptr;
+
 	switch (type)
 	{
 	case ComponentType::CANVAS: {
@@ -2028,7 +2429,7 @@ void ModuleObjects::CreateBaseUI(ComponentType type)
 		break; }
 
 	case ComponentType::UI_IMAGE: {
- 		ComponentCanvas* canvas = GetCanvas();
+		ComponentCanvas* canvas = GetCanvas();
 		comp = new ComponentImage(object);
 		dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 		object->SetName("Image");
@@ -2037,12 +2438,28 @@ void ModuleObjects::CreateBaseUI(ComponentType type)
 		break; }
 
 	case ComponentType::UI_BUTTON: {
+		GameObject* object_text = CreateEmptyGameObject(nullptr);
+
 		ComponentCanvas* canvas = GetCanvas();
 		comp = new ComponentButton(object);
+		comp_emitter = new ComponentAudioEmitter(object);
+
+		comp_text = new ComponentText(object_text);
+
 		dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
+		dynamic_cast<ComponentUI*>(comp_text)->SetCanvas(canvas);
+
 		object->SetName("Button");
 		object->AddComponent(comp);
+		object->AddComponent(comp_emitter);
+
+		object_text->SetName("Text");
+		object_text->AddComponent(comp_text);
+
+
+
 		ReparentGameObject(object, canvas->game_object_attached, false);
+		ReparentGameObject(object_text, object, false);
 		break; }
 
 	case ComponentType::UI_TEXT: {
@@ -2057,18 +2474,22 @@ void ModuleObjects::CreateBaseUI(ComponentType type)
 	case ComponentType::UI_CHECKBOX: {
 		ComponentCanvas* canvas = GetCanvas();
 		comp = new ComponentCheckbox(object);
+		comp_emitter = new ComponentAudioEmitter(object);
 		dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 		object->SetName("Checkbox");
 		object->AddComponent(comp);
+		object->AddComponent(comp_emitter);
 		ReparentGameObject(object, canvas->game_object_attached, false);
 		break; }
 
 	case ComponentType::UI_SLIDER: {
 		ComponentCanvas* canvas = GetCanvas();
 		comp = new ComponentSlider(object);
+		comp_emitter = new ComponentAudioEmitter(object);
 		dynamic_cast<ComponentUI*>(comp)->SetCanvas(canvas);
 		object->SetName("Slider");
 		object->AddComponent(comp);
+		object->AddComponent(comp_emitter);
 		ReparentGameObject(object, canvas->game_object_attached, false);
 		break; }
 
@@ -2092,7 +2513,9 @@ void ModuleObjects::CreateBaseUI(ComponentType type)
 	default: {
 		break; }
 	}
-
+	if (object != nullptr) {
+		SetNewSelectedObject(object, false);
+	}
 }
 
 void ModuleObjects::CreateLight(LightTypeObj type)
@@ -2127,7 +2550,7 @@ void ModuleObjects::CreateLight(LightTypeObj type)
 		break;
 	}
 
-	SetNewSelectedObject(object);
+	SetNewSelectedObject(object, false);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 }
 
@@ -2149,7 +2572,7 @@ void ModuleObjects::CreateEffect(ComponentType type)
 		break;
 	}
 
-	SetNewSelectedObject(object);
+	SetNewSelectedObject(object, false);
 	ReturnZ::AddNewAction(ReturnZ::ReturnActions::ADD_OBJECT, object);
 }
 

@@ -1,48 +1,42 @@
 #include "GameManager.h"
+#include "EventManager.h"
+#include "EnemyManager.h"
+#include "DialogueManager.h"
+#include "PlayerManager.h"
+#include "RelicManager.h"
+#include "ParticlePool.h"
+#include "EffectsFactory.h"
+#include "RumblerManager.h"
 
 GameManager::GameManager() : Alien()
 {
-	manager = this;
+
 }
 
 GameManager::~GameManager()
 {
+	delete effects_factory;
 }
 
 void GameManager::Awake()
 {
-	event_manager = (EventManager*)game_object->GetComponentScript("EventManager");
-	enemy_manager = (EnemyManager*)game_object->GetComponentScript("EnemyManager");
-	dialogue_manager = (DialogueManager*)game_object->GetComponentScript("DialogueManager");
-	player_manager = (PlayerManager*)game_object->GetComponentScript("PlayerManager");
-	relic_manager = (RelicManager*)game_object->GetComponentScript("RelicManager");
+	effects_factory = new EffectsFactory();
+
+	event_manager = game_object->GetComponent<EventManager>();
+	enemy_manager = game_object->GetComponent<EnemyManager>();
+	dialogue_manager = game_object->GetComponent<DialogueManager>();
+	player_manager = game_object->GetComponent<PlayerManager>();
+	relic_manager = game_object->GetComponent<RelicManager>();
+	rumbler_manager = game_object->GetComponent<RumblerManager>();
+	particle_pool = game_object->GetComponent<ParticlePool>();
 }
 
 void GameManager::Start()
 {
+
 }
 
 void GameManager::Update()
 {
-}
-
-void GameManager::Rumbler(RumblerType type, int index_controller)
-{
-	if (index_controller > 0)
-		switch (type)
-		{
-		case RumblerType::RECEIVE_HIT:
-			Input::DoRumble(index_controller, 1.f, 240.0f);
-			break;
-		case RumblerType::REVIVE:
-			Input::DoRumble(index_controller, 0.5f, 100.0f);
-			break;
-		default:
-			break;
-		}
-	else
-	{
-		Rumbler(type, 1);
-		Rumbler(type, 2);
-	}
+	
 }

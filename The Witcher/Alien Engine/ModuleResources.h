@@ -133,9 +133,12 @@ public:
 	ResourceFont* default_font = nullptr;
 	ResourceMaterial* default_material = nullptr;
 	ResourceShader* default_shader = nullptr;
+	ResourceShader* shadow_shader = nullptr;
 	ResourceShader* default_particle_shader = nullptr;
 	ResourceShader* skybox_shader = nullptr;
-
+	ResourceShader* water_shader = nullptr;
+	ResourceShader* shield_fresnel_shader = nullptr;
+	ResourceShader* shield_shader = nullptr;
 	FileNode* assets = nullptr;
 
 private:

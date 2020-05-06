@@ -1,14 +1,19 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowScript.h"
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "EnemyManager.h"
+#include "MusicController.h"
+
+#include "InGame_UI.h"
 
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
+	state = NilfgaardSoldierState::IDLE;
 	Enemy::StartEnemy();
 }
 
@@ -19,12 +24,11 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
 
-	JSONArraypack* stat_weapon = stat->GetArray("Weapons");
+	JSONArraypack* stat_weapon = stat->GetArray("NilfgaardSoldier");
 	int i = 0;
 	if (stat_weapon)
 	{
 		stat_weapon->GetFirstNode();
-
 		for (int i = 0; i < stat_weapon->GetArraySize(); ++i)
 			if (stat_weapon->GetNumber("Type") != (int)nilf_type)
 				stat_weapon->GetAnotherNode();
@@ -36,98 +40,85 @@ void NilfgaardSoldier::SetStats(const char* json)
 		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
+
 		if (nilf_type == NilfgaardType::ARCHER)
 		{
 			stats["FleeRange"] = Stat("FleeRange", stat_weapon->GetNumber("FleeRange"));
-			stats["FleeRange"].SetMaxValue(stat_weapon->GetNumber("MaxFleeRange"));
+			stats["RecoverRange"] = Stat("RecoverRange", stat_weapon->GetNumber("RecoverRange"));
 		}
-		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		else if (nilf_type == NilfgaardType::SWORD_SHIELD)
+			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));
 
-		stat_weapon->GetAnotherNode();
 	}
 
 	JSONfilepack::FreeJSON(stat);
 }
 
-void NilfgaardSoldier::Action()
+float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
-	switch (nilf_type)
-	{
-	case NilfgaardSoldier::NilfgaardType::SWORD:
-		animator->PlayState("Attack");
-		state = EnemyState::ATTACK;
-		break;
-	case NilfgaardSoldier::NilfgaardType::ARCHER:
-		animator->PlayState("Shoot");
-		state = EnemyState::ATTACK;
-		break;
-	case NilfgaardSoldier::NilfgaardType::SWORD_SHIELD:
-		animator->PlayState("Block");
-		current_time = Time::GetGameTime();
-		state = EnemyState::BLOCK;
-		break;
-	}
-}
+	float damage = Enemy::GetDamaged(dmg, player, knock);
 
-void NilfgaardSoldier::Block()
-{
-	float b_time = (has_been_attacked) ? block_attack_time : block_time;
-	if (Time::GetGameTime() - current_time > b_time)
-	{
-		state = EnemyState::ATTACK;
-		animator->PlayState("Attack");
-		has_been_attacked = false;
-		break_shield_attack = 0.0f;
-	}
-	else if (break_shield_attack >= max_break_shield_attack)
-	{
-		state = EnemyState::ATTACK;
+	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
-		has_been_attacked = false;
-		break_shield_attack = 0.0f;
+		audio_emitter->StartSound("SoldierHit");
+		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
-}
 
-void NilfgaardSoldier::Flee(float3 direction)
-{
-	character_ctrl->SetWalkDirection(direction * stats["Agility"].GetValue());
-	animator->SetFloat("speed", stats["Agility"].GetValue());
-
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	character_ctrl->SetRotation(rot);
-
-	if (distance > stats["FleeRange"].GetMaxValue())
+	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
 	{
-		state = Enemy::EnemyState::ATTACK;
-		character_ctrl->SetWalkDirection(float3(0.0F, 0.0F, 0.0F));
-		animator->SetFloat("speed", 0.0F);
-		Action();
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		can_get_interrupted = false;
 	}
-}
 
-void NilfgaardSoldier::ShootAttack()
-{
-	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
-	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
-	ComponentRigidBody* arrow_rb = (ComponentRigidBody*)arrow_go->GetComponent(ComponentType::RIGID_BODY);
-	static_cast<ArrowScript*>(arrow_go->GetChild("Point")->GetComponentScript("ArrowScript"))->damage = stats["Damage"].GetValue();
-	arrow_rb->SetRotation(RotateArrow());
-	arrow_rb->AddForce(direction.Mul(20));
-}
+	//else
+	//{
+	//	//Quizas que haga sonidito de ataque pero le han hecho pupita
+	//}
 
-Quat NilfgaardSoldier::RotateArrow()
-{
-	float3 front = float3::unitZ(); //front of the object
-	Quat rot1 = Quat::RotateFromTo(front, direction);
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition()); //1 is body position
 
-	float3 desiredUp = float3::unitY();
-	float3 right = Cross(direction, desiredUp);
-	desiredUp = Cross(right, direction);
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
-	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
-	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
-	return rot2 * rot1;
+	if (stats["Health"].GetValue() == 0.0F) {
+
+		animator->SetBool("dead", true);
+		OnDeathHit();
+
+		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
+		{
+			state = NilfgaardSoldierState::DYING;
+			audio_emitter->StartSound("SoldierDeath");
+
+			float3 head_pos = transform->GetGlobalPosition();
+			head_pos.y += 1.0f;
+
+			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
+			if (decapitated_head)
+			{
+				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
+
+				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
+				head_rb->SetRotation(transform->GetGlobalRotation());
+
+				float decapitation_force = 2.0f;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+				decapitation_vector += transform->up * decapitation_force;
+	
+				head_rb->AddForce(decapitation_vector);
+				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
+			}
+		}
+	}
+
+	return damage;
 }
 
 void NilfgaardSoldier::OnDeathHit()
@@ -141,111 +132,132 @@ void NilfgaardSoldier::OnDeathHit()
 	}*/
 }
 
-void NilfgaardSoldier::UpdateEnemy()
-{	
-	Enemy::UpdateEnemy();
-
-	switch (state)
+void NilfgaardSoldier::CheckDistance()
+{
+	if ((distance < stats["AttackRange"].GetValue()))
 	{
-	case Enemy::EnemyState::IDLE:
-		if (distance < stats["VisionRange"].GetValue() && distance > stats["AttackRange"].GetValue())
-			state = Enemy::EnemyState::MOVE;
-		else if (nilf_type == NilfgaardType::ARCHER && distance < stats["FleeRange"].GetValue())
-			state = Enemy::EnemyState::FLEE;
-		break;
-	case Enemy::EnemyState::MOVE:
-		Move(direction);
-		break;
-	case Enemy::EnemyState::ATTACK:
-		switch (nilf_type)
-		{
-		case NilfgaardSoldier::NilfgaardType::ARCHER:
-			float angle = atan2f(direction.z, direction.x);
-			Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-			character_ctrl->SetRotation(rot);
-
-			if (distance < stats["FleeRange"].GetValue())
-			{
-				animator->PlayState("Walk");
-				state = Enemy::EnemyState::FLEE;
-			}
-			break;
-		}
-		break;
-	case Enemy::EnemyState::BLOCK:
-		Block();
-		break;
-	case Enemy::EnemyState::FLEE:
-		Flee(-direction);
-		break;
-	case Enemy::EnemyState::DYING:
-	{
-		EnemyManager* enemy_manager = (EnemyManager*)(GameObject::FindWithName("GameManager")->GetComponentScript("EnemyManager"));
-		//Ori Ori function sintaxis
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-		state = EnemyState::DEAD;
-		break;
-	}
-	case Enemy::EnemyState::DEAD:
-		break;
+		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		Action();
 	}
 
+	if (distance > stats["VisionRange"].GetValue())
+	{
+		state = NilfgaardSoldierState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		animator->SetFloat("speed", 0.0F);
+		is_combat = false;
+	}
+}
+
+void NilfgaardSoldier::RotateSoldier()
+{
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
 }
 
 void NilfgaardSoldier::CleanUpEnemy()
 {
+	if (decapitated_head)
+	{
+		for (auto it = particles.begin(); it != particles.end(); ++it)
+		{
+			ReleaseParticle((*it)->GetName());
+		}
+
+		decapitated_head->ToDelete();
+		decapitated_head = nullptr;
+	}
+}
+
+void NilfgaardSoldier::Stun(float time)
+{
+	if (state != NilfgaardSoldierState::STUNNED || state != NilfgaardSoldierState::DEAD)
+	{
+		state = NilfgaardSoldierState::STUNNED;
+		animator->PlayState("Dizzy");
+		current_stun_time = Time::GetGameTime();
+		stun_time = time;
+	}
+}
+
+bool NilfgaardSoldier::IsDead()
+{
+	return (state == NilfgaardSoldierState::DEAD ? true : false);
+}
+
+void NilfgaardSoldier::SetState(const char* state_str)
+{
+	if (state_str == "Idle")
+		state = NilfgaardSoldierState::IDLE;
+	else if (state_str == "Move")
+		state = NilfgaardSoldierState::MOVE;
+	else if (state_str == "Attack")
+		state = NilfgaardSoldierState::ATTACK;
+	else if (state_str == "Block" || state_str == "Flee")
+		state = NilfgaardSoldierState::AUXILIAR;
+	else if (state_str == "Hit")
+		state = NilfgaardSoldierState::HIT;
+	else if (state_str == "Dying")
+		state = NilfgaardSoldierState::DYING;
+	else if (state_str == "Dead")
+		state = NilfgaardSoldierState::DEAD;
+	else if (state_str == "Stunned")
+		state = NilfgaardSoldierState::STUNNED;
+	else
+		LOG("Incorrect state name: %s", state_str);
 }
 
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		can_get_interrupted = true;
+		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())
 		{
-			state = Enemy::EnemyState::MOVE;
+			state = NilfgaardSoldierState::MOVE;
 		}
 		else
 		{
-			state = Enemy::EnemyState::IDLE;
+			state = NilfgaardSoldierState::IDLE;
+			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		}
 	}
-
-	if (strcmp(name, "Hit") == 0) {
+	else if (strcmp(name, "Hit") == 0) {
+		ReleaseParticle("hit_particle");
 		if (stats["Health"].GetValue() == 0.0F) {
-			state = EnemyState::HIT;
+			state = NilfgaardSoldierState::HIT;
 		}
 		else
-			state = Enemy::EnemyState::IDLE;
+		{
+			state = NilfgaardSoldierState::IDLE;
+			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		}
 	}
-
-	if (strcmp(name, "Dizzy") == 0)
+	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
-		state = EnemyState::DYING;
-		GameManager::manager->player_manager->IncreaseUltimateCharge(10);
-		//need to know last enemy who hit him to count kill?
+		state = NilfgaardSoldierState::DYING;
+		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 }
 
 void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != EnemyState::DEAD) {
-
-		if (is_blocked)
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 		{
-			has_been_attacked = true;
-			current_time = Time::GetGameTime();
-			break_shield_attack++;
-		}
-		else
-		{
-			PlayerController* player = static_cast<PlayerController*>(collider->game_object_attached->GetComponentScriptInParent("PlayerController"));
-			if (player)
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
+			float dmg_received = player->attacks->GetCurrentDMG();
+			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
 
-				if (state == EnemyState::DYING)
-					player->OnEnemyKill();
-			}
+			player->OnHit(this, GetDamaged(dmg_received, player, knock));
+			last_player_hit = player;
+
+			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 		}
 	}
 }

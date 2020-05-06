@@ -9,11 +9,21 @@ public:
 
 	ExplodeChildren();
 	virtual ~ExplodeChildren();
-	
-	void Start();
-	void Update();
 
+	void Start() override;
+
+	void Explode();
+
+	void SetVars(float force, float time_despawn);
+
+	void Fall();
 	void DeleteMyself();
+
+	std::map<std::string, ComponentParticleSystem*> particles;
+
+private:
+	float time_to_disappear = 5.f;
+	float force = 15.f;
 
 };
 

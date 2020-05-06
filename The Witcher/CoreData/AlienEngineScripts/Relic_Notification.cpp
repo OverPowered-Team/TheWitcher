@@ -11,12 +11,18 @@ Relic_Notification::~Relic_Notification()
 
 void Relic_Notification::Start()
 {
+
 	relic_notification = GameObject::FindWithName("Relics_Notification");
-	geralt_portrait = game_object->GetChild("Relics_Notification")->GetChild("Portrait_Relics")->GetChild("Geralt_Relics_Portrait");
-	yennefer_portrait = game_object->GetChild("Relics_Notification")->GetChild("Portrait_Relics")->GetChild("Yennefer_Relics_Portrait");
-	relic_title = (ComponentText*)game_object->GetChild("Relics_Notification")->GetChild("Relic_Name")->GetComponent(ComponentType::UI_TEXT);
-	description = (ComponentText*)game_object->GetChild("Relics_Notification")->GetChild("Relic_Description")->GetComponent(ComponentType::UI_TEXT);
-	combo = game_object->GetChild("Relics_Notification")->GetChild("Combo_Container");
+	if (relic_notification)
+	{
+		relic_notification->SetEnable(false);
+		geralt_portrait = relic_notification->GetChild("Portrait_Relics")->GetChild("Geralt_Relics_Portrait");
+		yennefer_portrait = relic_notification->GetChild("Portrait_Relics")->GetChild("Yennefer_Relics_Portrait");
+		relic_title = relic_notification->GetChild("Relic_Name")->GetComponent<ComponentText>();
+		description = relic_notification->GetChild("Relic_Description")->GetComponent<ComponentText>();
+		combo = relic_notification->GetChild("Combo_Container");
+	}
+	
 
 	L_combo_images.resize(5);
 	H_combo_images.resize(5);
@@ -46,7 +52,7 @@ void Relic_Notification::Update()
 void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo)
 {
 	Notification* new_relic = new Notification();
-	new_relic->type = player->player_data.player_type;
+	new_relic->type = player->player_data.type;
 	new_relic->attack = attack_combo;
 	new_relic->relic_name = relic_name.c_str();
 	new_relic->description = description.c_str();

@@ -13,7 +13,7 @@ public:
 	void NewGame();
 	void ExitGame();
 	void Controls();
-	void Settings();
+	void Credits();
 	void Muffin();
 
 };
@@ -26,7 +26,7 @@ ALIEN_FACTORY MainMenu_Buttons* CreateMainMenu_Buttons() {
 	SHOW_VOID_FUNCTION(MainMenu_Buttons::NewGame, alien);
 	SHOW_VOID_FUNCTION(MainMenu_Buttons::ExitGame, alien);
 	SHOW_VOID_FUNCTION(MainMenu_Buttons::Controls, alien);
-	SHOW_VOID_FUNCTION(MainMenu_Buttons::Settings, alien);
+	SHOW_VOID_FUNCTION(MainMenu_Buttons::Credits, alien);
 
 	return alien;
 } 

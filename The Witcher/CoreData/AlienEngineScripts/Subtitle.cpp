@@ -10,23 +10,31 @@ Subtitle::~Subtitle()
 
 void Subtitle::Start()
 {
-	text = (ComponentText*)GetComponent(ComponentType::UI_TEXT);
+	text = game_object->GetComponent<ComponentText>();
 	if (!text)
+	{
+		LOG("Text not found");
 		return;
-	audio = (ComponentAudioEmitter*)GetComponent(ComponentType::A_EMITTER);
+	}
+		
+	audio = GetComponent<ComponentAudioEmitter>();
 	if (!audio)
+	{
+		LOG("Audio component not found");
 		return;
+	}
+		
 	if (songBard)
 	{
-		song = (ComponentAudioEmitter*)songBard->GetComponent(ComponentType::A_EMITTER);
+		song = songBard->GetComponent<ComponentAudioEmitter>();
 	}
 
 
-	std::string json_path = std::string("Configuration/Subtitles/Project_1.json");
+	std::string json_path = std::string("GameData/Intro.json");
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
 	if (jsonDoc)
 	{
-		LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+		LOG("READING Intro named %s", json_path.data());
 		JSONArraypack* titles = jsonDoc->GetArray("titles");
 		if (titles == nullptr)
 			return;
@@ -40,6 +48,10 @@ void Subtitle::Start()
 			
 		} while (titles->GetAnotherNode());
 	}
+	else
+	{
+		LOG("Can't read this json");
+	}
 	
 	JSONfilepack::FreeJSON(jsonDoc);
 	start_time = Time::GetGameTime();
@@ -49,32 +61,37 @@ void Subtitle::Update()
 {
 	if (!text || !audio)
 		return;
-	
 	current_time = Time::GetGameTime() - start_time;
-	if (subtitles.size() > 0 && subtitles.size() > current_sub)
+	
+	if (!change_scene)
 	{
-		if (current_time >= subtitles[current_sub].start)
+		if (subtitles.size() > 0 && subtitles.size() > current_sub)
 		{
-			if (first_entered)
+			if (current_time >= subtitles[current_sub].start)
 			{
-				text->SetText(subtitles[current_sub].text.c_str());
-				first_entered = false;
-			}
-			else if (current_time > subtitles[current_sub].end && !first_entered)
-			{
-				text->SetText("");
-				first_entered = true;
-				++current_sub;
+				if (first_entered)
+				{
+					text->SetText(subtitles[current_sub].text.c_str());
+					first_entered = false;
+				}
+				else if (current_time > subtitles[current_sub].end && !first_entered)
+				{
+					text->SetText("");
+					first_entered = true;
+					++current_sub;
+				}
 			}
 		}
 	}
-	if (current_time > end_seconds || Input::GetControllerButton(1,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A))
+	
+	if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
 	{
+		change_scene = true;
 		LOG("ENTERED");
 		if(audio)
 			audio->Mute(true);
 		if(song)
 			song->Mute(true);
-		SceneManager::LoadScene("newTRIGGER");
+		SceneManager::LoadScene("Lvl_1_Art_Colliders");
 	}
 }

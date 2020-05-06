@@ -42,42 +42,50 @@ void ComponentAudioEmitter::ChangeVolume(float new_volume)
 {
 	if (mute != true) {
 		volume = new_volume;
-		source->SetVolume(volume);
+		if (source != nullptr)
+			source->SetVolume(volume);
 	}
 }
 
 void ComponentAudioEmitter::Mute(bool mute)
 {
-	if (mute)
-		source->SetVolume(0.F);
-	else
-		source->SetVolume(volume);
+	if (source != nullptr) {
+		if (mute)
+			source->SetVolume(0.F);
+		else
+			source->SetVolume(volume);
+	}
 	this->mute = mute;
 }
 
 void ComponentAudioEmitter::StartSound()
-{	
-	source->PlayEventByID(current_event);
+{
+	if (source != nullptr)
+		source->PlayEventByID(current_event);
 }
 
 void ComponentAudioEmitter::StartSound(uint _event)
 {
-	source->PlayEventByID(_event);
+	if (source != nullptr)
+		source->PlayEventByID(_event);
 }
 
 void ComponentAudioEmitter::StartSound(const char* event_name)
 {
-	source->PlayEventByName(event_name);
+	if (source != nullptr)
+		source->PlayEventByName(event_name);
 }
 
 void ComponentAudioEmitter::StopSoundByName(const char* even_name)
 {
-	source->StopEventByName(even_name);
+	if (source != nullptr)
+		source->StopEventByName(even_name);
 }
 
 void ComponentAudioEmitter::StopOwnSound()
 {
-	source->StopEventByName(audio_name.c_str());
+	if (source != nullptr)
+		source->StopEventByName(audio_name.c_str());
 }
 
 void ComponentAudioEmitter::UpdateSourcePos()
@@ -209,17 +217,25 @@ u32 ComponentAudioEmitter::GetWwiseIDFromString(const char* Wwise_name) const
 
 void ComponentAudioEmitter::SetSwitchState(const char* switch_group_id, const char* switch_state_id)
 {
-	source->SetSwitch(source->GetID(), switch_group_id, switch_state_id);
+	if (source != nullptr)
+		source->SetSwitch(source->GetID(), switch_group_id, switch_state_id);
 }
 
-void ComponentAudioEmitter::SetReverb(const float& strength, const char* name) 
+void ComponentAudioEmitter::SetReverb(const float& strength, const char* name)
 {
-	source->ApplyEnvReverb(strength, name);
+	if (source != nullptr)
+		source->ApplyEnvReverb(strength, name);
 }
 
 void ComponentAudioEmitter::SetState(const char* state_group, const char* new_state)
 {
-	source->ChangeState(state_group, new_state);
+	if (source != nullptr)
+		source->ChangeState(state_group, new_state);
+}
+
+void ComponentAudioEmitter::SetRTPCValue(const char* RTPC, float value)
+{
+	source->SetRTPCValue(RTPC, value, source->GetID());
 }
 
 WwiseT::AudioSource* ComponentAudioEmitter::GetSource() const
@@ -231,7 +247,8 @@ void ComponentAudioEmitter::OnEnable()
 {
 	Bank* bank = App->audio->GetBankByID(current_bank);
 	if (bank != nullptr)
-		audio_name = bank->events.at(current_event);
+		if (bank->events.find(current_event) != bank->events.end())
+			audio_name = bank->events.at(current_event);
 }
 
 void ComponentAudioEmitter::OnDisable()

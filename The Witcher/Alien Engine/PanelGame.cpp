@@ -66,6 +66,14 @@ void PanelGame::PanelLogic()
 	else {
 		game_focused = false;
 	}
+
+	ImDrawList* list = ImGui::GetWindowDrawList();
+	if (list != nullptr && list->CmdBuffer.size() > 1) {
+		App->objects->game_viewport->active = true;
+	}
+	else {
+		App->objects->game_viewport->active = false;
+	}
 	
 	ImGui::End();
 }

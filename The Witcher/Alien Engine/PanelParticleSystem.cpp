@@ -53,7 +53,7 @@ void PanelParticleSystem::PanelLogic()
 		ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s", "Particle System");
 		ImGui::Separator();
 		ImGui::Spacing();
-		static bool start = true;
+		static bool start = false;
 
 		if (!start) {
 			if (ImGui::Button("Play", ImVec2(75.f, 20.f))) { start = true, particleSystem->Play(); }

@@ -17,6 +17,14 @@ void UI_EndMenu::Start()
 	xp_info = GameObject::FindWithName("XPInfo");
 }
 
+void UI_EndMenu::Update()
+{
+	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y))||(Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_Y)))
+	{
+		SceneManager::LoadScene("CreditsMenu");
+	}
+}
+
 void UI_EndMenu::EndMenu(ENDMENU menu)
 {
 	if (first_time)

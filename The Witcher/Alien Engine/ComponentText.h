@@ -8,6 +8,12 @@
 class ResourceFont;
 struct Character;
 
+struct TextBackground {
+	bool visible = false;
+	Color color;
+	uint id = 0;
+};
+
 enum TextAlign {
 	NONE = -1,
 	LEFT,
@@ -41,12 +47,16 @@ public:
 	void SetText(const char* newText);
 	const char* GetText();
 
+	void SetAlpha(float alpha);
+	void SetColor(float3 color);
+
 private:
 	TextAlign align = TextAlign::LEFT;
 	ResourceFont*	font = nullptr;
 	uint VAO;
 	int width = 200;
 	float interlineal = 1.5;
+	TextBackground text_background;
 	std::string	text = "Non-Text";
 };
 

@@ -28,6 +28,7 @@ struct aiFileIO;
 #define LIBRARY_FONTS_FOLDER "Library/Fonts/"
 #define CONFIGURATION_FOLDER "Configuration/"
 #define CONFIGURATION_LAYOUTS_FOLDER "Configuration/Layouts/"
+#define CONFIGURATION_PHYSICS "Configuration/PhysicsSettings.json"
 #define MODELS_FOLDER "Assets/Models/"
 #define TEXTURES_FOLDER "Assets/Textures/"
 #define SHADERS_FOLDER "Assets/Shaders/"
@@ -48,6 +49,7 @@ struct aiFileIO;
 #define DLL_CREATION_PATH "AlienEngineScripts/OutPut/AlienEngineScripts.dll"
 // -------DLL Paths--------
 
+#define FILE_PHYSICS "Configuration/PhysicsSettings.json"
 #define FILE_TAGS "Configuration/Tags/tags.alienTags"
 #define BUILD_SETTINGS_PATH "Configuration/BuildSettings.alienBuild"
 #define BUILD_EXE_PATH "../Alien Engine/EngineBuild/Alien Engine.exe"

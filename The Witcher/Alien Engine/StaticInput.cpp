@@ -126,6 +126,26 @@ float Input::GetControllerVerticalRightAxis(int controller_index)
 	return (!App->input->IsControllerActive(controller_index) ? 0.0f : -App->input->game_pads[controller_index]->joystick_right.valueY);
 }
 
+KEY_STATE Input::GetControllerJoystickLeft(int controller_index, const JOYSTICK_BUTTONS& code)
+{
+	return App->input->GetControllerJoystickLeft(controller_index, code);
+}
+
+KEY_STATE Input::GetControllerJoystickRight(int controller_index, const JOYSTICK_BUTTONS& code)
+{
+	return App->input->GetControllerJoystickRight(controller_index, code);
+}
+
+float Input::GetControllerTriggerLeft(int controller_index)
+{
+	return !App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->left_trigger;
+}
+
+float Input::GetControllerTriggerRight(int controller_index)
+{
+	return !App->input->IsControllerActive(controller_index) ? 0.0f : App->input->game_pads[controller_index]->right_trigger;
+}
+
 KEY_STATE Input::GetControllerButton(int controller_index, const CONTROLLER_BUTTONS& code)
 {
 	return App->input->GetControllerButton(controller_index, code);
