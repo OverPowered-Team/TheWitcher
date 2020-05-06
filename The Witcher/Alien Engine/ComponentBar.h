@@ -5,6 +5,12 @@
 
 class ResourceTexture;
 
+enum class SCISSOR_TYPE {
+	RIGHT_TO_LEFT,
+	LEFT_TO_RIGHT,
+	CENTER
+};
+
 class __declspec(dllexport) ComponentBar :public ComponentUI
 {
 	friend class ReturnZ;
@@ -25,6 +31,8 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
+	void SetSize(float width, float height);
+
 	//Script
 	void CalculateFactor();
 	float GetBarValue();
@@ -42,6 +50,9 @@ private:
 	float barScaleY = 0.8F, barScaleX = 1.0f;
 
 	float offsetX = 0.0f, offsetY = 0.0f;
+	bool draw_bar = false;
+	bool right_to_left = true;
+	SCISSOR_TYPE scType = SCISSOR_TYPE::RIGHT_TO_LEFT;
 };
 
 #endif // !_COMPONENT_BAR_H_

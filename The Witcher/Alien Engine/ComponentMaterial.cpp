@@ -307,6 +307,16 @@ const ResourceMaterial* ComponentMaterial::GetMaterial() const
 	return material;
 }
 
+ResourceShader* ComponentMaterial::GetUsedShader() const
+{
+	return material->used_shader;
+}
+
+bool ComponentMaterial::IsTransparent() const
+{
+	return material->IsTransparent();
+}
+
 
 
 void ComponentMaterial::ShowShaderTextEditor()

@@ -52,13 +52,14 @@ void main()
     // --------------------------------------- 
 
     // --------------- Animation -------------
+    vec3 blendpos = vec3(0,0,0);
     if(animate == 1)
     {
-          mat4 BoneTransform = gBones[BoneIDs[0]] * Weights[0];
-            BoneTransform += gBones[BoneIDs[1]] * Weights[1];
-            BoneTransform += gBones[BoneIDs[2]] * Weights[2];
-            BoneTransform += gBones[BoneIDs[3]] * Weights[3];
-            pos = BoneTransform * pos;
+        for(int i=0; i<4; i++)
+        {
+            blendpos += vec3(gBones[BoneIDs[i]] * pos) * Weights[i];
+        }
+            pos = vec4(blendpos,1);
     }
     // --------------------------------------- 
     frag_pos = vec3(model * pos);

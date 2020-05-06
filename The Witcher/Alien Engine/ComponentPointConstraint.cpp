@@ -12,11 +12,16 @@ ComponentPointConstraint::ComponentPointConstraint(GameObject* go) : Component(g
 	type = ComponentType::POINT_CONSTRAINT;
 	transform = game_object_attached->GetComponent<ComponentTransform>();
 
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentPointConstraint::DrawScene, this));
+#endif // !GAME_VERSION
 }
 
 ComponentPointConstraint::~ComponentPointConstraint()
 {
-
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 void ComponentPointConstraint::SaveComponent(JSONArraypack* to_save)
@@ -41,7 +46,7 @@ void ComponentPointConstraint::Update()
 
 }
 
-void ComponentPointConstraint::DrawScene(ComponentCamera* camera)
+void ComponentPointConstraint::DrawScene()
 {
 
 

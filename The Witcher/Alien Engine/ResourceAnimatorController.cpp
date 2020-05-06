@@ -368,12 +368,10 @@ void ResourceAnimatorController::UpdateState(State* state)
 {
 	ResourceAnimation* animation = state->GetClip();
 	ResourceAnimation* current_clip = current_state->GetClip();
-
 	if (current_clip == nullptr)
 		return;
 
-	if (!transitioning)
-		CheckTriggers();
+	if (!transitioning)CheckTriggers();
 
 	if (animation && (animation->GetDuration()) > 0) {
 

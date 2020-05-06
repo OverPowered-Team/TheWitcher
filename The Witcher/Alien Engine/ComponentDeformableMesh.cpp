@@ -53,7 +53,11 @@ void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)
 	AttachBone(root);
 	
 	material = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
-
+	if (material == nullptr)
+	{
+		material = new ComponentMaterial(game_object_attached);
+		game_object_attached->AddComponent(material);
+	}
 	SendWeightsAndID();
 
 }
@@ -104,14 +108,16 @@ void ComponentDeformableMesh::UpdateBonesMatrix()
 	}
 }
 
-void ComponentDeformableMesh::DrawScene(ComponentCamera* camera)
+void ComponentDeformableMesh::DrawScene()
 {
 	OPTICK_EVENT();
 
 	if (IsEnabled())
 	{
 		if (!wireframe)
-			DrawPolygon(camera);
+		{
+			//DrawPolygon(camera);
+		}
 		/*if ((selected || parent_selected) && App->objects->outline)
 			mesh->DrawOutLine();*/
 		if (view_mesh || wireframe)
@@ -121,24 +127,24 @@ void ComponentDeformableMesh::DrawScene(ComponentCamera* camera)
 		if (view_face_normals)
 			DrawFaceNormals();
 		if (draw_AABB)
-			DrawGlobalAABB(camera);
+			DrawGlobalAABB();
 		if (draw_OBB)
-			DrawOBB(camera);
+			DrawOBB();
 	}
 }
 
-void ComponentDeformableMesh::DrawGame(ComponentCamera* camera)
+void ComponentDeformableMesh::DrawGame()
 {
 	OPTICK_EVENT();
 
 	if (IsEnabled())
 	{
-		DrawPolygon(camera);
+		DrawPolygon();
 	}
 }
 
 
-void ComponentDeformableMesh::DrawPolygon(ComponentCamera* camera)
+void ComponentDeformableMesh::DrawPolygon()
 {
 	OPTICK_EVENT();
 	if (mesh == nullptr || mesh->id_index <= 0 || material == nullptr)
@@ -146,13 +152,13 @@ void ComponentDeformableMesh::DrawPolygon(ComponentCamera* camera)
 
 	UpdateBonesMatrix();
 
-	ComponentMesh::DrawPolygon(camera);
+	ComponentMesh::DrawPolygon();
 
 }
 
-void ComponentDeformableMesh::SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera)
+void ComponentDeformableMesh::SetUniforms(ResourceMaterial* resource_material)
 {
-	ComponentMesh::SetUniforms(resource_material, camera);
+	ComponentMesh::SetUniforms(resource_material);
 	resource_material->used_shader->SetUniformMat4f("gBones", bones_matrix, bones.size());
 }
 

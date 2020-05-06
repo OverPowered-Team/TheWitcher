@@ -69,6 +69,7 @@ public:
 	SHADER_TEMPLATE GetShaderType() const;
 
 	void UpdateUniforms(ShaderInputs inputs);
+	void ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera); 
 	void ApplyLightsUniforms();
 	void Bind() const;
 	void Unbind() const;

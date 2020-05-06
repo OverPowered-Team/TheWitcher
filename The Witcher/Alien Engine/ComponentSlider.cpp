@@ -525,34 +525,42 @@ void ComponentSlider::Update()
 		
 		GetValue();
 
-		switch (state)
+		(game_object_attached->enabled) ? active = true : active = false;
+
+		if (active)
+			(game_object_attached->IsUpWardsEnabled()) ? active = true : active = false;
+
+		if (active)
 		{
-		case Idle:
-			OnIdle();
-			break;
-		case Hover:
-			OnHover();
-			break;
-		case Click:
-			OnClick();
-			break;
-		case Pressed:
-			OnPressed();
-			break;
-		case Release:
-			OnRelease();
-			break;
-		case Exit:
-			OnExit();
-			break;
-		case Enter:
-			OnEnter();
-			break;
-		default:
-			break;
+			switch (state)
+			{
+			case Idle:
+				OnIdle();
+				break;
+			case Hover:
+				OnHover();
+				break;
+			case Click:
+				OnClick();
+				break;
+			case Pressed:
+				OnPressed();
+				break;
+			case Release:
+				OnRelease();
+				break;
+			case Exit:
+				OnExit();
+				break;
+			case Enter:
+				OnEnter();
+				break;
+			default:
+				break;
+			}
+			if (canvas->game_object_attached->enabled || canvas->allow_navigation)
+				UILogicGamePad();
 		}
-		if (canvas->game_object_attached->enabled || canvas->allow_navigation)
-			UILogicGamePad();
 	}
 }
 
