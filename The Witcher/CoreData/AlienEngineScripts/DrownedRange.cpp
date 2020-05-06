@@ -26,6 +26,18 @@ void DrownedRange::UpdateEnemy()
 			animator->PlayState("GetOff");
 			state = DrownedState::GETOFF;
 			is_hide = false;
+			if (m_controller && !is_combat)
+			{
+				is_combat = true;
+				m_controller->EnemyInSight((Enemy*)this);
+			}
+		}
+		else {
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
 		}
 		break;
 
@@ -65,11 +77,11 @@ void DrownedRange::UpdateEnemy()
 		animator->PlayState("Dead");
 		last_player_hit->OnEnemyKill();
 		//audio_emitter->StartSound("DrownedDeath");
-		//if (m_controller && is_combat)
-		//{
-		//	is_combat = false;
-		//	m_controller->EnemyLostSight((Enemy*)this);
-		//}
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 	}
 	}
 }

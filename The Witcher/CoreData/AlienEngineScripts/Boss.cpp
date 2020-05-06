@@ -2,8 +2,8 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 #include "Boss.h"
-
 
 
 Boss::BossAction::BossAction(ActionType _type, float _probability)
@@ -32,6 +32,18 @@ void Boss::UpdateEnemy()
 			else {
 				SetAttackState();
 			}
+			if (m_controller && !is_combat)
+			{
+				is_combat = true;
+				m_controller->EnemyInSight((Enemy*)this);
+			}
+		}
+		else {
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
 		}
 		break;
 	case Boss::BossState::ATTACK:
@@ -53,6 +65,11 @@ void Boss::UpdateEnemy()
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = BossState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 	}
 								 break;
 	case Boss::BossState::DEAD:

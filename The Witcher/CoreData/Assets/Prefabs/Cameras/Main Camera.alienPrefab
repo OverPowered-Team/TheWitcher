@@ -4,8 +4,8 @@
             {
                 "Name": "Main Camera",
                 "FamilyNumber": 1,
-                "ID": "5535210005199322507",
-                "ParentID": "18119624127478177604",
+                "ID": "15556538476831265890",
+                "ParentID": "8232295045223925732",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,9 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -4.1025538444519043,
+                            10.252265930175781,
+                            13.166707992553711
                         ],
                         "Rotation": [
                             0.26289856433868408,
@@ -35,7 +35,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13847963341799363811"
+                        "ID": "15075454279695252789"
                     },
                     {
                         "Enabled": true,
@@ -51,8 +51,8 @@
                         "FarPlane": 200,
                         "NearPlane": 0.10000000149011612,
                         "isFovHori": 0,
-                        "ID": "12443757524954919838",
-                        "IsGameCamera": false,
+                        "ID": "4924912100390074741",
+                        "IsGameCamera": true,
                         "IsSelectedCamera": true,
                         "PrintIcon": true,
                         "IconColor": [
@@ -72,24 +72,24 @@
                         "Skybox_NegativeZ": "Library\/Textures\/16155666848095087743.dds"
                     },
                     {
-                        "ID": "9065992410012356546",
+                        "ID": "1634741339893174339",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 0.46399998664855957,
                         "Mute": false,
                         "Bank": "3991942870",
                         "Event": "4145153789",
-                        "PlayOnAwake": true
+                        "PlayOnAwake": false
                     },
                     {
                         "Type": 17,
                         "Enabled": true,
-                        "ID": "4113924852355904712",
-                        "ListenerID": "1875685570"
+                        "ID": "2878334055627523085",
+                        "ListenerID": "2818357269"
                     },
                     {
                         "Type": 29,
-                        "ID": "13632965790542047736",
+                        "ID": "8686961430041593884",
                         "ResourceID": "10408381955680660573",
                         "DataName": "CameraMovement",
                         "HasInspector": true,
@@ -137,7 +137,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "2679794622849810648",
+                        "ID": "9190924856463572207",
                         "ResourceID": "8894711529836489338",
                         "DataName": "CameraShake",
                         "HasInspector": true,
@@ -171,7 +171,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "10964942182296081634",
+                        "ID": "8895235507714415032",
                         "ResourceID": "16057303148137039602",
                         "DataName": "CameraUltiMode",
                         "HasInspector": true,
@@ -195,10 +195,22 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "16856627556480497061",
+                        "ID": "3375323828168811745",
                         "ResourceID": "3479373960671141251",
                         "DataName": "MusicController",
-                        "HasInspector": false
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "minimum_volume",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_start_decrease",
+                                "float": 1
+                            }
+                        ]
                     }
                 ]
             }
