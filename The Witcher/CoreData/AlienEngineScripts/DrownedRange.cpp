@@ -58,34 +58,12 @@ void DrownedRange::UpdateEnemy()
 
 	case DrownedState::DYING:
 	{
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = DrownedState::DEAD;
 		animator->PlayState("Dead");
 		//audio_emitter->StartSound("DrownedDeath");
 	}
-	}
-}
-
-
-void DrownedRange::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != DrownedState::DEAD) {
-
-		if (!is_hide)
-		{
-			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
-
-				if (state == DrownedState::DYING)
-					player->OnEnemyKill();
-
-				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-			}
-		}
 	}
 }
 

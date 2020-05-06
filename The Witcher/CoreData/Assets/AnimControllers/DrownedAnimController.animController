@@ -1,107 +1,13 @@
 {
     "Controller": {
         "Name": "DrownedAnimController",
-        "NumStates": 7,
-        "NumTransitions": 3,
-        "States": [
-            {
-                "Name": "Idle",
-                "Speed": 1,
-                "Clip": "6535522296308659848"
-            },
-            {
-                "Name": "GetOff",
-                "Speed": 1,
-                "Clip": "6535522296308659848"
-            },
-            {
-                "Name": "Attack",
-                "Speed": 1,
-                "Clip": "3313610826098254409"
-            },
-            {
-                "Name": "Death",
-                "Speed": 1,
-                "Clip": "11546414413718116826"
-            },
-            {
-                "Name": "Dizzy",
-                "Speed": 1,
-                "Clip": "7795381935914547974"
-            },
-            {
-                "Name": "Hide",
-                "Speed": 1,
-                "Clip": "6535522296308659848"
-            },
-            {
-                "Name": "Hit",
-                "Speed": 1,
-                "Clip": "13193819018923853663"
-            }
-        ],
-        "Transitions": [
-            {
-                "Source": "Dizzy",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 0
-                    }
-                ]
-            },
-            {
-                "Source": "Dizzy",
-                "Target": "Death",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 0
-                    }
-                ]
-            },
-            {
-                "Source": "Hit",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 0
-                    }
-                ]
-            }
-        ],
+        "NumStates": 0,
+        "NumTransitions": 0,
+        "States": [],
+        "Transitions": [],
         "IntParameters": [],
         "FloatParameters": [],
-        "BoolParameters": [
-            {
-                "Name": "dead",
-                "Value": false
-            }
-        ],
-        "Events": [
-            {
-                "Event_Id": "DrownedRange::ShootSlime",
-                "Animation_Id": "3313610826098254409",
-                "Frame": 71,
-                "Type": 2
-            }
-        ]
+        "BoolParameters": [],
+        "Events": []
     }
 }

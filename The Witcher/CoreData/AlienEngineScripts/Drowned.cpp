@@ -1,5 +1,6 @@
 #include "Drowned.h"
 #include "PlayerController.h"
+#include "PlayerAttacks.h"
 
 Drowned::Drowned() : Enemy()
 {
@@ -92,7 +93,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 
 void Drowned::Stun(float time)
 {
-	if (state != DrownedState::STUNNED)
+	if (state != DrownedState::STUNNED || state != DrownedState::DEAD)
 	{
 		state = DrownedState::STUNNED;
 		animator->PlayState("Dizzy");
@@ -112,6 +113,27 @@ void Drowned::OnAnimationEnd(const char* name)
 		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+	}
+}
+
+void Drowned::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != DrownedState::DEAD) {
+
+		if (!is_hide)
+		{
+			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
+			{
+				float dmg_received = player->attacks->GetCurrentDMG();
+				player->OnHit(this, GetDamaged(dmg_received, player));
+
+				if (state == DrownedState::DYING)
+					player->OnEnemyKill();
+
+				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+			}
+		}
 	}
 }
 

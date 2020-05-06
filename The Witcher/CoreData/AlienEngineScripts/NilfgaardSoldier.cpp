@@ -173,7 +173,7 @@ void NilfgaardSoldier::CleanUpEnemy()
 
 void NilfgaardSoldier::Stun(float time)
 {
-	if (state != NilfgaardSoldierState::STUNNED)
+	if (state != NilfgaardSoldierState::STUNNED || state != NilfgaardSoldierState::DEAD)
 	{
 		state = NilfgaardSoldierState::STUNNED;
 		animator->PlayState("Dizzy");

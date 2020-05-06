@@ -3,15 +3,16 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class ALIEN_ENGINE_API DrownedGrab : public Alien {
+class Enemy;
+
+class ALIEN_ENGINE_API DrownedGrab : public Drowned {
 
 public:
 
 	DrownedGrab();
 	virtual ~DrownedGrab();
 	
-	void Start();
-	void Update();
+	void UpdateEnemy() override;
 
 };
 

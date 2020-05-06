@@ -13,8 +13,6 @@ public:
 	
 	void UpdateEnemy() override;
 
-	void OnTriggerEnter(ComponentCollider* collider);
-
 	void ShootSlime();
 
 public:

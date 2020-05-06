@@ -75,10 +75,10 @@ void Ghoul::JumpImpulse()
 
 void Ghoul::Stun(float time)
 {
-    if (state != GhoulState::STUNNED)
+    if (state != GhoulState::STUNNED || state != GhoulState::DEAD)
     {
         state = GhoulState::STUNNED;
-        //animator->PlayState("Dizzy");
+        animator->PlayState("Dizzy");
         current_stun_time = Time::GetGameTime();
         stun_time = time;
     }

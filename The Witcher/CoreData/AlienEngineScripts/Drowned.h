@@ -35,6 +35,7 @@ public:
 	bool IsDead() override;
 
 	void OnAnimationEnd(const char* name) override;
+	void OnTriggerEnter(ComponentCollider* collider) override;
 
 public:
 	DrownedState state = DrownedState::NONE;
