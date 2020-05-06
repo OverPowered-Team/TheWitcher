@@ -1,6 +1,7 @@
 #include "GhoulDodge.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 
 GhoulDodge::GhoulDodge() : Ghoul()
 {
@@ -57,6 +58,11 @@ void GhoulDodge::UpdateEnemy()
         audio_emitter->StartSound("GhoulDeath");
         last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
+        if (m_controller && is_combat)
+        {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
         break;
     }
     }

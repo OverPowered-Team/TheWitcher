@@ -52,6 +52,7 @@ public:
 public:
 	GhoulState state = GhoulState::NONE;
 	GhoulType ghoul_type = GhoulType::NONE;
+	MusicController* m_controller = nullptr;
 };
 
 
