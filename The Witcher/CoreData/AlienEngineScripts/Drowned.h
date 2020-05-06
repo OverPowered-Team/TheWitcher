@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
 
+class MusicController;
+
 class ALIEN_ENGINE_API Drowned : public Enemy {
 public:
 	enum(DrownedType,
@@ -40,6 +42,7 @@ public:
 public:
 	DrownedState state = DrownedState::NONE;
 	DrownedType drowned_type = DrownedType::NONE;
+	MusicController* m_controller = nullptr;
 	bool is_hide = true;
 };
 

@@ -9,24 +9,48 @@ MusicController::~MusicController()
 {
 }
 
-void MusicController::Start()
+void MusicController::Awake()
 {
 	emitter = this->GetComponent<ComponentAudioEmitter>();
+	emitter->StartSound("Play_Bad_News_Ahead");
+	emitter->StartSound("Play_Combat_Music");
+	emitter->StartSound("Play_KaerMorhen");
+	emitter->StartSound("Play_Ladies_of_the_Woods");
+	emitter->StartSound("Play_No_Surrender");
+	emitter->StartSound("Play_Random_Level1_Music");
+	emitter->StartSound("Play_Trial_Of_The_Grasses");
 	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
 	last_music = "Quiet";
 }
 
+void MusicController::Start()
+{
+	
+	t1 = Time::GetGameTime();
+}
+
 void MusicController::Update()
 {
-	if (is_combat && has_changed && enemies_in_sight.size() == 1)
+	LOG("CHILDS: %i", enemies_in_sight.size());
+	if (is_combat)
 	{
-		emitter->SetState("Interactive_Music_Lvl1", "Combat");
-		has_changed = !has_changed;
+		if (has_changed && enemies_in_sight.size() == 1) {
+			if ((*enemies_in_sight.begin())->game_object->GetComponent<Enemy>()->type == EnemyType::LESHEN)
+			{
+				emitter->SetState("Interactive_Music_Lvl1", "Boss");
+			}
+			else
+				emitter->SetState("Interactive_Music_Lvl1", "Combat");
+
+			has_changed = !has_changed;
+		}
+		//DecreaseMusicVolume();
 	}
 	else if(!is_combat && has_changed && enemies_in_sight.size() <= 0)
 	{
 		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str());
 		has_changed = !has_changed;
+		//already_minium = false;
 	}
 }
 
@@ -59,4 +83,20 @@ void MusicController::EnemyLostSight(Enemy* en)
 	is_combat = false;
 	has_changed = true;
 	enemies_in_sight.remove(en);
+}
+
+void MusicController::DecreaseMusicVolume()
+{
+	if (Time::GetGameTime() - t1 >= 1.f && !already_minium) {
+		dist += 0.1;
+		emitter->SetRTPCValue("CombatDistance", dist);
+		if (dist >= 100) {
+			dist = 0.f;
+			t1 = Time::GetGameTime();
+			LOG("Minimum combat volume");
+			already_minium = true;
+			return;
+		}
+			
+	}
 }

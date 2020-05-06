@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "MusicController.h"
 #include "ArrowScript.h"
 
 DrownedRange::DrownedRange() : Drowned()
@@ -25,12 +26,24 @@ void DrownedRange::UpdateEnemy()
 			animator->PlayState("GetOff");
 			state = DrownedState::GETOFF;
 			is_hide = false;
+			if (m_controller && !is_combat)
+			{
+				is_combat = true;
+				m_controller->EnemyInSight((Enemy*)this);
+			}
+		}
+		else {
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
 		}
 		break;
 
 	case DrownedState::GETOFF:
-		if (transform->GetGlobalScale().y < 0.006)
-			transform->AddScale(float3(0.0f, 0.0001f, 0.0f));
+		if (transform->GetGlobalScale().y < 0.3)
+			transform->AddScale(float3(0.0f, 0.01f, 0.0f));
 		else
 		{
 			state = DrownedState::ATTACK;
@@ -39,7 +52,7 @@ void DrownedRange::UpdateEnemy()
 		break;
 
 	case DrownedState::ATTACK:
-		if (distance < stats["HideDistance"].GetValue() /*|| distance > stats["AttackRange"].GetValue()*/)
+		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
 		{
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
@@ -50,7 +63,7 @@ void DrownedRange::UpdateEnemy()
 		if (Time::GetGameTime() - current_hide_time > max_hide_time)
 		{
 			animator->PlayState("Hide");
-			transform->AddScale(float3(0.0f, -0.005f, 0.0f));
+			transform->AddScale(float3(0.0f, -0.29f, 0.0f));
 			state = DrownedState::IDLE;
 			is_hide = true;
 		}
@@ -64,6 +77,11 @@ void DrownedRange::UpdateEnemy()
 		animator->PlayState("Dead");
 		last_player_hit->OnEnemyKill();
 		//audio_emitter->StartSound("DrownedDeath");
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 	}
 	}
 }
@@ -73,7 +91,7 @@ void DrownedRange::ShootSlime()
 	float3 slime_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(slime, slime_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
-	audio_emitter->StartSound("SoldierShoot");
+	audio_emitter->StartSound("Play_Drowner_Shot_Attack");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateProjectile());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);

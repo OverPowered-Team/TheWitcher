@@ -52,5 +52,8 @@ std::string TriggerFootsteps::GetNameByEnum(GroundMaterial mat)
 	case GroundMaterial::VEGETATION:
 		return name = "Vegetation";
 		break;
+	case GroundMaterial::WOOD:
+		return name = "Wood";
+		break;
 	}
 }

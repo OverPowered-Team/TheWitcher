@@ -1,4 +1,5 @@
 #include "Drowned.h"
+#include "MusicController.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 
@@ -65,7 +66,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 		animator->PlayState("Hit");
 		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		//audio_emitter->StartSound("GhoulHit");
+		audio_emitter->StartSound("Play_Drowner_Hit");
 	}
 
 	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
@@ -84,7 +85,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 		animator->SetBool("dead", true);
 		OnDeathHit();
 		state = DrownedState::DYING;
-		//audio_emitter->StartSound("GhoulDeath");
+		audio_emitter->StartSound("Play_Drowner_Hit");
 		player->OnEnemyKill();
 	}
 
@@ -93,10 +94,11 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 
 void Drowned::Stun(float time)
 {
-	if (state != DrownedState::STUNNED || state != DrownedState::DEAD)
+	if (state != DrownedState::STUNNED && state != DrownedState::DEAD)
 	{
 		state = DrownedState::STUNNED;
 		animator->PlayState("Dizzy");
+		audio_emitter->StartSound("Play_Dizzy_Enemy");
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
 	}
