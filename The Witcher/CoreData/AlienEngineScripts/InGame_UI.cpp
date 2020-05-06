@@ -25,6 +25,7 @@ void InGame_UI::Start()
 	in_game->SetEnable(true);
 	ulti_bar = game_object->GetChild("InGame")->GetChild("Ulti_Bar")->GetComponent<UltiBar>();
 	checkpoint_saved_text = in_game->GetChild("NewCheckpoint");
+	component_checkpoint_saved_text = checkpoint_saved_text->GetComponent<ComponentText>();
 	checkpoint_saved_text->SetEnable(false);
 }
 
@@ -37,9 +38,52 @@ void InGame_UI::Update()
 
 	if (checkpoint_saved_text->IsEnabled())
 	{
-		if (time_checkpoint + 2.f <= Time::GetGameTime())
+		float t = (Time::GetGameTime() - time_checkpoint) / 0.5f;
+		float lerp = 0.0f;
+
+		switch (checkpoint_state)
 		{
-			checkpoint_saved_text->SetEnable(false);
+		case CP_STATE::FADE_IN:
+		{
+			lerp = Maths::Lerp(0.f, 1.f, t);
+			break;
+		}
+		case CP_STATE::SHOW:
+		{
+			lerp = 1;
+			break;
+		}
+		case CP_STATE::FADE_OUT:
+		{
+			lerp = Maths::Lerp(1.f, 0.f, t);
+			break;
+		}
+		}
+
+		component_checkpoint_saved_text->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			switch (checkpoint_state)
+			{
+			case CP_STATE::FADE_IN:
+			{
+				checkpoint_state = CP_STATE::SHOW;
+				time_checkpoint = Time::GetGameTime() + 1.5f;
+				break;
+			}
+			case CP_STATE::SHOW:
+			{
+				time_checkpoint = Time::GetGameTime();
+				checkpoint_state = CP_STATE::FADE_OUT;
+				break;
+			}
+			case CP_STATE::FADE_OUT:
+			{
+				checkpoint_saved_text->SetEnable(false);
+				break;
+			}
+			}
 		}
 	}
 
