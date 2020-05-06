@@ -35,7 +35,13 @@ void MusicController::Update()
 	if (is_combat)
 	{
 		if (has_changed && enemies_in_sight.size() == 1) {
-			emitter->SetState("Interactive_Music_Lvl1", "Combat");
+			if ((*enemies_in_sight.begin())->game_object->GetComponent<Enemy>()->type == EnemyType::LESHEN)
+			{
+				emitter->SetState("Interactive_Music_Lvl1", "Boss");
+			}
+			else
+				emitter->SetState("Interactive_Music_Lvl1", "Combat");
+
 			has_changed = !has_changed;
 		}
 		//DecreaseMusicVolume();
