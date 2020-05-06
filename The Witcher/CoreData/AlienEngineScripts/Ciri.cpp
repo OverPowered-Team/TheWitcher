@@ -23,6 +23,9 @@ void Ciri::StartEnemy()
 	meshes = game_object->GetChild("Meshes");
 
 	fight_controller = GameObject::FindWithName("Ciri")->GetComponent<CiriFightController>();
+
+	state = Boss::BossState::NONE;
+	animator->PlayState("Spawn");
 }
 
 void Ciri::UpdateEnemy()
@@ -238,6 +241,9 @@ void Ciri::OnAnimationEnd(const char* name)
 	}
 	if (strcmp(name, "Scream") == 0) {
 		current_action->state = Boss::ActionState::ENDED;
+	}
+	if (strcmp(name, "Spawn") == 0) {
+		state = Boss::BossState::IDLE;
 	}
 }
 

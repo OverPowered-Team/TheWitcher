@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "CiriCloneController",
-        "NumStates": 8,
-        "NumTransitions": 6,
+        "NumStates": 9,
+        "NumTransitions": 7,
         "States": [
             {
                 "Name": "Idle",
@@ -43,6 +43,11 @@
                 "Name": "Hit",
                 "Speed": 2,
                 "Clip": "2539962578311142380"
+            },
+            {
+                "Name": "Spawn",
+                "Speed": 1,
+                "Clip": "16989326587477936744"
             }
         ],
         "Transitions": [
@@ -93,6 +98,15 @@
             },
             {
                 "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Spawn",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
