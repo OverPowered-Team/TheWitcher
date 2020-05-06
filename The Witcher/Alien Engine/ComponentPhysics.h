@@ -23,11 +23,12 @@ class __declspec(dllexport) ComponentPhysics : public Component
 	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
 	friend class UserControllerHitReport;
-
+	friend class RaycastHit;
 public:
 
 	ComponentPhysics(GameObject* go);
 	virtual ~ComponentPhysics();
+	ComponentRigidBody* GetRigidBody();
 
 private:
 

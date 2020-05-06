@@ -18,7 +18,7 @@ ComponentLightSpot::ComponentLightSpot(GameObject* attach) : Component(attach)
 	type = ComponentType::LIGHT_SPOT;
 	App->objects->spot_light_properites.push_back(&light_props);
 	App->objects->AddNumOfSpotLights();
-
+	light_props.enabled = enabled;
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
@@ -115,9 +115,16 @@ bool ComponentLightSpot::DrawInspector()
 	return true;
 }
 
+void ComponentLightSpot::OnEnable()
+{
+	enabled = true;
+	light_props.enabled = true;
+}
+
 void ComponentLightSpot::OnDisable()
 {
-
+	enabled = false;
+	light_props.enabled = false;
 }
 
 void ComponentLightSpot::Clone(Component* clone)

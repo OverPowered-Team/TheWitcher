@@ -50,6 +50,7 @@ void NilfSoldierShield::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
+		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
 		break;
 	}
@@ -128,9 +129,7 @@ void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
 				player->OnHit(this, GetDamaged(dmg_received, player));
-
-				if (state == NilfgaardSoldierState::DYING)
-					player->OnEnemyKill();
+				last_player_hit = player;
 
 				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 			}

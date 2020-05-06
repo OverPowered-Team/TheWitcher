@@ -116,15 +116,6 @@ void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 
 	// Reflection / Refraction --------------
 
-	// TODO: Change slots, probably used
-
-	/*glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetReflectionTexture());
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetRefractionTexture());
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->dvud_tex->id);*/
-
 	// --------------------------------------------------------------------- 
 	// Uniforms --------------
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
@@ -132,15 +123,12 @@ void ComponentMesh::DrawPolygon(ComponentCamera* camera)
 
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	material->used_shader->Unbind();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	material->UnbindMaterial();
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CCW);
-
-
 }
 
 void ComponentMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
@@ -178,14 +166,6 @@ void ComponentMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const floa
 	// Uniforms --------------
 	SetShadowUniforms(material, camera, ViewMat, ProjMatrix, position);
 
-	//TODO: Change slots, probably occupied
-
-	/*glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetReflectionTexture());
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->GetRefractionTexture());
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, App->objects->wfbos->dvud_tex->id);*/
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, NULL);
@@ -201,7 +181,9 @@ void ComponentMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const floa
 		glFrontFace(GL_CCW);
 
 
+
 }
+
 
 void ComponentMesh::DrawOutLine()
 {
@@ -289,7 +271,7 @@ void ComponentMesh::SetShadowUniforms(ResourceMaterial* resource_material, Compo
 
 void ComponentMesh::SetUniforms(ResourceMaterial* resource_material, ComponentCamera* camera)
 {
-	resource_material->used_shader->SetUniformMat4f("view", camera->GetViewMatrix4x4());
+resource_material->used_shader->SetUniformMat4f("view", camera->GetViewMatrix4x4());
 	resource_material->used_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
 	resource_material->used_shader->SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 	resource_material->used_shader->SetUniformFloat3("view_pos", camera->GetCameraPosition());

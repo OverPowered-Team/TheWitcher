@@ -443,9 +443,10 @@ void ParticleSystem::SetParticleGlobal(bool global)
 // -------- Init Properties ----------
 
 
-void ParticleSystem::SetParticleInitialSize(float size)
+void ParticleSystem::SetParticleInitialSize(float3 size)
 {
-	particleInfo.size = size;
+	particleInfo.size3D = size;
+	particleInfo.size = size.x;
 }
 
 void ParticleSystem::SetParticleInitialColor(const float4& initialColor)
@@ -458,13 +459,19 @@ void ParticleSystem::SetParticleInitialForce(const float3& initialForce)
 	particleInfo.force = initialForce;
 }
 
+void ParticleSystem::SetParticleInitialAngle(const float3& initialAngle)
+{
+	particleInfo.angle3D = initialAngle;
+}
+
 
 // -------- Final Properties ----------
 
 
-void ParticleSystem::SetParticleFinalSize(float size)
+void ParticleSystem::SetParticleFinalSize(float3 size)
 {
-	endInfo.size = size;
+	endInfo.size3D = size;
+	endInfo.size = size.x;
 }
 
 void ParticleSystem::SetParticleFinalColor(const float4& initialColor)

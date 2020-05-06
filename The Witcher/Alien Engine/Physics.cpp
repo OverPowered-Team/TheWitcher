@@ -2,32 +2,37 @@
 #include "Application.h"
 #include "ModulePhysX.h"
 
-bool Physics::Raycast(float3 origin, float3 unitDir, float maxDistance, PxRaycastBuffer& hit)
+void Physics::SetGravity(const float3 gravity)
 {
-	return App->physx->Raycast(origin, unitDir, maxDistance, hit);
+	App->physx->SetGravity(gravity);
 }
 
-const std::vector<PxRaycastHit>& Physics::RaycastAll(float3 origin, float3 unitDir, float maxDistance)
+float3 Physics::GetGravity()
 {
-	static std::vector<PxRaycastHit> hits;
-	hits = App->physx->RaycastAll(origin, unitDir, maxDistance);
-	return hits;
+	return App->physx->GetGravity();
+}
+
+bool Physics::Raycast(float3 origin, float3 unit_dir, float max_dist)
+{
+	return  App->physx->Raycast(origin, unit_dir, max_dist);
+}
+
+bool Physics::Raycast(float3 origin, float3 unit_dir, float max_dist, RaycastHit& hit)
+{
+	return  App->physx->Raycast(origin, unit_dir, max_dist, hit);
+}
+
+const std::vector<RaycastHit>& Physics::RaycastAll(float3 origin, float3 unitDir, float maxDistance)
+{
+	static std::vector<RaycastHit> ret;
+	ret = App->physx->RaycastAll(origin, unitDir, maxDistance);
+	return ret;
 }
 
 // TODO: uncomment this when we have heap change integred
 const std::vector<ComponentCollider*>& Physics::OverlapSphere(float3 center, float radius)
 {
-	static std::vector<ComponentCollider*> colliders;
-	colliders = App->physx->OverlapSphere(center, radius);
-	return colliders;
+	static  std::vector<ComponentCollider*> ret;
+	ret = App->physx->OverlapSphere(center, radius);
+	return ret;
 }
-
-//void Physics::SetGravity(const float3 gravity)
-//{
-//	App->physics->SetGravity(gravity);
-//}
-//
-//float3 Physics::GetGravity()
-//{
-//	return App->physics->GetGravity();
-//}

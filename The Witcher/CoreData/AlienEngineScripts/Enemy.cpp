@@ -217,7 +217,7 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	if (new_effect->vfx_on_apply != "")
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
-			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
+			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
@@ -263,7 +263,7 @@ void Enemy::StopHitFreeze(float speed)
 	animator->SetCurrentStateSpeed(speed);
 }
 
-void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
 {
 	if (particle_name == "")
 		return;
@@ -278,7 +278,9 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, Gam
 		}
 	}
 
-	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+	parent = parent != nullptr ? parent : this->game_object;
+	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
 	particles.push_back(new_particle);
 }
 

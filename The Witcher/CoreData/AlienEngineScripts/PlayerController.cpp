@@ -295,7 +295,7 @@ void PlayerController::PlayAllowParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+		//SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
 		/*particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
 			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name,
 				transform->GetGlobalPosition(), this->game_object)));*/
@@ -478,8 +478,8 @@ void PlayerController::AddEffect(Effect* _effect)
 	effects.push_back(_effect);
 
 	if (std::strcmp(_effect->vfx_on_apply.c_str(), "") != 0)
-		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply, 
-			particle_spawn_positions[_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
+		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply,
+			particle_spawn_positions[_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
 
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
@@ -548,6 +548,11 @@ bool PlayerController::CheckBoundaries()
 	Frustum fake_frustum = camera->frustum;
 	fake_frustum.pos = next_cam_pos;
 
+	bool contained = false;
+	if (camera->frustum.Contains(fake_aabb)) {
+		contained = true;
+	}
+
 	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponent<CameraMovement>();
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
@@ -562,14 +567,31 @@ bool PlayerController::CheckBoundaries()
 				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					player_data.speed = float3::zero();
-					return false;
+					if (contained) {
+						if (cam->state == CameraMovement::CameraState::FREE)
+							return true;
+
+						cam->prev_state = cam->state;
+						cam->state = CameraMovement::CameraState::FREE;
+						if (cam->players[0]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition()) > cam->players[1]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition())) {
+							cam->closest_player = 1;
+						}
+						else
+							cam->closest_player = 0;
+
+						cam->prev_middle = cam->transform->GetGlobalPosition() - cam->players[cam->closest_player]->transform->GetGlobalPosition();
+						return true;
+					}
+					else {
+						player_data.speed = float3::zero();
+						return false;
+					}
 				}
 			}
 		}
 	}
 
-	if (camera->frustum.Contains(fake_aabb)) {
+	if (contained) {
 		return true;
 	}
 	else {
@@ -610,7 +632,7 @@ void PlayerController::RemoveFreeze(float speed)
 	is_immune = false;
 }
 
-void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
 {
 	if (particle_name == "")
 		return;
@@ -624,8 +646,10 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 			return;
 		}
 	}
+	parent = parent != nullptr ? parent : this->game_object;
+	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
 
-	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
 	particles.push_back(new_particle);
 	/*if (particles[particle_name])
 	{
@@ -644,15 +668,17 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	if (particle_name == "")
 		return;
 
-	for (auto it = particles.begin(); it != particles.end(); ++it)
+	for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
 			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
 			particles.erase(it);
-			return;
 		}
+		else
+			++it;
 	}
+
 	/*if (particles[particle_name])
 	{
 		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
@@ -705,8 +731,8 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
-				if (dash_coll->dash_particles[(*it)->name])
-					dash_coll->dash_particles[(*it)->name]->SetEnable(true);
+				if (dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name])
+					dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name]->SetEnable(true);
 			}
 		}
 	}
@@ -718,27 +744,35 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	{
 		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
 
-		if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+		if (!bonfire->has_been_used)
 		{
-			Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
-			HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
-		}
-
-		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
-		{
-			if (player_data.stats["Health"].GetMaxValue() > player_data.stats["Health"].GetValue()
-				|| player_data.stats["Chaos"].GetMaxValue() > player_data.stats["Chaos"].GetValue())
+			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
 			{
-				// Heal
-				player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
-				player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
-				HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-				HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
-
-
-				// Player Used this Bonfire
-				bonfire->SetBonfireUsed(this);
+				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
 			}
+
+			auto player = GameManager::instance->player_manager->players.begin();
+			for (; player != GameManager::instance->player_manager->players.end(); ++player)
+			{
+				if (!GameManager::instance->player_manager->players_dead.empty() && GameManager::instance->player_manager->players_dead[0] == (*player))
+				{
+					(*player)->Revive(1);
+					GameObject::Destroy((*player)->game_object->GetChild("ReviveMinigame"));
+					(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+					(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+					continue;
+				}
+
+				// Heal
+				(*player)->player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+				(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+			}
+
+			// Player Used this Bonfire
+			bonfire->SetBonfireUsed();
 		}
 	}
 
@@ -761,8 +795,11 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 void PlayerController::OnEnemyKill()
 {
+	LOG("ENEMY KILL");
 	player_data.total_kills++;
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
 void PlayerController::OnUltimateActivation(float value)

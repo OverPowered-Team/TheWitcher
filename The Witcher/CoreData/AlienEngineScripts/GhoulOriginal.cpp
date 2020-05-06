@@ -1,4 +1,5 @@
 #include "GhoulOriginal.h"
+#include "PlayerController.h"
 #include "EnemyManager.h"
 
 GhoulOriginal::GhoulOriginal() : Ghoul()
@@ -38,6 +39,7 @@ void GhoulOriginal::UpdateEnemy()
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
         animator->PlayState("Death");
         audio_emitter->StartSound("GhoulDeath");
+        last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
         break;
     }

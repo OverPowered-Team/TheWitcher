@@ -89,9 +89,9 @@ public:
 
 	uint GetMSAA();
 
-	uint GetTexture();
-
 	uint GetFBO();
+
+	uint GetTexture();
 
 	bool ScreenPointToViewport(float2& screen_point);
 

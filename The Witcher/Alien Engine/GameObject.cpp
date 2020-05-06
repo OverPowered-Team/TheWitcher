@@ -92,12 +92,14 @@ GameObject::GameObject(bool ignore_transform)
 
 GameObject::~GameObject()
 {
+#ifndef GAME_VERSION
 	if (std::find(App->objects->GetSelectedObjects().begin(), App->objects->GetSelectedObjects().end(), this) != App->objects->GetSelectedObjects().end()) {
 		App->objects->DeselectObject(this);
 		App->ui->panel_scene->gizmo_curve = false;
 		App->ui->panel_scene->curve = nullptr;
 		App->ui->panel_scene->curve_index = 0;
 	}
+#endif
 
 	App->objects->octree.Remove(this);
 
@@ -139,15 +141,20 @@ GameObject* GameObject::GetChild(const int& index)
 
 GameObject* GameObject::GetChildRecursive(const char* child_name)
 {
+	GameObject* ret = nullptr;
 	auto item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
+			if (ret != nullptr) {
+				return ret;
+			}
 			if (App->StringCmp((*item)->name, child_name)) {
 				return (*item);
 			}
-			(*item)->GetChildRecursive(child_name);
+			ret = (*item)->GetChildRecursive(child_name);
 		}
 	}
+	return ret;
 }
 
 std::vector<GameObject*>& GameObject::GetChildren()
@@ -177,6 +184,7 @@ bool GameObject::IsEnabled() const
 void GameObject::PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
 {
 	OPTICK_EVENT();
+	ComponentTransform* transform = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 	ComponentMaterial* material = (ComponentMaterial*)GetComponent(ComponentType::MATERIAL);
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 
@@ -193,15 +201,17 @@ void GameObject::PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, 
 	}
 }
 
-void GameObject::DrawScene(ComponentCamera* camera, const float4& clip_plane)
+
+void GameObject::DrawScene(ComponentCamera* camera)
 {
 	OPTICK_EVENT();
-
 	for (Component* component : components)
 	{
 		component->DrawScene(camera);
 	}
 }
+
+
 
 void GameObject::PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
 {
@@ -212,11 +222,6 @@ void GameObject::PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, c
 	if (mesh == nullptr) //not sure if this is the best solution
 		mesh = (ComponentMesh*)GetComponent(ComponentType::DEFORMABLE_MESH);
 
-	/*if (material != nullptr && material->IsEnabled() && mesh != nullptr && mesh->IsEnabled())
-	{
-		material->BindTexture();
-	}*/
-
 	if (mesh != nullptr && mesh->IsEnabled())
 	{
 		if (material == nullptr || (material != nullptr && !material->IsEnabled())) // set the basic color if the GameObject hasn't a material
@@ -226,7 +231,8 @@ void GameObject::PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, c
 	}
 }
 
-void GameObject::DrawGame(ComponentCamera* camera, const float4& clip_plane)
+
+void GameObject::DrawGame(ComponentCamera* camera)
 {
 	OPTICK_EVENT();
 
@@ -234,8 +240,8 @@ void GameObject::DrawGame(ComponentCamera* camera, const float4& clip_plane)
 	{
 		component->DrawGame(camera);
 	}
-
 }
+
 
 void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {

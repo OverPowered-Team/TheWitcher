@@ -7,6 +7,7 @@ class ComponentCamera;
 class GameObject;
 class OctreeNode;
 class Viewport;
+struct ShortCut;
 
 class ModuleCamera3D : public Module
 {
@@ -27,7 +28,7 @@ public:
 
 	void CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, GameObject* go, const LineSegment &ray);
 	void CreateObjectsHitMap(std::vector<std::pair<float, GameObject*>>* hits, OctreeNode* node, const LineSegment &ray);
-	bool TestTrianglesIntersections(GameObject* object, const LineSegment& ray);
+	bool TestTrianglesIntersections(GameObject* object, const LineSegment& ray, float& triangle_dist, float aabb_dist);
 	static bool SortByDistance(const std::pair<float, GameObject*> pair1, const std::pair<float, GameObject*> pair2);
 	
 	void PanelConfigOption();
@@ -77,6 +78,6 @@ private:
 	float lerp_trans_speed = 6.f;
 	float lerp_rot_speed = 10.f;
 	float max_distance;
-	
+	ShortCut* focus_short;
 
 };
