@@ -2,8 +2,7 @@
 
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
-
-class Enemy;
+#include "Drowned.h"
 
 class ALIEN_ENGINE_API DrownedGrab : public Drowned {
 
