@@ -77,14 +77,7 @@ void InGame_UI::Update()
 				float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / 
 					(float)GameManager::instance->player_manager->max_ultimate_charge;
 
-				if (new_value != 1)
-				{
-					ulti_bar->UpdateBar(new_value);
-				}
-				else
-				{
-					ulti_bar->MaxBar();
-				}
+				ulti_bar->UpdateBar(new_value);
 				
 				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;
