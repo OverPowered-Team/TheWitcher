@@ -59,8 +59,8 @@ void CiriFightController::UpdatePhaseZero()
 void CiriFightController::FinishPhaseZero()
 {
 	phase++;
-	ciri_clones.push_back((Ciri*)(GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition())));
-	ciri_clones.push_back((Ciri*)(GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition())));
+	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
 	this->GetComponent<ComponentCharacterController>()->Move(float3::zero());
 }
 
@@ -70,7 +70,7 @@ void CiriFightController::UpdatePhaseOne()
 
 void CiriFightController::FinishPhaseOne()
 {
-	ciri_clones.push_back((Ciri*)(GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition())));
+	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
 }
 
 void CiriFightController::UpdatePhaseTwo()
@@ -87,4 +87,26 @@ void CiriFightController::UpdatePhaseThree()
 
 void CiriFightController::FinishPhaseThree()
 {
+}
+
+void CiriFightController::ChangeToPhase2()
+{
+	phase_change = true;
+	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+}
+
+void CiriFightController::ChangeToPhase3()
+{
+	phase_change = true;
+}
+
+void CiriFightController::OnCloneDead(GameObject* clone)
+{
+	clones_dead++;
+	if (clones_dead == 2) {
+		ChangeToPhase2();
+	}
+	else if (clones_dead == 5)
+		ChangeToPhase3();
+	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
 }

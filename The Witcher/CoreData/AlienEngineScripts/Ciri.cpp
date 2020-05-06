@@ -40,13 +40,28 @@ void Ciri::CleanUpEnemy()
 
 float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
+	if (stats["Health"].GetValue() == 0.0F) {
+		state = Boss::BossState::DYING;
+		animator->PlayState("Death");
+	}
+	else {
+		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+			animator->PlayState("Hit");
+			LOG("animation speed %f", animator->GetCurrentStateSpeed());
+			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			//if(animator->GetCurrentStateSpeed() > player->attacks->GetCurrentAttack()->info.freeze_time)
+			//	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+			if (current_action)current_action->state = Boss::ActionState::ENDED;
+			SetIdleState();
+		}
 
-	if (can_get_interrupted) {
-		animator->PlayState("Hit");
-		if (current_action)current_action->state = Boss::ActionState::ENDED;
-		else
-			LOG("ASDSADASF");
-		SetIdleState();
+		if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+		{
+			stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			can_get_interrupted = false;
+		}
 	}
 
 	return Boss::GetDamaged(dmg, player);
@@ -228,15 +243,18 @@ void Ciri::OnAnimationEnd(const char* name)
 {
 	if (strcmp(name, "Combo3") == 0) {
 		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		ReleaseParticle("EnemyAttackParticle");
 		EndComboAction(nullptr);
 	}
 	if (strcmp(name, "Combo") == 0) {
 		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		ReleaseParticle("EnemyAttackParticle");
 	}
 	if (strcmp(name, "Combo2") == 0) {
 		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		ReleaseParticle("EnemyAttackParticle");
 	}
 	if (strcmp(name, "Scream") == 0) {
@@ -245,11 +263,15 @@ void Ciri::OnAnimationEnd(const char* name)
 	if (strcmp(name, "Spawn") == 0) {
 		state = Boss::BossState::IDLE;
 	}
+	
+	if (strcmp(name, "Death") == 0) {
+		fight_controller->OnCloneDead(this->game_object);
+	}
 }
 
 void Ciri::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0) {
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
 		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
 		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 		{
@@ -258,9 +280,14 @@ void Ciri::OnTriggerEnter(ComponentCollider* collider)
 			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
 
 			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-
-			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 		}
+	}
+
+	if (can_get_interrupted) {
+		LOG("CAN GET INTERRUPTED");
+	}
+	else {
+		LOG("CANT GET INTERRUPTED");
 	}
 }
 
@@ -268,4 +295,26 @@ void Ciri::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), mini_scream_range, Color::Cyan()); //snap_range
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), scream_range, Color::Cyan()); //snap_range
+}
+
+void Ciri::SetStats(const char* json)
+{
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+	if (stat)
+	{
+		stats["Health"] = Stat("Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat->GetNumber("MaxHitSpeed"));
+	}
+
+	JSONfilepack::FreeJSON(stat);
 }

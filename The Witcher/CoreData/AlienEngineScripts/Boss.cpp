@@ -57,7 +57,7 @@ void Boss::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = BossState::DEAD;
 	}
-								 break;
+	break;
 	case Boss::BossState::DEAD:
 		break;
 	default:
@@ -153,7 +153,7 @@ void Boss::EndAction(GameObject* go_ended)
 
 void Boss::SetStats(const char* json)
 {
-	Enemy::SetStats(json);
+
 }
 
 void Boss::OrientToPlayer(int target)

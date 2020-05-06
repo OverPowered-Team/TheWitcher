@@ -55,6 +55,8 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 
 	void OnDrawGizmosSelected();
+	
+	void SetStats(const char* json) override;
 
 };
 

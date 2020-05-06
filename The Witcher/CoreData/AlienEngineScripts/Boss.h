@@ -77,7 +77,7 @@ public:
 	virtual ActionState UpdateAction();
 	virtual void EndAction(GameObject* go_ended);
 
-	void SetStats(const char* json) override;
+	virtual void SetStats(const char* json) override;
 
 	void OrientToPlayer(int target);
 	void OrientToPlayerWithoutSlerp(int target);

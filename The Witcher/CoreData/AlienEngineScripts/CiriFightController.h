@@ -8,7 +8,6 @@
 
 class ALIEN_ENGINE_API CiriFightController : public Alien {
 public:
-	std::vector<Ciri*> ciri_clones;
 	bool fight_started = false;
 	float ciri_clones_scream_cd = 15.0f;
 	float scream_cd_timer = 0.0f;
@@ -16,6 +15,8 @@ public:
 	float phase_0_timer = 0.0f;
 	float phase_0_time = 3.0f;
 	bool phase_change = false;
+
+	int clones_dead = 0;
 
 	int phase = 0;
 
@@ -36,6 +37,11 @@ public:
 	void FinishPhaseTwo();
 	void UpdatePhaseThree();
 	void FinishPhaseThree();
+
+	void ChangeToPhase2();
+	void ChangeToPhase3();
+
+	void OnCloneDead(GameObject* clone);
 
 };
 
