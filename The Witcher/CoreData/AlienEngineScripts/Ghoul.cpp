@@ -175,7 +175,6 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
         OnDeathHit();
         state = GhoulState::DYING;
         audio_emitter->StartSound("GhoulDeath");
-        player->OnEnemyKill();
     }
 
     return damage;
@@ -189,9 +188,7 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
         {
             float dmg_received = player->attacks->GetCurrentDMG();
             player->OnHit(this, GetDamaged(dmg_received, player));
-
-            if (state == GhoulState::DYING)
-                player->OnEnemyKill();
+            last_player_hit = player;
 
             HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
         }

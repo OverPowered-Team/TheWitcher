@@ -38,6 +38,11 @@ ComponentPhysics::~ComponentPhysics()
 	rigid_body = nullptr;
 }
 
+ComponentRigidBody* ComponentPhysics::GetRigidBody()
+{
+	return (rigid_body && IsDynamic()) ? rigid_body : nullptr;
+}
+
 void ComponentPhysics::Update()
 {
 	if (IsDisabled()) return;

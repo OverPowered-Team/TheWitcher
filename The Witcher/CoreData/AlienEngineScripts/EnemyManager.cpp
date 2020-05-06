@@ -130,3 +130,8 @@ void EnemyManager::DeleteEnemy(Enemy* enemy)
 	}
 }
 
+const std::vector<Enemy*>& EnemyManager::GetEnemies()
+{
+	return (enemies);
+}
+

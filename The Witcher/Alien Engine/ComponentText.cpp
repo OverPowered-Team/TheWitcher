@@ -160,7 +160,6 @@ void ComponentText::Draw(bool isGame)
 		font->text_shader->Bind();
 		font->text_shader->SetUniform1i("isGame", isGame);
 		font->text_shader->SetUniform4f("textColor", float4(current_color.r, current_color.g, current_color.b, current_color.a));
-		font->text_shader->SetUniform1f("alpha", current_color.a);
 
 		#ifndef GAME_VERSION
 		glm::mat4 projection = glm::ortho(0.0f, App->ui->panel_game->width, 0.0f, App->ui->panel_game->height);

@@ -3,6 +3,12 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+enum(KILL_COUNT_STATE,
+	FADING_IN,
+	SHOWING,
+	FADING_OUT
+	);
+
 class ALIEN_ENGINE_API UI_Char_Frame : public Alien {
 
 public:
@@ -16,6 +22,8 @@ public:
 	void LifeChange(float life_change, float max_life);
 	void ManaChange(float mana_change, float max_mana);
 
+	void StartFadeKillCount(int new_kill_count);
+
 public:
 
 	enum(CHARACTER,
@@ -27,6 +35,12 @@ public:
 
 	// Lerps
 	float change_time = 0.150f;
+	float killcount_time_to_lerp = 0.5f;
+
+	// KillCount
+	GameObject* kill_count = nullptr;
+	ComponentText* kill_count_number = nullptr;
+	ComponentText* kill_count_number_X = nullptr;
 
 private:
 
@@ -54,6 +68,11 @@ private:
 	float chaos_time = 0.0f;
 	bool changing_chaos = false;
 
+	// Kill Count
+	bool is_showing_kill_count = false;
+	float killcount_lerp_time = 0.0f;
+	KILL_COUNT_STATE kc_state = KILL_COUNT_STATE::FADING_IN;
+
 	// HUD Components
 	GameObject* geralt_img = nullptr;
 	GameObject* yen_img = nullptr;
@@ -69,6 +88,7 @@ ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {
 
 	SHOW_IN_INSPECTOR_AS_ENUM(UI_Char_Frame::CHARACTER, alien->character);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->change_time);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->killcount_time_to_lerp);
 
 	return alien;
 } 

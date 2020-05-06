@@ -30,8 +30,10 @@ public:
 	float3 GetGravity();
 
 	//* ---------- SCENE QUERIES ------------*//
-	bool Raycast(float3 origin, float3 unitDir, float maxDistance, PxRaycastBuffer& hit) const; // TODO: make own pxraycastbuffer data to abstract from physx
-	const std::vector<PxRaycastHit> RaycastAll(float3 origin, float3 unitDir, float maxDistance) const;
+
+	bool Raycast(float3 origin, float3 unit_dir, float max_distance) const;
+	bool Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit) const;
+	const std::vector<RaycastHit> RaycastAll(float3 origin, float3 unitDir, float maxDistance) const;
 	const std::vector<ComponentCollider*> OverlapSphere(float3 center, float radius) const;
 
 private:
@@ -68,6 +70,7 @@ public:
 
 private:
 
+	float accumulator = 0.f;
 	float3 gravity = float3(0.f, -9.81, 0.f);
 
 	HMODULE foundation_lib = nullptr;
@@ -81,7 +84,6 @@ private:
 	const char* gpu_lib_path = APP_BIN_DIR DLL_DIR "PhysXGpu_" DLL_NAME_BITS ".dll";
 	const char* cooking_lib_path = APP_BIN_DIR DLL_DIR "PhysXCooking_" DLL_NAME_BITS ".dll";
 
-private:
 	// delay load hooks
 	CustomDelayLoadHook			delayLoadHook;
 	CustomGpuLoadHook			gpuLoadHook;

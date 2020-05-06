@@ -24,12 +24,12 @@
         }
       ],
       "activation_frame": 30,
-      "movement_strength": 0.6,
+      "movement_strength": 0.0,
       "max_distance_traveled": 3.0,
       "snap_detection_range": 5.5,
       "min_distance_to_target": 3.0,
       "next_attack_light": "LL",
-      "next_attack_heavy": "End",
+      "next_attack_heavy": "LH",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test"
@@ -58,11 +58,11 @@
         }
       ],
       "activation_frame": 25,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "max_distance_traveled": 4.5,
       "snap_detection_range": 5.5,
       "next_attack_light": "LHL",
-      "next_attack_heavy": "End",
+      "next_attack_heavy": "LHH",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test"
@@ -92,7 +92,7 @@
         }
       ],
       "activation_frame": 10,
-      "movement_strength": 1.8,
+      "movement_strength": 0.0,
       "max_distance_traveled": 3.0,
       "snap_detection_range": 5.5,
       "min_distance_to_target": 3.0,
@@ -127,12 +127,46 @@
         }
       ],
       "activation_frame": 18,
-      "movement_strength": 1.8,
+      "movement_strength": 0,
       "max_distance_traveled": 3.0,
       "snap_detection_range": 5.5,
       "min_distance_to_target": 3.0,
       "next_attack_light": "LLLL",
       "next_attack_heavy": "LLLH",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "LHH",
+      "button": "LHH",
+      "particle_name": "p_yen_atk_2",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "collider": {
+        "pos_x": 17.40,
+        "pos_y": 93.950,
+        "pos_z": 234.400,
+        "width": 275.700,
+        "height": 124.700,
+        "depth": 362.200
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.9
+        }
+      ],
+      "activation_frame": 18,
+      "movement_strength": 0,
+      "max_distance_traveled": 3.0,
+      "snap_detection_range": 5.5,
+      "min_distance_to_target": 3.0,
+      "next_attack_light": "End",
+      "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test"
@@ -196,7 +230,7 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 3.0,
-      "movement_strength": 10.0,
+      "movement_strength": -0.01,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "LLHL",
@@ -264,7 +298,7 @@
       ],
       "activation_frame": 37,
       "max_distance_traveled": -1.0,
-      "movement_strength": -3,
+      "movement_strength": 0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "LLLLL",
@@ -298,13 +332,13 @@
       ],
       "activation_frame": 39,
       "max_distance_traveled": 3.0,
-      "movement_strength": 0.6,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.1,
-      "cam_shake": 0,
+      "cam_shake": 1,
       "allow_particle": "allow_test"
     },
     {
@@ -401,7 +435,7 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "HL",
@@ -435,7 +469,7 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "HLL",
@@ -469,13 +503,47 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
+      "min_distance_to_target": 3.0,
+      "snap_detection_range": 5.5,
+      "next_attack_light": "End",
+      "next_attack_heavy": "HLLH",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "HLLH",
+      "button": "HLLH",
+      "particle_name": "p_attack",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.8
+        }
+      ],
+      "activation_frame": 25,
+      "max_distance_traveled": 2.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.1,
-      "cam_shake": 0,
+      "cam_shake": 1,
       "allow_particle": "allow_test"
     },
     {
@@ -503,10 +571,10 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
-      "next_attack_light": "End",
+      "next_attack_light": "HHL",
       "next_attack_heavy": "HHH",
       "freeze_time": 0.1,
       "cam_shake": 0,
@@ -537,11 +605,79 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "End",
       "next_attack_heavy": "HHHH",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "HHL",
+      "button": "HHL",
+      "particle_name": "p_attack",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.8
+        }
+      ],
+      "activation_frame": 25,
+      "max_distance_traveled": 2.0,
+      "movement_strength": 0.0,
+      "min_distance_to_target": 3.0,
+      "snap_detection_range": 5.5,
+      "next_attack_light": "HHLL",
+      "next_attack_heavy": "End",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "HHLL",
+      "button": "HHLL",
+      "particle_name": "p_attack",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "collider": {
+        "pos_x": 0,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 200,
+        "height": 200,
+        "depth": 200
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.8
+        }
+      ],
+      "activation_frame": 25,
+      "max_distance_traveled": 2.0,
+      "movement_strength": 0.0,
+      "min_distance_to_target": 3.0,
+      "snap_detection_range": 5.5,
+      "next_attack_light": "End",
+      "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test"
@@ -571,7 +707,7 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "End",
@@ -606,7 +742,7 @@
       ],
       "activation_frame": 25,
       "max_distance_traveled": 2.0,
-      "movement_strength": 10.0,
+      "movement_strength": 0.0,
       "min_distance_to_target": 3.0,
       "snap_detection_range": 5.5,
       "next_attack_light": "End",
@@ -664,7 +800,7 @@
         { "tag": "Chaining" }
       ],
       "name": "Chain",
-      "particle_name": "p_flamethrower",
+      "particle_name": "p_lightning_bolt",
       "particle_pos": {
         "pos_x": -0.25,
         "pos_y": 0.5,

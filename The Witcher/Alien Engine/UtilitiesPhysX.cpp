@@ -74,8 +74,8 @@ void SimulationEventCallback::onContact(const PxContactPairHeader& pair_header, 
 		else if (contact_pair.events & physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS) callback_type = CallbackType::STAY;
 		else if (contact_pair.events & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)     callback_type = CallbackType::EXIT;
 
-		rb_A = (collider_B->physics->IsDynamic()) ? collider_B->physics->rigid_body : nullptr;
-		rb_B = (collider_A->physics->IsDynamic()) ? collider_A->physics->rigid_body : nullptr;
+		rb_A = collider_B->physics->GetRigidBody();
+		rb_B = collider_A->physics->GetRigidBody();
 
 		if (contact_pair.contactCount > 0)
 		{
@@ -223,3 +223,20 @@ PxQueryHitType::Enum ControllerFilterCallback::postFilter(const PxFilterData& fi
 }
 
 LayerChangedData::LayerChangedData(int layer_0, int layer_1) : layer_0(layer_0), layer_1(layer_1) {}
+
+ContactPoint::ContactPoint(const float3& normal, const float3& point, float separation, ComponentCollider* this_collider, ComponentCollider* other_collider) :
+	normal(normal), point(point), separation(separation), this_collider(this_collider), other_collider(other_collider) {}
+
+Collision::Collision(ComponentCollider* collider, ComponentRigidBody* rigid_body, ComponentTransform* transform, const std::vector<ContactPoint>& contancts,
+	uint num_contact, GameObject* game_object, const float3& impulse, const float3& relative_velocity) :
+	collider(collider), rigid_body(rigid_body), transform(transform), contancts(contancts), num_contact(num_contact), game_object(game_object), impulse(impulse), relative_velocity(relative_velocity) {}
+
+void RaycastHit::SetRaycastHit(const PxRaycastHit& _hit) {
+	collider = (ComponentCollider*)_hit.shape->userData;
+	rigid_body = collider->physics->GetRigidBody();
+	transform = collider->physics->transform;
+	distance = _hit.distance;
+	normal = PXVEC3_TO_F3(_hit.normal);
+	point = PXVEC3_TO_F3(_hit.position);
+	texture_coords = float2(_hit.u, _hit.v);
+}

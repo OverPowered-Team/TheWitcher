@@ -8,6 +8,8 @@
 #include "EnemyManager.h"
 #include "MusicController.h"
 
+#include "InGame_UI.h"
+
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
@@ -113,8 +115,6 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
 				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
 			}
-
-			player->OnEnemyKill();
 		}
 	}
 
@@ -239,6 +239,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
 		state = NilfgaardSoldierState::DYING;
+		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 }
@@ -254,9 +255,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
 
 			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-
-			if (state == NilfgaardSoldierState::DYING)
-				player->OnEnemyKill();
+			last_player_hit = player;
 
 			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 		}

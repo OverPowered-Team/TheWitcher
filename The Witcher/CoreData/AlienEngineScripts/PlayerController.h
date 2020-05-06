@@ -10,6 +10,7 @@ class Relic;
 class Effect;
 class Enemy;
 class CameraShake;
+class InGame_UI;
 
 class ALIEN_ENGINE_API PlayerController : public Alien {
 	friend class IdleState;
@@ -98,7 +99,7 @@ public:
 	void HitFreeze(float freeze_time);
 	void RemoveFreeze(float speed);
 
-	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 
 	void ReleaseParticle(std::string particle_name);
 
@@ -170,6 +171,7 @@ public:
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
+	AABB max_aabb;
 private:
 	float angle = 0.0f;
 	float timer = 0.f;
@@ -177,7 +179,6 @@ private:
 	ComponentAudioEmitter* audio = nullptr;
 	ComponentCamera* camera = nullptr;
 
-	AABB max_aabb;
 	CameraShake* shake = nullptr;
 	float last_regen_tick = 0.0f;
 };

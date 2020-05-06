@@ -299,14 +299,14 @@ uint Viewport::GetMSAA()
 	return fbo->GetMSAA();
 }
 
-uint Viewport::GetTexture()
-{
-	return fbo->GetFBOTexture();
-}
-
 uint Viewport::GetFBO()
 {
 	return fbo->GetFBO();
+}
+
+uint Viewport::GetTexture()
+{
+	return fbo->GetFBOTexture();
 }
 
 bool Viewport::CanRender()
@@ -324,7 +324,6 @@ float2 Viewport::GetSize() const
 	float2 size = float2(width, height);
 	return size;
 }
-
 // Return if screen point is inside viewport
 
 bool Viewport::ScreenPointToViewport(float2& input_output)
