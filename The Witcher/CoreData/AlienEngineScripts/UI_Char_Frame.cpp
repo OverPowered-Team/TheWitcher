@@ -44,6 +44,7 @@ void UI_Char_Frame::Start()
 	mana_bar = game_object->GetChild("Mana")->GetComponent<ComponentBar>();
 	kill_count = game_object->GetChild("Killcount");
 	kill_count_number = kill_count->GetComponent<ComponentText>();
+	kill_count_number_X = kill_count->GetChild("x")->GetComponent<ComponentText>();
 	kill_count->SetEnable(false);
 }
 
@@ -82,9 +83,9 @@ void UI_Char_Frame::Update()
 		LowLifeGlow();
 	}
 
-	if (is_showing_kill_count)
+	if (kill_count->IsEnabled())
 	{
-		float t = (Time::GetGameTime() - killcount_lerp_time) / 0.5f;
+		float t = (Time::GetGameTime() - killcount_lerp_time) / killcount_time_to_lerp;
 		float lerp = 0.0f;
 
 		switch (kc_state)
@@ -107,7 +108,8 @@ void UI_Char_Frame::Update()
 		}
 
 		// Set text alpha
-		//kill_count_number
+		kill_count_number->SetAlpha(lerp);
+		kill_count_number_X->SetAlpha(lerp);
 
 		if (t >= 1)
 		{
@@ -127,8 +129,8 @@ void UI_Char_Frame::Update()
 			}
 			case KILL_COUNT_STATE::FADING_OUT:
 			{
-				is_showing_kill_count = false;
 				kill_count->SetEnable(false);
+				kc_state = KILL_COUNT_STATE::FADING_IN;
 				break;
 			}
 			}
@@ -194,16 +196,31 @@ void UI_Char_Frame::StartFadeKillCount(int new_kill_count)
 		kill_count_number->SetText(kills.c_str());
 	}
 
-	is_showing_kill_count = true;
+	kill_count->SetEnable(true);
 
-	if (kc_state != KILL_COUNT_STATE::SHOWING)
+	switch (kc_state)
 	{
-		kc_state = KILL_COUNT_STATE::FADING_IN;
-		killcount_lerp_time = Time::GetGameTime();
+	case KILL_COUNT_STATE::FADING_IN:
+	{
+		if (((Time::GetGameTime() - killcount_lerp_time) / killcount_time_to_lerp) >= 1.f)
+		{
+			kill_count_number->SetAlpha(0);
+			kill_count_number_X->SetAlpha(0);
+			killcount_lerp_time = Time::GetGameTime();
+		}
+		break;
 	}
-	else
+	case KILL_COUNT_STATE::SHOWING:
 	{
 		killcount_lerp_time = Time::GetGameTime() + 1.5f;
+		break;
+	}
+	case KILL_COUNT_STATE::FADING_OUT:
+	{
+		kc_state = KILL_COUNT_STATE::FADING_IN;
+		killcount_lerp_time = Time::GetGameTime() - kill_count_number->current_color.a * killcount_time_to_lerp;
+		break;
+	}
 	}
 }
 

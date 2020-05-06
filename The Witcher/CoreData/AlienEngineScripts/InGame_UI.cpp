@@ -77,7 +77,7 @@ void InGame_UI::Update()
 				float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / 
 					(float)GameManager::instance->player_manager->max_ultimate_charge;
 
-				if (new_value != 1)
+				if (new_value != 1.0f)
 				{
 					ulti_bar->UpdateBar(new_value);
 				}
