@@ -655,6 +655,9 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
 
+	if (new_particle == nullptr)
+		return;
+
 	particles.push_back(new_particle);
 	/*if (particles[particle_name])
 	{

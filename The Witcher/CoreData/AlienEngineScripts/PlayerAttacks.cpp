@@ -615,6 +615,8 @@ void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 	
 	float3 direction = (to - from).Normalized();
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.chain_particle, mid_point);
+	if (new_particle == nullptr)
+		return;
 
 	Quat rot = new_particle->transform->GetGlobalRotation().LookAt(new_particle->transform->forward, direction, new_particle->transform->up, float3::unitY());
 	new_particle->transform->SetGlobalRotation(rot);
