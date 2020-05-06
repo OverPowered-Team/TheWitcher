@@ -116,7 +116,7 @@ RelicBehaviour::~RelicBehaviour()
 void RelicBehaviour::Start()
 {
 	std::string json_str;
-
+	
 	switch (relic_type)
 	{
 	case Relic_Type::BASE:
@@ -137,6 +137,7 @@ void RelicBehaviour::Start()
 
 	if (relic)
 	{
+		audio_emitter = GetComponent<ComponentAudioEmitter>();
 		relic->relic_effect = relic_effect;
 		SetRelic(json_str.data());
 	}
@@ -252,6 +253,12 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
 			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
+			if(relic_type == Relic_Type::ATTACK)
+				audio_emitter->StartSound("Play_Collect_Runestone");
+			else if (relic_type == Relic_Type::DASH)
+				audio_emitter->StartSound("Play_Collect_Runestone");
+			else
+				audio_emitter->StartSound("Play_Collect_Runestone");
 
 			Destroy(this->game_object);		
 		}

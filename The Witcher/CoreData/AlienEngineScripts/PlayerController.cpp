@@ -701,8 +701,10 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
-				if (dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name])
-					dash_coll->dash_particles["p_" + dash_coll->effect->on_dash_effect->name]->SetEnable(true);
+
+				if (dash_coll->effect->on_dash_effect->name != "")
+					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
+						float3::zero(), float3::zero(), dash_coll->game_object);
 			}
 		}
 	}
@@ -814,29 +816,35 @@ void PlayerController::InitKeyboardControls()
 		keyboard_move_right = SDL_SCANCODE_D;
 		keyboard_move_down = SDL_SCANCODE_S;
 		keyboard_jump = SDL_SCANCODE_SPACE;
-		keyboard_dash = SDL_SCANCODE_LALT;
-		keyboard_light_attack = SDL_SCANCODE_V;
-		keyboard_heavy_attack = SDL_SCANCODE_B;
-		keyboard_revive = SDL_SCANCODE_C;
+		keyboard_dash = SDL_SCANCODE_LSHIFT;
+		keyboard_light_attack = SDL_SCANCODE_C;
+		keyboard_heavy_attack = SDL_SCANCODE_V;
+		keyboard_revive = SDL_SCANCODE_F;
 		keyboard_ultimate = SDL_SCANCODE_X;
-		keyboard_spell = SDL_SCANCODE_F;
+		keyboard_spell_1 = SDL_SCANCODE_1;
+		keyboard_spell_2 = SDL_SCANCODE_2;
+		keyboard_spell_3 = SDL_SCANCODE_3;
+		keyboard_spell_4 = SDL_SCANCODE_4;
 
 		// HUD
 		if(GameObject::FindWithName("HUD_Game"))
 			HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
 	}
 	else if (controller_index == 2) {
-		keyboard_move_up = SDL_SCANCODE_I;
-		keyboard_move_left = SDL_SCANCODE_J;
-		keyboard_move_right = SDL_SCANCODE_L;
-		keyboard_move_down = SDL_SCANCODE_K;
-		keyboard_jump = SDL_SCANCODE_RSHIFT;
-		keyboard_dash = SDL_SCANCODE_RALT;
-		keyboard_light_attack = SDL_SCANCODE_RCTRL;
-		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
-		keyboard_revive = SDL_SCANCODE_M;
-		keyboard_ultimate = SDL_SCANCODE_APOSTROPHE;
-		keyboard_spell = SDL_SCANCODE_COMMA;
+		keyboard_move_up = SDL_SCANCODE_UP;
+		keyboard_move_left = SDL_SCANCODE_LEFT;
+		keyboard_move_right = SDL_SCANCODE_RIGHT;
+		keyboard_move_down = SDL_SCANCODE_DOWN;
+		keyboard_jump = SDL_SCANCODE_RCTRL;
+		keyboard_dash = SDL_SCANCODE_RSHIFT;
+		keyboard_light_attack = SDL_SCANCODE_KP_0;
+		keyboard_heavy_attack = SDL_SCANCODE_KP_PERIOD;
+		keyboard_revive = SDL_SCANCODE_KP_ENTER;
+		keyboard_ultimate = SDL_SCANCODE_KP_5;
+		keyboard_spell_1 = SDL_SCANCODE_KP_1;
+		keyboard_spell_2 = SDL_SCANCODE_KP_2;
+		keyboard_spell_3 = SDL_SCANCODE_KP_3;
+		keyboard_spell_4 = SDL_SCANCODE_KP_4;
 
 		// HUD
 		if(GameObject::FindWithName("HUD_Game"))
