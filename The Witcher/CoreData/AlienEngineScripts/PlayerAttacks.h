@@ -50,6 +50,8 @@ public:
 		float snap_detection_range = 0.0f;
 		int shake = 0;
 		int activation_frame = 0;
+		float chain_range = 0;
+		std::string chain_particle = "";
 	};
 
 public:
