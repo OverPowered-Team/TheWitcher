@@ -604,22 +604,23 @@ void PlayerAttacks::ConnectAttacks()
 
 void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 {
-	float3 mid_point = float3((from.x + to.x) / 2, 1.0f, (from.z + to.z) / 2);
+	float3 mid_point = float3((from.x + to.x) / 2, (from.y + to.y) / 2, (from.z + to.z) / 2);
+	mid_point.y += 0.5f; //hardcode lol
 	float distance = from.DistanceSq(to);
 	
 	float3 direction = (to - from).Normalized();
-	//float angle = math::RadToDeg(atan2(direction.x, direction.z));
-
-	//float angle = math::RadToDeg(float3::unitX().AngleBetween((to - mid_point)));
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.particle_name, mid_point);
 
-	Quat rot = new_particle->transform->GetGlobalRotation();
-	float3 eu_rot = rot.LookAt(float3::unitX(), direction, new_particle->transform->up, float3::unitY()).ToEulerXYZ();
-	float angle = math::RadToDeg(eu_rot.y);
+	Quat rot = new_particle->transform->GetGlobalRotation().LookAt(new_particle->transform->forward, direction, new_particle->transform->up, float3::unitY());
+	new_particle->transform->SetGlobalRotation(rot);
+	//new_particle->GetChild(0)->transform->SetGlobalRotation(rot);
+	//float angle = math::RadToDeg(eu_rot.y);
 
 	ComponentParticleSystem* p_system = new_particle->GetComponent<ComponentParticleSystem>();
 	p_system->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.3f, 1));
-	p_system->GetSystem()->SetParticleInitialAngle(float3(0, direction.x > 0 ? angle:-angle, 90));
+	ComponentParticleSystem* p_system_2 = new_particle->GetComponentInChildren<ComponentParticleSystem>();
+	p_system_2->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.3f, 1));
+	//p_system->GetSystem()->SetParticleInitialAngle(float3(0, direction.x > 0 ? angle:-angle, 90));
 
 	player_controller->particles.push_back(new_particle);
 }
