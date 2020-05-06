@@ -18,20 +18,72 @@ void VagoneteMove::Update()
 	float3 inclinationVector = curve->curve.NormalAt(actual_pos).Normalized();
 	Quat inclinationRot = Quat::RotateFromTo(float3::unitY(), inclinationVector);
 	inclinationRot.Inverse();
+	rot = rot * inclinationRot;
 
-	transform->SetLocalRotation(rot * inclinationRot);
+	if (Input::GetKeyRepeat(SDL_SCANCODE_LEFT)) {
+		currentInclination2 -= speedInclination * Time::GetDT();
+		if (currentInclination2 < -inclination4player) {
+			currentInclination2 = -inclination4player;
+		}
+		rot = rot * Quat::RotateX(currentInclination2 * Maths::Deg2Rad());
+	}
+	else if (Input::GetKeyRepeat(SDL_SCANCODE_RIGHT)) {
+		currentInclination2 += speedInclination * Time::GetDT();
+		if (currentInclination2 > inclination4player) {
+			currentInclination2 = inclination4player;
+		}
+		rot = rot * Quat::RotateX(currentInclination2 * Maths::Deg2Rad());
+	}
+	else {
+		if (currentInclination2 < 0) {
+			currentInclination2 += speedInclination * Time::GetDT();
+			if (currentInclination2 > 0) {
+				currentInclination2 = 0;
+			}
+			rot = rot * Quat::RotateX(currentInclination2 * Maths::Deg2Rad());
+		}
+		else if (currentInclination2 > 0) {
+			currentInclination2 -= speedInclination * Time::GetDT();
+			if (currentInclination2 < 0) {
+				currentInclination2 = 0;
+			}
+			rot = rot * Quat::RotateX(currentInclination2 * Maths::Deg2Rad());
+		}
+	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_A)) {
+		currentInclination1 -= speedInclination * Time::GetDT();
+		if (currentInclination1 < -inclination4player) {
+			currentInclination1 = -inclination4player;
+		}
+		rot = rot * Quat::RotateX(currentInclination1 * Maths::Deg2Rad());
+	}
+	else if (Input::GetKeyRepeat(SDL_SCANCODE_D)) {
+		currentInclination1 += speedInclination * Time::GetDT();
+		if (currentInclination1 > inclination4player) {
+			currentInclination1 = inclination4player;
+		}
+		rot = rot * Quat::RotateX(currentInclination1 * Maths::Deg2Rad());
+	}
+	else {
+		if (currentInclination1 < 0) {
+			currentInclination1 += speedInclination * Time::GetDT();
+			if (currentInclination1 > 0) {
+				currentInclination1 = 0;
+			}
+			rot = rot * Quat::RotateX(currentInclination1 * Maths::Deg2Rad());
+		}
+		else if (currentInclination1 > 0) {
+			currentInclination1 -= speedInclination * Time::GetDT();
+			if (currentInclination1 < 0) {
+				currentInclination1 = 0;
+			}
+			rot = rot * Quat::RotateX(currentInclination1 * Maths::Deg2Rad());
+		}
+	}
+
+	transform->SetLocalRotation(rot);
 	transform->SetLocalPosition(currentPos);
-
-	//APPROACH 3
-	//float3 vector = (nextPos - currentPos).Normalized();
-
-	//float3 normal = curve->curve.NormalAt(actual_pos).Normalized();
-	//float3 Y = vector.Cross(normal);
-
-	//float3x3 rot = float3x3(vector, normal, Y);
-
-	//transform->SetLocalRotation(rot.ToQuat());
-	//transform->SetLocalPosition(currentPos);
 
 	actual_pos += speed * Time::GetDT();
 
