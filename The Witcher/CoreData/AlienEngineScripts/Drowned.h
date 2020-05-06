@@ -16,6 +16,7 @@ public:
 		IDLE,
 		MOVE,
 		ATTACK,
+		GETOFF,
 		HIDE,
 		STUNNED,
 		HIT,
@@ -28,12 +29,18 @@ public:
 	void StartEnemy() override;
 	void SetStats(const char* json) override;
 
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero()) override;
+
 	void Stun(float time) override;
 	bool IsDead() override;
+
+	void OnAnimationEnd(const char* name) override;
+	void OnTriggerEnter(ComponentCollider* collider) override;
 
 public:
 	DrownedState state = DrownedState::NONE;
 	DrownedType drowned_type = DrownedType::NONE;
+	bool is_hide = true;
 };
 
 ALIEN_FACTORY Drowned* CreateDrowned() {
