@@ -185,12 +185,13 @@ void NilfgaardSoldier::CleanUpEnemy()
 
 void NilfgaardSoldier::Stun(float time)
 {
-	if (state != NilfgaardSoldierState::STUNNED || state != NilfgaardSoldierState::DEAD)
+	if (state != NilfgaardSoldierState::STUNNED && state != NilfgaardSoldierState::DEAD)
 	{
 		state = NilfgaardSoldierState::STUNNED;
 		animator->PlayState("Dizzy");
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
+		audio_emitter->StartSound("Play_Dizzy_Enemy");
 	}
 }
 
