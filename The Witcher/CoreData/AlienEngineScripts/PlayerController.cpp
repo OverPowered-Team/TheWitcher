@@ -130,6 +130,11 @@ void PlayerController::UpdateInput()
 		mov_input = false;
 		movement_input = float2::zero();
 	}
+
+
+	// DEBUG
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+		ReceiveDamage(10, float3::zero(), false); 
 }
 
 void PlayerController::SetState(StateType new_state)
@@ -397,6 +402,31 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+
+	// Heartbeat effect 
+	static float percentage = 0.f, thresholdPercentage = 0.3f; 
+	static bool playing = false; 
+
+	percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue(); 
+	if (playing == false)
+	{
+		if (percentage <= thresholdPercentage)
+		{
+			playing = true;
+			audio->StartSound("Play_Heartbeats");
+		}
+	}
+	else
+	{
+		if (percentage > thresholdPercentage)
+		{
+			playing = false;
+			audio->StopSoundByName("Play_Heartbeats");
+		}
+	}
+		
+	audio->SetRTPCValue("PlayerLife", player_data.stats["Health"].GetValue()); 
+
 }
 
 void PlayerController::AbsorbHit()
