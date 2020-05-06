@@ -21,6 +21,9 @@ void Boss::StartEnemy()
 
 void Boss::UpdateEnemy()
 {
+	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
+	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
+
 	switch (state)
 	{
 	case Boss::BossState::NONE:
@@ -163,4 +166,13 @@ void Boss::OrientToPlayer(int target)
 	transform->SetGlobalRotation(current_rot);
 	if(rotate_time < time_to_rotate)
 		rotate_time += Time::GetDT();
+}
+
+void Boss::OrientToPlayerWithoutSlerp(int target)
+{
+	direction = -(player_controllers[target]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
+	float desired_angle = atan2f(direction.z, direction.x);
+	desired_angle = -(desired_angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad();
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), desired_angle);
+	transform->SetGlobalRotation(rot);
 }

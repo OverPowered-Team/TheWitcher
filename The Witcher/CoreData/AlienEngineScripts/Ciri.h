@@ -52,6 +52,7 @@ public:
 	void EndMiniScreamAction(GameObject* go_ended);
 
 	void OnAnimationEnd(const char* name);
+	void OnTriggerEnter(ComponentCollider* collider);
 
 	void OnDrawGizmosSelected();
 
@@ -64,6 +65,7 @@ ALIEN_FACTORY Ciri* CreateCiri() {
 	SHOW_VOID_FUNCTION(Ciri::ActivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::DeactivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::MiniScream, ciri);
+	SHOW_VOID_FUNCTION(Ciri::SpawnAttackParticle, ciri);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->mini_scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_speed);

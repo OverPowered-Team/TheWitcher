@@ -80,6 +80,7 @@ public:
 	void SetStats(const char* json) override;
 
 	void OrientToPlayer(int target);
+	void OrientToPlayerWithoutSlerp(int target);
 
 };
 
