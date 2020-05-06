@@ -46,6 +46,7 @@ ComponentCharacterController::~ComponentCharacterController()
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
 	controller->release();
 	delete report;
+
 }
 
 // Movement Functions -----------------------------------------
@@ -309,7 +310,7 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	}
 }
 
-void ComponentCharacterController::DrawScene(ComponentCamera* camera)
+void ComponentCharacterController::DrawScene()
 {
 	if (game_object_attached->IsSelected() && App->physx->debug_physics == false)
 	{

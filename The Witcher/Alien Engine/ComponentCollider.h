@@ -91,7 +91,7 @@ protected:
 	void HandleAlienEvent(const AlienEvent& e);
 
 	virtual void DrawSpecificInspector() {}
-	virtual void DrawScene(ComponentCamera* camera) override;
+	virtual void DrawScene() override;
 	virtual void Reset();
 	virtual void Clone(Component* clone) {}
 	virtual void SetComponent(Component* component) {}
