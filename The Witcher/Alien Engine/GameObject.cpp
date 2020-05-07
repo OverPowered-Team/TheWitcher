@@ -1145,6 +1145,8 @@ void GameObject::SaveObject(JSONArraypack* to_save, const uint& family_number)
 
 void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool force_no_selected)
 {
+	OPTICK_EVENT();
+
 	strcpy(name, to_load->GetString("Name"));
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
@@ -1696,6 +1698,8 @@ void GameObject::GetObjectWithPrefabID(const u64& prefID, std::vector<GameObject
 
 void GameObject::LockPrefab(bool lock)
 {
+	OPTICK_EVENT();
+
 	if (!IsPrefab())
 		return;
 
@@ -1710,6 +1714,8 @@ void GameObject::LockPrefab(bool lock)
 
 void GameObject::GetAllPrefabRoots(std::vector<GameObject*>& roots)
 {
+	OPTICK_EVENT();
+
 	if (IsPrefab() && FindPrefabRoot() == this) {
 		roots.push_back(this);
 	}
@@ -1725,6 +1731,8 @@ void GameObject::GetAllPrefabRoots(std::vector<GameObject*>& roots)
 
 void GameObject::ResetIDs()
 {
+	OPTICK_EVENT();
+
 	ID = App->resources->GetRandomID();
 
 	if (!components.empty()) {
@@ -1747,6 +1755,8 @@ void GameObject::ResetIDs()
 
 void GameObject::ChangeStatic(bool static_)
 {
+	OPTICK_EVENT();
+
 	std::vector<GameObject*>::iterator item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr) {
@@ -1758,6 +1768,8 @@ void GameObject::ChangeStatic(bool static_)
 
 bool GameObject::HasChildrenStatic() const 
 {
+	OPTICK_EVENT();
+
 	bool ret = false;
 
 	if (!children.empty()) {
@@ -1783,6 +1795,8 @@ bool GameObject::HasChildrenStatic() const
 
 void GameObject::SearchToDelete()
 {
+	OPTICK_EVENT();
+
 	std::vector<GameObject*>::iterator item = children.begin();
 	while (item != children.end()) {
 

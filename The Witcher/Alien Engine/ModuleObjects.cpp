@@ -1516,13 +1516,13 @@ void ModuleObjects::LoadScene(const char* name, bool change_scene)
 					objects_created.push_back(obj);
 					game_objects->GetAnotherNode();
 				}
-				for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
-				{
-					ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
-					if (def_mesh)
-						def_mesh->AttachSkeleton();
-				}
-				ReAttachUIScriptEvents();
+				//for each (GameObject * obj in objects_created) //not sure where to place this, need to link skeletons to meshes after all go's have been created
+				//{
+				//	ComponentDeformableMesh* def_mesh = obj->GetComponent<ComponentDeformableMesh>();
+				//	if (def_mesh)
+				//		def_mesh->AttachSkeleton();
+				//}
+				//ReAttachUIScriptEvents();
 				delete scene;
 
 				if (change_scene) {

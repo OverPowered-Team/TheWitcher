@@ -297,6 +297,8 @@ void Application::FinishUpdate()
 
 JSONfilepack* Application::LoadJSONFile(const std::string& path)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* value = json_parse_file(path.data());
 	JSON_Object* object = json_value_get_object(value);
 
@@ -313,6 +315,8 @@ JSONfilepack* Application::LoadJSONFile(const std::string& path)
 
 JSONfilepack* Application::CreateJSONFile(const std::string& path)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* object = json_value_get_object(value);
 	json_serialize_to_file_pretty(value, path.data());
@@ -328,6 +332,8 @@ JSONfilepack* Application::CreateJSONFile(const std::string& path)
 
 void Application::DeleteJSONfile(JSONfilepack* json_pack)
 {
+	OPTICK_EVENT();
+
 	std::list<JSONfilepack*>::iterator item = json_files.begin();
 	for (; item != json_files.end(); ++item) {
 		if (*item != nullptr && *item == json_pack) {
@@ -341,6 +347,8 @@ void Application::DeleteJSONfile(JSONfilepack* json_pack)
 
 void Application::UpdateLogFile(FILE* fp)
 {
+	OPTICK_EVENT();
+
 	for (auto it_log = engine_string_logs.begin(); it_log != engine_string_logs.end(); it_log++)
 	{
 		fprintf(fp, std::string((*it_log).loged.at(0).second + '\n').data());
@@ -435,6 +443,8 @@ bool Application::CleanUp()
 
 bool Application::StringCmp(const char* str1, const char* str2)
 {
+	OPTICK_EVENT();
+
 	size_t size = strlen(str1);
 	if (size != strlen(str2))
 		return false;
@@ -463,12 +473,16 @@ void Application::OpenWebsite(const std::string& website)
 
 void Application::CastEvent(EventType eventType)
 {
+	OPTICK_EVENT();
+
 	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); ++item)
 		(*item)->HandleEvent(eventType);
 }
 
 void Application::SendAlienEvent(void* object, AlienEventType type)
 {
+	OPTICK_EVENT();
+
 	AlienEvent alien_event;
 	alien_event.object = object;
 	alien_event.type = type;

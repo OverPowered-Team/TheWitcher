@@ -57,6 +57,7 @@ ComponentParticleSystem::~ComponentParticleSystem()
 
 void ComponentParticleSystem::OnPlay()
 {
+	OPTICK_EVENT();
 	particleSystem->Restart();
 }
 
@@ -72,6 +73,7 @@ void ComponentParticleSystem::OnStop()
 
 void ComponentParticleSystem::OnEmitterPlay()
 {
+	OPTICK_EVENT();
 	particleSystem->emmitter.Play();
 }
 
@@ -165,7 +167,8 @@ void ComponentParticleSystem::OnDisable()
 
 bool ComponentParticleSystem::DrawInspector()
 {
-	
+	OPTICK_EVENT();
+
 	//texture = material->material->texture;
 	
 	
@@ -1107,6 +1110,8 @@ ParticleSystem* ComponentParticleSystem::GetSystem()
 
 void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	// --------------- General Info -------------------- //
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetString("ID", std::to_string(ID).data());
@@ -1293,6 +1298,8 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 
 void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	// --------------- General Info -------------------- //
 	//to_load->GetNumber("Type");
 	ID = std::stoull(to_load->GetString("ID"));
@@ -1561,6 +1568,8 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 
 void ComponentParticleSystem::LoadParticles()
 {
+	OPTICK_EVENT();
+
 	OPENFILENAME to_load;
 
 	static char filename[MAX_PATH];
@@ -1621,6 +1630,8 @@ void ComponentParticleSystem::LoadParticles()
 
 void ComponentParticleSystem::SaveParticles()
 {
+	OPTICK_EVENT();
+
 	OPENFILENAME to_save;
 
 	static char filename[MAX_PATH];

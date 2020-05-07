@@ -30,6 +30,8 @@
 
 ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 {
+	OPTICK_EVENT();
+
 	type = ComponentType::CAMERA;
 
 	frustum.type = FrustumType::PerspectiveFrustum;
@@ -99,6 +101,8 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 ComponentCamera::~ComponentCamera()
 {
+	OPTICK_EVENT();
+
 	std::vector<ComponentCamera*>::iterator item = App->objects->game_cameras.begin();
 	for (; item != App->objects->game_cameras.end(); ++item) {
 		if (*item != nullptr && *item == this) {
@@ -154,6 +158,8 @@ ComponentCamera::~ComponentCamera()
 
 bool ComponentCamera::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool en;
 	ImGui::PushID(this);
 	en = enabled;
@@ -621,6 +627,8 @@ void ComponentCamera::Reset()
 
 void ComponentCamera::SetComponent(Component* component)
 {
+	OPTICK_EVENT();
+
 	if (component->GetType() == type) {
 
 		ComponentCamera* camera = (ComponentCamera*)component;
@@ -639,6 +647,8 @@ void ComponentCamera::SetComponent(Component* component)
 
 void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_type)
 {
+	OPTICK_EVENT();
+
 	if (fov_type == 0)
 	{
 		frustum.horizontalFov = (2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ((float)width_ratio / (float)height_ratio)));
@@ -653,6 +663,8 @@ void ComponentCamera::AspectRatio(int width_ratio, int height_ratio, bool fov_ty
 
 void ComponentCamera::Look(const float3& position_to_look)
 {
+	OPTICK_EVENT();
+
 	if (position_to_look.IsFinite()) {
 		float3 direction = position_to_look - frustum.pos;
 
@@ -823,6 +835,8 @@ void ComponentCamera::DrawSkybox()
 
 float2 ComponentCamera::WorldToScreenPoint(const float3& world_position)
 {
+	OPTICK_EVENT();
+
 	float3 position = App->renderer3D->actual_game_camera->GetViewMatrix4x4().MulPos(world_position);
 
 	return float2((((position.x / -position.z) + 16 * 0.5f) / App->objects->current_viewport->GetSize().x),

@@ -25,6 +25,8 @@ ComponentTransform::ComponentTransform(GameObject* attach) : Component(attach)
 
 ComponentTransform::ComponentTransform(GameObject* attach, const float3& pos, const Quat& rot, const float3& scale) : Component(attach)
 {
+	OPTICK_EVENT();
+
 	local_position = pos;
 	local_rotation = rot;
 	local_scale = scale;
@@ -180,6 +182,8 @@ void ComponentTransform::SetLocalTransform(const float3& position, const Quat& r
 
 void ComponentTransform::LookScale()
 {
+	OPTICK_EVENT();
+
 	bool aux_scale = is_scale_negative;
 
 	if (local_scale.x < 0 || local_scale.y < 0 || local_scale.z < 0) {
@@ -198,6 +202,8 @@ const float3 ComponentTransform::GetLocalScale() const
 
 const float3 ComponentTransform::GetGlobalScale() const
 {
+	OPTICK_EVENT();
+
 	float3 scale;
 	float3x3 rotate;
 	rotate = global_transformation.RotatePart();
@@ -261,6 +267,7 @@ float4x4 ComponentTransform::GetGlobalMatrix() const
 void ComponentTransform::RecalculateTransform()
 {
 	OPTICK_EVENT();
+
 	if (game_object_attached == nullptr)
 		return;
 
@@ -321,6 +328,8 @@ void ComponentTransform::RecalculateTransform()
 
 bool ComponentTransform::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	ImGui::Spacing();
 
 	if (ImGui::Checkbox("Enabled", &game_object_attached->enabled))
@@ -865,6 +874,8 @@ bool ComponentTransform::DrawInspector()
 
 bool ComponentTransform::AddNewTagClicked(const char* new_tag)
 {
+	OPTICK_EVENT();
+
 	std::vector<std::string>::iterator item = App->objects->tags.begin();
 	for (; item != App->objects->tags.end(); ++item) {
 		if (App->StringCmp((*item).data(), new_tag)) {
@@ -906,6 +917,8 @@ bool ComponentTransform::IsScaleNegative()
 
 void ComponentTransform::Reset()
 {
+	OPTICK_EVENT();
+
 	local_scale = { 1,1,1 };
 	local_position = { 0,0,0 };
 	local_rotation = { 0,0,0,0 };
@@ -922,6 +935,8 @@ void ComponentTransform::Reset()
 
 void ComponentTransform::SetComponent(Component* component)
 {
+	OPTICK_EVENT();
+
 	if (component->GetType() == type) {
 
 		ComponentTransform* transform = (ComponentTransform*)component;
@@ -938,6 +953,8 @@ void ComponentTransform::SetComponent(Component* component)
 
 void ComponentTransform::Clone(Component* clone)
 {
+	OPTICK_EVENT();
+
 	clone->enabled = enabled;
 	clone->not_destroy = not_destroy;
 	ComponentTransform* transform = (ComponentTransform*)clone;
@@ -955,6 +972,8 @@ void ComponentTransform::Clone(Component* clone)
 
 void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetFloat3("Position", local_position);
 	to_save->SetQuat("Rotation", local_rotation);
@@ -965,6 +984,8 @@ void ComponentTransform::SaveComponent(JSONArraypack* to_save)
 
 void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	local_position = to_load->GetFloat3("Position");
 	local_rotation = to_load->GetQuat("Rotation");
 	local_scale = to_load->GetFloat3("Scale");
@@ -988,6 +1009,8 @@ void ComponentTransform::LoadComponent(JSONArraypack* to_load)
 
 void ComponentTransform::SetGlobalTransformation(const float4x4& global_transformation)
 {
+	OPTICK_EVENT();
+
 	float3 position, scale;
 	Quat rotation;
 	global_transformation.Decompose(position, rotation, scale);

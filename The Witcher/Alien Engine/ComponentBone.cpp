@@ -7,6 +7,7 @@
 #include "ComponentBone.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
 
 ComponentBone::ComponentBone(GameObject* gameobject) : Component(gameobject)
 {
@@ -53,6 +54,8 @@ ResourceBone* ComponentBone::GetBone()
 
 void ComponentBone::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetString("BoneID", bone ? std::to_string(bone->GetID()).data() : std::to_string(0).data());
@@ -61,6 +64,8 @@ void ComponentBone::SaveComponent(JSONArraypack* to_save)
 
 void ComponentBone::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	u64 bone_ID = std::stoull(to_load->GetString("BoneID"));

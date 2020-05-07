@@ -5,6 +5,8 @@
 #include <fstream>
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourceScript::ResourceScript()
 {
 	type = ResourceType::RESOURCE_SCRIPT;
@@ -16,6 +18,8 @@ ResourceScript::~ResourceScript()
 
 bool ResourceScript::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	if (force_id != 0) {
@@ -100,6 +104,8 @@ bool ResourceScript::CreateMetaData(const u64& force_id)
 
 bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 {
+	OPTICK_EVENT();
+
 	path = std::string(assets_file_path);
 	
 	ID = App->resources->GetIDFromAlienPath(std::string(App->file_system->GetPathWithoutExtension(assets_file_path) + "_meta.alien").data());
@@ -151,6 +157,8 @@ bool ResourceScript::ReadBaseInfo(const char* assets_file_path)
 
 void ResourceScript::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = std::string(meta_data);
 
 	JSON_Value* value = json_parse_file(meta_data_path.data());
@@ -176,6 +184,8 @@ void ResourceScript::ReadLibrary(const char* meta_data)
 
 bool ResourceScript::NeedReload() const
 {
+	OPTICK_EVENT();
+
 	bool ret = false;
 
 	struct stat file;
@@ -191,6 +201,8 @@ bool ResourceScript::NeedReload() const
 
 void ResourceScript::Reimport()
 {
+	OPTICK_EVENT();
+
 	remove(path.data());
 	remove(meta_data_path.data());
 	data_structures.clear();
@@ -262,6 +274,8 @@ void ResourceScript::Reimport()
 
 bool ResourceScript::DeleteMetaData()
 {
+	OPTICK_EVENT();
+
 	remove(path.data());
 	remove(std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien").data());
 	remove(meta_data_path.data());
@@ -271,6 +285,8 @@ bool ResourceScript::DeleteMetaData()
 
 std::string ResourceScript::GetDataStructure(const std::string& line, const std::string& api)
 {
+	OPTICK_EVENT();
+
 	std::string data_name;
 	bool start_cpoying = false;
 	bool api_found = false;

@@ -6,6 +6,8 @@
 #include "ModuleResources.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourceAnimation::ResourceAnimation() : Resource()
 {
 	type = ResourceType::RESOURCE_ANIMATION;
@@ -42,6 +44,8 @@ uint ResourceAnimation::GetChannelIndex(std::string name)
 
 bool ResourceAnimation::LoadMemory()
 {
+	OPTICK_EVENT();
+
 	char* buffer;
 	uint size = App->file_system->Load(meta_data_path.data(), &buffer);
 
@@ -135,6 +139,8 @@ void ResourceAnimation::FreeMemory()
 
 bool ResourceAnimation::ReadBaseInfo(const char* meta_file_path)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
 
@@ -182,6 +188,8 @@ bool ResourceAnimation::ReadBaseInfo(const char* meta_file_path)
 
 void ResourceAnimation::Copy(ResourceAnimation* anim)
 {
+	OPTICK_EVENT();
+
 	ticks_per_second = anim->ticks_per_second;
 	num_channels = anim->num_channels;
 	channels = new ResourceAnimation::Channel[num_channels];
@@ -211,6 +219,8 @@ void ResourceAnimation::Copy(ResourceAnimation* anim)
 
 bool ResourceAnimation::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0) {
 		ID = App->resources->GetRandomID();
 	}

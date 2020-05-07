@@ -183,6 +183,8 @@ void Gizmos::DrawWire(const ResourceMesh * mesh, const float4x4& matrix, const C
 
 void Gizmos::RemoveGizmos()
 {
+	OPTICK_EVENT();
+
 	std::vector<Gizmo>::iterator item = active_gizmos.begin();
 	while (item != active_gizmos.end()) {
 		if ((*item).controller != controller) {
@@ -199,6 +201,8 @@ void Gizmos::RemoveGizmos()
 
 void Gizmos::ClearAllCurrentGizmos()
 {
+	OPTICK_EVENT();
+
 	std::vector<Gizmo>::iterator item = active_gizmos.begin();
 	while (item != active_gizmos.end()) {
 		if ((*item).mesh != nullptr) {

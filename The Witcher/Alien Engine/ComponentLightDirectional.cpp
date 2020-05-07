@@ -21,6 +21,8 @@
 
 ComponentLightDirectional::ComponentLightDirectional(GameObject* attach) : Component(attach)
 {
+	OPTICK_EVENT();
+
 	type = ComponentType::LIGHT_DIRECTIONAL;
 	App->objects->directional_light_properites.push_back(&light_props);
 	App->objects->AddNumOfDirLights();
@@ -39,6 +41,8 @@ ComponentLightDirectional::ComponentLightDirectional(GameObject* attach) : Compo
 
 void ComponentLightDirectional::InitFrameBuffers()
 {
+	OPTICK_EVENT();
+
 	//dynamic shadows
 	glBindFramebuffer(GL_FRAMEBUFFER, light_props.depthMapFBO);
 	glGenTextures(1, &light_props.depthMap);
@@ -154,6 +158,8 @@ void ComponentLightDirectional::DrawScene()
 
 void ComponentLightDirectional::CalculateBakedViewMatrix()
 {
+	OPTICK_EVENT();
+
 	//Calculate ortographic light frustum position
 	float3 far_position = (light_props.position + float3(2 * sizefrustrumbaked, 0 ,0)) / sizefrustrumbaked;
 	float3 near_position = (light_props.position - float3(2 * sizefrustrumbaked, 0, 0)) / sizefrustrumbaked;
@@ -196,6 +202,8 @@ void ComponentLightDirectional::CalculateBakedViewMatrix()
 
 bool ComponentLightDirectional::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool en;
 	ImGui::PushID(this);
 	en = enabled;
@@ -279,6 +287,8 @@ void ComponentLightDirectional::Reset()
 
 void ComponentLightDirectional::SetComponent(Component* component)
 {
+	OPTICK_EVENT();
+
 	if (component->GetType() == type) {
 
 		ComponentLightDirectional* light = (ComponentLightDirectional*)component;
@@ -290,6 +300,8 @@ void ComponentLightDirectional::SetComponent(Component* component)
 
 void ComponentLightDirectional::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetString("ID", std::to_string(ID).data());
@@ -307,6 +319,8 @@ void ComponentLightDirectional::SaveComponent(JSONArraypack* to_save)
 
 void ComponentLightDirectional::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	print_icon = to_load->GetBoolean("PrintIcon");

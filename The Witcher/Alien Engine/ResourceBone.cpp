@@ -5,6 +5,7 @@
 #include "ResourceBone.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
 
 ResourceBone::ResourceBone() : Resource()
 {
@@ -19,6 +20,8 @@ ResourceBone::~ResourceBone()
 
 bool ResourceBone::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0) {
 		ID = App->resources->GetRandomID();
 	}
@@ -84,6 +87,8 @@ std::string ResourceBone::GetTypeString() const
 
 bool ResourceBone::LoadMemory()
 {
+	OPTICK_EVENT();
+
 	char* buffer;
 	uint size = App->file_system->Load(meta_data_path.data(), &buffer);
 	char* cursor = buffer;
@@ -155,6 +160,8 @@ void ResourceBone::FreeMemory()
 
 bool ResourceBone::ReadBaseInfo(const char* meta_file_path)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
 

@@ -10,6 +10,8 @@
 #include "ResourceBone.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourceMesh::ResourceMesh() : Resource()
 {
 	type = ResourceType::RESOURCE_MESH;
@@ -17,6 +19,8 @@ ResourceMesh::ResourceMesh() : Resource()
 
 ResourceMesh::ResourceMesh(ResourceMesh* r_mesh)
 {
+	OPTICK_EVENT();
+
 	num_index = r_mesh->num_index;
 	num_vertex = r_mesh->num_vertex;
 	num_faces = r_mesh->num_faces;
@@ -80,6 +84,8 @@ ResourceMesh::~ResourceMesh()
 
 bool ResourceMesh::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0) {
 		ID = App->resources->GetRandomID();
 	}
@@ -176,6 +182,8 @@ bool ResourceMesh::CreateMetaData(const u64& force_id)
 
 bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = std::string(meta_file_path);
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_file_path));
 
@@ -218,6 +226,8 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 
 void ResourceMesh::FreeMemory()
 {
+	OPTICK_EVENT();
+
 	if (id_vertex != 0)
 		glDeleteBuffers(1, &id_vertex);
 	if (id_index != 0)
@@ -299,6 +309,8 @@ void ResourceMesh::FreeMemory()
 
 bool ResourceMesh::LoadMemory()
 {	
+	OPTICK_EVENT();
+
 	if (num_vertex != 0) {
 		return true;
 	}
@@ -392,6 +404,8 @@ bool ResourceMesh::LoadMemory()
 
 bool ResourceMesh::DeleteMetaData()
 {
+	OPTICK_EVENT();
+
 	remove(meta_data_path.data());
 
 	std::vector<Resource*>::iterator position = std::find(App->resources->resources.begin(), App->resources->resources.end(), static_cast<Resource*>(this));
@@ -405,6 +419,8 @@ bool ResourceMesh::DeleteMetaData()
 
 void ResourceMesh::InitBuffers()
 {
+	OPTICK_EVENT();
+
 	// VAO
 	glGenVertexArrays(1, &vao);
 
@@ -475,6 +491,8 @@ void ResourceMesh::InitBuffers()
 
 void ResourceMesh::Reset()
 {
+	OPTICK_EVENT();
+
 	memset(vertex, 0, sizeof(float) * num_vertex * 3);
 
 	if (normals > 0)

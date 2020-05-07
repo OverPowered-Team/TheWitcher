@@ -13,6 +13,8 @@
 #include "mmgr/mmgr.h"
 #include "Event.h"
 
+#include "Optick/include/optick.h"
+
 ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::SCRIPT;
@@ -20,6 +22,8 @@ ComponentScript::ComponentScript(GameObject* attach) : Component(attach)
 
 ComponentScript::~ComponentScript()
 {
+	OPTICK_EVENT();
+
 	if (data_ptr != nullptr) {
 		if (need_alien) {
 			Alien* alien = (Alien*)data_ptr;
@@ -52,6 +56,8 @@ void ComponentScript::Reset()
 
 void ComponentScript::SetComponent(Component* component)
 {
+	OPTICK_EVENT();
+
 	if (component->GetType() == type) {
 		ComponentScript* script = (ComponentScript*)component;
 		if (App->StringCmp(data_name.data(), script->data_name.data())) {
@@ -96,6 +102,8 @@ void ComponentScript::SetComponent(Component* component)
 
 bool ComponentScript::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool en;
 	ImGui::PushID(this);
 	en = enabled;
@@ -333,6 +341,8 @@ bool ComponentScript::DrawInspector()
 
 void ComponentScript::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetString("ResourceID", std::to_string(resourceID).data());
@@ -392,6 +402,8 @@ void ComponentScript::SaveComponent(JSONArraypack* to_save)
 
 void ComponentScript::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	type = (ComponentType)(int)to_load->GetNumber("Type");
 	ID = std::stoull(to_load->GetString("ID"));
 	resourceID = std::stoull(to_load->GetString("ResourceID"));

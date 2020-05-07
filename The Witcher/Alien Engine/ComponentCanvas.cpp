@@ -46,6 +46,8 @@ void ComponentCanvas::DrawScene()
 
 bool ComponentCanvas::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool check;
 
 	ImGui::PushID(this);
@@ -101,6 +103,8 @@ bool ComponentCanvas::DrawInspector()
 
 void ComponentCanvas::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetBoolean("isWorld", isWorld);
 	to_save->SetNumber("Type", (int)type);
@@ -110,6 +114,8 @@ void ComponentCanvas::SaveComponent(JSONArraypack* to_save)
 
 void ComponentCanvas::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	isWorld = to_load->GetBoolean("isWorld");
 	bbtype  = (BillboardType)(int)to_load->GetNumber("BBType");

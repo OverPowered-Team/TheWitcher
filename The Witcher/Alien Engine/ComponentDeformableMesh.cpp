@@ -169,6 +169,8 @@ void ComponentDeformableMesh::SetShadowUniforms(ResourceMaterial* resource_mater
 
 void ComponentDeformableMesh::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("ViewMesh", view_mesh);
 	to_save->SetBoolean("Wireframe", wireframe);
@@ -184,6 +186,8 @@ void ComponentDeformableMesh::SaveComponent(JSONArraypack* to_save)
 
 void ComponentDeformableMesh::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	view_mesh = to_load->GetBoolean("ViewMesh");
 	wireframe = to_load->GetBoolean("Wireframe");
 	view_vertex_normals = to_load->GetBoolean("ViewVertexNormals");
@@ -209,6 +213,8 @@ void ComponentDeformableMesh::LoadComponent(JSONArraypack* to_load)
 //When loading resouce model
 void ComponentDeformableMesh::SendWeightsAndID()
 {
+	OPTICK_EVENT();
+
 	if (mesh == nullptr) {
 		return;
 	}

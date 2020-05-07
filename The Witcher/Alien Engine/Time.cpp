@@ -12,6 +12,8 @@
 #include "PanelScene.h"
 #include "Event.h"
 
+#include "Optick/include/optick.h"
+
 Time::GameState Time::state = Time::GameState::NONE;
 float Time::time_since_start = 0.0F;
 float Time::game_time = 0.0F;
@@ -40,6 +42,8 @@ void Time::Update()
 
 void Time::Play()
 {
+	OPTICK_EVENT();
+
 	static std::vector<std::string> actual_scene_names;
 	if (state == GameState::NONE) {
 #ifndef GAME_VERSION

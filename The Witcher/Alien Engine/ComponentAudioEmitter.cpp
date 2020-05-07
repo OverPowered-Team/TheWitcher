@@ -7,6 +7,8 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ComponentAudioEmitter::ComponentAudioEmitter(GameObject * parent) : Component(parent)
 {
 	type = ComponentType::A_EMITTER;
@@ -16,6 +18,8 @@ ComponentAudioEmitter::ComponentAudioEmitter(GameObject * parent) : Component(pa
 
 void ComponentAudioEmitter::Update()
 {
+	OPTICK_EVENT();
+
 	if (Time::state == Time::GameState::NONE) {
 		if (play_mode) {
 			play_mode = false;
@@ -109,6 +113,8 @@ void ComponentAudioEmitter::UpdateSourcePos()
 
 void ComponentAudioEmitter::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", enabled);
@@ -120,6 +126,8 @@ void ComponentAudioEmitter::SaveComponent(JSONArraypack* to_save)
 }
 void ComponentAudioEmitter::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	ID = std::stoull(to_load->GetString("ID"));
 	enabled = to_load->GetBoolean("Enabled");
 	volume = to_load->GetNumber("Volume");
@@ -135,6 +143,8 @@ void ComponentAudioEmitter::LoadComponent(JSONArraypack* to_load)
 }
 bool ComponentAudioEmitter::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	ImGui::PushID(this);
 
 	if (ImGui::Checkbox("##CmpActive", &enabled)) {
@@ -245,6 +255,8 @@ WwiseT::AudioSource* ComponentAudioEmitter::GetSource() const
 
 void ComponentAudioEmitter::OnEnable()
 {
+	OPTICK_EVENT();
+
 	Bank* bank = App->audio->GetBankByID(current_bank);
 	if (bank != nullptr)
 		if (bank->events.find(current_event) != bank->events.end())

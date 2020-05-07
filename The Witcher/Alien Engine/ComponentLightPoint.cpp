@@ -81,6 +81,8 @@ void ComponentLightPoint::DrawScene()
 
 bool ComponentLightPoint::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool en;
 	ImGui::PushID(this);
 	en = enabled;
@@ -141,6 +143,8 @@ void ComponentLightPoint::OnDisable()
 
 void ComponentLightPoint::Clone(Component* clone)
 {
+	OPTICK_EVENT();
+
 	clone->enabled = enabled;
 	clone->not_destroy = not_destroy;
 	ComponentLightPoint* light = (ComponentLightPoint*)clone;
@@ -155,6 +159,8 @@ void ComponentLightPoint::Reset()
 
 void ComponentLightPoint::SetComponent(Component* component)
 {
+	OPTICK_EVENT();
+
 	if (component->GetType() == type) {
 
 		ComponentLightPoint* light = (ComponentLightPoint*)component;
@@ -166,6 +172,8 @@ void ComponentLightPoint::SetComponent(Component* component)
 
 void ComponentLightPoint::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetString("ID", std::to_string(ID).data());
@@ -183,6 +191,8 @@ void ComponentLightPoint::SaveComponent(JSONArraypack* to_save)
 
 void ComponentLightPoint::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	print_icon = to_load->GetBoolean("PrintIcon");

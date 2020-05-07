@@ -51,6 +51,8 @@ void ComponentAnimator::PlayState(const char* name)
 
 void ComponentAnimator::SetStateSpeed(const char* name, float value)
 {
+	OPTICK_EVENT();
+
 	std::vector<State*> states = animator_controller->GetStates();
 	for (auto it = states.begin(); it != states.end(); ++it)
 	{
@@ -63,6 +65,8 @@ void ComponentAnimator::SetStateSpeed(const char* name, float value)
 
 bool ComponentAnimator::IsPlaying(const char* name)
 {
+	OPTICK_EVENT();
+
 	bool ret = false;
 
 	if (strcmp(animator_controller->GetCurrentNode()->GetName().c_str(), name) == 0)
@@ -73,6 +77,8 @@ bool ComponentAnimator::IsPlaying(const char* name)
 
 void ComponentAnimator::IncreaseAllStateSpeeds(float value)
 {
+	OPTICK_EVENT();
+
 	std::vector<State*> states = animator_controller->GetStates();
 	for (auto it = states.begin(); it != states.end(); ++it)
 	{
@@ -82,6 +88,8 @@ void ComponentAnimator::IncreaseAllStateSpeeds(float value)
 
 void ComponentAnimator::DecreaseAllStateSpeeds(float value)
 {
+	OPTICK_EVENT();
+
 	std::vector<State*> states = animator_controller->GetStates();
 	for (auto it = states.begin(); it != states.end(); ++it)
 	{
@@ -91,6 +99,8 @@ void ComponentAnimator::DecreaseAllStateSpeeds(float value)
 
 void ComponentAnimator::UpdateAnimation(GameObject* go_to_update)
 {
+	OPTICK_EVENT();
+
 	float3 position, scale;
 	Quat rotation;
 
@@ -107,6 +117,8 @@ void ComponentAnimator::UpdateAnimation(GameObject* go_to_update)
 
 void ComponentAnimator::OnPlay()
 {
+	OPTICK_EVENT();
+
 	if (source_animator_controller)
 	{
 		source_animator_controller->SaveAsset(source_animator_controller->GetID());
@@ -129,6 +141,8 @@ ResourceAnimatorController* ComponentAnimator::GetCurrentAnimatorController()
 
 void ComponentAnimator::SetAnimatorController(ResourceAnimatorController* controller)
 {
+	OPTICK_EVENT();
+
 	if (source_animator_controller) {
 		source_animator_controller->DecreaseReferences();	}
 
@@ -146,6 +160,8 @@ void ComponentAnimator::SaveComponent(JSONArraypack* to_save)
 
 void ComponentAnimator::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	u64 controller_ID = std::stoull(to_load->GetString("ControllerID"));

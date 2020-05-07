@@ -61,6 +61,8 @@ void ResourceShader::FreeMemory()
 
 bool ResourceShader::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0)
 		ID = App->resources->GetRandomID();
 	else
@@ -105,6 +107,8 @@ bool ResourceShader::DeleteMetaData()
 
 bool ResourceShader::ReadBaseInfo(const char* assets_path)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	this->path = assets_path;
@@ -149,6 +153,8 @@ bool ResourceShader::ReadBaseInfo(const char* assets_path)
 
 void ResourceShader::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	this->meta_data_path = meta_data;
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 	App->resources->AddResource(this);
@@ -156,6 +162,8 @@ void ResourceShader::ReadLibrary(const char* meta_data)
 
 void ResourceShader::TryToSetShaderType()
 {
+	OPTICK_EVENT();
+
 	if (std::strcmp(name.c_str(), "default_shader") == 0)
 		shaderType = SHADER_TEMPLATE::DEFAULT;
 	else if (std::strcmp(name.c_str(), "shader_wave") == 0)
@@ -178,6 +186,8 @@ void ResourceShader::TryToSetShaderType()
 
 uint ResourceShader::ParseAndCreateShader()
 {
+	OPTICK_EVENT();
+
 	SHADER_PROGRAM_SOURCE source = ParseShader(meta_data_path);
 	shader_id = CreateShader(source.vertex_source, source.fragment_source);
 
@@ -251,6 +261,8 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 
 void ResourceShader::ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera)
 {
+	OPTICK_EVENT();
+
 	switch (shaderType)
 	{
 	case SHADER_TEMPLATE::DEFAULT:

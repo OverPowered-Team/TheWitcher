@@ -8,8 +8,12 @@
 #include "ModuleImporter.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& width, const uint& height) : Resource()
 {
+	OPTICK_EVENT();
+
 	this->path = std::string(path);
 	this->id = id;
 	this->width = width;
@@ -20,6 +24,8 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 
 ResourceTexture::ResourceTexture(const char* path)
 {
+	OPTICK_EVENT();
+
 	name = App->file_system->GetBaseFileName(path); 
 	this->path = std::string(path); 
 	type = ResourceType::RESOURCE_TEXTURE;
@@ -27,11 +33,15 @@ ResourceTexture::ResourceTexture(const char* path)
 
 ResourceTexture::~ResourceTexture()
 {
+	OPTICK_EVENT();
+
 	glDeleteTextures(1, &id);
 }
 
 bool ResourceTexture::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	bool ret = false;
 	if (ilLoadImage(path.data())) {
 		if (force_id == 0)
@@ -101,6 +111,8 @@ bool ResourceTexture::CreateMetaData(const u64& force_id)
 
 bool ResourceTexture::LoadMemory()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	App->importer->LoadTextureToResource(meta_data_path.data(), this);
@@ -110,6 +122,8 @@ bool ResourceTexture::LoadMemory()
 
 void ResourceTexture::FreeMemory()
 {
+	OPTICK_EVENT();
+
 	glDeleteTextures(1, &id);
 	width = 0;
 	height = 0;
@@ -118,6 +132,8 @@ void ResourceTexture::FreeMemory()
 
 bool ResourceTexture::ReadBaseInfo(const char* assets_path)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	name = App->file_system->GetBaseFileName(assets_path);
@@ -161,6 +177,8 @@ bool ResourceTexture::ReadBaseInfo(const char* assets_path)
 
 void ResourceTexture::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	this->meta_data_path = meta_data;
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 	App->resources->AddResource(this);
@@ -168,6 +186,8 @@ void ResourceTexture::ReadLibrary(const char* meta_data)
 
 bool ResourceTexture::DeleteMetaData()
 {
+	OPTICK_EVENT();
+
 	remove(meta_data_path.data());
 
 	std::vector<Resource*>::iterator position = std::find(App->resources->resources.begin(), App->resources->resources.end(), static_cast<Resource*>(this));

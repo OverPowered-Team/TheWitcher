@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "imgui/imgui.h"
 
+#include "Optick/include/optick.h"
+
 ComponentBoxCollider::ComponentBoxCollider(GameObject* go) : ComponentCollider(go)
 {
 	name.assign("Box Collider");
@@ -25,6 +27,8 @@ void ComponentBoxCollider::ScaleChanged()
 
 PxShape* ComponentBoxCollider::ReCreateBoxShape()
 {
+	OPTICK_EVENT();
+
 	if (!shape)
 		return nullptr;
 
@@ -72,12 +76,16 @@ void ComponentBoxCollider::Reset()
 
 void ComponentBoxCollider::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	ComponentCollider::SaveComponent(to_save);
 	to_save->SetFloat3("Size", size);
 }
 
 void ComponentBoxCollider::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	ComponentCollider::LoadComponent(to_load);
 	size = to_load->GetFloat3("Size");
 	ReCreateBoxShape();
@@ -87,6 +95,7 @@ void ComponentBoxCollider::LoadComponent(JSONArraypack* to_load)
 
 void ComponentBoxCollider::SetSize(float3 size)
 {
+	OPTICK_EVENT();
 	this->size = size;
 	ReCreateBoxShape();
 }

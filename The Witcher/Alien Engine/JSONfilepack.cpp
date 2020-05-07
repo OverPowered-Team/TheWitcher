@@ -2,6 +2,8 @@
 #include "Color.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 JSONfilepack::JSONfilepack(const char* path, JSON_Object*& object, JSON_Value*& value)
 	: path(path), object(object), value(value)
 {
@@ -20,9 +22,12 @@ JSONfilepack::~JSONfilepack()
 	if (value != nullptr)
 		json_value_free(value);
 }
-
+
+
 JSONfilepack* JSONfilepack::CreateJSON(const char* path)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* value = json_value_init_object();
 	JSON_Object* json_object = json_value_get_object(value);
  
@@ -33,6 +38,8 @@ JSONfilepack* JSONfilepack::CreateJSON(const char* path)
 
 JSONfilepack* JSONfilepack::GetJSON(const char* path)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* value = json_parse_file(path);
 	JSON_Object* object = json_value_get_object(value);
 
@@ -46,12 +53,16 @@ void JSONfilepack::FreeJSON(JSONfilepack* json)
 }
 void JSONfilepack::StartSave()
 {
+	OPTICK_EVENT();
+
 	save_value = json_parse_file(path);
 	save_object = json_object(save_value);
 }
 
 void JSONfilepack::FinishSave()
 {
+	OPTICK_EVENT();
+
 	json_serialize_to_file_pretty(save_value, path);
 	json_value_free(save_value);
 	save_value = nullptr;
@@ -60,11 +71,15 @@ void JSONfilepack::FinishSave()
 
 void JSONfilepack::SetNumber(const char* name, const double& number)
 {
+	OPTICK_EVENT();
+
 	json_object_dotset_number(save_object, name, number);
 }
 
 double JSONfilepack::GetNumber(const char* name, double default_value)
 {
+	OPTICK_EVENT();
+
 	try {
 		return json_object_dotget_number(object, name);
 	}
@@ -75,11 +90,15 @@ double JSONfilepack::GetNumber(const char* name, double default_value)
 
 void JSONfilepack::SetBoolean(const char* name, const bool& boolean)
 {
+	OPTICK_EVENT();
+
 	json_object_dotset_boolean(save_object, name, boolean);
 }
 
 bool JSONfilepack::GetBoolean(const char* name, bool default_value)
 {
+	OPTICK_EVENT();
+
 	try {
 		return json_object_dotget_boolean(object, name);
 	}
@@ -90,6 +109,8 @@ bool JSONfilepack::GetBoolean(const char* name, bool default_value)
 
 void JSONfilepack::SetColor(const char* name, const Color& color)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -107,6 +128,8 @@ void JSONfilepack::SetColor(const char* name, const Color& color)
 
 Color JSONfilepack::GetColor(const char* name, Color default_color)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(object, name);
 
@@ -125,6 +148,8 @@ Color JSONfilepack::GetColor(const char* name, Color default_color)
 
 void JSONfilepack::SetFloat3(const char* name, const float3& numbers)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -141,6 +166,8 @@ void JSONfilepack::SetFloat3(const char* name, const float3& numbers)
 
 float3 JSONfilepack::GetFloat3(const char* name, const float3& default_float3)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(object, name);
 
@@ -158,6 +185,8 @@ float3 JSONfilepack::GetFloat3(const char* name, const float3& default_float3)
 
 void JSONfilepack::SetFloat4(const char* name, const float4& numbers)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -175,6 +204,8 @@ void JSONfilepack::SetFloat4(const char* name, const float4& numbers)
 
 float4 JSONfilepack::GetFloat4(const char* name, const float4& default_float4)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(object, name);
 
@@ -193,6 +224,8 @@ float4 JSONfilepack::GetFloat4(const char* name, const float4& default_float4)
 
 void JSONfilepack::SetQuat(const char* name, const Quat& numbers)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -210,6 +243,8 @@ void JSONfilepack::SetQuat(const char* name, const Quat& numbers)
 
 Quat JSONfilepack::GetQuat(const char* name, const Quat& default_quat)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(object, name);
 
@@ -228,6 +263,8 @@ Quat JSONfilepack::GetQuat(const char* name, const Quat& default_quat)
 
 void JSONfilepack::SetNumberArray(const char* name, float* numbers, uint size)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -244,6 +281,8 @@ void JSONfilepack::SetNumberArray(const char* name, float* numbers, uint size)
 
 float* JSONfilepack::GetNumberArray(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(object, name);
 	
 	uint size = json_array_get_count(arr);
@@ -259,6 +298,8 @@ float* JSONfilepack::GetNumberArray(const char* name)
 
 void JSONfilepack::SetUintArray(const char* name, uint* numbers, uint size)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -275,6 +316,8 @@ void JSONfilepack::SetUintArray(const char* name, uint* numbers, uint size)
 
 uint* JSONfilepack::GetUintArray(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(object, name);
 
 	uint size = json_array_get_count(arr);
@@ -290,6 +333,8 @@ uint* JSONfilepack::GetUintArray(const char* name)
 
 void JSONfilepack::SetShortcutCodes(const char* name, SDL_Scancode* codes)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -306,6 +351,8 @@ void JSONfilepack::SetShortcutCodes(const char* name, SDL_Scancode* codes)
 
 SDL_Scancode* JSONfilepack::GetShortcutCodes(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(object, name);
 
 	uint size = json_array_get_count(arr);
@@ -321,6 +368,8 @@ SDL_Scancode* JSONfilepack::GetShortcutCodes(const char* name)
 
 void JSONfilepack::SetArrayString(const char* name, std::string* strings, uint size)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -337,6 +386,8 @@ void JSONfilepack::SetArrayString(const char* name, std::string* strings, uint s
 
 void JSONfilepack::SetArrayNumber(const char* name, const double& number)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(save_object, name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -349,6 +400,8 @@ void JSONfilepack::SetArrayNumber(const char* name, const double& number)
 
 double JSONfilepack::GetArrayNumber(const char* name, const uint& index)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(object, name);
 	return json_array_get_number(arr, index);
 }
@@ -356,6 +409,8 @@ double JSONfilepack::GetArrayNumber(const char* name, const uint& index)
 
 std::string* JSONfilepack::GetArrayString(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(object, name);
 
 	uint size = json_array_get_count(arr);
@@ -371,11 +426,15 @@ std::string* JSONfilepack::GetArrayString(const char* name)
 
 void JSONfilepack::SetString(const char* name, const char* string_parameter)
 {
+	OPTICK_EVENT();
+
 	json_object_dotset_string(save_object, name, string_parameter);
 }
 
 const char* JSONfilepack::GetString(const char* name, const std::string& default_string)
 {
+	OPTICK_EVENT();
+
 	try {
 		return json_object_dotget_string(object, name);
 	}
@@ -386,6 +445,8 @@ const char* JSONfilepack::GetString(const char* name, const std::string& default
 
 JSONArraypack* JSONfilepack::InitNewArray(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* val = json_value_init_array();
 	json_object_dotset_value(save_object, name, val);
 
@@ -397,6 +458,8 @@ JSONArraypack* JSONfilepack::InitNewArray(const char* name)
 
 JSONArraypack* JSONfilepack::GetArray(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = nullptr;
 	if (save_object != nullptr) {
 		arr = json_object_dotget_array(save_object, name);
@@ -423,6 +486,8 @@ void JSONfilepack::ClearArrays()
 
 JSONArraypack::~JSONArraypack()
 {
+	OPTICK_EVENT();
+
 	if (!arrays.empty()) {
 		std::vector<JSONArraypack*>::iterator item = arrays.begin();
 		for (; item != arrays.end(); ++item) {
@@ -434,12 +499,16 @@ JSONArraypack::~JSONArraypack()
 
 void JSONArraypack::SetNumber(const char* name, const double& number)
 {
+	OPTICK_EVENT();
+
 	json_object_dotset_number(json_value_get_object(value), name, number);
 	json_array_append_value(arr, value);
 }
 
 double JSONArraypack::GetNumber(const char* name, double default_value)
 {
+	OPTICK_EVENT();
+
 	try {
 		return json_object_dotget_number(json_value_get_object(value), name);
 	}
@@ -450,11 +519,15 @@ double JSONArraypack::GetNumber(const char* name, double default_value)
 
 void JSONArraypack::SetBoolean(const char* name, const bool& boolean)
 {
+	OPTICK_EVENT();
+
 	json_object_dotset_boolean(json_value_get_object(value), name, boolean);
 }
 
 bool JSONArraypack::GetBoolean(const char* name, bool default_value)
 {
+	OPTICK_EVENT();
+
 	try {
 		return json_object_dotget_boolean(json_value_get_object(value), name);
 	}
@@ -465,6 +538,8 @@ bool JSONArraypack::GetBoolean(const char* name, bool default_value)
 
 void JSONArraypack::SetColor(const char* name, const Color& color)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -482,6 +557,8 @@ void JSONArraypack::SetColor(const char* name, const Color& color)
 
 Color JSONArraypack::GetColor(const char* name, Color default_color)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
@@ -500,6 +577,8 @@ Color JSONArraypack::GetColor(const char* name, Color default_color)
 
 void JSONArraypack::SetFloat3(const char* name, const float3& numbers)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -516,6 +595,8 @@ void JSONArraypack::SetFloat3(const char* name, const float3& numbers)
 
 float3 JSONArraypack::GetFloat3(const char* name, const float3& default_float3)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
@@ -533,6 +614,8 @@ float3 JSONArraypack::GetFloat3(const char* name, const float3& default_float3)
 
 void JSONArraypack::SetFloat4(const char* name, const float4& numbers)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -550,6 +633,8 @@ void JSONArraypack::SetFloat4(const char* name, const float4& numbers)
 
 float4 JSONArraypack::GetFloat4(const char* name, const float4& default_float4)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
@@ -568,6 +653,8 @@ float4 JSONArraypack::GetFloat4(const char* name, const float4& default_float4)
 
 void JSONArraypack::SetQuat(const char* name, const Quat& numbers)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 	if (arr == nullptr) {
 		JSON_Value* new_val = json_value_init_array();
@@ -585,6 +672,8 @@ void JSONArraypack::SetQuat(const char* name, const Quat& numbers)
 
 Quat JSONArraypack::GetQuat(const char* name, const Quat& default_quat)
 {
+	OPTICK_EVENT();
+
 	try {
 		JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 
@@ -603,6 +692,8 @@ Quat JSONArraypack::GetQuat(const char* name, const Quat& default_quat)
 
 void JSONArraypack::SetAnotherNode()
 {
+	OPTICK_EVENT();
+
 	// I hope when destroying the core value of the file everything is deleted :) 
 	value = json_value_init_object();
 	json_array_append_value(arr, value);
@@ -610,6 +701,8 @@ void JSONArraypack::SetAnotherNode()
 
 bool JSONArraypack::GetAnotherNode()
 {
+	OPTICK_EVENT();
+
 	++index;
 	if (index < json_array_get_count(arr)) {
 		value = json_array_get_value(arr, index);
@@ -622,28 +715,38 @@ bool JSONArraypack::GetAnotherNode()
 
 void JSONArraypack::GetFirstNode()
 {
+	OPTICK_EVENT();
+
 	index = 0;
 	value = json_array_get_value(arr, index);
 }
 
 void JSONArraypack::GetNode(const uint& index)
 {
+	OPTICK_EVENT();
+
 	this->index = index;
 	value = json_array_get_value(arr, index);
 }
 
 uint JSONArraypack::GetArraySize()
 {
+	OPTICK_EVENT();
+
 	return json_array_get_count(arr);
 }
 
 void JSONArraypack::SetString(const char* name, const char* string_parameter)
 {
+	OPTICK_EVENT();
+
 	json_object_dotset_string(json_value_get_object(value), name, string_parameter);
 }
 
 const char* JSONArraypack::GetString(const char* name, std::string default_string)
 {
+	OPTICK_EVENT();
+
 	try {
 		const char* ret = json_object_dotget_string(json_value_get_object(value), name);
 		return ret;
@@ -655,6 +758,8 @@ const char* JSONArraypack::GetString(const char* name, std::string default_strin
 
 JSONArraypack* JSONArraypack::InitNewArray(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* val = json_value_init_array();
 	json_object_dotset_value(json_value_get_object(value), name, val);
 
@@ -666,6 +771,8 @@ JSONArraypack* JSONArraypack::InitNewArray(const char* name)
 
 JSONArraypack* JSONArraypack::GetArray(const char* name)
 {
+	OPTICK_EVENT();
+
 	JSON_Array* arr = json_object_dotget_array(json_value_get_object(value), name);
 	JSON_Value* value = json_array_get_value(arr, 0);
 	JSONArraypack* array_pack = new JSONArraypack(arr, value);

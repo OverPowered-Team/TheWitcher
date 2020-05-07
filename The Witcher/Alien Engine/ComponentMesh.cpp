@@ -193,6 +193,8 @@ void ComponentMesh::PreDrawPolygonForShadows(ComponentCamera* camera, const floa
 
 void ComponentMesh::DrawOutLine()
 {
+	OPTICK_EVENT();
+
 	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
@@ -271,6 +273,8 @@ void ComponentMesh::DrawMesh()
 
 void ComponentMesh::SetShadowUniforms(ResourceMaterial* resource_material, ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position)
 {
+	OPTICK_EVENT();
+
 	resource_material->simple_depth_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
 	resource_material->simple_depth_shader->SetUniformMat4f("lightSpaceMatrix", ProjMatrix * ViewMat);
 	resource_material->simple_depth_shader->SetUniform1i("animate", animate);
@@ -278,12 +282,16 @@ void ComponentMesh::SetShadowUniforms(ResourceMaterial* resource_material, Compo
 
 void ComponentMesh::SetUniforms(ResourceMaterial* resource_material)
 {
+	OPTICK_EVENT();
+
 	resource_material->used_shader->SetUniformMat4f("model", game_object_attached->transform->GetGlobalMatrix().Transposed());
 	resource_material->used_shader->SetUniform1i("animate", animate);
 }
 
 void ComponentMesh::DrawVertexNormals()
 {
+	OPTICK_EVENT();
+
 	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
@@ -310,6 +318,8 @@ void ComponentMesh::DrawVertexNormals()
 
 void ComponentMesh::DrawFaceNormals()
 {
+	OPTICK_EVENT();
+
 	if (mesh == nullptr || mesh->id_index <= 0)
 		return;
 
@@ -336,6 +346,8 @@ void ComponentMesh::DrawFaceNormals()
 
 bool ComponentMesh::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool check;
 
 	ImGui::PushID(this);
@@ -414,6 +426,8 @@ bool ComponentMesh::DrawInspector()
 
 void ComponentMesh::DrawGlobalAABB()
 {
+	OPTICK_EVENT();
+
 	if (mesh == nullptr)
 		return;
 
@@ -465,6 +479,8 @@ void ComponentMesh::DrawGlobalAABB()
 
 void ComponentMesh::DrawOBB()
 {
+	OPTICK_EVENT();
+
 	if (mesh == nullptr)
 		return;
 
@@ -527,6 +543,8 @@ void ComponentMesh::Reset()
 
 void ComponentMesh::SetComponent(Component* component)
 {
+	OPTICK_EVENT();
+
 	if (component->GetType() == type) {
 
 		ComponentMesh* tmp = (ComponentMesh*)component;
@@ -551,6 +569,8 @@ void ComponentMesh::SetComponent(Component* component)
 
 void ComponentMesh::Clone(Component* clone)
 {
+	OPTICK_EVENT();
+
 	clone->enabled = enabled;
 	clone->not_destroy = not_destroy;
 	ComponentMesh* mesh = (ComponentMesh*)clone;
@@ -571,6 +591,8 @@ void ComponentMesh::Clone(Component* clone)
 
 void ComponentMesh::GenerateLocalAABB()
 {
+	OPTICK_EVENT();
+
 	if (mesh != nullptr) {
 		local_aabb.SetNegativeInfinity();
 		local_aabb.Enclose((float3*)mesh->vertex, mesh->num_vertex);
@@ -579,6 +601,8 @@ void ComponentMesh::GenerateLocalAABB()
 
 void ComponentMesh::RecalculateAABB_OBB()
 {
+	OPTICK_EVENT();
+
 	ComponentTransform* transform = game_object_attached->transform;
 	obb = local_aabb;
 	obb.Transform(transform->global_transformation);

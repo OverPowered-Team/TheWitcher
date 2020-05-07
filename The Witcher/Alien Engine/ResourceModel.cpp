@@ -19,6 +19,8 @@
 #include "ComponentBone.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourceModel::ResourceModel() : Resource()
 {
 	type = ResourceType::RESOURCE_MODEL;
@@ -38,6 +40,8 @@ ResourceModel::~ResourceModel()
 
 bool ResourceModel::CreateMetaData(const u64& force_id)
 {	
+	OPTICK_EVENT();
+
 	if (force_id == 0)
 		ID = App->resources->GetRandomID();
 	else
@@ -219,6 +223,8 @@ bool ResourceModel::CreateMetaData(const u64& force_id)
 
 bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	path = std::string(assets_file_path);
@@ -363,6 +369,8 @@ bool ResourceModel::ReadBaseInfo(const char* assets_file_path)
 
 void ResourceModel::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = meta_data;
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 
@@ -457,6 +465,8 @@ void ResourceModel::ReadLibrary(const char* meta_data)
 
 bool ResourceModel::LoadMemory()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	std::vector<ResourceMesh*>::iterator item = meshes_attached.begin();
@@ -560,6 +570,8 @@ bool ResourceModel::DeleteMetaData()
 
 void ResourceModel::UpdateAnimationInfo()
 {
+	OPTICK_EVENT();
+
 	JSON_Value* mesh_value = json_parse_file(meta_data_path.data());
 	JSON_Object* mesh_object = json_value_get_object(mesh_value);
 
@@ -661,6 +673,8 @@ void ResourceModel::UpdateAnimationInfo()
 
 void ResourceModel::ConvertToGameObjects()
 {
+	OPTICK_EVENT();
+
 	if (model_nodes.empty())
 		return;
 
@@ -710,6 +724,8 @@ bool ResourceModel::SortByFamilyNumber(const ModelNode& node1, const ModelNode& 
 
 GameObject* ResourceModel::CreateGameObject(const ModelNode& node, std::vector<std::pair<uint, GameObject*>>& objects_created, GameObject*& root_bone)
 {
+	OPTICK_EVENT();
+
 	GameObject* ret = nullptr;
 
 	for (uint i = 0; i < objects_created.size(); ++i) {

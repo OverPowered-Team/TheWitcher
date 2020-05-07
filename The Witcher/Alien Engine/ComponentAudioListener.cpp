@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ComponentAudioListener::ComponentAudioListener(GameObject * parent) : Component(parent)
 {
 	type = ComponentType::A_LISTENER;
@@ -26,6 +28,8 @@ void ComponentAudioListener::Update()
 
 void ComponentAudioListener::UpdateListenerPos()
 {
+	OPTICK_EVENT();
+
 	ComponentTransform* transformation = game_object_attached->GetComponentTransform();
 	if (transformation != nullptr && listener)
 	{
@@ -63,6 +67,8 @@ void ComponentAudioListener::OnDisable()
 
 void ComponentAudioListener::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", (bool)enabled);
 	to_save->SetString("ID", std::to_string(ID).data());
@@ -72,6 +78,8 @@ void ComponentAudioListener::SaveComponent(JSONArraypack* to_save)
 
 void ComponentAudioListener::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	if(enabled)
@@ -81,6 +89,8 @@ void ComponentAudioListener::LoadComponent(JSONArraypack* to_load)
 
 bool ComponentAudioListener::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	ImGui::PushID(this);
 
 	if (ImGui::Checkbox("##enableListener", &enabled)) {

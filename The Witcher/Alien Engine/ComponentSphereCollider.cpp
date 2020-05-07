@@ -8,6 +8,8 @@
 #include "imgui/imgui.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ComponentSphereCollider::ComponentSphereCollider(GameObject* go) :ComponentCollider(go)
 {
 	name.assign("Sphere Collider");
@@ -30,6 +32,8 @@ const float ComponentSphereCollider::CalculateRadius()
 
 PxShape* ComponentSphereCollider::RecreateSphereShape()
 {
+	OPTICK_EVENT();
+
 	if (!shape)
 		return nullptr;
 
@@ -71,12 +75,16 @@ void ComponentSphereCollider::SetRadius(float radius)
 
 void ComponentSphereCollider::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	ComponentCollider::SaveComponent(to_save);
 	to_save->SetNumber("Radius", radius);
 }
 
 void ComponentSphereCollider::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	ComponentCollider::LoadComponent(to_load);
 	radius = (to_load->GetNumber("Radius"));
 	RecreateSphereShape();

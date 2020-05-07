@@ -19,6 +19,8 @@
 #include "ResourceAnimatorController.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourceAnimatorController::ResourceAnimatorController() : Resource()
 {
 	type = ResourceType::RESOURCE_ANIMATOR_CONTROLLER;
@@ -29,6 +31,7 @@ ResourceAnimatorController::ResourceAnimatorController() : Resource()
 
 ResourceAnimatorController::ResourceAnimatorController(ResourceAnimatorController* controller)
 {
+	OPTICK_EVENT();
 
 	name = controller->name;
 
@@ -64,6 +67,8 @@ ResourceAnimatorController::~ResourceAnimatorController()
 
 void ResourceAnimatorController::ReImport(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	JSON_Value* value = json_parse_file(path.data());
 	JSON_Object* object = json_value_get_object(value);
 
@@ -277,6 +282,8 @@ void ResourceAnimatorController::AddIntParameter(std::pair<std::string, int> par
 
 void ResourceAnimatorController::RemoveBoolParameter(std::string name)
 {
+	OPTICK_EVENT();
+
 	for (std::vector<std::pair<std::string, bool>>::iterator it = bool_parameters.begin(); it != bool_parameters.end(); ++it) {
 		if ((*it).first == name) {
 			for (std::vector<Transition*>::iterator t_it = transitions.begin(); t_it != transitions.end(); ++t_it) {
@@ -295,6 +302,8 @@ void ResourceAnimatorController::RemoveBoolParameter(std::string name)
 
 void ResourceAnimatorController::RemoveFloatParameter(std::string name)
 {
+	OPTICK_EVENT();
+
 	for (std::vector<std::pair<std::string, float>>::iterator it = float_parameters.begin(); it != float_parameters.end(); ++it) {
 		if ((*it).first == name) {
 			for (std::vector<Transition*>::iterator t_it = transitions.begin(); t_it != transitions.end(); ++t_it) {
@@ -313,6 +322,8 @@ void ResourceAnimatorController::RemoveFloatParameter(std::string name)
 
 void ResourceAnimatorController::RemoveIntParameter(std::string name)
 {
+	OPTICK_EVENT();
+
 	for (std::vector<std::pair<std::string, int>>::iterator it = int_parameters.begin(); it != int_parameters.end(); ++it) {
 		if ((*it).first == name) {
 			for (std::vector<Transition*>::iterator t_it = transitions.begin(); t_it != transitions.end(); ++t_it) {
@@ -366,6 +377,8 @@ void ResourceAnimatorController::Update()
 
 void ResourceAnimatorController::UpdateState(State* state)
 {
+	OPTICK_EVENT();
+
 	ResourceAnimation* animation = state->GetClip();
 	ResourceAnimation* current_clip = current_state->GetClip();
 	if (current_clip == nullptr)
@@ -445,6 +458,8 @@ void ResourceAnimatorController::Stop()
 
 bool ResourceAnimatorController::CheckTriggers()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	std::vector<Transition*> current_transitions = FindTransitionsFromSourceState(current_state);
@@ -492,6 +507,8 @@ bool ResourceAnimatorController::CheckTriggers()
 
 bool ResourceAnimatorController::SaveAsset(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0)
 		ID = App->resources->GetRandomID();
 	else
@@ -597,6 +614,8 @@ bool ResourceAnimatorController::SaveAsset(const u64& force_id)
 
 void ResourceAnimatorController::FreeMemory()
 {
+	OPTICK_EVENT();
+
 	for (std::vector<State*>::iterator it = states.begin(); it != states.end(); ++it)
 	{
 		if ((*it)->GetClip() && !App->IsQuiting())
@@ -642,6 +661,8 @@ void ResourceAnimatorController::FreeMemory()
 }
 bool ResourceAnimatorController::LoadMemory()
 {
+	OPTICK_EVENT();
+
 	char* buffer;
 	uint size = App->file_system->Load(meta_data_path.data(), &buffer);
 
@@ -987,6 +1008,8 @@ bool ResourceAnimatorController::LoadMemory()
 
 bool ResourceAnimatorController::ReadBaseInfo(const char* assets_file_path)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	path = std::string(assets_file_path);
@@ -1055,6 +1078,8 @@ bool ResourceAnimatorController::ReadBaseInfo(const char* assets_file_path)
 
 void ResourceAnimatorController::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	this->meta_data_path = meta_data;
 	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 	App->resources->AddResource(this);
@@ -1062,6 +1087,8 @@ void ResourceAnimatorController::ReadLibrary(const char* meta_data)
 
 bool ResourceAnimatorController::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0)
 		ID = App->resources->GetRandomID();
 	else
@@ -1408,6 +1435,8 @@ bool ResourceAnimatorController::CreateMetaData(const u64& force_id)
 
 bool ResourceAnimatorController::DeleteMetaData()
 {
+	OPTICK_EVENT();
+
 	remove(meta_data_path.data());
 
 	std::vector<Resource*>::iterator position = std::find(App->resources->resources.begin(), App->resources->resources.end(), static_cast<Resource*>(this));
@@ -1421,6 +1450,8 @@ bool ResourceAnimatorController::DeleteMetaData()
 
 void ResourceAnimatorController::Play()
 {
+	OPTICK_EVENT();
+
 	if (default_state)
 	{
 		current_state = default_state;
@@ -1439,6 +1470,8 @@ void ResourceAnimatorController::Play()
 
 void ResourceAnimatorController::Play(std::string state_name)
 {
+	OPTICK_EVENT();
+
 	for (std::vector<State*>::iterator it = states.begin(); it != states.end(); ++it)
 	{
 		if (strcmp((*it)->GetName().c_str(), state_name.c_str()) == 0) {
@@ -1460,6 +1493,8 @@ void ResourceAnimatorController::Play(std::string state_name)
 
 bool ResourceAnimatorController::GetTransform(std::string channel_name, float3& position, Quat& rotation, float3& scale)
 {
+	OPTICK_EVENT();
+
 	if (current_state)
 	{
 		return GetTransformState(current_state, channel_name, position, rotation, scale);
@@ -1470,6 +1505,8 @@ bool ResourceAnimatorController::GetTransform(std::string channel_name, float3& 
 
 bool ResourceAnimatorController::GetTransformState(State* state, std::string channel_name, float3& position, Quat& rotation, float3& scale)
 {
+	OPTICK_EVENT();
+
 	ResourceAnimation* animation = state->GetClip();
 
 	if (animation)

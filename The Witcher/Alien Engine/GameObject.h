@@ -310,6 +310,23 @@ private:
 template<class Comp>
 inline Comp* GameObject::GetComponent()
 {
+	static int count = 0;
+	static std::string lastname;
+
+	if (strcmp(lastname.data(), name) == 0)
+	{
+		++count;
+	}
+	else
+	{
+		lastname = name;
+		count = 0;
+	}
+
+	if (count > 100)
+	{
+		LOG_ENGINE("%s", name);
+	}
 	for (uint i = 0; i < components.size(); ++i) {
 		if (components[i]->GetType() != ComponentType::SCRIPT) {
 			Comp* component = dynamic_cast<Comp*>(components[i]);

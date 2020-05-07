@@ -51,6 +51,8 @@ ModuleImporter::~ModuleImporter()
 
 bool ModuleImporter::Init()
 {
+	OPTICK_EVENT();
+
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
@@ -565,6 +567,8 @@ ResourceTexture *ModuleImporter::LoadEngineTexture(const char *path)
 
 ResourceFont *ModuleImporter::LoadFontFile(const char *path)
 {
+	OPTICK_EVENT();
+
 	ResourceFont *font = nullptr;
 
 	if (!App->resources->GetFontByName(App->file_system->GetBaseFileName(path).c_str()))
@@ -577,6 +581,8 @@ ResourceFont *ModuleImporter::LoadFontFile(const char *path)
 
 void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *texture)
 {
+	OPTICK_EVENT();
+
 	ILuint new_image_id = 0;
 	ilGenImages(1, &new_image_id);
 	ilBindImage(new_image_id);
@@ -592,12 +598,12 @@ void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *te
 		texture->width = ilGetInteger(IL_IMAGE_WIDTH);
 		texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
 
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		/*glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		ilBindImage(0);
@@ -622,6 +628,8 @@ void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *te
 
 void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture *texture)
 {
+	OPTICK_EVENT();
+
 	std::list<GameObject *> selected = App->objects->GetSelectedObjects();
 	auto item = selected.begin();
 	for (; item != selected.end(); ++item)
@@ -672,6 +680,8 @@ void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture *texture)
 
 ResourceShader *ModuleImporter::LoadShaderFile(const char *path, bool has_been_dropped, bool is_custom)
 {
+	OPTICK_EVENT();
+
 	ResourceShader *shader = nullptr;
 
 	if (!has_been_dropped && !App->file_system->Exists(path))
@@ -719,6 +729,8 @@ void ModuleImporter::ApplyShaderToSelectedObject(ResourceShader *shader)
 
 void ModuleImporter::ApplyMaterialToSelectedObject(ResourceMaterial* material)
 {
+	OPTICK_EVENT();
+
 	std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 	auto item = selected.begin();
 	for (; item != selected.end(); ++item)
@@ -743,6 +755,7 @@ void ModuleImporter::ApplyMaterialToSelectedObject(ResourceMaterial* material)
 
 void ModuleImporter::ApplyParticleSystemToSelectedObject(std::string path)
 {
+	OPTICK_EVENT();
 
 	std::list<GameObject *> selected = App->objects->GetSelectedObjects();
 	auto item = selected.begin();
@@ -784,6 +797,8 @@ void ModuleImporter::ApplyParticleSystemToSelectedObject(std::string path)
 
 void ModuleImporter::LoadParShapesMesh(par_shapes_mesh *shape, ResourceMesh *mesh)
 {
+	OPTICK_EVENT();
+
 	par_shapes_unweld(shape, true);
 	par_shapes_compute_normals(shape);
 
@@ -841,6 +856,8 @@ void ModuleImporter::LoadParShapesMesh(par_shapes_mesh *shape, ResourceMesh *mes
 
 ResourceMesh *ModuleImporter::LoadEngineModels(const char *path)
 {
+	OPTICK_EVENT();
+
 	ResourceMesh *ret = nullptr;
 
 	const aiScene *scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
@@ -925,6 +942,8 @@ ResourceMesh *ModuleImporter::LoadEngineModels(const char *path)
 
 bool ModuleImporter::ReImportModel(ResourceModel *model)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	const aiScene *scene = aiImportFile(model->GetAssetsPath(), aiProcess_Triangulate | aiProcess_GenSmoothNormals |
@@ -984,6 +1003,8 @@ bool ModuleImporter::ReImportModel(ResourceModel *model)
 
 void ModuleImporter::ReImportAnimations(ResourceModel *model, const aiScene *scene)
 {
+	OPTICK_EVENT();
+
 	if (scene->HasAnimations())
 	{
 		for (int i = 0; i < scene->mNumAnimations; i++)

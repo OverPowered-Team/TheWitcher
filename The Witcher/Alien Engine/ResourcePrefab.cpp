@@ -18,6 +18,8 @@
 
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ResourcePrefab::ResourcePrefab() : Resource()
 {
 	type = ResourceType::RESOURCE_PREFAB;
@@ -30,6 +32,8 @@ ResourcePrefab::~ResourcePrefab()
 
 bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 force_id)
 {
+	OPTICK_EVENT();
+
 	App->objects->is_saving_prefab = true;
 	std::vector<std::string> files;
 	std::vector<std::string> dir;
@@ -117,6 +121,8 @@ bool ResourcePrefab::CreateMetaData(GameObject* object, const char* folder, u64 
 
 bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 {
+	OPTICK_EVENT();
+
 	path = std::string(assets_file_path);
 
 	std::string meta_path = std::string(App->file_system->GetPathWithoutExtension(path) + "_meta.alien");
@@ -176,6 +182,8 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 
 void ResourcePrefab::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = std::string(meta_data);
 
 	JSONfilepack* pack = JSONfilepack::GetJSON(meta_data_path.data());
@@ -194,6 +202,8 @@ void ResourcePrefab::ReadLibrary(const char* meta_data)
 
 bool ResourcePrefab::DeleteMetaData()
 {
+	OPTICK_EVENT();
+
 	if (App->objects->prefab_scene && App->objects->prefab_opened == this) {
 		App->objects->LoadScene("Library/save_prefab_scene.alienScene", false);
 		App->objects->prefab_opened = nullptr;
@@ -208,6 +218,8 @@ bool ResourcePrefab::DeleteMetaData()
 
 void ResourcePrefab::Save(GameObject* prefab_root)
 {
+	OPTICK_EVENT();
+
 	App->objects->is_saving_prefab = true;
 	remove(meta_data_path.data());
 	remove(path.data());
@@ -242,6 +254,8 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 
 void ResourcePrefab::OpenPrefabScene()
 {
+	OPTICK_EVENT();
+
 	if (Time::IsInGameState()) {
 		App->ui->panel_hierarchy->popup_no_open_prefab = true;
 		return;
@@ -261,6 +275,8 @@ void ResourcePrefab::OpenPrefabScene()
 
 GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_num, float3 pos, bool check_childrens, bool set_selected)
 {
+	OPTICK_EVENT();
+
 	if (!set_selected) {
 		App->objects->inPrefabCreation = true;
 	}
@@ -385,6 +401,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 
 void ResourcePrefab::CheckChildren(GameObject* game_object, float3 pos)
 {
+	OPTICK_EVENT();
+
 	ComponentRigidBody* rb = (ComponentRigidBody*)(game_object)->GetComponent(ComponentType::RIGID_BODY);
 	if (rb)
 	{

@@ -17,6 +17,8 @@
 
 ResourceMaterial::ResourceMaterial() : Resource()
 {
+	OPTICK_EVENT();
+
 	type = ResourceType::RESOURCE_MATERIAL;
 
 	for (uint i = 0; i < (uint)TextureType::MAX; ++i)
@@ -39,6 +41,8 @@ ResourceMaterial::ResourceMaterial() : Resource()
 
 ResourceMaterial::~ResourceMaterial()
 {
+	OPTICK_EVENT();
+
 	for (uint texType = 0; texType < (uint)TextureType::MAX; ++texType)
 	{
 		textures[texType].first = NO_TEXTURE_ID;
@@ -58,6 +62,8 @@ ResourceMaterial::~ResourceMaterial()
 
 bool ResourceMaterial::LoadMemory()
 {
+	OPTICK_EVENT();
+
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
 		if (textures[iter].first != NO_TEXTURE_ID)
 		{
@@ -71,6 +77,8 @@ bool ResourceMaterial::LoadMemory()
 
 void ResourceMaterial::FreeMemory()
 {
+	OPTICK_EVENT();
+
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
 		if (textures[iter].first != NO_TEXTURE_ID)
 		{
@@ -82,16 +90,22 @@ void ResourceMaterial::FreeMemory()
 
 void ResourceMaterial::OnSelected()
 {
+	OPTICK_EVENT();
+
 	LoadMemory();
 }
 
 void ResourceMaterial::OnDeselected()
 {
+	OPTICK_EVENT();
+
 	FreeMemory();
 }
 
 void ResourceMaterial::SaveResource()
 {
+	OPTICK_EVENT();
+
 	remove(path.c_str());
 
 	JSON_Value* alien_value = json_value_init_object();
@@ -109,6 +123,8 @@ void ResourceMaterial::SaveResource()
 
 bool ResourceMaterial::CreateMetaData(const u64& force_id)
 {
+	OPTICK_EVENT();
+
 	if (force_id == 0) {
 		ID = App->resources->GetRandomID();
 	}
@@ -153,6 +169,8 @@ bool ResourceMaterial::CreateMetaData(const u64& force_id)
 
 bool ResourceMaterial::ReadBaseInfo(const char* assets_file_path)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	this->path = assets_file_path;
@@ -214,6 +232,8 @@ bool ResourceMaterial::ReadBaseInfo(const char* assets_file_path)
 
 void ResourceMaterial::ReadLibrary(const char* meta_data)
 {
+	OPTICK_EVENT();
+
 	meta_data_path = meta_data;
 
 	JSON_Value* value = json_parse_file(meta_data_path.data());
@@ -239,6 +259,8 @@ bool ResourceMaterial::DeleteMetaData()
 
 void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 {
+	OPTICK_EVENT();
+
 	file->StartSave();
 
 	file->SetString("Name", name.data());
@@ -258,6 +280,8 @@ void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 
 void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 {
+	OPTICK_EVENT();
+
 	this->name = file->GetString("Name");
 
 	color = file->GetFloat4("Color");
@@ -322,6 +346,8 @@ void ResourceMaterial::ApplyMaterial()
 
 void ResourceMaterial::ApplyPreRenderShadows()
 {
+	OPTICK_EVENT();
+
 	// Bind the actual shader
 	simple_depth_shader->Bind();
 
@@ -334,6 +360,8 @@ void ResourceMaterial::ApplyPreRenderShadows()
 
 void ResourceMaterial::UnbindMaterial()
 {
+	OPTICK_EVENT();
+
 	if (textures[(uint)TextureType::SPECULAR].first != NO_TEXTURE_ID)
 	{
 		glActiveTexture(GL_TEXTURE1);
@@ -354,6 +382,8 @@ void ResourceMaterial::UnbindMaterial()
 
 void ResourceMaterial::SetTexture(ResourceTexture* tex, TextureType texType)
 {
+	OPTICK_EVENT();
+
 	RemoveTexture(texType);
 
 	if (tex == nullptr)
@@ -366,16 +396,22 @@ void ResourceMaterial::SetTexture(ResourceTexture* tex, TextureType texType)
 
 const ResourceTexture* ResourceMaterial::GetTexture(TextureType texType) const
 {
+	OPTICK_EVENT();
+
 	return textures[(uint)texType].second;
 }
 
 ResourceTexture* ResourceMaterial::GetTexture(TextureType texType)
 {
+	OPTICK_EVENT();
+
 	return textures[(uint)texType].second;
 }
 
 void ResourceMaterial::RemoveTexture(TextureType texType)
 {
+	OPTICK_EVENT();
+
 	if (textures[(uint)texType].first != NO_TEXTURE_ID)
 	{
 		if (textures[(uint)texType].second != nullptr)
@@ -388,11 +424,15 @@ void ResourceMaterial::RemoveTexture(TextureType texType)
 
 bool ResourceMaterial::HasTexture(TextureType texType) const
 {
+	OPTICK_EVENT();
+
 	return textures[(int)texType].first != NO_TEXTURE_ID;
 }
 
 void ResourceMaterial::SetShader(ResourceShader* newShader)
 {
+	OPTICK_EVENT();
+
 	if (newShader == nullptr || newShader == used_shader)
 		return;
 
@@ -409,6 +449,8 @@ bool ResourceMaterial::IsTransparent() const
 
 void ResourceMaterial::DisplayMaterialOnInspector()
 {
+	OPTICK_EVENT();
+
 	if (ImGui::CollapsingHeader(GetName(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::SameLine();
@@ -461,6 +503,8 @@ void ResourceMaterial::DisplayMaterialOnInspector()
 
 void ResourceMaterial::MaterialHeader()
 {
+	OPTICK_EVENT();
+
 	ImGui::TextDisabled("(?)");
 	if (ImGui::IsItemHovered())
 	{
@@ -475,6 +519,8 @@ void ResourceMaterial::MaterialHeader()
 
 void ResourceMaterial::ShaderSelectionHeader()
 {
+	OPTICK_EVENT();
+
 	std::vector<ResourceShader*> shadersList;
 	App->resources->GetShaders(shadersList);
 	selectedShader = used_shader->GetName();
@@ -506,6 +552,7 @@ void ResourceMaterial::ShaderSelectionHeader()
 
 void ResourceMaterial::ShaderInputsSegment()
 {
+	OPTICK_EVENT();
 
 	switch (used_shader->GetShaderType())
 	{
@@ -628,6 +675,8 @@ void ResourceMaterial::ShaderInputsSegment()
 
 void ResourceMaterial::InputTexture(TextureType texType)
 {
+	OPTICK_EVENT();
+
 	ImGui::ImageButton((ImTextureID)App->resources->GetTextureidByID(textures[(uint)texType].first), ImVec2(30, 30));
 	if (ImGui::BeginDragDropTarget() && this != App->resources->default_material) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
@@ -781,6 +830,7 @@ void ResourceMaterial::TexturesSegment()
 
 void ResourceMaterial::TextureBrowser(TextureType selectedType)
 {
+	OPTICK_EVENT();
 
 	ImGui::OpenPopup("Textures Loaded");
 	ImGui::SetNextWindowSize({ 522,585 });

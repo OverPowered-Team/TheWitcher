@@ -13,6 +13,8 @@
 #include "ReturnZ.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
 ComponentMaterial::ComponentMaterial(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::MATERIAL;
@@ -29,6 +31,8 @@ ComponentMaterial::~ComponentMaterial()
 
 bool ComponentMaterial::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool en;
 	ImGui::PushID(this);
 	en = enabled;
@@ -149,6 +153,8 @@ bool ComponentMaterial::DrawInspector()
 
 void ComponentMaterial::Reset()
 {
+	OPTICK_EVENT();
+
 	if (material != nullptr)
 		material->DecreaseReferences();
 	
@@ -198,6 +204,8 @@ void ComponentMaterial::SetComponent(Component* component)
 
 void ComponentMaterial::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetString("ID", std::to_string(ID).data());
 	to_save->SetBoolean("HasMaterial", (material != nullptr) ? true : false);
@@ -209,6 +217,8 @@ void ComponentMaterial::SaveComponent(JSONArraypack* to_save)
 
 void ComponentMaterial::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 
 	if (to_load->GetBoolean("HasMaterial")) {

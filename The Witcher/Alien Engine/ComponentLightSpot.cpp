@@ -79,6 +79,8 @@ void ComponentLightSpot::LightLogic()
 
 bool ComponentLightSpot::DrawInspector()
 {
+	OPTICK_EVENT();
+
 	static bool en;
 	ImGui::PushID(this);
 	en = enabled;
@@ -166,6 +168,8 @@ void ComponentLightSpot::SetComponent(Component* component)
 
 void ComponentLightSpot::SaveComponent(JSONArraypack* to_save)
 {
+	OPTICK_EVENT();
+
 	to_save->SetNumber("Type", (int)type);
 	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetString("ID", std::to_string(ID).data());
@@ -186,6 +190,8 @@ void ComponentLightSpot::SaveComponent(JSONArraypack* to_save)
 
 void ComponentLightSpot::LoadComponent(JSONArraypack* to_load)
 {
+	OPTICK_EVENT();
+
 	enabled = to_load->GetBoolean("Enabled");
 	ID = std::stoull(to_load->GetString("ID"));
 	print_icon = to_load->GetBoolean("PrintIcon");
