@@ -3,10 +3,13 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "Boss.h"
+#include "Enemy.h"
+
+class CiriFightController;
 
 class ALIEN_ENGINE_API Ciri : public Boss {
 public:
-	float combo_range = 3.0f;
+	float combo_range = 2.0f;
 	float mini_scream_range = 5.0f;
 	float mini_scream_damage = 5.0f;
 	float mini_scream_force = 7.0f;
@@ -15,6 +18,9 @@ public:
 	float dash_speed = 50.0f;
 	float dash_time = 0.1f;
 	float dash_timer = 0.0f;
+	int target = 0;
+
+	CiriFightController* fight_controller = nullptr;
 public:
 
 	void StartEnemy() override;
@@ -27,10 +33,13 @@ public:
 	bool IsOnAction() override;
 
 	void LaunchAction() override;
+	float GetDamaged(float dmg, float3 knock_back = float3::zero()) override;
 
 	void LaunchDashAction();
 	void LaunchComboAction();
 	void LaunchMiniScreamAction();
+
+	void MiniScream();
 
 	ActionState UpdateAction() override;
 
@@ -45,8 +54,11 @@ public:
 	void EndMiniScreamAction(GameObject* go_ended);
 
 	void OnAnimationEnd(const char* name);
+	void OnTriggerEnter(ComponentCollider* collider);
 
 	void OnDrawGizmosSelected();
+	
+	void SetStats(const char* json) override;
 
 };
 
@@ -54,8 +66,11 @@ ALIEN_FACTORY Ciri* CreateCiri() {
 	Ciri* ciri = new Ciri();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, ciri->state);
+	SHOW_IN_INSPECTOR_AS_ENUM(EnemyType, ciri->type);
 	SHOW_VOID_FUNCTION(Ciri::ActivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::DeactivateCollider, ciri);
+	SHOW_VOID_FUNCTION(Ciri::MiniScream, ciri);
+	SHOW_VOID_FUNCTION(Ciri::SpawnAttackParticle, ciri);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->mini_scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_speed);
