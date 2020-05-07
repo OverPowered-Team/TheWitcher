@@ -3,6 +3,7 @@
 Quat VagoneteInputs::playerRotation = Quat::identity();
 float VagoneteInputs::inclination4player = 0.0F;
 float VagoneteInputs::globalInclination = 0.0F;
+float VagoneteInputs::globalInclinationY = 0.0F;
 float VagoneteInputs::speedInclination = 0.0F;
 VagoneteInputs::State VagoneteInputs::globalState = VagoneteInputs::State::IDLE;
 
@@ -56,11 +57,12 @@ void VagoneteMove::FollowCurve()
 	rot = rot * inclinationRot;
 
 	transform->SetLocalRotation(rot * VagoneteInputs::playerRotation);
-	transform->SetLocalPosition(currentPos);
+	transform->SetLocalPosition(currentPos + float3{0, VagoneteInputs::globalInclinationY, 0});
 
 	actual_pos += speed * Time::GetDT();
 	VagoneteInputs::playerRotation = Quat::identity();
 	VagoneteInputs::globalInclination = 0;
+	VagoneteInputs::globalInclinationY = 0;
 }
 
 VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
@@ -164,8 +166,10 @@ void VagoneteInputs::DoAction()
 	switch (state)
 	{
 	case VagoneteInputs::State::JUMP: {
+		state = State::IDLE;
 		break; }
 	case VagoneteInputs::State::JUMPING: {
+		state = State::IDLE;
 		break; }
 	case VagoneteInputs::State::INCLINATION: {
 		Inclination();
@@ -194,8 +198,9 @@ void VagoneteInputs::Inclination()
 			}
 		}
 	}
-
+	currentYInclination = tan(currentInclination * Maths::Deg2Rad()) * 0.7F;
 	if (currentInclination != 0) {
+		globalInclinationY += currentYInclination;
 		globalInclination += currentInclination;
 		currentInclination = Maths::Clamp(currentInclination, -inclination4player, inclination4player);
 		playerRotation = playerRotation * Quat::RotateX(currentInclination * Maths::Deg2Rad());

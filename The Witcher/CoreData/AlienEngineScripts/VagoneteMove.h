@@ -30,6 +30,7 @@ public:
 
 	State state = State::IDLE;
 
+	float currentYInclination = 0.0F;
 	float currentInclination = 0.0F;
 	int inclinationZone = 1;
 
@@ -44,6 +45,7 @@ public:
 
 	static Quat playerRotation;
 	static float globalInclination;
+	static float globalInclinationY;
 	static float inclination4player;
 	static float speedInclination;
 	static State globalState;
