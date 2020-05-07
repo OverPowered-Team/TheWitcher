@@ -36,7 +36,7 @@
         "vfx_on_apply": "p_fire_runestone",
 		    "vfx_position": 0,
         "time": 0.5,
-        "ticks_time": 3.0,
+        "ticks_time": 1.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
@@ -51,10 +51,10 @@
       "description": "slows enemies hit",
       "hit_effect": {
         "name": "ice_runestone",
-        "time": 0.5,
-        "ticks_time": 1.0,
         "vfx_on_apply": "p_ice_runestone",
-		    "vfx_position": 0,
+        "vfx_position": 0,
+        "time": 0.5,
+        "ticks_time": 0.0,
         "multiplicative_modifiers": [
           {
             "identifier": "Agility",
@@ -98,13 +98,13 @@
       "hit_effect": {
         "name": "poison_runestone",
         "vfx_on_apply": "p_poison_runestone",
-		    "vfx_position": 0,
-        "time": 2.0,
-        "ticks_time": 1.0,
+        "vfx_position": 0,
+        "time": 0.0,
+        "ticks_time": 0.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
-            "value": -5
+            "value": -3
           }
         ]
       }
@@ -118,7 +118,7 @@
       "dash_effect": {
         "name": "fire_oil",
         "time": 3.0,
-        "ticks_time": 2.0,
+        "ticks_time": 0.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
@@ -154,7 +154,7 @@
       "dash_effect": {
         "name": "earth_oil",
         "time": 3.0,
-        "ticks_time": 2.0,
+        "ticks_time": 0.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
@@ -170,7 +170,7 @@
       "dash_effect": {
         "name": "poison_oil",
         "time": 3.0,
-        "ticks_time": 2.0,
+        "ticks_time": 0.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
