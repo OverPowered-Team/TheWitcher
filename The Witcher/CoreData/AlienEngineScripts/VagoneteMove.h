@@ -67,6 +67,8 @@ public:
 
 	void OnTriggerEnter(ComponentCollider* col);
 
+	void DecreaseLife();
+
 public:
 	float actual_pos = 0.0F;
 	float vagonete_life = 100.f;
