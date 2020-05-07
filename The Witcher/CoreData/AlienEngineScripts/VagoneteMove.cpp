@@ -2,6 +2,7 @@
 
 Quat VagoneteInputs::playerRotation = Quat::identity();
 float VagoneteInputs::inclination4player = 0.0F;
+float VagoneteInputs::globalInclination = 0.0F;
 float VagoneteInputs::speedInclination = 0.0F;
 VagoneteInputs::State VagoneteInputs::globalState = VagoneteInputs::State::IDLE;
 
@@ -59,6 +60,7 @@ void VagoneteMove::FollowCurve()
 
 	actual_pos += speed * Time::GetDT();
 	VagoneteInputs::playerRotation = Quat::identity();
+	VagoneteInputs::globalInclination = 0;
 }
 
 VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
@@ -98,25 +100,6 @@ void VagoneteInputs::UpdateInputs()
 {
 	switch (globalState) {
 	case VagoneteInputs::State::IDLE: {
-
-		break; }
-	case VagoneteInputs::State::JUMP: {
-
-		break; }
-	case VagoneteInputs::State::JUMPING: {
-
-		break; }
-	case VagoneteInputs::State::COVER: {
-
-		break; }
-	case VagoneteInputs::State::INCLINATION: {
-
-		break; }
-	}
-
-	switch (state)
-	{
-	case VagoneteInputs::State::IDLE: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
 		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump);
@@ -125,39 +108,53 @@ void VagoneteInputs::UpdateInputs()
 		if (rightInclinationInput || leftInclinationInput) {
 			inclinationZone = (rightInclinationInput) ? 1 : -1;
 			state = State::INCLINATION;
+			globalState = State::INCLINATION;
 		}
 		else if (jumpInput) {
 			state = State::JUMP;
+			globalState = State::JUMP;
 		}
 		else if (coverInput) {
 			state = State::COVER;
 		}
-		break; }
-	case VagoneteInputs::State::JUMP: {
-		state = State::IDLE;
+		else {
+			state = State::IDLE;
+		}
+
 		break; }
 	case VagoneteInputs::State::JUMPING: {
-		state = State::IDLE;
+
 		break; }
 	case VagoneteInputs::State::INCLINATION: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
+		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
 
-		if (rightInclinationInput || leftInclinationInput) {
-			inclinationZone = (rightInclinationInput) ? 1 : -1;
+		if (state == State::INCLINATION) {
+			if (currentInclination != 0 || (rightInclinationInput || leftInclinationInput)) {
+				if (rightInclinationInput || leftInclinationInput) {
+					inclinationZone = (rightInclinationInput) ? 1 : -1;
+				}
+				else {
+					inclinationZone = 0;
+				}
+			}
+			else {
+				if (globalInclination == 0) {
+					globalState = State::IDLE;
+				}
+				state = State::IDLE;
+			}
 		}
 		else {
-			inclinationZone = 0;
+			if (rightInclinationInput || leftInclinationInput) {
+				state = State::INCLINATION;
+				inclinationZone = (rightInclinationInput) ? 1 : -1;
+			}
+			else if (coverInput) {
+				state = State::COVER;
+			}
 		}
-
-		if (currentInclination == 0) {
-			state = State::IDLE;
-		}
-		break; }
-	case VagoneteInputs::State::COVER: {
-		state = State::IDLE;
-		break; }
-	default: {
 		break; }
 	}
 }
@@ -199,6 +196,7 @@ void VagoneteInputs::Inclination()
 	}
 
 	if (currentInclination != 0) {
+		globalInclination += currentInclination;
 		currentInclination = Maths::Clamp(currentInclination, -inclination4player, inclination4player);
 		playerRotation = playerRotation * Quat::RotateX(currentInclination * Maths::Deg2Rad());
 	}

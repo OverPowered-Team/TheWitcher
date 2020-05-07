@@ -43,6 +43,7 @@ public:
 	int controllerIndex = -1;
 
 	static Quat playerRotation;
+	static float globalInclination;
 	static float inclination4player;
 	static float speedInclination;
 	static State globalState;
