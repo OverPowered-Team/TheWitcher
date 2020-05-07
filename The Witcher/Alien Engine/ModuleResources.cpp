@@ -704,6 +704,7 @@ void ModuleResources::ReadAllMetaData()
 	default_particle_shader = GetShaderByName("particle_shader");
 	skybox_shader = GetShaderByName("skybox_shader");
 	water_shader = GetShaderByName("water_shader");
+	shield_fresnel_shader = GetShaderByName("shield_fresnel_shader");
 
 	// Init Materials
 	App->file_system->DiscoverFiles(MATERIALS_FOLDER, files, directories);

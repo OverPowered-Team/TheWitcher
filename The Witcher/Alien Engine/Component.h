@@ -43,6 +43,7 @@ enum class ComponentType {
 	SCRIPT = 29,
 	UI = 30,
 	CURVE = 31,
+	MESH_COLLIDER = 32,
 
 	MAX //LAST LAST LAST
 };
