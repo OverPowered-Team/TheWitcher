@@ -41,6 +41,9 @@ void Enemy::StartEnemy()
 	case EnemyType::CIRI:
 		json_str = "ciri";
 		break;
+	case EnemyType::CIRI_CLONE:
+		json_str = "ciri_clone";
+		break;
 	case EnemyType::DROWNED:
 		json_str = "drowned";
 		break;
@@ -215,6 +218,16 @@ void Enemy::KnockBack(float3 knock)
 }
 
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
+{
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
+
+	KnockBack(knock_back);
+
+	return aux_health - stats["Health"].GetValue();
+}
+
+float Enemy::GetDamaged(float dmg, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
