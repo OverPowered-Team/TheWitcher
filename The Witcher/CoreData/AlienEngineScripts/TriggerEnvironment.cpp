@@ -65,25 +65,25 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 
 void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 {
-	Component* c = (Component*)collider;
-	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
-		if (c->game_object_attached == p1)
-		{
-			p1 = nullptr;
-			player_counter--;
-			LOG("EXIT p1");
-		}
-		else if (c->game_object_attached == p2)
-		{
-			p2 = nullptr;
-			player_counter--;
-			LOG("EXIT p2");
-		}
-		if (emitter != nullptr && player_counter == 0) {
-			emitter->SetState("Env_Lvl1", "Quiet");
-			LOG("EXIT");
-		}
-	}
+	//Component* c = (Component*)collider;
+	//if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
+	//	if (c->game_object_attached == p1)
+	//	{
+	//		p1 = nullptr;
+	//		player_counter--;
+	//		LOG("EXIT p1");
+	//	}
+	//	else if (c->game_object_attached == p2)
+	//	{
+	//		p2 = nullptr;
+	//		player_counter--;
+	//		LOG("EXIT p2");
+	//	}
+	//	if (emitter != nullptr && player_counter == 0) {
+	//		emitter->SetState("Env_Lvl1", "Quiet");
+	//		LOG("EXIT");
+	//	}
+	//}
 }
 
 void TriggerEnvironment::OnDrawGizmosSelected()
