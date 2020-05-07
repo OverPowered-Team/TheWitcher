@@ -63,6 +63,9 @@ void CameraMovement::Update()
             }
         }
         if (inside) {
+            if (prev_state == CameraState::FREE)
+                prev_state = CameraState::DYNAMIC;
+
             state = prev_state;
         }
         break;
