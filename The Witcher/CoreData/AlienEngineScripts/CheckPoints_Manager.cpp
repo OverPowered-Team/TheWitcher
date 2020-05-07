@@ -23,12 +23,12 @@ void CheckPoints_Manager::Start()
 
 void CheckPoints_Manager::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_F11))
+	if (Input::GetKeyDown(SDL_SCANCODE_F1))
 	{
 		TP(true);
 	}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_F10))
+	if (Input::GetKeyDown(SDL_SCANCODE_F2))
 	{
 		TP(false);
 	}

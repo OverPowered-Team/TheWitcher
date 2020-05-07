@@ -38,7 +38,7 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_L))
 		{
-			SceneManager::LoadScene("Mahakam");
+			SceneManager::LoadScene("Level_Mahakam");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_D))
 		{
