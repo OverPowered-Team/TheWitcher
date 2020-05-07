@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "YenneferController",
         "NumStates": 30,
-        "NumTransitions": 56,
+        "NumTransitions": 55,
         "States": [
             {
                 "Name": "L",
@@ -41,8 +41,8 @@
             },
             {
                 "Name": "Roll",
-                "Speed": 3,
-                "Clip": "9062388936802494515"
+                "Speed": 2,
+                "Clip": "2441290518139000273"
             },
             {
                 "Name": "Air",
@@ -194,30 +194,7 @@
                 "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Lesser",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
-                "BoolConditions": []
-            },
-            {
-                "Source": "Roll",
-                "Target": "Run",
-                "Blend": 0.10000000149011612,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [
-                    {
-                        "Type": "float",
-                        "CompText": "Greater",
-                        "ParameterIndex": 0,
-                        "CompValue": 0.0099999997764825821
-                    }
-                ],
+                "FloatConditions": [],
                 "BoolConditions": []
             },
             {
@@ -1542,6 +1519,18 @@
                 "Event_Id": "PlayerAttacks::AllowCombo",
                 "Animation_Id": "3060363109149753826",
                 "Frame": 53,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::StartImmune",
+                "Animation_Id": "2441290518139000273",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::StopImmune",
+                "Animation_Id": "2441290518139000273",
+                "Frame": 23,
                 "Type": 2
             }
         ]
