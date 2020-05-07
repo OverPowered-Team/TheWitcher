@@ -59,6 +59,7 @@ void ComponentDeformableMesh::AttachSkeleton(ComponentTransform* root)
 		game_object_attached->AddComponent(material);
 	}
 	SendWeightsAndID();
+
 }
 
 void ComponentDeformableMesh::AttachSkeleton()

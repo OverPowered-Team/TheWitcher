@@ -316,7 +316,6 @@ bool ComponentCamera::DrawInspector()
 			ImGui::Image((ImTextureID)tex_pos_x->id, ImVec2(100.0f, 100.0f));
 		else
 			LOG_ENGINE("Component Camera skybox image not found");
-		
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -355,8 +354,7 @@ bool ComponentCamera::DrawInspector()
 
 		std::string path_neg_x = App->file_system->GetBaseFileName(cubemap->neg_x.c_str());
 		ResourceTexture* tex_neg_x = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_x));
-		if(tex_neg_x)
-			ImGui::Image((ImTextureID)tex_neg_x->id, ImVec2(100.0f, 100.0f));
+		ImGui::Image((ImTextureID)tex_neg_x->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -439,7 +437,6 @@ bool ComponentCamera::DrawInspector()
 		ResourceTexture* tex_neg_y = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_y));
 		if (tex_neg_y)
 			ImGui::Image((ImTextureID)tex_neg_y->id, ImVec2(100.0f, 100.0f));
-		
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
