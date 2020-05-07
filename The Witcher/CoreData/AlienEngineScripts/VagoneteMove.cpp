@@ -77,6 +77,9 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 			}
 		}
 	}
+	else if (strcmp("VagoneteDie", col->game_object_attached->GetTag()) == 0) {
+		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+	}
 }
 
 void VagoneteMove::FollowCurve()
