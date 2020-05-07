@@ -14,6 +14,8 @@ public:
 	bool can_mini_scream = true;
 	float phase_0_timer = 0.0f;
 	float phase_0_time = 3.0f;
+	float phase_4_timer = 0.0f;
+	float phase_4_time = 3.0f;
 	bool phase_change = false;
 
 	int clones_dead = 0;
@@ -37,9 +39,12 @@ public:
 	void FinishPhaseTwo();
 	void UpdatePhaseThree();
 	void FinishPhaseThree();
+	void FinishPhaseFour();
+	void UpdatePhaseFour();
 
 	void ChangeToPhase2();
 	void ChangeToPhase3();
+	void ChangeToPhase4();
 
 	void OnCloneDead(GameObject* clone);
 

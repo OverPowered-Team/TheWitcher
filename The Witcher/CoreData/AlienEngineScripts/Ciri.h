@@ -33,6 +33,7 @@ public:
 	bool IsOnAction() override;
 
 	void LaunchAction() override;
+	float GetDamaged(float dmg, float3 knock_back = float3::zero()) override;
 
 	void LaunchDashAction();
 	void LaunchComboAction();

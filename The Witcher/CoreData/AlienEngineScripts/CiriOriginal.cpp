@@ -10,6 +10,7 @@ void CiriOriginal::StartEnemy()
 {
 	actions.emplace("RockThrow", new BossAction(ActionType::ROCKTHROW, 0.0f));
 	actions.emplace("Scream", new BossAction(ActionType::SCREAM, 0.0f));
+	actions.emplace("AFK", new BossAction(ActionType::AFK, 0.0f));
 
 	can_get_interrupted = true;
 	action_cooldown = 0.0f;
@@ -18,13 +19,12 @@ void CiriOriginal::StartEnemy()
 
 	Boss::StartEnemy();
 
-	state = Boss::BossState::NONE;
+	state = Boss::BossState::IDLE;
 
 	meshes = game_object->GetChild("Meshes");
 
 	fight_controller = GetComponent<CiriFightController>();
 
-	LOG("ASD");
 }
 
 void CiriOriginal::UpdateEnemy()
@@ -49,9 +49,13 @@ void CiriOriginal::SetActionProbabilities()
 	if (fight_controller->phase_change) {
 		actions.find("Scream")->second->probability = 100.0f;
 	}
-	else if (fight_controller->phase == 2) {
+	else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
 		action_cooldown = 10.0f;
 		actions.find("RockThrow")->second->probability = 100.0f;
+	}
+	else {
+		action_cooldown = 1.0f;
+		actions.find("AFK")->second->probability = 100.0f;
 	}
 }
 
@@ -75,6 +79,8 @@ void CiriOriginal::LaunchAction()
 		break;
 	case CiriOriginal::ActionType::ROCKTHROW:
 		LaunchRockAction();
+		break;
+	case CiriOriginal::ActionType::AFK:
 		break;
 	case CiriOriginal::ActionType::SCREAM:
 		LaunchScreamAction();
@@ -129,6 +135,9 @@ Boss::ActionState CiriOriginal::UpdateAction()
 		current_action->state = ActionState::ENDED;
 		fight_controller->phase_change = false;
 		break;
+	case CiriOriginal::ActionType::AFK:
+		current_action->state = ActionState::ENDED;
+		break;
 	default:
 		break;
 	}
@@ -158,4 +167,26 @@ void CiriOriginal::OnAnimationEnd(const char* name)
 void CiriOriginal::OnDrawGizmosSelected()
 {
 
+}
+
+void CiriOriginal::SetStats(const char* json)
+{
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+	if (stat)
+	{
+		stats["Health"] = Stat("Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat->GetNumber("MaxHitSpeed"));
+	}
+
+	JSONfilepack::FreeJSON(stat);
 }

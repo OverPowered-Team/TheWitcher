@@ -30,7 +30,8 @@ public:
 		COMBO,
 		SCREAM,
 		MINISCREAM,
-		ROCKTHROW
+		ROCKTHROW,
+		AFK
 		);
 
 	enum(ActionState,
@@ -78,6 +79,7 @@ public:
 	virtual void LaunchAction();
 	virtual ActionState UpdateAction();
 	virtual void EndAction(GameObject* go_ended);
+	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero()) override;
 
 	virtual void SetStats(const char* json) override;
 

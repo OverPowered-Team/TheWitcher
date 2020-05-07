@@ -30,6 +30,7 @@ void Boss::UpdateEnemy()
 		break;
 	case Boss::BossState::IDLE:
 		if (player_distance[0] < stats["VisionRange"].GetValue() || player_distance[1] < stats["VisionRange"].GetValue()) {
+			LOG("IDLESATATE");
 			if (time_to_action <= action_cooldown)
 				time_to_action += Time::GetDT();
 			else {
@@ -168,6 +169,11 @@ Boss::ActionState Boss::UpdateAction()
 
 void Boss::EndAction(GameObject* go_ended)
 {
+}
+
+float Boss::GetDamaged(float dmg, float3 knock_back)
+{
+	return Enemy::GetDamaged(dmg, knock_back);
 }
 
 void Boss::SetStats(const char* json)

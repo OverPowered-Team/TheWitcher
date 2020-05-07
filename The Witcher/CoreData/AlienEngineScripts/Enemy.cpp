@@ -228,6 +228,16 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	return aux_health - stats["Health"].GetValue();
 }
 
+float Enemy::GetDamaged(float dmg, float3 knock_back)
+{
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
+
+	KnockBack(knock_back);
+
+	return aux_health - stats["Health"].GetValue();
+}
+
 void Enemy::AddEffect(Effect* new_effect)
 {
 	for (auto it = effects.begin(); it != effects.end(); ++it)

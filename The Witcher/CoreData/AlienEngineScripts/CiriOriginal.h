@@ -37,6 +37,8 @@ public:
 
 	void OnDrawGizmosSelected();
 
+	void SetStats(const char* json) override;
+
 };
 
 ALIEN_FACTORY CiriOriginal* CreateCiriOriginal() {

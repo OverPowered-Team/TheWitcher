@@ -15,7 +15,7 @@ public:
 	void Start();
 	void Update();
 
-	void OnCollisionEnter(ComponentCollider* collider);
+	void OnTriggerEnter(ComponentCollider* collider);
 
 };
 

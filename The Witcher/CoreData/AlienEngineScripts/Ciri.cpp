@@ -124,6 +124,38 @@ void Ciri::LaunchAction()
 	current_action->state = ActionState::UPDATING;
 }
 
+float Ciri::GetDamaged(float dmg, float3 knock_back)
+{
+	float damage = Enemy::GetDamaged(dmg, knock_back);
+
+	if (stats["Health"].GetValue() == 0.0F) {
+		state = Boss::BossState::DYING;
+		animator->PlayState("Death");
+		fight_controller->OnCloneDead(this->game_object);
+	}
+	else {
+		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+			animator->PlayState("Hit");
+			LOG("animation speed %f", animator->GetCurrentStateSpeed());
+			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			//if(animator->GetCurrentStateSpeed() > player->attacks->GetCurrentAttack()->info.freeze_time)
+			//	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+			if (current_action)current_action->state = Boss::ActionState::ENDED;
+			SetIdleState();
+		}
+
+		if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+		{
+			stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			can_get_interrupted = false;
+		}
+	}
+
+	return damage;
+}
+
 void Ciri::LaunchDashAction()
 {
 	//dash_direction = (player_controllers[player_distance[0] > player_distance[1] ? 1 : 0]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();

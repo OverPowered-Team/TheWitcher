@@ -52,6 +52,7 @@ public:
 	virtual void OnDeathHit() {}
 
 	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
+	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero());
 	void AddEffect(Effect* new_effect);
 	void RemoveEffect(Effect* _effect);
 
