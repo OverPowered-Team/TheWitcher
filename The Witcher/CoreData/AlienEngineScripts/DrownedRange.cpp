@@ -56,11 +56,16 @@ void DrownedRange::UpdateEnemy()
 		break;
 
 	case DrownedState::ATTACK:
+	{
+		float angle = atan2f(direction.z, direction.x);
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+		transform->SetGlobalRotation(rot);
 		if (set_attack)
 		{
 			animator->PlayState("Attack");
 			set_attack = false;
 		}
+	}
 		break;
 
 	case DrownedState::HIDE:
