@@ -27,7 +27,6 @@ void Boss::UpdateEnemy()
 	switch (state)
 	{
 	case Boss::BossState::NONE:
-		LOG("ADSF");
 		break;
 	case Boss::BossState::IDLE:
 		if (player_distance[0] < stats["VisionRange"].GetValue() || player_distance[1] < stats["VisionRange"].GetValue()) {
@@ -85,17 +84,19 @@ void Boss::UpdateEnemy()
 
 void Boss::CleanUpEnemy()
 {
-	for (auto it = actions.begin(); it != actions.end(); ++it) {
-		delete (*it).second;
-	}
+	//for (auto it = actions.begin(); it != actions.end(); ++it) {
+	//	delete (*it).second;
+	//}
 
-	current_action = nullptr;
-	delete current_action;
+	//current_action = nullptr;
+	//delete current_action;
 }
 
 float Boss::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	return Enemy::GetDamaged(dmg, player);
+	float damage = Enemy::GetDamaged(dmg, player, knock_back);
+
+	return damage;
 }
 
 void Boss::SetActionVariables()

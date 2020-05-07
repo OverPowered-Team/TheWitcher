@@ -23,6 +23,8 @@ void CiriOriginal::StartEnemy()
 	meshes = game_object->GetChild("Meshes");
 
 	fight_controller = GetComponent<CiriFightController>();
+
+	LOG("ASD");
 }
 
 void CiriOriginal::UpdateEnemy()

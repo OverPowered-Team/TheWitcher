@@ -19,9 +19,15 @@ void CiriFightController::Start()
 
 void CiriFightController::Update()
 {
+	if (scream_cd_timer <= ciri_clones_scream_cd) {
+		scream_cd_timer += Time::GetDT();
+	}
+	else {
+		can_mini_scream = true;
+	}
 	if (game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition()) < 5 || game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition()) < 5) {
 		fight_started = true;
-		game_object->GetComponent<CiriOriginal>()->state = Boss::BossState::IDLE;
+		game_object->GetComponent<CiriOriginal>()->SetAttackState();
 		phase_change = true;
 	}
 	if (fight_started) {
@@ -71,6 +77,7 @@ void CiriFightController::UpdatePhaseOne()
 void CiriFightController::FinishPhaseOne()
 {
 	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+	phase++;
 }
 
 void CiriFightController::UpdatePhaseTwo()
@@ -79,6 +86,7 @@ void CiriFightController::UpdatePhaseTwo()
 
 void CiriFightController::FinishPhaseTwo()
 {
+	phase++;;
 }
 
 void CiriFightController::UpdatePhaseThree()

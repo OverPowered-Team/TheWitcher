@@ -40,9 +40,12 @@ void Ciri::CleanUpEnemy()
 
 float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
+	float damage = Enemy::GetDamaged(dmg, player, knock_back);
+
 	if (stats["Health"].GetValue() == 0.0F) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
+		fight_controller->OnCloneDead(this->game_object);
 	}
 	else {
 		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
@@ -64,7 +67,7 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		}
 	}
 
-	return Boss::GetDamaged(dmg, player);
+	return damage;
 }
 
 void Ciri::SetActionProbabilities()
@@ -142,6 +145,7 @@ void Ciri::LaunchMiniScreamAction()
 {
 	fight_controller->can_mini_scream = false;
 	animator->PlayState("Scream");
+	fight_controller->scream_cd_timer = 0;
 }
 
 void Ciri::MiniScream()
