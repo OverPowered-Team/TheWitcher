@@ -75,6 +75,7 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationRight = SDL_SCANCODE_D;
 		keyboardInput.cover = SDL_SCANCODE_S;
 		keyboardInput.jump = SDL_SCANCODE_W;
+		player = GameObject::FindWithName("Geralt_Prefab"); // TODO: Change this to only find in children of GameObject
 		break; }
 	case PlayerController::PlayerType::YENNEFER: {
 		controllerIndex = 2;
@@ -82,6 +83,7 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationRight = SDL_SCANCODE_RIGHT;
 		keyboardInput.cover = SDL_SCANCODE_DOWN;
 		keyboardInput.jump = SDL_SCANCODE_UP;
+		player = GameObject::FindWithName("Yenn_Ready");
 		break; }
 	default: {
 		break; }
@@ -105,6 +107,11 @@ void VagoneteInputs::UpdateInputs()
 		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
 
+		if (!coverInput) {
+			state = State::IDLE;
+			player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.5f, player->transform->GetLocalPosition().z);
+		}
+
 		if (rightInclinationInput || leftInclinationInput) {
 			inclinationZone = (rightInclinationInput) ? 1 : -1;
 			state = State::INCLINATION;
@@ -116,6 +123,7 @@ void VagoneteInputs::UpdateInputs()
 		}
 		else if (coverInput) {
 			state = State::COVER;
+			player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.3f, player->transform->GetLocalPosition().z);
 		}
 		else {
 			state = State::IDLE;
@@ -129,6 +137,10 @@ void VagoneteInputs::UpdateInputs()
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
+
+		if (!coverInput) {
+			player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.5f, player->transform->GetLocalPosition().z);
+		}
 
 		if (state == State::INCLINATION) {
 			if (currentInclination != 0 || (rightInclinationInput || leftInclinationInput)) {
@@ -153,6 +165,7 @@ void VagoneteInputs::UpdateInputs()
 			}
 			else if (coverInput) {
 				state = State::COVER;
+				player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.3f, player->transform->GetLocalPosition().z);
 			}
 		}
 		break; }

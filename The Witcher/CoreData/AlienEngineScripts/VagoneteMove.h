@@ -47,6 +47,8 @@ public:
 	static float inclination4player;
 	static float speedInclination;
 	static State globalState;
+
+	GameObject* player = nullptr;
 };
 
 class ALIEN_ENGINE_API VagoneteMove : public Alien {
