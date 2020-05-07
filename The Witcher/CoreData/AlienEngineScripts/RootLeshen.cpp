@@ -51,7 +51,7 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
-		if (player_ctrl && !player_ctrl->is_immune && player_ctrl->can_move) {
+		if (player_ctrl && !player_ctrl->is_immune && player_ctrl->can_move && state != ROOTSTATE::ROOT) {
 			state = ROOTSTATE::ROOT;
 			transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
 			player_ctrl->ApplyRoot(total_root_time);
