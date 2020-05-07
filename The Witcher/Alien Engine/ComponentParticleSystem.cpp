@@ -24,6 +24,10 @@ ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component
 
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentParticleSystem::DrawScene, this));
+#endif // !GAME_VERSION
+
 }
 
 ComponentParticleSystem::~ComponentParticleSystem()
@@ -45,6 +49,10 @@ ComponentParticleSystem::~ComponentParticleSystem()
 	
 	/*if (material != nullptr)
 		material = nullptr;*/
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 void ComponentParticleSystem::OnPlay()
@@ -98,22 +106,34 @@ void ComponentParticleSystem::PostUpdate()
 		particleSystem->PostUpdate(Time::GetCurrentDT());
 }
 
-void ComponentParticleSystem::DrawScene(ComponentCamera* camera)
+void ComponentParticleSystem::DrawScene()
 {
 	OPTICK_EVENT();
 
 	if (game_object_attached->selected)
 	{
-		Draw();
 		DebugDraw();
 	}
 }
 
-void ComponentParticleSystem::DrawGame(ComponentCamera* camera)
+void ComponentParticleSystem::DrawGame()
 {
 	OPTICK_EVENT();
 
+#ifndef GAME_VERSION
+	if (App->objects->printing_scene)
+	{
+		if(game_object_attached->selected)
+			Draw();
+	}
+	else 
+		Draw();
+#else
+
 	Draw();
+
+#endif
+
 }
 
 void ComponentParticleSystem::DebugDraw()
@@ -1298,12 +1318,26 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->particleInfo.speed = to_load->GetNumber("Start.Speed");
 	// Color
 	particleSystem->particleInfo.color = to_load->GetFloat4("Start.Color");
-	// SizeStart
-	particleSystem->particleInfo.size3DStart = to_load->GetBoolean("Start.SizeStart3D");
+	try
+	{
+		// SizeStart
+		particleSystem->particleInfo.size3DStart = to_load->GetBoolean("Start.SizeStart3D");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.size3DStart = false;
+	}
 	// Size
 	particleSystem->particleInfo.size = to_load->GetNumber("Start.Size");
-	// Size 3D
-	particleSystem->particleInfo.size3D = to_load->GetFloat3("Start.Size3D");
+
+	try {
+		// Size 3D
+		particleSystem->particleInfo.size3D = to_load->GetFloat3("Start.Size3D");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.size3D = float3(1.f, 1.f, 1.f);
+	}
 	// LightColor
 	particleSystem->particleInfo.lightColor = to_load->GetFloat4("Start.LightColor");
 	// MaxLifeTime
@@ -1319,16 +1353,34 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 
 
 	// ----------------- Particle System End Info -------------------- //
+	try {
 	// Final Time
-	particleSystem->particleInfo.changedTime = to_load->GetNumber("End.FinalTime");
+		particleSystem->particleInfo.changedTime = to_load->GetNumber("End.FinalTime");
+	}
+	catch (...)
+	{
+		particleSystem->particleInfo.changedTime = 5;
+	}
+	try {
 	// Speed
-	particleSystem->endInfo.speed = to_load->GetNumber("End.Speed");
+		particleSystem->endInfo.speed = to_load->GetNumber("End.Speed");
+	}
+	catch (...)
+	{
+		particleSystem->endInfo.speed = 0.0f;
+	}
 	// Color
 	particleSystem->endInfo.color = to_load->GetFloat4("End.Color");
 	// Size
 	particleSystem->endInfo.size = to_load->GetNumber("End.Size");
-	// Size 3D
-	particleSystem->endInfo.size3D = to_load->GetFloat3("End.Size3D");
+	try {
+		// Size 3D
+		particleSystem->endInfo.size3D = to_load->GetFloat3("End.Size3D");
+	}
+	catch (...)
+	{
+		particleSystem->endInfo.size3D = float3(1.f, 1.f, 1.f);
+	}
 	// LightColor
 	particleSystem->endInfo.lightColor = to_load->GetFloat4("End.LightColor");
 	// Force
@@ -1441,43 +1493,51 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 		particleSystem->CalculateParticleUV(texRows, texColumns, animSpeed, startFrame, endFrame);
 	}
 
-	particleSystem->mesh_mode = to_load->GetBoolean("HasMesh");
+	try {
+		particleSystem->mesh_mode = to_load->GetBoolean("HasMesh");
 
-	
+		if (to_load->GetBoolean("HasMesh")) {
 
-	if (to_load->GetBoolean("HasMesh")) {
+			particleSystem->meshType = (PARTICLE_MESH)(int)to_load->GetNumber("Mesh.MeshType");
+			meshTypeSelected = (int)to_load->GetNumber("Mesh.MeshType");
+			particleSystem->CreateParticleMesh((PARTICLE_MESH)particleSystem->meshType);
 
-		particleSystem->meshType = (PARTICLE_MESH)(int)to_load->GetNumber("Mesh.MeshType");
-		meshTypeSelected = (int)to_load->GetNumber("Mesh.MeshType");
-		particleSystem->CreateParticleMesh((PARTICLE_MESH)particleSystem->meshType);
-
-		if ((PARTICLE_MESH)particleSystem->meshType == PARTICLE_MESH::CUSTOM)
-		{
-			int size = (int)to_load->GetNumber("Mesh.Size");
-
-			if (size > 0)
+			if ((PARTICLE_MESH)particleSystem->meshType == PARTICLE_MESH::CUSTOM)
 			{
-				std::vector<ResourceMesh*> tmp_meshes;
+				int size = (int)to_load->GetNumber("Mesh.Size");
 
-				for (int i = 0; i < size; ++i)
+				if (size > 0)
 				{
-					std::string tmp = std::to_string(i);
-					u64 ID = std::stoull(to_load->GetString(("Mesh.MeshesAttached.MeshID_" + tmp).data()));
+					std::vector<ResourceMesh*> tmp_meshes;
 
-					if (ID != 0)
+					for (int i = 0; i < size; ++i)
 					{
-						ResourceMesh* mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
-						if (mesh != nullptr)
-						{
-							tmp_meshes.push_back(mesh);
-						}
-					}
+						std::string tmp = std::to_string(i);
+						u64 ID = std::stoull(to_load->GetString(("Mesh.MeshesAttached.MeshID_" + tmp).data()));
 
+						if (ID != 0)
+						{
+							ResourceMesh* mesh = (ResourceMesh*)App->resources->GetResourceWithID(ID);
+							if (mesh != nullptr)
+							{
+								tmp_meshes.push_back(mesh);
+							}
+						}
+
+					}
+					particleSystem->SetMeshes(tmp_meshes);
 				}
-				particleSystem->SetMeshes(tmp_meshes);
 			}
 		}
+
 	}
+	catch (...)
+	{
+		particleSystem->mesh_mode = false;
+	}
+	
+
+	
 
 	
 	// ---------------------- Deprecated -------------------------- //

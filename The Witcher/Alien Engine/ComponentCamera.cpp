@@ -89,6 +89,12 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 	skybox_shader->Bind();
 	skybox_shader->SetUniform1i("skybox", 0);
 	skybox_shader->Unbind();
+
+#ifndef GAME_VERSION
+	if(attach != nullptr)
+		App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCamera::DrawScene, this));
+#endif // !GAME_VERSION
+
 }
 
 ComponentCamera::~ComponentCamera()
@@ -139,6 +145,11 @@ ComponentCamera::~ComponentCamera()
 
 	RELEASE(skybox);
 	RELEASE(cubemap);
+
+#ifndef GAME_VERSION
+	if (game_object_attached != nullptr)
+		App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 bool ComponentCamera::DrawInspector()
@@ -301,8 +312,10 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_pos_x = App->file_system->GetBaseFileName(cubemap->pos_x.c_str());
 		ResourceTexture* tex_pos_x = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_x));
-		ImGui::Image((ImTextureID)tex_pos_x->id, ImVec2(100.0f, 100.0f));
-		
+		if (tex_pos_x)
+			ImGui::Image((ImTextureID)tex_pos_x->id, ImVec2(100.0f, 100.0f));
+		else
+			LOG_ENGINE("Component Camera skybox image not found");
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -381,7 +394,8 @@ bool ComponentCamera::DrawInspector()
 
 		std::string path_pos_y = App->file_system->GetBaseFileName(cubemap->pos_y.c_str());
 		ResourceTexture* tex_pos_y = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_y));
-		ImGui::Image((ImTextureID)tex_pos_y->id, ImVec2(100.0f, 100.0f));
+		if(tex_pos_y)
+			ImGui::Image((ImTextureID)tex_pos_y->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -421,7 +435,8 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_neg_y = App->file_system->GetBaseFileName(cubemap->neg_y.c_str());
 		ResourceTexture* tex_neg_y = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_y));
-		ImGui::Image((ImTextureID)tex_neg_y->id, ImVec2(100.0f, 100.0f));
+		if (tex_neg_y)
+			ImGui::Image((ImTextureID)tex_neg_y->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -461,7 +476,8 @@ bool ComponentCamera::DrawInspector()
 		
 		std::string path_pos_z = App->file_system->GetBaseFileName(cubemap->pos_z.c_str());
 		ResourceTexture* tex_pos_z = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos_z));
-		ImGui::Image((ImTextureID)tex_pos_z->id, ImVec2(100.0f, 100.0f));
+		if(tex_pos_z)
+			ImGui::Image((ImTextureID)tex_pos_z->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -502,7 +518,8 @@ bool ComponentCamera::DrawInspector()
 
 		std::string path_neg_z = App->file_system->GetBaseFileName(cubemap->neg_z.c_str());
 		ResourceTexture* tex_neg_z = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_neg_z));
-		ImGui::Image((ImTextureID)tex_neg_z->id, ImVec2(100.0f, 100.0f));
+		if(tex_neg_z)
+			ImGui::Image((ImTextureID)tex_neg_z->id, ImVec2(100.0f, 100.0f));
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = ImGui::GetDragDropPayload();
@@ -552,7 +569,16 @@ bool ComponentCamera::DrawInspector()
 	return true;
 }
 
-void ComponentCamera::DrawScene(ComponentCamera* camera)
+void ComponentCamera::Update()
+{
+	OPTICK_EVENT();
+
+	frustum.pos = game_object_attached->transform->GetGlobalPosition();
+	frustum.front = game_object_attached->transform->GetGlobalRotation().WorldZ();
+	frustum.up = game_object_attached->transform->GetGlobalRotation().WorldY();
+}
+
+void ComponentCamera::DrawScene()
 {
 	
 	OPTICK_EVENT();
@@ -560,9 +586,6 @@ void ComponentCamera::DrawScene(ComponentCamera* camera)
 	if (game_object_attached->IsSelected())
 	{
 		DrawFrustum();
-		frustum.pos = game_object_attached->transform->GetGlobalPosition();
-		frustum.front = game_object_attached->transform->GetGlobalRotation().WorldZ();
-		frustum.up = game_object_attached->transform->GetGlobalRotation().WorldY();
 	}
 
 	DrawIconCamera();
@@ -797,9 +820,10 @@ void ComponentCamera::DrawSkybox()
 
 float2 ComponentCamera::WorldToScreenPoint(const float3& world_position)
 {
-	float3 position = App->renderer3D->GetCurrentMainCamera()->frustum.ViewProjMatrix().MulPos(world_position);
+	float3 position = App->renderer3D->actual_game_camera->GetViewMatrix4x4().MulPos(world_position);
 
-	return float2(((position.x + 1) * 0.5f) * App->objects->game_viewport->GetSize().x, ((1 - position.y) * 0.5f) * App->objects->game_viewport->GetSize().y);
+	return float2((((position.x / -position.z) + 16 * 0.5f) / App->objects->current_viewport->GetSize().x),
+		((position.y / -position.z) + 9 * 0.5f) / App->objects->current_viewport->GetSize().y);
 }
 
 void ComponentCamera::DrawFrustum()

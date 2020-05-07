@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentMaterial.h"
 #include "mmgr/mmgr.h"
 
 OctreeNode::OctreeNode(const float3& min, const float3& max)
@@ -204,21 +205,30 @@ bool OctreeNode::AddToChildren(GameObject * obj, const AABB& sect)
 	return ret;
 }
 
-void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
+void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* meshes_to_draw, std::vector<std::pair<float, GameObject*>>* meshes_to_draw_transparency, const ComponentCamera* camera)
 {
 	if (App->renderer3D->IsInsideFrustum(camera, section)) {
 		if (!game_objects.empty()) {
 			std::vector<GameObject*>::iterator item = game_objects.begin();
 			for (; item != game_objects.end(); ++item) {
 				if (*item != nullptr && (*item)->IsParentEnabled()) {
-					ComponentMesh* mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::MESH);
-					if (mesh == nullptr)
-						mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::DEFORMABLE_MESH);
+					ComponentMesh* mesh = (*item)->GetComponent<ComponentMesh>();
+
 					if (mesh != nullptr && mesh->mesh != nullptr) {
 						if (App->renderer3D->IsInsideFrustum(camera, mesh->GetGlobalAABB())) {
-							float3 obj_pos = static_cast<ComponentTransform*>((*item)->GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
-							float distance = camera->frustum.pos.Distance(obj_pos);
-							to_draw->push_back({ distance, *item });
+
+							ComponentMaterial* material = (*item)->GetComponent<ComponentMaterial>();
+							if (material != nullptr) // Meshes won't be drawn without material ??
+							{
+								float3 obj_pos = (*item)->transform->GetGlobalPosition();
+								float distance = camera->frustum.pos.Distance(obj_pos);
+
+								if (material->IsTransparent())
+									meshes_to_draw_transparency->push_back({ distance, (*item) });
+
+								else
+									meshes_to_draw->push_back({ distance, (*item) });
+							}
 						}
 					}
 				}
@@ -229,8 +239,43 @@ void OctreeNode::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* t
 			for (; item != children.end(); ++item) {
 				if (*item != nullptr) {
 					if (App->renderer3D->IsInsideFrustum(camera, (*item)->section)) {
-						(*item)->SetStaticDrawList(to_draw, camera);
+						(*item)->SetStaticDrawList(meshes_to_draw, meshes_to_draw_transparency, camera);
 					}
+				}
+			}
+		}
+	}
+}
+
+void OctreeNode::SetAllStaticObjects(std::vector<GameObject*>* to_draw, const ComponentCamera* camera)
+{
+	
+		if (!game_objects.empty()) {
+			std::vector<GameObject*>::iterator item = game_objects.begin();
+			for (; item != game_objects.end(); ++item) {
+				if (*item != nullptr && (*item)->IsParentEnabled()) {
+					ComponentMesh* mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::MESH);
+					if (mesh == nullptr)
+						mesh = (ComponentMesh*)(*item)->GetComponent(ComponentType::DEFORMABLE_MESH);
+					if (mesh != nullptr && mesh->mesh != nullptr) {
+						ComponentMaterial* material = (*item)->GetComponent<ComponentMaterial>();
+						if (material != nullptr)
+						{
+							if (!material->IsTransparent())
+							{
+								float3 obj_pos = static_cast<ComponentTransform*>((*item)->GetComponent(ComponentType::TRANSFORM))->GetGlobalPosition();
+								float distance = camera->frustum.pos.Distance(obj_pos);
+								to_draw->push_back(*item);
+							}
+						}	
+					}
+				}
+			}
+		if (!children.empty()) {
+			std::vector<OctreeNode*>::iterator item = children.begin();
+			for (; item != children.end(); ++item) {
+				if (*item != nullptr) {		
+					(*item)->SetAllStaticObjects(to_draw, camera);
 				}
 			}
 		}
@@ -422,13 +467,22 @@ void Octree::Recalculate(GameObject* new_object)
 	to_save.clear();
 }
 
-void Octree::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera)
+void Octree::SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* meshes_to_draw, std::vector<std::pair<float, GameObject*>>* meshes_to_draw_transparency, const ComponentCamera* camera)
 {
 	if (root == nullptr) {
 		return;
 	}
 
-	root->SetStaticDrawList(to_draw, camera);
+	root->SetStaticDrawList(meshes_to_draw, meshes_to_draw_transparency, camera);
+}
+
+void Octree::ShowAllStaticObjects(std::vector<GameObject*>* to_draw, const ComponentCamera* camera)
+{
+	if (root == nullptr) {
+		return;
+	}
+
+	root->SetAllStaticObjects(to_draw, camera);
 }
 
 bool Octree::Exists(GameObject* object)

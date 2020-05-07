@@ -1,0 +1,448 @@
+{
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Geralt_Yrden",
+                "FamilyNumber": 1,
+                "ID": "11404898685386133313",
+                "ParentID": "15225447123514407060",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4813534130276941752",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            -1.4901162970204496e-08,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.99999994039535522,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7261030510742624716"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "5560075257905833006",
+                        "Billboard": 1,
+                        "Start": {
+                            "Position": [
+                                0,
+                                0.5,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                9.9223728179931641,
+                                0,
+                                1.243597149848938
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 10,
+                            "Color": [
+                                0.22911053895950317,
+                                0.017291361466050148,
+                                0.22658899426460266,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 0,
+                            "Size3D": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": false,
+                            "Angle3D": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "FinalTime": 0.69999998807907104,
+                            "Speed": 0,
+                            "Color": [
+                                1,
+                                0,
+                                0.91666746139526367,
+                                0.375
+                            ],
+                            "Size": 1,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": false,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 3,
+                            "Zone": 0,
+                            "Distance": 0,
+                            "Radius": 5,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                5,
+                                1,
+                                5
+                            ],
+                            "MaxLife": 10,
+                            "CurrentLife": 9.2610177993774414,
+                            "SpawnRate": 0,
+                            "Delay": 0,
+                            "Loop": false,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0.5,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                -1.7075474261218915e-06,
+                                0
+                            ],
+                            "RelativeRotation": [
+                                -90.000007629394531,
+                                0,
+                                0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 1
+                        },
+                        "Burst": {
+                            "TimeBurst-0": 0,
+                            "PartsInstanciate-0": 500
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "3586638759916422832",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            5,
+                            1,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6270830212257870572",
+                        "ResourceID": "2820973092083788769",
+                        "DataName": "EffectArea",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "duration",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "effect_to_apply",
+                                "string": "Yrden_Slow"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "yrden_bkgnd",
+                "FamilyNumber": 2,
+                "ID": "7520976265091313133",
+                "ParentID": "11404898685386133313",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4813534130276941752",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            1.4901162970204496e-08,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1.0000001192092896
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10251133527960430262"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "18033512860354919890",
+                        "Billboard": 5,
+                        "Start": {
+                            "Position": [
+                                0,
+                                0.10000000149011612,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                -0,
+                                -0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 0,
+                            "Color": [
+                                0.89556550979614258,
+                                0,
+                                1,
+                                0
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 0,
+                            "Size3D": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": true,
+                            "Angle3D": [
+                                -90,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "FinalTime": 0.5,
+                            "Speed": 0,
+                            "Color": [
+                                0.89556550979614258,
+                                0,
+                                1,
+                                0.72000002861022949
+                            ],
+                            "Size": 7,
+                            "Size3D": [
+                                7,
+                                7,
+                                7
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": false,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 0,
+                            "Zone": 0,
+                            "Distance": 20,
+                            "Radius": 1,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "MaxLife": 10,
+                            "CurrentLife": 9.2610177993774414,
+                            "SpawnRate": 0,
+                            "Delay": 0,
+                            "Loop": false,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0.10000000149011612,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 1
+                        },
+                        "Burst": {
+                            "TimeBurst-0": 0,
+                            "PartsInstanciate-0": 1
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "14838910325296087199",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false
+                    }
+                ]
+            }
+        ]
+    },
+    "Name": "Geralt_Yrden"
+}

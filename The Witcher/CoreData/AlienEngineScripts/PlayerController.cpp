@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
+#include "ParticlePool.h"
 #include "PlayerAttacks.h"
 #include "EventManager.h"
 #include "EffectsFactory.h"
@@ -38,11 +39,12 @@ void PlayerController::Start()
 	audio = GetComponent<ComponentAudioEmitter>();
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
-	std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
+	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->GetName(), (*it)));
 		(*it)->SetEnable(false);
-	}
+	}*/
 
 	LoadStats();
 	CalculateAABB();
@@ -128,6 +130,11 @@ void PlayerController::UpdateInput()
 		mov_input = false;
 		movement_input = float2::zero();
 	}
+
+
+	// DEBUG
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+		ReceiveDamage(10, float3::zero(), false); 
 }
 
 void PlayerController::SetState(StateType new_state)
@@ -151,9 +158,6 @@ void PlayerController::SetState(StateType new_state)
 		break;
 	case StateType::ROLLING:
 		state = new RollingState();
-		break;
-	case StateType::CASTING:
-		state = new CastingState();
 		break;
 	case StateType::DEAD:
 		state = new DeadState();
@@ -259,8 +263,12 @@ void PlayerController::EffectsUpdate()
 					}
 				}
 			}
-			if (particles[(*it)->name])
-				particles[(*it)->name]->SetEnable(true);
+			if ((*it)->spawned_particle != nullptr)
+			{
+				(*it)->spawned_particle->SetEnable(false);
+				(*it)->spawned_particle->SetEnable(true);
+			}
+
 		}
 
 		if ((*it)->to_delete)
@@ -276,8 +284,10 @@ void PlayerController::PlayAttackParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);
+		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
+		
+		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
 }
 
@@ -285,10 +295,35 @@ void PlayerController::PlayAllowParticle()
 {
 	if (attacks->GetCurrentAttack())
 	{
-		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);
-
+		//SpawnParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+		/*particles.insert(std::pair(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+			GameManager::instance->particle_pool->GetInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name,
+				transform->GetGlobalPosition(), this->game_object)));*/
+		/*particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(false);
+		particles[attacks->GetCurrentAttack()->info.allow_combo_p_name]->SetEnable(true);*/
 	}
+}
+
+void PlayerController::ReleaseAttackParticle()
+{
+	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
+	/*for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.particle_name, it->second);
+			it = particles.erase(it);
+		}
+		if (it->first == attacks->GetCurrentAttack()->info.allow_combo_p_name)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name, it->second);
+			it = particles.erase(it);
+		}
+		else
+			++it;
+	}*/
 }
 
 #pragma region PlayerActions
@@ -368,6 +403,31 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 	if(GameManager::instance->rumbler_manager)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+
+	// Heartbeat effect 
+	static float percentage = 0.f, thresholdPercentage = 0.3f; 
+	static bool playing = false; 
+
+	percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue(); 
+	if (playing == false)
+	{
+		if (percentage <= thresholdPercentage)
+		{
+			playing = true;
+			audio->StartSound("Play_Heartbeats");
+		}
+	}
+	else
+	{
+		if (percentage > thresholdPercentage)
+		{
+			playing = false;
+			audio->StopSoundByName("Play_Heartbeats");
+		}
+	}
+		
+	audio->SetRTPCValue("PlayerLife", player_data.stats["Health"].GetValue()); 
+
 }
 
 void PlayerController::AbsorbHit()
@@ -418,6 +478,10 @@ void PlayerController::AddEffect(Effect* _effect)
 
 	effects.push_back(_effect);
 
+	if (std::strcmp(_effect->vfx_on_apply.c_str(), "") != 0)
+		_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply,
+			particle_spawn_positions[_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
+
 	if (dynamic_cast<AttackEffect*>(_effect) != nullptr)
 	{
 		attacks->OnAddAttackEffect(((AttackEffect*)_effect));
@@ -431,9 +495,10 @@ void PlayerController::AddEffect(Effect* _effect)
 		}
 	}
 
-	GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
-	if (go)
-		particles.insert(std::pair(_effect->vfx_on_apply, go));
+
+
+	//GameObject* go = GameObject::Instantiate(_effect->vfx_on_apply.c_str(), {0, 0.5f, 0}, false, game_object);
+	//particles.insert(std::pair(_effect->vfx_on_apply, GameManager::instance->particle_pool->GetInstance(_effect->vfx_on_apply)));
 }
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
@@ -453,16 +518,21 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-	for (auto it = particles.begin(); it != particles.end();)
+	if (tmp_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
+	}
+
+	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == tmp_effect->vfx_on_apply)
 		{
-			GameObject::Destroy(it->second);
+			GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, it->second);
 			it = particles.erase(it);
 		}
 		else
 			++it;
-	}
+	}*/
 
 	delete tmp_effect;
 	return it;
@@ -479,12 +549,17 @@ bool PlayerController::CheckBoundaries()
 	Frustum fake_frustum = camera->frustum;
 	fake_frustum.pos = next_cam_pos;
 
+	bool contained = false;
+	if (camera->frustum.Contains(fake_aabb)) {
+		contained = true;
+	}
+
 	CameraMovement* cam = (CameraMovement*)camera->game_object_attached->GetComponent<CameraMovement>();
 	for (int i = 0; i < cam->players.size(); ++i)
 	{
 		if (cam->players[i] != this->game_object)
 		{
-			PlayerController* p = cam->players[i]->GetComponent<PlayerController>();
+			PlayerController* const p = cam->players[i]->GetComponent<PlayerController>();
 			if (p != nullptr) {
 				AABB p_tmp = p->max_aabb;
 				p_tmp.minPoint += cam->players[i]->transform->GetGlobalPosition();
@@ -493,14 +568,35 @@ bool PlayerController::CheckBoundaries()
 				if(camera->frustum.Contains(p_tmp) && !fake_frustum.Contains(p_tmp))
 				{
 					LOG("LEAVING BUDDY BEHIND");
-					player_data.speed = float3::zero();
-					return false;
+					if (contained) {
+						if (cam->state == CameraMovement::CameraState::FREE 
+							&& cam->state == CameraMovement::CameraState::MOVING_TO_STATIC
+							&& cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
+							&& cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
+							&& cam->state == CameraMovement::CameraState::AXIS)
+							return true;
+
+						cam->prev_state = cam->state;
+						cam->state = CameraMovement::CameraState::FREE;
+						if (cam->players[0]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition()) > cam->players[1]->transform->GetGlobalPosition().Distance(cam->transform->GetGlobalPosition())) {
+							cam->closest_player = 1;
+						}
+						else
+							cam->closest_player = 0;
+
+						cam->prev_middle = cam->transform->GetGlobalPosition() - cam->players[cam->closest_player]->transform->GetGlobalPosition();
+						return true;
+					}
+					else {
+						player_data.speed = float3::zero();
+						return false;
+					}
 				}
 			}
 		}
 	}
 
-	if (camera->frustum.Contains(fake_aabb)) {
+	if (contained) {
 		return true;
 	}
 	else {
@@ -539,6 +635,63 @@ void PlayerController::RemoveFreeze(float speed)
 {
 	animator->SetCurrentStateSpeed(speed);
 	is_immune = false;
+}
+
+void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			(*it)->SetEnable(false);
+			(*it)->SetEnable(true);
+			return;
+		}
+	}
+	parent = parent != nullptr ? parent : this->game_object;
+	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
+
+	if (new_particle == nullptr)
+		return;
+
+	particles.push_back(new_particle);
+	/*if (particles[particle_name])
+	{
+		particles[particle_name]->SetEnable(false);
+		particles[particle_name]->SetEnable(true);
+	}
+	else
+	{
+		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
+		particles.insert(std::pair(particle_name, new_particle));
+	}*/
+}
+
+void PlayerController::ReleaseParticle(std::string particle_name)
+{
+	if (particle_name == "")
+		return;
+
+	for (auto it = particles.begin(); it != particles.end();)
+	{
+		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
+		{
+			GameManager::instance->particle_pool->ReleaseInstance(particle_name, (*it));
+			particles.erase(it);
+		}
+		else
+			++it;
+	}
+
+	/*if (particles[particle_name])
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
+		particles.erase(particle_name);
+	}*/
 }
 
 
@@ -586,8 +739,10 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
-				if (dash_coll->dash_particles[(*it)->name])
-					dash_coll->dash_particles[(*it)->name]->SetEnable(true);
+
+				if (dash_coll->effect->on_dash_effect->name != "")
+					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
+						float3::zero(), float3::zero(), dash_coll->game_object);
 			}
 		}
 	}
@@ -599,27 +754,35 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	{
 		Bonfire* bonfire = col->game_object_attached->GetComponent<Bonfire>();
 
-		if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
+		if (!bonfire->has_been_used)
 		{
-			Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
-			HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
-		}
-
-		if (bonfire->is_active && !bonfire->HaveThisPlayerUsedThis(this))
-		{
-			if (player_data.stats["Health"].GetMaxValue() > player_data.stats["Health"].GetValue()
-				|| player_data.stats["Chaos"].GetMaxValue() > player_data.stats["Chaos"].GetValue())
+			if (!Scores_Data::last_checkpoint_position.Equals(bonfire->checkpoint->transform->GetGlobalPosition()))
 			{
-				// Heal
-				player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
-				player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
-				HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-				HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
-
-
-				// Player Used this Bonfire
-				bonfire->SetBonfireUsed(this);
+				Scores_Data::last_checkpoint_position = bonfire->checkpoint->transform->GetGlobalPosition();
+				HUD->parent->parent->GetComponent<InGame_UI>()->ShowCheckpointSaved();
 			}
+
+			auto player = GameManager::instance->player_manager->players.begin();
+			for (; player != GameManager::instance->player_manager->players.end(); ++player)
+			{
+				if (!GameManager::instance->player_manager->players_dead.empty() && GameManager::instance->player_manager->players_dead[0] == (*player))
+				{
+					(*player)->Revive(1);
+					GameObject::Destroy((*player)->game_object->GetChild("ReviveMinigame"));
+					(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+					(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+					continue;
+				}
+
+				// Heal
+				(*player)->player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
+				(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+			}
+
+			// Player Used this Bonfire
+			bonfire->SetBonfireUsed();
 		}
 	}
 
@@ -642,8 +805,11 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 
 void PlayerController::OnEnemyKill()
 {
+	LOG("ENEMY KILL");
 	player_data.total_kills++;
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
 void PlayerController::OnUltimateActivation(float value)
@@ -688,29 +854,35 @@ void PlayerController::InitKeyboardControls()
 		keyboard_move_right = SDL_SCANCODE_D;
 		keyboard_move_down = SDL_SCANCODE_S;
 		keyboard_jump = SDL_SCANCODE_SPACE;
-		keyboard_dash = SDL_SCANCODE_LALT;
-		keyboard_light_attack = SDL_SCANCODE_V;
-		keyboard_heavy_attack = SDL_SCANCODE_B;
-		keyboard_revive = SDL_SCANCODE_C;
+		keyboard_dash = SDL_SCANCODE_LSHIFT;
+		keyboard_light_attack = SDL_SCANCODE_C;
+		keyboard_heavy_attack = SDL_SCANCODE_V;
+		keyboard_revive = SDL_SCANCODE_F;
 		keyboard_ultimate = SDL_SCANCODE_X;
-		keyboard_spell = SDL_SCANCODE_F;
+		keyboard_spell_1 = SDL_SCANCODE_1;
+		keyboard_spell_2 = SDL_SCANCODE_2;
+		keyboard_spell_3 = SDL_SCANCODE_3;
+		keyboard_spell_4 = SDL_SCANCODE_4;
 
 		// HUD
 		if(GameObject::FindWithName("HUD_Game"))
 			HUD = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetChild("Character1");
 	}
 	else if (controller_index == 2) {
-		keyboard_move_up = SDL_SCANCODE_I;
-		keyboard_move_left = SDL_SCANCODE_J;
-		keyboard_move_right = SDL_SCANCODE_L;
-		keyboard_move_down = SDL_SCANCODE_K;
-		keyboard_jump = SDL_SCANCODE_RSHIFT;
-		keyboard_dash = SDL_SCANCODE_RALT;
-		keyboard_light_attack = SDL_SCANCODE_RCTRL;
-		keyboard_heavy_attack = SDL_SCANCODE_RIGHTBRACKET;
-		keyboard_revive = SDL_SCANCODE_M;
-		keyboard_ultimate = SDL_SCANCODE_APOSTROPHE;
-		keyboard_spell = SDL_SCANCODE_COMMA;
+		keyboard_move_up = SDL_SCANCODE_UP;
+		keyboard_move_left = SDL_SCANCODE_LEFT;
+		keyboard_move_right = SDL_SCANCODE_RIGHT;
+		keyboard_move_down = SDL_SCANCODE_DOWN;
+		keyboard_jump = SDL_SCANCODE_RCTRL;
+		keyboard_dash = SDL_SCANCODE_RSHIFT;
+		keyboard_light_attack = SDL_SCANCODE_KP_0;
+		keyboard_heavy_attack = SDL_SCANCODE_KP_PERIOD;
+		keyboard_revive = SDL_SCANCODE_KP_ENTER;
+		keyboard_ultimate = SDL_SCANCODE_KP_5;
+		keyboard_spell_1 = SDL_SCANCODE_KP_1;
+		keyboard_spell_2 = SDL_SCANCODE_KP_2;
+		keyboard_spell_3 = SDL_SCANCODE_KP_3;
+		keyboard_spell_4 = SDL_SCANCODE_KP_4;
 
 		// HUD
 		if(GameObject::FindWithName("HUD_Game"))

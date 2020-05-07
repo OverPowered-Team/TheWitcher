@@ -21,7 +21,7 @@ void UI_EndMenu::Update()
 {
 	if ((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y))||(Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_Y)))
 	{
-		SceneManager::LoadScene("Main_Menu");
+		SceneManager::LoadScene("CreditsMenu");
 	}
 }
 

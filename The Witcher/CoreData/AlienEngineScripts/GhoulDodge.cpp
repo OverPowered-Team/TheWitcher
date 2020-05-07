@@ -1,6 +1,7 @@
 #include "GhoulDodge.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 
 GhoulDodge::GhoulDodge() : Ghoul()
 {
@@ -55,7 +56,13 @@ void GhoulDodge::UpdateEnemy()
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
         animator->PlayState("Death");
         audio_emitter->StartSound("GhoulDeath");
+        last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
+        if (m_controller && is_combat)
+        {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
         break;
     }
     }
@@ -81,7 +88,7 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         {
             state = GhoulState::IDLE;
         }
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Jump") == 0)
     {
@@ -90,12 +97,12 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         else
             state = GhoulState::IDLE;
 
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Hit") == 0)
     {
         state = GhoulState::IDLE;
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
 }
 

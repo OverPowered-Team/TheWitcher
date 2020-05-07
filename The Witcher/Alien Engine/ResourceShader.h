@@ -30,7 +30,7 @@ enum class SHADER_TEMPLATE
 	SHIELD,
 	SHIELD_FRESNEL,
 	SHADOW,
-	WATER,
+	WATER
 
 };
 
@@ -69,6 +69,7 @@ public:
 	SHADER_TEMPLATE GetShaderType() const;
 
 	void UpdateUniforms(ShaderInputs inputs);
+	void ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera); 
 	void ApplyLightsUniforms();
 	void Bind() const;
 	void Unbind() const;
@@ -83,6 +84,10 @@ public:
 	void SetUniformFloat3(const std::string& name, const float3& vec3);
 
 	void SetUniformFloat3v(const std::string& name, const float3* vec, uint count);
+
+	void SetUniformFloatv(const std::string& name, const float* vec, uint count);
+
+	void SetUniformIntv(const std::string& name, const int* vec, uint count);
 
 	void SetUniform4f(const std::string& name, const float& v0, const float& v1, const float& v2, const float& v3);
 	void SetUniform4f(const std::string& name, const float4& vec);

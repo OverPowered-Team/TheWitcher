@@ -78,15 +78,15 @@ void ComponentUI::Update()
 {
 	
 	if (Time::IsPlaying()) {
-		if (canvas->allow_navigation && (!App->objects->first_assigned_selected || (App->objects->GetGameObjectByID(App->objects->selected_ui) != nullptr && !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled)))
+		if (canvas != nullptr && canvas->allow_navigation && (!App->objects->first_assigned_selected || (App->objects->GetGameObjectByID(App->objects->selected_ui) != nullptr && !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled)))
 			CheckFirstSelected();
 
 		//UILogicMouse();
 
 		(game_object_attached->enabled) ? active = true : active = false;
-
+		
 		if (active)
-			(canvas->game_object_attached->enabled) ? active = true : active = false;
+			(game_object_attached->IsUpWardsEnabled()) ? active = true : active = false;
 
 		if (active)
 		{
@@ -117,7 +117,7 @@ void ComponentUI::Update()
 				break; }
 			}
 
-			if (canvas->game_object_attached->enabled && canvas->allow_navigation)
+			if (canvas!=nullptr && canvas->game_object_attached->enabled && canvas->allow_navigation)
 				UILogicGamePad();
 		}
 
@@ -127,6 +127,7 @@ void ComponentUI::Update()
 void ComponentUI::Draw(bool isGame)
 {
 	if (canvas == nullptr || canvas_trans == nullptr) {
+		LOG_ENGINE("Canvas is nullptr");
 		return;
 	}
 
@@ -140,12 +141,20 @@ void ComponentUI::Draw(bool isGame)
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
+	/*float4x4 ortho_matrix = float4x4((2.0f / App->ui->panel_game->width), 0.0f, 0.0f, -(App->ui->panel_game->width / App->ui->panel_game->width),
+		0.0f, (2.0f / App->ui->panel_game->height), 0.0f, -(App->ui->panel_game->height / App->ui->panel_game->height),
+		0.0f, 0.0f, (-2.0f / 2.0f), -(0.0 / 2.0f),
+		0.0f, 0.0f, 0.0f, 1.0f);*/
+
 	if (isGame && App->renderer3D->actual_game_camera != nullptr && !canvas->isWorld) {
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 #ifndef GAME_VERSION
-		glOrtho(0, App->ui->panel_game->width, App->ui->panel_game->height, 0, App->renderer3D->actual_game_camera->frustum.farPlaneDistance, App->renderer3D->actual_game_camera->frustum.farPlaneDistance);
+		glOrtho(0, App->ui->panel_game->width, App->ui->panel_game->height, 0,App->renderer3D->actual_game_camera->frustum.farPlaneDistance, App->renderer3D->actual_game_camera->frustum.farPlaneDistance);
+		/*glPushMatrix();
+		glMultMatrixf(ortho_matrix.ptr());
+		glPopMatrix();*/
 #else
 		glOrtho(0, App->window->width, App->window->height, 0, App->renderer3D->actual_game_camera->frustum.farPlaneDistance, App->renderer3D->actual_game_camera->frustum.farPlaneDistance);
 #endif
@@ -172,14 +181,14 @@ void ComponentUI::Draw(bool isGame)
 		origin.y = -(-origin.y - 0.5F) * 2;
 		matrix[0][3] = origin.x;
 		matrix[1][3] = origin.y;
-		matrix[2][3] = 0.0f;
+		//matrix[2][3] = 0.0f;
 	}
 
 	
 
 	if (texture != nullptr) {
-		//glAlphaFunc(GL_GREATER, 0.0f);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 	}
 
@@ -207,11 +216,6 @@ void ComponentUI::Draw(bool isGame)
 		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
 		float4x4 uiGlobal = uiLocal;
 
-		/*	if (!particleInfo.globalTransform)
-			{
-				float4x4 parentGlobal = owner->emmitter.GetGlobalTransform();
-				particleGlobal = parentGlobal * particleLocal;
-			}*/
 
 		glPushMatrix();
 		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
@@ -242,6 +246,7 @@ void ComponentUI::Draw(bool isGame)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 
@@ -346,7 +351,7 @@ void ComponentUI::CheckFirstSelected()
 
 void ComponentUI::Orientate(ComponentCamera* camera)
 {
-	if (canvas->isWorld)
+	if (canvas != nullptr && canvas->isWorld)
 	{
 		if (camera == nullptr)
 			return;
@@ -381,7 +386,7 @@ void ComponentUI::Orientate(ComponentCamera* camera)
 
 void ComponentUI::Rotate()
 {
-	if (canvas->isWorld && game_object_attached->parent != nullptr && game_object_attached->parent == canvas->game_object_attached)
+	if (canvas != nullptr && canvas->isWorld && game_object_attached->parent != nullptr && game_object_attached->parent == canvas->game_object_attached)
 	{
 		rotation = rotation.Mul(Quat::RotateX(math::DegToRad(angle3D.x)));
 		rotation = rotation.Mul(Quat::RotateY(math::DegToRad(angle3D.y)));

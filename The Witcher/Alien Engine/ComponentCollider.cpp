@@ -11,13 +11,6 @@
 #include "Time.h"
 #include "Event.h"
 
-ContactPoint::ContactPoint(const float3& normal, const float3& point, float separation, ComponentCollider* this_collider, ComponentCollider* other_collider) :
-	normal(normal), point(point), separation(separation), this_collider(this_collider), other_collider(other_collider) {}
-
-Collision::Collision(ComponentCollider* collider, ComponentRigidBody* rigid_body, ComponentTransform* transform, const std::vector<ContactPoint>& contancts,
-	uint num_contact, GameObject* game_object, const float3& impulse, const float3& relative_velocity) :
-	collider(collider), rigid_body(rigid_body), transform(transform), contancts(contancts), num_contact(num_contact), game_object(game_object), impulse(impulse), relative_velocity(relative_velocity) {}
-
 ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
 {
 	// Default values 
@@ -25,6 +18,10 @@ ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
 	rotation = float3::zero();
 	material = App->physx->CreateMaterial();
 	InitMaterial();
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCollider::DrawScene, this));
+#endif // !GAME_VERSION
 }
 
 ComponentCollider::~ComponentCollider()
@@ -34,6 +31,11 @@ ComponentCollider::~ComponentCollider()
 		shape->release();
 		shape = nullptr;
 	}
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
+
 
 	material->release();
 	material = nullptr;
@@ -187,7 +189,7 @@ void ComponentCollider::OnDisable()
 		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DISABLED);
 }
 
-void ComponentCollider::DrawScene(ComponentCamera* camera)
+void ComponentCollider::DrawScene()
 {
 	if (enabled == true && (game_object_attached->IsSelected() || App->physx->debug_physics))
 	{

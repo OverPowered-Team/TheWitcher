@@ -1,6 +1,8 @@
 #ifndef __TIME_H__
 #define __TIME_H__
 
+#define MAX_GAME_DT 1.f/30.f
+
 #include <string>
 
 class Timer;

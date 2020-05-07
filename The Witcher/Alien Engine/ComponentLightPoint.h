@@ -9,6 +9,7 @@
 
 struct __declspec(dllexport) PointLightProperties
 {
+	bool enabled = true;
 	float intensity = 1.0f;
 	float3 position = float3::zero();
 	float3 ambient = float3::zero();
@@ -17,6 +18,8 @@ struct __declspec(dllexport) PointLightProperties
 	float constant = 1.0f;
 	float linear = 0.1f;
 	float quadratic = 0.02f;
+
+	ComponentLightPoint* light = nullptr;
 };
 
 class __declspec(dllexport) ComponentLightPoint : public Component {
@@ -29,9 +32,10 @@ public:
 private:
 	void LightLogic();
 	void Update() override;
-	void DrawScene(ComponentCamera* camera) override; 
+	void DrawScene() override; 
 
 	bool DrawInspector();
+	void OnEnable();
 	void OnDisable();
 
 	void Clone(Component* clone);

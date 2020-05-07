@@ -1,5 +1,7 @@
 #include "GhoulOriginal.h"
+#include "PlayerController.h"
 #include "EnemyManager.h"
+#include "MusicController.h"
 
 GhoulOriginal::GhoulOriginal() : Ghoul()
 {
@@ -38,7 +40,13 @@ void GhoulOriginal::UpdateEnemy()
         Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
         animator->PlayState("Death");
         audio_emitter->StartSound("GhoulDeath");
+        last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
+        if (m_controller && is_combat)
+        {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
         break;
     }
     }

@@ -51,13 +51,13 @@ void PauseMenu_Buttons::RetryLevel()
 {
 	Scores_Data::last_checkpoint_position = float3::inf();
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
-	SceneManager::LoadScene("Lvl_1_Art_Colliders");
+	SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
 }
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
-	SceneManager::LoadScene("Lvl_1_Art_Colliders");
+	SceneManager::LoadScene("Main_Menu");
 }
 
 void PauseMenu_Buttons::Exit_Menu()

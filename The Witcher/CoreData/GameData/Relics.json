@@ -31,14 +31,16 @@
       "effect": 1,
       "name": "Fire Runestone",
       "description": "burns enemies",
-	    "hit_effect":{
+      "hit_effect": {
         "name": "fire_runestone",
+        "vfx_on_apply": "p_fire_runestone",
+		    "vfx_position": 0,
         "time": 0.5,
         "ticks_time": 1.0,
-        "flat_modifiers":[
+        "flat_modifiers": [
           {
-            "identifier":"Health",
-            "value":-5
+            "identifier": "Health",
+            "value": -5
           }
         ]
       }
@@ -51,9 +53,15 @@
         "name": "ice_runestone",
         "time": 0.5,
         "ticks_time": 0.0,
+        "vfx_on_apply": "p_ice_runestone",
+		    "vfx_position": 0,
         "multiplicative_modifiers": [
           {
             "identifier": "Agility",
+            "value": 0.5
+          },
+          {
+            "identifier": "AttackSpeed",
             "value": 0.5
           }
         ]
@@ -65,6 +73,8 @@
       "description": "does double damage",
       "hit_effect": {
         "name": "earth_runestone",
+        "vfx_on_apply": "p_earth_runestone",
+		    "vfx_position": 0,
         "time": 0.0,
         "ticks_time": 0.0
       }
@@ -75,6 +85,8 @@
       "description": "stuns enemies hit",
       "hit_effect": {
         "name": "lightning_runestone",
+        "vfx_on_apply": "p_lightning_runestone",
+		    "vfx_position": 0,
         "time": 0.5,
         "ticks_time": 0.0
       }
@@ -85,6 +97,8 @@
       "description": "poisons enemies hit",
       "hit_effect": {
         "name": "poison_runestone",
+        "vfx_on_apply": "p_poison_runestone",
+		    "vfx_position": 0,
         "time": 1.0,
         "ticks_time": 1.0,
         "flat_modifiers": [
@@ -124,6 +138,10 @@
         "multiplicative_modifiers": [
           {
             "identifier": "Agility",
+            "value": 0.5
+          },
+          {
+            "identifier": "AttackSpeed",
             "value": 0.5
           }
         ]
