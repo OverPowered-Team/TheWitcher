@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GhoulAnimController",
-        "NumStates": 6,
-        "NumTransitions": 7,
+        "NumStates": 8,
+        "NumTransitions": 9,
         "States": [
             {
                 "Name": "Idle",
@@ -10,13 +10,13 @@
                 "Clip": "5274429494783861281"
             },
             {
-                "Name": "Wal",
+                "Name": "Walk",
                 "Speed": 1,
                 "Clip": "14742750107754546426"
             },
             {
                 "Name": "Jump",
-                "Speed": 2,
+                "Speed": 3,
                 "Clip": "8825609739987625586"
             },
             {
@@ -32,13 +32,23 @@
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "14145741330722218437"
+                "Clip": "2802214578329179710"
+            },
+            {
+                "Name": "Dizzy",
+                "Speed": 1,
+                "Clip": "14508775708390157767"
+            },
+            {
+                "Name": "QuickDeat",
+                "Speed": 1,
+                "Clip": "0"
             }
         ],
         "Transitions": [
             {
                 "Source": "Idle",
-                "Target": "Wal",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": false,
                 "IntConditions": [],
@@ -53,7 +63,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Wal",
+                "Source": "Walk",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": false,
@@ -86,7 +96,7 @@
             },
             {
                 "Source": "Slash",
-                "Target": "Wal",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -118,7 +128,7 @@
             },
             {
                 "Source": "Jump",
-                "Target": "Wal",
+                "Target": "Walk",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
@@ -140,6 +150,36 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Death",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -149,7 +189,12 @@
                 "Value": 0
             }
         ],
-        "BoolParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            }
+        ],
         "Events": [
             {
                 "Event_Id": "Ghoul::ActivateCollider",
@@ -173,6 +218,24 @@
                 "Event_Id": "Ghoul::DeactivateCollider",
                 "Animation_Id": "2909912792962758385",
                 "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateCollider",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 9,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateCollider",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 11,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnAttackParticle",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 8,
                 "Type": 2
             }
         ]
