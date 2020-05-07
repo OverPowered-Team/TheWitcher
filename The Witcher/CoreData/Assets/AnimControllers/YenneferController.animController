@@ -12,7 +12,7 @@
             {
                 "Name": "LL",
                 "Speed": 1,
-                "Clip": "5981717182448929904"
+                "Clip": "0"
             },
             {
                 "Name": "LLL",
@@ -27,7 +27,7 @@
             {
                 "Name": "LLLL",
                 "Speed": 1,
-                "Clip": "10823479263706787823"
+                "Clip": "0"
             },
             {
                 "Name": "Idle",
@@ -92,7 +92,7 @@
             {
                 "Name": "HH",
                 "Speed": 1.6499999761581421,
-                "Clip": "4808834135413022960"
+                "Clip": "0"
             },
             {
                 "Name": "HHHH",
@@ -102,7 +102,7 @@
             {
                 "Name": "HHHHH",
                 "Speed": 1.5,
-                "Clip": "7241398213408645275"
+                "Clip": "0"
             },
             {
                 "Name": "HHH",
@@ -127,7 +127,7 @@
             {
                 "Name": "HLL",
                 "Speed": 1,
-                "Clip": "10698994317895620532"
+                "Clip": "0"
             },
             {
                 "Name": "HLLH",
@@ -137,7 +137,7 @@
             {
                 "Name": "LH",
                 "Speed": 1.6499999761581421,
-                "Clip": "9829053222516540316"
+                "Clip": "0"
             },
             {
                 "Name": "LHH",
@@ -818,8 +818,721 @@
             }
         ],
         "IntParameters": [],
-        "FloatParameters": [],
-        "BoolParameters": [],
-        "Events": []
+        "FloatParameters": [
+            {
+                "Name": "speed",
+                "Value": 0
+            }
+        ],
+        "BoolParameters": [
+            {
+                "Name": "air",
+                "Value": false
+            },
+            {
+                "Name": "movement_input",
+                "Value": false
+            },
+            {
+                "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "reviving",
+                "Value": false
+            }
+        ],
+        "Events": [
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "4908746278255016155",
+                "Frame": 39,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "4908746278255016155",
+                "Frame": 42,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 30,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 52,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "440478480670926422",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "440478480670926422",
+                "Frame": 13,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "440478480670926422",
+                "Frame": 24,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 18,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 22,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 37,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 41,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 46,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 47,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "440478480670926422",
+                "Frame": 12,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "15038005924165173360",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "4908746278255016155",
+                "Frame": 40,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "16806086598256069524",
+                "Frame": 0,
+                "Type": 2
+            },
+            {
+                "Event_Id": "831621349",
+                "Animation_Id": "10546380727138208159",
+                "Frame": 9,
+                "Type": 0
+            },
+            {
+                "Event_Id": "527437",
+                "Animation_Id": "11452384421895114614",
+                "Frame": 22,
+                "Type": 0
+            },
+            {
+                "Event_Id": "511861945",
+                "Animation_Id": "9412677902632991369",
+                "Frame": 18,
+                "Type": 0
+            },
+            {
+                "Event_Id": "149154610",
+                "Animation_Id": "5434931430886810763",
+                "Frame": 11,
+                "Type": 0
+            },
+            {
+                "Event_Id": "2719919427",
+                "Animation_Id": "9011061221571290379",
+                "Frame": 4,
+                "Type": 0
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "5470057613373953221",
+                "Frame": 54,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "5470057613373953221",
+                "Frame": 56,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "5470057613373953221",
+                "Frame": 74,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "2659056683821727387",
+                "Frame": 23,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "2659056683821727387",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "3015327048544619653",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "3015327048544619653",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3015327048544619653",
+                "Frame": 45,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "12575178571649699862",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "12575178571649699862",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "12575178571649699862",
+                "Frame": 45,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "6013997251988468976",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "6013997251988468976",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "6013997251988468976",
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "6005326666346996765",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "6005326666346996765",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "6005326666346996765",
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "3737757155993371627",
+                "Frame": 38,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "3737757155993371627",
+                "Frame": 45,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "4808834135413022960",
+                "Frame": 23,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "4808834135413022960",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "12190364472890400192",
+                "Frame": 23,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "12190364472890400192",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "12190364472890400192",
+                "Frame": 53,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "3060363109149753826",
+                "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "3060363109149753826",
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "2498716969180813155",
+                "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "2498716969180813155",
+                "Frame": 40,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7409303378159626519",
+                "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7409303378159626519",
+                "Frame": 40,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "13790815703453017947",
+                "Frame": 27,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "13790815703453017947",
+                "Frame": 69,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16454515812707727638",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16454515812707727638",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16454515812707727638",
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7937841362023062394",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7937841362023062394",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7937841362023062394",
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7362509100989059400",
+                "Frame": 63,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7362509100989059400",
+                "Frame": 72,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "10391092860715158745",
+                "Frame": 15,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "10391092860715158745",
+                "Frame": 44,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "10391092860715158745",
+                "Frame": 64,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "8846865188502503922",
+                "Frame": 52,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "8846865188502503922",
+                "Frame": 57,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7723220700385677240",
+                "Frame": 14,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7723220700385677240",
+                "Frame": 49,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7723220700385677240",
+                "Frame": 63,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "4050472587394022395",
+                "Frame": 14,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "4050472587394022395",
+                "Frame": 49,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "3542243683532859658",
+                "Frame": 13,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "3542243683532859658",
+                "Frame": 14,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3542243683532859658",
+                "Frame": 25,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "8758664254539189037",
+                "Frame": 21,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "8758664254539189037",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "3603143499949684307",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "3603143499949684307",
+                "Frame": 25,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3603143499949684307",
+                "Frame": 60,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "3015327048544619653",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "5981717182448929904",
+                "Frame": 9,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "5981717182448929904",
+                "Frame": 16,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "5981717182448929904",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "10823479263706787823",
+                "Frame": 7,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "10823479263706787823",
+                "Frame": 8,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "10823479263706787823",
+                "Frame": 11,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "10823479263706787823",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "10698994317895620532",
+                "Frame": 7,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "10698994317895620532",
+                "Frame": 8,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "10698994317895620532",
+                "Frame": 11,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "10698994317895620532",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "8551552939008971968",
+                "Frame": 21,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "8551552939008971968",
+                "Frame": 23,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "8551552939008971968",
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "8551552939008971968",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "7241398213408645275",
+                "Frame": 18,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "7241398213408645275",
+                "Frame": 19,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7241398213408645275",
+                "Frame": 26,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "5981717182448929904",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "9829053222516540316",
+                "Frame": 79,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "7723220700385677240",
+                "Frame": 22,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "7723220700385677240",
+                "Frame": 21,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "4050472587394022395",
+                "Frame": 21,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::PlayAttackParticle",
+                "Animation_Id": "3060363109149753826",
+                "Frame": 30,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "2498716969180813155",
+                "Frame": 53,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "4808834135413022960",
+                "Frame": 47,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3060363109149753826",
+                "Frame": 53,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::StartImmune",
+                "Animation_Id": "2441290518139000273",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerController::StopImmune",
+                "Animation_Id": "2441290518139000273",
+                "Frame": 23,
+                "Type": 2
+            }
+        ]
     }
 }
