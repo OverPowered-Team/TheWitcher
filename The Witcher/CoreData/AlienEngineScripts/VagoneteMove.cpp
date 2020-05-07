@@ -1,4 +1,5 @@
 #include "VagoneteMove.h"
+#include "VagoneteDirection.h"
 
 Quat VagoneteInputs::playerRotation = Quat::identity();
 float VagoneteInputs::inclination4player = 0.0F;
@@ -23,13 +24,17 @@ VagoneteMove::~VagoneteMove()
 void VagoneteMove::Start()
 {
 	curve = GameObject::FindWithName("Curve")->GetComponent<ComponentCurve>();
-
+	rigid_body = GetComponent<ComponentRigidBody>();
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::GERALT));
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::YENNEFER));
 }
 
 void VagoneteMove::Update()
 {
+	VagoneteInputs::playerRotation = Quat::identity();
+	VagoneteInputs::globalInclination = 0;
+	VagoneteInputs::globalInclinationY = 0;
+
 	for (auto item = players.begin(); item != players.end(); ++item) {
 		(*item)->Update();
 	}
@@ -38,6 +43,30 @@ void VagoneteMove::Update()
 
 	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
 		actual_pos = 0;
+	}
+}
+
+void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
+{
+	VagoneteDirection* direction = col->game_object_attached->GetComponent<VagoneteDirection>();
+	if (direction != nullptr) {
+		if (VagoneteInputs::globalInclination == 0) {
+			if (direction->default_right) {
+				curve = direction->curve_right->GetComponent<ComponentCurve>();
+			}
+			else {
+				curve = direction->curve_left->GetComponent<ComponentCurve>();
+			}
+		}
+		else {
+			if (VagoneteInputs::globalInclination > 0) {
+				curve = direction->curve_left->GetComponent<ComponentCurve>();
+			}
+			else {
+				curve = direction->curve_right->GetComponent<ComponentCurve>();
+			}
+		}
+		actual_pos = 0.0F;
 	}
 }
 
@@ -56,13 +85,10 @@ void VagoneteMove::FollowCurve()
 	inclinationRot.Inverse();
 	rot = rot * inclinationRot;
 
-	transform->SetLocalRotation(rot * VagoneteInputs::playerRotation);
-	transform->SetLocalPosition(currentPos + float3{0, VagoneteInputs::globalInclinationY, 0});
+	rigid_body->SetRotation(rot * VagoneteInputs::playerRotation);
+	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
 
 	actual_pos += speed * Time::GetDT();
-	VagoneteInputs::playerRotation = Quat::identity();
-	VagoneteInputs::globalInclination = 0;
-	VagoneteInputs::globalInclinationY = 0;
 }
 
 VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
@@ -108,7 +134,7 @@ void VagoneteInputs::UpdateInputs()
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
 
 		if (rightInclinationInput || leftInclinationInput) {
-			inclinationZone = (rightInclinationInput) ? 1 : -1;
+			inclinationZone = (rightInclinationInput) ? -1 : 1;
 			state = State::INCLINATION;
 			globalState = State::INCLINATION;
 		}
@@ -135,7 +161,7 @@ void VagoneteInputs::UpdateInputs()
 		if (state == State::INCLINATION) {
 			if (currentInclination != 0 || (rightInclinationInput || leftInclinationInput)) {
 				if (rightInclinationInput || leftInclinationInput) {
-					inclinationZone = (rightInclinationInput) ? 1 : -1;
+					inclinationZone = (rightInclinationInput) ? -1 : 1;
 				}
 				else {
 					inclinationZone = 0;
@@ -151,7 +177,7 @@ void VagoneteInputs::UpdateInputs()
 		else {
 			if (rightInclinationInput || leftInclinationInput) {
 				state = State::INCLINATION;
-				inclinationZone = (rightInclinationInput) ? 1 : -1;
+				inclinationZone = (rightInclinationInput) ? -1 : 1;
 			}
 			else if (coverInput) {
 				state = State::COVER;
