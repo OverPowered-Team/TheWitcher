@@ -162,7 +162,7 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
 {
     float damage = Enemy::GetDamaged(dmg, player);
 
-    if (can_get_interrupted) {
+    if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
         state = GhoulState::HIT;
         animator->PlayState("Hit");
         audio_emitter->StartSound("GhoulHit");

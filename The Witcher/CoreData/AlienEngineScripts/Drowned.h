@@ -6,7 +6,7 @@
 
 class MusicController;
 
-class ALIEN_ENGINE_API Drowned : public Enemy {
+class Drowned : public Enemy {
 public:
 	enum(DrownedType,
 		NONE = -1,
@@ -46,10 +46,3 @@ public:
 	bool is_hide = true;
 };
 
-ALIEN_FACTORY Drowned* CreateDrowned() {
-	Drowned* drowned = new Drowned();
-	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_ENUM(Drowned::DrownedType, drowned->drowned_type);
-
-	return drowned;
-} 
