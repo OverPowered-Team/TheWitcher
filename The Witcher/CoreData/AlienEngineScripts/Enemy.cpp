@@ -95,7 +95,8 @@ void Enemy::UpdateEnemy()
 	}
 
 	//MOVEMENT
-	character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
+	if(type != EnemyType::DROWNED)
+		character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
