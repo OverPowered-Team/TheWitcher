@@ -72,6 +72,8 @@ public:
 	void SetRandomDirection();
 
 	void OnAnimationEnd(const char* name);
+
+	void SetStats(const char* json) override;
 };
 
 ALIEN_FACTORY Leshen* CreateLeshen() {

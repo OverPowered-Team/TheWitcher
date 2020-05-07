@@ -324,3 +324,25 @@ void Leshen::OnAnimationEnd(const char* name)
 		EndMeleeAction();
 	}
 }
+
+void Leshen::SetStats(const char* json)
+{
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+	if (stat)
+	{
+		stats["Health"] = Stat("Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat->GetNumber("MaxHitSpeed"));
+	}
+
+	JSONfilepack::FreeJSON(stat);
+}

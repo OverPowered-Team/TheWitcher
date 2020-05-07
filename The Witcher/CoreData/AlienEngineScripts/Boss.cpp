@@ -27,6 +27,7 @@ void Boss::UpdateEnemy()
 	switch (state)
 	{
 	case Boss::BossState::NONE:
+		LOG("ADSF");
 		break;
 	case Boss::BossState::IDLE:
 		if (player_distance[0] < stats["VisionRange"].GetValue() || player_distance[1] < stats["VisionRange"].GetValue()) {
