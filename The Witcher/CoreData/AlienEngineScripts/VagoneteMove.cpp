@@ -1,5 +1,6 @@
 #include "VagoneteMove.h"
 #include "VagoneteDirection.h"
+#include "Wagonnete_UI.h"
 
 Quat VagoneteInputs::playerRotation = Quat::identity();
 float VagoneteInputs::inclination4player = 0.0F;
@@ -27,6 +28,8 @@ void VagoneteMove::Start()
 	rigid_body = GetComponent<ComponentRigidBody>();
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::GERALT));
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::YENNEFER));
+	max_life = vagonete_life;
+	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
 }
 
 void VagoneteMove::Update()
@@ -72,8 +75,10 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
 		for (auto item = players.begin(); item != players.end(); ++item) {
-			if ((*item)->state != VagoneteInputs::State::COVER) {
-				LOG("HIT IN COVER, F");
+			if ((*item)->state != VagoneteInputs::State::COVER) 
+			{
+				vagonete_life -= 20;
+				HUD->UpdateLifebar(vagonete_life, max_life);
 			}
 		}
 	}
