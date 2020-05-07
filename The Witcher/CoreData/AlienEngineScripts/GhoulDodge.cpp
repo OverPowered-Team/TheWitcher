@@ -80,6 +80,7 @@ void GhoulDodge::Dodge()
 void GhoulDodge::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
+        can_get_interrupted = true;
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
             state = GhoulState::MOVE;

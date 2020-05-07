@@ -336,6 +336,7 @@ void PlayerAttacks::CastSpell()
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
 		player_controller->PlayAttackParticle();
+		player_controller->audio->StartSound(current_attack->info.audio_name.c_str());
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
 
 		if(player_controller->HUD)
@@ -556,6 +557,7 @@ void PlayerAttacks::CreateAttacks()
 			info.prefab_to_spawn = spells_json->GetString("prefab_to_spawn");
 			info.snap_detection_range = spells_json->GetNumber("snap_detection_range");
 			info.min_distance_to_target = spells_json->GetNumber("min_distance_to_target");
+			info.audio_name = spells_json->GetString("audio_name");
 
 			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 
