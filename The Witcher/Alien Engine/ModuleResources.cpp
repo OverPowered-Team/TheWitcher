@@ -744,6 +744,9 @@ void ModuleResources::ReadAllMetaData()
 
 	// Init Scripts
 	ReadScripts();
+	
+	files.clear();
+	directories.clear();
 
 	// Init Scenes
 	App->file_system->DiscoverFiles(SCENE_FOLDER, files, directories);
