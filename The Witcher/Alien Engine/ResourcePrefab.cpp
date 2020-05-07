@@ -304,6 +304,7 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 					*(*item).second = found;
 				}
 			}
+			App->objects->to_add.clear();
 		}
 
 		if (list_num != -1) {

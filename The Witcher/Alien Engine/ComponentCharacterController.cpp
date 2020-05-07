@@ -39,6 +39,10 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	controller->setUserData(this);
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
 	SetCollisionLayer("Default");
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCollider::DrawScene, this));
+#endif // !GAME_VERSION
 }
 
 ComponentCharacterController::~ComponentCharacterController()
@@ -46,6 +50,11 @@ ComponentCharacterController::~ComponentCharacterController()
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
 	controller->release();
 	delete report;
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
+
 }
 
 // Movement Functions -----------------------------------------
@@ -309,7 +318,7 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	}
 }
 
-void ComponentCharacterController::DrawScene(ComponentCamera* camera)
+void ComponentCharacterController::DrawScene()
 {
 	if (game_object_attached->IsSelected() && App->physx->debug_physics == false)
 	{
@@ -414,7 +423,7 @@ void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 	{
 		//_hit.controller = (ComponentCharacterController*)col; // only onControllerHit
 		_hit.gameObject = (GameObject*)col->game_object_attached;
-		_hit.rigidbody = col->physics->rigid_body;
+		_hit.rigidbody = col->physics->GetRigidBody();
 		_hit.transform = _hit.gameObject->transform;
 	}
 
@@ -433,7 +442,7 @@ void UserControllerHitReport::onControllerHit(const PxControllersHit& hit)
 	_hit.controller = (ComponentCharacterController*)hit.other->getUserData();
 	_hit.collider = (ComponentCollider*)_hit.controller;
 	_hit.gameObject = _hit.controller->game_object_attached;
-	_hit.rigidbody = _hit.collider->physics->rigid_body;
+	_hit.rigidbody = _hit.collider->physics->GetRigidBody();
 	_hit.transform = _hit.gameObject->transform;
 	
 	_hit.moveDirection = PXVEC3_TO_F3(hit.dir);

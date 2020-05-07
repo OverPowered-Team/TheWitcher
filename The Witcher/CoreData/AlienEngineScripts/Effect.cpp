@@ -18,6 +18,7 @@ Effect::Effect(EffectData* data)
 
     vfx_on_apply = data->vfx_on_apply;
     vfx_on_tick = data->vfx_on_tick;
+    vfx_position = data->vfx_position;
 
     for (int i = 0; i < data->additive_modifiers.size(); ++i)
     {

@@ -1,8 +1,11 @@
+#include "GameManager.h"
+#include "ParticlePool.h"
 #include "Ghoul.h"
 #include "MusicController.h"
 #include "EnemyManager.h"
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 
 Ghoul::Ghoul() : Enemy()
 {
@@ -45,6 +48,8 @@ void Ghoul::SetStats(const char* json)
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
         stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
+        stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+        stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
     }
 
     JSONfilepack::FreeJSON(stat);
@@ -52,6 +57,7 @@ void Ghoul::SetStats(const char* json)
 
 void Ghoul::CleanUpEnemy()
 {
+    ReleaseAllParticles();
 }
 
 void Ghoul::JumpImpulse()
@@ -71,11 +77,12 @@ void Ghoul::JumpImpulse()
 
 void Ghoul::Stun(float time)
 {
-    if (state != GhoulState::STUNNED)
+    if (state != GhoulState::STUNNED && state != GhoulState::DEAD && state != GhoulState::DYING)
     {
         state = GhoulState::STUNNED;
-        //animator->PlayState("Dizzy");
+        animator->PlayState("Dizzy");
         current_stun_time = Time::GetGameTime();
+        audio_emitter->StartSound("Play_Dizzy_Enemy");
         stun_time = time;
     }
 }
@@ -137,7 +144,17 @@ void Ghoul::CheckDistance()
         state = GhoulState::IDLE;
         character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
         animator->SetFloat("speed", 0.0F);
-        is_combat = false;
+        if (m_controller && is_combat) {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
+    }
+    if (distance < stats["VisionRange"].GetValue()) {
+        if (m_controller && !is_combat)
+        {
+            is_combat = true;
+            m_controller->EnemyInSight((Enemy*)this);
+        }
     }
 }
 
@@ -145,14 +162,23 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
 {
     float damage = Enemy::GetDamaged(dmg, player);
 
-    if (can_get_interrupted) {
+    if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
         state = GhoulState::HIT;
         animator->PlayState("Hit");
+        audio_emitter->StartSound("GhoulHit");
+        stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+        animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
     }
 
-    audio_emitter->StartSound("GhoulHit");
-    if (particles["hit_particle"])
-        particles["hit_particle"]->Restart();
+    if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+    {
+        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+        can_get_interrupted = false;
+    }
+
+
+    SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
 
     character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -162,7 +188,6 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
         OnDeathHit();
         state = GhoulState::DYING;
         audio_emitter->StartSound("GhoulDeath");
-        player->OnEnemyKill();
     }
 
     return damage;
@@ -176,9 +201,7 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
         {
             float dmg_received = player->attacks->GetCurrentDMG();
             player->OnHit(this, GetDamaged(dmg_received, player));
-
-            if (state == GhoulState::DYING)
-                player->OnEnemyKill();
+            last_player_hit = player;
 
             HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
         }
@@ -188,6 +211,8 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
 void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
+        can_get_interrupted = true;
+        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
             state = GhoulState::MOVE;
@@ -205,7 +230,11 @@ void Ghoul::OnAnimationEnd(const char* name)
             state = GhoulState::IDLE;
     }
     else if (strcmp(name, "Hit") == 0)
+    {
+        ReleaseParticle("hit_particle");
+
         state = GhoulState::IDLE;
+    }
 }
 
 

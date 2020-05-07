@@ -24,6 +24,7 @@ public:
 	float GetCurrentStateSpeed();
 	float GetCurrentStateTime();
 	float GetCurrentStateDuration();
+	std::string GetCurrentStateName();
 	uint GetCurrentAnimTPS();
 	void OnPlay();
 

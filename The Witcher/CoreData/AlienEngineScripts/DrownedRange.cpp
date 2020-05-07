@@ -2,6 +2,8 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "MusicController.h"
+#include "ArrowScript.h"
 
 DrownedRange::DrownedRange() : Drowned()
 {
@@ -17,21 +19,43 @@ void DrownedRange::UpdateEnemy()
 	switch (state)
 	{
 	case DrownedState::IDLE:
-		if (distance < stats["AttackRange"].GetValue())
+		if (distance < stats["AttackRange"].GetValue() && distance > stats["HideDistance"].GetValue())
 		{
 			animator->SetFloat("speed", 0.0F);
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 			animator->PlayState("GetOff");
-			state = DrownedState::ATTACK;
+			state = DrownedState::GETOFF;
 			is_hide = false;
+			if (m_controller && !is_combat)
+			{
+				is_combat = true;
+				m_controller->EnemyInSight((Enemy*)this);
+			}
+		}
+		else {
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
+		}
+		break;
+
+	case DrownedState::GETOFF:
+		if (transform->GetGlobalScale().y < 0.3)
+			transform->AddScale(float3(0.0f, 0.01f, 0.0f));
+		else
+		{
+			state = DrownedState::ATTACK;
+			animator->PlayState("Attack");
 		}
 		break;
 
 	case DrownedState::ATTACK:
-		if (distance < stats["HideDistance"].GetValue())
+		if (set_attack)
 		{
-			state = DrownedState::HIDE;
-			current_hide_time = Time::GetGameTime();
+			animator->PlayState("Attack");
+			set_attack = false;
 		}
 		break;
 
@@ -40,51 +64,55 @@ void DrownedRange::UpdateEnemy()
 		{
 			animator->PlayState("Hide");
 			state = DrownedState::IDLE;
+			transform->AddScale(float3(0.0f, -0.29f, 0.0f));
 			is_hide = true;
 		}
 		break;
 
 	case DrownedState::DYING:
 	{
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = DrownedState::DEAD;
-		//audio_emitter->StartSound("DrownedDeath");
+		animator->PlayState("Dead");
+		last_player_hit->OnEnemyKill();
+		audio_emitter->StartSound("Play_Drowner_Death");
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 	}
 	}
+}
+
+void DrownedRange::ShootSlime()
+{
+	float3 slime_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
+	GameObject* arrow_go = GameObject::Instantiate(slime, slime_pos);
+	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
+	audio_emitter->StartSound("Play_Drowner_Shot_Attack");
+	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
+	arrow_rb->SetRotation(RotateProjectile());
+	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
 }
 
 void DrownedRange::OnAnimationEnd(const char* name)
 {
-	if (strcmp(name, "GetOff") == 0)
-	{
-		state = DrownedState::ATTACK;
-		animator->PlayState("Attack");
-	}
-	else if (strcmp(name, "Attack") == 0)
-	{
-		state = DrownedState::ATTACK;
-		animator->PlayState("Attack");
-	}
-}
-
-void DrownedRange::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != DrownedState::DEAD) {
-
-		if (!is_hide)
+	if (strcmp(name, "Attack") == 0) {
+		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
 		{
-			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
-
-				if (state == DrownedState::DYING)
-					player->OnEnemyKill();
-
-				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-			}
+			state = DrownedState::HIDE;
+			current_hide_time = Time::GetGameTime();
 		}
+		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		set_attack = true;
+	}
+	else if (strcmp(name, "Hit") == 0) {
+		state = DrownedState::IDLE;
+		transform->AddScale(float3(0.0f, -0.29f, 0.0f));
+		is_hide = true;
 	}
 }

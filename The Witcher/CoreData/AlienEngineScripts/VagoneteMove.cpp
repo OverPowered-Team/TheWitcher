@@ -139,10 +139,10 @@ void VagoneteInputs::UpdateInputs()
 {
 	switch (globalState) {
 	case VagoneteInputs::State::IDLE: {
-		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
-		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
-		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump);
-		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
+		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
+		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
+		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump) || Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_A);
+		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex,Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::COVER) {
 			if (!coverInput) {
@@ -173,9 +173,9 @@ void VagoneteInputs::UpdateInputs()
 
 		break; }
 	case VagoneteInputs::State::INCLINATION: {
-		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
-		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
-		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
+		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
+		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
+		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::INCLINATION) {
 			if (currentInclination != 0 || (rightInclinationInput || leftInclinationInput)) {

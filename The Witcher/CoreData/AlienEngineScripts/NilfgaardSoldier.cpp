@@ -1,16 +1,20 @@
 #include "NilfgaardSoldier.h"
 #include "ArrowScript.h"
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "EnemyManager.h"
 #include "MusicController.h"
 
+#include "InGame_UI.h"
+
 void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
 	state = NilfgaardSoldierState::IDLE;
+	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }
 
@@ -38,6 +42,8 @@ void NilfgaardSoldier::SetStats(const char* json)
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
 		if (nilf_type == NilfgaardType::ARCHER)
 		{
@@ -54,16 +60,29 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
+	state = NilfgaardSoldierState::HIT;
 	float damage = Enemy::GetDamaged(dmg, player, knock);
 
-	if (can_get_interrupted) {
-		state = NilfgaardSoldierState::HIT;
+	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 		animator->PlayState("Hit");
+		audio_emitter->StartSound("SoldierHit");
+		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
 
-	audio_emitter->StartSound("SoldierHit");
-	if(particles["hit_particle"])
-		particles["hit_particle"]->Restart();
+	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	{
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		can_get_interrupted = false;
+	}
+
+	//else
+	//{
+	//	//Quizas que haga sonidito de ataque pero le han hecho pupita
+	//}
+
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition()); //1 is body position
 
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
@@ -84,7 +103,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 			if (decapitated_head)
 			{
 				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				particles["decapitation_particle"]->Restart();
+				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
 
 				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 				head_rb->SetRotation(transform->GetGlobalRotation());
@@ -97,8 +116,6 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
 				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
 			}
-
-			player->OnEnemyKill();
 		}
 	}
 
@@ -130,7 +147,18 @@ void NilfgaardSoldier::CheckDistance()
 		state = NilfgaardSoldierState::IDLE;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
-		is_combat = false;
+		if (m_controller && is_combat) {
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		
+	}
+	if (distance < stats["VisionRange"].GetValue()) {
+		if (m_controller && !is_combat)
+		{
+			is_combat = true;
+			m_controller->EnemyInSight((Enemy*)this);
+		}
 	}
 }
 
@@ -143,6 +171,7 @@ void NilfgaardSoldier::RotateSoldier()
 
 void NilfgaardSoldier::CleanUpEnemy()
 {
+	ReleaseAllParticles();
 	if (decapitated_head)
 	{
 		decapitated_head->ToDelete();
@@ -152,12 +181,13 @@ void NilfgaardSoldier::CleanUpEnemy()
 
 void NilfgaardSoldier::Stun(float time)
 {
-	if (state != NilfgaardSoldierState::STUNNED)
+	if (state != NilfgaardSoldierState::STUNNED && state != NilfgaardSoldierState::DEAD && state != NilfgaardSoldierState::DYING)
 	{
 		state = NilfgaardSoldierState::STUNNED;
 		animator->PlayState("Dizzy");
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
+		audio_emitter->StartSound("Play_Dizzy_Enemy");
 	}
 }
 
@@ -191,6 +221,9 @@ void NilfgaardSoldier::SetState(const char* state_str)
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		can_get_interrupted = true;
+		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())
 		{
 			state = NilfgaardSoldierState::MOVE;
@@ -202,6 +235,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		}
 	}
 	else if (strcmp(name, "Hit") == 0) {
+		ReleaseParticle("hit_particle");
 		if (stats["Health"].GetValue() == 0.0F) {
 			state = NilfgaardSoldierState::HIT;
 		}
@@ -214,6 +248,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
 		state = NilfgaardSoldierState::DYING;
+		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 }
@@ -229,9 +264,7 @@ void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
 			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
 
 			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-
-			if (state == NilfgaardSoldierState::DYING)
-				player->OnEnemyKill();
+			last_player_hit = player;
 
 			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 		}

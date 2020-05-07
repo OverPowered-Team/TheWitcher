@@ -38,6 +38,7 @@ EffectData* EffectsFactory::ReadData(JSONArraypack* effect)
 
 	data->vfx_on_apply = effect->GetString("vfx_on_apply");
 	data->vfx_on_tick = effect->GetString("vfx_on_tick");
+	data->vfx_position = effect->GetNumber("vfx_position");
 
 	JSONArraypack* flat_modifiers = effect->GetArray("flat_modifiers");
 	if (flat_modifiers)

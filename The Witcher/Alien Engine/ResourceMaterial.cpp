@@ -12,6 +12,9 @@
 #include "glew/include/glew.h"
 #include "mmgr/mmgr.h"
 
+#include "Optick/include/optick.h"
+
+
 ResourceMaterial::ResourceMaterial() : Resource()
 {
 	type = ResourceType::RESOURCE_MATERIAL;
@@ -21,12 +24,11 @@ ResourceMaterial::ResourceMaterial() : Resource()
 		textures[i].first = NO_TEXTURE_ID;
 		textures[i].second = nullptr;
 	}
-
-	simple_depth_shader = App->resources->simple_depth_shader;
+	simple_depth_shader = App->resources->shadow_shader;
 	if (simple_depth_shader != nullptr)
 		simple_depth_shader->IncreaseReferences();
 	else
-		LOG_ENGINE("There was an error. Could not find the default shader");
+		LOG_ENGINE("There was an error. Could not find the seimple depht shader");
 
 	used_shader = App->resources->default_shader;
 	if (used_shader != nullptr)
@@ -39,13 +41,13 @@ ResourceMaterial::~ResourceMaterial()
 {
 	for (uint texType = 0; texType < (uint)TextureType::MAX; ++texType)
 	{
-		textures[texType].first = NO_TEXTURE_ID; 
-		
+		textures[texType].first = NO_TEXTURE_ID;
+
 		if (!App->IsQuiting())
 		{
 			if (textures[texType].second != nullptr)
 			{
-				textures[texType].second->DecreaseReferences(); 
+				textures[texType].second->DecreaseReferences();
 			}
 		}
 
@@ -60,7 +62,7 @@ bool ResourceMaterial::LoadMemory()
 		if (textures[iter].first != NO_TEXTURE_ID)
 		{
 			if (textures[iter].second != nullptr)
-				textures[iter].second->IncreaseReferences(); 
+				textures[iter].second->IncreaseReferences();
 		}
 	}
 
@@ -245,6 +247,7 @@ void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 	file->SetNumber("Smoothness", shaderInputs.standardShaderProperties.smoothness);
 	file->SetNumber("Metalness", shaderInputs.standardShaderProperties.metalness);
 
+	file->SetNumber("RenderMode", renderMode);
 	file->SetString("ShaderID", std::to_string(used_shader_ID).data());
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
 		file->SetString(std::to_string(iter).data(), std::to_string(textures[iter].first).data());
@@ -260,6 +263,7 @@ void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 	color = file->GetFloat4("Color");
 	shaderInputs.standardShaderProperties.smoothness = (float)file->GetNumber("Smoothness");
 	shaderInputs.standardShaderProperties.metalness = (float)file->GetNumber("Metalness");
+	renderMode = (int)file->GetNumber("RenderMode");
 
 	SetShader((ResourceShader*)App->resources->GetResourceWithID(std::stoull(file->GetString("ShaderID"))));
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
@@ -271,9 +275,6 @@ void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 void ResourceMaterial::ApplyMaterial()
 {
 	OPTICK_EVENT();
-
-	// Bind the actual shader
-	used_shader->Bind();
 
 	if (textures[(uint)TextureType::DIFFUSE].first != NO_TEXTURE_ID && textures[(uint)TextureType::DIFFUSE].second != nullptr)
 	{
@@ -324,11 +325,6 @@ void ResourceMaterial::ApplyPreRenderShadows()
 	// Bind the actual shader
 	simple_depth_shader->Bind();
 
-	if (!recive_shadow)
-	{
-		simple_depth_shader->has_shadow = true;
-	}
-	// Bind textures
 
 	// Update uniforms
 	shaderInputs.standardShaderProperties.diffuse_color = color;
@@ -338,10 +334,8 @@ void ResourceMaterial::ApplyPreRenderShadows()
 
 void ResourceMaterial::UnbindMaterial()
 {
-	used_shader->Unbind();
-	
 	if (textures[(uint)TextureType::SPECULAR].first != NO_TEXTURE_ID)
-	{	
+	{
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -408,6 +402,10 @@ void ResourceMaterial::SetShader(ResourceShader* newShader)
 	used_shader->IncreaseReferences();
 }
 
+bool ResourceMaterial::IsTransparent() const
+{
+	return renderMode == 1;
+}
 
 void ResourceMaterial::DisplayMaterialOnInspector()
 {
@@ -421,6 +419,13 @@ void ResourceMaterial::DisplayMaterialOnInspector()
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
+
+
+		ImGui::Combo("Render Mode", &renderMode, "Opaque\0Transparent\0");
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
 
 		ShaderSelectionHeader();
 

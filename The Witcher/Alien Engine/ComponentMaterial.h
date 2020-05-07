@@ -41,6 +41,10 @@ public:
 	void SetMaterial(ResourceMaterial* mat);
 	const ResourceMaterial* GetMaterial() const;
 
+	ResourceShader* GetUsedShader() const; 
+
+	bool IsTransparent() const;
+
 private:
 	bool change_texture_menu = false;
 
@@ -55,4 +59,5 @@ private:
 	std::string file_to_edit;
 	bool show_shader_text_editor = false;
 	bool select_shader = false;
+
 };

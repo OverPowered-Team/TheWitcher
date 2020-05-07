@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GhoulAnimController",
-        "NumStates": 6,
-        "NumTransitions": 7,
+        "NumStates": 8,
+        "NumTransitions": 9,
         "States": [
             {
                 "Name": "Idle",
@@ -32,7 +32,17 @@
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "14145741330722218437"
+                "Clip": "2802214578329179710"
+            },
+            {
+                "Name": "Dizzy",
+                "Speed": 1,
+                "Clip": "14508775708390157767"
+            },
+            {
+                "Name": "QuickDeat",
+                "Speed": 1,
+                "Clip": "0"
             }
         ],
         "Transitions": [
@@ -140,6 +150,36 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Death",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -149,7 +189,12 @@
                 "Value": 0
             }
         ],
-        "BoolParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            }
+        ],
         "Events": [
             {
                 "Event_Id": "Ghoul::ActivateCollider",
@@ -185,6 +230,12 @@
                 "Event_Id": "Ghoul::DeactivateCollider",
                 "Animation_Id": "17144995185292312115",
                 "Frame": 11,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnAttackParticle",
+                "Animation_Id": "17144995185292312115",
+                "Frame": 8,
                 "Type": 2
             }
         ]
