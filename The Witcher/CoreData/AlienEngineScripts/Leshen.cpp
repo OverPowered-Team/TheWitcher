@@ -6,6 +6,7 @@
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
 #include "Leshen.h"
+#include "Scores_Data.h"
 
 void Leshen::StartEnemy()
 {
@@ -41,6 +42,8 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 	if (stats["Health"].GetValue() == 0.0F) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
+		Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+		Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
 	}
 
