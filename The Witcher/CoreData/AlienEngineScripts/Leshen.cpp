@@ -41,6 +41,7 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 	if (stats["Health"].GetValue() == 0.0F) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
+		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
 	}
 
 	return Boss::GetDamaged(dmg, player);
@@ -130,7 +131,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z));
+	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z), true);
 	if (player_rooted[0]) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
@@ -370,4 +371,9 @@ void Leshen::OnTriggerEnter(ComponentCollider* collider)
 			player->OnHit(this, GetDamaged(dmg_received, player, knock));
 		}
 	}
+}
+
+void Leshen::ChangeScene()
+{
+	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 }
