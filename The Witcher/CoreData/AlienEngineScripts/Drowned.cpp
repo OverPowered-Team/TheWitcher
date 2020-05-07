@@ -15,6 +15,7 @@ void Drowned::StartEnemy()
 {
 	type = EnemyType::DROWNED;
 	state = DrownedState::IDLE;
+	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }
 
