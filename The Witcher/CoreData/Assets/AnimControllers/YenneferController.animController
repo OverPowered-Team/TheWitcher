@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "YenneferController",
         "NumStates": 30,
-        "NumTransitions": 55,
+        "NumTransitions": 56,
         "States": [
             {
                 "Name": "L",
@@ -41,8 +41,8 @@
             },
             {
                 "Name": "Roll",
-                "Speed": 2,
-                "Clip": "2441290518139000273"
+                "Speed": 3,
+                "Clip": "0"
             },
             {
                 "Name": "Air",
@@ -67,7 +67,7 @@
             {
                 "Name": "Hit",
                 "Speed": 3,
-                "Clip": "5321354656792004426"
+                "Clip": "0"
             },
             {
                 "Name": "Fthrower",
@@ -194,7 +194,30 @@
                 "Blend": 0.10000000149011612,
                 "End": true,
                 "IntConditions": [],
-                "FloatConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Roll",
+                "Target": "Run",
+                "Blend": 0.10000000149011612,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
                 "BoolConditions": []
             },
             {
