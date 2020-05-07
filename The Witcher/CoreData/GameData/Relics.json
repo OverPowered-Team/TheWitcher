@@ -3,12 +3,12 @@
     {
       "effect": 6,
       "name": "Nature Soul",
-      "description": "Increases life regeneration by X"
+      "description": "Increases life regeneration by 5%"
     },
     {
       "effect": 7,
       "name": "Sea Soul",
-      "description": "Increases chaos regeneration by X"
+      "description": "Increases chaos regeneration by 10%"
     },
     {
       "effect": 8,
@@ -36,11 +36,11 @@
         "vfx_on_apply": "p_fire_runestone",
 		    "vfx_position": 0,
         "time": 0.5,
-        "ticks_time": 1.0,
+        "ticks_time": 3.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
-            "value": -5
+            "value": -3
           }
         ]
       }
@@ -52,7 +52,7 @@
       "hit_effect": {
         "name": "ice_runestone",
         "time": 0.5,
-        "ticks_time": 0.0,
+        "ticks_time": 1.0,
         "vfx_on_apply": "p_ice_runestone",
 		    "vfx_position": 0,
         "multiplicative_modifiers": [
@@ -99,7 +99,7 @@
         "name": "poison_runestone",
         "vfx_on_apply": "p_poison_runestone",
 		    "vfx_position": 0,
-        "time": 1.0,
+        "time": 2.0,
         "ticks_time": 1.0,
         "flat_modifiers": [
           {
