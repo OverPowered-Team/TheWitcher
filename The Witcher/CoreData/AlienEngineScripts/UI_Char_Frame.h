@@ -34,7 +34,7 @@ public:
 	CHARACTER character = CHARACTER::GERALT;
 
 	// Lerps
-	float change_time = 0.150f;
+	float change_time = 0.250f;
 	float killcount_time_to_lerp = 0.5f;
 
 	// KillCount
