@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "PlayerAttacks.h"
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
 #include "Leshen.h"
@@ -35,6 +36,13 @@ void Leshen::CleanUpEnemy()
 float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
 	HandleHitCount();
+	float damage = Boss::GetDamaged(dmg, player);
+
+	if (stats["Health"].GetValue() == 0.0F) {
+		state = Boss::BossState::DYING;
+		animator->PlayState("Death");
+	}
+
 	return Boss::GetDamaged(dmg, player);
 }
 
@@ -122,7 +130,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, transform->GetGlobalPosition());
+	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z));
 	if (player_rooted[0]) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
@@ -145,6 +153,7 @@ void Leshen::LaunchCloudAction()
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
 	SpawnParticle("Cloud");
+	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 }
 
 Boss::ActionState Leshen::UpdateAction()
@@ -322,5 +331,43 @@ void Leshen::OnAnimationEnd(const char* name)
 {
 	if (strcmp(name, "Melee") == 0) {
 		EndMeleeAction();
+	}
+}
+
+void Leshen::SetStats(const char* json)
+{
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+	if (stat)
+	{
+		stats["Health"] = Stat("Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat->GetNumber("MaxHitSpeed"));
+	}
+
+	JSONfilepack::FreeJSON(stat);
+}
+
+
+void Leshen::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
+		{
+			float dmg_received = player->attacks->GetCurrentDMG();
+			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+
+			player->OnHit(this, GetDamaged(dmg_received, player, knock));
+		}
 	}
 }

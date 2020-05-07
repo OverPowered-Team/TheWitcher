@@ -28,7 +28,14 @@ public:
 	virtual State* OnAnimationEnd(PlayerController* player, const char* name) { return nullptr; }
 };
 
-class IdleState : public State
+class GroundState : public State
+{
+public:
+	GroundState() {}
+	State* HandleInput(PlayerController* player) override;
+};
+
+class IdleState : public GroundState
 {
 public:
 	IdleState() { type = StateType::IDLE; }
@@ -38,7 +45,7 @@ public:
 	void OnExit(PlayerController* player) override;
 };
 
-class RunningState : public State
+class RunningState : public GroundState
 {
 public:
 	RunningState() { type = StateType::RUNNING; }
