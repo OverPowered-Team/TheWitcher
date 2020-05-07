@@ -34,7 +34,7 @@ void MusicController::Update()
 	if (is_combat) // This should be done better with a switch about enemy types
 	{
 		if (has_changed && enemies_in_sight.size() == 1) {
-			if ((*enemies_in_sight.begin())->game_object->GetComponent<Enemy>()->type == EnemyType::LESHEN)
+			if ((*enemies_in_sight.begin())->game_object->GetComponent<Enemy>()->type == EnemyType::LESHEN || (*enemies_in_sight.begin())->game_object->GetComponent<Enemy>()->type == EnemyType::CIRI)
 			{
 				emitter->SetState("Interactive_Music_Lvl1", "Boss");
 			}
