@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 65.0103759765625,
+                        "HoritzontalFov": 66.43353271484375,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -144,6 +144,369 @@
                 ]
             },
             {
+                "Name": "Vagonete",
+                "FamilyNumber": 1,
+                "ID": "10204349119020327815",
+                "ParentID": "326795695642562440",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "17018449222301769908",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.8873252868652344,
+                            23.764999389648438,
+                            -8.7539997100830078
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9025799836527534737"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0.20000000298023224,
+                            0.44999998807907104,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            2.5,
+                            1.8999999761581421,
+                            1.3999999761581421
+                        ]
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2665367754270275453",
+                        "ResourceID": "7308023687165620906",
+                        "DataName": "VagoneteMove",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "speedInclination",
+                                "float": 120
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "inclination4player",
+                                "float": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "FrontWheel",
+                "FamilyNumber": 2,
+                "ID": "1757389749020000923",
+                "ParentID": "10204349119020327815",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "17018449222301769908",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.0053656101226806641,
+                            -0.039581298828125,
+                            0.026297569274902344
+                        ],
+                        "Rotation": [
+                            -2.4367831428888376e-13,
+                            -0.70710664987564087,
+                            6.1817495122795663e-08,
+                            0.70710688829421997
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1,
+                            0.9999997615814209
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6074758948606675949"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1163954724898980935",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "13057571785219852079",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "2980235893632575017",
+                        "HasMaterial": true,
+                        "MaterialID": "14978884895091768405",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "BackWheel",
+                "FamilyNumber": 2,
+                "ID": "2878256933722867352",
+                "ParentID": "10204349119020327815",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "17018449222301769908",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.34868454933166504,
+                            -0.039581298828125,
+                            0.026297569274902344
+                        ],
+                        "Rotation": [
+                            -2.4367831428888376e-13,
+                            -0.70710664987564087,
+                            6.1817495122795663e-08,
+                            0.70710688829421997
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1,
+                            0.9999997615814209
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5260193271985626847"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "10285100877758935549",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "3803455392160298388",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "17397792958014902741",
+                        "HasMaterial": true,
+                        "MaterialID": "14978884895091768405",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Wagonete",
+                "FamilyNumber": 2,
+                "ID": "4006893391430789706",
+                "ParentID": "10204349119020327815",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "17018449222301769908",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.25574755668640137,
+                            -0.0093250274658203125,
+                            -0.061379432678222656
+                        ],
+                        "Rotation": [
+                            -3.2657917711266526e-14,
+                            -0.70710664987564087,
+                            6.1817274854547577e-08,
+                            0.70710688829421997
+                        ],
+                        "Scale": [
+                            0.9999997615814209,
+                            1,
+                            0.9999997615814209
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6516826447441800596"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "1166485943390631431",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "14626281219252857405",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6480426500580574906",
+                        "HasMaterial": true,
+                        "MaterialID": "14978884895091768405",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Bifurcation xd",
+                "FamilyNumber": 1,
+                "ID": "9755413272641487094",
+                "ParentID": "326795695642562440",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "13626126990312727129",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            135.3013916015625,
+                            7.5524640083312988,
+                            7.0061221122741699
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            2.0366024971008301,
+                            4.5567460060119629
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17800267607927499566"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15797661764035730386",
+                        "ResourceID": "8386516459629063411",
+                        "DataName": "VagoneteDirection",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 7,
+                                "Name": "default_right",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "curve_right",
+                                "gameobject": "4163100775933273157"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "curve_left",
+                                "gameobject": "15317509677363904914"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
                 "Name": "CurveManager",
                 "FamilyNumber": 1,
                 "ID": "910286084335882223",
@@ -227,77 +590,77 @@
                                 "ControlPoint": [
                                     2.8873252868652344,
                                     23.764999389648438,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     3,
                                     23.764999389648438,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     16.624996185302734,
                                     23.764999389648438,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     17.624996185302734,
                                     23.764999389648438,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     20.625003814697266,
                                     23.764999389648438,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     29.244003295898438,
                                     16.312999725341797,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     31.243862152099609,
                                     16.313177108764648,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     33.743869781494141,
                                     16.246570587158203,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     38.743862152099609,
                                     15.980835914611816,
-                                    -8.7539997100830078
+                                    -8.7540016174316406
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     39.346965789794922,
                                     16.313177108764648,
-                                    0.22300636768341064
+                                    0.2230072021484375
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     38.733448028564453,
                                     17.017990112304688,
-                                    7.6208844184875488
+                                    7.6208839416503906
                                 ]
                             },
                             {
@@ -311,7 +674,7 @@
                                 "ControlPoint": [
                                     39.451503753662109,
                                     7.2478733062744141,
-                                    14.977627754211426
+                                    14.977626800537109
                                 ]
                             },
                             {
@@ -332,7 +695,7 @@
                                 "ControlPoint": [
                                     56.050487518310547,
                                     7.7079272270202637,
-                                    13.924979209899902
+                                    13.924980163574219
                                 ]
                             },
                             {
@@ -346,28 +709,28 @@
                                 "ControlPoint": [
                                     60.912113189697266,
                                     7.7399659156799316,
-                                    0.38765886425971985
+                                    0.38766098022460938
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     66.050483703613281,
                                     7.5729103088378906,
-                                    0.9959709644317627
+                                    0.9959716796875
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     69.81072998046875,
                                     6.9448761940002441,
-                                    1.3600831031799316
+                                    1.3600845336914063
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     78.361083984375,
                                     4.3371200561523438,
-                                    1.3600831031799316
+                                    1.3600845336914063
                                 ]
                             },
                             {
@@ -416,7 +779,7 @@
                                 "ControlPoint": [
                                     106.11177062988281,
                                     14.003806114196777,
-                                    0.6922074556350708
+                                    0.69220733642578125
                                 ]
                             },
                             {
@@ -430,56 +793,56 @@
                                 "ControlPoint": [
                                     78.517623901367188,
                                     30.752475738525391,
-                                    9.8450527191162109
+                                    9.8450508117675781
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     83.0576171875,
                                     14.003806114196777,
-                                    6.8321194648742676
+                                    6.8321189880371094
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     87.638259887695313,
                                     5.7641968727111816,
-                                    6.8321175575256348
+                                    6.8321151733398438
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     91.1729736328125,
                                     7.3766722679138184,
-                                    6.8321185111999512
+                                    6.8321189880371094
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     106.93421936035156,
                                     7.2150468826293945,
-                                    6.832118034362793
+                                    6.8321189880371094
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     109.43421936035156,
                                     7.2458133697509766,
-                                    6.832118034362793
+                                    6.8321189880371094
                                 ]
                             },
                             {
                                 "ControlPoint": [
-                                    130.81629943847656,
-                                    7.3254737854003906,
-                                    8.899867057800293
+                                    130.54730224609375,
+                                    7.5903873443603516,
+                                    6.6941452026367188
                                 ]
                             },
                             {
                                 "ControlPoint": [
-                                    135.29441833496094,
-                                    7.2150468826293945,
-                                    7.1808500289916992
+                                    135.37846374511719,
+                                    7.153078556060791,
+                                    7.0588302612304688
                                 ]
                             }
                         ]
@@ -531,7 +894,7 @@
                         "ControlPoints": [
                             {
                                 "ControlPoint": [
-                                    135.32553100585938,
+                                    135.32600402832031,
                                     7.2016544342041016,
                                     7.0826711654663086
                                 ]
@@ -540,7 +903,7 @@
                                 "ControlPoint": [
                                     154.90487670898438,
                                     7.5120220184326172,
-                                    10.425091743469238
+                                    10.425090789794922
                                 ]
                             },
                             {
@@ -554,35 +917,35 @@
                                 "ControlPoint": [
                                     139.80995178222656,
                                     7.5961446762084961,
-                                    -9.5764598846435547
+                                    -9.5764579772949219
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     132.85784912109375,
                                     7.611790657043457,
-                                    -9.5764598846435547
+                                    -9.5764579772949219
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     122.37130737304688,
                                     7.2504034042358398,
-                                    -9.5764598846435547
+                                    -9.5764579772949219
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     120.05996704101563,
                                     8.1831111907958984,
-                                    -9.5764598846435547
+                                    -9.5764579772949219
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     110.99726867675781,
                                     17.104681015014648,
-                                    -9.4787483215332031
+                                    -9.4787464141845703
                                 ]
                             },
                             {
@@ -596,7 +959,7 @@
                                 "ControlPoint": [
                                     101.11306762695313,
                                     0.31092047691345215,
-                                    -10.160824775695801
+                                    -10.160823822021484
                                 ]
                             },
                             {
@@ -610,21 +973,21 @@
                                 "ControlPoint": [
                                     86.571151733398438,
                                     0.37388888001441956,
-                                    -13.423718452453613
+                                    -13.42371940612793
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     87.044769287109375,
                                     0.088153421878814697,
-                                    2.9286558628082275
+                                    2.9286556243896484
                                 ]
                             },
                             {
                                 "ControlPoint": [
                                     87.118438720703125,
                                     0.47913336753845215,
-                                    10.301999092102051
+                                    10.301998138427734
                                 ]
                             },
                             {
@@ -659,7 +1022,7 @@
                                 "ControlPoint": [
                                     87.049545288085938,
                                     0.2178618311882019,
-                                    64.411109924316406
+                                    64.411117553710938
                                 ]
                             }
                         ]
@@ -713,7 +1076,7 @@
                                 "ControlPoint": [
                                     87.344657897949219,
                                     0.30472671985626221,
-                                    63.789722442626953
+                                    65.790000915527344
                                 ]
                             },
                             {
@@ -746,7 +1109,7 @@
                             },
                             {
                                 "ControlPoint": [
-                                    57.228755950927734,
+                                    57.228752136230469,
                                     -5.5657539367675781,
                                     81.920127868652344
                                 ]
@@ -828,7 +1191,7 @@
                         "ControlPoints": [
                             {
                                 "ControlPoint": [
-                                    87.131675720214844,
+                                    87.132003784179688,
                                     0,
                                     63.598934173583984
                                 ]
@@ -903,23 +1266,23 @@
                         "ControlPoints": [
                             {
                                 "ControlPoint": [
-                                    134.93106079101563,
+                                    135.35000610351563,
                                     7.2380566596984863,
-                                    7.4007778167724609
+                                    7.0100002288818359
                                 ]
                             },
                             {
                                 "ControlPoint": [
-                                    146.94056701660156,
+                                    142.94099426269531,
                                     6.4963531494140625,
-                                    13.468069076538086
+                                    7.4679999351501465
                                 ]
                             },
                             {
                                 "ControlPoint": [
-                                    140.396484375,
+                                    148.39599609375,
                                     7.2580356597900391,
-                                    27.30952262878418
+                                    28.309999465942383
                                 ]
                             },
                             {
@@ -70014,245 +70377,6 @@
                         "ID": "15827703563273600204",
                         "HasMaterial": true,
                         "MaterialID": "16269890181174869716",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Vagonete",
-                "FamilyNumber": 1,
-                "ID": "10204349119020327815",
-                "ParentID": "326795695642562440",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17018449222301769908",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            2.8873252868652344,
-                            23.764999389648438,
-                            -8.7539997100830078
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "9025799836527534737"
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "2665367754270275453",
-                        "ResourceID": "7308023687165620906",
-                        "DataName": "VagoneteMove",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "speed",
-                                "float": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "speedInclination",
-                                "float": 120
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "inclination4player",
-                                "float": 20
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "Name": "FrontWheel",
-                "FamilyNumber": 2,
-                "ID": "1757389749020000923",
-                "ParentID": "10204349119020327815",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17018449222301769908",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0.0053656101226806641,
-                            -0.039581298828125,
-                            0.026297569274902344
-                        ],
-                        "Rotation": [
-                            -2.4367831428888376e-13,
-                            -0.70710664987564087,
-                            6.1817495122795663e-08,
-                            0.70710688829421997
-                        ],
-                        "Scale": [
-                            0.9999997615814209,
-                            1,
-                            0.9999997615814209
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "6074758948606675949"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "1163954724898980935",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "13057571785219852079",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "2980235893632575017",
-                        "HasMaterial": true,
-                        "MaterialID": "14978884895091768405",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "BackWheel",
-                "FamilyNumber": 2,
-                "ID": "2878256933722867352",
-                "ParentID": "10204349119020327815",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17018449222301769908",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0.34868454933166504,
-                            -0.039581298828125,
-                            0.026297569274902344
-                        ],
-                        "Rotation": [
-                            -2.4367831428888376e-13,
-                            -0.70710664987564087,
-                            6.1817495122795663e-08,
-                            0.70710688829421997
-                        ],
-                        "Scale": [
-                            0.9999997615814209,
-                            1,
-                            0.9999997615814209
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "5260193271985626847"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "10285100877758935549",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "3803455392160298388",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "17397792958014902741",
-                        "HasMaterial": true,
-                        "MaterialID": "14978884895091768405",
-                        "Enabled": true
-                    }
-                ]
-            },
-            {
-                "Name": "Wagonete",
-                "FamilyNumber": 2,
-                "ID": "4006893391430789706",
-                "ParentID": "10204349119020327815",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17018449222301769908",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0.25574755668640137,
-                            -0.0093250274658203125,
-                            -0.061379432678222656
-                        ],
-                        "Rotation": [
-                            -3.2657917711266526e-14,
-                            -0.70710664987564087,
-                            6.1817274854547577e-08,
-                            0.70710688829421997
-                        ],
-                        "Scale": [
-                            0.9999997615814209,
-                            1,
-                            0.9999997615814209
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "6516826447441800596"
-                    },
-                    {
-                        "Type": 1,
-                        "ViewMesh": false,
-                        "Wireframe": false,
-                        "ViewVertexNormals": false,
-                        "ViewFaceNormals": false,
-                        "DrawAABB": false,
-                        "DrawOBB": false,
-                        "ID": "1166485943390631431",
-                        "HasMesh": true,
-                        "IsPrimitive": false,
-                        "MeshID": "14626281219252857405",
-                        "Enabled": true
-                    },
-                    {
-                        "Type": 2,
-                        "ID": "6480426500580574906",
-                        "HasMaterial": true,
-                        "MaterialID": "14978884895091768405",
                         "Enabled": true
                     }
                 ]
