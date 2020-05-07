@@ -65,6 +65,7 @@ public:
 
 public:
 	float actual_pos = 0.0F;
+
 	ComponentCurve* curve = nullptr;
 	ComponentRigidBody* rigid_body = nullptr;
 
