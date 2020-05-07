@@ -19,6 +19,7 @@ public:
 public:
 	float current_hide_time = 0.0f;
 	float max_hide_time = 3.0f;
+	float movement = 0.0f;
 	Prefab slime;
 
 	bool set_attack = false;

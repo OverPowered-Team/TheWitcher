@@ -119,6 +119,7 @@ public:
 	std::vector<GameObject*> particle_spawn_positions;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
+	ComponentAudioEmitter* audio = nullptr;
 
 	float2 movement_input;
 
@@ -179,7 +180,6 @@ private:
 	float angle = 0.0f;
 	float timer = 0.f;
 
-	ComponentAudioEmitter* audio = nullptr;
 	ComponentCamera* camera = nullptr;
 
 	CameraShake* shake = nullptr;
