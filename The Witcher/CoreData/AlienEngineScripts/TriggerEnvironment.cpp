@@ -162,6 +162,9 @@ std::string TriggerEnvironment::GetAudioElementByEnum(AudioEffects eff)
 	case AudioEffects::WOLF_HOWLING:
 		return name = "Play_Wolf_Howling";
 		break;
+	case AudioEffects::DRIPPING:
+		return name = "Play_Dripping";
+		break;
 	}
 }
 
