@@ -727,7 +727,6 @@ void ModuleResources::ReadAllMetaData()
 	files.clear();
 	directories.clear();
 
-
 	// Init Prefabs
 	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, directories);
 	ReadPrefabs(directories, files, ASSETS_PREFAB_FOLDER);
@@ -744,10 +743,9 @@ void ModuleResources::ReadAllMetaData()
 
 	// Init Scripts
 	ReadScripts();
-	
+
 	files.clear();
 	directories.clear();
-
 	// Init Scenes
 	App->file_system->DiscoverFiles(SCENE_FOLDER, files, directories);
 	ReadScenes(directories, files, SCENE_FOLDER);
