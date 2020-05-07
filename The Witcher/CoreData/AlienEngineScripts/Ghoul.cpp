@@ -19,6 +19,7 @@ void Ghoul::StartEnemy()
 {
     type = EnemyType::GHOUL;
     state = GhoulState::IDLE;
+    m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
     Enemy::StartEnemy();
 }
 
@@ -145,16 +146,20 @@ void Ghoul::CheckDistance()
         character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
         animator->SetFloat("speed", 0.0F);
         if (m_controller && is_combat) {
+            LOG("Adios");
             is_combat = false;
             m_controller->EnemyLostSight((Enemy*)this);
         }
+        LOG("Adios");
     }
     if (distance < stats["VisionRange"].GetValue()) {
         if (m_controller && !is_combat)
         {
+            LOG("HOLA");
             is_combat = true;
             m_controller->EnemyInSight((Enemy*)this);
         }
+        LOG("HOLA");
     }
 }
 
