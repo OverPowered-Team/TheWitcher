@@ -4,6 +4,8 @@
 #include "Macros/AlienScripts.h"
 #include "PlayerController.h"
 
+class Wagonnete_UI;
+
 class VagoneteInputs {
 public:
 	enum class State {
@@ -67,6 +69,9 @@ public:
 
 public:
 	float actual_pos = 0.0F;
+	float vagonete_life = 100.f;
+
+	Wagonnete_UI* HUD = nullptr;
 
 	ComponentCurve* curve = nullptr;
 	ComponentRigidBody* rigid_body = nullptr;
@@ -80,13 +85,15 @@ private:
 private:
 
 	std::vector<VagoneteInputs*> players;
-
+	float max_life = 0.0f;
 };
 
 ALIEN_FACTORY VagoneteMove* CreateVagoneteMove() {
 	VagoneteMove* alien = new VagoneteMove();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->speed);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->vagonete_life);
+
 	ComponentScript::InspectorDragableFloat(&VagoneteInputs::speedInclination, "speedInclination");
 	ComponentScript::InspectorDragableFloat(&VagoneteInputs::inclination4player, "inclination4player");
 
