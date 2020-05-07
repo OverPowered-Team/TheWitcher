@@ -483,6 +483,7 @@ void ComponentBar::LoadComponent(JSONArraypack* to_load)
 	x = to_load->GetNumber("X");
 	y = to_load->GetNumber("Y");
 	size = { (float)to_load->GetNumber("Width"), (float)to_load->GetNumber("Height") };
+	SetSize(size.x * 100.0f, size.y * 100.0f);
 
 	enabled = to_load->GetBoolean("Enabled");
 	current_color = to_load->GetColor("Color");
