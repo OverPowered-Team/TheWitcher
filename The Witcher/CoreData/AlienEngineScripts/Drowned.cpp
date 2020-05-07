@@ -99,7 +99,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 
 void Drowned::Stun(float time)
 {
-	if (state != DrownedState::STUNNED && state != DrownedState::DEAD)
+	if (state != DrownedState::STUNNED && state != DrownedState::DEAD && state != DrownedState::DYING)
 	{
 		state = DrownedState::STUNNED;
 		animator->PlayState("Dizzy");
