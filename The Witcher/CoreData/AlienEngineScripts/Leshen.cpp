@@ -153,6 +153,7 @@ void Leshen::LaunchCloudAction()
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
 	SpawnParticle("Cloud");
+	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 }
 
 Boss::ActionState Leshen::UpdateAction()
