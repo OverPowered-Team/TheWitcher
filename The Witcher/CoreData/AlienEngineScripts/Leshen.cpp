@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "PlayerAttacks.h"
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
 #include "Leshen.h"
@@ -35,6 +36,13 @@ void Leshen::CleanUpEnemy()
 float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
 	HandleHitCount();
+	float damage = Boss::GetDamaged(dmg, player);
+
+	if (stats["Health"].GetValue() == 0.0F) {
+		state = Boss::BossState::DYING;
+		animator->PlayState("Death");
+	}
+
 	return Boss::GetDamaged(dmg, player);
 }
 
@@ -345,4 +353,20 @@ void Leshen::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
+}
+
+
+void Leshen::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
+		{
+			float dmg_received = player->attacks->GetCurrentDMG();
+			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+
+			player->OnHit(this, GetDamaged(dmg_received, player, knock));
+		}
+	}
 }

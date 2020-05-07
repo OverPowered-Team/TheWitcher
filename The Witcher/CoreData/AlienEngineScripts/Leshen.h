@@ -72,6 +72,7 @@ public:
 	void SetRandomDirection();
 
 	void OnAnimationEnd(const char* name);
+	void OnTriggerEnter(ComponentCollider* collider);
 
 	void SetStats(const char* json) override;
 };
