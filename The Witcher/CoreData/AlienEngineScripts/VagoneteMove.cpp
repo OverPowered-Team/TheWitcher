@@ -48,25 +48,34 @@ void VagoneteMove::Update()
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 {
-	VagoneteDirection* direction = col->game_object_attached->GetComponent<VagoneteDirection>();
-	if (direction != nullptr) {
-		if (VagoneteInputs::globalInclination == 0) {
-			if (direction->default_right) {
-				curve = direction->curve_right->GetComponent<ComponentCurve>();
+	if (strcmp("VagoneteDirection", col->game_object_attached->GetTag()) == 0) {
+		VagoneteDirection* direction = col->game_object_attached->GetComponent<VagoneteDirection>();
+		if (direction != nullptr) {
+			if (VagoneteInputs::globalInclination == 0) {
+				if (direction->default_right) {
+					curve = direction->curve_right->GetComponent<ComponentCurve>();
+				}
+				else {
+					curve = direction->curve_left->GetComponent<ComponentCurve>();
+				}
 			}
 			else {
-				curve = direction->curve_left->GetComponent<ComponentCurve>();
+				if (VagoneteInputs::globalInclination > 0) {
+					curve = direction->curve_left->GetComponent<ComponentCurve>();
+				}
+				else {
+					curve = direction->curve_right->GetComponent<ComponentCurve>();
+				}
+			}
+			actual_pos = 0.0F;
+		}
+	}
+	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
+		for (auto item = players.begin(); item != players.end(); ++item) {
+			if ((*item)->state != VagoneteInputs::State::COVER) {
+				LOG("HIT IN COVER, F");
 			}
 		}
-		else {
-			if (VagoneteInputs::globalInclination > 0) {
-				curve = direction->curve_left->GetComponent<ComponentCurve>();
-			}
-			else {
-				curve = direction->curve_right->GetComponent<ComponentCurve>();
-			}
-		}
-		actual_pos = 0.0F;
 	}
 }
 
@@ -135,26 +144,28 @@ void VagoneteInputs::UpdateInputs()
 		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
 
-		if (!coverInput) {
-			state = State::IDLE;
-			player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.5f, player->transform->GetLocalPosition().z);
-		}
-
-		if (rightInclinationInput || leftInclinationInput) {
-			inclinationZone = (rightInclinationInput) ? -1 : 1;
-			state = State::INCLINATION;
-			globalState = State::INCLINATION;
-		}
-		else if (jumpInput) {
-			state = State::JUMP;
-			globalState = State::JUMP;
-		}
-		else if (coverInput) {
-			state = State::COVER;
-			player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.3f, player->transform->GetLocalPosition().z);
+		if (state == State::COVER) {
+			if (!coverInput) {
+				state = State::IDLE;
+				player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.5f, player->transform->GetLocalPosition().z);
+			}
 		}
 		else {
-			state = State::IDLE;
+			if (rightInclinationInput || leftInclinationInput) {
+				inclinationZone = (rightInclinationInput) ? -1 : 1;
+				state = State::INCLINATION;
+				globalState = State::INCLINATION;
+			}
+			else if (jumpInput) {
+				state = State::JUMP;
+				globalState = State::JUMP;
+			}
+			else if (coverInput) {
+				state = State::COVER;
+			}
+			else {
+				state = State::IDLE;
+			}
 		}
 
 		break; }
@@ -165,10 +176,6 @@ void VagoneteInputs::UpdateInputs()
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight);
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover);
-
-		if (!coverInput) {
-			player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.5f, player->transform->GetLocalPosition().z);
-		}
 
 		if (state == State::INCLINATION) {
 			if (currentInclination != 0 || (rightInclinationInput || leftInclinationInput)) {
@@ -183,6 +190,12 @@ void VagoneteInputs::UpdateInputs()
 				if (globalInclination == 0) {
 					globalState = State::IDLE;
 				}
+				state = State::IDLE;
+			}
+		}
+		else if (state == State::COVER) {
+			if (!coverInput) {
+				player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.5f, player->transform->GetLocalPosition().z);
 				state = State::IDLE;
 			}
 		}
@@ -214,6 +227,7 @@ void VagoneteInputs::DoAction()
 		Inclination();
 		break; }
 	case VagoneteInputs::State::COVER: {
+		player->transform->SetLocalPosition(player->transform->GetLocalPosition().x, 0.3f, player->transform->GetLocalPosition().z);
 		break; }
 	}
 }
