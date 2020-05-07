@@ -233,16 +233,17 @@ void UI_Char_Frame::HitEffect(float lerp_time)
 	if (lerp_time <= 0.5f)
 	{
 		//lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time * 2);
-		lerp_life = Maths::Lerp(1.0f, 0.575f, lerp_time * 2);
+		lerp_life = Maths::Lerp(1.0f, 0.f, lerp_time * 2);
 	}
 	else
 	{
 		//lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time - 0.5f) * 2);
-		lerp_life = Maths::Lerp(0.575f, 1.0f, (lerp_time - 0.5f) * 2);
+		lerp_life = Maths::Lerp(0.f, 1.0f, (lerp_time - 0.5f) * 2);
 	}
 
-	//portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
 	lifebar->SetBarColor(1.f, lerp_life, lerp_life, 1.f);
+	//portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
+	
 }
 
 void UI_Char_Frame::LowLifeGlow()
@@ -259,7 +260,7 @@ void UI_Char_Frame::LowLifeGlow()
 		color = Maths::Lerp(0.f, 1.f, t);
 	}
 
-	lifebar->SetBarColor(1, color, color, 1);
+	lifebar->SetBarColor(1.f, color, color, 1);
 
 	if (t >= 1)
 	{
