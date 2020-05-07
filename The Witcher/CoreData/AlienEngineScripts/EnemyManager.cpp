@@ -102,7 +102,6 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 	}
 
 	if (enemy != nullptr) {
-		AddEnemy(enemy);
 		enemy->StartEnemy();
 	}
 
