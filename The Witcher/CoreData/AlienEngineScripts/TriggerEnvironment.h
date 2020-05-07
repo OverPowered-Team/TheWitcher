@@ -33,7 +33,8 @@ public:
 		WOLF_HOWLING,
 		BATS,
 		CAVE,
-		TREES_SQUEAKING
+		TREES_SQUEAKING,
+		DRIPPING
 		);
 	struct MovingSpatial {
 		GameObject* spatial_place = nullptr;
