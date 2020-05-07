@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "DrownedAnimController",
         "NumStates": 7,
-        "NumTransitions": 5,
+        "NumTransitions": 7,
         "States": [
             {
                 "Name": "Idle",
@@ -103,6 +103,24 @@
             },
             {
                 "Source": "Attack",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hide",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "GetOff",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
