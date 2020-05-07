@@ -66,7 +66,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 {
 	float damage = Enemy::GetDamaged(dmg, player);
 
-	if (can_get_interrupted) {
+	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 		state = DrownedState::HIT;
 		animator->PlayState("Hit");
 		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
@@ -99,7 +99,7 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 
 void Drowned::Stun(float time)
 {
-	if (state != DrownedState::STUNNED && state != DrownedState::DEAD)
+	if (state != DrownedState::STUNNED && state != DrownedState::DEAD && state != DrownedState::DYING)
 	{
 		state = DrownedState::STUNNED;
 		animator->PlayState("Dizzy");
@@ -118,7 +118,6 @@ bool Drowned::IsDead()
 void Drowned::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != DrownedState::DEAD) {
-
 		if (!is_hide)
 		{
 			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
@@ -135,4 +134,3 @@ void Drowned::OnTriggerEnter(ComponentCollider* collider)
 		}
 	}
 }
-

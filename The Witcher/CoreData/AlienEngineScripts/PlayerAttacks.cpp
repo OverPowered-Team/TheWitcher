@@ -247,7 +247,7 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0 && !(*i)->game_object_attached->GetComponent<Enemy>()->IsDead())
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
@@ -319,6 +319,7 @@ void PlayerAttacks::ActivateCollider()
 	{
 		collider->SetCenter(current_attack->info.collider_position);
 		collider->SetSize(current_attack->info.collider_size);
+		collider->SetRotation(current_attack->info.collider_rotation);
 		collider->SetEnable(true);
 	}
 }
@@ -501,6 +502,9 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
+			info.collider_rotation = float3(attack_combo->GetNumber("collider.rot_x"),
+				attack_combo->GetNumber("collider.rot_y"),
+				attack_combo->GetNumber("collider.rot_z"));
 			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
@@ -541,6 +545,9 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(spells_json->GetNumber("collider.width"),
 				spells_json->GetNumber("collider.height"),
 				spells_json->GetNumber("collider.depth"));
+			info.collider_rotation = float3(spells_json->GetNumber("collider.rot_x"),
+				spells_json->GetNumber("collider.rot_y"),
+				spells_json->GetNumber("collider.rot_z"));
 			info.movement_strength = spells_json->GetNumber("movement_strength");
 			info.activation_frame = spells_json->GetNumber("activation_frame");
 			info.max_distance_traveled = spells_json->GetNumber("max_distance_traveled");

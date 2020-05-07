@@ -52,11 +52,6 @@ void DrownedRange::UpdateEnemy()
 		break;
 
 	case DrownedState::ATTACK:
-		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
-		{
-			state = DrownedState::HIDE;
-			current_hide_time = Time::GetGameTime();
-		}
 		if (set_attack)
 		{
 			animator->PlayState("Attack");
@@ -68,8 +63,8 @@ void DrownedRange::UpdateEnemy()
 		if (Time::GetGameTime() - current_hide_time > max_hide_time)
 		{
 			animator->PlayState("Hide");
-			transform->AddScale(float3(0.0f, -0.29f, 0.0f));
 			state = DrownedState::IDLE;
+			transform->AddScale(float3(0.0f, -0.29f, 0.0f));
 			is_hide = true;
 		}
 		break;
@@ -105,10 +100,19 @@ void DrownedRange::ShootSlime()
 void DrownedRange::OnAnimationEnd(const char* name)
 {
 	if (strcmp(name, "Attack") == 0) {
+		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
+		{
+			state = DrownedState::HIDE;
+			current_hide_time = Time::GetGameTime();
+		}
 		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		animator->PlayState("Idle");
 		set_attack = true;
+	}
+	else if (strcmp(name, "Hit") == 0) {
+		state = DrownedState::IDLE;
+		transform->AddScale(float3(0.0f, -0.29f, 0.0f));
+		is_hide = true;
 	}
 }

@@ -14,7 +14,6 @@ public:
 	void UpdateEnemy() override;
 
 	void ShootSlime();
-
 	void OnAnimationEnd(const char* name) override;
 
 public:

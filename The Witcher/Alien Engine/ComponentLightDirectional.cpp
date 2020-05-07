@@ -318,7 +318,13 @@ void ComponentLightDirectional::LoadComponent(JSONArraypack* to_load)
 	light_props.diffuse = to_load->GetFloat3("Diffuse");
 	light_props.specular = to_load->GetFloat3("Specular");
 	castShadows = to_load->GetBoolean("CastShadows");
-	sizefrustrumbaked = to_load->GetNumber("SizeBakedShadow");
+
+	try {
+		sizefrustrumbaked = to_load->GetNumber("SizeBakedShadow");
+	}
+	catch (...) {
+		sizefrustrumbaked = 78.0f;
+	}
 }
 
 void ComponentLightDirectional::DrawIconLight()

@@ -77,7 +77,7 @@ void Ghoul::JumpImpulse()
 
 void Ghoul::Stun(float time)
 {
-    if (state != GhoulState::STUNNED && state != GhoulState::DEAD)
+    if (state != GhoulState::STUNNED && state != GhoulState::DEAD && state != GhoulState::DYING)
     {
         state = GhoulState::STUNNED;
         animator->PlayState("Dizzy");
@@ -162,7 +162,7 @@ float Ghoul::GetDamaged(float dmg, PlayerController* player)
 {
     float damage = Enemy::GetDamaged(dmg, player);
 
-    if (can_get_interrupted) {
+    if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
         state = GhoulState::HIT;
         animator->PlayState("Hit");
         audio_emitter->StartSound("GhoulHit");

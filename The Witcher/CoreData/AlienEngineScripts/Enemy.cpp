@@ -122,7 +122,6 @@ void Enemy::UpdateEnemy()
 
 			std::string audio_name = "Play_" + (*it)->name;
 			audio_emitter->StartSound(audio_name.c_str());
-				
 		}
 
 		if ((*it)->to_delete)

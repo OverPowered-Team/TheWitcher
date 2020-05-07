@@ -19,6 +19,7 @@ class __declspec(dllexport) ComponentPhysics : public Component
 	friend class ComponentBoxCollider;
 	friend class ComponentSphereCollider;
 	friend class ComponentCapsuleCollider;
+	friend class ComponentMeshCollider;
 	friend class ComponentConvexHullCollider;
 	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
