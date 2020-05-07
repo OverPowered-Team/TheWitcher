@@ -29,7 +29,9 @@ public:
 		DASH,
 		COMBO,
 		SCREAM,
-		MINISCREAM
+		MINISCREAM,
+		ROCKTHROW,
+		AFK
 		);
 
 	enum(ActionState,
@@ -77,10 +79,12 @@ public:
 	virtual void LaunchAction();
 	virtual ActionState UpdateAction();
 	virtual void EndAction(GameObject* go_ended);
+	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero()) override;
 
-	void SetStats(const char* json) override;
+	virtual void SetStats(const char* json) override;
 
 	void OrientToPlayer(int target);
+	void OrientToPlayerWithoutSlerp(int target);
 
 };
 
