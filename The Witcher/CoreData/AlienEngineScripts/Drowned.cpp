@@ -109,14 +109,6 @@ bool Drowned::IsDead()
 	return (state == DrownedState::DEAD ? true : false);
 }
 
-void Drowned::OnAnimationEnd(const char* name)
-{
-	if (strcmp(name, "Attack") == 0) {
-		can_get_interrupted = true;
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-	}
-}
 
 void Drowned::OnTriggerEnter(ComponentCollider* collider)
 {

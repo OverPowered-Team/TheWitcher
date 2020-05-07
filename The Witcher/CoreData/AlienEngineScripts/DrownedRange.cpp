@@ -57,6 +57,11 @@ void DrownedRange::UpdateEnemy()
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
 		}
+		if (set_attack)
+		{
+			animator->PlayState("Attack");
+			set_attack = false;
+		}
 		break;
 
 	case DrownedState::HIDE:
@@ -76,7 +81,7 @@ void DrownedRange::UpdateEnemy()
 		state = DrownedState::DEAD;
 		animator->PlayState("Dead");
 		last_player_hit->OnEnemyKill();
-		//audio_emitter->StartSound("DrownedDeath");
+		audio_emitter->StartSound("Play_Drowner_Death");
 		if (m_controller && is_combat)
 		{
 			is_combat = false;
@@ -95,4 +100,15 @@ void DrownedRange::ShootSlime()
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateProjectile());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
+}
+
+void DrownedRange::OnAnimationEnd(const char* name)
+{
+	if (strcmp(name, "Attack") == 0) {
+		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		animator->PlayState("Idle");
+		set_attack = true;
+	}
 }
