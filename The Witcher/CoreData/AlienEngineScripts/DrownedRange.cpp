@@ -65,10 +65,11 @@ void DrownedRange::UpdateEnemy()
 		break;
 
 	case DrownedState::HIDE:
+		if (transform->GetGlobalScale().y > 0.01)
+			transform->AddScale(float3(0.0f, -0.001f, 0.0f));
 		if (Time::GetGameTime() - current_hide_time > max_hide_time)
 		{
 			animator->PlayState("Hide");
-			transform->AddScale(float3(0.0f, -0.29f, 0.0f));
 			state = DrownedState::IDLE;
 			is_hide = true;
 		}
@@ -104,11 +105,12 @@ void DrownedRange::ShootSlime()
 
 void DrownedRange::OnAnimationEnd(const char* name)
 {
+	LOG("He enetrado en AnimationEnd");
 	if (strcmp(name, "Attack") == 0) {
 		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		animator->PlayState("Idle");
+		animator->PlayState("Attack");
 		set_attack = true;
 	}
 }
