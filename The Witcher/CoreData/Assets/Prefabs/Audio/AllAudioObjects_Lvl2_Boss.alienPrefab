@@ -1,0 +1,898 @@
+{
+    "Name": "AllAudioObjects_Lvl2_Boss",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "AllAudioObjects_Lvl2_Boss",
+                "FamilyNumber": 1,
+                "ID": "4929283586123842292",
+                "ParentID": "18317055274320091213",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15598033513880574651"
+                    }
+                ]
+            },
+            {
+                "Name": "BigMine_ZoneAudio",
+                "FamilyNumber": 2,
+                "ID": "4947272337154238212",
+                "ParentID": "4929283586123842292",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.8930587768554688,
+                            -60.9918212890625,
+                            -4.7603931427001953
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.0031708576716482639,
+                            0,
+                            0.99999499320983887
+                        ],
+                        "Scale": [
+                            6.2560281753540039,
+                            11.929660797119141,
+                            8.282811164855957
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "250533973677893162"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            19.200000762939453,
+                            13.5,
+                            14.899999618530273
+                        ]
+                    },
+                    {
+                        "ID": "13551551731930255128",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13049804653630569941",
+                        "ResourceID": "12037526431574568711",
+                        "DataName": "TriggerEnvironment",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "zone",
+                                "enumInt": 7
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Choose an audio event to reproduce in your environment"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only choose spatial if you know your sound IS in fact spatial"
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Audio1"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "audio1.type",
+                                "enumInt": 12
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio1.spatial",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio1.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio1.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If you choose instant can't be random!"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio1.instant",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio1.time_to_play_instant",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio1.random",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 10,
+                                "Name": "If it is NOT random we assume that sound will play continuously"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If is Random, maximum and minimum time between plays"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio1.min_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio1.max_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Audio2"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "audio2.type",
+                                "enumInt": 11
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio2.spatial",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio2.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio2.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If you choose instant can't be random!"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio2.instant",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio2.time_to_play_instant",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio2.random",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If is Random, maximum and minimum time between plays"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio2.min_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio2.max_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Audio3"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "audio3.type",
+                                "enumInt": 14
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio3.spatial",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio3.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio3.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If you choose instant can't be random!"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio3.instant",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio3.time_to_play_instant",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio3.random",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If is Random, maximum and minimum time between plays"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio3.min_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio3.max_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Audio4"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "audio4.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio4.spatial",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio4.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio4.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If you choose instant can't be random!"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio4.instant",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio4.time_to_play_instant",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio4.random",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If is Random, maximum and minimum time between plays"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio4.min_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio4.max_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Audio5"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "audio5.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio5.spatial",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "SpatialMovement only if your spatial audio is selected and it will move"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio5.spatial_movement",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio5.spatial_place.move_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If you choose instant can't be random!"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio5.instant",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio5.time_to_play_instant",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "audio5.random",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If is Random, maximum and minimum time between plays"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio5.min_time_between_plays",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "audio5.max_time_between_plays",
+                                "float": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Spatial0",
+                "FamilyNumber": 3,
+                "ID": "16995422743679637760",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
+                        ],
+                        "Rotation": [
+                            0,
+                            0.0074977036565542221,
+                            0,
+                            0.99997192621231079
+                        ],
+                        "Scale": [
+                            0.13369068503379822,
+                            0.048044301569461823,
+                            0.05128154531121254
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7007350986255848375"
+                    },
+                    {
+                        "ID": "2357758315412357368",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "Spatial1",
+                "FamilyNumber": 3,
+                "ID": "17015941736977630963",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
+                        ],
+                        "Rotation": [
+                            0,
+                            0.011914896778762341,
+                            0,
+                            0.99992901086807251
+                        ],
+                        "Scale": [
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3165654567512803254"
+                    },
+                    {
+                        "ID": "4427400184617313121",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "Spatial2",
+                "FamilyNumber": 3,
+                "ID": "17162208972787101852",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
+                        ],
+                        "Rotation": [
+                            0,
+                            0.011914896778762341,
+                            0,
+                            0.99992901086807251
+                        ],
+                        "Scale": [
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9915563234152405757"
+                    },
+                    {
+                        "ID": "1037180250112956913",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "Spatial3",
+                "FamilyNumber": 3,
+                "ID": "8079100272541699547",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
+                        ],
+                        "Rotation": [
+                            0,
+                            0.011914896778762341,
+                            0,
+                            0.99992901086807251
+                        ],
+                        "Scale": [
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3064685050948268822"
+                    },
+                    {
+                        "ID": "7039064449001317259",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "Spatial4",
+                "FamilyNumber": 3,
+                "ID": "5150248747861413814",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.088387526571750641,
+                            -0.54438066482543945,
+                            8.6308670043945313
+                        ],
+                        "Rotation": [
+                            0,
+                            0.011914896778762341,
+                            0,
+                            0.99992901086807251
+                        ],
+                        "Scale": [
+                            0.048877112567424774,
+                            0.010530835948884487,
+                            0.011616146191954613
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4888399259677860949"
+                    },
+                    {
+                        "ID": "7997068755574741790",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd0",
+                "FamilyNumber": 3,
+                "ID": "7643220366266819838",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.016886040568351746,
+                            -0.54438066482543945,
+                            1.6488723754882813
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.00088496768148615956,
+                            0,
+                            0.99999970197677612
+                        ],
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "626403800408593951"
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd1",
+                "FamilyNumber": 3,
+                "ID": "12570218192279373558",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.0052275657653808594,
+                            -0.54438066482543945,
+                            0.51045417785644531
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.00088496768148615956,
+                            0,
+                            0.99999970197677612
+                        ],
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11700481474819855472"
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd2",
+                "FamilyNumber": 3,
+                "ID": "5582446547659698677",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.0019584447145462036,
+                            -0.54438066482543945,
+                            0.19121170043945313
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.00088496768148615956,
+                            0,
+                            0.99999970197677612
+                        ],
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11281484794322510508"
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd3",
+                "FamilyNumber": 3,
+                "ID": "17562826895830160362",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.0040426105260848999,
+                            -0.54438066482543945,
+                            0.39473819732666016
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.00088496768148615956,
+                            0,
+                            0.99999970197677612
+                        ],
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2735953493995007252"
+                    }
+                ]
+            },
+            {
+                "Name": "SpatialEnd4",
+                "FamilyNumber": 3,
+                "ID": "9809144908264847504",
+                "ParentID": "4947272337154238212",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10819663816773156395",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.0049184709787368774,
+                            -0.54438066482543945,
+                            0.48025608062744141
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.00088496768148615956,
+                            0,
+                            0.99999970197677612
+                        ],
+                        "Scale": [
+                            0.048879038542509079,
+                            0.010530835948884487,
+                            0.011619830504059792
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14236926449265691856"
+                    }
+                ]
+            }
+        ]
+    }
+}
