@@ -6,6 +6,8 @@
 
 #define TOTAL_PLAYERS 2
 
+class MusicController;
+
 class ALIEN_ENGINE_API Boss : public Enemy {
 
 public:
@@ -59,7 +61,7 @@ public:
 	float rotate_time = 0.0f;
 
 	float player_distance[TOTAL_PLAYERS];
-
+	MusicController* m_controller = nullptr;
 public:
 	virtual void StartEnemy() override;
 	virtual void UpdateEnemy() override;

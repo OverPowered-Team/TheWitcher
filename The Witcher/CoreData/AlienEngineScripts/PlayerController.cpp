@@ -308,6 +308,7 @@ void PlayerController::ReleaseAttackParticle()
 {
 	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
 		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
@@ -568,7 +569,11 @@ bool PlayerController::CheckBoundaries()
 				{
 					LOG("LEAVING BUDDY BEHIND");
 					if (contained) {
-						if (cam->state == CameraMovement::CameraState::FREE)
+						if (cam->state == CameraMovement::CameraState::FREE 
+							&& cam->state == CameraMovement::CameraState::MOVING_TO_STATIC
+							&& cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
+							&& cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
+							&& cam->state == CameraMovement::CameraState::AXIS)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -649,6 +654,9 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 	parent = parent != nullptr ? parent : this->game_object;
 	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
+
+	if (new_particle == nullptr)
+		return;
 
 	particles.push_back(new_particle);
 	/*if (particles[particle_name])

@@ -26,6 +26,18 @@ void DrownedRange::UpdateEnemy()
 			animator->PlayState("GetOff");
 			state = DrownedState::GETOFF;
 			is_hide = false;
+			if (m_controller && !is_combat)
+			{
+				is_combat = true;
+				m_controller->EnemyInSight((Enemy*)this);
+			}
+		}
+		else {
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
 		}
 		break;
 
@@ -44,6 +56,11 @@ void DrownedRange::UpdateEnemy()
 		{
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
+		}
+		if (set_attack)
+		{
+			animator->PlayState("Attack");
+			set_attack = false;
 		}
 		break;
 
@@ -64,12 +81,12 @@ void DrownedRange::UpdateEnemy()
 		state = DrownedState::DEAD;
 		animator->PlayState("Dead");
 		last_player_hit->OnEnemyKill();
-		//audio_emitter->StartSound("DrownedDeath");
-		//if (m_controller && is_combat)
-		//{
-		//	is_combat = false;
-		//	m_controller->EnemyLostSight((Enemy*)this);
-		//}
+		audio_emitter->StartSound("Play_Drowner_Death");
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 	}
 	}
 }
@@ -79,8 +96,19 @@ void DrownedRange::ShootSlime()
 	float3 slime_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(slime, slime_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
-	audio_emitter->StartSound("SoldierShoot");
+	audio_emitter->StartSound("Play_Drowner_Shot_Attack");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateProjectile());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
+}
+
+void DrownedRange::OnAnimationEnd(const char* name)
+{
+	if (strcmp(name, "Attack") == 0) {
+		can_get_interrupted = true;
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		animator->PlayState("Idle");
+		set_attack = true;
+	}
 }

@@ -60,10 +60,10 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
+	state = NilfgaardSoldierState::HIT;
 	float damage = Enemy::GetDamaged(dmg, player, knock);
 
 	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
-		state = NilfgaardSoldierState::HIT;
 		animator->PlayState("Hit");
 		audio_emitter->StartSound("SoldierHit");
 		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
@@ -171,13 +171,9 @@ void NilfgaardSoldier::RotateSoldier()
 
 void NilfgaardSoldier::CleanUpEnemy()
 {
+	ReleaseAllParticles();
 	if (decapitated_head)
 	{
-		for (auto it = particles.begin(); it != particles.end(); ++it)
-		{
-			ReleaseParticle((*it)->GetName());
-		}
-
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
@@ -185,12 +181,13 @@ void NilfgaardSoldier::CleanUpEnemy()
 
 void NilfgaardSoldier::Stun(float time)
 {
-	if (state != NilfgaardSoldierState::STUNNED || state != NilfgaardSoldierState::DEAD)
+	if (state != NilfgaardSoldierState::STUNNED && state != NilfgaardSoldierState::DEAD)
 	{
 		state = NilfgaardSoldierState::STUNNED;
 		animator->PlayState("Dizzy");
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
+		audio_emitter->StartSound("Play_Dizzy_Enemy");
 	}
 }
 

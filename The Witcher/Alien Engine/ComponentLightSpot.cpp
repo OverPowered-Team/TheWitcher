@@ -19,10 +19,17 @@ ComponentLightSpot::ComponentLightSpot(GameObject* attach) : Component(attach)
 	App->objects->spot_light_properites.push_back(&light_props);
 	App->objects->AddNumOfSpotLights();
 	light_props.enabled = enabled;
+	light_props.light = this;
+
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
 #endif
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentLightSpot::DrawScene, this));
+#endif // !GAME_VERSION
+
 }
 
 ComponentLightSpot::~ComponentLightSpot()
@@ -33,6 +40,11 @@ ComponentLightSpot::~ComponentLightSpot()
 
 	App->objects->spot_light_properites.remove(&light_props);
 	App->objects->ReduceNumOfSpotLights();
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
+
 }
 
 void ComponentLightSpot::Update()
@@ -42,7 +54,7 @@ void ComponentLightSpot::Update()
 	LightLogic();
 }
 
-void ComponentLightSpot::DrawScene(ComponentCamera* camera)
+void ComponentLightSpot::DrawScene()
 {
 	OPTICK_EVENT(); 
 

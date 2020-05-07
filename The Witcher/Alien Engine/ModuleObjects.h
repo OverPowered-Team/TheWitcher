@@ -80,7 +80,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
-	void CalculateShadows(std::vector<std::pair<float, GameObject*>>& dynamic_to_draw, Viewport* viewport, std::vector<std::pair<float, GameObject*>>& static_to_draw, ComponentCamera* frustum_camera);
+	void CalculateShadows(std::vector<GameObject*>& dynamic_to_draw, Viewport* viewport, std::vector<GameObject*>& static_to_draw, ComponentCamera* frustum_camera);
 	void DrawRay();
 	bool CleanUp();
 
@@ -320,6 +320,8 @@ public:
 	std::list<PointLightProperties*> point_light_properites;
 	std::list<SpotLightProperties*> spot_light_properites;
 	std::vector<std::pair<u64, GameObject**>> to_add;
+
+	std::map<Component*, std::function<void()>> debug_draw_list;
 
 	std::string sceneNameToChange;
 

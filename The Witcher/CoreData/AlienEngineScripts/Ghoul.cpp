@@ -57,6 +57,7 @@ void Ghoul::SetStats(const char* json)
 
 void Ghoul::CleanUpEnemy()
 {
+    ReleaseAllParticles();
 }
 
 void Ghoul::JumpImpulse()
@@ -76,11 +77,12 @@ void Ghoul::JumpImpulse()
 
 void Ghoul::Stun(float time)
 {
-    if (state != GhoulState::STUNNED || state != GhoulState::DEAD)
+    if (state != GhoulState::STUNNED && state != GhoulState::DEAD)
     {
         state = GhoulState::STUNNED;
         animator->PlayState("Dizzy");
         current_stun_time = Time::GetGameTime();
+        audio_emitter->StartSound("Play_Dizzy_Enemy");
         stun_time = time;
     }
 }

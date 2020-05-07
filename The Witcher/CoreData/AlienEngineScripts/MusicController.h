@@ -30,6 +30,8 @@ private:
 	float dist = 0.f;
 	float t1 = 0.f;
 	bool already_minium = false;
+	bool to_normal_rtpc = false;
+	float t2 = 0.f;
 };
 
 ALIEN_FACTORY MusicController* CreateMusicController() {
@@ -38,4 +40,4 @@ ALIEN_FACTORY MusicController* CreateMusicController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->minimum_volume);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->time_start_decrease);
 	return alien;
-} 
+}

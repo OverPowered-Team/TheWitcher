@@ -116,6 +116,8 @@ public:
 	bool HasTexture(TextureType texType = TextureType::DIFFUSE) const;
 
 	void SetShader(ResourceShader* newShader);
+	bool IsTransparent() const; 
+
 	// ----- ImGui ----- 
 	void DisplayMaterialOnInspector();
 	void MaterialHeader();
@@ -140,6 +142,9 @@ public:
 	ResourceShader* used_shader = nullptr; 
 	ResourceShader* simple_depth_shader = nullptr;
 	const char* selectedShader = nullptr;
+
+	int renderMode = 0;
+
 	ResourceTexture* selected_texture = nullptr;
 	bool change_texture_menu = false;
 };

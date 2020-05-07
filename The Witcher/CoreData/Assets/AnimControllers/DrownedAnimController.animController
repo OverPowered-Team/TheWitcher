@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "DrownedAnimController",
         "NumStates": 7,
-        "NumTransitions": 5,
+        "NumTransitions": 4,
         "States": [
             {
                 "Name": "Idle",
@@ -37,7 +37,7 @@
             {
                 "Name": "Attack",
                 "Speed": 1,
-                "Clip": "14101932209812305813"
+                "Clip": "4037813064645979005"
             }
         ],
         "Transitions": [
@@ -100,15 +100,6 @@
                         "ParameterIndex": 0
                     }
                 ]
-            },
-            {
-                "Source": "Attack",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -119,6 +110,19 @@
                 "Value": false
             }
         ],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "DrownedRange::ShootSlime",
+                "Animation_Id": "4037813064645979005",
+                "Frame": 24,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnAttackParticle",
+                "Animation_Id": "4037813064645979005",
+                "Frame": 20,
+                "Type": 2
+            }
+        ]
     }
 }

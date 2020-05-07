@@ -1,6 +1,6 @@
 # TheWitcher
 
-TheWitcher v.0.4.0
+TheWitcher v.0.5.0
 
 ## Description
 
@@ -71,6 +71,21 @@ Another Breakable prop finished -> explosion particles / animation & sound
 Terrain
 Environmental music polished
 2nd level blockout with colliders and camera transitions
+
+V.5
+Combat, movement and animations polish 
+ 
+HUD Polish. Reacting to things happening.
+ 
+More Particles.
+ 
+Yennefer Polish Pass.
+ 
+Boss 1st final pass: art and particles. 
+ 
+Level: Lighting. Polish camera angles and transitions. 2nd level 1st pass (art, lighting, gameplay and narrative) & 2nd Boss prototype 
+ 
+Game Loop: Start menu -> 1st level -> death/campfires -> final score ->... Checkpoints / campfires 
 
 ## Links
 

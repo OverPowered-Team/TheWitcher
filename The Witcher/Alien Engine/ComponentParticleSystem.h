@@ -25,15 +25,14 @@ private:
 	void Update() override;
 	void PostUpdate() override;
 
-	void DrawScene(ComponentCamera* camera) override;
-	void DrawGame(ComponentCamera* camera) override;
+	void DrawScene() override;
+	void DrawGame() override;
 
 	void DebugDraw();
 	void Draw();
 
 	void OnEnable() override;
 	void OnDisable() override;
-
 
 	bool DrawInspector () override;
 

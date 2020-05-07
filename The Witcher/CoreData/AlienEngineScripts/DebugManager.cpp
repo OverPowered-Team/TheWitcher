@@ -1,5 +1,6 @@
 #include "DebugManager.h"
 #include "PlayerController.h"
+#include "UI_Char_Frame.h"
 
 DebugManager::DebugManager() : Alien()
 {
@@ -22,8 +23,10 @@ void DebugManager::Update()
 	{
 		if (Input::GetKeyDown(SDL_SCANCODE_F1))
 		{
-			geralt_controller->player_data.stats["Health"].IncreaseStat(10);
-			yennefer_controller->player_data.stats["Health"].IncreaseStat(10);
+			geralt_controller->player_data.stats["Health"].IncreaseStat(geralt_controller->player_data.stats["Health"].GetMaxValue());
+			yennefer_controller->player_data.stats["Health"].IncreaseStat(yennefer_controller->player_data.stats["Health"].GetMaxValue());
+			geralt_controller->HUD->GetComponent<UI_Char_Frame>()->LifeChange(geralt_controller->player_data.stats["Health"].GetMaxValue(), geralt_controller->player_data.stats["Health"].GetMaxValue());
+			yennefer_controller->HUD->GetComponent<UI_Char_Frame>()->LifeChange(yennefer_controller->player_data.stats["Health"].GetMaxValue(), yennefer_controller->player_data.stats["Health"].GetMaxValue());
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_M))
 		{
