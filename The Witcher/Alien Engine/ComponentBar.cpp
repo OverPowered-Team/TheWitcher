@@ -10,6 +10,7 @@
 #include "ModuleResources.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 #include "ReturnZ.h"
 #include "imgui/imgui.h"
 #include "mmgr/mmgr.h"
@@ -324,43 +325,44 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 			case SCISSOR_TYPE::RIGHT_TO_LEFT: {
 #ifndef GAME_VERSION
 				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + offsetX,
-					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F),
+					0,
 					((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
-					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F));
+					10000);
+
 #else
 				glScissor(x - (matrix[0][0] * App->window->width) + offsetX,
-					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F),
+					0,
 					((x + (matrix[0][0] * App->window->width)) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
-					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F));
+					10000);
 #endif		
 				break; }
 
 			case SCISSOR_TYPE::LEFT_TO_RIGHT: {
 #ifndef GAME_VERSION
 				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor)),
-					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F),
+					0,
 					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor,
-					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F));
+					10000);
 #else
 				glScissor(x - (matrix[0][0] * App->window->width) + (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor)),
-					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F),
+					0,
 					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor,
-					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F));
+					10000);
 #endif	
 				break; }
 
 			case SCISSOR_TYPE::CENTER: {
 #ifndef GAME_VERSION
 				glScissor(x - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
-					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F),
+					0,
 					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
-					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F));
+					10000);
 				
 #else
 				glScissor(x - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
-					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F),
+					0,
 					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
-					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F));
+					10000);
 #endif	
 				break; }
 
