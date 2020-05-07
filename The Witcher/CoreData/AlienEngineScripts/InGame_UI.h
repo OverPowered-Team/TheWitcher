@@ -76,13 +76,8 @@ private:
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {
 	InGame_UI* alien = new InGame_UI();
 	// To show in inspector here
-
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->in_game);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->pause_menu);
 	
 	SHOW_IN_INSPECTOR_AS_PREFAB(alien->ulti_particle);
-	SHOW_IN_INSPECTOR_AS_PREFAB(alien->killcount_particle);
-
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_lerp_ult_part);
 
 	return alien;
