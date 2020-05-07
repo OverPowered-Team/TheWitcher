@@ -72,6 +72,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 				}
 			}
 			actual_pos = 0.0F;
+			speed = direction->velocity;
 		}
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
