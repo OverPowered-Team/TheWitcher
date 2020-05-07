@@ -25,13 +25,12 @@ void MusicController::Awake()
 
 void MusicController::Start()
 {
-	
+
 	t1 = Time::GetGameTime();
 }
 
 void MusicController::Update()
 {
-	LOG("CHILDS: %i", enemies_in_sight.size());
 	if (is_combat)
 	{
 		if (has_changed && enemies_in_sight.size() == 1) {
@@ -44,13 +43,23 @@ void MusicController::Update()
 
 			has_changed = !has_changed;
 		}
-		//DecreaseMusicVolume();
+		DecreaseMusicVolume();
 	}
-	else if(!is_combat && has_changed && enemies_in_sight.size() <= 0)
+	else if (!is_combat && has_changed && enemies_in_sight.size() <= 0)
 	{
 		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str());
 		has_changed = !has_changed;
-		//already_minium = false;
+		already_minium = false;
+		to_normal_rtpc = true;
+		t2 = Time::GetGameTime();
+	}
+	if (to_normal_rtpc)
+	{
+		if (Time::GetGameTime() - t2 >= 1.5f) {
+			dist = 0.f;
+			emitter->SetRTPCValue("CombatDistance", dist);
+			to_normal_rtpc = false;
+		}
 	}
 }
 
@@ -91,12 +100,10 @@ void MusicController::DecreaseMusicVolume()
 		dist += 0.1;
 		emitter->SetRTPCValue("CombatDistance", dist);
 		if (dist >= 100) {
-			dist = 0.f;
 			t1 = Time::GetGameTime();
 			LOG("Minimum combat volume");
 			already_minium = true;
-			return;
 		}
-			
+
 	}
 }
