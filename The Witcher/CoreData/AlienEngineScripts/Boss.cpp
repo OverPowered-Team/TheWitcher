@@ -14,6 +14,7 @@ Boss::BossAction::BossAction(ActionType _type, float _probability)
 
 void Boss::StartEnemy()
 {
+	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 
 	state = BossState::IDLE;
