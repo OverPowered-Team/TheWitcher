@@ -255,8 +255,11 @@ void Enemy::AddEffect(Effect* new_effect)
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
 			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
 
-	std::string audio_name = "Play_" + new_effect->name;
-	audio_emitter->StartSound(audio_name.c_str());
+	if (new_effect->ticks_time == 0)
+	{
+		std::string audio_name = "Play_" + new_effect->name;
+		audio_emitter->StartSound(audio_name.c_str());
+	}
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
