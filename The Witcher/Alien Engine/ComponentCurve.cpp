@@ -10,16 +10,24 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleObjects.h"
 
 ComponentCurve::ComponentCurve(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::CURVE;
 
 	curve = Curve(float3{ -10,0,0 }, float3{ 10,0,0 }, game_object_attached->transform->GetGlobalPosition());
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCurve::DrawScene, this));
+#endif
 }
 
 ComponentCurve::~ComponentCurve()
 {
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif
 }
 
 void ComponentCurve::UpdatePosition(const float3& new_position)
@@ -249,7 +257,7 @@ void ComponentCurve::LoadComponent(JSONArraypack* to_load)
 	curve.SetPoints(control_points, control_points_normals);
 }
 
-void ComponentCurve::DrawScene(ComponentCamera* camera)
+void ComponentCurve::DrawScene()
 {
 	if (!game_object_attached->IsSelected() && renderOnSelected) {
 		return;

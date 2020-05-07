@@ -27,6 +27,8 @@ ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
 ComponentCollider::~ComponentCollider()
 {
 	if (!IsController()) {
+		material->release();
+		material = nullptr;
 		go->SendAlientEventThis(this, AlienEventType::COLLIDER_DELETED);
 		shape->release();
 		shape = nullptr;
@@ -35,10 +37,6 @@ ComponentCollider::~ComponentCollider()
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
 #endif // !GAME_VERSION
-
-
-	material->release();
-	material = nullptr;
 }
 
 // Colliders Functions --------------------------------
