@@ -14,7 +14,6 @@ ComponentBoxCollider::ComponentBoxCollider(GameObject* go) : ComponentCollider(g
 	size = GetLocalMeshAabbSize();
 	float3 dimensions = CalculateSize();
 	shape = App->physx->CreateShape(PxBoxGeometry(dimensions.x, dimensions.y, dimensions.z), *material);
-	App->SendAlienEvent(this, AlienEventType::COLLIDER_ADDED);
 	InitCollider();
 }
 

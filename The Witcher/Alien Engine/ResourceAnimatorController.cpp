@@ -82,7 +82,7 @@ void ResourceAnimatorController::ReImport(const u64& force_id)
 			for (uint i = 0; i < asset_states->GetArraySize(); ++i)
 			{
 				std::string state_name = asset_states->GetString("Name");
-				int state_speed = asset_states->GetNumber("Speed");
+				float state_speed = asset_states->GetNumber("Speed");
 				u64 clip_id = std::stoull(asset_states->GetString("Clip"));
 				AddState(state_name, clip_id == 0 ? nullptr : (ResourceAnimation*)App->resources->GetResourceWithID(clip_id), state_speed);
 				asset_states->GetAnotherNode();
