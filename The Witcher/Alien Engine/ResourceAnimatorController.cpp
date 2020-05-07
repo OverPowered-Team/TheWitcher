@@ -82,7 +82,7 @@ void ResourceAnimatorController::ReImport(const u64& force_id)
 			for (uint i = 0; i < asset_states->GetArraySize(); ++i)
 			{
 				std::string state_name = asset_states->GetString("Name");
-				int state_speed = asset_states->GetNumber("Speed");
+				float state_speed = asset_states->GetNumber("Speed");
 				u64 clip_id = std::stoull(asset_states->GetString("Clip"));
 				AddState(state_name, clip_id == 0 ? nullptr : (ResourceAnimation*)App->resources->GetResourceWithID(clip_id), state_speed);
 				asset_states->GetAnotherNode();
@@ -367,6 +367,9 @@ void ResourceAnimatorController::Update()
 void ResourceAnimatorController::UpdateState(State* state)
 {
 	ResourceAnimation* animation = state->GetClip();
+	ResourceAnimation* current_clip = current_state->GetClip();
+	if (current_clip == nullptr)
+		return;
 
 	if (!transitioning)CheckTriggers();
 
@@ -388,7 +391,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			if (state->GetClip()->loops)
 			{
 				state->time = 0;
-				previous_key_time = current_state->GetClip()->start_tick;
+				previous_key_time = current_clip->start_tick;
 			}
 			else
 				state->time = animation->GetDuration();
@@ -430,7 +433,7 @@ void ResourceAnimatorController::UpdateState(State* state)
 			state->fade_time = 0;
 			state->fade_duration = 0;
 			transitioning = false;
-			previous_key_time = current_state->GetClip()->start_tick;
+			previous_key_time = current_clip->start_tick;
 		}
 	}
 }
@@ -1421,7 +1424,16 @@ void ResourceAnimatorController::Play()
 	if (default_state)
 	{
 		current_state = default_state;
-		previous_key_time = current_state->GetClip()->start_tick;
+		ResourceAnimation* clip = current_state->GetClip();
+		if (clip != nullptr)
+		{
+			previous_key_time = clip->start_tick;
+		}
+		else
+		{
+			LOG_ENGINE("Resource Animator COntroller %s: Clip not found", this->name);
+			return;
+		}
 	}
 }
 

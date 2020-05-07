@@ -2,109 +2,53 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "PlayerAttacks.h"
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
 #include "Leshen.h"
 
 void Leshen::StartEnemy()
 {
-	actions.emplace("Root", new LeshenAction(ActionType::ROOT, 33.0f));
-	actions.emplace("Melee", new LeshenAction(ActionType::MELEE, 33.0f));
-	actions.emplace("Crows", new LeshenAction(ActionType::CROWS, 34.0f));
-	actions.emplace("Cloud", new LeshenAction(ActionType::CLOUD, .0f));
+	actions.emplace("Root", new BossAction(ActionType::ROOT, 33.0f));
+	actions.emplace("Melee", new BossAction(ActionType::MELEE, 33.0f));
+	actions.emplace("Crows", new BossAction(ActionType::CROWS, 34.0f));
+	actions.emplace("Cloud", new BossAction(ActionType::CLOUD, .0f));
 	
 	can_get_interrupted = false;
 
 	type = EnemyType::LESHEN;
 
-	Enemy::StartEnemy();
+	Boss::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
 }
 
 void Leshen::UpdateEnemy()
 {
-	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
-
-	//switch (state)
-	//{
-	//case Enemy::EnemyState::NONE:
-	//	break;
-	//case Enemy::EnemyState::IDLE:
-	//	if (player_distance[0] < stats["VisionRange"].GetValue()) {
-	//		if (time_to_action <= action_cooldown)
-	//			time_to_action += Time::GetDT();
-	//		else {
-	//			SetAttackState();
-	//		}
-	//	}
-	//	break;
-	//case Enemy::EnemyState::ATTACK:
-	//	if (current_action) {
-	//		if (!UpdateAction()) {
-	//			SetIdleState();
-	//		}
-	//	}
-	//	else
-	//		LOG("NO CURRENT ACTION DETECTED");
-	//	break;
-	//case Enemy::EnemyState::HIT:
-	//	if (current_action)
-	//		state = EnemyState::ATTACK;
-	//	else
-	//		state = EnemyState::IDLE;
-	//	break;
-	//case Enemy::EnemyState::DYING: {
-	//	EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-	//	//Ori Ori function sintaxis
-	//	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
-	//	audio_emitter->StartSound("SoldierDeath");
-	//	state = EnemyState::DEAD;
-	//}
-	//	break;
-	//case Enemy::EnemyState::DEAD:
-	//	break;
-	//default:
-	//	break;
-	//}
+	Boss::UpdateEnemy();
 }
 
 void Leshen::CleanUpEnemy()
 {
-	for (auto it = actions.begin(); it != actions.end(); ++it) {
-		delete (*it).second;
-	}
-
-	current_action = nullptr;
-	delete current_action;
+	Boss::CleanUpEnemy();
 }
 
 float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 {
 	HandleHitCount();
-	LOG("health remaining %f", stats["Health"].GetValue());
-	LOG("hitcount %i", times_hitted);
-	return Enemy::GetDamaged(dmg, player, knock);
-}
+	float damage = Boss::GetDamaged(dmg, player);
 
-void Leshen::OrientToPlayer(int target)
-{
-	direction = -(player_controllers[target]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad());
-	transform->SetGlobalRotation(rot);
-}
+	if (stats["Health"].GetValue() == 0.0F) {
+		state = Boss::BossState::DYING;
+		animator->PlayState("Death");
+	}
 
-void Leshen::SetStats(const char* json)
-{
-	Enemy::SetStats(json);
+	return Boss::GetDamaged(dmg, player);
 }
 
 void Leshen::SetActionProbabilities()
 {
-	for (auto it = actions.begin(); it != actions.end(); ++it) {
-		(*it).second->probability = 0.f;
-	}
+	Boss::SetActionProbabilities();
 
 	if (times_hitted >= 10) {
 		actions.find("Cloud")->second->probability = 100.0f;
@@ -122,25 +66,7 @@ void Leshen::SetActionProbabilities()
 		actions.find("Crows")->second->probability = 40.0f;
 		actions.find("Root")->second->probability = 60.0f;
 	}
-	
 
-}
-
-void Leshen::SelectAction()
-{
-
-	float rand_num = rand() % 100 + 1;
-	float aux = 0.f;
-
-	current_action = actions["Root"];
-
-	for (auto it = actions.begin(); it != actions.end(); ++it) {
-		if (rand_num > aux && rand_num <= (aux + (*it).second->probability)) {
-			current_action = (*it).second;
-			break;
-		}
-		aux = (aux + (*it).second->probability);
-	}
 }
 
 bool Leshen::IsOnAction()
@@ -148,31 +74,10 @@ bool Leshen::IsOnAction()
 	return current_action != nullptr;
 }
 
-void Leshen::FinishAttack()
-{
-
-}
-
-void Leshen::SetIdleState()
-{
-	/*current_action = nullptr;
-	state = Enemy::EnemyState::IDLE;*/
-}
-
-void Leshen::SetAttackState()
-{
-	SetActionVariables();
-	SetActionProbabilities();
-	SelectAction();
-	time_to_action = 0.0f;
-	//state = Enemy::EnemyState::ATTACK;
-	current_action->state = ActionState::LAUNCH;
-	LaunchAction();
-	//animator->PlayState("Action")
-}
-
 void Leshen::LaunchAction()
 {
+	Boss::LaunchAction();
+
 	switch (current_action->type)
 	{
 	case Leshen::ActionType::NONE:
@@ -195,7 +100,6 @@ void Leshen::LaunchAction()
 		else {
 			crows_target = rand() % 1;
 		}
-		OrientToPlayer(crows_target);
 		break;
 	case Leshen::ActionType::CLOUD:
 		LaunchCloudAction();
@@ -205,10 +109,6 @@ void Leshen::LaunchAction()
 	}
 
 	current_action->state = ActionState::UPDATING;
-}
-
-void Leshen::OnDeathHit()
-{
 }
 
 void Leshen::LaunchRootAction()
@@ -225,16 +125,12 @@ void Leshen::LaunchRootAction()
 
 void Leshen::LaunchMeleeAction()
 {
-	if (player_distance[0] < player_distance[1])
-		OrientToPlayer(0);
-	else {
-		OrientToPlayer(1);
-	}
+
 }
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, transform->GetGlobalPosition());
+	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z));
 	if (player_rooted[0]) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
@@ -256,16 +152,11 @@ void Leshen::LaunchCloudAction()
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	particles["Cloud"]->game_object_attached->SetEnable(true);
+	SpawnParticle("Cloud");
+	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 }
 
-Leshen::LeshenAction::LeshenAction(ActionType _type, float _probability)
-{
-	type = _type;
-	probability = _probability;
-}
-
-bool Leshen::UpdateAction()
+Boss::ActionState Leshen::UpdateAction()
 {
 	switch (current_action->type)
 	{
@@ -287,10 +178,7 @@ bool Leshen::UpdateAction()
 		break;
 	}
 
-	if (current_action->state == ActionState::ENDED)
-		return false;
-	else
-		return true;
+	return current_action->state;
 }
 
 Leshen::ActionState Leshen::UpdateRootAction()
@@ -304,7 +192,11 @@ Leshen::ActionState Leshen::UpdateMeleeAction()
 {
 	LOG("UPDATING MELEE ACTION");
 
-	current_action->state = ActionState::ENDED;
+	if (player_distance[0] < player_distance[1])
+		OrientToPlayer(0);
+	else {
+		OrientToPlayer(1);
+	}
 
 	return current_action->state;
 }
@@ -313,6 +205,7 @@ Leshen::ActionState Leshen::UpdateCrowsAction()
 {
 	LOG("UPDATING CROWS ACTION");
 
+	OrientToPlayer(crows_target);
 
 	return current_action->state;
 }
@@ -339,6 +232,29 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 	return current_action->state;
 }
 
+void Leshen::EndAction(GameObject* go_ended)
+{
+	switch (current_action->type)
+	{
+	case Leshen::ActionType::NONE:
+		break;
+	case Leshen::ActionType::ROOT:
+		EndRootAction(go_ended);
+		break;
+	case Leshen::ActionType::MELEE:
+		EndMeleeAction();
+		break;
+	case Leshen::ActionType::CROWS:
+		EndCrowsAction();
+		break;
+	case Leshen::ActionType::CLOUD:
+		EndCloudAction();
+		break;
+	default:
+		break;
+	}
+}
+
 void Leshen::EndRootAction(GameObject* root)
 {
 	current_action->state = Leshen::ActionState::ENDED;
@@ -356,16 +272,15 @@ void Leshen::EndMeleeAction()
 	current_action->state = Leshen::ActionState::ENDED;
 }
 
-void Leshen::EndCrowsAction(GameObject* crow)
+void Leshen::EndCrowsAction()
 {
-	Destroy(crow);
 	current_action->state = Leshen::ActionState::ENDED;
 }
 
 void Leshen::EndCloudAction()
 {
 	meshes->SetEnable(true);
-	particles["Cloud"]->game_object_attached->SetEnable(false);
+	ReleaseParticle("Cloud");
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
 	times_switched = 0;
@@ -373,11 +288,7 @@ void Leshen::EndCloudAction()
 
 void Leshen::SetActionVariables()
 {
-	player_distance[0] = 0;
-	player_distance[1] = 0;
-
-	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
-	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
+	Boss::SetActionVariables();
 
 	player_rooted[0] = false;
 	player_rooted[1] = false;	
@@ -389,11 +300,6 @@ void Leshen::SetActionVariables()
 		player_rooted[1] = true;
 	}
 }
-
-//void Leshen::ChangePhase()
-//{
-//	phase = 2;
-//}
 
 void Leshen::HandleHitCount()
 {
@@ -419,4 +325,49 @@ void Leshen::SetRandomDirection()
 
 
 	direction = float3(rand_x, 0, rand_z);
+}
+
+void Leshen::OnAnimationEnd(const char* name)
+{
+	if (strcmp(name, "Melee") == 0) {
+		EndMeleeAction();
+	}
+}
+
+void Leshen::SetStats(const char* json)
+{
+	std::string json_path = ENEMY_JSON + std::string(json) + std::string(".json");
+	LOG("READING ENEMY STAT GAME JSON WITH NAME %s", json_path.data());
+
+	JSONfilepack* stat = JSONfilepack::GetJSON(json_path.c_str());
+	if (stat)
+	{
+		stats["Health"] = Stat("Health", stat->GetNumber("Health"));
+		stats["Agility"] = Stat("Agility", stat->GetNumber("Agility"));
+		stats["Damage"] = Stat("Damage", stat->GetNumber("Damage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat->GetNumber("AttackSpeed"));
+		stats["AttackRange"] = Stat("AttackRange", stat->GetNumber("AttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat->GetNumber("VisionRange"));
+		stats["KnockBack"] = Stat("KnockBack", stat->GetNumber("KnockBack"));
+		stats["HitSpeed"] = Stat("HitSpeed", stat->GetNumber("HitSpeed"));
+		stats["HitSpeed"].SetMaxValue(stat->GetNumber("MaxHitSpeed"));
+	}
+
+	JSONfilepack::FreeJSON(stat);
+}
+
+
+void Leshen::OnTriggerEnter(ComponentCollider* collider)
+{
+	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
+		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
+		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
+		{
+			float dmg_received = player->attacks->GetCurrentDMG();
+			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+
+			player->OnHit(this, GetDamaged(dmg_received, player, knock));
+		}
+	}
 }

@@ -1,5 +1,4 @@
 #include "UI_Char_Frame.h"
-#include "../../Alien Engine/ComponentBar.h"
 
 UI_Char_Frame::UI_Char_Frame() : Alien()
 {
@@ -43,6 +42,10 @@ void UI_Char_Frame::Start()
 
 	lifebar = game_object->GetChild("Lifebar")->GetComponent<ComponentBar>();
 	mana_bar = game_object->GetChild("Mana")->GetComponent<ComponentBar>();
+	kill_count = game_object->GetChild("Killcount");
+	kill_count_number = kill_count->GetComponent<ComponentText>();
+	kill_count_number_X = kill_count->GetChild("x")->GetComponent<ComponentText>();
+	kill_count->SetEnable(false);
 }
 
 void UI_Char_Frame::Update()
@@ -80,6 +83,59 @@ void UI_Char_Frame::Update()
 		LowLifeGlow();
 	}
 
+	if (kill_count->IsEnabled())
+	{
+		float t = (Time::GetGameTime() - killcount_lerp_time) / killcount_time_to_lerp;
+		float lerp = 0.0f;
+
+		switch (kc_state)
+		{
+		case KILL_COUNT_STATE::FADING_IN:
+		{
+			lerp = Maths::Lerp(0.f, 1.0f, t);
+			break;
+		}
+		case KILL_COUNT_STATE::SHOWING:
+		{
+			lerp = 1;
+			break;
+		}
+		case KILL_COUNT_STATE::FADING_OUT:
+		{
+			lerp = Maths::Lerp(1.f, 0.0f, t);
+			break;
+		}
+		}
+
+		// Set text alpha
+		kill_count_number->SetAlpha(lerp);
+		kill_count_number_X->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			switch (kc_state)
+			{
+			case KILL_COUNT_STATE::FADING_IN:
+			{
+				kc_state = KILL_COUNT_STATE::SHOWING;
+				killcount_lerp_time = Time::GetGameTime() + 1.5f;
+				break;
+			}
+			case KILL_COUNT_STATE::SHOWING:
+			{
+				kc_state = KILL_COUNT_STATE::FADING_OUT;
+				killcount_lerp_time = Time::GetGameTime();
+				break;
+			}
+			case KILL_COUNT_STATE::FADING_OUT:
+			{
+				kill_count->SetEnable(false);
+				kc_state = KILL_COUNT_STATE::FADING_IN;
+				break;
+			}
+			}
+		}
+	}
 }
 
 // Bar Changes
@@ -128,33 +184,64 @@ void UI_Char_Frame::ManaChange(float mana_change, float max_mana)
 	}
 }
 
+void UI_Char_Frame::StartFadeKillCount(int new_kill_count)
+{
+	if (new_kill_count >= 10)
+	{
+		kill_count_number->SetText(std::to_string(new_kill_count).c_str());
+	}
+	else
+	{
+		std::string kills = "0" + std::to_string(new_kill_count);
+		kill_count_number->SetText(kills.c_str());
+	}
+
+	kill_count->SetEnable(true);
+
+	switch (kc_state)
+	{
+	case KILL_COUNT_STATE::FADING_IN:
+	{
+		if (((Time::GetGameTime() - killcount_lerp_time) / killcount_time_to_lerp) >= 1.f)
+		{
+			kill_count_number->SetAlpha(0);
+			kill_count_number_X->SetAlpha(0);
+			killcount_lerp_time = Time::GetGameTime();
+		}
+		break;
+	}
+	case KILL_COUNT_STATE::SHOWING:
+	{
+		killcount_lerp_time = Time::GetGameTime() + 1.5f;
+		break;
+	}
+	case KILL_COUNT_STATE::FADING_OUT:
+	{
+		kc_state = KILL_COUNT_STATE::FADING_IN;
+		killcount_lerp_time = Time::GetGameTime() - kill_count_number->current_color.a * killcount_time_to_lerp;
+		break;
+	}
+	}
+}
+
 // Effects
 void UI_Char_Frame::HitEffect(float lerp_time)
 {
-	float lerp_portrait = 0.0f;
+	//float lerp_portrait = 0.0f;
 	float lerp_life = 0.0f;
 
 	if (lerp_time <= 0.5f)
 	{
-		/*
-		lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time*2);
-		lerp_life = Maths::Lerp(1.0f, 0.575f, lerp_time*2);
-		*/
-
-		lerp_portrait = Maths::Lerp(1.0f, 0.f, lerp_time);
-		lerp_life = Maths::Lerp(1.0f, 0.150f, lerp_time);
+		//lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time * 2);
+		lerp_life = Maths::Lerp(1.0f, 0.575f, lerp_time * 2);
 	}
 	else
 	{
-		/*
-		lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time-0.5f)*2);
-		lerp_life = Maths::Lerp(0.575f, 1.0f, (lerp_time-0.5f)*2);
-		*/
-		lerp_portrait = Maths::Lerp(0.f, 1.0f, lerp_time);
-		lerp_life = Maths::Lerp(0.150f, 1.f, lerp_time);
+		//lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time - 0.5f) * 2);
+		lerp_life = Maths::Lerp(0.575f, 1.0f, (lerp_time - 0.5f) * 2);
 	}
 
-	portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
+	//portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
 	lifebar->SetBarColor(1.f, lerp_life, lerp_life, 1.f);
 }
 

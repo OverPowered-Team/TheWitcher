@@ -42,6 +42,8 @@ public:
 
 		float3 collider_position;
 		float3 collider_size;
+		float3 collider_rotation;
+		float3 particle_pos;
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
 		float max_distance_traveled = 0.0f;
@@ -49,6 +51,8 @@ public:
 		float snap_detection_range = 0.0f;
 		int shake = 0;
 		int activation_frame = 0;
+		float chain_range = 0;
+		std::string chain_particle = "";
 	};
 
 public:
@@ -131,6 +135,7 @@ public:
 protected:
 	void CreateAttacks();
 	void ConnectAttacks();
+	void SpawnChainParticle(float3 from, float3 to);
 	void DoAttack();
 	void AttackMovement();
 	void SelectAttack(AttackType attack);

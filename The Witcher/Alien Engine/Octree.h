@@ -33,7 +33,9 @@ private:
 	void Regrup();
 	void SaveGameObjects(std::vector<GameObject*>* to_save, AABB* new_section);
 	bool AddToChildren(GameObject* obj, const AABB& sect);
-	void SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
+	void SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* meshes_to_draw, std::vector<std::pair<float, GameObject*>>* meshes_to_draw_transparency, const ComponentCamera* camera);
+
+	void SetAllStaticObjects(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
 
 public:
 
@@ -70,7 +72,9 @@ public:
 	// create again the octree
 	void Recalculate(GameObject* new_object);
 
-	void SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, const ComponentCamera* camera);
+	void SetStaticDrawList(std::vector<std::pair<float, GameObject*>>* meshes_to_draw, std::vector<std::pair<float, GameObject*>>* meshes_to_draw_transparency, const ComponentCamera* camera);
+
+	void ShowAllStaticObjects(std::vector<GameObject*>* to_draw, const ComponentCamera* camera);
 
 	uint bucket = 2;
 	OctreeNode* root = nullptr;

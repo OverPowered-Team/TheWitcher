@@ -151,7 +151,7 @@ void PanelScene::PanelLogic()
 							prefab_parent = App->objects->GetRoot(false);
 						}
 						else {
-							prefab_parent = App->objects->GetRoot(true)->children.front();
+							prefab_parent = App->objects->GetRoot(true);
 						}
 					}
 					else {

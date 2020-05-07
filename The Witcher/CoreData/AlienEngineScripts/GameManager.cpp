@@ -4,6 +4,7 @@
 #include "DialogueManager.h"
 #include "PlayerManager.h"
 #include "RelicManager.h"
+#include "ParticlePool.h"
 #include "EffectsFactory.h"
 #include "RumblerManager.h"
 
@@ -27,6 +28,7 @@ void GameManager::Awake()
 	player_manager = game_object->GetComponent<PlayerManager>();
 	relic_manager = game_object->GetComponent<RelicManager>();
 	rumbler_manager = game_object->GetComponent<RumblerManager>();
+	particle_pool = game_object->GetComponent<ParticlePool>();
 }
 
 void GameManager::Start()

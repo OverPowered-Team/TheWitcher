@@ -31,7 +31,7 @@ void ComponentButton::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Height", size.y);
 
 	to_save->SetBoolean("Enabled", enabled);
-
+	to_save->SetNumber("Type", (int)type);
 	to_save->SetNumber("UIType", (int)ui_type);
 
 	to_save->SetColor("ColorCurrent", current_color);
@@ -191,27 +191,30 @@ void ComponentButton::LoadComponent(JSONArraypack* to_load)
 	click_event = to_load->GetString("ClickEvent", "none");
 	move_event = to_load->GetString("MoveEvent", "none");
 
-	idle_info.loop = to_load->GetBoolean("LoopIdle");
-	idle_info.speed = to_load->GetNumber("AnimSpeedIdle");
-	hover_info.loop = to_load->GetBoolean("LoopHover");
-	hover_info.speed = to_load->GetNumber("AnimSpeedHover");
-	clicked_info.loop = to_load->GetBoolean("LoopClicked");
-	clicked_info.speed = to_load->GetNumber("AnimSpeedClicked");
-	pressed_info.loop = to_load->GetBoolean("LoopPressed");
-	pressed_info.speed = to_load->GetNumber("AnimSpeedPressed");
-	disabled_info.loop = to_load->GetBoolean("LoopDisabled");
-	disabled_info.speed = to_load->GetNumber("AnimSpeedDisabled");
-
-	idle_info.loop = to_load->GetBoolean("LoopIdle");
-	idle_info.speed = to_load->GetNumber("AnimSpeedIdle");
-	hover_info.loop = to_load->GetBoolean("LoopHover");
-	hover_info.speed = to_load->GetNumber("AnimSpeedHover");
-	clicked_info.loop = to_load->GetBoolean("LoopClicked");
-	clicked_info.speed = to_load->GetNumber("AnimSpeedClicked");
-	pressed_info.loop = to_load->GetBoolean("LoopPressed");
-	pressed_info.speed = to_load->GetNumber("AnimSpeedPressed");
-	disabled_info.loop = to_load->GetBoolean("LoopDisabled");
-	disabled_info.speed = to_load->GetNumber("AnimSpeedDisabled");
+	try {
+		idle_info.loop = to_load->GetBoolean("LoopIdle");
+		idle_info.speed = to_load->GetNumber("AnimSpeedIdle");
+		hover_info.loop = to_load->GetBoolean("LoopHover");
+		hover_info.speed = to_load->GetNumber("AnimSpeedHover");
+		clicked_info.loop = to_load->GetBoolean("LoopClicked");
+		clicked_info.speed = to_load->GetNumber("AnimSpeedClicked");
+		pressed_info.loop = to_load->GetBoolean("LoopPressed");
+		pressed_info.speed = to_load->GetNumber("AnimSpeedPressed");
+		disabled_info.loop = to_load->GetBoolean("LoopDisabled");
+		disabled_info.speed = to_load->GetNumber("AnimSpeedDisabled");
+	}
+	catch (...) {
+		idle_info.loop = true;
+		idle_info.speed = 1.0f;
+		hover_info.loop = true;
+		hover_info.speed = 1.0f;
+		clicked_info.loop = true;
+		clicked_info.speed = 1.0f;
+		pressed_info.loop = true;
+		pressed_info.speed = 1.0f;
+		disabled_info.loop = true;
+		disabled_info.speed = 1.0f;
+	}
 
 	//-----------------------------------------------------------
 
@@ -1743,6 +1746,7 @@ void ComponentButton::Draw(bool isGame)
 		{
 			SetSize(tex->width, tex->height);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, tex->id);
 		}
 	}
@@ -1802,6 +1806,7 @@ void ComponentButton::Draw(bool isGame)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 

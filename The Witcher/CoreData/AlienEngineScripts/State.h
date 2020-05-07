@@ -7,7 +7,6 @@ enum (StateType,
 	ATTACKING,
 	JUMPING,
 	ROLLING,
-	CASTING,
 	DEAD,
 	REVIVING,
 	HIT,
@@ -29,7 +28,14 @@ public:
 	virtual State* OnAnimationEnd(PlayerController* player, const char* name) { return nullptr; }
 };
 
-class IdleState : public State
+class GroundState : public State
+{
+public:
+	GroundState() {}
+	State* HandleInput(PlayerController* player) override;
+};
+
+class IdleState : public GroundState
 {
 public:
 	IdleState() { type = StateType::IDLE; }
@@ -39,7 +45,7 @@ public:
 	void OnExit(PlayerController* player) override;
 };
 
-class RunningState : public State
+class RunningState : public GroundState
 {
 public:
 	RunningState() { type = StateType::RUNNING; }
@@ -75,17 +81,6 @@ class AttackingState : public State
 public:
 	AttackingState() { type = StateType::ATTACKING; }
 	State* HandleInput(PlayerController* player) override;
-	void Update(PlayerController* player) override;
-	State* OnAnimationEnd(PlayerController* player, const char* name) override;
-	void OnEnter(PlayerController* player) override;
-	void OnExit(PlayerController* player) override;
-};
-
-class CastingState : public State
-{
-public:
-	CastingState() { type = StateType::CASTING; }
-	//State* HandleInput(PlayerController* player) override;
 	void Update(PlayerController* player) override;
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
 	void OnEnter(PlayerController* player) override;
