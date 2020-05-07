@@ -40,7 +40,7 @@ void InGame_UI::Update()
 		PauseMenu(!Time::IsGamePaused());
 	}
 
-	/*if (checkpoint_saved_text->IsEnabled())
+	if (checkpoint_saved_text->IsEnabled())
 	{
 		float t = (Time::GetGameTime() - time_checkpoint) / 0.5f;
 		float lerp = 0.0f;
@@ -89,7 +89,7 @@ void InGame_UI::Update()
 			}
 			}
 		}
-	}*/
+	}
 
 	if (died)
 	{
