@@ -57,6 +57,11 @@ void Drowned::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
+void Drowned::CleanUpEnemy()
+{
+	ReleaseAllParticles();
+}
+
 float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float damage = Enemy::GetDamaged(dmg, player);
