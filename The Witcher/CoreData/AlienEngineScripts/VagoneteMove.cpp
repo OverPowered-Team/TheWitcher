@@ -1,6 +1,7 @@
 #include "VagoneteMove.h"
 #include "VagoneteDirection.h"
 #include "Wagonnete_UI.h"
+#include "VagoneteObstacle.h"
 
 Quat VagoneteInputs::playerRotation = Quat::identity();
 float VagoneteInputs::inclination4player = 0.0F;
@@ -77,12 +78,33 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		for (auto item = players.begin(); item != players.end(); ++item) {
 			if ((*item)->state != VagoneteInputs::State::COVER) 
 			{
-				vagonete_life -= 20;
-				HUD->UpdateLifebar(vagonete_life, max_life);
+				DecreaseLife();
 			}
 		}
 	}
 	else if (strcmp("VagoneteDie", col->game_object_attached->GetTag()) == 0) {
+		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+	}
+	else if (strcmp("VagoneteObstacle", col->game_object_attached->GetTag()) == 0) {
+		if (col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
+			if (VagoneteInputs::globalInclination >= -35) {
+				DecreaseLife();
+			}
+		}
+		else {
+			if (VagoneteInputs::globalInclination <= 35) {
+				DecreaseLife();
+			}
+		}
+	}
+}
+
+void VagoneteMove::DecreaseLife()
+{
+	vagonete_life -= 20;
+	HUD->UpdateLifebar(vagonete_life, max_life);
+
+	if (vagonete_life <= 0) {
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
 	}
 }
