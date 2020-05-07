@@ -11,7 +11,7 @@ MusicController::~MusicController()
 
 void MusicController::Awake()
 {
-	emitter = this->GetComponent<ComponentAudioEmitter>();
+	emitter = this->GetComponent<ComponentAudioEmitter>(); //Its ugly I know
 	emitter->StartSound("Play_Bad_News_Ahead");
 	emitter->StartSound("Play_Combat_Music");
 	emitter->StartSound("Play_KaerMorhen");
@@ -31,7 +31,7 @@ void MusicController::Start()
 
 void MusicController::Update()
 {
-	if (is_combat)
+	if (is_combat) // This should be done better with a switch about enemy types
 	{
 		if (has_changed && enemies_in_sight.size() == 1) {
 			if ((*enemies_in_sight.begin())->game_object->GetComponent<Enemy>()->type == EnemyType::LESHEN)
@@ -47,7 +47,7 @@ void MusicController::Update()
 	}
 	else if (!is_combat && has_changed && enemies_in_sight.size() <= 0)
 	{
-		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str());
+		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str()); //CASE OF AFTER BOSS KILLING
 		has_changed = !has_changed;
 		already_minium = false;
 		to_normal_rtpc = true;

@@ -127,7 +127,7 @@ std::string TriggerEnvironment::GetAudioElementByEnum(AudioEffects eff)
 		return name = "Play_Forest";
 		break;
 	case AudioEffects::BIRDS:
-		return name = "Play_Bird";
+		return name = "Play_Birds";
 		break;
 	case AudioEffects::CROWS:
 		return name = "Play_Crows";
@@ -241,6 +241,7 @@ void TriggerEnvironment::PlayEnvironment()
 		{
 			if (iter->spatial_movement && Time::GetGameTime() - iter->timer_play >= iter->time_to_play && iter->spatial_place.el_emitter != nullptr)
 			{
+				LOG("AHORITA");
 				iter->spatial_place.el_emitter->StartSound(iter->event_name.c_str());
 				iter->timer_play = Time::GetGameTime();
 				iter->time_to_play = Random::GetRandomFloatBetweenTwo(iter->min_time_between_plays, iter->max_time_between_plays);
