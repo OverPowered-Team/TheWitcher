@@ -1746,6 +1746,7 @@ void ComponentButton::Draw(bool isGame)
 		{
 			SetSize(tex->width, tex->height);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, tex->id);
 		}
 	}
@@ -1805,6 +1806,7 @@ void ComponentButton::Draw(bool isGame)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 

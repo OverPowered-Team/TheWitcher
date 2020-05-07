@@ -188,6 +188,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = flat_modifiers->GetString("identifier");
 					mod.amount = flat_modifiers->GetNumber("value");
 					_effect->additive_modifiers.push_back(mod);
+					flat_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -201,6 +202,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = mult_modifiers->GetString("identifier");
 					mod.amount = mult_modifiers->GetNumber("value");
 					_effect->multiplicative_modifiers.push_back(mod);
+					mult_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -223,6 +225,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = flat_modifiers->GetString("identifier");
 					mod.amount = flat_modifiers->GetNumber("value");
 					_effect->additive_modifiers.push_back(mod);
+					flat_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -236,6 +239,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = mult_modifiers->GetString("identifier");
 					mod.amount = mult_modifiers->GetNumber("value");
 					_effect->multiplicative_modifiers.push_back(mod);
+					mult_modifiers->GetAnotherNode();
 				}
 			}
 
