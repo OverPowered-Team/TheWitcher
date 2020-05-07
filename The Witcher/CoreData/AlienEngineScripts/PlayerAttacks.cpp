@@ -60,6 +60,7 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 	{
 		if (current_attack)
 		{
+			player_controller->ReleaseAttackParticle();
 			//take the links of the attack we were doing so we can continue the combo after the spell.
 			spells[spell_index]->heavy_attack_link = current_attack->heavy_attack_link;
 			spells[spell_index]->light_attack_link = current_attack->light_attack_link;
@@ -107,11 +108,12 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
-		player_controller->ReleaseAttackParticle();
 		if (next_attack == AttackType::SPELL)
 			StartSpell(next_spell);
 		else
 			StartAttack(next_attack);
+		
+		next_attack = AttackType::NONE;
 	}
 }
 
@@ -143,6 +145,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 	else
 	{
+		player_controller->ReleaseAttackParticle();
 		if (attack == AttackType::LIGHT)
 		{
 			if (current_attack->light_attack_link)

@@ -275,6 +275,7 @@ State* AttackingState::HandleInput(PlayerController* player)
 	if ((Input::GetControllerButtonDown(player->controller_index, player->controller_jump)
 		|| Input::GetKeyDown(player->keyboard_jump)) && player->attacks->CanBeInterrupted() && player->controller->isGrounded) {
 		player->Jump();
+		return new JumpingState();
 	}
 
 	return nullptr;
