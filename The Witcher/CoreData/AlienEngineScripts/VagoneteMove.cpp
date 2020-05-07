@@ -48,6 +48,14 @@ void VagoneteMove::Update()
 	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
 		actual_pos = 0;
 	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_5)) {
+		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+	}
+
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_6)) {
+		SceneManager::LoadScene("Level_Mahakam_Deepnest");
+	}
 }
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
