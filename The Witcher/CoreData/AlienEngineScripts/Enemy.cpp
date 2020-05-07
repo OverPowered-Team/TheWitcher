@@ -320,6 +320,9 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, flo
 	parent = parent != nullptr ? parent : this->game_object;
 	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
+	if (new_particle == nullptr)
+		return;
+
 	particles.push_back(new_particle);
 }
 
@@ -336,6 +339,15 @@ void Enemy::ReleaseParticle(std::string particle_name)
 			particles.erase(it);
 			return;
 		}
+	}
+}
+
+void Enemy::ReleaseAllParticles()
+{
+	for (auto it = particles.begin(); it != particles.end();)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance((*it)->GetName(), (*it));
+		it = particles.erase(it);
 	}
 }
 	

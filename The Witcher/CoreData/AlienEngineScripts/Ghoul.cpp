@@ -57,6 +57,7 @@ void Ghoul::SetStats(const char* json)
 
 void Ghoul::CleanUpEnemy()
 {
+    ReleaseAllParticles();
 }
 
 void Ghoul::JumpImpulse()
