@@ -71,7 +71,7 @@ bool ComponentCanvas::DrawInspector()
 		{
 			ImGui::Text("BillBoard Type");
 			ImGui::SameLine();
-			static int type = 0;
+			int type = (int)bbtype;
 			ImGui::Combo("##BillBoardType", &type, "Screen\0World\0Axis\0");
 			switch (BillboardType(type))
 			{

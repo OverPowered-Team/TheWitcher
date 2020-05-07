@@ -220,7 +220,7 @@ bool ComponentBar::DrawInspector()
 
 		ImGui::Text("Scissoring Type");
 		ImGui::SameLine(150);
-		static int type = 0;
+		int type = (int)scType;
 		ImGui::Combo("##ScissorType", &type, "Right to left\0Left to right\0Center\0");
 		switch (SCISSOR_TYPE(type))
 		{
@@ -322,25 +322,48 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 			switch (scType)
 			{
 			case SCISSOR_TYPE::RIGHT_TO_LEFT: {
+#ifndef GAME_VERSION
 				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + offsetX,
 					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F),
 					((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
 					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F));
+#else
+				glScissor(x - (matrix[0][0] * App->window->width) + offsetX,
+					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F),
+					((x + (matrix[0][0] * App->window->width)) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
+					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F));
+#endif		
 				break; }
 
 			case SCISSOR_TYPE::LEFT_TO_RIGHT: {
+#ifndef GAME_VERSION
 				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor)),
 					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F),
 					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor,
 					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F));
+#else
+				glScissor(x - (matrix[0][0] * App->window->width) + (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor)),
+					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F),
+					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor,
+					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F));
+#endif	
 				break; }
 
 			case SCISSOR_TYPE::CENTER: {
-				glScissor(x - (((x + (matrix[0][0] * App->ui->panel_game->width)-offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
+#ifndef GAME_VERSION
+				glScissor(x - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
 					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F),
-					((x + (matrix[0][0] * App->ui->panel_game->width)-offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
+					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
 					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->ui->panel_game->height) * 0.5F));
+				
+#else
+				glScissor(x - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
+					y - ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F),
+					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
+					y + ((transform->global_transformation[1][1] / (canvas->height * 0.5F) * App->window->height) * 0.5F));
+#endif	
 				break; }
+
 			default: {
 				break; }
 			}
@@ -352,12 +375,12 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 	
 
 	if (tex != nullptr) {
-		glAlphaFunc(GL_GREATER, 0.0f);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex->id);
 	}
 
-	if(tex == texture)
+	if(!draw_bar)
 		glColor4f(current_color.r, current_color.g, current_color.b, current_color.a);
 	else
 		glColor4f(bar_color.r, bar_color.g, bar_color.b, bar_color.a);
@@ -412,6 +435,7 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 
@@ -534,7 +558,6 @@ void ComponentBar::SetSize(float width, float height)
 	vertices[3] = { halfWidth, halfHeight, 0 };
 
 	UpdateVertex();
-	LOG_ENGINE("Sorry, I'm cutre");
 }
 
 void ComponentBar::CalculateFactor()
