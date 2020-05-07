@@ -46,6 +46,7 @@
 #include "ComponentCollider.h"
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
+#include "ComponentMeshCollider.h"
 #include "ComponentCapsuleCollider.h"
 #include "ComponentConvexHullCollider.h"
 #include "ComponentRigidBody.h"
@@ -676,6 +677,10 @@ void PanelInspector::ButtonAddComponent()
 				case ComponentType::CAPSULE_COLLIDER: {
 						comp = new ComponentCapsuleCollider(selected);
 						selected->AddComponent(comp);
+					break; }
+				case ComponentType::MESH_COLLIDER: {
+					comp = new ComponentMeshCollider(selected);
+					selected->AddComponent(comp);
 					break; }
 				case ComponentType::CONVEX_HULL_COLLIDER: {
 						comp = new ComponentConvexHullCollider(selected);

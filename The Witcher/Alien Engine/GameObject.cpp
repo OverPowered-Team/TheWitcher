@@ -43,13 +43,15 @@
 
 #include "ComponentBoxCollider.h"
 #include "ComponentSphereCollider.h"
+#include "ComponentCapsuleCollider.h"
+#include "ComponentMeshCollider.h"
+#include "ComponentConvexHullCollider.h"
+#include "ComponentCharacterController.h"
+#include "ComponentRigidBody.h"
+
 #include "ModuleUI.h"
 #include "PanelScene.h"
 #include "Alien.h"
-#include "ComponentCapsuleCollider.h"
-#include "ComponentConvexHullCollider.h"
-#include "ComponentRigidBody.h"
-#include "ComponentCharacterController.h"
 
 #include "Optick/include/optick.h"
 
@@ -1264,6 +1266,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				ComponentCapsuleCollider* capsule_collider = new ComponentCapsuleCollider(this);
 				capsule_collider->LoadComponent(components_to_load);
 				AddComponent(capsule_collider);
+				break; }
+			case (int)ComponentType::MESH_COLLIDER: {
+				ComponentMeshCollider* mesh_collider = new ComponentMeshCollider(this);
+				mesh_collider->LoadComponent(components_to_load);
+				AddComponent(mesh_collider);
 				break; }
 			case (int)ComponentType::CONVEX_HULL_COLLIDER: {
 				ComponentConvexHullCollider* convex_hull_collider = new ComponentConvexHullCollider(this);
