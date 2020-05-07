@@ -130,7 +130,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, transform->GetGlobalPosition());
+	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z));
 	if (player_rooted[0]) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
