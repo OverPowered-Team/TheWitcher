@@ -3,6 +3,7 @@
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "CiriFightController.h"
+#include "Scores_Data.h"
 
 CiriFightController::CiriFightController() : Alien()
 {
@@ -100,6 +101,9 @@ void CiriFightController::FinishPhaseThree()
 
 void CiriFightController::FinishPhaseFour()
 {
+	Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+	Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 	Destroy(game_object);
 }
 
