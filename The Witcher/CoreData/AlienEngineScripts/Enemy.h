@@ -13,9 +13,11 @@ enum (EnemyType,
 	NONE = -1,
 	GHOUL,
 	NILFGAARD_SOLDIER,
+	LESHEN,
+	CIRI,
+	CIRI_CLONE,
 	DROWNED,
 	SHAELMAR,
-	LESHEN,
 	BLOCKER_OBSTACLE
 	);
 
@@ -39,6 +41,7 @@ public:
 	virtual void Action() {}
 	void ActivateCollider();
 	void DeactivateCollider();
+	Quat RotateProjectile();
 
 	virtual void Stun(float time) {};
 	virtual void KnockBack(float3 knock);
@@ -49,19 +52,23 @@ public:
 	virtual void OnDeathHit() {}
 
 	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
+	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero());
 	void AddEffect(Effect* new_effect);
 	void RemoveEffect(Effect* _effect);
 
 	void HitFreeze(float freeze_time);
+	void SpawnAttackParticle();
 	void StopHitFreeze(float speed);
-	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 	void ReleaseParticle(std::string particle_name);
+	void ReleaseAllParticles();
 
 public:
 	float distance = 0.0F;
 	float3 direction;
 	float3 velocity = float3::zero();
 	float knock_slow = -4.2f;
+	float increase_hit_animation = 1.0f;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;

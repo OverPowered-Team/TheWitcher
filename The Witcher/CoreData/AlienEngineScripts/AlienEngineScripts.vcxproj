@@ -176,6 +176,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArrowScript.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="BlockerObstacle.h" />
     <ClInclude Include="Bonfire.h" />
     <ClInclude Include="BreakableObject.h" />
@@ -184,9 +185,13 @@
     <ClInclude Include="CameraMovement.h" />
     <ClInclude Include="CameraShake.h" />
     <ClInclude Include="CameraUltiMode.h" />
-    <ClInclude Include="CloudLeshen.h" />
+    <ClInclude Include="Ciri.h" />
+    <ClInclude Include="CiriFightController.h" />
+    <ClInclude Include="CiriOriginal.h" />
+    <ClInclude Include="Credits.h" />
     <ClInclude Include="CrowsLeshen.h" />
     <ClInclude Include="DashCollider.h" />
+    <ClInclude Include="DrownedGrab.h" />
     <ClInclude Include="Dummie.h" />
     <ClInclude Include="EffectsFactory.h" />
     <ClInclude Include="Drowned.h" />
@@ -198,6 +203,7 @@
     <ClInclude Include="CheckPoints_Manager.h" />
     <ClInclude Include="FadeImages.h" />
     <ClInclude Include="Ghoul.h" />
+    <ClInclude Include="MeleeLeshen.h" />
     <ClInclude Include="MiniGame_Revive.h" />
     <ClInclude Include="MoveImages.h" />
     <ClInclude Include="MusicController.h" />
@@ -235,11 +241,14 @@
     <ClInclude Include="Macros\AlienScripts.h" />
     <ClInclude Include="RockDownHill.h" />
     <ClInclude Include="RockFall.h" />
+    <ClInclude Include="RockThrow.h" />
     <ClInclude Include="RootLeshen.h" />
     <ClInclude Include="RockSpawner.h" />
     <ClInclude Include="Scale_Win.h" />
     <ClInclude Include="Scores_Data.h" />
     <ClInclude Include="EffectArea.h" />
+    <ClInclude Include="SpawnEnemy.h" />
+    <ClInclude Include="SpawnEnemyManager.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="RumblerManager.h" />
     <ClInclude Include="Stat.h" />
@@ -252,14 +261,21 @@
     <ClInclude Include="Trigger_Win.h" />
     <ClInclude Include="UI_Char_Frame.h" />
     <ClInclude Include="UI_EndMenu.h" />
+    <ClInclude Include="UI_Ultibar_Particle.h" />
     <ClInclude Include="UltiBar.h" />
     <ClInclude Include="TriggerAudioEvent.h" />
     <ClInclude Include="TriggerCamera.h" />
     <ClInclude Include="TriggerEnvironment.h" />
     <ClInclude Include="TriggerFootsteps.h" />
+    <ClInclude Include="VagoneteCover.h" />
+    <ClInclude Include="VagoneteDirection.h" />
+    <ClInclude Include="VagoneteMove.h" />
+    <ClInclude Include="VagoneteObstacle.h" />
+    <ClInclude Include="Wagonnete_UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrowScript.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BlockerObstacle.cpp" />
     <ClCompile Include="Bonfire.cpp" />
     <ClCompile Include="BreakableObject.cpp" />
@@ -268,9 +284,13 @@
     <ClCompile Include="CameraMovement.cpp" />
     <ClCompile Include="CameraShake.cpp" />
     <ClCompile Include="CameraUltiMode.cpp" />
-    <ClCompile Include="CloudLeshen.cpp" />
+    <ClCompile Include="Ciri.cpp" />
+    <ClCompile Include="CiriFightController.cpp" />
+    <ClCompile Include="CiriOriginal.cpp" />
+    <ClCompile Include="Credits.cpp" />
     <ClCompile Include="CrowsLeshen.cpp" />
     <ClCompile Include="DashCollider.cpp" />
+    <ClCompile Include="DrownedGrab.cpp" />
     <ClCompile Include="Dummie.cpp" />
     <ClCompile Include="EffectsFactory.cpp" />
     <ClCompile Include="Drowned.cpp" />
@@ -319,10 +339,13 @@
     <ClCompile Include="Macros\dllmain.cpp" />
     <ClCompile Include="RockDownHill.cpp" />
     <ClCompile Include="RockFall.cpp" />
+    <ClCompile Include="RockThrow.cpp" />
     <ClCompile Include="RootLeshen.cpp" />
     <ClCompile Include="RockSpawner.cpp" />
     <ClCompile Include="Scale_Win.cpp" />
     <ClCompile Include="EffectArea.cpp" />
+    <ClCompile Include="SpawnEnemy.cpp" />
+    <ClCompile Include="SpawnEnemyManager.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="RumblerManager.cpp" />
     <ClCompile Include="Stat.cpp" />
@@ -335,11 +358,17 @@
     <ClCompile Include="Trigger_Win.cpp" />
     <ClCompile Include="UI_Char_Frame.cpp" />
     <ClCompile Include="UI_EndMenu.cpp" />
+    <ClCompile Include="UI_Ultibar_Particle.cpp" />
     <ClCompile Include="UltiBar.cpp" />
     <ClCompile Include="TriggerAudioEvent.cpp" />
     <ClCompile Include="TriggerCamera.cpp" />
     <ClCompile Include="TriggerEnvironment.cpp" />
     <ClCompile Include="TriggerFootsteps.cpp" />
+    <ClCompile Include="VagoneteCover.cpp" />
+    <ClCompile Include="VagoneteDirection.cpp" />
+    <ClCompile Include="VagoneteMove.cpp" />
+    <ClCompile Include="VagoneteObstacle.cpp" />
+    <ClCompile Include="Wagonnete_UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -43,6 +43,7 @@ enum class ComponentType {
 	SCRIPT = 29,
 	UI = 30,
 	CURVE = 31,
+	MESH_COLLIDER = 32,
 
 	MAX //LAST LAST LAST
 };
@@ -102,8 +103,8 @@ protected:
 	virtual void Update() {}
 	virtual void PostUpdate() {}
 
-	virtual void DrawScene(ComponentCamera* camera) {}
-	virtual void DrawGame(ComponentCamera* camera) {}
+	virtual void DrawScene() {}
+	virtual void DrawGame() {}
 
 	virtual void ResetIDs();
 

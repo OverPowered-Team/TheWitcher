@@ -22,8 +22,8 @@ struct TransitionInfo
 	TransitionInfo(GameObject* to_move, float transition_time)
 		: to_move(to_move), transition_time(transition_time), type(ToTransitionType::STATIC)
 	{}
-	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, ToAxisType type)
-		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), axis_type(type), type(ToTransitionType::AXIS)
+	TransitionInfo(GameObject* to_move, float transition_time, ToAxisType type)
+		: to_move(to_move), transition_time(transition_time), axis_type(type), type(ToTransitionType::AXIS)
 	{};
 
 	float distance = 0.f;
@@ -46,12 +46,12 @@ public:
 	TriggerCamera();
 	virtual ~TriggerCamera();
 	void Start() override;
-	void StartTransition(TransitionInfo transition_info);
+	void StartTransition(const TransitionInfo& transition_info);
 	
 	void RegisterMovement(int playerNum, int collider_position);
 	bool PlayerMovedForward(int player_num);
 	bool PlayerMovedBackward(int player_num);
-	void VisualizeCameraTransition(TransitionInfo transition_info, Color color);
+	void VisualizeCameraTransition(const TransitionInfo& transition_info, Color color);
 
 	void OnDrawGizmos() override;
 
@@ -73,7 +73,7 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->prev_camera.hor_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->prev_camera.vert_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->prev_camera.transition_time);
-	SHOW_TEXT("If Static");
+	SHOW_TEXT("If Static & Axis");
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->prev_camera.to_move);
 	SHOW_TEXT("If Axis");
 	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->prev_camera.axis_type);
@@ -86,7 +86,7 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera.hor_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->next_camera.vert_angle, -360.f, 360.f);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->next_camera.transition_time);
-	SHOW_TEXT("If Static");
+	SHOW_TEXT("If Static & Axis");
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->next_camera.to_move);
 	SHOW_TEXT("If Axis");
 	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->next_camera.axis_type);

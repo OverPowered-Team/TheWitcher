@@ -99,7 +99,7 @@ public:
 	void HitFreeze(float freeze_time);
 	void RemoveFreeze(float speed);
 
-	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, GameObject* parent = nullptr);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 
 	void ReleaseParticle(std::string particle_name);
 
@@ -119,6 +119,7 @@ public:
 	std::vector<GameObject*> particle_spawn_positions;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
+	ComponentAudioEmitter* audio = nullptr;
 
 	float2 movement_input;
 
@@ -158,7 +159,10 @@ public:
 	SDL_Scancode keyboard_dash;
 	SDL_Scancode keyboard_light_attack;
 	SDL_Scancode keyboard_heavy_attack;
-	SDL_Scancode keyboard_spell;
+	SDL_Scancode keyboard_spell_1;
+	SDL_Scancode keyboard_spell_2;
+	SDL_Scancode keyboard_spell_3;
+	SDL_Scancode keyboard_spell_4;
 	SDL_Scancode keyboard_revive;
 	SDL_Scancode keyboard_ultimate;
 
@@ -176,7 +180,6 @@ private:
 	float angle = 0.0f;
 	float timer = 0.f;
 
-	ComponentAudioEmitter* audio = nullptr;
 	ComponentCamera* camera = nullptr;
 
 	CameraShake* shake = nullptr;

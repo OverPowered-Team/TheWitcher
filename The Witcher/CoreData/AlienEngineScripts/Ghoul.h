@@ -43,7 +43,7 @@ public:
 
 	void CheckDistance();
 	
-	float GetDamaged(float dmg, PlayerController* player);
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
@@ -52,6 +52,7 @@ public:
 public:
 	GhoulState state = GhoulState::NONE;
 	GhoulType ghoul_type = GhoulType::NONE;
+	MusicController* m_controller = nullptr;
 };
 
 

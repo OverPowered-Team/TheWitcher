@@ -1,6 +1,7 @@
 #include "GhoulOriginal.h"
 #include "PlayerController.h"
 #include "EnemyManager.h"
+#include "MusicController.h"
 
 GhoulOriginal::GhoulOriginal() : Ghoul()
 {
@@ -23,6 +24,10 @@ void GhoulOriginal::UpdateEnemy()
     case GhoulState::MOVE:
         Move(direction);
         break;
+    case GhoulState::HIT:
+        velocity += velocity * knock_slow * Time::GetDT();
+        character_ctrl->Move(velocity * Time::GetDT());
+        break;
     case GhoulState::JUMP:
         JumpImpulse();
         break;
@@ -41,6 +46,11 @@ void GhoulOriginal::UpdateEnemy()
         audio_emitter->StartSound("GhoulDeath");
         last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
+        if (m_controller && is_combat)
+        {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
         break;
     }
     }

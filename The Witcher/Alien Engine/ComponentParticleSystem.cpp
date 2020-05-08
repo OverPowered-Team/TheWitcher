@@ -24,6 +24,10 @@ ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component
 
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentParticleSystem::DrawScene, this));
+#endif // !GAME_VERSION
+
 }
 
 ComponentParticleSystem::~ComponentParticleSystem()
@@ -45,6 +49,10 @@ ComponentParticleSystem::~ComponentParticleSystem()
 	
 	/*if (material != nullptr)
 		material = nullptr;*/
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 void ComponentParticleSystem::OnPlay()
@@ -98,22 +106,34 @@ void ComponentParticleSystem::PostUpdate()
 		particleSystem->PostUpdate(Time::GetCurrentDT());
 }
 
-void ComponentParticleSystem::DrawScene(ComponentCamera* camera)
+void ComponentParticleSystem::DrawScene()
 {
 	OPTICK_EVENT();
 
 	if (game_object_attached->selected)
 	{
-		Draw();
 		DebugDraw();
 	}
 }
 
-void ComponentParticleSystem::DrawGame(ComponentCamera* camera)
+void ComponentParticleSystem::DrawGame()
 {
 	OPTICK_EVENT();
 
+#ifndef GAME_VERSION
+	if (App->objects->printing_scene)
+	{
+		if(game_object_attached->selected)
+			Draw();
+	}
+	else 
+		Draw();
+#else
+
 	Draw();
+
+#endif
+
 }
 
 void ComponentParticleSystem::DebugDraw()
@@ -1316,7 +1336,7 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	}
 	catch (...)
 	{
-		particleSystem->particleInfo.size3D = float3(1.f, 0.f, 0.f);
+		particleSystem->particleInfo.size3D = float3(1.f, 1.f, 1.f);
 	}
 	// LightColor
 	particleSystem->particleInfo.lightColor = to_load->GetFloat4("Start.LightColor");
@@ -1355,11 +1375,11 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->endInfo.size = to_load->GetNumber("End.Size");
 	try {
 		// Size 3D
-		particleSystem->particleInfo.size3D = to_load->GetFloat3("Start.Size3D");
+		particleSystem->endInfo.size3D = to_load->GetFloat3("End.Size3D");
 	}
 	catch (...)
 	{
-		particleSystem->particleInfo.size3D = float3(1.f, 0.f, 0.f);
+		particleSystem->endInfo.size3D = float3(1.f, 1.f, 1.f);
 	}
 	// LightColor
 	particleSystem->endInfo.lightColor = to_load->GetFloat4("End.LightColor");

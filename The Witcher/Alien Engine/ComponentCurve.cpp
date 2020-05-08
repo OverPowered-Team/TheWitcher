@@ -10,16 +10,24 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleObjects.h"
 
 ComponentCurve::ComponentCurve(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::CURVE;
 
 	curve = Curve(float3{ -10,0,0 }, float3{ 10,0,0 }, game_object_attached->transform->GetGlobalPosition());
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCurve::DrawScene, this));
+#endif
 }
 
 ComponentCurve::~ComponentCurve()
 {
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif
 }
 
 void ComponentCurve::UpdatePosition(const float3& new_position)
@@ -249,7 +257,7 @@ void ComponentCurve::LoadComponent(JSONArraypack* to_load)
 	curve.SetPoints(control_points, control_points_normals);
 }
 
-void ComponentCurve::DrawScene(ComponentCamera* camera)
+void ComponentCurve::DrawScene()
 {
 	if (!game_object_attached->IsSelected() && renderOnSelected) {
 		return;
@@ -330,28 +338,37 @@ Curve::Curve(const float3& begin, const float3& end, const float3& position)
 
 	control_points_normals.push_back(float3::unitY());
 	control_points_normals.push_back(float3::unitY());
-
-	CalculateCurvePoints();
 }
 
 float3 Curve::ValueAt(float at)
 {
-	if (at < 0 || at > 1 || curve_points.empty() || control_points.empty()) {
-		return float3::zero();
+	at = Clamp01<float>(at);
+
+	if (at == 0) {
+		return control_points.front();
+	}
+	else if (at == 1) {
+		return control_points.back();
 	}
 
-	uint index = Maths::Map(at, 0, 1, 0, curve_points.size() - 1);
-	return curve_points[index];
+	int num_segments = (control_points.size() - 1) / 3;
+	float ratio_segments = 1 / (float)num_segments;
+	int current_segment = at / ratio_segments + 1;
+	int indexControl = (current_segment - 1) * 3;
+	
+	float time = Maths::Map(at, ratio_segments * (current_segment - 1), ratio_segments * current_segment, 0.0F, 1.0F);
+
+	return CubicCurve(control_points[indexControl], control_points[indexControl + 1], 
+		control_points[indexControl + 2], control_points[indexControl + 3], time);
 }
 
 float3 Curve::NormalAt(float at)
 {
-	if (at < 0 || at > 1 || curve_points.empty() || control_points.empty() || curve_normals.empty()) {
-		return float3::zero();
-	}
+	at = Clamp01<float>(at);
 
-	uint index = Maths::Map(at, 0, 1, 0, curve_normals.size() - 1);
-	return curve_normals[index];
+	/*uint index = Maths::Map(at, 0, 1, 0, curve_normals.size() - 1);*/
+	//return curve_normals[index];
+	return { 0,1,0 };
 }
 
 const std::vector<float3>& Curve::GetControlPoints()
@@ -367,19 +384,16 @@ const std::vector<float3>& Curve::GetControlPointsNormals()
 void Curve::SetControlPointAt(int index, const float3& value)
 {
 	control_points[index] = value;
-	Refresh();
 }
 
 void Curve::SetControlPointNormalAt(int index, const float3& value)
 {
 	control_points_normals[index] = value;
-	Refresh();
 }
 
 void Curve::SetDetail(int detail)
 {
 	this->detail = detail;
-	Refresh();
 }
 
 void Curve::AddSegment(bool begin)
@@ -410,8 +424,6 @@ void Curve::AddSegment(bool begin)
 
 		control_points_normals.push_back(float3::unitY());
 	}
-
-	Refresh();
 }
 
 void Curve::InsertControlPoint(int index)
@@ -431,8 +443,6 @@ void Curve::InsertControlPoint(int index)
 	control_points_normals.insert(control_points_normals.begin() + (index/3) + 1, float3::unitY());
 
 	control_points.insert(control_points.begin() + index + 2, points.begin(), points.end());
-
-	Refresh();
 }
 
 void Curve::RemoveControlPoint(int index)
@@ -458,8 +468,6 @@ void Curve::RemoveControlPoint(int index)
 		control_points.erase(control_points.begin() + index);
 		control_points.erase(control_points.begin() + index);
 	}
-
-	Refresh();
 }
 
 void Curve::UpdatePosition(const float3& new_position)
@@ -470,8 +478,6 @@ void Curve::UpdatePosition(const float3& new_position)
 	for (auto item = control_points.begin(); item != control_points.end(); ++item) {
 		(*item) += difference;
 	}
-
-	Refresh();
 }
 
 void Curve::SetPoints(const std::vector<float3>& controlPoints, const std::vector<float3>& normalPoints)
@@ -481,33 +487,20 @@ void Curve::SetPoints(const std::vector<float3>& controlPoints, const std::vecto
 
 	control_points.assign(controlPoints.begin(), controlPoints.end());
 	control_points_normals.assign(normalPoints.begin(), normalPoints.end());
-
-	Refresh();
 }
 
-void Curve::Refresh()
+float3 Curve::QuadraticCurve(const float3& a, const float3& b, const float3& c, float t)
 {
-	curve_points.clear();
-	curve_normals.clear();
+	float3 p0 = Lerp(a, b, t);
+	float3 p1 = Lerp(b, c, t);
 
-	CalculateCurvePoints();
+	return Lerp(p0, p1, t);
 }
 
-void Curve::CalculateCurvePoints()
+float3 Curve::CubicCurve(const float3& a, const float3& b, const float3& c, const float3& d, float t)
 {
-	for (uint i = 0; i < control_points.size() - 1; i += 3) {
-		for (int f = 0; f <= detail; ++f) {
-			curve_points.push_back(CalculateBezier(f/(float)detail, control_points[i], control_points[i + 1], control_points[i + 2], control_points[i + 3]));
-			curve_normals.push_back(Quat::SlerpVector(control_points_normals[i/3].Normalized(), control_points_normals[(i/3)+1].Normalized(), f / (float)detail));
-		}
-	}
-}
+	float3 p0 = QuadraticCurve(a, b, c, t);
+	float3 p1 = QuadraticCurve(b, c, d, t);
 
-float3 Curve::CalculateBezier(float t, const float3& p0, const float3& p1, const float3& p2, const float3& p3)
-{
-	float3 res = float3::zero();
-	res[0] = pow((1 - t), 3) * p0[0] + 3 * t * pow((1 - t), 2) * p1[0] + 3 * pow(t, 2) * (1 - t) * p2[0] + pow(t, 3) * p3[0];
-	res[1] = pow((1 - t), 3) * p0[1] + 3 * t * pow((1 - t), 2) * p1[1] + 3 * pow(t, 2) * (1 - t) * p2[1] + pow(t, 3) * p3[1];
-	res[2] = pow((1 - t), 3) * p0[2] + 3 * t * pow((1 - t), 2) * p1[2] + 3 * pow(t, 2) * (1 - t) * p2[2] + pow(t, 3) * p3[2];
-	return res;
+	return Lerp(p0, p1, t);
 }

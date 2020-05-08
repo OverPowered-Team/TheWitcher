@@ -1,6 +1,7 @@
 #include "GhoulDodge.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 
 GhoulDodge::GhoulDodge() : Ghoul()
 {
@@ -43,7 +44,10 @@ void GhoulDodge::UpdateEnemy()
             animator->PlayState("Jump");
         }
         break;
-
+    case GhoulState::HIT:
+        velocity += velocity * knock_slow * Time::GetDT();
+        character_ctrl->Move(velocity * Time::GetDT());
+        break;
     case GhoulState::DODGE:
         Dodge();
         break;
@@ -57,6 +61,11 @@ void GhoulDodge::UpdateEnemy()
         audio_emitter->StartSound("GhoulDeath");
         last_player_hit->OnEnemyKill();
         state = GhoulState::DEAD;
+        if (m_controller && is_combat)
+        {
+            is_combat = false;
+            m_controller->EnemyLostSight((Enemy*)this);
+        }
         break;
     }
     }
@@ -74,6 +83,7 @@ void GhoulDodge::Dodge()
 void GhoulDodge::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
+        can_get_interrupted = true;
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
             state = GhoulState::MOVE;
@@ -82,7 +92,7 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         {
             state = GhoulState::IDLE;
         }
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Jump") == 0)
     {
@@ -91,12 +101,12 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         else
             state = GhoulState::IDLE;
 
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Hit") == 0)
     {
         state = GhoulState::IDLE;
-        rand_num = Random::GetRandomIntBetweenTwo(0, 1);
+        rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
 }
 

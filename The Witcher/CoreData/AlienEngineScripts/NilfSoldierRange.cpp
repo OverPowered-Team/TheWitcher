@@ -2,6 +2,7 @@
 #include "PlayerController.h"
 #include "EnemyManager.h"
 #include "ArrowScript.h"
+#include "MusicController.h"
 
 NilfSoldierRange::NilfSoldierRange() : NilfgaardSoldier()
 {
@@ -63,6 +64,11 @@ void NilfSoldierRange::UpdateEnemy()
 		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 		break;
 	}
 	}
@@ -86,7 +92,20 @@ void NilfSoldierRange::CheckDistance()
 		state = NilfgaardSoldierState::IDLE;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		animator->SetFloat("speed", 0.0F);
-		is_combat = false;
+		if (m_controller && !is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
+	}
+
+	if (distance < stats["VisionRange"].GetValue())
+	{
+		if (m_controller && !is_combat)
+		{
+			is_combat = true;
+			m_controller->EnemyInSight((Enemy*)this);
+		}
 	}
 }
 
@@ -120,25 +139,12 @@ void NilfSoldierRange::Flee()
 
 void NilfSoldierRange::ShootAttack()
 {
+	SpawnAttackParticle();
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
 	audio_emitter->StartSound("SoldierShoot");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
-	arrow_rb->SetRotation(RotateArrow());
+	arrow_rb->SetRotation(RotateProjectile());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
-}
-
-Quat NilfSoldierRange::RotateArrow()
-{
-	float3 front = -float3::unitZ(); //front of the object
-	Quat rot1 = Quat::RotateFromTo(front, direction);
-
-	float3 desiredUp = float3::unitY();
-	float3 right = Cross(direction, desiredUp);
-	desiredUp = Cross(right, direction);
-
-	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
-	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
-	return rot2 * rot1;
 }

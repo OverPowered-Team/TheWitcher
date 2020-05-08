@@ -182,6 +182,11 @@ float ComponentAnimator::GetCurrentStateDuration()
 	return animator_controller->GetCurrentNode()->GetClip()->GetDuration() / animator_controller->GetCurrentNode()->GetSpeed();
 }
 
+std::string ComponentAnimator::GetCurrentStateName()
+{
+	return animator_controller->GetCurrentNode()->GetName();
+}
+
 float ComponentAnimator::GetCurrentStateSpeed()
 {
 	return animator_controller->GetCurrentNode()->GetSpeed();

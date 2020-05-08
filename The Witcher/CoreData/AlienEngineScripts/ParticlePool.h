@@ -9,7 +9,7 @@ public:
 	ParticlePool() {}
 	virtual ~ParticlePool();
 
-	GameObject* GetInstance(std::string particle_type, float3 pos = float3::zero(), GameObject* parent = nullptr, bool local = false);
+	GameObject* GetInstance(std::string particle_type, float3 pos = float3::zero(), float3 rotation = float3::zero(), GameObject* parent = nullptr, bool local = false);
 	void ReleaseInstance(std::string particle_type, GameObject* instance);
 
 private:

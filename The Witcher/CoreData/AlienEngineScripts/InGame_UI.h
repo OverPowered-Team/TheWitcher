@@ -6,12 +6,10 @@
 class PlayerController;
 class UltiBar;
 
-enum(UI_Particle_Type,
-	ULTI,
-	KILL_COUNT,
-
-	ANY = -1
-	);
+enum(CP_STATE,
+	FADE_IN,
+	SHOW,
+	FADE_OUT);
 
 class UI_Particles
 {
@@ -21,7 +19,6 @@ public:
 	GameObject* particle = nullptr;
 	PlayerController* player = nullptr;
 	float time_passed = 0.0f;
-	UI_Particle_Type type = UI_Particle_Type::ANY;
 };
 
 class ALIEN_ENGINE_API InGame_UI : public Alien {
@@ -39,7 +36,7 @@ public:
 	void YouDied();
 	void ShowCheckpointSaved();
 
-	void StartLerpParticle(const float3& world_position, UI_Particle_Type type, PlayerController* player = nullptr);
+	void StartLerpParticleUltibar(const float3& world_position);
 
 public:
 
@@ -67,6 +64,8 @@ private:
 
 	// Checkpoint Saved Text
 	GameObject* checkpoint_saved_text = nullptr;
+	ComponentText* component_checkpoint_saved_text = nullptr;
+	CP_STATE checkpoint_state = CP_STATE::FADE_IN;
 	float time_checkpoint = 0.0f;
 
 	// Charging ultibar particles
@@ -77,13 +76,8 @@ private:
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {
 	InGame_UI* alien = new InGame_UI();
 	// To show in inspector here
-
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->in_game);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->pause_menu);
 	
 	SHOW_IN_INSPECTOR_AS_PREFAB(alien->ulti_particle);
-	SHOW_IN_INSPECTOR_AS_PREFAB(alien->killcount_particle);
-
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_lerp_ult_part);
 
 	return alien;

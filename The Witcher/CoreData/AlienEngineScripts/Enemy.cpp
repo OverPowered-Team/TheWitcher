@@ -13,6 +13,7 @@ void Enemy::Awake()
 	attack_collider = game_object->GetChild("EnemyAttack")->GetComponent<ComponentCollider>();
 	attack_collider->SetEnable(false);
 
+	//0.Head 1.Body 2.Feet 3.Attack
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
 }
 
@@ -36,6 +37,12 @@ void Enemy::StartEnemy()
 		break;
 	case EnemyType::LESHEN:
 		json_str = "leshen";
+		break;
+	case EnemyType::CIRI:
+		json_str = "ciri";
+		break;
+	case EnemyType::CIRI_CLONE:
+		json_str = "ciri_clone";
 		break;
 	case EnemyType::DROWNED:
 		json_str = "drowned";
@@ -87,6 +94,10 @@ void Enemy::UpdateEnemy()
 		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
 
+	//MOVEMENT
+	if(type != EnemyType::DROWNED)
+		character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
+
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
@@ -109,7 +120,9 @@ void Enemy::UpdateEnemy()
 				(*it)->spawned_particle->SetEnable(false);
 				(*it)->spawned_particle->SetEnable(true);
 			}
-				
+
+			std::string audio_name = "Play_" + (*it)->name;
+			audio_emitter->StartSound(audio_name.c_str());
 		}
 
 		if ((*it)->to_delete)
@@ -185,6 +198,20 @@ void Enemy::DeactivateCollider()
 	}
 }
 
+Quat Enemy::RotateProjectile()
+{
+	float3 front = -float3::unitZ(); //front of the object
+	Quat rot1 = Quat::RotateFromTo(front, direction);
+
+	float3 desiredUp = float3::unitY();
+	float3 right = Cross(direction, desiredUp);
+	desiredUp = Cross(right, direction);
+
+	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
+	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
+	return rot2 * rot1;
+}
+
 void Enemy::KnockBack(float3 knock)
 {
 	velocity = knock;
@@ -192,6 +219,16 @@ void Enemy::KnockBack(float3 knock)
 }
 
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
+{
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
+
+	KnockBack(knock_back);
+
+	return aux_health - stats["Health"].GetValue();
+}
+
+float Enemy::GetDamaged(float dmg, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
@@ -217,7 +254,13 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	if (new_effect->vfx_on_apply != "")
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
-			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), this->game_object, true);
+			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
+
+	if (new_effect->ticks_time == 0)
+	{
+		std::string audio_name = "Play_" + new_effect->name;
+		audio_emitter->StartSound(audio_name.c_str());
+	}
 
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
@@ -257,16 +300,28 @@ void Enemy::HitFreeze(float freeze_time)
 	}
 }
 
+void Enemy::SpawnAttackParticle()
+{
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+	HitFreeze(0.05);
+	can_get_interrupted = false;
+	// Sonidito de clinck de iluminacion espada maestra
+}
+
+
 void Enemy::StopHitFreeze(float speed)
 {
 	is_frozen = false;
 	animator->SetCurrentStateSpeed(speed);
 }
 
-void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, GameObject* parent)
+void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
 {
 	if (particle_name == "")
+	{
+		LOG("There's no particle name. String is empty!");
 		return;
+	}
 
 	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
@@ -278,7 +333,12 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, Gam
 		}
 	}
 
-	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr ? parent : this->game_object, local);
+	parent = parent != nullptr ? parent : this->game_object;
+	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
+	if (new_particle == nullptr)
+		return;
+
 	particles.push_back(new_particle);
 }
 
@@ -295,6 +355,15 @@ void Enemy::ReleaseParticle(std::string particle_name)
 			particles.erase(it);
 			return;
 		}
+	}
+}
+
+void Enemy::ReleaseAllParticles()
+{
+	for (auto it = particles.begin(); it != particles.end();)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance((*it)->GetName(), (*it));
+		it = particles.erase(it);
 	}
 }
 	

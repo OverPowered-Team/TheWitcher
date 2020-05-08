@@ -8,6 +8,7 @@
 #include "PlayerManager.h"
 #include "PlayerProjectile.h"
 #include "ParticlePool.h"
+#include "..\..\Alien Engine\ParticleEmitter.h"
 #include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
@@ -59,6 +60,7 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 	{
 		if (current_attack)
 		{
+			player_controller->ReleaseAttackParticle();
 			//take the links of the attack we were doing so we can continue the combo after the spell.
 			spells[spell_index]->heavy_attack_link = current_attack->heavy_attack_link;
 			spells[spell_index]->light_attack_link = current_attack->light_attack_link;
@@ -106,11 +108,12 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
-		player_controller->ReleaseAttackParticle();
 		if (next_attack == AttackType::SPELL)
 			StartSpell(next_spell);
 		else
 			StartAttack(next_attack);
+		
+		next_attack = AttackType::NONE;
 	}
 }
 
@@ -142,6 +145,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 	else
 	{
+		player_controller->ReleaseAttackParticle();
 		if (attack == AttackType::LIGHT)
 		{
 			if (current_attack->light_attack_link)
@@ -243,7 +247,7 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0 && !(*i)->game_object_attached->GetComponent<Enemy>()->IsDead())
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
@@ -315,6 +319,7 @@ void PlayerAttacks::ActivateCollider()
 	{
 		collider->SetCenter(current_attack->info.collider_position);
 		collider->SetSize(current_attack->info.collider_size);
+		collider->SetRotation(current_attack->info.collider_rotation);
 		collider->SetEnable(true);
 	}
 }
@@ -331,7 +336,9 @@ void PlayerAttacks::CastSpell()
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
 		player_controller->PlayAttackParticle();
+		player_controller->audio->StartSound(current_attack->info.audio_name.c_str());
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
+
 		if(player_controller->HUD)
 			player_controller->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_controller->player_data.stats["Chaos"].GetValue(), player_controller->player_data.stats["Chaos"].GetMaxValue());
 
@@ -390,12 +397,19 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 	}
 	if (current_attack->HasTag(Attack_Tags::T_Chaining))
 	{
-		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 3);
+		enemy->Stun(1.0f);
+		if (current_attack->enemies_hit.size() == 1)
+		{
+			SpawnChainParticle(this->game_object->transform->GetGlobalPosition() , enemy->transform->GetGlobalPosition());
+		}
+		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), current_attack->info.chain_range);
+
 		for (auto it = colliders.begin(); it != colliders.end(); ++it)
 		{
 			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
 				Enemy* enemy_close = (*it)->game_object_attached->GetComponent<Enemy>();
 				if (enemy_close && current_attack->CanHit(enemy_close)) {
+					SpawnChainParticle(enemy->transform->GetGlobalPosition(), enemy_close->transform->GetGlobalPosition());
 					if (!enemy_close->IsDead())
 						enemy_close->GetDamaged(GetCurrentDMG(), player_controller);
 
@@ -414,6 +428,7 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 void PlayerAttacks::AllowCombo()
 {
 	can_execute_input = true;
+	player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());
 }
 
 bool PlayerAttacks::CanBeInterrupted()
@@ -488,6 +503,9 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
 				attack_combo->GetNumber("collider.height"),
 				attack_combo->GetNumber("collider.depth"));
+			info.collider_rotation = float3(attack_combo->GetNumber("collider.rot_x"),
+				attack_combo->GetNumber("collider.rot_y"),
+				attack_combo->GetNumber("collider.rot_z"));
 			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
@@ -528,6 +546,9 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_size = float3(spells_json->GetNumber("collider.width"),
 				spells_json->GetNumber("collider.height"),
 				spells_json->GetNumber("collider.depth"));
+			info.collider_rotation = float3(spells_json->GetNumber("collider.rot_x"),
+				spells_json->GetNumber("collider.rot_y"),
+				spells_json->GetNumber("collider.rot_z"));
 			info.movement_strength = spells_json->GetNumber("movement_strength");
 			info.activation_frame = spells_json->GetNumber("activation_frame");
 			info.max_distance_traveled = spells_json->GetNumber("max_distance_traveled");
@@ -536,6 +557,7 @@ void PlayerAttacks::CreateAttacks()
 			info.prefab_to_spawn = spells_json->GetString("prefab_to_spawn");
 			info.snap_detection_range = spells_json->GetNumber("snap_detection_range");
 			info.min_distance_to_target = spells_json->GetNumber("min_distance_to_target");
+			info.audio_name = spells_json->GetString("audio_name");
 
 			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 
@@ -547,7 +569,14 @@ void PlayerAttacks::CreateAttacks()
 				for (uint j = 0; j < num_tags; j++)
 				{
 					std::string tag_str = tags->GetString("tag");
-					info.tags.push_back(GetTag(tag_str));
+					Attack_Tags tag = GetTag(tag_str);
+					if (tag == Attack_Tags::T_Chaining)
+					{
+						info.chain_range = spells_json->GetNumber("chain_range");
+						info.chain_particle = spells_json->GetString("chain_particle");
+					}	
+					info.tags.push_back(tag);
+
 					tags->GetAnotherNode();
 				}
 			}
@@ -588,4 +617,29 @@ void PlayerAttacks::ConnectAttacks()
 			}
 		}
 	}
+}
+
+void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
+{
+	float3 mid_point = float3((from.x + to.x) / 2, (from.y + to.y) / 2, (from.z + to.z) / 2);
+	mid_point.y += 0.5f; //hardcode lol
+	float distance = from.DistanceSq(to);
+	
+	float3 direction = (to - from).Normalized();
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.chain_particle, mid_point);
+	if (new_particle == nullptr)
+		return;
+
+	Quat rot = new_particle->transform->GetGlobalRotation().LookAt(new_particle->transform->forward, direction, new_particle->transform->up, float3::unitY());
+	new_particle->transform->SetGlobalRotation(rot);
+	//new_particle->GetChild(0)->transform->SetGlobalRotation(rot);
+	//float angle = math::RadToDeg(eu_rot.y);
+
+	ComponentParticleSystem* p_system = new_particle->GetComponent<ComponentParticleSystem>();
+	p_system->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.3f, 1));
+	ComponentParticleSystem* p_system_2 = new_particle->GetComponentInChildren<ComponentParticleSystem>();
+	p_system_2->GetSystem()->SetParticleInitialSize(float3(1, distance * 0.3f, 1));
+	//p_system->GetSystem()->SetParticleInitialAngle(float3(0, direction.x > 0 ? angle:-angle, 90));
+
+	player_controller->particles.push_back(new_particle);
 }

@@ -14,6 +14,12 @@
         },
         {
             "Layer": "Enemy"
+        },
+        {
+            "Layer": "Drowner"
+        },
+        {
+            "Layer": "Dashcoll"
         }
     ],
     "Default": {
@@ -21,34 +27,62 @@
         "Wall": true,
         "Ground": true,
         "Player": true,
-        "Enemy": true
+        "Enemy": true,
+        "Drowner": true,
+        "Dashcoll": true
     },
     "Wall": {
         "Default": true,
         "Wall": true,
         "Ground": true,
         "Player": true,
-        "Enemy": true
+        "Enemy": true,
+        "Drowner": true,
+        "Dashcoll": false
     },
     "Ground": {
         "Default": true,
         "Wall": true,
         "Ground": true,
         "Player": true,
-        "Enemy": true
+        "Enemy": true,
+        "Drowner": false,
+        "Dashcoll": false
     },
     "Player": {
         "Default": true,
         "Wall": true,
         "Ground": true,
         "Player": true,
-        "Enemy": true
+        "Enemy": true,
+        "Drowner": true,
+        "Dashcoll": false
     },
     "Enemy": {
         "Default": true,
         "Wall": true,
         "Ground": true,
         "Player": true,
-        "Enemy": true
+        "Enemy": true,
+        "Drowner": true,
+        "Dashcoll": true
+    },
+    "Drowner": {
+        "Default": true,
+        "Wall": true,
+        "Ground": false,
+        "Player": true,
+        "Enemy": true,
+        "Drowner": true,
+        "Dashcoll": true
+    },
+    "Dashcoll": {
+        "Default": true,
+        "Wall": false,
+        "Ground": false,
+        "Player": false,
+        "Enemy": true,
+        "Drowner": true,
+        "Dashcoll": false
     }
 }

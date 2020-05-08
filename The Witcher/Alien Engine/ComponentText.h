@@ -47,6 +47,9 @@ public:
 	void SetText(const char* newText);
 	const char* GetText();
 
+	void SetAlpha(float alpha);
+	void SetColor(float3 color);
+
 private:
 	TextAlign align = TextAlign::LEFT;
 	ResourceFont*	font = nullptr;

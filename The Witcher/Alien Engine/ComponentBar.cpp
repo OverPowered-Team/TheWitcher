@@ -10,6 +10,7 @@
 #include "ModuleResources.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 #include "ReturnZ.h"
 #include "imgui/imgui.h"
 #include "mmgr/mmgr.h"
@@ -64,7 +65,7 @@ bool ComponentBar::DrawInspector()
 		ImGui::Text("Offset:	"); ImGui::SameLine(150); ImGui::SetNextItemWidth(100);
 		ImGui::DragFloat("X", &offsetX, 0.1F, 0, 0, "%.1f", 1, game_object_attached->is_static);
 		ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-		ImGui::DragFloat("Y", &barScaleY, 0.1F, 0, 0, "%.1f", 1, game_object_attached->is_static);
+		ImGui::DragFloat("Y", &offsetY, 0.1F, 0, 0, "%.1f", 1, game_object_attached->is_static);
 		ImGui::PopID();
 
 		ImGui::Spacing();
@@ -216,6 +217,27 @@ bool ComponentBar::DrawInspector()
 		ImGui::DragFloat("Y", &barScaleY, 0.05F);
 		ImGui::PopID();
 
+		ImGui::Spacing(); ImGui::Spacing(); ImGui::Spacing();
+
+		ImGui::Text("Scissoring Type");
+		ImGui::SameLine(150);
+		int type = (int)scType;
+		ImGui::Combo("##ScissorType", &type, "Right to left\0Left to right\0Center\0");
+		switch (SCISSOR_TYPE(type))
+		{
+		case SCISSOR_TYPE::RIGHT_TO_LEFT: {
+			scType = SCISSOR_TYPE::RIGHT_TO_LEFT;
+			break; }
+		case SCISSOR_TYPE::LEFT_TO_RIGHT: {
+			scType = SCISSOR_TYPE::LEFT_TO_RIGHT;
+			break; }
+		case SCISSOR_TYPE::CENTER: {
+			scType = SCISSOR_TYPE::CENTER;
+			break; }
+		default: {
+			break; }
+		}
+
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
@@ -229,17 +251,16 @@ bool ComponentBar::DrawInspector()
 
 void ComponentBar::Draw(bool isGame)
 {
+	draw_bar = true;
 	if (canvas == nullptr || canvas_trans == nullptr) {
 		return;
 	}
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	float4x4 matrix = transform->global_transformation;
-	transform->global_transformation[0][0] = transform->global_transformation[0][0] * factor * barScaleX; //w
-	transform->global_transformation[1][1] = transform->global_transformation[1][1] * barScaleY; //h
-	transform->global_transformation[0][3] = matrix[0][3] - matrix[0][0] + transform->global_transformation[0][0] /*+ offsetX*/; //x
-	transform->global_transformation[1][3] = transform->global_transformation[1][3] + offsetY; //y
+	
 	DrawTexture(isGame, barTexture);
 
+	draw_bar = false;
 	transform->global_transformation = matrix;
 	DrawTexture(isGame, texture);
 }
@@ -255,7 +276,8 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
-	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
+
+	if (isGame && App->renderer3D->actual_game_camera != nullptr && !canvas->isWorld) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 #ifndef GAME_VERSION
@@ -283,18 +305,96 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 
 		origin.x = (origin.x - 0.5F) * 2;
 		origin.y = -(-origin.y - 0.5F) * 2;
-		matrix[0][3] = origin.x;
-		matrix[1][3] = origin.y;
-		matrix[2][3] = 0.0f;
+		if (draw_bar) {
+			matrix[0][3] = origin.x;
+			matrix[1][3] = origin.y;
+		}
+		else {
+			matrix[0][3] = origin.x;
+			matrix[1][3] = origin.y;
+		}
+		//matrix[2][3] = 0.0f;
+
+		if (tex != nullptr && draw_bar)
+		{
+			matrix[0][0] *= barScaleX;
+			matrix[1][1] *= barScaleY;
+			glEnable(GL_SCISSOR_TEST);
+			switch (scType)
+			{
+			case SCISSOR_TYPE::RIGHT_TO_LEFT: {
+#ifndef GAME_VERSION
+				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + offsetX,
+					0,
+					((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
+					10000);
+
+
+				/*if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN) {
+					LOG_ENGINE("X: %f", x);
+					LOG_ENGINE("CURRENT: %f", x - (matrix[0][0] * App->ui->panel_game->width) + offsetX);
+					LOG_ENGINE("CURRENT OFFSET: %f", (matrix[0][0] * App->ui->panel_game->width) + offsetX);
+					LOG_ENGINE("WIDTH: %f", ((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor);
+				}
+				else
+				{
+					LOG_ENGINE("MOUSE: %f", (App->input->GetMouseX() - App->ui->panel_game->posX));
+				}*/
+
+#else
+				glScissor(x - (matrix[0][0] * App->window->width) + offsetX,
+					0,
+					((x + (matrix[0][0] * App->window->width)) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
+					10000);
+#endif		
+				break; }
+
+			case SCISSOR_TYPE::LEFT_TO_RIGHT: {
+#ifndef GAME_VERSION
+				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor)),
+					0,
+					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor,
+					10000);
+#else
+				glScissor(x - (matrix[0][0] * App->window->width) + (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor)),
+					0,
+					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor,
+					10000);
+#endif	
+				break; }
+
+			case SCISSOR_TYPE::CENTER: {
+#ifndef GAME_VERSION
+				glScissor(x - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
+					0,
+					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
+					10000);
+				
+#else
+				glScissor(x - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
+					0,
+					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
+					10000);
+#endif	
+				break; }
+
+			default: {
+				break; }
+			}
+		}
+		
+
 	}
 
+	
+
 	if (tex != nullptr) {
-		glAlphaFunc(GL_GREATER, 0.0f);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex->id);
 	}
 
-	if(tex == texture)
+	if(!draw_bar)
 		glColor4f(current_color.r, current_color.g, current_color.b, current_color.a);
 	else
 		glColor4f(bar_color.r, bar_color.g, bar_color.b, bar_color.a);
@@ -320,12 +420,6 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 
 		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
 		float4x4 uiGlobal = uiLocal;
-
-		/*	if (!particleInfo.globalTransform)
-			{
-				float4x4 parentGlobal = owner->emmitter.GetGlobalTransform();
-				particleGlobal = parentGlobal * particleLocal;
-			}*/
 
 		glPushMatrix();
 		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
@@ -355,9 +449,14 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 
+	if (draw_bar)
+		glDisable(GL_SCISSOR_TEST);
+		
+	
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 	glEnable(GL_LIGHTING);
@@ -387,6 +486,7 @@ void ComponentBar::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("barScaleY", barScaleY);
 	to_save->SetNumber("offsetX", offsetX);
 	to_save->SetNumber("offsetY", offsetY);
+	to_save->SetNumber("SCType", (int)scType);
 	
 }
 
@@ -395,6 +495,7 @@ void ComponentBar::LoadComponent(JSONArraypack* to_load)
 	x = to_load->GetNumber("X");
 	y = to_load->GetNumber("Y");
 	size = { (float)to_load->GetNumber("Width"), (float)to_load->GetNumber("Height") };
+	SetSize(size.x * 100.0f, size.y * 100.0f);
 
 	enabled = to_load->GetBoolean("Enabled");
 	current_color = to_load->GetColor("Color");
@@ -408,6 +509,15 @@ void ComponentBar::LoadComponent(JSONArraypack* to_load)
 	barScaleY = to_load->GetNumber("barScaleY");
 	offsetX = to_load->GetNumber("offsetX");
 	offsetY = to_load->GetNumber("offsetY");
+
+	try
+	{
+		scType = (SCISSOR_TYPE)(int)to_load->GetNumber("SCType");
+	}
+	catch (...)
+	{
+		scType = SCISSOR_TYPE::RIGHT_TO_LEFT;
+	}
 
 
 	u64 textureID = std::stoull(to_load->GetString("TextureID"));
@@ -449,6 +559,22 @@ void ComponentBar::LoadComponent(JSONArraypack* to_load)
 	}
 }
 
+void ComponentBar::SetSize(float width, float height)
+{
+	size.x = width / 100.0f;
+	size.y = height / 100.0f;
+
+	float halfWidth = size.x * 0.5F;
+	float halfHeight = size.y * 0.5F;
+
+	vertices[0] = { -halfWidth, halfHeight, 0 };
+	vertices[1] = { -halfWidth, -halfHeight, 0 };
+	vertices[2] = { halfWidth, -halfHeight, 0 };
+	vertices[3] = { halfWidth, halfHeight, 0 };
+
+	UpdateVertex();
+}
+
 void ComponentBar::CalculateFactor()
 {
 	if (currentValue > maxValue) currentValue = maxValue;
@@ -487,7 +613,7 @@ void ComponentBar::SetTextureBar(ResourceTexture* tex)
 			barTexture->DecreaseReferences();
 		}
 		barTexture = tex;
-		//SetSize(tex->width, tex->height);
+		SetSize(tex->width, tex->height);
 	}
 }
 

@@ -69,7 +69,7 @@ bool ComponentText::DrawInspector()
 		}
 
 		static bool set_Z = true;
-		static Color col = current_color;
+		Color col = current_color;
 		if (ImGui::ColorEdit4("Color", &col, ImGuiColorEditFlags_Float)) {
 			if (set_Z)
 				ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
@@ -80,7 +80,7 @@ bool ComponentText::DrawInspector()
 			set_Z = true;
 		}
 
-		static bool set_bg_Z = true;
+		/*static bool set_bg_Z = true;
 		static Color bg_col = text_background.color;
 		if (ImGui::ColorEdit4("Background Color", &bg_col, ImGuiColorEditFlags_Float)) {
 			if (set_bg_Z)
@@ -90,7 +90,7 @@ bool ComponentText::DrawInspector()
 		}
 		else if (!set_bg_Z && ImGui::IsMouseReleased(0)) {
 			set_bg_Z = true;
-		}
+		}*/
 
 		ImGui::Spacing(); ImGui::Separator();
 
@@ -158,7 +158,7 @@ void ComponentText::Draw(bool isGame)
 	if (isGame && App->renderer3D->actual_game_camera != nullptr) {
 		font->text_shader->Bind();
 		font->text_shader->SetUniform1i("isGame", isGame);
-		font->text_shader->SetUniformFloat3("textColor", float3(current_color.r, current_color.g, current_color.b));
+		font->text_shader->SetUniform4f("textColor", float4(current_color.r, current_color.g, current_color.b, current_color.a));
 
 		#ifndef GAME_VERSION
 		glm::mat4 projection = glm::ortho(0.0f, App->ui->panel_game->width, 0.0f, App->ui->panel_game->height);
@@ -193,7 +193,7 @@ void ComponentText::Draw(bool isGame)
 	{
 		font->text_shader->Bind();
 		font->text_shader->SetUniform1i("isGame", isGame);
-		font->text_shader->SetUniformFloat3("textColor", float3(current_color.r, current_color.g, current_color.b));
+		font->text_shader->SetUniform4f("textColor", float4(current_color.r, current_color.g, current_color.b, current_color.a));
 		font->text_shader->SetUniformMat4f("projection", App->renderer3D->scene_fake_camera->GetProjectionMatrix4f4());
 		font->text_shader->SetUniformMat4f("view", App->renderer3D->scene_fake_camera->GetViewMatrix4x4());
 	}
@@ -731,6 +731,18 @@ void ComponentText::SetText(const char* newText)
 const char* ComponentText::GetText()
 {
 	return text.data();
+}
+
+void ComponentText::SetAlpha(float alpha)
+{
+	current_color.a = alpha;
+}
+
+void ComponentText::SetColor(float3 color)
+{
+	current_color.r = color.x;
+	current_color.g = color.y;
+	current_color.b = color.z;
 }
 
 

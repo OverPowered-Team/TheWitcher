@@ -4,6 +4,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "MusicController.h"
 
 NilfSoldierShield::NilfSoldierShield() : NilfgaardSoldier()
 {
@@ -52,6 +53,11 @@ void NilfSoldierShield::UpdateEnemy()
 		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 		break;
 	}
 	}
@@ -110,16 +116,26 @@ void NilfSoldierShield::Block()
 	}
 }
 
+bool NilfSoldierShield::CheckPlayerForward()
+{
+	float angle = transform->forward.AngleBetween(player_controllers[current_player]->transform->forward) * RADTODEG;
+	LOG("Angle: %f", angle);
+	if (angle > 100 && angle < 200)
+		return true;
+	else
+		return false;
+}
+
 void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
 
-		if (is_blocked)
+		if (is_blocked && CheckPlayerForward())
 		{
 			has_been_attacked = true;
 			current_time = Time::GetGameTime();
 			break_shield_attack++;
-			SpawnParticle("ClinckEmitter", particle_spawn_positions[1]->transform->GetLocalPosition()); // 1 is body position
+			SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition()); // 1 is body position
 			audio_emitter->StartSound("SoldierBlock");
 		}
 		else

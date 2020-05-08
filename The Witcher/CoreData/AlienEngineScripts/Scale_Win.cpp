@@ -48,36 +48,42 @@ void Scale_Win::Start()
 	}
 
 	// Head Spawns
-	for (int i = 1; i <= Scores_Data::player1_kills; ++i)
+	if (Scores_Data::player1_kills > 0)
 	{
-		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+		for (int i = 1; i <= Scores_Data::player1_kills; ++i)
+		{
+			float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
+			float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+			float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
 
-		Invoke([this, random_pos_x, random_pos_z]() -> void
-			{
-				spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + random_pos_x,
-					spawner_l->transform->GetGlobalPosition().y,
-					spawner_l->transform->GetGlobalPosition().z + random_pos_z));
-			}
-			,
-				random_time* i);
+			Invoke([this, random_pos_x, random_pos_z]() -> void
+				{
+					spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + random_pos_x,
+						spawner_l->transform->GetGlobalPosition().y,
+						spawner_l->transform->GetGlobalPosition().z + random_pos_z));
+				}
+				,
+					random_time * i);
+		}
 	}
 
-	for (int i = 1; i <= Scores_Data::player2_kills; ++i)
+	if (Scores_Data::player2_kills > 0)
 	{
-		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+		for (int i = 1; i <= Scores_Data::player2_kills; ++i)
+		{
+			float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
+			float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+			float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
 
-		Invoke([this, random_pos_x, random_pos_z]() -> void
-			{
-				spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + random_pos_x,
-					spawner_r->transform->GetGlobalPosition().y,
-					spawner_r->transform->GetGlobalPosition().z + random_pos_z));
-			}
-			,
-				random_time * i);
+			Invoke([this, random_pos_x, random_pos_z]() -> void
+				{
+					spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + random_pos_x,
+						spawner_r->transform->GetGlobalPosition().y,
+						spawner_r->transform->GetGlobalPosition().z + random_pos_z));
+				}
+				,
+					random_time * i);
+		}
 	}
 }
 
@@ -195,7 +201,7 @@ void Scale_Win::HandleSceneLoad()
 		Scores_Data::dead = false;
 		if (Scores_Data::won_level1)
 		{
-			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		else
 		{
@@ -207,7 +213,7 @@ void Scale_Win::HandleSceneLoad()
 		Scores_Data::last_checkpoint_position = float3::inf();
 		if (Scores_Data::won_level1)
 		{
-			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		else if (Scores_Data::won_level2)
 		{

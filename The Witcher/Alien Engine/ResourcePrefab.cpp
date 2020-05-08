@@ -304,6 +304,7 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 					*(*item).second = found;
 				}
 			}
+			App->objects->to_add.clear();
 		}
 
 		if (list_num != -1) {
@@ -332,8 +333,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		}
 
 		// Navigation
-		auto ui = parent->GetComponentsInChildrenRecursive<ComponentUI>();
-		auto uiParent = parent->GetComponents<ComponentUI>();
+		auto ui = obj->GetComponentsInChildrenRecursive<ComponentUI>();
+		auto uiParent = obj->GetComponents<ComponentUI>();
 		ui.insert(ui.end(), uiParent.begin(), uiParent.end());
 		for each (ComponentUI* uiElement in ui) {
 			uiElement->ReSetIDNavigation();
@@ -341,10 +342,6 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
-
-		for each (ComponentUI * uiElement in ui) {
-			uiElement->ReSetIDNavigation();
-		}
 
 		obj->SetPrefab(ID);
 		obj->transform->SetLocalPosition(pos);
