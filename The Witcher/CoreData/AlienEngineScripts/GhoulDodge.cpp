@@ -44,7 +44,10 @@ void GhoulDodge::UpdateEnemy()
             animator->PlayState("Jump");
         }
         break;
-
+    case GhoulState::HIT:
+        velocity += velocity * knock_slow * Time::GetDT();
+        character_ctrl->Move(velocity * Time::GetDT());
+        break;
     case GhoulState::DODGE:
         Dodge();
         break;

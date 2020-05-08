@@ -43,7 +43,7 @@ public:
 
 	void CheckDistance();
 	
-	float GetDamaged(float dmg, PlayerController* player);
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 

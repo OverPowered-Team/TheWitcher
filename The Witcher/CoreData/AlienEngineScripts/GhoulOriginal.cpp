@@ -24,6 +24,10 @@ void GhoulOriginal::UpdateEnemy()
     case GhoulState::MOVE:
         Move(direction);
         break;
+    case GhoulState::HIT:
+        velocity += velocity * knock_slow * Time::GetDT();
+        character_ctrl->Move(velocity * Time::GetDT());
+        break;
     case GhoulState::JUMP:
         JumpImpulse();
         break;

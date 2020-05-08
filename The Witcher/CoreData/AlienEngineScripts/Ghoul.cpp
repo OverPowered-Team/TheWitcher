@@ -163,12 +163,12 @@ void Ghoul::CheckDistance()
     }
 }
 
-float Ghoul::GetDamaged(float dmg, PlayerController* player)
+float Ghoul::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-    float damage = Enemy::GetDamaged(dmg, player);
+    state = GhoulState::HIT;
+    float damage = Enemy::GetDamaged(dmg, player, knock_back);
 
     if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
-        state = GhoulState::HIT;
         animator->PlayState("Hit");
         audio_emitter->StartSound("GhoulHit");
         stats["HitSpeed"].IncreaseStat(increase_hit_animation);
@@ -205,7 +205,10 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
         if (player && player->attacks->GetCurrentAttack()->CanHit(this))
         {
             float dmg_received = player->attacks->GetCurrentDMG();
-            player->OnHit(this, GetDamaged(dmg_received, player));
+            float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
+            knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+
+            player->OnHit(this, GetDamaged(dmg_received, player, knock));
             last_player_hit = player;
 
             HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
