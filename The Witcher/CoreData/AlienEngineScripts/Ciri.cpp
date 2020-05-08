@@ -5,7 +5,7 @@
 #include "PlayerAttacks.h"
 #include "CiriFightController.h"
 #include "Ciri.h"
-
+#include "Scores_Data.h"
 
 void Ciri::StartEnemy()
 {
@@ -45,6 +45,10 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (stats["Health"].GetValue() == 0.0F) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
+
+		Scores_Data::won_level2 = true;
+		Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+		Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 		fight_controller->OnCloneDead(this->game_object);
 	}
 	else {

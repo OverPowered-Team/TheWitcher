@@ -201,7 +201,7 @@ void Scale_Win::HandleSceneLoad()
 		Scores_Data::dead = false;
 		if (Scores_Data::won_level1)
 		{
-			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		else
 		{
@@ -213,7 +213,7 @@ void Scale_Win::HandleSceneLoad()
 		Scores_Data::last_checkpoint_position = float3::inf();
 		if (Scores_Data::won_level1)
 		{
-			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		else if (Scores_Data::won_level2)
 		{

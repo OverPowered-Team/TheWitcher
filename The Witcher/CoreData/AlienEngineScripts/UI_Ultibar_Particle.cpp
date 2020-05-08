@@ -21,11 +21,11 @@ void UI_Ultibar_Particle::Update()
 
 	if (sign > 0)
 	{
-		lerp = Maths::Lerp(original_scale, original_scale * (1 + 1 / 3), t);
+		lerp = Maths::Lerp(original_scale, original_scale * (1.f + 1.f / 3.f), t);
 	}
 	else
 	{
-		lerp = Maths::Lerp(original_scale * (1 + 1 / 3), original_scale, t);
+		lerp = Maths::Lerp(original_scale * (1.f + 1.f / 3.f), original_scale, t);
 	}
 
 	if (t >= 1)

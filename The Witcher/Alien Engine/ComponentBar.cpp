@@ -329,6 +329,18 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 					((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
 					10000);
 
+
+				/*if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN) {
+					LOG_ENGINE("X: %f", x);
+					LOG_ENGINE("CURRENT: %f", x - (matrix[0][0] * App->ui->panel_game->width) + offsetX);
+					LOG_ENGINE("CURRENT OFFSET: %f", (matrix[0][0] * App->ui->panel_game->width) + offsetX);
+					LOG_ENGINE("WIDTH: %f", ((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor);
+				}
+				else
+				{
+					LOG_ENGINE("MOUSE: %f", (App->input->GetMouseX() - App->ui->panel_game->posX));
+				}*/
+
 #else
 				glScissor(x - (matrix[0][0] * App->window->width) + offsetX,
 					0,

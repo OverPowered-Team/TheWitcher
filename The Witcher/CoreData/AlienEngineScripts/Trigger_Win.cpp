@@ -43,9 +43,9 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 		}
 		else if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
 		{
-			SceneManager::LoadScene("Level_Wagonette");
+			SceneManager::LoadScene("VagonetaTest");
 		}
-		else if (strcmp(current_scene.c_str(), "Level_Wagonette") == 0)
+		else if (strcmp(current_scene.c_str(), "VagonetaTest") == 0)
 		{
 			SceneManager::LoadScene("Level_Mahakam_Deepnest");
 		}
