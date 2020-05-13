@@ -25,15 +25,6 @@ void PlayerManager::Start()
 
 void PlayerManager::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_0))
-	{
-		ActivateUltimate();
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_1))
-	{
-		CancelUltimate();
-	}
-
 	if (ultimate_buttons_pressed == players.size() && collective_ultimate_charge == max_ultimate_charge)
 	{
 		ActivateUltimate();
