@@ -19,6 +19,8 @@ void InGame_UI::Start()
 	pause_menu->SetEnable(false);
 	in_game = game_object->GetChild("InGame");
 	in_game->SetEnable(true);
+	ulti_filter = in_game->GetChild("Ulti_Filter")->GetComponent<ComponentImage>();
+	ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
 
 	GameObject::FindWithName("Menu")->SetEnable(true);
 	canvas = game_object->GetComponent<ComponentCanvas>();
@@ -134,6 +136,37 @@ void InGame_UI::Update()
 			}
 		}
 	}
+
+	if (changing_alpha_filter)
+	{
+		float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.25f;
+		float lerp = 0.0f;
+
+		if (ulti_active)
+		{
+			lerp = Maths::Lerp(0.0f, 0.2f, t);
+		}
+		else
+		{
+			lerp = Maths::Lerp(0.2f, 0.0f, t);
+		}
+
+		ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, lerp);
+
+		if (t >= 1)
+		{
+			if (ulti_active)
+			{
+				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.2f);
+			}
+			else
+			{
+				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
+			}
+
+			changing_alpha_filter = false;
+		}
+	}
 }
 
 void InGame_UI::PauseMenu(bool to_open)
@@ -168,4 +201,11 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	particle->time_passed = Time::GetGameTime();
 
 	particles.push_back(particle);
+}
+
+void InGame_UI::ShowUltiFilter(bool show)
+{
+	ulti_active = show;
+	changing_alpha_filter = true;
+	time_ulti_filter = Time::GetTimeSinceStart();
 }
