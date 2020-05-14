@@ -175,8 +175,6 @@ void Enemy::Move(float3 direction)
 {
 	float3 velocity_vec = direction * stats["Agility"].GetValue();
 
-	LOG("Enemy moving with velocity: (%f, %f, %f)", velocity_vec.x, velocity_vec.y, velocity_vec.z); 
-
 	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 

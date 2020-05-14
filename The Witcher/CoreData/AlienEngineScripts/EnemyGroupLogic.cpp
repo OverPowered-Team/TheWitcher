@@ -39,19 +39,13 @@ void EnemyGroupLogic::Update()
 	// the closer and the more enemies there are, the higher the group strength
 	current_group_strength = (game_object->GetChildren().size() / enclosing_sphere.r);
 
-	LOG("Enemy group with strength WITHOUT CAPPING: %f", current_group_strength);
-
-
 	// cap the strength between 0 and 1  
 	current_group_strength = Normalize(current_group_strength, 0.f, max_group_strength); 
-
-	LOG("Enemy group with strength: %f", current_group_strength); 
 
 	// change each enemy's stats
 	for (auto& child : game_object->GetChildren())
 	{
 		auto enemy = child->GetComponent<Enemy>();
-		
 		SetEnemyValue(enemy, "Health", stat_variances.health);
 		SetEnemyValue(enemy, "Damage", stat_variances.damage);
 		SetEnemyValue(enemy, "Agility", stat_variances.agility);
@@ -62,17 +56,16 @@ void EnemyGroupLogic::Update()
 
 void EnemyGroupLogic::SetEnemyValue(Enemy* enemy, const char* value_name, float variance)
 {
-	float start = -variance / 2.f; // eg if it is a 20% variance, it starts at -10%
-	float percentage = start + current_group_strength * variance; // eg -10 + 0.75 * 20 = 5, which means 0.75 group strength equals to +5% in this stat
-	float multiplier = percentage / 100.f; // eg 0,05
-	float base_value = enemy->stats[value_name].GetBaseValue(); // eg 100 health
-	float result_value = base_value + base_value * multiplier; // eg 100 + 100 * 0,05
+	float start = -variance / 2.f;  
+	float multiplier = (start + current_group_strength * variance) * 0.01f; 
+	float base_value = enemy->stats[value_name].GetBaseValue();  
+	float result_value = base_value + base_value * multiplier;  
 
-	enemy->stats[value_name].SetCurrentStat(result_value, false); 
+	enemy->stats[value_name].SetCurrentStat(result_value); 
 
 	// DEBUG
-	LOG("Due to group dynamics, an enemy's %s with base value %f is multiplied by %f and is now theoretically %f and practically %f", 
-		value_name, base_value, multiplier, result_value, enemy->stats[value_name].GetValue()); 
+/*	LOG("Due to group dynamics, an enemy's %s with base value %f is multiplied by %f and is now theoretically %f and practically %f", 
+		value_name, base_value, multiplier, result_value, enemy->stats[value_name].GetValue());*/ 
 }
 
 
