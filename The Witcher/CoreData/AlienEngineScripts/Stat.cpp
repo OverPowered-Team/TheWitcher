@@ -66,12 +66,17 @@ void Stat::SetBaseStat(float _value)
 	current_value = base_value;
 }
 
-void Stat::SetCurrentStat(float value)
+void Stat::SetCurrentStat(float value, bool baseIsMin)
 {
     if (value >= base_value && value <= max_value)
         current_value = value;
-    else if (value < base_value)
-        current_value = base_value;
+	else if (value < base_value)
+	{
+		if (baseIsMin)
+			current_value = base_value;
+		else if (value >= 0.f)
+			current_value = value; 
+	}
     else if (value > max_value)
         current_value = max_value;
 }

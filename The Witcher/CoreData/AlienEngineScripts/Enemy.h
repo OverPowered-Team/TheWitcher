@@ -63,9 +63,6 @@ public:
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
 
-	// Grouping Suff
-	void OnGroupStrengthChange(float strength_multi) {};
-
 public:
 	float distance = 0.0F;
 	float3 direction; 

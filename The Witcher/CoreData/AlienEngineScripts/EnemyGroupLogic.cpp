@@ -37,28 +37,49 @@ void EnemyGroupLogic::Update()
 	}
 
 	// the closer and the more enemies there are, the higher the group strength
-	current_group_strength = (game_object->GetChildren().size() / enclosing_sphere.r) * group_stength_factor;
+	current_group_strength = (game_object->GetChildren().size() / enclosing_sphere.r);
 
 	LOG("Enemy group with strength WITHOUT CAPPING: %f", current_group_strength);
 
 
-	// cap the strength between 0.5 and 1.5 (1 as the "default") 
-	current_group_strength = 0.5f + ((current_group_strength - min_group_strength) / (max_group_strength - min_group_strength));
+	// cap the strength between 0 and 1  
+	current_group_strength = Normalize(current_group_strength, 0.f, max_group_strength); 
 
 	LOG("Enemy group with strength: %f", current_group_strength); 
 
-	// send the strength notifier to each enemy in the group
+	// change each enemy's stats
 	for (auto& child : game_object->GetChildren())
 	{
-		child->GetComponent<Enemy>()->OnGroupStrengthChange(current_group_strength);
+		auto enemy = child->GetComponent<Enemy>();
+		
+		SetEnemyValue(enemy, "Health", stat_variances.health);
+		SetEnemyValue(enemy, "Damage", stat_variances.damage);
+		SetEnemyValue(enemy, "Agility", stat_variances.agility);
+		SetEnemyValue(enemy, "AttacKSpeed", stat_variances.attack_speed);
+
 	}
+}
+
+void EnemyGroupLogic::SetEnemyValue(Enemy* enemy, const char* value_name, float variance)
+{
+	float start = -variance / 2.f; // eg if it is a 20% variance, it starts at -10%
+	float percentage = start + current_group_strength * variance; // eg -10 + 0.75 * 20 = 5, which means 0.75 group strength equals to +5% in this stat
+	float multiplier = percentage / 100.f; // eg 0,05
+	float base_value = enemy->stats[value_name].GetBaseValue(); // eg 100 health
+	float result_value = base_value + base_value * multiplier; // eg 100 + 100 * 0,05
+
+	enemy->stats[value_name].SetCurrentStat(result_value, false); 
+
+	// DEBUG
+	LOG("Due to group dynamics, an enemy's %s with base value %f is multiplied by %f and is now theoretically %f and practically %f", 
+		value_name, base_value, multiplier, result_value, enemy->stats[value_name].GetValue()); 
 }
 
 
 void EnemyGroupLogic::OnDrawGizmosSelected()
 {
-	float green = current_group_strength - 0.5f;
-	float red = 1 - (current_group_strength - 0.5f);
+	float green = current_group_strength; 
+	float red = 1 - current_group_strength;
 	Color color = Color(red, green, 0.f);
 
 	Gizmos::DrawWireSphere(enclosing_sphere.pos, enclosing_sphere.r, color);

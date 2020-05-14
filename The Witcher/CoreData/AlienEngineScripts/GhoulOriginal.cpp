@@ -89,8 +89,6 @@ void GhoulOriginal::DoAwake()
 
 		Move(direction);
 
-		LOG("Enemy curve current point: %f", current_curve_point);
-
 		break;
 
 	}
@@ -99,7 +97,6 @@ void GhoulOriginal::DoAwake()
 	{
 		if (wander_rest) // Resting
 		{
-			LOG("Enemy resting from wander!"); 
 
 			if ((current_wander_time += Time::GetDT()) >= wander_rest_time)
 			{
@@ -116,7 +113,6 @@ void GhoulOriginal::DoAwake()
 		}
 		else // Going to next position
 		{
-			LOG("Enemy wandering! Distance to target: %f", ((lastWanderTargetPos - current_position).Length()));
 			Move((lastWanderTargetPos - current_position).Normalized());
 
 			if ((lastWanderTargetPos - current_position).Length() <= wander_precision) // Arrived to next position

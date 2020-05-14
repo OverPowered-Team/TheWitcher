@@ -21,7 +21,7 @@ public:
 	float GetMaxValue() { return max_value; }
 	float GetBaseValue() { return base_value; }
 	void SetBaseStat(float _value);
-	void SetCurrentStat(float value);
+	void SetCurrentStat(float value, bool baseIsMin = true);
 	void SetMaxValue(float _value);
 	void IncreaseStat(float value);
 	void DecreaseStat(float value);

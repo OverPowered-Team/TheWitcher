@@ -36,12 +36,19 @@ void NilfgaardSoldier::SetStats(const char* json)
 			else
 				break;
 
+
 		stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
 		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
 		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
-		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
 		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 

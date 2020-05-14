@@ -43,9 +43,13 @@ void Ghoul::SetStats(const char* json)
                 break;
 
         stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
         stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
         stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
         stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
+		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
         stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
