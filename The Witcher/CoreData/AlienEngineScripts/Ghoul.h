@@ -10,6 +10,7 @@ class Ghoul : public Enemy {
 public:
 	enum(GhoulState,
 		NONE = -1,
+		AWAKE,
 		IDLE,
 		MOVE,
 		ATTACK,
@@ -24,6 +25,13 @@ public:
 		NONE = -1,
 		ORIGINAL,
 		DODGE);
+
+	enum(AwakeBehaviour, 
+		DEFAULT,
+		SLEEP,
+		HIDE,
+		WANDER,
+		FOLLOW_CURVE)
 
 	Ghoul();
 	virtual ~Ghoul();
@@ -50,9 +58,11 @@ public:
 	void OnAnimationEnd(const char* name) override;
 
 public:
-	GhoulState state = GhoulState::NONE;
+	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
+	AwakeBehaviour awake_behaviour = AwakeBehaviour::FOLLOW_CURVE;
 	MusicController* m_controller = nullptr;
+	GameObject* awake_curve = nullptr;
 };
 
 

@@ -7,6 +7,7 @@
 #include "PlayerController.h"
 #include "MusicController.h"
 
+
 Ghoul::Ghoul() : Enemy()
 {
 }
@@ -18,7 +19,7 @@ Ghoul::~Ghoul()
 void Ghoul::StartEnemy()
 {
     type = EnemyType::GHOUL;
-    state = GhoulState::IDLE;
+    state = GhoulState::AWAKE;
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
     Enemy::StartEnemy();
 }
@@ -133,6 +134,9 @@ void Ghoul::Action()
 
 void Ghoul::CheckDistance()
 {
+	if (state == GhoulState::AWAKE)
+		return; 
+
     if (distance < stats["JumpRange"].GetValue())
     {
         animator->SetFloat("speed", 0.0F);

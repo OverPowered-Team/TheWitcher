@@ -17,6 +17,9 @@ void GhoulOriginal::UpdateEnemy()
 
     switch (state)
     {
+	case GhoulState::AWAKE: 
+		DoAwake(); 
+		break; 
     case GhoulState::IDLE:
         if (distance < stats["VisionRange"].GetValue())
             state = GhoulState::MOVE;
@@ -54,4 +57,41 @@ void GhoulOriginal::UpdateEnemy()
         break;
     }
     }
+}
+
+void GhoulOriginal::DoAwake()
+{
+	if (distance < stats["VisionRange"].GetValue())
+	{
+		state = GhoulState::MOVE;
+		return; 
+	}
+		
+	switch (awake_behaviour)
+	{
+	case AwakeBehaviour::FOLLOW_CURVE:
+
+		Curve& curve = awake_curve->GetComponent<ComponentCurve>()->curve;
+
+		current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+		if (current_curve_point >= 1.f)
+		{
+			LOG("Enemy has completed a curve cycle!!"); 
+			current_curve_point = 0.f;
+			current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+		}
+
+		float3 current_position = game_object->transform->GetGlobalPosition(); 
+		float3 next_position = curve.ValueAt(current_curve_point);
+		next_position.y = current_position.y;
+		float3 direction = (next_position - current_position).Normalized(); 
+		
+		Move(direction);
+ 
+		LOG("Enemy curve current point: %f", current_curve_point);
+
+		break; 
+	}
+
+
 }
