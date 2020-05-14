@@ -56,6 +56,8 @@ void Enemy::StartEnemy()
 
 	SetStats(json_str.data());
 
+	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition(); 
+
 	/*if (game_object->GetChild("Particles"))
 	{
 		std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();

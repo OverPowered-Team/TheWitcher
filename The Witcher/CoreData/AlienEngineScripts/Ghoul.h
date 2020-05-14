@@ -57,6 +57,19 @@ public:
 
 	void OnAnimationEnd(const char* name) override;
 
+// = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
+public:
+	float current_curve_point = 0.f;
+	float curve_speed = 0.02f;
+	float wander_speed = 2.0f; 
+	float wander_radius = 3.0f;
+	float wander_precision = 0.1f; 
+	float wander_rest_time = 1.f;
+	float current_wander_time = 0.f; 
+	bool wander_rest = true; 
+	float3 lastWanderTargetPos; 
+// = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
+
 public:
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;

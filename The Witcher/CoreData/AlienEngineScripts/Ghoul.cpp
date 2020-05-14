@@ -96,7 +96,9 @@ bool Ghoul::IsDead()
 
 void Ghoul::SetState(const char* state_str)
 {
-    if (state_str == "Idle")
+	if (state_str == "Awake")
+		state = GhoulState::AWAKE;
+    else if (state_str == "Idle")
         state = GhoulState::IDLE;
     else if (state_str == "Move")
         state = GhoulState::MOVE;

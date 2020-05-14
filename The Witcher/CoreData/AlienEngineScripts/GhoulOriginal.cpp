@@ -66,31 +66,72 @@ void GhoulOriginal::DoAwake()
 		state = GhoulState::MOVE;
 		return; 
 	}
-		
+
+	float3 current_position = game_object->transform->GetGlobalPosition();
+
 	switch (awake_behaviour)
 	{
 	case AwakeBehaviour::FOLLOW_CURVE:
-
+	{
 		Curve& curve = awake_curve->GetComponent<ComponentCurve>()->curve;
 
 		current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
 		if (current_curve_point >= 1.f)
 		{
-			LOG("Enemy has completed a curve cycle!!"); 
+			LOG("Enemy has completed a curve cycle!!");
 			current_curve_point = 0.f;
 			current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
 		}
 
-		float3 current_position = game_object->transform->GetGlobalPosition(); 
 		float3 next_position = curve.ValueAt(current_curve_point);
 		next_position.y = current_position.y;
-		float3 direction = (next_position - current_position).Normalized(); 
-		
+		float3 direction = (next_position - current_position).Normalized();
+
 		Move(direction);
- 
+
 		LOG("Enemy curve current point: %f", current_curve_point);
 
-		break; 
+		break;
+
+	}
+		
+	case AwakeBehaviour::WANDER:
+	{
+		if (wander_rest) // Resting
+		{
+			LOG("Enemy resting from wander!"); 
+
+			if ((current_wander_time += Time::GetDT()) >= wander_rest_time)
+			{
+				LOG("Enemy resumed wander!"); 
+
+				wander_rest = false; 
+				current_wander_time = 0.0f;
+				float delta = (float)hypot(wander_radius, wander_radius);
+				float deltaX = Random::GetRandomFloatBetweenTwo(-delta, delta);
+				float deltaZ = Random::GetRandomFloatBetweenTwo(-delta, delta);
+				lastWanderTargetPos = float3(start_pos.x + deltaX, start_pos.y, start_pos.z + deltaZ);
+
+			}
+		}
+		else // Going to next position
+		{
+			LOG("Enemy wandering! Distance to target: %f", ((lastWanderTargetPos - current_position).Length()));
+			Move((lastWanderTargetPos - current_position).Normalized());
+
+			if ((lastWanderTargetPos - current_position).Length() <= wander_precision) // Arrived to next position
+			{
+				LOG("Enemy arrived to wander rest position!");
+				wander_rest = true;
+				character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+				animator->SetFloat("speed", 0.0F);
+			}
+				
+		}
+
+		break;
+	}
+	
 	}
 
 

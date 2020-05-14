@@ -65,7 +65,8 @@ public:
 
 public:
 	float distance = 0.0F;
-	float3 direction;
+	float3 direction; 
+	float3 start_pos;
 	float3 velocity = float3::zero();
 	float knock_slow = -4.2f;
 	float increase_hit_animation = 1.0f;
