@@ -249,6 +249,19 @@ void Ghoul::OnAnimationEnd(const char* name)
 
         state = GhoulState::IDLE;
     }
+
+
 }
 
 
+void Ghoul::OnDrawGizmosSelected()
+{
+	if(wander_radius > 0.0f)
+		Gizmos::DrawWireSphere(start_pos, wander_radius, Color::Blue());
+	
+}
+
+/*void Ghoul::OnGroupStrengthChange(float strength_multi)
+{
+
+}*/

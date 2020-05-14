@@ -57,13 +57,18 @@ public:
 
 	void OnAnimationEnd(const char* name) override;
 
+	void OnDrawGizmosSelected(); 
+
+// Group tactics
+	//void OnGroupStrengthChange(float strength_multi) override;
+
 // = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
 public:
 	float current_curve_point = 0.f;
 	float curve_speed = 0.02f;
 	float wander_speed = 2.0f; 
-	float wander_radius = 3.0f;
-	float wander_precision = 0.1f; 
+	float wander_radius = 0.0f;
+	float wander_precision = 0.5f; 
 	float wander_rest_time = 1.f;
 	float current_wander_time = 0.f; 
 	bool wander_rest = true; 
@@ -73,7 +78,7 @@ public:
 public:
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
-	AwakeBehaviour awake_behaviour = AwakeBehaviour::FOLLOW_CURVE;
+	AwakeBehaviour awake_behaviour = AwakeBehaviour::DEFAULT;
 	MusicController* m_controller = nullptr;
 	GameObject* awake_curve = nullptr;
 };
