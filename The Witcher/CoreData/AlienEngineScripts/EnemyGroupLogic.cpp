@@ -11,17 +11,43 @@ void EnemyGroupLogic::Start()
 	PositionSphere(); 
 
 	// Leader
+	icon_offset = float3(0, indicator_offset_Y, 0);
+
 	if (leader)
 	{
+		leader_indicator->transform->SetGlobalPosition(leader->transform->GetGlobalPosition() + icon_offset);
 		leaderAlive = true; 
 		ToggleIndicator(true);
 	}
+	else
+		ToggleIndicator(false);
 	
-	icon_offset = float3(0, effect_offset_Y, 0); 
+	// Debug
+	debugDataMap = // clean up? 
+	{
+		{ "Health", "value"}, 
+		{ "Damage", "value"},
+		{ "Agility", "value"},
+		{ "AttackSpeed", "value"},
+		{ "Health Leader", "value"},
+		{ "Damage Leader", "value"},
+		{ "Agility Leader", "value"},
+		{ "AttackSpeed Leader", "value"}
+	}; 
 }
 
 void EnemyGroupLogic::Update()
 {
+	// debug
+	if (debug)
+	{
+		if ((current_debug_time += Time::GetDT()) >= debug_time)
+		{
+			current_debug_time = 0.0f;
+			debug_this_frame = true; 
+		}
+	}
+
 	// Leader effect
 	if (leaderAlive)
 		leader_indicator->transform->SetGlobalPosition(leader->transform->GetGlobalPosition() + icon_offset);
@@ -37,6 +63,10 @@ void EnemyGroupLogic::Update()
 
 	// change each enemy's stats
 	SetEnemiesStats(); 
+
+	// Debug
+	debug_this_frame = false;
+	
 }
 
 void EnemyGroupLogic::SetEnemyValue(Enemy* enemy, const char* value_name, float variance, bool isLeader)
@@ -54,9 +84,20 @@ void EnemyGroupLogic::SetEnemyValue(Enemy* enemy, const char* value_name, float 
 	
 	enemy->stats[value_name].SetCurrentStat(result_value); 
 
-	// DEBUG
-	/*LOG("Due to group dynamics, an enemy's %s with base value %f is multiplied by %f and is now theoretically %f and practically %f", 
-		value_name, base_value, multiplier, result_value, enemy->stats[value_name].GetValue());*/
+	if(debug_this_frame)
+		InputDebugValue(value_name, enemy->stats[value_name].GetBaseValue(), enemy->stats[value_name].GetValue(), isLeader);
+}
+
+void EnemyGroupLogic::InputDebugValue(std::string name, float base_value, float value, bool isLeader)
+{
+	float percentage = value - base_value; 
+	if (isLeader)
+		name.append(" Leader"); 
+	std::string result = "+" + std::to_string(percentage);
+
+	debugDataMap.at(name) = result; 
+	LOG("====================== Enemy with stat %s gets a %s percentage from group tactics ======================", 
+		name.c_str(), result.c_str()); 
 }
 
 
@@ -153,9 +194,7 @@ void EnemyGroupLogic::SetGroupStrength()
 	if (leaderAlive)
 	{
 		float increment = current_group_strength * leader_multiplier.group_strength * 0.01f; 
-		LOG("Enemy group strength before leader increment: %f", current_group_strength); 
 		current_group_strength += increment;
-		LOG("Enemy group strength after leader increment: %f", current_group_strength);
 	}
 	
 
@@ -183,7 +222,7 @@ void EnemyGroupLogic::SetEnemiesStats()
 void EnemyGroupLogic::ToggleIndicator(bool show)
 {
 	for (auto& child : leader_indicator->GetChildren())
-		child->GetComponent<ComponentMesh>()->SetEnable(show);  // won't work ?
+		child->GetComponent<ComponentMesh>()->SetEnable(show);  
 }
 
 int EnemyGroupLogic::GetAliveEnemyCount() const

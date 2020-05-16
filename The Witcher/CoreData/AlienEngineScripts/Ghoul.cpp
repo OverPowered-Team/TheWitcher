@@ -299,7 +299,6 @@ void Ghoul::DoAwake()
 		current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
 		if (current_curve_point >= 1.f)
 		{
-			LOG("Enemy has completed a curve cycle!!");
 			current_curve_point = 0.f;
 			current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
 		}
@@ -321,8 +320,6 @@ void Ghoul::DoAwake()
 
 			if ((current_wander_time += Time::GetDT()) >= wander_rest_time)
 			{
-				LOG("Enemy resumed wander!");
-
 				wander_rest = false;
 				current_wander_time = 0.0f;
 				float delta = (float)hypot(wander_radius, wander_radius);
@@ -338,7 +335,6 @@ void Ghoul::DoAwake()
 
 			if ((lastWanderTargetPos - current_position).Length() <= wander_precision) // Arrived to next position
 			{
-				LOG("Enemy arrived to wander rest position!");
 				wander_rest = true;
 				character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 				animator->SetFloat("speed", 0.0F);
