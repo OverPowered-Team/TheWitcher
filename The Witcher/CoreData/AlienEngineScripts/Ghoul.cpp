@@ -8,6 +8,7 @@
 #include "MusicController.h"
 #include "GhoulOriginal.h"
 #include "EnemyGroupLogic.h"
+#include "Stat.h"
 
 Ghoul::Ghoul() : Enemy()
 {

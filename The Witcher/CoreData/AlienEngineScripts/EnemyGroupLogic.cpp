@@ -39,18 +39,24 @@ void EnemyGroupLogic::Update()
 	SetEnemiesStats(); 
 }
 
-void EnemyGroupLogic::SetEnemyValue(Enemy* enemy, const char* value_name, float variance)
+void EnemyGroupLogic::SetEnemyValue(Enemy* enemy, const char* value_name, float variance, bool isLeader)
 {
 	float start = -variance / 2.f;  
 	float multiplier = (start + current_group_strength * variance) * 0.01f; 
 	float base_value = enemy->stats[value_name].GetBaseValue();  
 	float result_value = base_value + base_value * multiplier;  
 
+	if (isLeader)
+	{
+		float increment = result_value * leader_multiplier.leader_strength * 0.01f; 
+		result_value += increment;
+	}
+	
 	enemy->stats[value_name].SetCurrentStat(result_value); 
 
 	// DEBUG
-/*	LOG("Due to group dynamics, an enemy's %s with base value %f is multiplied by %f and is now theoretically %f and practically %f", 
-		value_name, base_value, multiplier, result_value, enemy->stats[value_name].GetValue());*/ 
+	/*LOG("Due to group dynamics, an enemy's %s with base value %f is multiplied by %f and is now theoretically %f and practically %f", 
+		value_name, base_value, multiplier, result_value, enemy->stats[value_name].GetValue());*/
 }
 
 
@@ -143,6 +149,16 @@ void EnemyGroupLogic::SetGroupStrength()
 	// the closer and the more enemies there are, the higher the group strength
 	current_group_strength = GetAliveEnemyCount() / enclosing_sphere.r;
 
+	// extra % when leader alive
+	if (leaderAlive)
+	{
+		float increment = current_group_strength * leader_multiplier.group_strength * 0.01f; 
+		LOG("Enemy group strength before leader increment: %f", current_group_strength); 
+		current_group_strength += increment;
+		LOG("Enemy group strength after leader increment: %f", current_group_strength);
+	}
+	
+
 	// cap the strength between 0 and 1  
 	current_group_strength = Normalize(current_group_strength, 0.f, max_group_strength);
 }
@@ -155,10 +171,12 @@ void EnemyGroupLogic::SetEnemiesStats()
 		if (enemy->IsDead() == true)
 			continue; 
 
-		SetEnemyValue(enemy, "Health", stat_variances.health);
-		SetEnemyValue(enemy, "Damage", stat_variances.damage);
-		SetEnemyValue(enemy, "Agility", stat_variances.agility);
-		SetEnemyValue(enemy, "AttacKSpeed", stat_variances.attack_speed);
+		bool isLeader = ((leaderAlive) && (child == leader)) ? true : false; 
+
+		SetEnemyValue(enemy, "Health", stat_variances.health, isLeader);
+		SetEnemyValue(enemy, "Damage", stat_variances.damage, isLeader);
+		SetEnemyValue(enemy, "Agility", stat_variances.agility, isLeader);
+		SetEnemyValue(enemy, "AttackSpeed", stat_variances.attack_speed, isLeader);
 	}
 }
 
