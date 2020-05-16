@@ -12,7 +12,6 @@ public:
 	virtual ~GhoulOriginal();
 
 	void UpdateEnemy() override;
-	void DoAwake(); 
 
 
 };

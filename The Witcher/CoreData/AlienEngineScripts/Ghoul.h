@@ -59,11 +59,13 @@ public:
 
 	void OnDrawGizmosSelected(); 
 
-// Group tactics
-	//void OnGroupStrengthChange(float strength_multi) override;
 
 // = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
 public:
+	void DoAwake(); 
+	void Dying(); 
+
+public: 
 	float current_curve_point = 0.f;
 	float curve_speed = 0.02f;
 	float wander_speed = 2.0f; 
@@ -73,6 +75,7 @@ public:
 	float current_wander_time = 0.f; 
 	bool wander_rest = true; 
 	float3 lastWanderTargetPos; 
+
 // = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
 
 public:
