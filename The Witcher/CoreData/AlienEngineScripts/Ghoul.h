@@ -65,20 +65,19 @@ public:
 	void DoAwake(); 
 	void Dying(); 
 
-public: 
+private: 
+	float current_wander_time = 0.f;
+	float3 lastWanderTargetPos;
+	bool curve_patrol_go = true; 
 	float current_curve_point = 0.f;
+public: 
 	float curve_speed = 0.02f;
+	bool patrol = false;
 	float wander_speed = 2.0f; 
 	float wander_radius = 0.0f;
 	float wander_precision = 0.5f; 
 	float wander_rest_time = 1.f;
-	float current_wander_time = 0.f; 
 	bool wander_rest = true; 
-	float3 lastWanderTargetPos; 
-
-// = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
-
-public:
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
 	AwakeBehaviour awake_behaviour = AwakeBehaviour::DEFAULT;

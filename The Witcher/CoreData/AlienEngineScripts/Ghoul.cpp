@@ -9,6 +9,7 @@
 #include "GhoulOriginal.h"
 #include "EnemyGroupLogic.h"
 #include "Stat.h"
+ 
 
 Ghoul::Ghoul() : Enemy()
 {
@@ -274,14 +275,20 @@ void Ghoul::OnAnimationEnd(const char* name)
 
 void Ghoul::OnDrawGizmosSelected()
 {
-	if(wander_radius > 0.0f)
+	if(awake_behaviour == AwakeBehaviour::WANDER)
 		Gizmos::DrawWireSphere(start_pos, wander_radius, Color::Blue());
 	
 }
 
 
-void Ghoul::DoAwake()
+void Ghoul::DoAwake() // Do this in other enemies
 {
+	if (is_combat)
+	{
+		Move(direction);
+		return; 
+	}
+
 	if (distance < stats["VisionRange"].GetValue())
 	{
 		state = GhoulState::MOVE;
@@ -296,11 +303,49 @@ void Ghoul::DoAwake()
 	{
 		Curve& curve = awake_curve->GetComponent<ComponentCurve>()->curve;
 
-		current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
-		if (current_curve_point >= 1.f)
-		{
-			current_curve_point = 0.f;
+		// Go forwards
+		if(!patrol)
 			current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+		else
+		{
+			// Go forwards or backwards
+			if(curve_patrol_go)
+				current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+			else
+				current_curve_point -= curve_speed * Time::GetScaleTime() * Time::GetDT();
+		}
+		
+		// Reached end
+		if (((current_curve_point >= 1.f)) || ((current_curve_point < 0.f) && patrol))
+		{
+			// Current point set to the beginning
+			
+			// If patrol, now go the other way around 
+			if (patrol)
+			{
+				// Cap the current point to either 1 or 0
+				if (current_curve_point >= 1.f)
+					current_curve_point = 1.f; 
+				else
+					current_curve_point = 0.f;
+
+				// Go the other way around
+				curve_patrol_go = !curve_patrol_go;
+
+				// Speed has a + or - multiplier
+				if (curve_patrol_go)
+					current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+				else
+					current_curve_point -= curve_speed * Time::GetScaleTime() * Time::GetDT();
+			}
+			else
+			{
+				// Otherwise just keep going
+				current_curve_point = 0.f;
+				current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+			}
+			
+	
 		}
 
 		float3 next_position = curve.ValueAt(current_curve_point);

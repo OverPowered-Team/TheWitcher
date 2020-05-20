@@ -4,6 +4,14 @@
 #include "Macros/AlienScripts.h"
 
 class Enemy;
+
+enum (PlayerDetectionType,
+	DO_NOT_COMMUNICATE,
+	COMMUNICATE_TO_ALL,
+	COMMUNICATE_TO_CLOSEST
+	);
+
+
 class ALIEN_ENGINE_API EnemyGroupLogic : public Alien {
 public:
 	struct StatVariances
@@ -19,6 +27,7 @@ public:
 		float group_strength = 10.f;
 		float leader_strength = 20.f; 
 	};
+ 
 
 public: 
 	EnemyGroupLogic() {}
@@ -58,7 +67,7 @@ private:
 	float current_group_strength = 1.f;
 	float current_respawn_time = 0.f; 
 	bool leaderAlive = false; 
-
+ 
 	// Debug
 	bool debug_this_frame = false; 
 	float current_debug_time = 0.f;
@@ -72,6 +81,7 @@ public:
 	int leader_respawn_prob = 50; 
 	StatVariances stat_variances;
 	LeaderMultiplier leader_multiplier; 
+	PlayerDetectionType playerDetectionType; 
 
 	// Debug
 	bool debug = false;
@@ -113,6 +123,12 @@ ALIEN_FACTORY EnemyGroupLogic* CreateEnemyGroupLogic() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(group->stat_variances.agility);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(group->stat_variances.attack_speed);
 
+
+	SHOW_SPACING();
+	SHOW_SEPARATOR();
+	SHOW_TEXT("How enemies communicate to others when a player is on sight");
+	SHOW_IN_INSPECTOR_AS_ENUM(PlayerDetectionType, group->playerDetectionType); 
+
 	SHOW_SPACING();
 	SHOW_SEPARATOR();
 	SHOW_TEXT("Debug stat change percentages in the console");
@@ -120,5 +136,9 @@ ALIEN_FACTORY EnemyGroupLogic* CreateEnemyGroupLogic() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(group->debug_time);
 
 	
+
+	/*
+	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+	*/
 	return group;
 }
