@@ -303,6 +303,9 @@ void Ghoul::DoAwake() // Do this in other enemies
 	{
 		Curve& curve = awake_curve->GetComponent<ComponentCurve>()->curve;
 
+		if(patrol)
+			LOG("Current patrol enemy curve point: %f", current_curve_point); 
+
 		// Go forwards
 		if(!patrol)
 			current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
