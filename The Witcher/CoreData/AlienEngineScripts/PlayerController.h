@@ -117,6 +117,7 @@ public:
 	PlayerData player_data;
 	std::vector<GameObject*> particles;
 	std::vector<GameObject*> particle_spawn_positions;
+	std::vector<GameObject*> enemy_battle_circle;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	ComponentAudioEmitter* audio = nullptr;
