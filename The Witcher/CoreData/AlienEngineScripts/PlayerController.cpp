@@ -824,6 +824,7 @@ void PlayerController::OnUltimateDeactivation(float value)
 void PlayerController::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), battleCircle, Color::Green()); //battle circle
 }
 #pragma endregion Events
 float3 PlayerController::GetDirectionVector()

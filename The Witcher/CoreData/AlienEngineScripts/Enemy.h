@@ -8,6 +8,7 @@
 
 class PlayerController;
 class Effect;
+class SteeringAvoid;
 
 enum (EnemyType,
 	NONE = -1,
@@ -76,6 +77,7 @@ public:
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
 	ComponentAudioEmitter* audio_emitter = nullptr;
+	SteeringAvoid* steeringAvoid = nullptr;
 	bool can_get_interrupted = true;
 
 	std::vector<PlayerController*> player_controllers;
@@ -85,6 +87,7 @@ public:
 
 	bool is_frozen = false;
 	bool is_combat = false;
+	bool is_attacking = false;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;

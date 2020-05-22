@@ -117,7 +117,8 @@ public:
 	PlayerData player_data;
 	std::vector<GameObject*> particles;
 	std::vector<GameObject*> particle_spawn_positions;
-	std::vector<GameObject*> enemy_battle_circle;
+	std::vector<Enemy*> enemy_battle_circle;
+	float battleCircle = 2.0f;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	ComponentAudioEmitter* audio = nullptr;
@@ -205,6 +206,8 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
+
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->battleCircle);
 
 	return player;
 }

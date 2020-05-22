@@ -13,7 +13,7 @@ public:
 	virtual ~SteeringAvoid();
 	
 	void Start();
-	void Update();
+	void AvoidObstacle(float3& direction);
 
 	void OnDrawGizmosSelected();
 

@@ -6,6 +6,7 @@
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "Effect.h"
+#include "SteeringAvoid.h"
 
 void Enemy::Awake()
 {
@@ -22,6 +23,7 @@ void Enemy::StartEnemy()
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
+	steeringAvoid = GetComponent<SteeringAvoid>();
 	std::string json_str;
 
 	switch (type)
@@ -173,9 +175,10 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	float3 velocity_vec = direction.Normalized();
+	steeringAvoid->AvoidObstacle(velocity_vec);
 
-	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
+	character_ctrl->Move(velocity_vec * stats["Agility"].GetValue() * Time::GetScaleTime() * Time::GetDT());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
 	float angle = atan2f(direction.z, direction.x);

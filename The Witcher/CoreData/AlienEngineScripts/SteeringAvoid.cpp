@@ -14,7 +14,7 @@ void SteeringAvoid::Start()
 	enemyScript = game_object->GetComponent<Enemy>();
 }
 
-void SteeringAvoid::Update()
+void SteeringAvoid::AvoidObstacle(float3& direction)
 {
 	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), avoidRange);
 
@@ -22,8 +22,8 @@ void SteeringAvoid::Update()
 	{
 		if (colliders[i]->game_object_attached != game_object && strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
 		{
-			float3 direction = (colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-			enemyScript->character_ctrl->Move(-direction * enemyScript->stats["Agility"].GetValue() * Time::GetDT() * Time::GetScaleTime());
+			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
+			direction -= avoid_direction.Normalized();
 		}
 	}
 }
