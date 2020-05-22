@@ -161,9 +161,6 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 				current_attack = base_heavy_attack;
 		}		
 	}
-
-	if(GameManager::instance->player_manager && current_attack && current_attack->IsLast())
-		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -390,6 +387,9 @@ void PlayerAttacks::CastSpell()
 void PlayerAttacks::OnHit(Enemy* enemy)
 {
 	current_attack->enemies_hit.push_back(enemy);
+
+	if (GameManager::instance->player_manager && !current_attack->HasTag(Attack_Tags::T_Spell) && current_attack->IsLast())
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 
 	if (current_attack->HasTag(Attack_Tags::T_Debuff))
 	{

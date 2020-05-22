@@ -195,7 +195,7 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	particle->origin_position = float3(0, 0, 0);
+	particle->origin_position = float3(0, 43.f, 0);
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
 	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
 	particle->time_passed = Time::GetGameTime();

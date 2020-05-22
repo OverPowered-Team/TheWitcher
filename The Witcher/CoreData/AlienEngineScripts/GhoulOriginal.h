@@ -12,7 +12,6 @@ public:
 	virtual ~GhoulOriginal();
 
 	void UpdateEnemy() override;
-	void DoAwake(); 
 
 
 };
@@ -23,14 +22,31 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulType, ghoul->ghoul_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulState, ghoul->state);
+
+	SHOW_SPACING();
+	SHOW_SEPARATOR();
+	SHOW_TEXT("What does the enemy do before aggro-ing the players?");
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::AwakeBehaviour, ghoul->awake_behaviour); 
+
+	SHOW_SPACING();
+	SHOW_SEPARATOR();
+	SHOW_TEXT("If follow curve");
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(ghoul->awake_curve);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->curve_speed); 
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(ghoul->patrol);
+
+	SHOW_SPACING();
+	SHOW_SEPARATOR();
+	SHOW_TEXT("If wander");
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_radius);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_speed);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_rest_time);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_precision);
+
+	SHOW_SPACING();
+	SHOW_SEPARATOR();
+
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ghoul->increase_hit_animation);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(ghoul->awake_curve); 
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
