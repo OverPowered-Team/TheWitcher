@@ -17,22 +17,13 @@ void Boss_Lifebar::Start()
 
 	lifebar->SetBackgroundColor(1, 1, 1, 0.0f);
 	lifebar->SetBarColor(1, 1, 1, 0.0f);
+	lifebar->SetBarValue(0);
 	boss_name->SetAlpha(0.0f);
 }
 
 void Boss_Lifebar::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_SPACE))
-	{
-		ShowLifeBar(true);
-	}
-
-	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT))
-	{
-		ShowLifeBar(false);
-	}
-
-	if (lifebar_changing)
+	if (lifebar_changing && !filling_bar)
 	{
 		float t = (Time::GetTimeSinceStart() - start_lerp_time) / time_to_lerp;
 		float lerp = Maths::Lerp(start_life, goal_life, t);
@@ -48,28 +39,12 @@ void Boss_Lifebar::Update()
 
 	if (changing_alpha)
 	{
-		float t = (Time::GetTimeSinceStart() - start_time_show) / time_to_show;
-		float lerp = Maths::Lerp(starting_point, ending_point, t);
+		AlphaChange();
+	}
 
-		lifebar->SetBackgroundColor(1, 1, 1, lerp);
-		lifebar->SetBarColor(1, 1, 1, lerp);
-		boss_name->SetAlpha(lerp);
-
-		if (t >= 1)
-		{
-			if (lerp >= 1)
-			{
-				lifebar->SetBackgroundColor(1, 1, 1, 1.f);
-				boss_name->SetAlpha(1.0f);
-			}
-			else
-			{
-				lifebar->SetBackgroundColor(1, 1, 1, 0.f);
-				boss_name->SetAlpha(0.0f);
-			}
-
-			changing_alpha = false;
-		}
+	if (filling_bar)
+	{
+		FillingBar();
 	}
 }
 
@@ -99,3 +74,49 @@ void Boss_Lifebar::ShowLifeBar(bool want_to_show)
 	start_time_show = Time::GetTimeSinceStart();
 }
 
+void Boss_Lifebar::AlphaChange()
+{
+	float t = (Time::GetTimeSinceStart() - start_time_show) / time_to_show;
+	float lerp = Maths::Lerp(starting_point, ending_point, t);
+
+	lifebar->SetBackgroundColor(1, 1, 1, lerp);
+	lifebar->SetBarColor(1, 1, 1, lerp);
+	boss_name->SetAlpha(lerp);
+
+	if (t >= 1)
+	{
+		if (lerp >= 1)
+		{
+			lifebar->SetBackgroundColor(1, 1, 1, 1.f);
+			boss_name->SetAlpha(1.0f);
+
+			if (first_time_filling)
+			{
+				first_time_filling = false;
+				filling_bar = true;
+				time_start_fill = Time::GetTimeSinceStart();
+			}
+		}
+		else
+		{
+			lifebar->SetBackgroundColor(1, 1, 1, 0.f);
+			boss_name->SetAlpha(0.0f);
+		}
+
+		changing_alpha = false;
+	}
+}
+
+void Boss_Lifebar::FillingBar()
+{
+	float t = (Time::GetTimeSinceStart() - time_start_fill) / time_to_show;
+	float lerp = Maths::Lerp(0.0f, 1.0f, t);
+
+	lifebar->SetBarValue(lerp);
+
+	if (t >= 1)
+	{
+		lifebar->SetBarValue(1);
+		filling_bar = false;
+	}
+}

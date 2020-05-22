@@ -4,7 +4,7 @@
 #include "PlayerController.h"
 #include "MusicController.h"
 #include "Boss.h"
-
+#include "Boss_Lifebar.h"
 
 Boss::BossAction::BossAction(ActionType _type, float _probability)
 {
@@ -16,6 +16,8 @@ void Boss::StartEnemy()
 {
 	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
+
+	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	state = BossState::IDLE;
 }
@@ -41,6 +43,7 @@ void Boss::UpdateEnemy()
 			{
 				is_combat = true;
 				m_controller->EnemyInSight((Enemy*)this);
+				HUD->ShowLifeBar(true);
 			}
 		}
 		else {
@@ -48,6 +51,7 @@ void Boss::UpdateEnemy()
 			{
 				is_combat = false;
 				m_controller->EnemyLostSight((Enemy*)this);
+				HUD->ShowLifeBar(false);
 			}
 		}
 		break;
@@ -97,6 +101,8 @@ void Boss::CleanUpEnemy()
 float Boss::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float damage = Enemy::GetDamaged(dmg, player, knock_back);
+
+	HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
 
 	return damage;
 }
@@ -174,6 +180,10 @@ void Boss::EndAction(GameObject* go_ended)
 
 float Boss::GetDamaged(float dmg, float3 knock_back)
 {
+	float damage = Enemy::GetDamaged(dmg, knock_back);
+
+	HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
+
 	return Enemy::GetDamaged(dmg, knock_back);
 }
 

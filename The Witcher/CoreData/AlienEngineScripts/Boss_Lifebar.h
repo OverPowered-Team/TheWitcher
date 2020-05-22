@@ -14,6 +14,10 @@ private:
 	void Start();
 	void Update();
 
+	void AlphaChange();
+
+	void FillingBar();
+
 public:
 
 	void UpdateLifebar(float life, float max_life);
@@ -42,6 +46,11 @@ private:
 	float start_time_show		= false;
 	float starting_point		= false;
 	float ending_point			= false;
+	
+	bool filling_bar			= false;
+	float time_start_fill		= 0.0f;
+	bool first_time_filling		= true;
+
 };
 
 ALIEN_FACTORY Boss_Lifebar* CreateBoss_Lifebar() {
