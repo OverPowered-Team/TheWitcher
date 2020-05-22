@@ -1,0 +1,195 @@
+{
+    "Name": "Boss_HUD",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Boss_HUD",
+                "FamilyNumber": 1,
+                "ID": "4761336033411944982",
+                "ParentID": "12736680637920272787",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11056150425712940278",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1399618338576255760"
+                    },
+                    {
+                        "Enabled": true,
+                        "isWorld": false,
+                        "Type": 19,
+                        "BBType": 0
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16050637920594327317",
+                        "ResourceID": "11431151498149048558",
+                        "DataName": "Boss_Lifebar",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_lerp",
+                                "float": 0.25
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_show",
+                                "float": 0.5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Boss_Life",
+                "FamilyNumber": 2,
+                "ID": "2033602696121175673",
+                "ParentID": "4761336033411944982",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11056150425712940278",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -40.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            8,
+                            5,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4619009329650674096"
+                    },
+                    {
+                        "X": 605,
+                        "Y": 620.3499755859375,
+                        "Width": 8.9799995422363281,
+                        "Height": 0.40999999642372131,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 25,
+                        "TextureID": "2708325781690226991",
+                        "sliderTexture": "14703691212849681173",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "BarColor": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "maxValue": 100,
+                        "minValue": 0,
+                        "currentValue": 100,
+                        "factor": 1,
+                        "barScaleX": 1,
+                        "barScaleY": 0.80000001192092896,
+                        "offsetX": 0,
+                        "offsetY": 0,
+                        "SCType": 2
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 3,
+                "ID": "10122842157506854808",
+                "ParentID": "2033602696121175673",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11056150425712940278",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -3.6875,
+                            0.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.0024999999441206455,
+                            0.0020000000949949026,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1358345929256398715"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "11557906190785625796",
+                        "Text": "Error: Name Not Found",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.95098036527633667,
+                            0.95097082853317261,
+                            0.95097082853317261,
+                            1
+                        ],
+                        "Width": 3015,
+                        "Interlineal": 1.5,
+                        "Align": 1
+                    }
+                ]
+            }
+        ]
+    }
+}
