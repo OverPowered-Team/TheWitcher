@@ -75,7 +75,7 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	}
 	
 	// UI
-	in_game_ui->StartLerpParticleUltibar(float3(0, 0, 0));
+	in_game_ui->StartLerpParticleUltibar(float3(0, -38.f, 0));
 }
 
 void PlayerManager::ActivateUltimate()
