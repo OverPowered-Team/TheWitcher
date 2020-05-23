@@ -76,7 +76,10 @@ void NilfgaardSoldier::CheckDistance()
 	if ((distance < stats["AttackRange"].GetValue()))
 	{
 		animator->SetFloat("speed", 0.0F);
+		float angle = atan2f(direction.z, direction.x);
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad()));
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
 		Action();
 	}
 
@@ -84,6 +87,7 @@ void NilfgaardSoldier::CheckDistance()
 	{
 		state = NilfgaardSoldierState::IDLE;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
 		animator->SetFloat("speed", 0.0F);
 		if (m_controller && is_combat) {
 			is_combat = false;
@@ -180,6 +184,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			state = NilfgaardSoldierState::IDLE;
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+			velocity = float3::zero();
 		}
 	}
 	else if (strcmp(name, "Hit") == 0) {
@@ -191,6 +196,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			state = NilfgaardSoldierState::IDLE;
 			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+			velocity = float3::zero();
 		}
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)

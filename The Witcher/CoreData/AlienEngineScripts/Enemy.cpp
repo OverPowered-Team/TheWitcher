@@ -175,13 +175,24 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	float3 velocity_vec = direction.Normalized();
-	steeringAvoid->AvoidObstacle(velocity_vec);
+	float3 velocity_vec = direction.Normalized() * 10 * Time::GetDT();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle();
 
-	character_ctrl->Move(velocity_vec * stats["Agility"].GetValue() * Time::GetScaleTime() * Time::GetDT());
+	if (avoid_vector.LengthSq() > 0)
+		velocity += avoid_vector;
+	else
+		velocity += velocity_vec;
+
+	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	{
+		velocity = velocity.Normalized()* stats["Agility"].GetValue();
+	}
+
+
+	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
-	float angle = atan2f(direction.z, direction.x);
+	float angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
