@@ -133,11 +133,8 @@ void Drowned::OnTriggerEnter(ComponentCollider* collider)
 			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
-
-				if (state == DrownedState::DYING)
-					player->OnEnemyKill();
-
+				float3 knock = player->attacks->GetKnockBack(this->transform);
+				player->OnHit(this, GetDamaged(dmg_received, player, knock));
 				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 			}
 		}
