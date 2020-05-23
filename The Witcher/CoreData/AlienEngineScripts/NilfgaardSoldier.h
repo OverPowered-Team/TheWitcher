@@ -33,7 +33,6 @@ public:
 
 	void StartEnemy() override;
 	void SetStats(const char* json) override;
-	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	void CleanUpEnemy() override;
 
 	void Stun(float time) override;
@@ -45,17 +44,15 @@ public:
 
 	void RotateSoldier();
 
+	void PlaySFX(const char* sfx_name);
+
 	void OnAnimationEnd(const char* name) override;
 	void OnTriggerEnter(ComponentCollider* collider);
 
 public:
-	Prefab head_prefab;
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	NilfgaardSoldierState state = NilfgaardSoldierState::NONE;
 	MusicController* m_controller = nullptr;
-
-protected:
-	GameObject* decapitated_head = nullptr;
 };
 
 

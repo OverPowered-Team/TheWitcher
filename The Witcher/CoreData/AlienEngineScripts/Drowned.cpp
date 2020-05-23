@@ -37,18 +37,10 @@ void Drowned::SetStats(const char* json)
 			else
 				break;
 
-		stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
-		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
-		stats["Health"].SetMinValue(stat_weapon->GetNumber("MinHealth"));
-		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
-		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
-		stats["Agility"].SetMinValue(stat_weapon->GetNumber("MinAgility"));
-		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
-		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
-		stats["Damage"].SetMinValue(stat_weapon->GetNumber("MinDamage"));
-		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
-		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
-		stats["AttackSpeed"].SetMinValue(stat_weapon->GetNumber("MinAttackSpeed"));
+		stats["Health"] = Stat("Health", stat_weapon->GetNumber("MinHealth"), stat_weapon->GetNumber("Health"), stat_weapon->GetNumber("MaxHealth"));
+		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("MinAgility"), stat_weapon->GetNumber("Agility"), stat_weapon->GetNumber("MaxAgility"));
+		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("MinDamage"), stat_weapon->GetNumber("Damage"), stat_weapon->GetNumber("MaxDamage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("MinAttackSpeed"), stat_weapon->GetNumber("AttackSpeed"), stat_weapon->GetNumber("MaxAttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 		stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
@@ -56,9 +48,7 @@ void Drowned::SetStats(const char* json)
 		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
-			stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
-	/*	else if (drowned_type == DrownedType::GRAB)
-			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));*/
+		stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
 
 		stat_weapon->GetAnotherNode();
 	}
@@ -69,41 +59,6 @@ void Drowned::SetStats(const char* json)
 void Drowned::CleanUpEnemy()
 {
 	ReleaseAllParticles();
-}
-
-float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
-{
-	float damage = Enemy::GetDamaged(dmg, player);
-
-	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
-		state = DrownedState::HIT;
-		animator->PlayState("Hit");
-		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		audio_emitter->StartSound("Play_Drowner_Hit");
-	}
-
-	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
-	{
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		can_get_interrupted = false;
-	}
-
-	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
-
-	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-
-	if (stats["Health"].GetValue() == 0.0F) {
-
-		animator->SetBool("dead", true);
-		OnDeathHit();
-		state = DrownedState::DYING;
-		audio_emitter->StartSound("Play_Drowner_Hit");
-		player->OnEnemyKill();
-	}
-
-	return damage;
 }
 
 void Drowned::Stun(float time)
@@ -123,6 +78,15 @@ bool Drowned::IsDead()
 	return (state == DrownedState::DEAD ? true : false);
 }
 
+void Drowned::PlaySFX(const char* sfx_name)
+{
+	if (sfx_name == "Hit")
+		audio_emitter->StartSound("Play_Drowner_Hit");
+	else if (sfx_name == "Death")
+		audio_emitter->StartSound("Play_Drowner_Hit"); // TODO: Put Death sfx
+	else
+		LOG("Sound effect with name %s not found!", sfx_name);
+}
 
 void Drowned::OnTriggerEnter(ComponentCollider* collider)
 {

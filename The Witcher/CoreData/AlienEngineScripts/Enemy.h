@@ -40,9 +40,12 @@ public:
 	virtual void Move(float3 direction);
 	virtual void CheckDistance() {};
 	virtual void Action() {}
+
 	void ActivateCollider();
 	void DeactivateCollider();
 	Quat RotateProjectile();
+
+	virtual void PlaySFX(const char* sfx_name) {}
 
 	virtual void Stun(float time) {};
 	virtual void KnockBack(float3 knock);
@@ -88,6 +91,9 @@ public:
 	bool is_frozen = false;
 	bool is_combat = false;
 	bool is_attacking = false;
+
+	Prefab head_prefab;
+	GameObject* decapitated_head = nullptr;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;

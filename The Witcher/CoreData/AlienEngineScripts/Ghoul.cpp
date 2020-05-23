@@ -42,18 +42,10 @@ void Ghoul::SetStats(const char* json)
             else
                 break;
 
-        stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
-		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
-		stats["Health"].SetMinValue(stat_weapon->GetNumber("MinHealth"));
-        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
-		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
-		stats["Agility"].SetMinValue(stat_weapon->GetNumber("MinAgility"));
-        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
-		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
-		stats["Damage"].SetMinValue(stat_weapon->GetNumber("MinDamage"));
-        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
-		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
-		stats["AttackSpeed"].SetMinValue(stat_weapon->GetNumber("MinAttackSpeed"));
+        stats["Health"] = Stat("Health", stat_weapon->GetNumber("MinHealth"), stat_weapon->GetNumber("Health"), stat_weapon->GetNumber("MaxHealth"));
+        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("MinAgility"), stat_weapon->GetNumber("Agility"), stat_weapon->GetNumber("MaxAgility"));
+        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("MinDamage"), stat_weapon->GetNumber("Damage"), stat_weapon->GetNumber("MaxDamage"));
+        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("MinAttackSpeed"), stat_weapon->GetNumber("AttackSpeed"), stat_weapon->GetNumber("MaxAttackSpeed"));
         stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
@@ -160,56 +152,17 @@ void Ghoul::CheckDistance()
         character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
         animator->SetFloat("speed", 0.0F);
         if (m_controller && is_combat) {
-            LOG("Adios");
             is_combat = false;
             m_controller->EnemyLostSight((Enemy*)this);
         }
-        LOG("Adios");
     }
     if (distance < stats["VisionRange"].GetValue()) {
         if (m_controller && !is_combat)
         {
-            LOG("HOLA");
             is_combat = true;
             m_controller->EnemyInSight((Enemy*)this);
         }
-        LOG("HOLA");
     }
-}
-
-float Ghoul::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
-{
-    state = GhoulState::HIT;
-    float damage = Enemy::GetDamaged(dmg, player, knock_back);
-
-    if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
-        animator->PlayState("Hit");
-        audio_emitter->StartSound("GhoulHit");
-        stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-        animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-    }
-
-    if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
-    {
-        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-        animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-        can_get_interrupted = false;
-    }
-
-
-    SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
-
-    character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-
-    if (stats["Health"].GetValue() == 0.0F) {
-
-        animator->SetBool("dead", true);
-        OnDeathHit();
-        state = GhoulState::DYING;
-        audio_emitter->StartSound("GhoulDeath");
-    }
-
-    return damage;
 }
 
 void Ghoul::OnTriggerEnter(ComponentCollider* collider)
@@ -235,6 +188,7 @@ void Ghoul::OnAnimationEnd(const char* name)
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
         stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
             state = GhoulState::MOVE;
@@ -257,8 +211,6 @@ void Ghoul::OnAnimationEnd(const char* name)
 
         state = GhoulState::IDLE;
     }
-
-
 }
 
 
@@ -269,7 +221,12 @@ void Ghoul::OnDrawGizmosSelected()
 	
 }
 
-/*void Ghoul::OnGroupStrengthChange(float strength_multi)
+void Ghoul::PlaySFX(const char* sfx_name)
 {
-
-}*/
+    if (sfx_name == "Hit")
+        audio_emitter->StartSound("GhoulHit");
+    else if (sfx_name == "Death")
+        audio_emitter->StartSound("GhoulDeath");
+    else
+        LOG("Sound effect with name %s not found!", sfx_name);
+}

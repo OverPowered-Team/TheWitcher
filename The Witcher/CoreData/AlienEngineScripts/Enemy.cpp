@@ -226,10 +226,63 @@ void Enemy::KnockBack(float3 knock)
 
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
+	SetState("Hit");
+
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 
 	KnockBack(knock_back);
+
+	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+		animator->PlayState("Hit");
+		PlaySFX("Hit");
+		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+	}
+
+	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	{
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		can_get_interrupted = false;
+	}
+
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
+
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+	if (stats["Health"].GetValue() == 0.0F) {
+
+		animator->SetBool("dead", true);
+		OnDeathHit();
+
+		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
+		{
+			SetState("Dying");
+			audio_emitter->StartSound("SoldierDeath");
+
+			float3 head_pos = transform->GetGlobalPosition();
+			head_pos.y += 1.0f;
+
+			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
+			if (decapitated_head)
+			{
+				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
+
+				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
+				head_rb->SetRotation(transform->GetGlobalRotation());
+
+				float decapitation_force = 2.0f;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+				decapitation_vector += transform->up * decapitation_force;
+
+				head_rb->AddForce(decapitation_vector);
+				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
+			}
+		}
+	}
 
 	return aux_health - stats["Health"].GetValue();
 }
