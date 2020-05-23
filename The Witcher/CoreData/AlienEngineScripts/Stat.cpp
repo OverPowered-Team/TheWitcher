@@ -4,6 +4,7 @@
 Stat::Stat(std::string name, float base_value)
 {
     this->name = name;
+    this->min_value = base_value;
     this->base_value = base_value;
     this->current_value = base_value;
     this->max_value = base_value;
@@ -12,6 +13,7 @@ Stat::Stat(std::string name, float base_value)
 Stat::Stat(std::string name, float min_value, float base_value, float max_value)
 {
     this->name = name;
+    this->min_value = min_value;
     this->base_value = base_value;
     this->current_value = base_value;
     this->max_value = max_value;

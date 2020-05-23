@@ -284,6 +284,8 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		}
 	}
 
+	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+
 	return aux_health - stats["Health"].GetValue();
 }
 
