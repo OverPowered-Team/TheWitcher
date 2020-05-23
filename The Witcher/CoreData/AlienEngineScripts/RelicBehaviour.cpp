@@ -142,7 +142,7 @@ void RelicBehaviour::Start()
 
 void RelicBehaviour::Update()
 {
-	float3 rot = {0, 5, 0};
+	float3 rot = {0, 2, 0};
 	transform->AddRotation(rot);
 }
 
