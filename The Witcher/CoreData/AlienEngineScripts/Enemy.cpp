@@ -97,6 +97,7 @@ void Enemy::UpdateEnemy()
 	}
 
 	character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
+	animator->SetBool("grounded", character_ctrl->isGrounded);
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{

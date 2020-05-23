@@ -149,7 +149,13 @@
                 "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
             },
             {
                 "Source": "Dizzy",
@@ -192,6 +198,10 @@
         "BoolParameters": [
             {
                 "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "grounded",
                 "Value": false
             }
         ],

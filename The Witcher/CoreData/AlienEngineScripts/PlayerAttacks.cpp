@@ -334,17 +334,15 @@ void PlayerAttacks::ActivateCollider()
 	{
 		switch (current_attack->info.coll_type)
 		{
-		case Collider_Type::C_Box:
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetSize(current_attack->info.collider_size);
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
-			break;
 		case Collider_Type::C_Sphere:
 			((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
 			//((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRadius(current_attack->info.collider_size.x); //x as radius for now :D
 			((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
 			break;
-		case Collider_Type::C_Weapon:
+		default:
+			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
+			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetSize(current_attack->info.collider_size);
+			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
 			break;
 		}
 		colliders[(int)current_attack->info.coll_type]->SetEnable(true);
