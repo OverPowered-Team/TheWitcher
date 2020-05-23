@@ -62,6 +62,7 @@ void PlayerController::Start()
 
 	state = new IdleState();
 	state->OnEnter(this);
+
 }
 
 void PlayerController::Update()
