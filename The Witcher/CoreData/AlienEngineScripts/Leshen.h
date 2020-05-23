@@ -19,6 +19,8 @@ public:
 	GameObject* root_1 = nullptr;
 	GameObject* root_2 = nullptr;
 
+	GameObject* cloud_collider = nullptr;
+
 	Prefab crow_prefab;
 	GameObject* crows = nullptr;
 

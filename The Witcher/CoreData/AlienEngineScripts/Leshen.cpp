@@ -22,6 +22,8 @@ void Leshen::StartEnemy()
 	Boss::StartEnemy();
 
 	meshes = game_object->GetChild("Meshes");
+	cloud_collider = game_object->GetChild("CloudCollider");
+	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 }
 
 void Leshen::UpdateEnemy()
@@ -159,6 +161,7 @@ void Leshen::LaunchCloudAction()
 	meshes->SetEnable(false);
 	SpawnParticle("Cloud");
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
+	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
 }
 
 Boss::ActionState Leshen::UpdateAction()
@@ -228,6 +231,7 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 			SetRandomDirection();
 			times_switched++;
 			direction_time = 0;
+			LaunchCrowsAction();
 		}
 	}
 	else {
@@ -289,6 +293,7 @@ void Leshen::EndCloudAction()
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
 	times_switched = 0;
+	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 }
 
 void Leshen::SetActionVariables()
