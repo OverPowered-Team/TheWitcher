@@ -22,6 +22,7 @@ void CloudLeshen::Update()
 		can_damage = false;
 	}
 	else {
+		can_damage = true;
 		cloud_damage_tick_timer = 0.0f;
 		if (player_entered[0]) {
 			GameManager::instance->player_manager->players[0]->ReceiveDamage(cloud_damage);
