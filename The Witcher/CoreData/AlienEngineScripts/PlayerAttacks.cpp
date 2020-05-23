@@ -27,6 +27,15 @@ Attack_Tags GetTag(std::string str)
 	return Attack_Tags::T_None;
 }
 
+static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon} };
+
+Collider_Type GetColliderType(std::string str)
+{
+	if (auto it = coll_table.find(str); it != coll_table.end()) {
+		return it->second;
+	}
+	return Collider_Type::C_Box;
+}
 
 PlayerAttacks::PlayerAttacks() : Alien()
 {
@@ -39,8 +48,15 @@ PlayerAttacks::~PlayerAttacks()
 void PlayerAttacks::Start()
 {
 	player_controller = GetComponent<PlayerController>();
-	collider = game_object->GetChild("Attacks_Collider")->GetComponent<ComponentBoxCollider>();
-	collider->SetEnable(false);
+
+	colliders = game_object->GetChild("Attacks_Collider")->GetComponents<ComponentCollider>();
+	if (weapon_obj)
+		colliders.push_back(weapon_obj->GetComponent<ComponentCollider>());
+
+	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
+	{
+		(*it)->SetEnable(false);
+	}
 	
 	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
@@ -195,8 +211,10 @@ void PlayerAttacks::CancelAttack()
 	if (current_attack != nullptr)
 	{
 		player_controller->ReleaseAttackParticle();
+		if(colliders[(int)current_attack->info.coll_type])
+			colliders[(int)current_attack->info.coll_type]->SetEnable(false);
+		
 		current_attack = nullptr;
-		collider->SetEnable(false);
 	}
 }
 
@@ -312,19 +330,29 @@ void PlayerAttacks::AttackMovement()
 
 void PlayerAttacks::ActivateCollider()
 {
-	if (collider && current_attack)
+	if (current_attack && colliders[(int)current_attack->info.coll_type])
 	{
-		collider->SetCenter(current_attack->info.collider_position);
-		collider->SetSize(current_attack->info.collider_size);
-		collider->SetRotation(current_attack->info.collider_rotation);
-		collider->SetEnable(true);
+		switch (current_attack->info.coll_type)
+		{
+		case Collider_Type::C_Sphere:
+			((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
+			//((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRadius(current_attack->info.collider_size.x); //x as radius for now :D
+			((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
+			break;
+		default:
+			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
+			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetSize(current_attack->info.collider_size);
+			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
+			break;
+		}
+		colliders[(int)current_attack->info.coll_type]->SetEnable(true);
 	}
 }
 
 void PlayerAttacks::DeactivateCollider()
 {
-	if(collider)
-		collider->SetEnable(false);
+	if (colliders[(int)current_attack->info.coll_type])
+		colliders[(int)current_attack->info.coll_type]->SetEnable(false);
 }
 
 void PlayerAttacks::CastSpell()
@@ -433,8 +461,8 @@ void PlayerAttacks::AllowCombo()
 
 bool PlayerAttacks::CanBeInterrupted()
 {
-	if (collider)
-		return !collider->IsEnabled();
+	if (colliders[(int)current_attack->info.coll_type])
+		return !colliders[(int)current_attack->info.coll_type]->IsEnabled();
 	else
 		return true;
 }
@@ -451,6 +479,19 @@ float3 PlayerAttacks::GetMovementVector()
 	}
 
 	return direction_vector;
+}
+
+float3 PlayerAttacks::GetKnockBack(ComponentTransform* enemy_transform)
+{
+	float3 knockback = float3::zero();
+
+	if (current_attack)
+	{
+		knockback = transform->GetGlobalMatrix().MulDir(current_attack->info.knock_direction).Normalized();
+		knockback *= current_attack->info.stats["KnockBack"].GetValue();
+	}
+
+	return knockback;
 }
 
 void PlayerAttacks::AttackShake()
@@ -506,6 +547,10 @@ void PlayerAttacks::CreateAttacks()
 			info.collider_rotation = float3(attack_combo->GetNumber("collider.rot_x"),
 				attack_combo->GetNumber("collider.rot_y"),
 				attack_combo->GetNumber("collider.rot_z"));
+			info.knock_direction = float3(attack_combo->GetNumber("knock_back.x"),
+				attack_combo->GetNumber("knock_back.y"),
+				attack_combo->GetNumber("knock_back.z"));
+
 			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
@@ -516,6 +561,7 @@ void PlayerAttacks::CreateAttacks()
 			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
 			info.snap_detection_range = attack_combo->GetNumber("snap_detection_range");
 			info.min_distance_to_target = attack_combo->GetNumber("min_distance_to_target");
+			info.coll_type = GetColliderType(attack_combo->GetString("collider.type"));
 
 			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
 
@@ -558,6 +604,10 @@ void PlayerAttacks::CreateAttacks()
 			info.snap_detection_range = spells_json->GetNumber("snap_detection_range");
 			info.min_distance_to_target = spells_json->GetNumber("min_distance_to_target");
 			info.audio_name = spells_json->GetString("audio_name");
+			info.knock_direction = float3(spells_json->GetNumber("knock_back.x"),
+				spells_json->GetNumber("knock_back.y"),
+				spells_json->GetNumber("knock_back.z"));
+			info.coll_type = GetColliderType(spells_json->GetString("collider.type"));
 
 			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 

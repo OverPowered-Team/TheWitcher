@@ -119,10 +119,6 @@ void RelicBehaviour::Start()
 	
 	switch (relic_type)
 	{
-	case Relic_Type::BASE:
-		relic = new Relic();
-		json_str = "BASE";
-		break;
 	case Relic_Type::ATTACK:
 		relic = new AttackRelic();
 		json_str = "ATTACK";
@@ -146,7 +142,8 @@ void RelicBehaviour::Start()
 
 void RelicBehaviour::Update()
 {
-	
+	float3 rot = {0, 2, 0};
+	transform->AddRotation(rot);
 }
 
 void RelicBehaviour::SetRelic(const char* json_array)
@@ -256,13 +253,20 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 	{
 		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
+			std::vector<Effect*> effects = collider->game_object_attached->GetComponent<PlayerController>()->effects;
+
+			for (auto it = effects.begin(); it != effects.end(); ++it)
+			{
+				if (dynamic_cast<DashEffect*>(*it) != nullptr && relic_type == Relic_Type::DASH)
+				{
+					relic = new AttackRelic();
+					SetRelic("ATTACK");
+				}
+			}
+
 			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
-			if(relic_type == Relic_Type::ATTACK)
-				audio_emitter->StartSound("Play_Collect_Runestone");
-			else if (relic_type == Relic_Type::DASH)
-				audio_emitter->StartSound("Play_Collect_Runestone");
-			else
-				audio_emitter->StartSound("Play_Collect_Runestone");
+
+			audio_emitter->StartSound("Play_Collect_Runestone");
 
 			Destroy(this->game_object);		
 		}

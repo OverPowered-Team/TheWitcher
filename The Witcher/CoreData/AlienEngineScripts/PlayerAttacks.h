@@ -23,6 +23,12 @@ enum class Attack_Tags {
 	T_None
 };
 
+enum class Collider_Type {
+	C_Box,
+	C_Sphere,
+	C_Weapon
+};
+
 class Attack {
 	friend class PlayerAttacks;
 public:
@@ -37,6 +43,7 @@ public:
 
 		std::map<std::string, Stat> stats;
 		std::vector<Attack_Tags> tags;
+		Collider_Type coll_type;
 
 		std::string next_light = "";
 		std::string next_heavy = "";
@@ -45,6 +52,8 @@ public:
 		float3 collider_size;
 		float3 collider_rotation;
 		float3 particle_pos;
+		float3 knock_direction;
+
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
 		float max_distance_traveled = 0.0f;
@@ -52,6 +61,8 @@ public:
 		float snap_detection_range = 0.0f;
 		int shake = 0;
 		int activation_frame = 0;
+
+		//Todo: Move this to info for chain attack only or something like that.
 		float chain_range = 0;
 		std::string chain_particle = "";
 	};
@@ -118,6 +129,7 @@ public:
 	void ActivateCollider();
 	void DeactivateCollider();
 	void CastSpell();
+	float3 GetKnockBack(ComponentTransform* enemy_transform);
 
 	void OnHit(Enemy* enemy);
 
@@ -129,6 +141,7 @@ public:
 	Attack* GetCurrentAttack();
 
 public:
+	GameObject* weapon_obj;
 	float max_snap_angle = 0.0f;
 	float snap_angle_value = 0.0f;
 	float snap_distance_value = 0.0f;
@@ -144,6 +157,7 @@ protected:
 	bool FindSnapTarget();
 	float3 GetMovementVector();
 
+
 protected:
 	Attack* current_attack = nullptr;
 	Attack* base_light_attack = nullptr;
@@ -151,7 +165,7 @@ protected:
 
 	GameObject* current_target = nullptr;
 	PlayerController* player_controller = nullptr;
-	ComponentBoxCollider* collider = nullptr;
+	std::vector<ComponentCollider*> colliders;
 	CameraShake* shake = nullptr;
 
 	std::vector<Attack*> attacks;
@@ -174,6 +188,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->max_snap_angle);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon_obj);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);

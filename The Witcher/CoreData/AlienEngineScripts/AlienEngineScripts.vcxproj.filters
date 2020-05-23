@@ -62,10 +62,10 @@
       <Filter>Scripts\Triggers</Filter>
     </ClCompile>
     <ClCompile Include="BreakableObject.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="ExplodeChildren.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="TriggerMusicInteractive.cpp">
       <Filter>Scripts\Triggers</Filter>
@@ -125,13 +125,13 @@
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="RockSpawner.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="RockDownHill.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="TriggerRocks.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="MusicController.cpp">
       <Filter>Scripts\Triggers</Filter>
@@ -224,10 +224,10 @@
       <Filter>Scripts\Enemies\Ghoul</Filter>
     </ClCompile>
     <ClCompile Include="Bonfire.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="BlockerObstacle.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Floating.cpp">
       <Filter>Scripts</Filter>
@@ -254,7 +254,7 @@
       <Filter>Scripts\Enemies\Ghoul</Filter>
     </ClCompile>
     <ClCompile Include="Dummie.cpp">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClCompile>
     <ClCompile Include="VagoneteMove.cpp">
       <Filter>Scripts\Vagoneta</Filter>
@@ -310,9 +310,11 @@
     <ClCompile Include="EnemyGroupLogic.cpp">
       <Filter>Scripts\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Boss_Lifebar.cpp">
-      <Filter>Scripts\UI\HUD</Filter>
+    <ClCompile Include="AttackTrigger.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="Boss_Lifebar.cpp">
+      <Filter>Scripts\UI\HUD</Filter>    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macros\AlienScripts.h">
@@ -382,10 +384,10 @@
       <Filter>Scripts\Triggers</Filter>
     </ClInclude>
     <ClInclude Include="BreakableObject.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="ExplodeChildren.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="TriggerMusicInteractive.h">
       <Filter>Scripts\Triggers</Filter>
@@ -448,13 +450,13 @@
       <Filter>Scripts\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="RockSpawner.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="RockDownHill.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="TriggerRocks.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="MusicController.h">
       <Filter>Scripts\Triggers</Filter>
@@ -550,10 +552,10 @@
       <Filter>Scripts\Enemies\Ghoul</Filter>
     </ClInclude>
     <ClInclude Include="Bonfire.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="BlockerObstacle.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Floating.h">
       <Filter>Scripts</Filter>
@@ -580,7 +582,7 @@
       <Filter>Scripts\Enemies\Ghoul</Filter>
     </ClInclude>
     <ClInclude Include="Dummie.h">
-      <Filter>Scripts\Objects</Filter>
+      <Filter>Scripts\Managers\Objects</Filter>
     </ClInclude>
     <ClInclude Include="VagoneteMove.h">
       <Filter>Scripts\Vagoneta</Filter>
@@ -636,6 +638,9 @@
     <ClInclude Include="EnemyGroupLogic.h">
       <Filter>Scripts\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="AttackTrigger.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
     <ClInclude Include="Boss_Lifebar.h">
       <Filter>Scripts\UI\HUD</Filter>
     </ClInclude>
@@ -664,9 +669,6 @@
     </Filter>
     <Filter Include="Scripts\Triggers">
       <UniqueIdentifier>{4b461c48-f228-448b-bd9b-d17cc95854aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\Objects">
-      <UniqueIdentifier>{c5fbad49-d2c4-4e75-89d0-8646dfde0057}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scripts\Debug">
       <UniqueIdentifier>{2439b081-3d52-4572-8338-780c4f33dd4e}</UniqueIdentifier>
@@ -709,6 +711,12 @@
     </Filter>
     <Filter Include="Scripts\UI\Another Menus">
       <UniqueIdentifier>{6173e0cd-bf1f-4f7d-a29e-5ad7f550f311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Enemies\Group">
+      <UniqueIdentifier>{fc469a0a-352c-43bd-b873-cc094cd829e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Managers\Objects">
+      <UniqueIdentifier>{c5fbad49-d2c4-4e75-89d0-8646dfde0057}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
