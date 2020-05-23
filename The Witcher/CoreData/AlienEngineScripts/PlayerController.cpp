@@ -96,6 +96,12 @@ void PlayerController::Update()
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
+
+	if (state->type == StateType::RUNNING)
+	{
+		float lerp = player_data.speed.Length() / player_data.stats["Movement_Speed"].GetValue(); 
+		animator->SetStateSpeed("Run", lerp); 
+	}
 }
 
 void PlayerController::UpdateInput()
