@@ -126,11 +126,40 @@ void JumpingState::Update(PlayerController* player)
 
 void JumpingState::OnEnter(PlayerController* player)
 {
+	bool found_jumping = false;
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
+		{
+			found_jumping = true;
+			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+			(*it)->GetComponent<ComponentParticleSystem>()->GetSystem()->emmitter.ResetBursts(); // burts
+			break;
+		}
+	}
+
+	if (found_jumping == false)
+		player->SpawnParticle("p_jump");
+
 	player->animator->SetBool("air", true);
 }
 
 void JumpingState::OnExit(PlayerController* player)
 {
+	bool found_jumping = false;
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
+		{
+			found_jumping = true;
+			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+			(*it)->GetComponent<ComponentParticleSystem>()->GetSystem()->emmitter.ResetBursts(); // burts
+			break;
+		}
+	}
+
 	player->animator->SetBool("air", false);
 }
 
