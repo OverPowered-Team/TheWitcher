@@ -4,6 +4,7 @@
 #include "Macros/AlienScripts.h"
 
 class Tutorial_HUD;
+class PlayerController;
 
 enum(TRIGGER_TYPE,
 	ATTACK,
@@ -29,10 +30,13 @@ private:
 	void Start();
 	void Update();
 	void OnTriggerEnter(ComponentCollider* col) override;
+	void OnTriggerExit(ComponentCollider* col) override;
 
 private:
 
 	bool first_time = false;
+	std::list<PlayerController*> players_triggered_attack;
+	std::list<PlayerController*> players_triggered_dash;
 
 };
 

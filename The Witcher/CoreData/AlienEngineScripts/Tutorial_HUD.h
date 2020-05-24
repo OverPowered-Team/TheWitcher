@@ -20,8 +20,8 @@ public:
 	
 public:
 
-	void ShowTriggerAttack();
-	void ShowTriggerDash();
+	void ShowTriggerAttack(bool show);
+	void ShowTriggerDash(bool show);
 
 private:
 	
@@ -35,13 +35,18 @@ private:
 	Current_Showing current_state_dash = Current_Showing::ANY;
 
 	// Components
-	ComponentImage*		X		= nullptr;
-	ComponentImage*		Y		= nullptr;
-	ComponentText*		text	= nullptr;
+	ComponentImage*		X			= nullptr;
+	ComponentImage*		Y			= nullptr;
+	ComponentText*		text_attack	= nullptr;
+
+	ComponentImage*		RB			= nullptr;
+	ComponentText*		text_dash	= nullptr;
 
 	// Effects
 	bool show_attack	= false;
 	bool show_dash		= false;
+	float attack_time	= 0.0f;
+	float dash_time		= 0.0f;
 
 };
 
