@@ -113,21 +113,26 @@ void PlayerController::UpdateVisualEffects()
 	}
 	else if (state->type == StateType::ROLLING)
 	{
-		float current_speed = animator->GetCurrentStateSpeed(); 
-		float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT(); 
+		if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		{
+			float current_speed = animator->GetCurrentStateSpeed();
+			float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT();
 
-		if (target_speed > dashData.max_speed)
-			target_speed = dashData.max_speed;
-		else if (target_speed < dashData.min_speed)
-			target_speed = dashData.min_speed; 
+			if (target_speed > dashData.max_speed)
+				target_speed = dashData.max_speed;
+			else if (target_speed < dashData.min_speed)
+				target_speed = dashData.min_speed;
 
-		animator->SetStateSpeed("Roll", target_speed);
+			animator->SetStateSpeed("Roll", target_speed);
+		}
+		
 	}
 }
 
 void PlayerController::ToggleDashMultiplier()
-{
-	dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
+{   
+	if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
 }
 
 void PlayerController::UpdateInput()

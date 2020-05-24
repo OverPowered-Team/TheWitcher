@@ -279,15 +279,60 @@ void RollingState::OnEnter(PlayerController* player)
 	player->last_dash_position = player->transform->GetGlobalPosition();
 
 	// Special stuff to make it look cooler
-	if (player->dashData.start_speed == 0.0f)
-		player->dashData.start_speed = player->animator->GetCurrentStateSpeed(); 
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		// Animation
+		if (player->dashData.start_speed == 0.0f)
+			player->dashData.start_speed = player->animator->GetCurrentStateSpeed();
 
+		// Particles
+		bool found_dash = false;
 
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				found_dash = true;
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				break;
+			}
+		}
+
+		if (found_dash == false)
+			player->SpawnParticle("Y_Dash_Particle_Emitter");
+	}
+		
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
-	player->ToggleDashMultiplier(); 
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		// Animation
+		player->ToggleDashMultiplier();
+
+		// Particles
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				break;
+			}
+		}
+
+	}
+		
 }
 
 void HitState::Update(PlayerController* player)

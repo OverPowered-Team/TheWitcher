@@ -48,9 +48,9 @@ public:
 
 	struct DashData
 	{
-		float accel_multi = 0.f; 
-		float max_speed = 0.f; 
-		float min_speed = 0.f; 
+		float accel_multi = 1.f; 
+		float max_speed = 4.4f; 
+		float min_speed = 2.0f; 
 		float start_speed = 0.f; 
 		float current_acel_multi = 0.f; 
 	};
@@ -227,9 +227,9 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	SHOW_TEXT("Dash animation cool data"); 
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 2.f, 4.f);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 1.f, 2.f);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.accel_multi, 0.75f, 1.25f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 3.f, 5.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 2.f, 3.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.accel_multi, 1.f, 2.f);
 
 	return player;
 }
