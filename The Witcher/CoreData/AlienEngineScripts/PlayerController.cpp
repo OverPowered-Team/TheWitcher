@@ -63,6 +63,8 @@ void PlayerController::Start()
 	state = new IdleState();
 	state->OnEnter(this);
 
+	// Dash
+	dashData.current_acel_multi = dashData.accel_multi; 
 }
 
 void PlayerController::Update()
@@ -97,11 +99,35 @@ void PlayerController::Update()
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
 
+	// Visual effects
+	UpdateVisualEffects(); 
+
+}
+
+void PlayerController::UpdateVisualEffects()
+{
 	if (state->type == StateType::RUNNING)
 	{
-		float lerp = player_data.speed.Length() / player_data.stats["Movement_Speed"].GetValue(); 
-		animator->SetStateSpeed("Run", lerp); 
+		float lerp = player_data.speed.Length() / player_data.stats["Movement_Speed"].GetValue();
+		animator->SetStateSpeed("Run", lerp);
 	}
+	else if (state->type == StateType::ROLLING)
+	{
+		float current_speed = animator->GetCurrentStateSpeed(); 
+		float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT(); 
+
+		if (target_speed > dashData.max_speed)
+			target_speed = dashData.max_speed;
+		else if (target_speed < dashData.min_speed)
+			target_speed = dashData.min_speed; 
+
+		animator->SetStateSpeed("Roll", target_speed);
+	}
+}
+
+void PlayerController::ToggleDashMultiplier()
+{
+	dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
 }
 
 void PlayerController::UpdateInput()

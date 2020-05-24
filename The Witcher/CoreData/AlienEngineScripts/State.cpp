@@ -277,11 +277,17 @@ void RollingState::OnEnter(PlayerController* player)
 
 	player->animator->PlayState("Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
+
+	// Special stuff to make it look cooler
+	if (player->dashData.start_speed == 0.0f)
+		player->dashData.start_speed = player->animator->GetCurrentStateSpeed(); 
+
+
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
-
+	player->ToggleDashMultiplier(); 
 }
 
 void HitState::Update(PlayerController* player)
