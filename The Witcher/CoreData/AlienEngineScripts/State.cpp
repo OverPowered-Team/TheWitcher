@@ -133,8 +133,10 @@ void JumpingState::OnEnter(PlayerController* player)
 		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
 		{
 			found_jumping = true;
-			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
-			(*it)->GetComponent<ComponentParticleSystem>()->GetSystem()->emmitter.ResetBursts(); // burts
+			auto particles = (*it)->GetComponent<ComponentParticleSystem>(); 
+			particles->OnStop();
+			particles->GetSystem()->emmitter.ResetBursts();
+			particles->OnPlay();
 			break;
 		}
 	}
@@ -154,8 +156,10 @@ void JumpingState::OnExit(PlayerController* player)
 		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
 		{
 			found_jumping = true;
-			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
-			(*it)->GetComponent<ComponentParticleSystem>()->GetSystem()->emmitter.ResetBursts(); // burts
+			auto particles = (*it)->GetComponent<ComponentParticleSystem>();
+			particles->OnStop();
+			particles->GetSystem()->emmitter.ResetBursts();
+			particles->OnPlay();
 			break;
 		}
 	}
