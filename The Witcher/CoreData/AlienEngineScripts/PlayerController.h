@@ -103,6 +103,9 @@ public:
 
 	void ReleaseParticle(std::string particle_name);
 
+	// Terrain - particles
+	void OnTerrainEnter(float4 initial_color, float4 final_color); 
+
 private:
 	void LoadStats();
 	void InitKeyboardControls();

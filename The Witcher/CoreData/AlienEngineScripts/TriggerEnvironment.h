@@ -168,5 +168,6 @@ ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	SHOW_TEXT("If is Random, maximum and minimum time between plays");
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio5.min_time_between_plays);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->audio5.max_time_between_plays);
+
 	return alien;
 }

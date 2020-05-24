@@ -701,7 +701,15 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	}*/
 }
 
-
+void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
+{
+	for (auto& p : particles)
+		if (strcmp(p->GetName(), "p_run") == 0 || strcmp(p->GetName(), "p_jump") == 0)
+		{
+			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
+			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
+		}
+}
 
 #pragma region Events
 void PlayerController::OnAnimationEnd(const char* name) {
