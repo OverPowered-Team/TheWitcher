@@ -487,7 +487,14 @@ float3 PlayerAttacks::GetKnockBack(ComponentTransform* enemy_transform)
 
 	if (current_attack)
 	{
-		knockback = transform->GetGlobalMatrix().MulDir(current_attack->info.knock_direction).Normalized();
+		float3 enemy_direction = (enemy_transform->GetGlobalPosition() - player_controller->game_object->transform->GetGlobalPosition()).Normalized();
+
+		float2 tmp_f = float2(player_controller->game_object->transform->forward.x, player_controller->game_object->transform->forward.z);
+		float2 tmp_e = float2(enemy_direction.x, enemy_direction.z);
+		float angle = acos(math::Dot(tmp_f, tmp_e) / (tmp_f.Length() * tmp_e.Length()));
+
+		knockback = player_controller->game_object->transform->GetGlobalMatrix().MulDir(current_attack->info.knock_direction).Normalized();
+		knockback = Quat::RotateAxisAngle(float3::unitY(), angle) * knockback;
 		knockback *= current_attack->info.stats["KnockBack"].GetValue();
 	}
 
