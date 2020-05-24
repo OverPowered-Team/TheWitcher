@@ -95,6 +95,10 @@ void PlayerController::Update()
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
+
+	//Battle circle
+	if (current_attacking_enemies < max_attacking_enemies)
+		CheckEnemyCircle();
 }
 
 void PlayerController::UpdateInput()
@@ -694,6 +698,34 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	}*/
 }
 
+void PlayerController::CheckEnemyCircle()
+{
+	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
+
+	for (int i = 0; i < colliders.size(); ++i)
+	{
+		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		{
+			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
+			float avoid_distance = avoid_direction.LengthSq();
+			if (avoid_distance > battleCircle)
+				continue;
+
+			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
+			enemy_battle_circle.push_back(enemy);
+
+			if (current_attacking_enemies == max_attacking_enemies)
+			{
+				enemy->SetState("Guard");
+				enemy->velocity = float3::zero();
+				enemy->animator->PlayState("Idle");
+			}
+			else
+				current_attacking_enemies++;
+
+		}
+	}
+}
 
 
 #pragma region Events

@@ -103,6 +103,9 @@ public:
 
 	void ReleaseParticle(std::string particle_name);
 
+	//Battle Circles
+	void CheckEnemyCircle();
+
 private:
 	void LoadStats();
 	void InitKeyboardControls();
@@ -117,8 +120,6 @@ public:
 	PlayerData player_data;
 	std::vector<GameObject*> particles;
 	std::vector<GameObject*> particle_spawn_positions;
-	std::vector<Enemy*> enemy_battle_circle;
-	float battleCircle = 2.0f;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* controller = nullptr;
 	ComponentAudioEmitter* audio = nullptr;
@@ -177,7 +178,14 @@ public:
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
+	//Battle Circle
+	std::vector<Enemy*> enemy_battle_circle;
+	int current_attacking_enemies = 0;
+	int max_attacking_enemies = 1;
+	float battleCircle = 2.0f;
+
 	AABB max_aabb;
+
 private:
 	float angle = 0.0f;
 	float timer = 0.f;

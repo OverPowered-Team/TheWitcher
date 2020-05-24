@@ -93,9 +93,24 @@ void Enemy::UpdateEnemy()
 	}
 	else
 	{
-		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
-		current_player = (distance_1 < distance_2) ? 0 : 1;
+		if (player_controllers[0]->enemy_battle_circle.size() == player_controllers[1]->enemy_battle_circle.size())
+		{
+			distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+			direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+			current_player = (distance_1 < distance_2) ? 0 : 1;
+		}
+		else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
+		{
+			distance = distance_1;
+			direction = direction_1;
+			current_player = 0;
+		}
+		else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
+		{
+			distance = distance_2;
+			direction = direction_2;
+			current_player = 1;
+		}
 	}
 
 	//MOVEMENT
@@ -175,7 +190,7 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	float3 velocity_vec = direction.Normalized() * 10 * Time::GetDT();
+	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
 	float3 avoid_vector = steeringAvoid->AvoidObstacle();
 
 	if (avoid_vector.LengthSq() > 0)
@@ -188,7 +203,6 @@ void Enemy::Move(float3 direction)
 		velocity = velocity.Normalized()* stats["Agility"].GetValue();
 	}
 
-
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
@@ -197,6 +211,30 @@ void Enemy::Move(float3 direction)
 	transform->SetGlobalRotation(rot);
 
 	CheckDistance();
+}
+
+void Enemy::Guard()
+{
+	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+
+	if (avoid_vector.LengthSq() > 0)
+		velocity += avoid_vector;
+	else if (player_controllers[current_player]->battleCircle < distance)
+		velocity += velocity_vec;
+	else
+		velocity = float3::zero();
+
+	if (velocity.LengthSq() > stats["Agility"].GetValue())
+		velocity = velocity.Normalized() * stats["Agility"].GetValue();
+
+	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
+	animator->SetFloat("speed", stats["Agility"].GetValue());
+
+	float angle = atan2f(velocity.z, velocity.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+
 }
 
 void Enemy::ActivateCollider()

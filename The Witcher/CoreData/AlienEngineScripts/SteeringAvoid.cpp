@@ -29,15 +29,12 @@ float3 SteeringAvoid::AvoidObstacle()
 				continue;
 
 			float avoid_force = 1 - (avoid_distance / avoidRange);
-			//avoid_force = 1 - (std::powf(avoid_distance, avoid_force) -1) / (avoid_distance - 1);
-			LOG("Avoid force: %f", math::Abs(avoid_force));
-			LOG("Distance: %f", avoid_distance);
-			separation_vector += avoid_direction.Normalized() * 10 * math::Abs(avoid_force) * Time::GetDT();
+			separation_vector += avoid_direction.Normalized() * enemyScript->stats["Acceleration"].GetValue() * math::Abs(avoid_force) * Time::GetDT();
 		}
 	}
 
-	if (separation_vector.LengthSq() > 10)
-		separation_vector = separation_vector.Normalized() * 10;
+	if (separation_vector.LengthSq() > enemyScript->stats["Acceleration"].GetValue())
+		separation_vector = separation_vector.Normalized() * enemyScript->stats["Acceleration"].GetValue();
 
 	return -separation_vector;
 }

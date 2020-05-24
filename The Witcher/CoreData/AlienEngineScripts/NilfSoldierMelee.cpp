@@ -26,6 +26,13 @@ void NilfSoldierMelee::UpdateEnemy()
 		Move(direction);
 		break;
 
+	case NilfgaardSoldierState::GUARD:
+	{
+		//Tiene que estar animacion de guardia
+		Guard();
+	}
+		break;
+
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{

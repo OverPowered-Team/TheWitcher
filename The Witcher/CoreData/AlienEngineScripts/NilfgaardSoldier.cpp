@@ -38,6 +38,7 @@ void NilfgaardSoldier::SetStats(const char* json)
 
 		stats["Health"] = Stat("Health", stat_weapon->GetNumber("MinHealth"), stat_weapon->GetNumber("Health"), stat_weapon->GetNumber("MaxHealth"));
 		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("MinAgility"), stat_weapon->GetNumber("Agility"), stat_weapon->GetNumber("MaxAgility"));
+		stats["Acceleration"] = Stat("Acceleration", stat_weapon->GetNumber("Acceleration"));
 		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("MinDamage"), stat_weapon->GetNumber("Damage"), stat_weapon->GetNumber("MaxDamage"));
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("MinAttackSpeed"), stat_weapon->GetNumber("AttackSpeed"), stat_weapon->GetNumber("MaxAttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
@@ -156,6 +157,8 @@ void NilfgaardSoldier::SetState(const char* state_str)
 		state = NilfgaardSoldierState::MOVE;
 	else if (state_str == "Attack")
 		state = NilfgaardSoldierState::ATTACK;
+	else if (state_str == "Guard")
+		state = NilfgaardSoldierState::GUARD;
 	else if (state_str == "Block" || state_str == "Flee")
 		state = NilfgaardSoldierState::AUXILIAR;
 	else if (state_str == "Hit")
