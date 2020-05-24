@@ -32,6 +32,12 @@ enum class Collider_Type {
 class Attack {
 	friend class PlayerAttacks;
 public:
+	struct AttackCollider {
+		Collider_Type type;
+		float3 position;
+		float3 size;
+		float3 rotation;
+	};
 	struct AttackInfo {
 		std::string name = "";
 		std::string input = "";
@@ -43,14 +49,10 @@ public:
 
 		std::map<std::string, Stat> stats;
 		std::vector<Attack_Tags> tags;
-		Collider_Type coll_type;
+		std::vector<AttackCollider> colliders;
 
 		std::string next_light = "";
 		std::string next_heavy = "";
-
-		float3 collider_position;
-		float3 collider_size;
-		float3 collider_rotation;
 		float3 particle_pos;
 		float3 knock_direction;
 
@@ -95,6 +97,7 @@ public:
 public:
 	AttackInfo info;
 	std::vector<Enemy*> enemies_hit;
+	uint current_collider = 0;
 
 private:
 	Attack* light_attack_link = nullptr;
@@ -127,6 +130,7 @@ public:
 	void OnRemoveAttackEffect(AttackEffect* new_effect);
 	void CancelAttack();
 	void ActivateCollider();
+	void UpdateCollider();
 	void DeactivateCollider();
 	void CastSpell();
 	float3 GetKnockBack(ComponentTransform* enemy_transform);
@@ -191,6 +195,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon_obj);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::UpdateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::CastSpell, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AllowCombo, player_attacks);
