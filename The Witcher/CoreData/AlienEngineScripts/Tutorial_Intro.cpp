@@ -19,7 +19,7 @@ void Tutorial_Intro::Update()
 	case Tutorial_Intro_State::DIALOGUE_1:
 		break;
 	case Tutorial_Intro_State::DIALOGUE_2:
-		break;
+		break;		
 	case Tutorial_Intro_State::SHAKE:
 		break;
 	case Tutorial_Intro_State::CAMERA_ASCENSION:

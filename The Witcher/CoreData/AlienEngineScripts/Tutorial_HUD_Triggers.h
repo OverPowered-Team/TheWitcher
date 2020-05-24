@@ -3,6 +3,8 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
+class Tutorial_HUD;
+
 enum(TRIGGER_TYPE,
 	ATTACK,
 	DASH,
