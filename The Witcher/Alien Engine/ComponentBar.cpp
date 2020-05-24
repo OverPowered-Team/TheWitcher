@@ -21,6 +21,14 @@ ComponentBar::ComponentBar(GameObject* obj):ComponentUI(obj)
 	tabbable = false;
 }
 
+ComponentBar::~ComponentBar()
+{
+	if (barTexture != nullptr)
+	{
+		barTexture->DecreaseReferences();
+	}
+}
+
 bool ComponentBar::DrawInspector()
 {
 	static bool check;

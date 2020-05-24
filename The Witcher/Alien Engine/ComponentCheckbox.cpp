@@ -26,6 +26,15 @@ ComponentCheckbox::ComponentCheckbox(GameObject* obj) : ComponentUI(obj)
 	tabbable = true;
 }
 
+ComponentCheckbox::~ComponentCheckbox()
+{
+	if (crossTexture != nullptr)
+		crossTexture->DecreaseReferences();
+
+	if (tickTexture != nullptr)
+		tickTexture->DecreaseReferences();
+}
+
 bool ComponentCheckbox::DrawInspector()
 {
 	static bool check;

@@ -575,15 +575,16 @@ ResourceFont *ModuleImporter::LoadFontFile(const char *path)
 	return font;
 }
 
-void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *texture)
+bool ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *texture)
 {
+	bool ret = true;
 	ILuint new_image_id = 0;
 	ilGenImages(1, &new_image_id);
 	ilBindImage(new_image_id);
 
 	ilutRenderer(ILUT_OPENGL);
 
-	if (ilutGLLoadImage((char*)path))
+	if (ilLoadImage(path))
 	{
 		iluFlipImage();
 
@@ -615,9 +616,11 @@ void ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *te
 
 		LOG_ENGINE("Error while loading image in %s", path);
 		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
+		ret = false;
 	}
 
 	ilDeleteImages(1, &new_image_id);
+	return ret;
 }
 
 void ModuleImporter::ApplyTextureToSelectedObject(ResourceTexture *texture)
