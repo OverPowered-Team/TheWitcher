@@ -708,6 +708,14 @@ void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
 		{
 			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
 			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
+
+			// Sub-emitters
+			for (auto& child : p->GetChildren())
+			{
+				child->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
+				child->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
+
+			}
 		}
 }
 

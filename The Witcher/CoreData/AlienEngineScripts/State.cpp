@@ -76,12 +76,17 @@ void RunningState::OnEnter(PlayerController* player)
 		{
 			found_running = true; 
 			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+			// sub-emitters 
+			for(auto& child : (*it)->GetChildren())
+				child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
 			break;
 		}
 	}
 
 	if(found_running == false)
-		player->SpawnParticle("p_run");
+		player->SpawnParticle("p_run", float3(0.f, 0.f, -0.15f));
 
 	player->audio->StartSound();
 	player->timer = Time::GetGameTime();
@@ -94,6 +99,11 @@ void RunningState::OnExit(PlayerController* player)
 		if (std::strcmp((*it)->GetName(), "p_run") == 0)
 		{
 			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+			// sub-emitters 
+			for (auto& child : (*it)->GetChildren())
+				child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
 			break;
 		}
 	}
