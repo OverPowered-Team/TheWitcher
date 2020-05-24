@@ -61,7 +61,7 @@ void Leshen::SetActionProbabilities()
 		actions.find("Cloud")->second->probability = 100.0f;
 		return;
 	}
-	else if (player_distance[0] <= melee_range || player_distance[1] <= melee_range) {
+	else if (player_distance[0] <= melee_range && player_controllers[0]->state->type != StateType::DEAD || player_distance[1] <= melee_range && player_controllers[1]->state->type != StateType::DEAD) {
 		actions.find("Melee")->second->probability = 100.0f;
 		return;
 	}
@@ -120,14 +120,17 @@ void Leshen::LaunchAction()
 
 void Leshen::LaunchRootAction()
 {
-	root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
-	root_1->GetComponent<RootLeshen>()->leshen = this;
-	root_1->GetComponent<RootLeshen>()->target = 0;
+	if (player_controllers[0]->state->type != StateType::DEAD) {
+		root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_1->GetComponent<RootLeshen>()->leshen = this;
+		root_1->GetComponent<RootLeshen>()->target = 0;
+	}
 
-
-	root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
-	root_2->GetComponent<RootLeshen>()->leshen = this;
-	root_2->GetComponent<RootLeshen>()->target = 1;
+	if (player_controllers[1]->state->type != StateType::DEAD) {
+		root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_2->GetComponent<RootLeshen>()->leshen = this;
+		root_2->GetComponent<RootLeshen>()->target = 1;
+	}
 }
 
 void Leshen::LaunchMeleeAction()
@@ -138,17 +141,25 @@ void Leshen::LaunchMeleeAction()
 void Leshen::LaunchCrowsAction()
 {
 	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z), true);
-	if (player_rooted[0]) {
+	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
 	}
-	else if (player_rooted[1]){
+	else if (player_rooted[1] && player_controllers[1]->state->type != StateType::DEAD){
 		crows->GetComponent<CrowsLeshen>()->target = 1;
 		crows_target = 1;
 	}
-	else {
+	else if(player_controllers[0]->state->type != StateType::DEAD && player_controllers[1]->state->type != StateType::DEAD){
 		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
 		crows_target = crows->GetComponent<CrowsLeshen>()->target;
+	}
+	else if (player_controllers[0]->state->type != StateType::DEAD) {
+		crows->GetComponent<CrowsLeshen>()->target = 0;
+		crows_target = 0;
+	}
+	else if (player_controllers[1]->state->type != StateType::DEAD) {
+		crows->GetComponent<CrowsLeshen>()->target = 1;
+		crows_target = 1;
 	}
 
 	crows->GetComponent<CrowsLeshen>()->leshen = this;
@@ -200,9 +211,9 @@ Leshen::ActionState Leshen::UpdateMeleeAction()
 {
 	LOG("UPDATING MELEE ACTION");
 
-	if (player_distance[0] < player_distance[1])
+	if (player_distance[0] < player_distance[1] && player_controllers[0]->state->type != StateType::DEAD)
 		OrientToPlayer(0);
-	else {
+	else if(player_controllers[1]->state->type != StateType::DEAD){
 		OrientToPlayer(1);
 	}
 
