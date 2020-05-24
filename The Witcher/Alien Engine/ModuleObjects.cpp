@@ -229,15 +229,6 @@ update_status ModuleObjects::PreUpdate(float dt)
 
 update_status ModuleObjects::Update(float dt)
 {
-	
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == Input::KEY_DOWN)
-	{
-		if (GetSelectedObjects().front())
-		{
-			App->renderer3D->actual_game_camera->WorldToScreenPoint(GetSelectedObjects().front()->transform->GetGlobalPosition());
-		}
-	}
-
 	OPTICK_EVENT();
 	base_game_object->Update();
 	if (!functions_to_call.empty()) {
