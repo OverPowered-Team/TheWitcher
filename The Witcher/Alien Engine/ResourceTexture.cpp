@@ -107,6 +107,16 @@ bool ResourceTexture::LoadMemory()
 void ResourceTexture::FreeMemory()
 {
 	glDeleteTextures(1, &id);
+	if (glIsTexture(id))
+	{
+		int i = 0;
+		//LOG_ENGINE("Couldn't unload texture properly: %s with id: %i", this->name, this->id);
+	}
+	else
+	{
+		int i = 0;
+		//LOG_ENGINE("Unloaded texture properly: %s with id: %i", this->name, this->id);
+	}
 	width = 0;
 	height = 0;
 	id = 0;

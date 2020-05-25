@@ -7,6 +7,7 @@
 #include "ReturnZ.h"
 #include "ModuleResources.h"
 #include "ModuleRenderer3D.h"
+#include "ResourceMesh.h"
 #include "ModuleObjects.h"
 #include "Viewport.h"
 #include "ComponentMesh.h"
@@ -32,6 +33,7 @@ ComponentLightDirectional::ComponentLightDirectional(GameObject* attach) : Compo
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
+	bulb->mesh->IncreaseReferences();
 #endif
 
 	InitFrameBuffers();
@@ -90,7 +92,10 @@ ComponentLightDirectional::~ComponentLightDirectional()
 
 	App->objects->directional_light_properites.remove(&light_props);
 	App->objects->ReduceNumOfDirLights();
+
 	glDeleteFramebuffers(1, &light_props.depthMapFBO);
+	glDeleteFramebuffers(1, &light_props.bakedepthMapFBO);
+
 	glDeleteTextures(1, &light_props.depthMap);
 	glDeleteTextures(num_of_static_shadowMap, light_props.bakedepthMap);
 

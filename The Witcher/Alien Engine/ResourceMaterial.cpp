@@ -635,10 +635,13 @@ void ResourceMaterial::InputTexture(TextureType texType)
 	{
 		uint id = App->resources->GetTextureidByID(textures[(uint)texType].first);
 		ImGui::ImageButton((ImTextureID)id, ImVec2(30, 30));
+		ImGui::Text("Texture ID: %i", id);
 	}
 	else
 	{
-		ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30));
+		ImGui::Text("No TEXTURE");
+
+		//ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30));
 	}
 	if (ImGui::BeginDragDropTarget() && this != App->resources->default_material) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
@@ -682,7 +685,8 @@ void ResourceMaterial::InputTexture(TextureType texType)
 	if (textures[(uint)texType].first != NO_TEXTURE_ID)
 	{
 		uint id = App->resources->GetTextureidByID(textures[(uint)texType].first);
-		ImGui::Image((ImTextureID)id, ImVec2(50, 50));
+		id = id - 1;
+		ImGui::Image((ImTextureID)(id), ImVec2(50, 50));
 		ImGui::Text("Texture ID: %i", id);
 	}
 }

@@ -218,6 +218,8 @@ bool ResourceMesh::ReadBaseInfo(const char* meta_file_path)
 
 void ResourceMesh::FreeMemory()
 {
+	if (vao != 0)
+		glDeleteVertexArrays(1, &vao);
 	if (id_vertex != 0)
 		glDeleteBuffers(1, &id_vertex);
 	if (id_index != 0)

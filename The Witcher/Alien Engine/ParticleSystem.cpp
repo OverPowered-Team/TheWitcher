@@ -122,8 +122,6 @@ ParticleSystem::~ParticleSystem()
 
 	particles.clear();
 
-	RemoveMesh();
-
 	if (material != nullptr) {
 
 		material->DecreaseReferences();

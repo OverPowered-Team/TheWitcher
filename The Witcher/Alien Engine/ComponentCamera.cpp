@@ -11,6 +11,7 @@
 #include "Gizmos.h"
 #include "ModuleFileSystem.h"
 #include "ResourceTexture.h"
+#include "ResourceMesh.h"
 #include "Application.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -58,6 +59,8 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 #ifndef GAME_VERSION
 	mesh_camera = new ComponentMesh(game_object_attached);
 	mesh_camera->mesh = App->resources->camera_mesh;
+	mesh_camera->mesh->IncreaseReferences();
+
 #endif
 
 	/* Create skybox */
