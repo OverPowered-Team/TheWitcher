@@ -1,19 +1,20 @@
-#include "PlayerController.h"
-#include "State.h"
-#include "Effect.h"
+#include "GameManager.h"
 #include "RumblerManager.h"
 #include "EnemyManager.h"
-#include "Enemy.h"
-#include "GameManager.h"
 #include "PlayerManager.h"
-#include "PlayerProjectile.h"
-#include "ParticlePool.h"
-#include "..\..\Alien Engine\ParticleEmitter.h"
-#include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
 #include "RumblerManager.h"
+#include "ParticlePool.h"
+
 #include "UI_Char_Frame.h"
+
+#include "PlayerController.h"
+#include "PlayerProjectile.h"
+
+#include "Enemy.h"
+
+#include "PlayerAttacks.h"
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
@@ -336,14 +337,20 @@ void PlayerAttacks::ActivateCollider()
 		switch (current_attack->info.colliders[current_attack->current_collider].type)
 		{
 		case Collider_Type::C_Sphere:
-			((ComponentSphereCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
-			//((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRadius(current_attack->info.collider_size.x); //x as radius for now :D
-			((ComponentSphereCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		{
+			ComponentSphereCollider* sphere_collider = (ComponentSphereCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
+			sphere_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
+			//sphere_collider->SetRadius(current_attack->info.colliders[current_attack->current_collider].radius); IDK WHY THIS DOESN'T COMPILE PLS HELP
+			sphere_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		}
 			break;
 		default:
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		{
+			ComponentBoxCollider* box_collider = (ComponentBoxCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
+			box_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
+			box_collider->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
+			box_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		}
 			break;
 		}
 		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(true);
@@ -565,19 +572,31 @@ void PlayerAttacks::CreateAttacks()
 				for (uint j = 0; j < colliders_array->GetArraySize(); j++)
 				{
 					Attack::AttackCollider collider;
-					collider.position = float3(colliders_array->GetNumber("pos_x"),
-						colliders_array->GetNumber("pos_y"),
-						colliders_array->GetNumber("pos_z"));
-					collider.size = float3(colliders_array->GetNumber("width"),
-						colliders_array->GetNumber("height"),
-						colliders_array->GetNumber("depth"));
-					collider.rotation = float3(colliders_array->GetNumber("rot_x"),
-						colliders_array->GetNumber("rot_y"),
-						colliders_array->GetNumber("rot_z"));
 					collider.type = GetColliderType(colliders_array->GetString("type"));
+					if (collider.type == Collider_Type::C_Sphere)
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.radius = colliders_array->GetNumber("radius");
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+					else
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.size = float3(colliders_array->GetNumber("width"),
+							colliders_array->GetNumber("height"),
+							colliders_array->GetNumber("depth"));
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
 
 					info.colliders.push_back(collider);
-
 					colliders_array->GetAnotherNode();
 				}
 			}
@@ -627,19 +646,31 @@ void PlayerAttacks::CreateAttacks()
 				for (uint j = 0; j < colliders_array->GetArraySize(); j++)
 				{
 					Attack::AttackCollider collider;
-					collider.position = float3(colliders_array->GetNumber("pos_x"),
-						colliders_array->GetNumber("pos_y"),
-						colliders_array->GetNumber("pos_z"));
-					collider.size = float3(colliders_array->GetNumber("width"),
-						colliders_array->GetNumber("height"),
-						colliders_array->GetNumber("depth"));
-					collider.rotation = float3(colliders_array->GetNumber("rot_x"),
-						colliders_array->GetNumber("rot_y"),
-						colliders_array->GetNumber("rot_z"));
 					collider.type = GetColliderType(colliders_array->GetString("type"));
+					if (collider.type == Collider_Type::C_Sphere)
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.radius = colliders_array->GetNumber("radius");
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+					else
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.size = float3(colliders_array->GetNumber("width"),
+							colliders_array->GetNumber("height"),
+							colliders_array->GetNumber("depth"));
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
 
 					info.colliders.push_back(collider);
-
 					colliders_array->GetAnotherNode();
 				}
 			}
