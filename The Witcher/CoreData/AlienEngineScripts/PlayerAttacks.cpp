@@ -422,7 +422,9 @@ void PlayerAttacks::CastSpell()
 			Quat rot = projectile_go->transform->GetGlobalRotation();
 			rot = rot.LookAt(projectile_go->transform->forward, direction, projectile_go->transform->up, float3::unitY());
 			projectile_go->transform->SetGlobalRotation(rot);
-			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
+			PlayerProjectile* projectile = projectile_go->GetComponent<PlayerProjectile>();
+			projectile->direction = direction;
+			projectile->player = player_controller;
 
 			if (GameManager::instance->rumbler_manager)
 				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
