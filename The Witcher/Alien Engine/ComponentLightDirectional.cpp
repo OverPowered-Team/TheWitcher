@@ -91,6 +91,8 @@ ComponentLightDirectional::~ComponentLightDirectional()
 	App->objects->directional_light_properites.remove(&light_props);
 	App->objects->ReduceNumOfDirLights();
 	glDeleteFramebuffers(1, &light_props.depthMapFBO);
+	glDeleteTextures(1, &light_props.depthMap);
+	glDeleteTextures(num_of_static_shadowMap, light_props.bakedepthMap);
 
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));

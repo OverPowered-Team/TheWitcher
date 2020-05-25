@@ -62,6 +62,9 @@ void PlayerController::Start()
 
 	state = new IdleState();
 	state->OnEnter(this);
+
+	// Dash
+	dashData.current_acel_multi = dashData.accel_multi; 
 }
 
 void PlayerController::Update()
@@ -95,6 +98,41 @@ void PlayerController::Update()
 	//Update animator variables
 	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
 	animator->SetBool("movement_input", mov_input);
+
+	// Visual effects
+	UpdateVisualEffects(); 
+
+}
+
+void PlayerController::UpdateVisualEffects()
+{
+	if (state->type == StateType::RUNNING)
+	{
+		float lerp = player_data.speed.Length() / player_data.stats["Movement_Speed"].GetValue();
+		animator->SetStateSpeed("Run", lerp);
+	}
+	else if (state->type == StateType::ROLLING)
+	{
+		if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		{
+			float current_speed = animator->GetCurrentStateSpeed();
+			float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT();
+
+			if (target_speed > dashData.max_speed)
+				target_speed = dashData.max_speed;
+			else if (target_speed < dashData.min_speed)
+				target_speed = dashData.min_speed;
+
+			animator->SetStateSpeed("Roll", target_speed);
+		}
+		
+	}
+}
+
+void PlayerController::ToggleDashMultiplier()
+{   
+	if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
 }
 
 void PlayerController::UpdateInput()
@@ -694,7 +732,23 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	}*/
 }
 
+void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
+{
+	for (auto& p : particles)
+		if (strcmp(p->GetName(), "p_run") == 0 || strcmp(p->GetName(), "p_jump") == 0)
+		{
+			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
+			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
 
+			// Sub-emitters
+			for (auto& child : p->GetChildren())
+			{
+				child->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
+				child->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
+
+			}
+		}
+}
 
 #pragma region Events
 void PlayerController::OnAnimationEnd(const char* name) {

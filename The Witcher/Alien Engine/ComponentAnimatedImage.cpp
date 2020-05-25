@@ -17,6 +17,15 @@ ComponentAnimatedImage::ComponentAnimatedImage(GameObject* obj): ComponentUI(obj
 	tabbable = false;
 }
 
+ComponentAnimatedImage::~ComponentAnimatedImage()
+{
+	for (auto item = images.begin(); item != images.end(); ++item)
+	{
+		if ((*item) != nullptr)
+			(*item)->DecreaseReferences();
+	}
+}
+
 bool ComponentAnimatedImage::DrawInspector()
 {
 	static bool check;
