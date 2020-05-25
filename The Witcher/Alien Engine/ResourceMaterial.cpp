@@ -279,7 +279,8 @@ void ResourceMaterial::ApplyMaterial()
 	if (textures[(uint)TextureType::DIFFUSE].first != NO_TEXTURE_ID && textures[(uint)TextureType::DIFFUSE].second != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textures[(uint)TextureType::DIFFUSE].second->id);
+		uint id = App->resources->GetTextureidByID(textures[(uint)TextureType::DIFFUSE].first);
+		glBindTexture(GL_TEXTURE_2D, id);
 		used_shader->SetUniform1i("objectMaterial.diffuseTexture", 0);
 		used_shader->SetUniform1i("objectMaterial.hasDiffuseTexture", 1);
 	}
@@ -291,7 +292,8 @@ void ResourceMaterial::ApplyMaterial()
 	if (textures[(uint)TextureType::SPECULAR].first != NO_TEXTURE_ID && textures[(uint)TextureType::SPECULAR].second != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, textures[(uint)TextureType::SPECULAR].second->id);
+		uint id = App->resources->GetTextureidByID(textures[(uint)TextureType::SPECULAR].first);
+		glBindTexture(GL_TEXTURE_2D, id);		
 		used_shader->SetUniform1i("objectMaterial.specularMap", 1);
 		used_shader->SetUniform1i("objectMaterial.hasSpecularMap", 1);
 	}
@@ -301,7 +303,8 @@ void ResourceMaterial::ApplyMaterial()
 	if (textures[(uint)TextureType::NORMALS].first != NO_TEXTURE_ID && textures[(uint)TextureType::NORMALS].second != nullptr)
 	{
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, textures[(uint)TextureType::NORMALS].second->id);
+		uint id = App->resources->GetTextureidByID(textures[(uint)TextureType::NORMALS].first);
+		glBindTexture(GL_TEXTURE_2D, id);		
 		used_shader->SetUniform1i("objectMaterial.normalMap", 2);
 		used_shader->SetUniform1i("objectMaterial.hasNormalMap", 1);
 	}
@@ -628,7 +631,15 @@ void ResourceMaterial::ShaderInputsSegment()
 
 void ResourceMaterial::InputTexture(TextureType texType)
 {
-	ImGui::ImageButton((ImTextureID)App->resources->GetTextureidByID(textures[(uint)texType].first), ImVec2(30, 30));
+	if (textures[(uint)texType].first != NO_TEXTURE_ID)
+	{
+		uint id = App->resources->GetTextureidByID(textures[(uint)texType].first);
+		ImGui::ImageButton((ImTextureID)id, ImVec2(30, 30));
+	}
+	else
+	{
+		ImGui::ImageButton((ImTextureID)App->resources->icons.local->id, ImVec2(30, 30));
+	}
 	if (ImGui::BeginDragDropTarget() && this != App->resources->default_material) {
 		const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(DROP_ID_PROJECT_NODE, ImGuiDragDropFlags_SourceNoDisableHover);
 		if (payload != nullptr && payload->IsDataType(DROP_ID_PROJECT_NODE)) {
@@ -651,6 +662,7 @@ void ResourceMaterial::InputTexture(TextureType texType)
 		ImGui::EndDragDropTarget();
 	}	
 
+
 	ImGui::SameLine();
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
 	ImGui::PushID((int)texType);
@@ -666,6 +678,13 @@ void ResourceMaterial::InputTexture(TextureType texType)
 		selectedType = texType;*/
 	}
 	ImGui::PopID();
+
+	if (textures[(uint)texType].first != NO_TEXTURE_ID)
+	{
+		uint id = App->resources->GetTextureidByID(textures[(uint)texType].first);
+		ImGui::Image((ImTextureID)id, ImVec2(50, 50));
+		ImGui::Text("Texture ID: %i", id);
+	}
 }
 
 void ResourceMaterial::TexturesSegment()

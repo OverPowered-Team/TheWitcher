@@ -120,8 +120,9 @@ ParticleSystem::~ParticleSystem()
 	glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_uv);
 
-
 	particles.clear();
+
+	RemoveMesh();
 
 	if (material != nullptr) {
 

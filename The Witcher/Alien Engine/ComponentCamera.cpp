@@ -337,12 +337,14 @@ bool ComponentCamera::DrawInspector()
 
 							if (texture_dropped != nullptr)
 							{
-								if (texture_dropped->references == 0)
-									texture_dropped->IncreaseReferences();
+								texture_dropped->IncreaseReferences();
 
 								cubemap->skybox_textures[i] = texture_dropped;
 								cubemap->path_pos[i].assign(texture_dropped->GetLibraryPath());
 								skybox->ChangeTextureByType((Cubemap::SKYBOX_POS)i, skybox_texture_id, texture_dropped->id, texture_dropped->width, texture_dropped->height);
+
+								texture_dropped->DecreaseReferences();
+
 							}
 						}
 						ImGui::ClearDragDrop();
@@ -782,10 +784,11 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos));
 	if (tex_pos != nullptr)
 	{
-		if (tex_pos->references == 0)
-			tex_pos->IncreaseReferences();
+		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::POSITIVE_X] = tex_pos;
 		skybox->ChangePositiveX(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		tex_pos->DecreaseReferences();
+
 	}
 	tex_pos = nullptr;
 
@@ -795,10 +798,10 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos));
 	if (tex_pos != nullptr)
 	{
-		if (tex_pos->references == 0)
-			tex_pos->IncreaseReferences();
+		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::NEGATIVE_X] = tex_pos;
 		skybox->ChangeNegativeX(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		tex_pos->DecreaseReferences();
 	}
 	tex_pos = nullptr;
 
@@ -808,10 +811,10 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos));
 	if (tex_pos != nullptr)
 	{
-		if (tex_pos->references == 0)
-			tex_pos->IncreaseReferences();
+		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::POSITIVE_Y] = tex_pos;
 		skybox->ChangePositiveY(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		tex_pos->DecreaseReferences();
 	}
 
 	cubemap->path_pos[Cubemap::NEGATIVE_Y].assign(to_load->GetString("Skybox_NegativeY"));
@@ -820,10 +823,10 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos));
 	if (tex_pos != nullptr)
 	{
-		if (tex_pos->references == 0)
-			tex_pos->IncreaseReferences();
+		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::NEGATIVE_Y] = tex_pos;
 		skybox->ChangeNegativeY(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		tex_pos->DecreaseReferences();
 	}
 
 	cubemap->path_pos[Cubemap::POSITIVE_Z].assign(to_load->GetString("Skybox_PositiveZ"));
@@ -832,10 +835,10 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos));
 	if (tex_pos != nullptr)
 	{
-		if (tex_pos->references == 0)
-			tex_pos->IncreaseReferences();
+		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::POSITIVE_Z] = tex_pos;
 		skybox->ChangePositiveZ(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		tex_pos->DecreaseReferences();
 	}
 
 	cubemap->path_pos[Cubemap::NEGATIVE_Z].assign(to_load->GetString("Skybox_NegativeZ"));
@@ -844,10 +847,10 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos = (ResourceTexture*)App->resources->GetResourceWithID(std::stoull(path_pos));
 	if (tex_pos != nullptr)
 	{
-		if (tex_pos->references == 0)
-			tex_pos->IncreaseReferences();
+		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::NEGATIVE_Z] = tex_pos;
 		skybox->ChangeNegativeZ(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		tex_pos->DecreaseReferences();
 	}
 
 #ifdef GAME_VERSION
