@@ -26,6 +26,12 @@ ComponentSlider::ComponentSlider(GameObject* obj) : ComponentUI(obj)
 	tabbable = true;
 }
 
+ComponentSlider::~ComponentSlider()
+{
+	if (sliderTexture != nullptr)
+		sliderTexture->DecreaseReferences();
+}
+
 bool ComponentSlider::DrawInspector()
 {
 	static bool check;
