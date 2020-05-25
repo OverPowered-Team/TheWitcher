@@ -37,6 +37,7 @@ public:
 		float3 position;
 		float3 size;
 		float3 rotation;
+		float radius;
 	};
 	struct AttackInfo {
 		std::string name = "";
