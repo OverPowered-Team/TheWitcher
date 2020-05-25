@@ -25,13 +25,6 @@ public:
 	Prefab ice_oil;
 	Prefab earth_oil;
 	Prefab poison_oil;
-	
-	Prefab nature_soul;
-	Prefab sea_soul;
-	Prefab djinn_jar;
-	Prefab strigas_claws;
-
-	Prefab witcher_rage;
 
 	GameObject* spawn = nullptr;
 
@@ -51,13 +44,6 @@ ALIEN_FACTORY RelicManager* CreateRelicManager() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(relic->ice_oil);
 	SHOW_IN_INSPECTOR_AS_PREFAB(relic->earth_oil);
 	SHOW_IN_INSPECTOR_AS_PREFAB(relic->poison_oil);
-
-	SHOW_IN_INSPECTOR_AS_PREFAB(relic->nature_soul);
-	SHOW_IN_INSPECTOR_AS_PREFAB(relic->sea_soul);
-	SHOW_IN_INSPECTOR_AS_PREFAB(relic->djinn_jar);
-	SHOW_IN_INSPECTOR_AS_PREFAB(relic->strigas_claws);
-
-	SHOW_IN_INSPECTOR_AS_PREFAB(relic->witcher_rage);
 
 	return relic;
 }

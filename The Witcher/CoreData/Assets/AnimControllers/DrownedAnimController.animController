@@ -82,6 +82,11 @@
                     {
                         "Type": "bool",
                         "CompText": "True",
+                        "ParameterIndex": 1
+                    },
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
                         "ParameterIndex": 0
                     }
                 ]
@@ -90,10 +95,15 @@
                 "Source": "Hit",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    },
                     {
                         "Type": "bool",
                         "CompText": "False",
@@ -134,6 +144,10 @@
         "BoolParameters": [
             {
                 "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "grounded",
                 "Value": false
             }
         ],

@@ -230,11 +230,9 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
         if (player && player->attacks->GetCurrentAttack()->CanHit(this))
         {
             float dmg_received = player->attacks->GetCurrentDMG();
-            float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
-            knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+            float3 knock = player->attacks->GetKnockBack(this->transform);
 
             player->OnHit(this, GetDamaged(dmg_received, player, knock));
-            last_player_hit = player;
 
             HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
         }

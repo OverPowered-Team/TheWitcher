@@ -4,8 +4,8 @@
             {
                 "Name": "Poison_Runestone",
                 "FamilyNumber": 1,
-                "ID": "16703529610019475179",
-                "ParentID": "2680458839242836818",
+                "ID": "9819208309692046304",
+                "ParentID": "14046935774256790219",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,8 +19,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
+                            -4.9732351303100586,
+                            1.0253374576568604,
                             0
                         ],
                         "Rotation": [
@@ -35,7 +35,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1618035270918857331"
+                        "ID": "1619841739487480024"
                     },
                     {
                         "Type": 1,
@@ -45,7 +45,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "7785474634594849134",
+                        "ID": "931934870548062623",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9526335529349955647",
@@ -53,7 +53,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15703941848065412983",
+                        "ID": "1783193635922894924",
                         "HasMaterial": true,
                         "MaterialID": "1409320524893316212",
                         "Enabled": true
@@ -83,7 +83,7 @@
                         ]
                     },
                     {
-                        "ID": "11134772902844801607",
+                        "ID": "1511760053611278628",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -94,7 +94,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "4543039737732510959",
+                        "ID": "3713378849132882150",
                         "ResourceID": "14777702257696053657",
                         "DataName": "RelicBehaviour",
                         "HasInspector": true,
@@ -102,7 +102,7 @@
                             {
                                 "VarType": 14,
                                 "Name": "relic_type",
-                                "enumInt": 1
+                                "enumInt": 0
                             },
                             {
                                 "VarType": 14,
@@ -110,6 +110,201 @@
                                 "enumInt": 5
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "p_poison",
+                "FamilyNumber": 2,
+                "ID": "680472750925396331",
+                "ParentID": "9819208309692046304",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11221113877578767450",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15896335218076275106"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "16203157047694733828",
+                        "Billboard": 0,
+                        "Start": {
+                            "Position": [
+                                -4.9732351303100586,
+                                1.0253374576568604,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                0,
+                                1,
+                                -1.1920930376163597e-07
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 1,
+                            "Color": [
+                                0.14089502394199371,
+                                0.45999997854232788,
+                                0.091999992728233337,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 0.10000000149011612,
+                            "Size3D": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 2,
+                            "AxisRotationStart": false,
+                            "Angle3D": [
+                                0,
+                                0,
+                                180
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "FinalTime": 2,
+                            "Speed": 1,
+                            "Color": [
+                                0.25691959261894226,
+                                0.5,
+                                0.087500005960464478,
+                                0
+                            ],
+                            "Size": 1,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                1,
+                                0
+                            ],
+                            "AxisRotation": false,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 3,
+                            "Zone": 0,
+                            "Distance": 4,
+                            "Radius": 5,
+                            "OutRadius": 0,
+                            "CubeSize": [
+                                10,
+                                5,
+                                10
+                            ],
+                            "MaxLife": 1,
+                            "CurrentLife": 0.2680000364780426,
+                            "SpawnRate": 1,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                -4.9732351303100586,
+                                1.0253374576568604,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                -90.000007629394531,
+                                0,
+                                0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "17981693510372123425",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false
                     }
                 ]
             }

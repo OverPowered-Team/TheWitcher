@@ -46,7 +46,7 @@ public:
 	void RotateSoldier();
 
 	void OnAnimationEnd(const char* name) override;
-	void OnTriggerEnter(ComponentCollider* collider);
+	void OnTriggerEnter(ComponentCollider* collider) {};
 
 public:
 	Prefab head_prefab;

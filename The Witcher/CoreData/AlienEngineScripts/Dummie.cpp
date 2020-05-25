@@ -18,7 +18,7 @@ void Dummie::Update()
 {
 	if (showing_combo)
 	{
-		if (time_showing + 2.f <= Time::GetGameTime())
+		if (time_showing + 2.f <= Time::GetTimeSinceStart())
 		{
 			DestroyCombo();
 		}
@@ -54,7 +54,7 @@ void Dummie::OnTriggerEnter(ComponentCollider* col)
 			}
 
 			showing_combo = true;
-			time_showing = Time::GetGameTime();
+			time_showing = Time::GetTimeSinceStart();
 		}
 	}
 }
