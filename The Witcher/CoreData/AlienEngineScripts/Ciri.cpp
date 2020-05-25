@@ -82,7 +82,7 @@ void Ciri::SetActionProbabilities()
 		actions.find("MiniScream")->second->probability = 100.0f;
 		action_cooldown = 0.5f;
 		return;
-	}else if (player_distance[0] <= combo_range || player_distance[1] <= combo_range) {
+	}else if (player_distance[0] <= combo_range && player_controllers[0]->state->type != StateType::DEAD || player_distance[1] <= combo_range && player_controllers[1]->state->type != StateType::DEAD) {
 		actions.find("Combo")->second->probability = 100.0f;
 		action_cooldown = 0.5f;
 		return;
@@ -134,6 +134,7 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 	if (stats["Health"].GetValue() == 0.0F) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
+		Invoke(std::bind(&Ciri::OnCloneDeath, this), 3.8f);
 	}
 	else {
 		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
@@ -162,7 +163,13 @@ void Ciri::LaunchDashAction()
 {
 	//dash_direction = (player_controllers[player_distance[0] > player_distance[1] ? 1 : 0]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 	//target = player_distance[0] > player_distance[1] ? 1 : 0;
-	target = Random::GetRandomIntBetweenTwo(0, 1);
+	if (player_controllers[0]->state->type == StateType::DEAD)
+		target = 1;
+	else if (player_controllers[1]->state->type == StateType::DEAD)
+		target = 0;
+	else {
+		target = Random::GetRandomIntBetweenTwo(0, 1);
+	}
 	dash_direction = (player_controllers[target]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 	animator->PlayState("Dash");
 
@@ -172,7 +179,15 @@ void Ciri::LaunchDashAction()
 void Ciri::LaunchComboAction()
 {
 	animator->PlayState("Combo");
-	target = player_distance[0] > player_distance[1] ? 1 : 0;
+	CheckForGapCloser();
+
+	if (player_controllers[0]->state->type == StateType::DEAD)
+		target = 1;
+	else if (player_controllers[1]->state->type == StateType::DEAD)
+		target = 0;
+	else {
+		target = player_distance[0] > player_distance[1] ? 1 : 0;
+	}
 }
 
 void Ciri::LaunchMiniScreamAction()
@@ -250,6 +265,17 @@ Boss::ActionState Ciri::UpdateComboAction()
 
 	OrientToPlayer(target);
 
+	if (gap_closer) {
+		float3 gap_closer_direction = (player_controllers[target]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+		character_ctrl->Move((gap_closer_direction * gap_closer_speed) * Time::GetDT());
+		if (gap_closer_speed > 0)
+			gap_closer_speed -= gap_closer_decay;
+		else
+			gap_closer_speed = 0;
+		if (player_distance[target] < combo_range)
+			gap_closer = false;
+	}
+
 	return current_action->state;
 }
 
@@ -258,6 +284,14 @@ Boss::ActionState Ciri::UpdateMiniScreamAction()
 	LOG("UPDATING MiniScream ACTION");
 
 	return current_action->state;
+}
+
+void Ciri::CheckForGapCloser()
+{
+	if (player_distance[target] > combo_range) {
+		gap_closer = true;
+		gap_closer_speed = 4.0f;
+	}
 }
 
 void Ciri::EndAction(GameObject* go_ended)
@@ -289,21 +323,19 @@ void Ciri::OnAnimationEnd(const char* name)
 		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		ReleaseParticle("EnemyAttackParticle");
+		CheckForGapCloser();
 	}
 	if (strcmp(name, "Combo2") == 0) {
 		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		ReleaseParticle("EnemyAttackParticle");
+		CheckForGapCloser();
 	}
 	if (strcmp(name, "Scream") == 0) {
 		current_action->state = Boss::ActionState::ENDED;
 	}
 	if (strcmp(name, "Spawn") == 0) {
 		state = Boss::BossState::IDLE;
-	}
-	
-	if (strcmp(name, "Death") == 0) {
-		fight_controller->OnCloneDead(this->game_object);
 	}
 }
 
@@ -327,6 +359,11 @@ void Ciri::OnTriggerEnter(ComponentCollider* collider)
 	else {
 		LOG("CANT GET INTERRUPTED");
 	}
+}
+
+void Ciri::OnCloneDeath()
+{
+	fight_controller->OnCloneDead(this->game_object);
 }
 
 void Ciri::OnDrawGizmosSelected()

@@ -98,7 +98,8 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 		break;
 	}
 	case EnemyType::CIRI_CLONE: {
-		enemy = GameObject::Instantiate(ciri_clone, position, false, parent)->GetComponent<Enemy>();
+		enemy = GameObject::Instantiate(ciri_clone, position, true, parent)->GetComponent<Enemy>();
+		enemy->GetComponent<ComponentCharacterController>()->SetPosition(position);
 		break;
 	}
 	default:
