@@ -42,6 +42,10 @@ void TriggerCamera::StartTransition(const TransitionInfo& transition_info)
 			break;
 		}
 		cam_script->curr_transition = transition_info;
+		cam_script->hor_angle = transition_info.hor_angle;
+		cam_script->vert_angle = transition_info.vert_angle;
+		cam_script->distance = transition_info.distance;
+
 		//cam_script->start_transition_pos = camera->transform->GetGlobalPosition();
 		LOG("Started transition");
 	}
