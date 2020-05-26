@@ -6,7 +6,7 @@
 class GameObject;
 class ComponentMesh;
 
-class ComponentSphereCollider : public ComponentCollider
+class __declspec(dllexport) ComponentSphereCollider : public ComponentCollider
 {
 public:
 

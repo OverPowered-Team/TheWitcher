@@ -48,6 +48,7 @@
 #include "ComponentConvexHullCollider.h"
 #include "ComponentCharacterController.h"
 #include "ComponentRigidBody.h"
+#include "ComponentConfigurableJoint.h"
 
 #include "ModuleUI.h"
 #include "PanelScene.h"
@@ -936,7 +937,7 @@ void GameObject::SendAlientEventThis(void* object, AlienEventType type)
 }
 
 
-GameObject* GameObject::GetGameObjectByID(const u64 & id)
+GameObject* GameObject::GetGameObjectByID(const u64 id)
 {
 	GameObject* ret = nullptr;
 	if (id == this->ID) {
@@ -953,7 +954,7 @@ GameObject* GameObject::GetGameObjectByID(const u64 & id)
 	return ret;
 }
 
-GameObject* GameObject::GetGameObjectByIDReverse(const u64& id)
+GameObject* GameObject::GetGameObjectByIDReverse(const u64 id)
 {
 	GameObject* ret = nullptr;
 	if (id == this->ID) {
@@ -1287,6 +1288,16 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				character_controller->LoadComponent(components_to_load);
 				AddComponent(character_controller);
 				break; }
+			case (int)ComponentType::CHARACTER_JOINT: {
+				ComponentConfigurableJoint* joint = new ComponentConfigurableJoint(this);
+				joint->LoadComponent(components_to_load);
+				AddComponent(joint);
+				break; }
+			case (int)ComponentType::CONFIGURABLE_JOINT: {
+				ComponentConfigurableJoint* joint = new ComponentConfigurableJoint(this);
+				joint->LoadComponent(components_to_load);
+				AddComponent(joint);
+				break; }
 			case (int)ComponentType::SCRIPT: {
 				ComponentScript* script = new ComponentScript(this);
 				script->LoadComponent(components_to_load);
@@ -1509,6 +1520,16 @@ void GameObject::CloningGameObject(GameObject* clone)
 					ComponentRigidBody* rb = new ComponentRigidBody(clone);
 					(*item)->Clone(rb);
 					clone->AddComponent(rb);
+					break; }
+				case ComponentType::CHARACTER_JOINT: {
+					ComponentConfigurableJoint* joint = new ComponentConfigurableJoint(clone);
+					(*item)->Clone(joint);
+					clone->AddComponent(joint);
+					break; }
+				case ComponentType::CONFIGURABLE_JOINT: {
+					ComponentConfigurableJoint* joint = new ComponentConfigurableJoint(clone);
+					(*item)->Clone(joint);
+					clone->AddComponent(joint);
 					break; }
 				default:
 					LOG_ENGINE("Unknown component type while loading");

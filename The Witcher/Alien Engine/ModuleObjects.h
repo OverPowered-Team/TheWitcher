@@ -160,7 +160,7 @@ public:
 	void MoveComponentUp(GameObject* object, Component* component, bool top);
 	
 	// get object
-	GameObject* GetGameObjectByID(const u64& id);
+	GameObject* GetGameObjectByID(const u64 id);
 
 	//reparent object in the next preupdate
 	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
