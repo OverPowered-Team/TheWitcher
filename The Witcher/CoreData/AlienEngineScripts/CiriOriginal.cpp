@@ -94,6 +94,9 @@ void CiriOriginal::LaunchAction()
 
 void CiriOriginal::Scream()
 {
+	SpawnParticle("Ciri_Scream", { 0, 0.6, 0 });
+	ReleaseParticle("Ciri_Scream");
+
 	if (player_distance[0] <= scream_range) {
 		float3 knockbak_direction = (player_controllers[0]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 		player_controllers[0]->ReceiveDamage(0, knockbak_direction * scream_force);

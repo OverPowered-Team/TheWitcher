@@ -172,6 +172,7 @@ void Ciri::LaunchDashAction()
 	}
 	dash_direction = (player_controllers[target]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 	animator->PlayState("Dash");
+	animator->SetStateSpeed("Dash", 1.0f);
 
 	OrientToPlayerWithoutSlerp(target);
 }
@@ -195,16 +196,18 @@ void Ciri::LaunchMiniScreamAction()
 	fight_controller->can_mini_scream = false;
 	animator->PlayState("Scream");
 	fight_controller->scream_cd_timer = 0;
+	SpawnParticle("Ciri_MiniScream", {0, 0.6, 0});
+	ReleaseParticle("Ciri_MiniScream");
 }
 
 void Ciri::MiniScream()
 {
-	if (player_distance[0] <= mini_scream_range) {
+	if (player_distance[0] <= mini_scream_range && player_controllers[0]->state->type != StateType::DEAD) {
 		float3 knockbak_direction = (player_controllers[0]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 		player_controllers[0]->ReceiveDamage(mini_scream_damage, knockbak_direction * mini_scream_force);
 	}
 
-	if (player_distance[1] <= mini_scream_range) {
+	if (player_distance[1] <= mini_scream_range && player_controllers[1]->state->type != StateType::DEAD) {
 		float3 knockbak_direction = (player_controllers[1]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 		player_controllers[1]->ReceiveDamage(mini_scream_damage, knockbak_direction * mini_scream_force);
 
@@ -248,6 +251,7 @@ Boss::ActionState Ciri::UpdateDashAction()
 			character_ctrl->Move(float3::zero());
 			dash_timer = 0;
 			current_action->state = Boss::ActionState::ENDED;
+			animator->SetStateSpeed("Dash", 0.0f);
 		}
 	}
 	else {
