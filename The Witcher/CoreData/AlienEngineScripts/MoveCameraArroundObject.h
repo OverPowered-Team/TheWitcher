@@ -12,12 +12,16 @@ public:
 	ComponentCamera* camera = nullptr;
 	float3 start_pos = float3::zero();
 	float3 start_curve = float3::zero();
+	float3 end_curve = float3::zero();
 
 	float speed = 0;
 	float current_pos = 0; 
 	bool start_transition = true;
+	bool go_back = false;
+	bool ended_intro = false;
 	float transition_duration = 0;
 	float current_time_transition = 0;
+
 	MoveCameraArroundObject();
 	virtual ~MoveCameraArroundObject();
 	
