@@ -9,7 +9,7 @@ class __declspec(dllexport) ComponentAnimatedImage :public ComponentUI
 {
 public:
 	ComponentAnimatedImage(GameObject* obj);
-	~ComponentAnimatedImage() {};
+	~ComponentAnimatedImage();
 
 	bool DrawInspector();
 

@@ -23,7 +23,7 @@ class __declspec(dllexport) ComponentButton :public ComponentUI
 	friend class ModuleObjects;
 public:
 	ComponentButton(GameObject* obj);
-	~ComponentButton() {};
+	~ComponentButton();
 
 	void SetActive(bool active);
 	void Draw(bool isGame);

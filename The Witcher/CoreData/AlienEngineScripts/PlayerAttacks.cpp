@@ -1,19 +1,20 @@
-#include "PlayerController.h"
-#include "State.h"
-#include "Effect.h"
+#include "GameManager.h"
 #include "RumblerManager.h"
 #include "EnemyManager.h"
-#include "Enemy.h"
-#include "GameManager.h"
 #include "PlayerManager.h"
-#include "PlayerProjectile.h"
-#include "ParticlePool.h"
-#include "..\..\Alien Engine\ParticleEmitter.h"
-#include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
 #include "RumblerManager.h"
+#include "ParticlePool.h"
+
 #include "UI_Char_Frame.h"
+
+#include "PlayerController.h"
+#include "PlayerProjectile.h"
+
+#include "Enemy.h"
+
+#include "PlayerAttacks.h"
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
@@ -139,6 +140,7 @@ void PlayerAttacks::DoAttack()
 	can_execute_input = false;
 	next_attack = AttackType::NONE;
 	current_target = nullptr;
+	current_attack->current_collider = 0;
 	distance_snapped = 0.0f;
 	current_attack->enemies_hit.clear();
 
@@ -211,8 +213,8 @@ void PlayerAttacks::CancelAttack()
 	if (current_attack != nullptr)
 	{
 		player_controller->ReleaseAttackParticle();
-		if(colliders[(int)current_attack->info.coll_type])
-			colliders[(int)current_attack->info.coll_type]->SetEnable(false);
+		if(colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+			colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
 		
 		current_attack = nullptr;
 	}
@@ -330,29 +332,45 @@ void PlayerAttacks::AttackMovement()
 
 void PlayerAttacks::ActivateCollider()
 {
-	if (current_attack && colliders[(int)current_attack->info.coll_type])
+	if (current_attack && colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
 	{
-		switch (current_attack->info.coll_type)
+		switch (current_attack->info.colliders[current_attack->current_collider].type)
 		{
 		case Collider_Type::C_Sphere:
-			((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
-			//((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRadius(current_attack->info.collider_size.x); //x as radius for now :D
-			((ComponentSphereCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
+		{
+			ComponentSphereCollider* sphere_collider = (ComponentSphereCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
+			sphere_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
+			//sphere_collider->SetRadius(current_attack->info.colliders[current_attack->current_collider].radius); IDK WHY THIS DOESN'T COMPILE PLS HELP
+			sphere_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		}
 			break;
 		default:
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetCenter(current_attack->info.collider_position);
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetSize(current_attack->info.collider_size);
-			((ComponentBoxCollider*)colliders[(int)current_attack->info.coll_type])->SetRotation(current_attack->info.collider_rotation);
+		{
+			ComponentBoxCollider* box_collider = (ComponentBoxCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
+			box_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
+			box_collider->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
+			box_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		}
 			break;
 		}
-		colliders[(int)current_attack->info.coll_type]->SetEnable(true);
+		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(true);
+	}
+}
+
+void PlayerAttacks::UpdateCollider()
+{
+	if (current_attack->current_collider + 1 < current_attack->info.colliders.size())
+	{
+		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
+		current_attack->current_collider++;
+		ActivateCollider();
 	}
 }
 
 void PlayerAttacks::DeactivateCollider()
 {
-	if (colliders[(int)current_attack->info.coll_type])
-		colliders[(int)current_attack->info.coll_type]->SetEnable(false);
+	if (colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
 }
 
 void PlayerAttacks::CastSpell()
@@ -404,7 +422,9 @@ void PlayerAttacks::CastSpell()
 			Quat rot = projectile_go->transform->GetGlobalRotation();
 			rot = rot.LookAt(projectile_go->transform->forward, direction, projectile_go->transform->up, float3::unitY());
 			projectile_go->transform->SetGlobalRotation(rot);
-			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
+			PlayerProjectile* projectile = projectile_go->GetComponent<PlayerProjectile>();
+			projectile->direction = direction;
+			projectile->player = player_controller;
 
 			if (GameManager::instance->rumbler_manager)
 				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
@@ -461,8 +481,8 @@ void PlayerAttacks::AllowCombo()
 
 bool PlayerAttacks::CanBeInterrupted()
 {
-	if (colliders[(int)current_attack->info.coll_type])
-		return !colliders[(int)current_attack->info.coll_type]->IsEnabled();
+	if (colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+		return !colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->IsEnabled();
 	else
 		return true;
 }
@@ -539,21 +559,50 @@ void PlayerAttacks::CreateAttacks()
 		{
 			Attack::AttackInfo info;
 
+			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
 			info.name = attack_combo->GetString("name");
 			info.input = attack_combo->GetString("button");
 			info.particle_name = attack_combo->GetString("particle_name");
 			info.particle_pos = float3(attack_combo->GetNumber("particle_pos.pos_x"),
 				attack_combo->GetNumber("particle_pos.pos_y"),
 				attack_combo->GetNumber("particle_pos.pos_z"));
-			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
-				attack_combo->GetNumber("collider.pos_y"),
-				attack_combo->GetNumber("collider.pos_z"));
-			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
-				attack_combo->GetNumber("collider.height"),
-				attack_combo->GetNumber("collider.depth"));
-			info.collider_rotation = float3(attack_combo->GetNumber("collider.rot_x"),
-				attack_combo->GetNumber("collider.rot_y"),
-				attack_combo->GetNumber("collider.rot_z"));
+
+			JSONArraypack* colliders_array = attack_combo->GetArray("colliders");
+			if(colliders_array)
+			{
+				colliders_array->GetFirstNode();
+				for (uint j = 0; j < colliders_array->GetArraySize(); j++)
+				{
+					Attack::AttackCollider collider;
+					collider.type = GetColliderType(colliders_array->GetString("type"));
+					if (collider.type == Collider_Type::C_Sphere)
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.radius = colliders_array->GetNumber("radius");
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+					else
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.size = float3(colliders_array->GetNumber("width"),
+							colliders_array->GetNumber("height"),
+							colliders_array->GetNumber("depth"));
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+
+					info.colliders.push_back(collider);
+					colliders_array->GetAnotherNode();
+				}
+			}
+
 			info.knock_direction = float3(attack_combo->GetNumber("knock_back.x"),
 				attack_combo->GetNumber("knock_back.y"),
 				attack_combo->GetNumber("knock_back.z"));
@@ -568,9 +617,6 @@ void PlayerAttacks::CreateAttacks()
 			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
 			info.snap_detection_range = attack_combo->GetNumber("snap_detection_range");
 			info.min_distance_to_target = attack_combo->GetNumber("min_distance_to_target");
-			info.coll_type = GetColliderType(attack_combo->GetString("collider.type"));
-
-			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
 
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
@@ -588,20 +634,49 @@ void PlayerAttacks::CreateAttacks()
 		{
 			Attack::AttackInfo info;
 
+			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 			info.name = spells_json->GetString("name");
 			info.particle_name = spells_json->GetString("particle_name");
 			info.particle_pos = float3(spells_json->GetNumber("particle_pos.pos_x"),
 				spells_json->GetNumber("particle_pos.pos_y"),
 				spells_json->GetNumber("particle_pos.pos_z"));
-			info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
-				spells_json->GetNumber("collider.pos_y"),
-				spells_json->GetNumber("collider.pos_z"));
-			info.collider_size = float3(spells_json->GetNumber("collider.width"),
-				spells_json->GetNumber("collider.height"),
-				spells_json->GetNumber("collider.depth"));
-			info.collider_rotation = float3(spells_json->GetNumber("collider.rot_x"),
-				spells_json->GetNumber("collider.rot_y"),
-				spells_json->GetNumber("collider.rot_z"));
+
+			JSONArraypack* colliders_array = spells_json->GetArray("colliders");
+			if (colliders_array)
+			{
+				colliders_array->GetFirstNode();
+				for (uint j = 0; j < colliders_array->GetArraySize(); j++)
+				{
+					Attack::AttackCollider collider;
+					collider.type = GetColliderType(colliders_array->GetString("type"));
+					if (collider.type == Collider_Type::C_Sphere)
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.radius = colliders_array->GetNumber("radius");
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+					else
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.size = float3(colliders_array->GetNumber("width"),
+							colliders_array->GetNumber("height"),
+							colliders_array->GetNumber("depth"));
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+
+					info.colliders.push_back(collider);
+					colliders_array->GetAnotherNode();
+				}
+			}
+
 			info.movement_strength = spells_json->GetNumber("movement_strength");
 			info.activation_frame = spells_json->GetNumber("activation_frame");
 			info.max_distance_traveled = spells_json->GetNumber("max_distance_traveled");
@@ -614,9 +689,7 @@ void PlayerAttacks::CreateAttacks()
 			info.knock_direction = float3(spells_json->GetNumber("knock_back.x"),
 				spells_json->GetNumber("knock_back.y"),
 				spells_json->GetNumber("knock_back.z"));
-			info.coll_type = GetColliderType(spells_json->GetString("collider.type"));
 
-			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 
 			JSONArraypack* tags = spells_json->GetArray("tags");
 			uint num_tags = tags->GetArraySize();
