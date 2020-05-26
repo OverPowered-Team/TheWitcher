@@ -36,14 +36,14 @@ void PlayerProjectile::OnTriggerEnter(ComponentCollider* collider)
 			float3 knock = direction * knock_back;
 			float damage_dealt = enemy->GetDamaged(damage, player, knock);
 
-			player->OnHit(enemy, damage_dealt);
+			player->player_data.total_damage_dealt += damage_dealt;
 
 			if (!enemy->IsDead())
-				GameObject::Destroy(game_object);
+				GameObject::Destroy(this->game_object);
 		}
 	}
 	else if (strcmp(collider->game_object_attached->GetTag(), "Player") != 0)
 	{
-		GameObject::Destroy(game_object);
+		GameObject::Destroy(this->game_object);
 	}
 }

@@ -5,39 +5,81 @@
 #include <string>
 
 #include "Globals.h"
+class ResourceTexture;
 
 struct Cubemap
 {
-	std::string pos_x;
-	std::string neg_x;
-	std::string pos_y;
-	std::string neg_y;
-	std::string pos_z;
-	std::string neg_z;
+	enum SKYBOX_POS
+	{
+		POSITIVE_X,
+		NEGATIVE_X,
+		POSITIVE_Y,
+		NEGATIVE_Y,
+		POSITIVE_Z,
+		NEGATIVE_Z,
+	};
+
+	std::string path_pos[6];
 
 	void Reset()
 	{
-		pos_x.clear();
-		neg_x.clear();
-		pos_y.clear();
-		neg_y.clear();
-		pos_z.clear();
-		neg_z.clear();
+		for (int i = 0; i < 6; i++)
+		{
+			path_pos[i].clear();
+		}
 	}
 
 	std::vector<std::string> ToVector()
 	{
 		std::vector<std::string> faces;
-
-		faces.push_back(pos_x);
-		faces.push_back(neg_x);
-		faces.push_back(pos_y);
-		faces.push_back(neg_y);
-		faces.push_back(pos_z);
-		faces.push_back(neg_z);
-
+		for (int i = 0; i < 6; i++)
+		{
+			faces.push_back(path_pos[i]);
+		}
 		return faces;
 	}
+
+	ResourceTexture* skybox_textures[6] = { nullptr,nullptr, nullptr, nullptr, nullptr, nullptr };
+
+	static std::string EnumToString(int i)
+	{
+		switch (i)
+		{
+		case SKYBOX_POS::POSITIVE_X:
+		{
+			return std::string("Positive X");
+			break;
+		}
+		case SKYBOX_POS::NEGATIVE_X:
+		{
+			return std::string("Negative X");
+			break;
+		}
+		case SKYBOX_POS::POSITIVE_Y:
+		{
+			return std::string("Positive Y");
+			break;
+		}
+		case SKYBOX_POS::NEGATIVE_Y:
+		{
+			return std::string("Negative X");
+			break;
+		}
+		case SKYBOX_POS::POSITIVE_Z:
+		{
+			return std::string("Positive Z");
+			break;
+		}
+		case SKYBOX_POS::NEGATIVE_Z:
+		{
+			return std::string("Negative X");
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
 };
 
 class Skybox
@@ -48,8 +90,9 @@ public:
 
 	uint LoadCubeMap(const std::vector<std::string>& texture_files);
 	uint LoadCubeMapFromLibraryFiles(const std::vector<std::string>& texture_files);
+	uint GenereteCubeMapFromTextures(ResourceTexture* skybox_textures[6]);
 	void SetBuffers();
-
+	void ChangeTextureByType(Cubemap::SKYBOX_POS type, const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
 	void ChangePositiveX(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
 	void ChangeNegativeX(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
 	void ChangePositiveY(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);

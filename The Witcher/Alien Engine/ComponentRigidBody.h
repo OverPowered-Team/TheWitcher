@@ -27,8 +27,10 @@ enum class ForceMode : uint
 
 class __declspec(dllexport) ComponentRigidBody : public ComponentBasePhysic
 {
+
 	friend class GameObject;
 	friend class ModulePhysX;
+	friend class ComponentJoint;
 	friend class ComponentPhysics;
 	friend class ComponentCollider;
 	friend class ComponentBoxCollider;
@@ -76,8 +78,6 @@ public:
 
 private:
 
-	void OnEnable();
-	void OnDisable();
 	void Update();
 	bool DrawInspector();
 
@@ -85,8 +85,6 @@ private:
 	void Clone(Component* clone);
 	void SaveComponent(JSONArraypack* config);
 	void LoadComponent(JSONArraypack* config);
-
-	bool CanUseRigidBody();
 	void SetBodyProperties();
 
 private:

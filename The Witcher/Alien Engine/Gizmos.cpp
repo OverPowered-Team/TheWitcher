@@ -93,7 +93,6 @@ void Gizmos::DrawWireSphere(const float3& position, const float& radius, const C
 void Gizmos::DrawLine(const float3& from, const float3& to, const Color& color, float line_width)
 {
 	OPTICK_EVENT();
-
 	glColor4f(color.r, color.g, color.b, color.a);
 	glLineWidth(line_width);
 	glBegin(GL_LINES);

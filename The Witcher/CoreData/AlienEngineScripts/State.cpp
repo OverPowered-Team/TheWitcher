@@ -32,7 +32,7 @@ void IdleState::Update(PlayerController* player)
 
 void IdleState::OnEnter(PlayerController* player)
 {
-	player->player_data.speed = float3::zero();
+	player->player_data.velocity = float3::zero();
 }
 
 void IdleState::OnExit(PlayerController* player)
@@ -56,7 +56,7 @@ void RunningState::Update(PlayerController* player)
 {
 	if (Time::GetGameTime() - player->timer >= player->delay_footsteps) {
 		player->timer = Time::GetGameTime();
-		player->audio->StartSound();
+		player->audio->StartSound("Player_Footstep");
 	}
 	player->HandleMovement();
 
@@ -89,9 +89,9 @@ void RunningState::OnEnter(PlayerController* player)
 	}
 
 	if(found_running == false)
-		player->SpawnParticle("p_run", float3(0.f, 0.f, -0.15f));
-
-	player->audio->StartSound();
+		player->SpawnParticle("p_run", float3(0.f, 0.f, -0.15f));	
+	
+	player->audio->StartSound("Player_Footstep");
 	player->timer = Time::GetGameTime();
 }
 
@@ -116,7 +116,7 @@ State* JumpingState::HandleInput(PlayerController* player)
 {
 	if (player->controller->isGrounded)
 	{
-		player->game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Player_Fall");
+		player->audio->StartSound("Player_Fall");
 
 		if (!player->mov_input)
 		{
@@ -126,7 +126,6 @@ State* JumpingState::HandleInput(PlayerController* player)
 		{
 			return new RunningState();
 		}
-
 	}
 
 	return nullptr;
@@ -235,7 +234,7 @@ State* AttackingState::OnAnimationEnd(PlayerController* player, const char* name
 
 void AttackingState::OnEnter(PlayerController* player)
 {
-	player->audio->StartSound("Hit_Sword");
+
 }
 
 void AttackingState::OnExit(PlayerController* player)
@@ -245,7 +244,7 @@ void AttackingState::OnExit(PlayerController* player)
 
 void RollingState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 	player->UpdateDashEffect();
 
 	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
@@ -282,16 +281,17 @@ void RollingState::OnEnter(PlayerController* player)
 	{
 		float3 direction_vector = player->GetDirectionVector();
 
-		player->player_data.speed = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
+		player->player_data.velocity = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
 
 		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		player->transform->SetGlobalRotation(rot);
 	}
 	else
-		player->player_data.speed = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
+		player->player_data.velocity = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
 	player->animator->PlayState("Roll");
+	player->audio->StartSound("Play_Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
 
 	// Special stuff to make it look cooler
@@ -353,14 +353,14 @@ void RollingState::OnExit(PlayerController* player)
 
 void HitState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 }
 
 State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 {
 	if (strcmp(name, "Hit") == 0) {
 		player->animator->SetBool("reviving", false);
-		player->player_data.speed = float3::zero();
+		player->player_data.velocity = float3::zero();
 		return new IdleState();
 	}
 	return nullptr;
@@ -386,7 +386,7 @@ void RevivingState::Update(PlayerController* player)
 void RevivingState::OnEnter(PlayerController* player)
 {
 	player->input_blocked = true;
-	player->player_data.speed = float3::zero();
+	player->player_data.velocity = float3::zero();
 	player->animator->SetBool("reviving", true);
 	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
@@ -402,7 +402,8 @@ void DeadState::OnEnter(PlayerController* player)
 {
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
-	player->player_data.speed = float3::zero();
+	//player->play
+	player->player_data.velocity = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
 	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
@@ -475,7 +476,7 @@ State* GroundState::HandleInput(PlayerController* player)
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive)
 		|| Input::GetKeyDown(player->keyboard_revive)) {
 		if (player->CheckForPossibleRevive()) {
-			player->player_data.speed = float3::zero();
+			player->player_data.velocity = float3::zero();
 			player->animator->SetBool("reviving", true);
 			return new RevivingState();
 		}

@@ -440,17 +440,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 			
 			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
 
-			std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
-			for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
-				if ((*it_ui_2d).second != nullptr) {
-					ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
-					if (ui != nullptr && ui->IsEnabled())
-					{
-						ui->Draw(!printing_scene);
-
-					}
-				}
-			}
 			std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 			for (; it_ui_world != ui_world.end(); ++it_ui_world) {
 				if ((*it_ui_world).second != nullptr) {
@@ -464,6 +453,19 @@ update_status ModuleObjects::PostUpdate(float dt)
 					}
 				}
 			}
+
+			std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
+			for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
+				if ((*it_ui_2d).second != nullptr) {
+					ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
+					if (ui != nullptr && ui->IsEnabled())
+					{
+						ui->Draw(!printing_scene);
+
+					}
+				}
+			}
+			
 
 			if (printing_scene)
 				OnDrawGizmos();
@@ -606,17 +608,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
 
-		std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
-		for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
-			if ((*it_ui_2d).second != nullptr) {
-				ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
-				if (ui != nullptr && ui->IsEnabled())
-				{
-					ui->Draw(!printing_scene);
-
-				}
-			}
-		}
 		std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 		for (; it_ui_world != ui_world.end(); ++it_ui_world) {
 			if ((*it_ui_world).second != nullptr) {
@@ -630,6 +621,19 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 		}
+
+		std::vector<std::pair<float, GameObject*>>::iterator it_ui_2d = ui_2d.begin();
+		for (; it_ui_2d != ui_2d.end(); ++it_ui_2d) {
+			if ((*it_ui_2d).second != nullptr) {
+				ComponentUI* ui = (*it_ui_2d).second->GetComponent<ComponentUI>();
+				if (ui != nullptr && ui->IsEnabled())
+				{
+					ui->Draw(!printing_scene);
+
+				}
+			}
+		}
+		
 
 		OnPostRender(game_viewport->GetCamera());
 
@@ -1342,9 +1346,24 @@ void ModuleObjects::MoveComponentUp(GameObject* object, Component* component, bo
 	}
 }
 
-GameObject* ModuleObjects::GetGameObjectByID(const u64& id)
+GameObject* ModuleObjects::GetGameObjectByID(const u64 id)
 {
-	return base_game_object->GetGameObjectByID(id);
+	std::stack<GameObject*>objects;
+	objects.push(base_game_object);
+
+	while (!objects.empty()) {
+		GameObject* obj = objects.top();
+		objects.pop();
+
+		if (obj->ID == id)
+			return obj;
+
+		for (auto item = obj->children.begin(); item != obj->children.end(); ++item) {
+			objects.push(*item);
+		}
+	}
+
+	return nullptr;
 }
 
 void ModuleObjects::ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ)
