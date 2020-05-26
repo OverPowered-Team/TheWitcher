@@ -53,6 +53,7 @@ public:
 		float min_speed = 2.0f; 
 		float start_speed = 0.f; 
 		float current_acel_multi = 0.f; 
+		bool disappear_on_dash = true; 
 	};
 
 public:
@@ -63,7 +64,6 @@ public:
 	void Update();
 
 	void UpdateInput();
-	void UpdateVisualEffects(); 
 	void SetState(StateType new_state);
 	void SwapState(State* new_state);
 	void ApplyRoot(float time);
@@ -230,6 +230,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 3.f, 5.f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 2.f, 3.f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.accel_multi, 1.f, 2.f);
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(player->dashData.disappear_on_dash); 
 
 	return player;
 }
