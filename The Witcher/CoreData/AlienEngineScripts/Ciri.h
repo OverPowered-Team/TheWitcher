@@ -24,6 +24,8 @@ public:
 	float gap_closer_decay = 0.08f;
 
 	CiriFightController* fight_controller = nullptr;
+
+	
 public:
 
 	void StartEnemy() override;
@@ -80,6 +82,7 @@ ALIEN_FACTORY Ciri* CreateCiri() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->mini_scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_speed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_time);
+	
 
 	return ciri;
 } 
