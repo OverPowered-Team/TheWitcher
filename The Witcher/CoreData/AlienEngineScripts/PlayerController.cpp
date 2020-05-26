@@ -74,6 +74,11 @@ void PlayerController::Update()
 
 	UpdateInput();
 
+	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
+	//{
+	//	ReceiveDamage(1000);
+	//}
+
 	//State Machine--------------------------------------------------------
 	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
 	if (new_state != nullptr)
