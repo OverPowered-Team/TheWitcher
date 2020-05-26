@@ -1,16 +1,96 @@
 {
     "Controller": {
         "Name": "Drowned_final",
-        "NumStates": 1,
-        "NumTransitions": 0,
+        "NumStates": 6,
+        "NumTransitions": 6,
         "States": [
             {
-                "Name": "NewState1",
+                "Name": "Idle",
                 "Speed": 1,
                 "Clip": "6151341537419743983"
+            },
+            {
+                "Name": "death",
+                "Speed": 1,
+                "Clip": "3843420451715123426"
+            },
+            {
+                "Name": "dizzy",
+                "Speed": 1,
+                "Clip": "9901289912322635148"
+            },
+            {
+                "Name": "hit",
+                "Speed": 1,
+                "Clip": "1336200346231563366"
+            },
+            {
+                "Name": "get_off",
+                "Speed": 1,
+                "Clip": "15252659645406112804"
+            },
+            {
+                "Name": "Attack",
+                "Speed": 1,
+                "Clip": "5753173194275656717"
             }
         ],
-        "Transitions": [],
+        "Transitions": [
+            {
+                "Source": "Idle",
+                "Target": "dizzy",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Idle",
+                "Target": "Attack",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Idle",
+                "Target": "get_off",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Idle",
+                "Target": "hit",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "dizzy",
+                "Target": "death",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "hit",
+                "Target": "dizzy",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            }
+        ],
         "IntParameters": [],
         "FloatParameters": [],
         "BoolParameters": [],
