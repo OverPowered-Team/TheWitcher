@@ -315,7 +315,7 @@ void ModuleCamera3D::CreateRay()
 
 	// Add Physic Raycast ------------------------
 	RaycastHit physic_hit;
-	bool collider_found = App->physx->Raycast(ray.a, ray.Dir(), 1000, physic_hit);
+	bool collider_found = App->physx->Raycast(ray.a, ray.Dir(), 1000, physic_hit, -1);
 	if (collider_found)
 		hits_triangle.push_back({ physic_hit.distance ,physic_hit.collider->game_object_attached });
 
