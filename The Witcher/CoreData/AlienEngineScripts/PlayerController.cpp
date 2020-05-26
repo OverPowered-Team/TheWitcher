@@ -252,16 +252,16 @@ void PlayerController::HandleMovement()
 	float3 direction_vector = GetDirectionVector();
 
 	RaycastHit hit;
-	if (Physics::Raycast(transform->GetGlobalPosition(), -float3::unitY(), 10.0f, hit))
+
+	float3 center_position = transform->GetGlobalPosition();
+	center_position.y += transform->GetGlobalScale().y * 0.5f;
+	
+	if (Physics::Raycast(center_position, -float3::unitY(), 10.0f, hit, Physics::GetLayerMask("Ground")))
 	{
-		LOG("HIT NORMAL IS : %f %f %f", hit.normal.x, hit.normal.y, hit.normal.z);
-		LOG("%s", hit.collider->game_object_attached->GetName());
 		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
 		direction_vector = ground_rot * direction_vector; //We rotate the direction vector for the amount of slope we currently are on.
 
-		LOG("SLOPE DIRECTION IS: %f %f %f", direction_vector.x, direction_vector.y, direction_vector.z);
-
-		if (direction_vector.y > 0)
+		if (direction_vector.y > 0) //temporal?
 			direction_vector.y = 0;
 	}
 	
@@ -276,20 +276,7 @@ void PlayerController::HandleMovement()
 
 void PlayerController::OnDrawGizmos()
 {
-	float3 direction_vector = GetDirectionVector();
 
-	RaycastHit hit;
-	if (Physics::Raycast(transform->GetGlobalPosition(), -float3::unitY(), 10.0f, hit))
-	{
-		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
-		direction_vector = ground_rot * direction_vector; //We rotate the direction vector for the amount of slope we currently are on.
-		Gizmos::DrawLine(transform->GetGlobalPosition(), transform->GetGlobalPosition() + (direction_vector * 1.0f), Color::Green());
-	}
-	Gizmos::DrawLine(transform->GetGlobalPosition() + (float3::unitY() * 0.5f), (transform->GetGlobalPosition() + (float3::unitY() * 0.5f)) + (player_data.velocity.Normalized() * 1.0f), Color::Green());
-	
-	/*float3 feet_pos = transform->GetGlobalPosition();
-	feet_pos.y += 0.5f;
-	Gizmos::DrawLine(feet_pos, feet_pos + (-float3::unitY() * 1.0f), Color::Green());*/
 }
 
 void PlayerController::EffectsUpdate()
