@@ -26,12 +26,28 @@ void NilfSoldierRange::UpdateEnemy()
 		break;
 
 	case NilfgaardSoldierState::MOVE:
+		if (distance > stats["VisionRange"].GetValue())//sorry alex for having this piece of code in a lot of places Att: Ivan
+		{
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
+		}
 		Move(direction);
 		if (distance < stats["FleeRange"].GetValue())
 			state = NilfgaardSoldierState::AUXILIAR;
 		break;
 
 	case NilfgaardSoldierState::ATTACK:
+		if (distance > stats["VisionRange"].GetValue())
+		{
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
+		}
 		RotateSoldier();
 		break;
 
