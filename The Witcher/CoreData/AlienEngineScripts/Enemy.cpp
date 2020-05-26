@@ -240,7 +240,11 @@ void Enemy::Guard()
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 
-	float angle = atan2f(velocity_vec.z, velocity_vec.x);
+	float angle;
+	if(velocity.LengthSq() == 0.0f)
+		angle = atan2f(velocity_vec.z, velocity_vec.x);
+	else
+		angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 

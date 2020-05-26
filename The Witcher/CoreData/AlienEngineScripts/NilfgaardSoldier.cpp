@@ -74,7 +74,7 @@ void NilfgaardSoldier::OnDeathHit()
 
 void NilfgaardSoldier::CheckDistance()
 {
-	if ((distance < stats["AttackRange"].GetValue()))
+	if ((distance < stats["AttackRange"].GetValue()) && is_attacking)
 	{
 		float angle = atan2f(direction.z, direction.x);
 		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad()));
@@ -84,6 +84,7 @@ void NilfgaardSoldier::CheckDistance()
 	if (distance > stats["VisionRange"].GetValue())
 	{
 		SetState("Idle");
+		RemoveBattleCircle();
 
 		if (m_controller && is_combat) {
 			is_combat = false;
@@ -91,9 +92,12 @@ void NilfgaardSoldier::CheckDistance()
 		}
 		
 	}
-	else if (m_controller && !is_combat) {
-		is_combat = true;
-		m_controller->EnemyInSight((Enemy*)this);
+	else if(!is_attacking)
+	{
+		if (m_controller && !is_combat) {
+			is_combat = true;
+			m_controller->EnemyInSight((Enemy*)this);
+		}
 	}
 }
 
@@ -189,14 +193,9 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		can_get_interrupted = true;
 		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())
-			ChangeAttackEnemy();
+			SetState("Move");
 		else
-		{
 			SetState("Idle");
-		}
-
-		if (is_battle_circle)
-			RemoveBattleCircle();
 
 	}
 	else if (strcmp(name, "Hit") == 0) {
@@ -205,7 +204,10 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			state = NilfgaardSoldierState::HIT;
 		}
 		else
+		{
+			ChangeAttackEnemy();
 			SetState("Idle");
+		}
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
