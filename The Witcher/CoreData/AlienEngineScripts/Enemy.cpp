@@ -116,6 +116,17 @@ void Enemy::UpdateEnemy()
 		}
 		else
 		{
+			if (current_player == 0 && distance_1 > distance_2 + 10)
+			{
+				RemoveBattleCircle();
+				current_player = 1;
+			}
+			else if (current_player == 1 && distance_2 > distance_1 + 10)
+			{
+				RemoveBattleCircle();
+				current_player = 0;
+			}
+
 			distance = (current_player == 0) ? distance_1 : distance_2;
 			direction = (current_player == 0) ? direction_1 : direction_2;
 		}
@@ -228,8 +239,10 @@ void Enemy::Guard()
 
 	if (avoid_vector.LengthSq() > 0)
 		velocity += avoid_vector;
-	else if (player_controllers[current_player]->battleCircle < distance)
+	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance )
 		velocity += velocity_vec;
+	else if (stats["AttackRange"].GetValue() > distance)
+		velocity -= velocity_vec;
 	else
 		velocity = float3::zero();
 
@@ -245,6 +258,7 @@ void Enemy::Guard()
 		angle = atan2f(velocity_vec.z, velocity_vec.x);
 	else
 		angle = atan2f(velocity.z, velocity.x);
+
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
@@ -499,7 +513,7 @@ void Enemy::ChangeAttackEnemy(bool deleting)
 	std::vector<Enemy*> enemy_vec = player_controllers[current_player]->enemy_battle_circle;
 	for (int i = 0; i < enemy_vec.size(); ++i)
 	{
-		if (!enemy_vec[i]->is_attacking && this != enemy_vec[i] && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
+		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
 		{
 			enemy_vec[i]->is_attacking = true;
 			player_controllers[current_player]->current_attacking_enemies++;
@@ -527,7 +541,6 @@ void Enemy::RemoveBattleCircle()
 		{
 			ChangeAttackEnemy(true);
 			is_battle_circle = false;
-			is_attacking = false;
 			player_controllers[current_player]->enemy_battle_circle.erase(it_enemy);
 			return;
 		}
