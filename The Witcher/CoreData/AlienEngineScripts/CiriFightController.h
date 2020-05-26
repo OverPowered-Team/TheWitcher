@@ -25,6 +25,14 @@ public:
 	int phase = 0;
 
 	std::vector<GameObject*> clone_positions;
+
+	GameObject* platform = nullptr;
+	GameObject* circle = nullptr;
+	ComponentMaterial* material_platform = nullptr;
+	int count_circle = 50;
+	float time_platform = 0.0;
+	bool desactived_mid_platform = false;
+	float rescale_platform_value = 0.1;
 public:
 
 	CiriFightController();
@@ -56,6 +64,8 @@ ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
 
 	CiriFightController* cirifightcontroller = new CiriFightController();
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(cirifightcontroller->ciri_clones_scream_cd);
+
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->platform);
 
 	return cirifightcontroller;
 } 

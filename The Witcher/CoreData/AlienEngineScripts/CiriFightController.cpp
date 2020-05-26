@@ -4,6 +4,7 @@
 #include "PlayerController.h"
 #include "CiriFightController.h"
 #include "Scores_Data.h"
+#include "RumblerManager.h"
 
 CiriFightController::CiriFightController() : Alien()
 {
@@ -11,12 +12,27 @@ CiriFightController::CiriFightController() : Alien()
 
 CiriFightController::~CiriFightController()
 {
+	if (material_platform)
+		material_platform->material->color = { 1,1,1,1 };
 }
 
 void CiriFightController::Start()
 {
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
 	ciri_fight_hp = 100.0f;
+
+	if (platform)
+	{
+		std::vector<GameObject*> children = platform->GetChildren();
+		for (auto it = children.begin(); it != children.end(); ++it)
+		{
+			if (strcmp((*it)->GetName(), "extern_circle") == 0)
+			{
+				material_platform = (*it)->GetComponent<ComponentMaterial>();
+				break;
+			}
+		}
+	}
 }
 
 void CiriFightController::Update()
@@ -76,6 +92,7 @@ void CiriFightController::FinishPhaseZero()
 
 void CiriFightController::UpdatePhaseOne()
 {
+	
 }
 
 void CiriFightController::FinishPhaseOne()
@@ -94,10 +111,73 @@ void CiriFightController::FinishPhaseTwo()
 
 void CiriFightController::UpdatePhaseThree()
 {
+	time_platform += rescale_platform_value;
+
+	if (platform != nullptr && !desactived_mid_platform)
+	{
+		if (time_platform > count_circle&& circle == nullptr)
+		{
+			std::vector<GameObject*> children = platform->GetChildren();
+			for (auto it = children.begin(); it != children.end(); ++it)
+			{
+				if (strcmp((*it)->GetName(), "extern_circle") == 0)
+				{
+					circle = (*it);
+					time_platform = 0.0;
+
+					if (GameManager::instance->rumbler_manager)
+						GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, 0, 2.0);
+				}
+				else if (strcmp((*it)->GetName(), "mid_circle") == 0)
+				{
+					material_platform = (*it)->GetComponent<ComponentMaterial>();
+					break;
+				}
+			}
+		}
+		else if (time_platform > count_circle)
+		{
+			std::vector<GameObject*> children = platform->GetChildren();
+			for (auto it = children.begin(); it != children.end(); ++it)
+			{
+				if (strcmp((*it)->GetName(), "mid_circle") == 0)
+				{
+					circle->GetComponent<ComponentMaterial>()->material->color = { 1,1,1,1 };
+					circle->SetEnable(false);
+					circle = (*it);
+					desactived_mid_platform = true;
+					time_platform = 0.0;
+
+					if (GameManager::instance->rumbler_manager)
+						GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, 0, 2.0);
+					break;
+				}
+			}
+		}
+	}
+
+	if (material_platform)
+	{
+		material_platform->material->color.x += rescale_platform_value * 0.01;
+		material_platform->material->color.y -= rescale_platform_value * 0.01;
+		material_platform->material->color.z -= rescale_platform_value * 0.01;
+	}
+
+	if (circle)
+	{
+		circle->transform->SetLocalPosition(circle->transform->GetLocalPosition().x, circle->transform->GetLocalPosition().y - rescale_platform_value, circle->transform->GetLocalPosition().z);
+
+		if (time_platform > count_circle)
+		{
+			circle->SetEnable(false);
+			circle = nullptr;
+		}
+	}
 }
 
 void CiriFightController::FinishPhaseThree()
 {
+	
 }
 
 void CiriFightController::FinishPhaseFour()
