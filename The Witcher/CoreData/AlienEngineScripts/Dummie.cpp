@@ -1,5 +1,6 @@
 #include "Dummie.h"
 #include "PlayerAttacks.h"
+#include "AttackTrigger.h"
 #include "PlayerController.h"
 
 Dummie::Dummie() : Alien()
@@ -31,10 +32,10 @@ void Dummie::OnTriggerEnter(ComponentCollider* col)
 	{
 		if (player == nullptr)
 		{
-			player = col->game_object_attached->parent->GetComponent<PlayerController>();
+			player = col->game_object_attached->GetComponent<AttackTrigger>()->player;
 		}
 
-		if (col->game_object_attached->parent->GetComponent<PlayerController>() == player)
+		if (col->game_object_attached->GetComponent<AttackTrigger>()->player == player)
 		{
 			if (current_buttons.size() >= 5)
 			{
@@ -43,7 +44,7 @@ void Dummie::OnTriggerEnter(ComponentCollider* col)
 
 			float position = current_buttons.size() * 5.f - 10.f;
 
-			if (col->game_object_attached->parent->GetComponent<PlayerAttacks>()->GetCurrentAttack()->info.name.back() == 'L')
+			if(player->attacks->GetCurrentAttack()->info.name.back() == 'L')
 			{
 				current_buttons.push_back(GameObject::Instantiate(button_x, float3(position, 0, 0), false, game_object->GetChild("Combo_UI")));
 			}
