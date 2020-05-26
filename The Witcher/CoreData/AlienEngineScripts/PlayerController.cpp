@@ -86,17 +86,21 @@ void PlayerController::Update()
 	EffectsUpdate();
 
 	//MOVEMENT
-	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if(CheckBoundaries() && can_move)
-		controller->Move(player_data.speed * Time::GetDT());
+	player_data.vertical_speed -= player_data.gravity * Time::GetDT();
+	player_data.velocity.y += player_data.vertical_speed;
 
-	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
+	if (CheckBoundaries() && can_move)
 	{
-		player_data.speed.y = 0;
+		controller->Move(player_data.velocity * Time::GetDT());
+	}
+
+	if (controller->isGrounded)
+	{
+		player_data.vertical_speed = 0;
 	}
 
 	//Update animator variables
-	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
+	animator->SetFloat("speed", float3(player_data.velocity.x, 0, player_data.velocity.z).Length());
 	animator->SetBool("movement_input", mov_input);
 
 	// Visual effects
@@ -108,7 +112,7 @@ void PlayerController::UpdateVisualEffects()
 {
 	if (state->type == StateType::RUNNING)
 	{
-		float lerp = player_data.speed.Length() / player_data.stats["Movement_Speed"].GetValue();
+		float lerp = player_data.velocity.Length() / player_data.stats["Movement_Speed"].GetValue();
 		animator->SetStateSpeed("Run", lerp);
 	}
 	else if (state->type == StateType::ROLLING)
@@ -245,25 +249,47 @@ bool PlayerController::AnyKeyboardInput()
 
 void PlayerController::HandleMovement()
 {
-	/*float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-	direction_vector.y = 0.f;
-
-	float speed_y = player_data.speed.y;
-	player_data.speed = direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;*/
 	float3 direction_vector = GetDirectionVector();
 
-	float tmp_y = player_data.speed.y;
-	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
-	player_data.speed.y = tmp_y;
+	RaycastHit hit;
+	if (Physics::Raycast(transform->GetGlobalPosition(), -float3::unitY(), 10.0f, hit))
+	{
+		LOG("HIT NORMAL IS : %f %f %f", hit.normal.x, hit.normal.y, hit.normal.z);
+		LOG("%s", hit.collider->game_object_attached->GetName());
+		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+		direction_vector = ground_rot * direction_vector; //We rotate the direction vector for the amount of slope we currently are on.
 
+		LOG("SLOPE DIRECTION IS: %f %f %f", direction_vector.x, direction_vector.y, direction_vector.z);
+
+		if (direction_vector.y > 0)
+			direction_vector.y = 0;
+	}
+	
+	player_data.velocity = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
 
 	//rotate
 	if (mov_input)
 	{
 		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
 	}
+}
+
+void PlayerController::OnDrawGizmos()
+{
+	float3 direction_vector = GetDirectionVector();
+
+	RaycastHit hit;
+	if (Physics::Raycast(transform->GetGlobalPosition(), -float3::unitY(), 10.0f, hit))
+	{
+		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+		direction_vector = ground_rot * direction_vector; //We rotate the direction vector for the amount of slope we currently are on.
+		Gizmos::DrawLine(transform->GetGlobalPosition(), transform->GetGlobalPosition() + (direction_vector * 1.0f), Color::Green());
+	}
+	Gizmos::DrawLine(transform->GetGlobalPosition() + (float3::unitY() * 0.5f), (transform->GetGlobalPosition() + (float3::unitY() * 0.5f)) + (player_data.velocity.Normalized() * 1.0f), Color::Green());
+	
+	/*float3 feet_pos = transform->GetGlobalPosition();
+	feet_pos.y += 0.5f;
+	Gizmos::DrawLine(feet_pos, feet_pos + (-float3::unitY() * 1.0f), Color::Green());*/
 }
 
 void PlayerController::EffectsUpdate()
@@ -347,28 +373,22 @@ void PlayerController::ReleaseAttackParticle()
 	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
-	/*for (auto it = particles.begin(); it != particles.end();)
-	{
-		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
-		{
-			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.particle_name, it->second);
-			it = particles.erase(it);
-		}
-		if (it->first == attacks->GetCurrentAttack()->info.allow_combo_p_name)
-		{
-			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name, it->second);
-			it = particles.erase(it);
-		}
-		else
-			++it;
-	}*/
 }
 
 #pragma region PlayerActions
 void PlayerController::Jump()
 {
-	player_data.speed.y = player_data.stats["Jump_Power"].GetValue();
+	player_data.vertical_speed = player_data.stats["Jump_Power"].GetValue();
 	animator->PlayState("Air");
+	switch (player_data.type)
+	{
+	case PlayerController::PlayerType::GERALT:
+		audio->StartSound("Play_GeraltJump");
+		break;
+	case PlayerController::PlayerType::YENNEFER:
+		audio->StartSound("Play_YennJump");
+		break;
+	}
 	animator->SetBool("air", true);
 }
 
@@ -419,6 +439,16 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 	player_data.stats["Health"].DecreaseStat(dmg);
 
+	switch (player_data.type)
+	{
+	case PlayerController::PlayerType::GERALT:
+		audio->StartSound("Play_GeraltGetDamaged");
+		break;
+	case PlayerController::PlayerType::YENNEFER:
+		audio->StartSound("Play_YennGetDamaged");
+		break;
+	}
+
 	if (HUD)
 	{
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
@@ -434,7 +464,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		else
 		{
 			animator->PlayState("Hit");
-			player_data.speed = knock_speed;
+			player_data.velocity = knock_speed;
 			SetState(StateType::HIT);
 		}
 	}
@@ -577,7 +607,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 }
 bool PlayerController::CheckBoundaries()
 {
-	float3 next_pos = transform->GetGlobalPosition() + player_data.speed * Time::GetDT();
+	float3 next_pos = transform->GetGlobalPosition() + player_data.velocity * Time::GetDT();
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
 	AABB fake_aabb(max_aabb.minPoint + moved + transform->GetGlobalPosition(), max_aabb.maxPoint + moved + transform->GetGlobalPosition());
@@ -626,7 +656,7 @@ bool PlayerController::CheckBoundaries()
 						return true;
 					}
 					else {
-						player_data.speed = float3::zero();
+						player_data.velocity = float3::zero();
 						return false;
 					}
 				}
@@ -639,7 +669,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	else {
 		if (transform->GetGlobalPosition().Distance(fake_frustum.CenterPoint()) < next_pos.Distance(fake_frustum.CenterPoint())) {
-			player_data.speed = float3::zero();
+			player_data.velocity = float3::zero();
 			return false;
 		}
 	}

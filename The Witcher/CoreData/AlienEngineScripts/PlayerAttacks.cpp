@@ -111,7 +111,7 @@ void PlayerAttacks::UpdateCurrentAttack()
 		SnapToTarget();
 	else
 	{
-		player_controller->player_data.speed += player_controller->player_data.speed * player_controller->player_data.slow_speed * Time::GetDT(); //SLOW DOWN
+		player_controller->player_data.velocity += player_controller->player_data.velocity * player_controller->player_data.slow_speed * Time::GetDT(); //SLOW DOWN
 	}
 		
 	//IF ANIM FINISHED 
@@ -254,7 +254,7 @@ void PlayerAttacks::SnapToTarget()
 	float3 velocity = transform->forward * speed;
 	distance_snapped += velocity.Length() * Time::GetDT();
 
-	player_controller->player_data.speed = velocity;
+	player_controller->player_data.velocity = velocity;
 }
 
 bool PlayerAttacks::FindSnapTarget()
@@ -326,7 +326,7 @@ void PlayerAttacks::AttackMovement()
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
 		
-		player_controller->player_data.speed = direction * current_attack->info.movement_strength;
+		player_controller->player_data.velocity = direction * current_attack->info.movement_strength;
 	}	
 }
 
@@ -340,7 +340,7 @@ void PlayerAttacks::ActivateCollider()
 		{
 			ComponentSphereCollider* sphere_collider = (ComponentSphereCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
 			sphere_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
-			//sphere_collider->SetRadius(current_attack->info.colliders[current_attack->current_collider].radius); IDK WHY THIS DOESN'T COMPILE PLS HELP
+			sphere_collider->SetRadius(current_attack->info.colliders[current_attack->current_collider].radius);
 			sphere_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
 		}
 			break;
