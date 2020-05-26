@@ -13,12 +13,10 @@ public:
 
 	void OnTriggerEnter(ComponentCollider* collider);
 	GameObject* player_obj = nullptr;
-
+	PlayerController* player = nullptr;
 public:
 	void Start();
-
-private:
-	PlayerController* player = nullptr;
+	
 };
 
 ALIEN_FACTORY AttackTrigger* CreateAttackTrigger() {

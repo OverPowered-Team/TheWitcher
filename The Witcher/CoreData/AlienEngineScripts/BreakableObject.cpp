@@ -28,7 +28,8 @@ void BreakableObject::Explode()
 
 void BreakableObject::OnTriggerEnter(ComponentCollider* collider)
 {
-	if(collider->game_object_attached->IsEnabled())
+	if (collider->game_object_attached->IsEnabled())
+	{
 		if (strcmp("PlayerAttack", collider->game_object_attached->GetTag()) == 0) {
 			++current_hits;
 			if (current_hits >= hits_to_broke)
@@ -37,4 +38,5 @@ void BreakableObject::OnTriggerEnter(ComponentCollider* collider)
 				collider->game_object_attached->parent->GetComponent<ComponentAudioEmitter>()->StartSound("Play_FenceDestroy");
 			}
 		}
+	}
 }
