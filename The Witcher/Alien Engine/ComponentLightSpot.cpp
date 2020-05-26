@@ -8,6 +8,7 @@
 #include "Application.h"
 #include "ReturnZ.h"
 #include "ComponentMesh.h"
+#include "ResourceMesh.h"
 #include "Gizmos.h"
 #include "mmgr/mmgr.h"
 
@@ -24,6 +25,7 @@ ComponentLightSpot::ComponentLightSpot(GameObject* attach) : Component(attach)
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
+	bulb->mesh->IncreaseReferences();
 #endif
 
 #ifndef GAME_VERSION
