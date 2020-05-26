@@ -3,7 +3,7 @@
     {
       "name": "L",
       "button": "L",
-      "particle_name": "L_slash_particle",
+      "particle_name": "L_particle_Test",
       "particle_pos": {
         "pos_x": 0.0,
         "pos_y": 0.465,
@@ -60,10 +60,10 @@
         "type": "Weapon",
         "pos_x": 0,
         "pos_y": -0.15,
-        "pos_z": 184.8,
-        "width": 174.114,
-        "height": 234.356,
-        "depth": 331.135,
+        "pos_z": 300,
+        "width": 233.214,
+        "height": 267.356,
+        "depth": 600,
         "rot_x": 0,
         "rot_y": 0,
         "rot_z": 0
@@ -71,12 +71,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": -1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.7
+        },
+        {
+          "name": "KnockBack",
+          "value": 10
         }
       ],
       "activation_frame": 25,
@@ -188,13 +192,13 @@
         "pos_z": 0.0
       },
       "collider": {
-        "type": "Weapon",
+        "type": "Box",
         "pos_x": 0,
-        "pos_y": -0.15,
-        "pos_z": 184.8,
-        "width": 174.114,
-        "height": 234.356,
-        "depth": 331.135,
+        "pos_y": 0,
+        "pos_z": 0,
+        "width": 70,
+        "height": 50,
+        "depth": 70,
         "rot_x": 0,
         "rot_y": 0,
         "rot_z": 0
@@ -202,12 +206,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": -1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 1.0
+        },
+        {
+          "name": "KnockBack",
+          "value": 50
         }
       ],
       "activation_frame": 25,
@@ -588,13 +596,17 @@
       },
       "knock_back": {
         "x": 0,
-        "y": 0,
+        "y": 1,
         "z": 0
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.8
+        },
+        {
+          "name": "KnockBack",
+          "value": 70
         }
       ],
       "activation_frame": 25,
