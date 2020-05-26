@@ -663,14 +663,43 @@ void PlayerController::HitFreeze(float freeze_time)
 
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
+	//PauseParticle();
 	is_immune = true;
 	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
 }
 
 void PlayerController::RemoveFreeze(float speed)
 {
+	//ResumeParticle();
 	animator->SetCurrentStateSpeed(speed);
+	
 	is_immune = false;
+}
+
+void PlayerController::PauseParticle()
+{
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(),attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			(*it)->GetComponent<ParticleSystem>()->Pause();
+
+			return;
+		}
+	}
+}
+
+void PlayerController::ResumeParticle()
+{
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			(*it)->GetComponent<ParticleSystem>()->Play();
+
+			return;
+		}
+	}
 }
 
 void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
@@ -684,13 +713,14 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		{
 			(*it)->SetEnable(false);
 			(*it)->SetEnable(true);
+			
 			return;
 		}
 	}
 	parent = parent != nullptr ? parent : this->game_object;
 	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
-
+	
 	if (new_particle == nullptr)
 		return;
 

@@ -110,7 +110,8 @@ public:
 
 	void HitFreeze(float freeze_time);
 	void RemoveFreeze(float speed);
-
+	void PauseParticle();
+	void ResumeParticle();
 	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 
 	void ReleaseParticle(std::string particle_name);
