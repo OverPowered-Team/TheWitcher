@@ -50,7 +50,7 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
 	}
 
-	return Boss::GetDamaged(dmg, player);
+	return damage;
 }
 
 void Leshen::SetActionProbabilities()

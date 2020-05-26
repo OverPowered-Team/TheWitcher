@@ -68,7 +68,26 @@ void RunningState::Update(PlayerController* player)
 
 void RunningState::OnEnter(PlayerController* player)
 {
-	player->SpawnParticle("p_run");
+	bool found_running = false; 
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_run") == 0)
+		{
+			found_running = true; 
+			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+			// sub-emitters 
+			for(auto& child : (*it)->GetChildren())
+				child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+			break;
+		}
+	}
+
+	if(found_running == false)
+		player->SpawnParticle("p_run", float3(0.f, 0.f, -0.15f));
+
 	player->audio->StartSound();
 	player->timer = Time::GetGameTime();
 }
@@ -79,11 +98,15 @@ void RunningState::OnExit(PlayerController* player)
 	{
 		if (std::strcmp((*it)->GetName(), "p_run") == 0)
 		{
-			(*it)->SetEnable(false);
+			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+			// sub-emitters 
+			for (auto& child : (*it)->GetChildren())
+				child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
 			break;
 		}
 	}
-	//player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)
@@ -113,11 +136,44 @@ void JumpingState::Update(PlayerController* player)
 
 void JumpingState::OnEnter(PlayerController* player)
 {
+	bool found_jumping = false;
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
+		{
+			found_jumping = true;
+			auto particles = (*it)->GetComponent<ComponentParticleSystem>(); 
+			particles->OnStop();
+			particles->GetSystem()->emmitter.ResetBursts();
+			particles->OnPlay();
+			break;
+		}
+	}
+
+	if (found_jumping == false)
+		player->SpawnParticle("p_jump");
+
 	player->animator->SetBool("air", true);
 }
 
 void JumpingState::OnExit(PlayerController* player)
 {
+	bool found_jumping = false;
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
+		{
+			found_jumping = true;
+			auto particles = (*it)->GetComponent<ComponentParticleSystem>();
+			particles->OnStop();
+			particles->GetSystem()->emmitter.ResetBursts();
+			particles->OnPlay();
+			break;
+		}
+	}
+
 	player->animator->SetBool("air", false);
 }
 
@@ -221,11 +277,62 @@ void RollingState::OnEnter(PlayerController* player)
 
 	player->animator->PlayState("Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
+
+	// Special stuff to make it look cooler
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		// Animation
+		if (player->dashData.start_speed == 0.0f)
+			player->dashData.start_speed = player->animator->GetCurrentStateSpeed();
+
+		// Particles
+		bool found_dash = false;
+
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				found_dash = true;
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				break;
+			}
+		}
+
+		if (found_dash == false)
+			player->SpawnParticle("Y_Dash_Particle_Emitter", float3(0.f, 0.15f, 0.f));
+	}
+		
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		// Animation
+		player->ToggleDashMultiplier();
 
+		// Particles
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				break;
+			}
+		}
+
+	}
+		
 }
 
 void HitState::Update(PlayerController* player)

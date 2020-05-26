@@ -25,9 +25,9 @@
                         ],
                         "Rotation": [
                             0,
+                            0.96868258714675903,
                             0,
-                            0,
-                            1
+                            0.24830235540866852
                         ],
                         "Scale": [
                             0.039999999105930328,
@@ -2066,7 +2066,7 @@
                         ],
                         "Rotation": [
                             0,
-                            0,
+                            7.4505805969238281e-09,
                             0,
                             1
                         ],
@@ -2104,7 +2104,7 @@
                         ],
                         "Rotation": [
                             0,
-                            0,
+                            7.4505805969238281e-09,
                             0,
                             1
                         ],
@@ -2177,6 +2177,194 @@
                             1,
                             1
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "Boss_HUD",
+                "FamilyNumber": 2,
+                "ID": "18432417881260521243",
+                "ParentID": "14266199695486745364",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "15034188878749731598",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -11.060150146484375,
+                            2693.25634765625,
+                            406.8800048828125
+                        ],
+                        "Rotation": [
+                            0,
+                            0.96868258714675903,
+                            0,
+                            -0.24830232560634613
+                        ],
+                        "Scale": [
+                            25,
+                            25,
+                            24.999998092651367
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12511767812249204428"
+                    },
+                    {
+                        "Enabled": true,
+                        "isWorld": false,
+                        "Type": 19,
+                        "BBType": 0
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3116819755342430689",
+                        "ResourceID": "11431151498149048558",
+                        "DataName": "Boss_Lifebar",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_lerp",
+                                "float": 0.25
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_show",
+                                "float": 0.5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Boss_Life",
+                "FamilyNumber": 3,
+                "ID": "8024007792248680523",
+                "ParentID": "18432417881260521243",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "15034188878749731598",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -40.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            8,
+                            5,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17231493610464721182"
+                    },
+                    {
+                        "X": 605,
+                        "Y": 620.3499755859375,
+                        "Width": 8.9799995422363281,
+                        "Height": 0.40999999642372131,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 25,
+                        "TextureID": "2708325781690226991",
+                        "sliderTexture": "14703691212849681173",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "BarColor": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "maxValue": 100,
+                        "minValue": 0,
+                        "currentValue": 100,
+                        "factor": 1,
+                        "barScaleX": 1,
+                        "barScaleY": 0.80000001192092896,
+                        "offsetX": 0,
+                        "offsetY": 0,
+                        "SCType": 2
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 4,
+                "ID": "2833335647625219802",
+                "ParentID": "8024007792248680523",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "15034188878749731598",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -3.6875,
+                            0.5,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.0024999999441206455,
+                            0.0020000000949949026,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13078094357852010890"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "15451239409851534297",
+                        "Text": "Error: Name Not Found",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.95098036527633667,
+                            0.95097082853317261,
+                            0.95097082853317261,
+                            1
+                        ],
+                        "Width": 3015,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             }

@@ -17,7 +17,7 @@ class __declspec(dllexport) ComponentBar :public ComponentUI
 	friend class CompZ;
 public:
 	ComponentBar(GameObject* obj);
-	~ComponentBar() {};
+	~ComponentBar();
 
 	bool DrawInspector();
 
