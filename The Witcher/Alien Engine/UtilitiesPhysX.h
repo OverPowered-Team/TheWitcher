@@ -79,6 +79,7 @@ public:
 	void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line);
 };
 
+// Filter callbakcs ------------------------------------
 
 PxFilterFlags FilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, physx::PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize);
 
@@ -89,6 +90,12 @@ public:
 	virtual PxQueryHitType::Enum postFilter(const PxFilterData& filterData, const PxQueryHit& hit);
 };
 
+class RaycastFilterCallback : public  PxQueryFilterCallback
+{
+public:
+	virtual PxQueryHitType::Enum preFilter(const PxFilterData& filterData, const PxShape* shape, const PxRigidActor* actor, PxHitFlags& queryFlags);
+	virtual PxQueryHitType::Enum postFilter(const PxFilterData& filterData, const PxQueryHit& hit);
+};
 
 enum class CallbackType { ENTER = 0, STAY = 1, EXIT = 2, UNKNOWN = 3 };
 
@@ -144,6 +151,7 @@ class RaycastHit {
 	friend class ModulePhysX;
 private:
 	void SetRaycastHit(const PxRaycastHit& _hit);
+	void SetRaycastHit(const PxSweepHit& _hit);
 public:
 	ComponentCollider*		collider = nullptr;
 	ComponentRigidBody*		rigid_body = nullptr;

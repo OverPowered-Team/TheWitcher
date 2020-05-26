@@ -334,14 +334,14 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 			case SCISSOR_TYPE::RIGHT_TO_LEFT: {
 #ifndef GAME_VERSION
 				float cutX = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width)+offsetX*0.5f) * App->ui->panel_game->width;
-				float cutXend = ((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) * App->ui->panel_game->width;
+				float cutXend = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
 				float diff = cutXend - cutX;
 				glScissor(cutX, 0, diff * factor, 10000);
 
 		
 #else
 				float cutX = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
-				float cutXend = ((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) * App->window->width;
+				float cutXend = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
 				float diff = cutXend - cutX;
 				glScissor(cutX, 0, diff * factor, 10000);
 #endif		
@@ -349,13 +349,14 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 
 			case SCISSOR_TYPE::LEFT_TO_RIGHT: {
 #ifndef GAME_VERSION
-				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) - offsetX * 0.5f)* App->ui->panel_game->width;
-				float beginPoint = ((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) * App->ui->panel_game->width;
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
 				float currentWidth = (endPoint - beginPoint) * factor;
 				glScissor(endPoint - currentWidth, 0, currentWidth, 10000);
+
 #else
-				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) - offsetX * 0.5f)* App->window->width;
-				float beginPoint = ((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) * App->window->width;
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
 				float currentWidth = (endPoint - beginPoint) * factor;
 				glScissor(endPoint - currentWidth, 0, currentWidth, 10000);
 #endif	
@@ -363,14 +364,14 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 
 			case SCISSOR_TYPE::CENTER: {
 #ifndef GAME_VERSION
-				float middlePos = ((transform->global_transformation[0][3] - canvasPivot.x) / canvas->width) * App->ui->panel_game->width;
-				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) - offsetX * 0.5f)* App->ui->panel_game->width;
+				float middlePos = (((transform->global_transformation[0][3] - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
 				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
 				float currentWidth = (endPoint - beginPoint) * factor;
 				glScissor(middlePos - (currentWidth * 0.5F), 0, currentWidth, 10000);
 #else
-				float middlePos = ((transform->global_transformation[0][3] - canvasPivot.x) / canvas->width) * App->window->width;
-				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) - offsetX * 0.5f)* App->window->width;
+				float middlePos = (((transform->global_transformation[0][3] - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
 				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
 				float currentWidth = (endPoint - beginPoint) * factor;
 				glScissor(middlePos - (currentWidth * 0.5F), 0, currentWidth, 10000);
