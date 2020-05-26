@@ -59,7 +59,6 @@ public:
 	void EndMiniScreamAction(GameObject* go_ended);
 
 	void OnAnimationEnd(const char* name);
-	void OnTriggerEnter(ComponentCollider* collider);
 	void OnCloneDeath();
 
 	void OnDrawGizmosSelected();

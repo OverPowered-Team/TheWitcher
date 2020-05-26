@@ -17,7 +17,6 @@ public:
 	float phase_4_timer = 0.0f;
 	float phase_4_time = 3.0f;
 	bool phase_change = false;
-	float ciri_fight_hp = 100.0f;
 	float clone_dead_damage = 12.50f;
 
 	int clones_dead = 0;

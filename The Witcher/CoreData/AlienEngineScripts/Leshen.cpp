@@ -7,6 +7,7 @@
 #include "CrowsLeshen.h"
 #include "Leshen.h"
 #include "Scores_Data.h"
+#include "Boss_Lifebar.h"
 
 void Leshen::StartEnemy()
 {
@@ -20,6 +21,8 @@ void Leshen::StartEnemy()
 	type = EnemyType::LESHEN;
 
 	Boss::StartEnemy();
+
+	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
@@ -375,22 +378,6 @@ void Leshen::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
-}
-
-
-void Leshen::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
-			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
-
-			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-		}
-	}
 }
 
 void Leshen::ChangeScene()

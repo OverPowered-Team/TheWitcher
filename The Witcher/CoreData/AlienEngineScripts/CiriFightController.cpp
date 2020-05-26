@@ -16,7 +16,6 @@ CiriFightController::~CiriFightController()
 void CiriFightController::Start()
 {
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
-	ciri_fight_hp = 100.0f;
 }
 
 void CiriFightController::Update()
@@ -140,7 +139,7 @@ void CiriFightController::ChangeToPhase4()
 void CiriFightController::OnCloneDead(GameObject* clone)
 {
 	clones_dead++;
-	ciri_fight_hp -= clone_dead_damage;
+	game_object->GetComponent<CiriOriginal>()->GetDamaged(clone_dead_damage);
 	if (clones_dead == 2) {
 		ChangeToPhase2();
 	}
