@@ -68,6 +68,10 @@ public:
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
 
+	void ChangeAttackEnemy(bool deleting = false);
+	void RemoveBattleCircle();
+	void AddBattleCircle(PlayerController* player_controller);
+
 public:
 	float distance = 0.0F;
 	float3 direction; 
@@ -92,6 +96,7 @@ public:
 	bool is_frozen = false;
 	bool is_combat = false;
 	bool is_attacking = false;
+	bool is_battle_circle = false;
 
 	Prefab head_prefab;
 	GameObject* decapitated_head = nullptr;

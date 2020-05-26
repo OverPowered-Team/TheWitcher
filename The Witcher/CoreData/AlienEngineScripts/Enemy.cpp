@@ -93,23 +93,31 @@ void Enemy::UpdateEnemy()
 	}
 	else
 	{
-		if (player_controllers[0]->enemy_battle_circle.size() == player_controllers[1]->enemy_battle_circle.size())
+		if (!is_battle_circle)
 		{
-			distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-			direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
-			current_player = (distance_1 < distance_2) ? 0 : 1;
+			/*if (player_controllers[0]->enemy_battle_circle.size() == player_controllers[1]->enemy_battle_circle.size())
+			{*/
+				distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+				direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+				current_player = (distance_1 < distance_2) ? 0 : 1;
+			/*}
+			else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
+			{
+				distance = distance_1;
+				direction = direction_1;
+				current_player = 0;
+			}
+			else if (player_controllers[1]->enemy_battle_circle.size() < player_controllers[0]->enemy_battle_circle.size())
+			{
+				distance = distance_2;
+				direction = direction_2;
+				current_player = 1;
+			}*/
 		}
-		else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
+		else
 		{
-			distance = distance_1;
-			direction = direction_1;
-			current_player = 0;
-		}
-		else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
-		{
-			distance = distance_2;
-			direction = direction_2;
-			current_player = 1;
+			distance = (current_player == 0) ? distance_1 : distance_2;
+			direction = (current_player == 0) ? direction_1 : direction_2;
 		}
 	}
 
@@ -204,7 +212,7 @@ void Enemy::Move(float3 direction)
 	}
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
-	animator->SetFloat("speed", stats["Agility"].GetValue());
+	animator->SetFloat("speed", velocity.LengthSq());
 
 	float angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
@@ -225,13 +233,14 @@ void Enemy::Guard()
 	else
 		velocity = float3::zero();
 
+	animator->SetFloat("speed", velocity.LengthSq());
+
 	if (velocity.LengthSq() > stats["Agility"].GetValue())
 		velocity = velocity.Normalized() * stats["Agility"].GetValue();
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
-	animator->SetFloat("speed", stats["Agility"].GetValue());
 
-	float angle = atan2f(velocity.z, velocity.x);
+	float angle = atan2f(velocity_vec.z, velocity_vec.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
@@ -474,6 +483,64 @@ void Enemy::ReleaseAllParticles()
 	{
 		GameManager::instance->particle_pool->ReleaseInstance((*it)->GetName(), (*it));
 		it = particles.erase(it);
+	}
+}
+
+void Enemy::ChangeAttackEnemy(bool deleting)
+{
+	is_attacking = false;
+	player_controllers[current_player]->current_attacking_enemies--;
+	SetState("Guard");
+
+	std::vector<Enemy*> enemy_vec = player_controllers[current_player]->enemy_battle_circle;
+	for (int i = 0; i < enemy_vec.size(); ++i)
+	{
+		if (!enemy_vec[i]->is_attacking && this != enemy_vec[i] && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
+		{
+			enemy_vec[i]->is_attacking = true;
+			player_controllers[current_player]->current_attacking_enemies++;
+			enemy_vec[i]->SetState("Move");
+
+			if (player_controllers[current_player]->current_attacking_enemies == player_controllers[current_player]->max_attacking_enemies)
+				return;
+		}
+	}
+
+	if (player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies && !deleting)
+	{
+		is_attacking = true;
+		player_controllers[current_player]->current_attacking_enemies++;
+		SetState("Move");
+	}
+		
+}
+
+void Enemy::RemoveBattleCircle()
+{
+	for (auto it_enemy = player_controllers[current_player]->enemy_battle_circle.begin(); it_enemy != player_controllers[current_player]->enemy_battle_circle.end(); ++it_enemy)
+	{
+		if ((*it_enemy) == this)
+		{
+			ChangeAttackEnemy(true);
+			is_battle_circle = false;
+			is_attacking = false;
+			player_controllers[current_player]->enemy_battle_circle.erase(it_enemy);
+			return;
+		}
+	}
+}
+
+void Enemy::AddBattleCircle(PlayerController* player_controller)
+{
+	is_battle_circle = true;
+	player_controller->enemy_battle_circle.push_back(this);
+
+	if (player_controller->current_attacking_enemies == player_controller->max_attacking_enemies)
+		SetState("Guard");
+	else
+	{
+		player_controller->current_attacking_enemies++;
+		is_attacking = true;
 	}
 }
 	

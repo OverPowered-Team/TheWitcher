@@ -97,8 +97,7 @@ void PlayerController::Update()
 	animator->SetBool("movement_input", mov_input);
 
 	//Battle circle
-	if (current_attacking_enemies < max_attacking_enemies)
-		CheckEnemyCircle();
+	CheckEnemyCircle();
 }
 
 void PlayerController::UpdateInput()
@@ -712,16 +711,10 @@ void PlayerController::CheckEnemyCircle()
 				continue;
 
 			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
-			enemy_battle_circle.push_back(enemy);
+			if (enemy->is_battle_circle)
+				continue;
 
-			if (current_attacking_enemies == max_attacking_enemies)
-			{
-				enemy->SetState("Guard");
-				enemy->velocity = float3::zero();
-				enemy->animator->PlayState("Idle");
-			}
-			else
-				current_attacking_enemies++;
+			enemy->AddBattleCircle(this);
 
 		}
 	}
