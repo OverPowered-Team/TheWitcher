@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
+                        "HoritzontalFov": 115.59153747558594,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -72,56 +72,21 @@
                         "Skybox_NegativeZ": "Default"
                     },
                     {
-                        "Enabled": true,
-                        "Type": 31,
-                        "Tensors": true,
-                        "Normals": true,
-                        "OnSelected": false,
-                        "Detail": 50,
-                        "ControlPoints": [
+                        "Type": 29,
+                        "ID": "13002832682833492326",
+                        "ResourceID": "8475334427152007912",
+                        "DataName": "MoveCameraArroundObject",
+                        "HasInspector": true,
+                        "Inspector": [
                             {
-                                "ControlPoint": [
-                                    -10,
-                                    0,
-                                    0
-                                ]
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 0
                             },
                             {
-                                "ControlPoint": [
-                                    -5,
-                                    10,
-                                    0
-                                ]
-                            },
-                            {
-                                "ControlPoint": [
-                                    5,
-                                    10,
-                                    0
-                                ]
-                            },
-                            {
-                                "ControlPoint": [
-                                    10,
-                                    0,
-                                    0
-                                ]
-                            }
-                        ],
-                        "NormalsPoints": [
-                            {
-                                "NormalPoint": [
-                                    0,
-                                    1,
-                                    0
-                                ]
-                            },
-                            {
-                                "NormalPoint": [
-                                    0,
-                                    1,
-                                    0
-                                ]
+                                "VarType": 9,
+                                "Name": "path",
+                                "gameobject": "2091132657956403582"
                             }
                         ]
                     }
@@ -2802,7 +2767,7 @@
                     },
                     {
                         "X": 0.00014424324035644531,
-                        "Y": 560.70001220703125,
+                        "Y": 396,
                         "Width": 8.9799995422363281,
                         "Height": 0.40999999642372131,
                         "Enabled": true,
@@ -2872,7 +2837,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15274829140578015138",
+                        "ID": "12009023424997432108",
                         "Text": "Error: Name Not Found",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2886,6 +2851,179 @@
                         "Width": 3015,
                         "Interlineal": 1.5,
                         "Align": 1
+                    }
+                ]
+            },
+            {
+                "Name": "Cube",
+                "FamilyNumber": 1,
+                "ID": "14926044402336752889",
+                "ParentID": "4890497285791404522",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -0.56606531143188477,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            20.800031661987305,
+                            1,
+                            20.531944274902344
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10993625570867354348"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "7089113772327920930",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "3147762873718581678",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "path",
+                "FamilyNumber": 1,
+                "ID": "2091132657956403582",
+                "ParentID": "4890497285791404522",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13675538910537871180"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 31,
+                        "Tensors": true,
+                        "Normals": true,
+                        "OnSelected": false,
+                        "Detail": 50,
+                        "ControlPoints": [
+                            {
+                                "ControlPoint": [
+                                    -10,
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "ControlPoint": [
+                                    -4.6807689666748047,
+                                    6.847740650177002,
+                                    12.669567108154297
+                                ]
+                            },
+                            {
+                                "ControlPoint": [
+                                    5,
+                                    10,
+                                    12.551774024963379
+                                ]
+                            },
+                            {
+                                "ControlPoint": [
+                                    10,
+                                    0,
+                                    0
+                                ]
+                            }
+                        ],
+                        "NormalsPoints": [
+                            {
+                                "NormalPoint": [
+                                    0,
+                                    1,
+                                    0
+                                ]
+                            },
+                            {
+                                "NormalPoint": [
+                                    0,
+                                    1,
+                                    0
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
