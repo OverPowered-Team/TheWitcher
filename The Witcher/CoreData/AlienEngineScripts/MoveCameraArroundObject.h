@@ -11,7 +11,9 @@ public:
 	ComponentCurve* curve = nullptr;
 	ComponentCamera* camera = nullptr;
 	float3 start_pos = float3::zero();
+	float3 start_front = float3::zero();
 	float3 start_curve = float3::zero();
+	float3 end_front = float3::zero();
 	float3 end_curve = float3::zero();
 
 	float speed = 0;
