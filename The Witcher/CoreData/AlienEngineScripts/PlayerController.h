@@ -63,6 +63,7 @@ public:
 	void Start();
 	void Update();
 
+	void CheckGround();
 	void UpdateInput();
 	void UpdateVisualEffects(); 
 	void SetState(StateType new_state);
@@ -141,9 +142,11 @@ public:
 	ComponentAudioEmitter* audio = nullptr;
 
 	float2 movement_input;
+	float3 direction;
 
 	bool mov_input = false;
 	bool is_immune = false;
+	bool is_grounded = false;
 	bool can_move = true;
 	bool input_blocked = false;
 

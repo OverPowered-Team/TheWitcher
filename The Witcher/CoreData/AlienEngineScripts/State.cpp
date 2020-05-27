@@ -24,7 +24,7 @@ State* IdleState::HandleInput(PlayerController* player)
 
 void IdleState::Update(PlayerController* player)
 {
-	if (!player->controller->isGrounded)
+	if (!player->is_grounded)
 	{
 		player->Fall();
 	}
@@ -60,7 +60,7 @@ void RunningState::Update(PlayerController* player)
 	}
 	player->HandleMovement();
 
-	if (!player->controller->isGrounded)
+	if (!player->is_grounded)
 	{
 		player->Fall();
 	}
@@ -111,7 +111,7 @@ void RunningState::OnExit(PlayerController* player)
 
 State* JumpingState::HandleInput(PlayerController* player)
 {
-	if (player->controller->isGrounded)
+	if (player->is_grounded)
 	{
 		player->audio->StartSound("Player_Fall");
 
@@ -211,7 +211,7 @@ State* AttackingState::HandleInput(PlayerController* player)
 	}
 
 	if ((Input::GetControllerButtonDown(player->controller_index, player->controller_jump)
-		|| Input::GetKeyDown(player->keyboard_jump)) && player->attacks->CanBeInterrupted() && player->controller->isGrounded) {
+		|| Input::GetKeyDown(player->keyboard_jump)) && player->attacks->CanBeInterrupted() && player->is_grounded) {
 		player->Jump();
 		return new JumpingState();
 	}
@@ -403,7 +403,7 @@ void DeadState::OnExit(PlayerController* player)
 
 State* GroundState::HandleInput(PlayerController* player)
 {
-	if (!player->controller->isGrounded)
+	if (!player->is_grounded)
 	{
 		player->Fall();
 		return new JumpingState();
@@ -451,7 +451,7 @@ State* GroundState::HandleInput(PlayerController* player)
 	}
 
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump)
-		|| Input::GetKeyDown(player->keyboard_jump) && player->controller->isGrounded)
+		|| Input::GetKeyDown(player->keyboard_jump) && player->is_grounded)
 	{
 		player->Jump();
 		return new JumpingState();

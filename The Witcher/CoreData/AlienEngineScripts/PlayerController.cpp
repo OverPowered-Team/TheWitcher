@@ -74,11 +74,6 @@ void PlayerController::Update()
 
 	UpdateInput();
 
-	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
-	//{
-	//	ReceiveDamage(1000);
-	//}
-
 	//State Machine--------------------------------------------------------
 	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
 	if (new_state != nullptr)
@@ -90,7 +85,7 @@ void PlayerController::Update()
 	//Effects-----------------------------
 	EffectsUpdate();
 
-	//MOVEMENT
+	//Movement
 	player_data.vertical_speed -= player_data.gravity * Time::GetDT();
 	player_data.velocity.y += player_data.vertical_speed;
 
@@ -99,7 +94,7 @@ void PlayerController::Update()
 		controller->Move(player_data.velocity * Time::GetDT());
 	}
 
-	if (controller->isGrounded)
+	if (is_grounded)
 	{
 		player_data.vertical_speed = 0;
 	}
@@ -111,6 +106,30 @@ void PlayerController::Update()
 	// Visual effects
 	UpdateVisualEffects(); 
 
+	CheckGround();
+}
+
+void PlayerController::CheckGround()
+{
+	direction = GetDirectionVector();
+
+	RaycastHit hit;
+
+	float3 center_position = transform->GetGlobalPosition();
+	float offset = transform->GetGlobalScale().y * 0.5f;
+	center_position.y += offset;
+
+	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Ground")))
+	{
+		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+		direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
+
+		is_grounded = player_data.vertical_speed > 0 ? false : true;
+		/*if (direction_vector.y > 0) //temporal?
+			direction_vector.y = 0;*/
+	}
+	else
+		is_grounded = false;
 }
 
 void PlayerController::UpdateVisualEffects()
@@ -253,35 +272,29 @@ bool PlayerController::AnyKeyboardInput()
 }
 
 void PlayerController::HandleMovement()
-{
-	float3 direction_vector = GetDirectionVector();
-
-	RaycastHit hit;
-
-	float3 center_position = transform->GetGlobalPosition();
-	center_position.y += transform->GetGlobalScale().y * 0.5f;
-	
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.0f, hit, Physics::GetLayerMask("Ground")))
-	{
-		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
-		direction_vector = ground_rot * direction_vector; //We rotate the direction vector for the amount of slope we currently are on.
-
-		if (direction_vector.y > 0) //temporal?
-			direction_vector.y = 0;
-	}
-	
-	player_data.velocity = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
+{	
+	player_data.velocity = direction * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
 
 	//rotate
 	if (mov_input)
 	{
-		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction.x, direction.z)));
 	}
 }
 
 void PlayerController::OnDrawGizmos()
 {
+	/*float4x4 matrix = transform->GetGlobalMatrix();
+	matrix = matrix.Translate(float3(0, 0.5f, 0)); //middle point of character
+	float3 origin = matrix.TranslatePart();
+	RaycastHit hit;
 
+	if (Physics::CapsuleCast(matrix, 0.1f, 0.25f, -float3::unitY(), 0.5f, hit, Physics::GetLayerMask("Ground")))
+	{
+		Gizmos::DrawLine(origin, hit.point, Color::Green());
+		float rest_dist = 0.2f - origin.Distance(hit.point);
+		Gizmos::DrawLine(hit.point, hit.point + hit.normal * rest_dist, Color::Green());
+	}*/
 }
 
 void PlayerController::EffectsUpdate()
@@ -371,6 +384,7 @@ void PlayerController::ReleaseAttackParticle()
 void PlayerController::Jump()
 {
 	player_data.vertical_speed = player_data.stats["Jump_Power"].GetValue();
+	is_grounded = false;
 	animator->PlayState("Air");
 	switch (player_data.type)
 	{
