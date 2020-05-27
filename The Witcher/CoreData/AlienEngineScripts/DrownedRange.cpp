@@ -95,6 +95,10 @@ void DrownedRange::UpdateEnemy()
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
 		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+		}
 	}
 	}
 }

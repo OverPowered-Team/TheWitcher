@@ -41,7 +41,7 @@ public:
 	virtual void Guard();
 	virtual void CheckDistance() {};
 	virtual void Action() {}
-
+	virtual bool IsState(const char* state) { LOG("Calling virtual function of IsDead!"); return false; };
 	void ActivateCollider();
 	void DeactivateCollider();
 	Quat RotateProjectile();
@@ -67,7 +67,6 @@ public:
 	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = false, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
-
 	void ChangeAttackEnemy(bool deleting = false);
 	void RemoveBattleCircle();
 	void AddBattleCircle(PlayerController* player_controller);
@@ -100,7 +99,7 @@ public:
 	bool is_combat = false;
 	bool is_attacking = false;
 	bool is_battle_circle = false;
-
+	bool is_obstacle = false;
 	Prefab head_prefab;
 
 protected:

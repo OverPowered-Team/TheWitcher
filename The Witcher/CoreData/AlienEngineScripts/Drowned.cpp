@@ -78,6 +78,24 @@ bool Drowned::IsDead()
 	return (state == DrownedState::DEAD ? true : false);
 }
 
+bool Drowned::IsState(const char* state_str)
+{
+	if (state_str == "Idle")
+		return (state == DrownedState::IDLE ? true : false);
+	else if (state_str == "Move")
+		return (state == DrownedState::MOVE ? true : false);
+	else if (state_str == "Attack")
+		return (state == DrownedState::ATTACK ? true : false);
+	else if (state_str == "Hit")
+		return (state == DrownedState::HIT ? true : false);
+	else if (state_str == "Dying")
+		return (state == DrownedState::DYING ? true : false);
+	else if (state_str == "Stunned")
+		return (state == DrownedState::STUNNED ? true : false);
+	else
+		LOG("Incorrect state name: %s", state_str);
+}
+
 void Drowned::PlaySFX(const char* sfx_name)
 {
 	if (sfx_name == "Hit")

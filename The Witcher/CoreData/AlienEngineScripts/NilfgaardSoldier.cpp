@@ -81,7 +81,7 @@ void NilfgaardSoldier::CheckDistance()
 		Action();
 	}
 
-	if (distance > stats["VisionRange"].GetValue())
+	if (distance > stats["VisionRange"].GetValue() && !is_obstacle)
 	{
 		SetState("Idle");
 		RemoveBattleCircle();
@@ -223,4 +223,22 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
+}
+
+bool NilfgaardSoldier::IsState(const char* state_str)
+{
+	if (state_str == "Idle")
+		return (state == NilfgaardSoldierState::IDLE ? true : false);
+	else if (state_str == "Move")
+		return (state == NilfgaardSoldierState::MOVE ? true : false);
+	else if (state_str == "Attack")
+		return (state == NilfgaardSoldierState::ATTACK ? true : false);
+	else if (state_str == "Hit")
+		return (state == NilfgaardSoldierState::HIT ? true : false);
+	else if (state_str == "Dying")
+		return (state == NilfgaardSoldierState::DYING ? true : false);
+	else if (state_str == "Stunned")
+		return (state == NilfgaardSoldierState::STUNNED ? true : false);
+	else
+		LOG("Incorrect state name: %s", state_str);
 }

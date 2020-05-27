@@ -48,6 +48,6 @@ void SpawnEnemyManager::SpawnEnemies()
 {
 	for (int i = 0; i < enemies_to_spawn.size(); ++i)
 	{
-		enemies_to_spawn[i]->InstantiateEnemy();
+		enemies_to_spawn[i]->InstantiateEnemy(game_object->parent->GetChild("ChildEnemies"));
 	}
 }

@@ -25,7 +25,7 @@ void GhoulDodge::UpdateEnemy()
 		DoAwake();
 		break;
     case GhoulState::IDLE:
-        if (distance < stats["VisionRange"].GetValue())
+        if (distance < stats["VisionRange"].GetValue() || is_obstacle)
             state = GhoulState::MOVE;
         break;
 

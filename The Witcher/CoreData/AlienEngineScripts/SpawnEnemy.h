@@ -11,7 +11,7 @@ public:
 	SpawnEnemy();
 	virtual ~SpawnEnemy();
 
-	void InstantiateEnemy();
+	void InstantiateEnemy(GameObject* parent);
 
 public:
 	EnemyType enemy_type = EnemyType::NONE;

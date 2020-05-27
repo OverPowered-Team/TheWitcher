@@ -21,7 +21,7 @@ void NilfSoldierShield::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue() || is_obstacle)
 			state = NilfgaardSoldierState::MOVE;
 		break;
 
@@ -61,6 +61,10 @@ void NilfSoldierShield::UpdateEnemy()
 		{
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
 		}
 		break;
 	}
