@@ -29,6 +29,7 @@ public:
 	int initial_sign = 1;
 	float cycle_time = 0.5f;
 	float damage_to_do = 20.f;
+	float push_force = 5.0f;
 
 private:
 
@@ -55,6 +56,7 @@ ALIEN_FACTORY Training_Zone* CreateTraining_Zone() {
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(alien->initial_sign, -1, 1);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->cycle_time);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->damage_to_do);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->push_force);
 
 	return alien;
 } 

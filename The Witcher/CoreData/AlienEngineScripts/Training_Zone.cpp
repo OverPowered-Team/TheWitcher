@@ -87,17 +87,17 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			{
 			case OSCILATION_DIRECTION::X:
 			{
-				col->game_object_attached->GetComponent<ComponentRigidBody>()->AddForce(float3(initial_sign * 50, 0, 0));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, float3(initial_sign * 50, 0, 0));
 				break;
 			}
 			case OSCILATION_DIRECTION::Y:
 			{
-				col->game_object_attached->GetComponent<ComponentRigidBody>()->AddForce(float3(0, 0, initial_sign * 50));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, float3(0, 0, initial_sign * 50));
 				break;
 			}
 			case OSCILATION_DIRECTION::Z:
 			{
-				col->game_object_attached->GetComponent<ComponentRigidBody>()->AddForce(float3(0, initial_sign * 50, 0));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, float3(0, initial_sign * 50, 0));
 				break;
 			}
 			}
@@ -115,17 +115,17 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			{
 			case OSCILATION_DIRECTION::X:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(initial_sign * 50, 0, 0));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(0, 0, -initial_sign * 5));
 				break;
 			}
 			case OSCILATION_DIRECTION::Y:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(0, 0, initial_sign * 50));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(0, -initial_sign * 2, 0));
 				break;
 			}
 			case OSCILATION_DIRECTION::Z:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(0, initial_sign * 50, 0));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(-initial_sign * 5, 0, 0));
 				break;
 			}
 			}
