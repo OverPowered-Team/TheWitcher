@@ -42,9 +42,10 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float damage = Enemy::GetDamaged(dmg, player, knock_back);
 
-	if (stats["Health"].GetValue() == 0.0F) {
-		state = Boss::BossState::DYING;
+	if (stats["Health"].GetValue() == 0.0) {
+		fight_controller->OnCloneDead(this->game_object);
 		animator->PlayState("Death");
+		state = Boss::BossState::DYING;
 
 		Scores_Data::won_level2 = true;
 		Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
@@ -130,11 +131,10 @@ void Ciri::LaunchAction()
 float Ciri::GetDamaged(float dmg, float3 knock_back)
 {
 	float damage = Enemy::GetDamaged(dmg, knock_back);
-
 	if (stats["Health"].GetValue() == 0.0F) {
-		state = Boss::BossState::DYING;
+		fight_controller->OnCloneDead(this->game_object);
 		animator->PlayState("Death");
-		Invoke(std::bind(&Ciri::OnCloneDeath, this), 3.8f);
+		state = Boss::BossState::DYING;
 	}
 	else {
 		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
@@ -155,7 +155,6 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 			can_get_interrupted = false;
 		}
 	}
-
 	return damage;
 }
 
@@ -197,7 +196,6 @@ void Ciri::LaunchMiniScreamAction()
 	animator->PlayState("Scream");
 	fight_controller->scream_cd_timer = 0;
 	SpawnParticle("Ciri_MiniScream", {0, 0.6, 0});
-	ReleaseParticle("Ciri_MiniScream");
 }
 
 void Ciri::MiniScream()
@@ -337,37 +335,16 @@ void Ciri::OnAnimationEnd(const char* name)
 	}
 	if (strcmp(name, "Scream") == 0) {
 		current_action->state = Boss::ActionState::ENDED;
+		ReleaseParticle("Ciri_MiniScream");
 	}
 	if (strcmp(name, "Spawn") == 0) {
 		state = Boss::BossState::IDLE;
 	}
 }
 
-void Ciri::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
-			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
-
-			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-		}
-	}
-
-	if (can_get_interrupted) {
-		LOG("CAN GET INTERRUPTED");
-	}
-	else {
-		LOG("CANT GET INTERRUPTED");
-	}
-}
-
 void Ciri::OnCloneDeath()
 {
-	fight_controller->OnCloneDead(this->game_object);
+
 }
 
 void Ciri::OnDrawGizmosSelected()

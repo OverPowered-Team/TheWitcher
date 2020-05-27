@@ -17,8 +17,6 @@ void Boss::StartEnemy()
 	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 
-	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
-
 	state = BossState::IDLE;
 }
 
@@ -39,11 +37,14 @@ void Boss::UpdateEnemy()
 			else {
 				SetAttackState();
 			}
-			if (m_controller && !is_combat)
+			if (m_controller)
 			{
-				is_combat = true;
-				m_controller->EnemyInSight((Enemy*)this);
-				HUD->ShowLifeBar(true);
+				if (!is_combat) {
+					is_combat = true;
+					m_controller->EnemyInSight((Enemy*)this);
+					if (HUD)
+						HUD->ShowLifeBar(true);
+				}
 			}
 		}
 		else {
@@ -51,7 +52,8 @@ void Boss::UpdateEnemy()
 			{
 				is_combat = false;
 				m_controller->EnemyLostSight((Enemy*)this);
-				HUD->ShowLifeBar(false);
+				if (HUD)
+					HUD->ShowLifeBar(false);
 			}
 		}
 		break;
@@ -101,8 +103,8 @@ void Boss::CleanUpEnemy()
 float Boss::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float damage = Enemy::GetDamaged(dmg, player, knock_back);
-
-	HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
+	if(HUD)
+		HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
 
 	return damage;
 }
@@ -115,6 +117,8 @@ void Boss::SetActionVariables()
 	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
 	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
 }
+
+
 
 void Boss::SetActionProbabilities()
 {
