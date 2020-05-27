@@ -32,12 +32,12 @@ public:
 	void SetStats(const char* json) override;
 	void CleanUpEnemy() override;
 
-	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero()) override;
-
 	void Stun(float time) override;
 	bool IsDead() override;
 
-	void OnTriggerEnter(ComponentCollider* collider) override;
+	void PlaySFX(const char* sfx_name);
+
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back) override;
 	void OnAnimationEnd(const char* name) override {};
 
 public:
