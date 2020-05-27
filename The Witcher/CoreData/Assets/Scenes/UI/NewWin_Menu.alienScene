@@ -68,7 +68,8 @@
                             0.53921025991439819,
                             0.53921025991439819
                         ],
-                        "CastShadows": true
+                        "CastShadows": true,
+                        "SizeBakedShadow": 0
                     }
                 ]
             },
@@ -111,7 +112,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 101.03900146484375,
+                        "HoritzontalFov": 91.492843627929688,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -282,7 +283,6 @@
                         ]
                     },
                     {
-                        "Enabled": true,
                         "Type": 11,
                         "IsKinematic": 1,
                         "Mass": 1,
@@ -1284,7 +1284,6 @@
                         ]
                     },
                     {
-                        "Enabled": true,
                         "Type": 11,
                         "IsKinematic": 1,
                         "Mass": 1,
@@ -2288,6 +2287,122 @@
                 ]
             },
             {
+                "Name": "Arm",
+                "FamilyNumber": 2,
+                "ID": "8859742319126067637",
+                "ParentID": "1686656018360352404",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            8.1113109588623047,
+                            39.054832458496094,
+                            -7.9486732482910156
+                        ],
+                        "Rotation": [
+                            -0.7071068286895752,
+                            0,
+                            0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            0.35852301120758057,
+                            2.5706896781921387,
+                            1.0002728700637817
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14052443947669057343"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "114459503735374201",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "1913416745395291803",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6041677245876474994",
+                        "HasMaterial": true,
+                        "MaterialID": "10534240063757505378",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Support",
+                "FamilyNumber": 2,
+                "ID": "181522402898115408",
+                "ParentID": "1686656018360352404",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            12.332399368286133,
+                            1.4507602230651173e-08,
+                            -7.9552650451660156
+                        ],
+                        "Rotation": [
+                            -0.70710670948028564,
+                            0,
+                            0,
+                            0.7071068286895752
+                        ],
+                        "Scale": [
+                            0.80868202447891235,
+                            0.81254792213439941,
+                            1.3550609350204468
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3993789957440365790"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "7812231942886098873",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "11406408966170286385",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "3558855123909168342",
+                        "HasMaterial": true,
+                        "MaterialID": "10534240063757505378",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
                 "Name": "Left_Spawner",
                 "FamilyNumber": 1,
                 "ID": "4969170276803995513",
@@ -2491,7 +2606,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9112992850428349294",
+                        "ID": "1708116231971045324",
                         "Text": "4872",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -2545,7 +2660,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9562475247107069367",
+                        "ID": "6201147090059085343",
                         "Text": "5623",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -2620,7 +2735,7 @@
                 "ParentID": "11228745552395536587",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -2650,7 +2765,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "7380693317679167303",
+                        "ID": "11759063316813885693",
                         "Text": "Go to Level 2",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2704,7 +2819,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9111130747642376759",
+                        "ID": "17736665447564541275",
                         "Text": "-Geralt-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2758,7 +2873,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13867325760512945755",
+                        "ID": "13906794885995038334",
                         "Text": "-Yennefer-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2863,7 +2978,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5028826825428313203",
+                        "ID": "10879083934665772790",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -3010,6 +3125,101 @@
                             1,
                             1
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "Balanza_LP",
+                "FamilyNumber": 1,
+                "ID": "8937360130638868363",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13887619402017242511"
+                    }
+                ]
+            },
+            {
+                "Name": "GeoSphere004",
+                "FamilyNumber": 2,
+                "ID": "10801551216449892382",
+                "ParentID": "8937360130638868363",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            8.110417366027832,
+                            33.358440399169922,
+                            -25.182138442993164
+                        ],
+                        "Rotation": [
+                            -0.70710676908493042,
+                            0,
+                            0,
+                            0.70710676908493042
+                        ],
+                        "Scale": [
+                            0.68741500377655029,
+                            0.68741500377655029,
+                            0.68741500377655029
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6375892384649336589"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "2502588662072849243",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "17046812265204971100",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "4792539403476173925",
+                        "HasMaterial": true,
+                        "MaterialID": "10534240063757505378",
+                        "Enabled": true
                     }
                 ]
             }

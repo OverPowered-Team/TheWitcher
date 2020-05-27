@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "SpawnEnemyManager.h"
 
 BlockerObstacle::BlockerObstacle() : Enemy()
 {
@@ -31,7 +32,7 @@ void BlockerObstacle::StartEnemy()
 	type = EnemyType::BLOCKER_OBSTACLE;
 	Enemy::StartEnemy();
 	state = ObstacleState::IDLE;
-	children_enemies = this->game_object->GetChild("ChildEnemies")->GetChildren();
+	children_enemies = this->game_object->GetChild("ChildEnemies")->GetComponentsInChildren<Enemy>();
 	manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 }
 
@@ -42,15 +43,16 @@ void BlockerObstacle::UpdateEnemy()
 	switch (state)
 	{
 	case ObstacleState::IDLE: {
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue() && !has_started)
 			LookForMyChildren();
 			break;
 	}
 	case ObstacleState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 1);
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 0.5f);
 		state = ObstacleState::DEAD;
+
 		break;
 	}
 	case ObstacleState::DEAD:
@@ -79,36 +81,23 @@ float BlockerObstacle::GetDamaged(float dmg, PlayerController* player)
 
 void BlockerObstacle::LookForMyChildren()
 {
-	
-	//for (auto i = children_enemies.begin(); i != children_enemies.end(); ++i) {
-
-	//	if (std::find(manager->GetEnemies().begin(), manager->GetEnemies().end(), (*i)->GetComponent<Enemy>()) == manager->GetEnemies().end()) {			
-	//		children_enemies.erase(i);
-	//		ManageHealth();
-	//		LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
-	//	}
-	//		
-	//}
-	auto iter = children_enemies.begin();
-	while(iter != children_enemies.end())
-	{
-		if (std::find(manager->GetEnemies().begin(), manager->GetEnemies().end(), (*iter)->GetComponent<Enemy>()) == manager->GetEnemies().end())
-		{
-			children_enemies.erase(iter);
-			ManageHealth();
-			LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
-		}
-		else {
-			++iter;
+	for (auto iter = children_enemies.begin(); iter != children_enemies.end(); ++iter) {
+		if (!(*iter)->IsState("Idle")) {
+			for (auto iter2 = children_enemies.begin(); iter2 != children_enemies.end(); ++iter2) {
+				(*iter2)->is_obstacle = true;
+			}
+			has_started = true;
+			game_object->GetChild("SpawnerManager")->GetComponent<SpawnEnemyManager>()->SpawnEnemies();
 		}
 	}
 }
 
 void BlockerObstacle::ManageHealth()
 {
-	if (children_enemies.size() <= 0) {
-		stats["Health"].SetBaseStat(1.f);
-		LOG("MATEME PORFAVOR");
+	stats["Health"].DecreaseStat(200.f);
+	if (children_enemies.size() <= 0 || stats["Health"].GetValue() <= 0) {
+		state = ObstacleState::DYING;
+		LOG("ESTOY MUERTO");
 	}
 }
 
@@ -132,4 +121,28 @@ void BlockerObstacle::OnTriggerEnter(ComponentCollider* collider)
 bool BlockerObstacle::IsDead()
 {
 	return (state == ObstacleState::DEAD ? true : false);
+}
+
+void BlockerObstacle::AddChildren(GameObject* g_o)
+{
+	Enemy* en = game_object->GetComponent<Enemy>();
+	g_o->SetNewParent(game_object);
+	en->is_obstacle = true;
+	children_enemies.push_back(en);
+}
+
+void BlockerObstacle::ReleaseChildren()
+{
+	for (auto it = children_enemies.begin(); it != children_enemies.end(); ++it)
+	{
+		(*it)->is_obstacle = false;
+	}
+}
+
+void BlockerObstacle::ReleaseMyself(Enemy* en)
+{
+	auto iter = std::find(children_enemies.begin(), children_enemies.end(), en);
+	children_enemies.erase(iter);
+	ManageHealth();
+	LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
 }
