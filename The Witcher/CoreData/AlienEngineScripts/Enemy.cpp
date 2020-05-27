@@ -506,18 +506,14 @@ void Enemy::ReleaseAllParticles()
 
 void Enemy::ChangeAttackEnemy(bool deleting)
 {
-	is_attacking = false;
-	player_controllers[current_player]->current_attacking_enemies--;
-	SetState("Guard");
+	RemoveAttacking(player_controllers[current_player]);
 
 	std::vector<Enemy*> enemy_vec = player_controllers[current_player]->enemy_battle_circle;
 	for (int i = 0; i < enemy_vec.size(); ++i)
 	{
 		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
 		{
-			enemy_vec[i]->is_attacking = true;
-			player_controllers[current_player]->current_attacking_enemies++;
-			enemy_vec[i]->SetState("Move");
+			enemy_vec[i]->AddAttacking(player_controllers[current_player]);
 
 			if (player_controllers[current_player]->current_attacking_enemies == player_controllers[current_player]->max_attacking_enemies)
 				return;
@@ -526,9 +522,7 @@ void Enemy::ChangeAttackEnemy(bool deleting)
 
 	if (player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies && !deleting)
 	{
-		is_attacking = true;
-		player_controllers[current_player]->current_attacking_enemies++;
-		SetState("Move");
+		AddAttacking(player_controllers[current_player]);
 	}
 		
 }
@@ -553,11 +547,26 @@ void Enemy::AddBattleCircle(PlayerController* player_controller)
 	player_controller->enemy_battle_circle.push_back(this);
 
 	if (player_controller->current_attacking_enemies == player_controller->max_attacking_enemies)
+	{
 		SetState("Guard");
+	}
 	else
 	{
-		player_controller->current_attacking_enemies++;
-		is_attacking = true;
+		AddAttacking(player_controller);
 	}
+}
+
+void Enemy::AddAttacking(PlayerController* player_controller)
+{
+	player_controller->current_attacking_enemies++;
+	is_attacking = true;
+	SetState("Move");
+}
+
+void Enemy::RemoveAttacking(PlayerController* player_controller)
+{
+	player_controllers[current_player]->current_attacking_enemies--;
+	is_attacking = false;
+	SetState("Guard");
 }
 	

@@ -71,6 +71,8 @@ public:
 	void ChangeAttackEnemy(bool deleting = false);
 	void RemoveBattleCircle();
 	void AddBattleCircle(PlayerController* player_controller);
+	void AddAttacking(PlayerController* player_controller);
+	void RemoveAttacking(PlayerController* player_controller);
 
 public:
 	float distance = 0.0F;
