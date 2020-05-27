@@ -155,6 +155,7 @@ void CiriFightController::UpdatePhaseThree()
 
 		if (time_platform > count_circle)
 		{
+			material_platform->material->color = { 1,1,1,1 };
 			circle->SetEnable(false);
 			circle = nullptr;
 		}
