@@ -1,3 +1,4 @@
+#include "PlayerController.h"
 #include "Enemy.h"
 #include "PlayerProjectile.h"
 
@@ -21,9 +22,7 @@ void PlayerProjectile::Update()
 	else
 	{
 		float3 pos = transform->GetGlobalPosition() + (direction * speed * Time::GetDT());
-		//float3 scale = transform->GetGlobalScale() + (float3(1,1,1) * speed * 0.05f * Time::GetDT());
 		transform->SetGlobalPosition(pos);
-		//transform->SetLocalScale(scale.Clamp(float3(0,0,0), float3(1.0f, 1.0f, 1.0f)));*/
 	}
 }
 
@@ -31,23 +30,20 @@ void PlayerProjectile::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Enemy") == 0) {
 
-		auto comps = collider->game_object_attached->GetComponents<Alien>();
+		Enemy* enemy = collider->game_object_attached->GetComponent<Enemy>();
+		if (enemy && !enemy->IsDead())
+		{
+			float3 knock = direction * knock_back;
+			float damage_dealt = enemy->GetDamaged(damage, player, knock);
 
-		for (auto i = comps.begin(); i != comps.end(); ++i) {
-			Enemy* enemy = dynamic_cast<Enemy*>(*i);
-			if (enemy) {
-				float3 knock = direction * knock_back;
+			player->player_data.total_damage_dealt += damage_dealt;
 
-				enemy->GetDamaged(damage, player, knock);
-				if(!enemy->IsDead())
-					Destroy(this->game_object);
-
-				return;
-			}
+			if (!enemy->IsDead())
+				GameObject::Destroy(this->game_object);
 		}
 	}
 	else if (strcmp(collider->game_object_attached->GetTag(), "Player") != 0)
 	{
-		GameObject::Destroy(game_object);
+		GameObject::Destroy(this->game_object);
 	}
 }

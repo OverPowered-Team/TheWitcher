@@ -37,8 +37,11 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 		all_shapes[i].userData = this;
 
 	controller->setUserData(this);
-	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
 	SetCollisionLayer("Default");
+
+	physics->AddController(this);
+	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
+
 }
 
 ComponentCharacterController::~ComponentCharacterController()
@@ -280,7 +283,7 @@ PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 
 	// perform the move
 	PxFilterData filter_data( layer_num, physics->ID, 0, 0);
-	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter_callback); // TODO: implement filters callback when needed
+	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter); // TODO: implement filters callback when needed
 	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
 
 	// set grounded internal state

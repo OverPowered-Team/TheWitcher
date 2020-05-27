@@ -37,13 +37,23 @@ public:
 		float revive_range = 5.0f;
 
 		//BASIC MOVEMENT DATA
-		float3 speed = float3::zero();
+		float3 velocity = float3::zero();
 		float gravity = 9.8f;
 		float slow_speed = -0.07f;
+		float vertical_speed = 0;
 
 		//RECOUNT
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+	};
+
+	struct DashData
+	{
+		float accel_multi = 1.f; 
+		float max_speed = 4.4f; 
+		float min_speed = 2.0f; 
+		float start_speed = 0.f; 
+		float current_acel_multi = 0.f; 
 	};
 
 public:
@@ -54,6 +64,7 @@ public:
 	void Update();
 
 	void UpdateInput();
+	void UpdateVisualEffects(); 
 	void SetState(StateType new_state);
 	void SwapState(State* new_state);
 	void ApplyRoot(float time);
@@ -62,6 +73,7 @@ public:
 	bool AnyKeyboardInput();
 
 	void HandleMovement();
+	void OnDrawGizmos();
 	void EffectsUpdate();
 	void Jump();
 	void Fall();
@@ -98,10 +110,17 @@ public:
 
 	void HitFreeze(float freeze_time);
 	void RemoveFreeze(float speed);
-
+	void PauseParticle();
+	void ResumeParticle();
 	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 
 	void ReleaseParticle(std::string particle_name);
+
+	// Terrain - particles
+	void OnTerrainEnter(float4 initial_color, float4 final_color); 
+
+	// Dash wonders
+	void ToggleDashMultiplier(); 
 
 private:
 	void LoadStats();
@@ -140,7 +159,7 @@ public:
 	GameObject* HUD = nullptr;
 
 	//Others
-	float delay_footsteps = 0.5f;
+	float delay_footsteps = 0.2f;
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
 
@@ -176,6 +195,10 @@ public:
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
 	AABB max_aabb;
+
+	// Dash data
+	DashData dashData; 
+
 private:
 	float angle = 0.0f;
 	float timer = 0.f;
@@ -200,10 +223,16 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::StartImmune, player);
 	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
+	SHOW_VOID_FUNCTION(PlayerController::ToggleDashMultiplier, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
+
+	SHOW_TEXT("Dash animation cool data"); 
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 3.f, 5.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 2.f, 3.f);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.accel_multi, 1.f, 2.f);
 
 	return player;
 }

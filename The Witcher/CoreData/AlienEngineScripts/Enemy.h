@@ -44,7 +44,6 @@ public:
 	Quat RotateProjectile();
 
 	virtual void Stun(float time) {};
-	virtual void KnockBack(float3 knock);
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
 
@@ -70,6 +69,7 @@ public:
 	float3 velocity = float3::zero();
 	float knock_slow = -4.2f;
 	float increase_hit_animation = 1.0f;
+	float gravity = -20.0f;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;

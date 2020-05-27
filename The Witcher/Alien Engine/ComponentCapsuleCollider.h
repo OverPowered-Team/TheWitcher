@@ -5,7 +5,7 @@
 
 class GameObject;
 
-class ComponentCapsuleCollider : public ComponentCollider
+class __declspec(dllexport) ComponentCapsuleCollider : public ComponentCollider
 {
 public:
 

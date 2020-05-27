@@ -23,6 +23,8 @@ class __declspec(dllexport) ComponentPhysics : public Component
 	friend class ComponentConvexHullCollider;
 	friend class ComponentCharacterController;
 	friend class ComponentRigidBody;
+	friend class ComponentJoint;
+	friend class ComponentConfigurableJoint;
 	friend class UserControllerHitReport;
 	friend class RaycastHit;
 public:
@@ -78,7 +80,7 @@ protected:
 
 	bool gizmo_selected = false;
 
-	PxU32							ID = 0;
+	PxU32							physic_ID = 0;
 	GameObject*						go = nullptr;
 	ComponentTransform*				transform = nullptr;
 	std::list<ComponentCollider*>	colliders;

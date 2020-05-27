@@ -21,7 +21,7 @@ WaterFrameBuffers::WaterFrameBuffers()
 	std::string name_id = App->file_system->GetBaseFileName(LIBRARY_TEXTURES_FOLDER"15714234206396395482.dds");
 	u64 ID = std::stoull(name_id);
 	dvud_tex = (ResourceTexture*)App->resources->GetResourceWithID(ID);
-	if (dvud_tex != nullptr && dvud_tex->references == 0)
+	if (dvud_tex != nullptr)
 		dvud_tex->IncreaseReferences();
 }
 
@@ -33,6 +33,8 @@ WaterFrameBuffers::~WaterFrameBuffers()
 	glDeleteFramebuffers(1, &refraction_frame_buffer);
 	glDeleteTextures(1, &refraction_texture);
 	glDeleteTextures(1, &refraction_depth_texture);
+	if (dvud_tex != nullptr)
+		dvud_tex->DecreaseReferences();
 }
 
 void WaterFrameBuffers::BindReflectionFrameBuffer()

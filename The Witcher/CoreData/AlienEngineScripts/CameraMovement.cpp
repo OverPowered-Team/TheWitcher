@@ -181,7 +181,11 @@ float3 CameraMovement::CalculateMidPoint()
     float3 mid_pos(0,0,0);
     for (std::vector<GameObject*>::iterator it = players.begin(); it != players.end(); ++it)
     {
-        mid_pos += (*it)->transform->GetGlobalPosition();
+        if ((*it) != nullptr)
+        {
+            mid_pos += (*it)->transform->GetGlobalPosition();
+        }
+       
     }
     if (players.size() == 0)
         return mid_pos;

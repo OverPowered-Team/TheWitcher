@@ -37,7 +37,8 @@ bool ModulePhysX::Init()
 		return false;
 
 	px_simulation_callback = new SimulationEventCallback();
-	px_controller_filter_callback = new ControllerFilterCallback();
+	px_controller_filter = new ControllerFilterCallback();
+	px_raycast_filter = new RaycastFilterCallback();
 
 	// TODO: make init blindings if any stage goes wrong
 
@@ -149,8 +150,10 @@ bool ModulePhysX::CleanUp()
 	PX_RELEASE(px_physics);
 	delete px_simulation_callback;
 	px_simulation_callback = nullptr;
-	delete px_controller_filter_callback;
-	px_controller_filter_callback = nullptr;
+	delete px_controller_filter;
+	px_controller_filter = nullptr;
+	delete px_raycast_filter;
+	px_raycast_filter = nullptr;
 
 	if (px_pvd)
 	{
@@ -337,38 +340,56 @@ PxMaterial* ModulePhysX::CreateMaterial(float staticFriction, float dynamicFrict
 
 // * --------------------- SCENE QUERIES ----------------------- * //
 
-bool ModulePhysX::Raycast(float3 origin, float3 unit_dir, float max_distance) const
+bool ModulePhysX::Raycast(float3 origin, float3 unit_dir, float max_distance, int layer_mask) const
 {
 	PxVec3 _origin = F3_TO_PXVEC3(origin);
 	PxVec3 _unitDir = F3_TO_PXVEC3(unit_dir);
 
 	PxQueryFilterData fd;
 	fd.flags |= PxQueryFlag::eANY_HIT;
+	fd.flags |= PxQueryFlag::ePREFILTER;
 	PxRaycastBuffer raycast_buffer;
-	return px_scene->raycast(_origin, _unitDir, max_distance, raycast_buffer, PxHitFlag::eDEFAULT, fd);  // TODO: implement filtering (layermask | queryTriggerInteraction)
+
+	App->physx->layer_mask = layer_mask;
+	bool ret = px_scene->raycast(_origin, _unitDir, max_distance, raycast_buffer, PxHitFlag::eDEFAULT, fd, App->physx->px_raycast_filter);
+	App->physx->layer_mask = -1;
+
+	return ret;
 }
 
-bool ModulePhysX::Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit) const
+bool ModulePhysX::Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit, int layer_mask) const
 {
 	PxVec3 _origin = F3_TO_PXVEC3(origin);
 	PxVec3 _unitDir = F3_TO_PXVEC3(unit_dir);
+
+	PxQueryFilterData fd;
+	fd.flags |= PxQueryFlag::ePREFILTER;
 	PxRaycastBuffer raycast_buffer;
-	bool ret = px_scene->raycast(_origin, _unitDir, max_distance, raycast_buffer);
+
+	App->physx->layer_mask = layer_mask;
+	bool ret = px_scene->raycast(_origin, _unitDir, max_distance, raycast_buffer, PxHitFlag::eDEFAULT, fd, App->physx->px_raycast_filter);
+	App->physx->layer_mask = -1;
+
 	if (ret) hit.SetRaycastHit(raycast_buffer.block);
 	return ret;
 }
 
-const std::vector<RaycastHit> ModulePhysX::RaycastAll(float3 origin, float3 unitDir, float maxDistance) const
+const std::vector<RaycastHit> ModulePhysX::RaycastAll(float3 origin, float3 unit_dir, float max_distance, int layer_mask) const
 {
 	PxVec3 _origin = F3_TO_PXVEC3(origin);
-	PxVec3 _unitDir = F3_TO_PXVEC3(unitDir);
+	PxVec3 _unit_dir = F3_TO_PXVEC3(unit_dir);
 
-	const PxU32 buffer_size = 128;
+	PxQueryFilterData fd;
+	fd.flags |= PxQueryFlag::ePREFILTER;
+	const PxU32 buffer_size = 64;
 	PxRaycastHit hits_buffer[buffer_size];
 	PxRaycastBuffer raycast_buffer(hits_buffer, buffer_size);
 	std::vector<RaycastHit> return_hits;
 
-	if (px_scene->raycast(_origin, _unitDir, maxDistance, raycast_buffer)) {
+	App->physx->layer_mask = layer_mask;
+	App->physx->multiple_hit = true;
+
+	if (px_scene->raycast(_origin, _unit_dir, max_distance, raycast_buffer, PxHitFlag::eDEFAULT, fd, App->physx->px_raycast_filter)) {
 		uint size = raycast_buffer.getNbAnyHits(); 
 		for (uint i = 0; i < size; ++i) {
 			RaycastHit hit;
@@ -377,10 +398,86 @@ const std::vector<RaycastHit> ModulePhysX::RaycastAll(float3 origin, float3 unit
 			return_hits.push_back(hit);
 		}
 	}
+
+	App->physx->layer_mask = -1;
+	App->physx->multiple_hit = false;
+
 	return return_hits;
 }
 
-const std::vector<ComponentCollider*> ModulePhysX::OverlapSphere(float3 center, float radius) const
+bool ModulePhysX::CapsuleCast(float4x4 trans, float height , float radius,  float3 unit_dir, float max_dist, int layer_mask) const
+{
+	PxVec3 _unit_dir = F3_TO_PXVEC3(unit_dir);
+	PxTransform _trans;
+	float4x4 final_trans = trans* Quat::RotateZ(DEGTORAD * -90);
+	if (!F4X4_TO_PXTRANS(final_trans, _trans))
+		return false;
+
+	PxSweepBuffer sweep_buffer;
+	PxQueryFilterData fd;
+	fd.flags |= PxQueryFlag::eANY_HIT;
+	fd.flags |= PxQueryFlag::ePREFILTER;
+
+	App->physx->layer_mask = layer_mask;
+	bool ret = px_scene->sweep(PxCapsuleGeometry(radius, height * .5f), _trans, _unit_dir, max_dist, sweep_buffer, PxHitFlag::eDEFAULT, fd, App->physx->px_raycast_filter);
+	App->physx->layer_mask = -1;
+
+	return ret;
+}
+
+bool ModulePhysX::CapsuleCast(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, RaycastHit& hit, int layer_mask) const
+{
+	PxVec3 _unit_dir = F3_TO_PXVEC3(unit_dir);
+	PxTransform _trans;
+	if (!F4X4_TO_PXTRANS(trans, _trans))
+		return false;
+
+	PxSweepBuffer sweep_buffer;
+	PxQueryFilterData fd;
+	fd.flags |= PxQueryFlag::ePREFILTER;
+
+	App->physx->layer_mask = layer_mask;
+	bool ret = px_scene->sweep(PxCapsuleGeometry(radius, height * .5f), _trans, _unit_dir, max_dist, sweep_buffer, PxHitFlag::eDEFAULT, fd, App->physx->px_raycast_filter);
+	App->physx->layer_mask = -1;
+
+	if (ret) hit.SetRaycastHit(sweep_buffer.block);
+	return ret;
+}
+
+const vector<RaycastHit>& ModulePhysX::CapsuleCastAll(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask) const
+{
+	std::vector<RaycastHit> return_hits;
+	PxVec3 _unit_dir = F3_TO_PXVEC3(unit_dir);
+	PxTransform _trans;
+	if (!F4X4_TO_PXTRANS(trans, _trans))
+		return return_hits;
+
+	PxQueryFilterData fd;
+	fd.flags |= PxQueryFlag::ePREFILTER;
+	const PxU32 buffer_size = 64;
+	PxSweepHit hits_buffer[buffer_size];
+	PxSweepBuffer sweep_buffer(hits_buffer, buffer_size);
+
+	App->physx->layer_mask = layer_mask;
+	App->physx->multiple_hit = true;
+	
+	if (px_scene->sweep(PxCapsuleGeometry(radius, height * .5f), _trans, _unit_dir, max_dist, sweep_buffer, PxHitFlag::eDEFAULT, fd, App->physx->px_raycast_filter)) {
+		uint size = sweep_buffer.getNbAnyHits();
+		for (uint i = 0; i < size; ++i) {
+			RaycastHit hit;
+			const PxSweepHit _hit = sweep_buffer.getAnyHit(i);
+			hit.SetRaycastHit(_hit);
+			return_hits.push_back(hit);
+		}
+	}
+
+	App->physx->layer_mask = -1;
+	App->physx->multiple_hit = false;
+
+	return return_hits;
+}
+
+const std::vector<ComponentCollider*> ModulePhysX::OverlapSphere(float3 center, float radius, int layer_mask) const
 {
 	PxVec3 _center = F3_TO_PXVEC3(center);
 

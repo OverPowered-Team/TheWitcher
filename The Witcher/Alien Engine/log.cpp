@@ -5,16 +5,17 @@
 
 void log(const char file[], int line, const char* format, ...)
 {
+#ifndef GAME_VERSION
 	static char tmp_string[4096];
 	static char tmp_string2[4096];
 	static va_list  ap;
-	
+
 	// Construct the string from variable arguments
 	va_start(ap, format);
 	vsprintf_s(tmp_string, 4096, format, ap);
 	va_end(ap);
 	sprintf_s(tmp_string2, 4096, "%s(%d) : %s", file, line, tmp_string);
-	
+
 	if (App != nullptr) {
 		if (!App->all_engine_logs.empty()) {
 			App->all_engine_logs.appendf(std::string("\n" + std::string(tmp_string2)).data());
@@ -46,6 +47,7 @@ void log(const char file[], int line, const char* format, ...)
 		}
 	}
 	OutputDebugString(std::string('\n' + tmp_string2).data());
+#endif // !GAME_VERSION
 }
 
 

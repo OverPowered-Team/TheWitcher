@@ -13,6 +13,7 @@
 ComponentRigidBody::ComponentRigidBody(GameObject* go) : ComponentBasePhysic(go)
 {
 	type = ComponentType::RIGID_BODY;
+	physics->AddRigidBody(this);
 	Reset();
 	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_ADDED);
 }
@@ -22,15 +23,15 @@ ComponentRigidBody::~ComponentRigidBody()
 	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_DELETED);
 }
 
-void ComponentRigidBody::OnEnable()
-{
-	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_ENABLED);
-}
-
-void ComponentRigidBody::OnDisable()
-{
-	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_DISABLED);
-}
+//void ComponentRigidBody::OnEnable()
+//{
+//	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_ENABLED);
+//}
+//
+//void ComponentRigidBody::OnDisable()
+//{
+//	App->SendAlienEvent(this, AlienEventType::RIGIDBODY_DISABLED);
+//}
 
 void ComponentRigidBody::Update()
 {
@@ -44,17 +45,16 @@ bool ComponentRigidBody::DrawInspector()
 	check = enabled;
 
 	ImGui::PushID(this);
-
-	if (ImGui::Checkbox("##CmpActive", &check)) {
-		SetEnable(check);
-	}
+	//if (ImGui::Checkbox("##CmpActive", &check)) {
+	//	SetEnable(check);
+	//}
+	//ImGui::SameLine();
 
 	bool current_is_kinematic = is_kinematic;
 	float current_mass = mass;
 	float current_drag = drag;
 	float current_angular_drag = angular_drag;
 
-	ImGui::SameLine();
 
 	// RigidBody Config --------------------------------------
 
@@ -114,7 +114,7 @@ void ComponentRigidBody::Clone(Component* clone)
 
 void ComponentRigidBody::SaveComponent(JSONArraypack* to_save)
 {
-	to_save->SetBoolean("Enabled", enabled);
+	//to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
 
 	to_save->SetNumber("IsKinematic", is_kinematic);
@@ -133,11 +133,11 @@ void ComponentRigidBody::SaveComponent(JSONArraypack* to_save)
 
 void ComponentRigidBody::LoadComponent(JSONArraypack* to_load)
 {
-	enabled = to_load->GetBoolean("Enabled");
-	if (enabled == false)
-	{
-		OnDisable();
-	}
+	//enabled = to_load->GetBoolean("Enabled");
+	//if (enabled == false)
+	//{
+	//	OnDisable();
+	//}
 
 	SetIsKinematic(to_load->GetNumber("IsKinematic"));
 	SetMass(to_load->GetNumber("Mass"));
@@ -157,55 +157,50 @@ void ComponentRigidBody::LoadComponent(JSONArraypack* to_load)
 
 void ComponentRigidBody::AddForce(const float3 force, ForceMode mode, Space space)
 {
-	if (CanUseRigidBody())
+	PxVec3 force_vec = F3_TO_PXVEC3(force);
+
+	if (space == Space::Local)
+		force_vec = body->getGlobalPose().rotate(force_vec);
+
+	switch (mode)
 	{
-		PxVec3 force_vec = F3_TO_PXVEC3(force);
-
-		if (space == Space::Local)
-			force_vec = body->getGlobalPose().rotate(force_vec);
-
-		switch (mode)
-		{
-		case ForceMode::FORCE:
-			body->addForce(force_vec, PxForceMode::eFORCE);
-			break;
-		case ForceMode::IMPULSE:
-			body->addForce(force_vec, PxForceMode::eIMPULSE);
-			break;
-		case ForceMode::ACCELERATION:
-			body->addForce(force_vec, PxForceMode::eACCELERATION);
-			break;
-		case ForceMode::VELOCITY_CHANGE:
-			body->addForce(force_vec, PxForceMode::eVELOCITY_CHANGE);
-			break;
-		}
+	case ForceMode::FORCE:
+		body->addForce(force_vec, PxForceMode::eFORCE);
+		break;
+	case ForceMode::IMPULSE:
+		body->addForce(force_vec, PxForceMode::eIMPULSE);
+		break;
+	case ForceMode::ACCELERATION:
+		body->addForce(force_vec, PxForceMode::eACCELERATION);
+		break;
+	case ForceMode::VELOCITY_CHANGE:
+		body->addForce(force_vec, PxForceMode::eVELOCITY_CHANGE);
+		break;
 	}
+
 }
 
 void ComponentRigidBody::AddTorque(const float3 force, ForceMode mode, Space space)
 {
-	if (CanUseRigidBody())
+	PxVec3 force_vec = F3_TO_PXVEC3(force);
+
+	if (space == Space::Local)
+		force_vec = body->getGlobalPose().rotate(force_vec);
+
+	switch (mode)
 	{
-		PxVec3 force_vec = F3_TO_PXVEC3(force);
-
-		if (space == Space::Local)
-			force_vec = body->getGlobalPose().rotate(force_vec);
-
-		switch (mode)
-		{
-		case ForceMode::FORCE:
-			body->addTorque(force_vec, PxForceMode::eFORCE);
-			break;
-		case ForceMode::IMPULSE:
-			body->addTorque(force_vec, PxForceMode::eIMPULSE);
-			break;
-		case ForceMode::ACCELERATION:
-			body->addTorque(force_vec, PxForceMode::eACCELERATION);
-			break;
-		case ForceMode::VELOCITY_CHANGE:
-			body->addTorque(force_vec, PxForceMode::eVELOCITY_CHANGE);
-			break;
-		}
+	case ForceMode::FORCE:
+		body->addTorque(force_vec, PxForceMode::eFORCE);
+		break;
+	case ForceMode::IMPULSE:
+		body->addTorque(force_vec, PxForceMode::eIMPULSE);
+		break;
+	case ForceMode::ACCELERATION:
+		body->addTorque(force_vec, PxForceMode::eACCELERATION);
+		break;
+	case ForceMode::VELOCITY_CHANGE:
+		body->addTorque(force_vec, PxForceMode::eVELOCITY_CHANGE);
+		break;
 	}
 }
 
@@ -213,59 +208,46 @@ void ComponentRigidBody::AddTorque(const float3 force, ForceMode mode, Space spa
 
 float3 ComponentRigidBody::GetPosition()
 {
-	return (CanUseRigidBody())
-		? PXVEC3_TO_F3(body->getGlobalPose().p)
-		: transform->GetGlobalPosition();
+	return PXVEC3_TO_F3(body->getGlobalPose().p);
 }
 
 Quat ComponentRigidBody::GetRotation()
 {
-	return (CanUseRigidBody())
-		? PXQUAT_TO_QUAT(body->getGlobalPose().q)
-		: transform->GetGlobalRotation();
+	return PXQUAT_TO_QUAT(body->getGlobalPose().q);
 }
 
 void ComponentRigidBody::SetPosition(const float3 new_position)
 {
-	if (CanUseRigidBody())
-	{
-		PxTransform trans = body->getGlobalPose();
-		trans.p = F3_TO_PXVEC3(new_position);
-		body->setGlobalPose(trans);
-		transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
-		transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
-	}
+	PxTransform trans = body->getGlobalPose();
+	trans.p = F3_TO_PXVEC3(new_position);
+	body->setGlobalPose(trans);
+	transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
+	transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
 }
 
 void ComponentRigidBody::SetRotation(const Quat new_rotation)
 {
-	if (CanUseRigidBody())
-	{
-		PxTransform trans = body->getGlobalPose();
-		trans.q = QUAT_TO_PXQUAT(new_rotation);
-		body->setGlobalPose(trans);
-		transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
-		transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
-	}
+	PxTransform trans = body->getGlobalPose();
+	trans.q = QUAT_TO_PXQUAT(new_rotation);
+	body->setGlobalPose(trans);
+	transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
+	transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
+
 }
 
 void ComponentRigidBody::SetTransform(const float3 new_position, const Quat new_rotation)
 {
-	if (CanUseRigidBody())
-	{
-		PxTransform trans(F3_TO_PXVEC3(new_position), QUAT_TO_PXQUAT(new_rotation));
-		body->setGlobalPose(trans);
-		transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
-		transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
-	}
+	PxTransform trans(F3_TO_PXVEC3(new_position), QUAT_TO_PXQUAT(new_rotation));
+	body->setGlobalPose(trans);
+	transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
+	transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
 }
 
 void ComponentRigidBody::SetIsKinematic(const bool value)
 {
 	is_kinematic = value;
 
-	if (CanUseRigidBody())
-		(is_kinematic)
+	(is_kinematic)
 		? body->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true)
 		: body->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, false);
 }
@@ -273,37 +255,28 @@ void ComponentRigidBody::SetIsKinematic(const bool value)
 void ComponentRigidBody::SetMass(const float value)
 {
 	mass = value;
-	if (CanUseRigidBody())
-		PxRigidBodyExt::setMassAndUpdateInertia(*body, mass);
+	PxRigidBodyExt::setMassAndUpdateInertia(*body, mass);
 }
 
 void ComponentRigidBody::SetDrag(const float value)
 {
 	drag = value;
-
-	if (CanUseRigidBody())
-		body->setLinearDamping(value);
+	body->setLinearDamping(value);
 }
 
 void ComponentRigidBody::SetAngularDrag(const float value)
 {
 	angular_drag = value;
-
-	if (CanUseRigidBody())
-		body->setAngularDamping(value);
+	body->setAngularDamping(value);
 }
 
 void ComponentRigidBody::SetFreezePosition(bool values[3])
 {
 	freeze_position[0] = values[0], freeze_position[1] = values[1], freeze_position[2] == values[2];
 
-	if (CanUseRigidBody())
-	{
-		body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_X, freeze_position[0]);
-		body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, freeze_position[1]);
-		body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, freeze_position[2]);
-	}
-
+	body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_X, freeze_position[0]);
+	body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, freeze_position[1]);
+	body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, freeze_position[2]);
 }
 
 void ComponentRigidBody::GetFreezePosition(bool values[3])
@@ -315,12 +288,9 @@ void ComponentRigidBody::SetFreezeRotation(bool values[3])
 {
 	freeze_rotation[0] = values[0], freeze_rotation[1] = values[1], freeze_rotation[2] = values[2];
 
-	if (CanUseRigidBody())
-	{
-		body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, freeze_rotation[0]);
-		body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, freeze_rotation[1]);
-		body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, freeze_rotation[2]);
-	}
+	body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, freeze_rotation[0]);
+	body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, freeze_rotation[1]);
+	body->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, freeze_rotation[2]);
 }
 
 void ComponentRigidBody::GetFreezeRotation(bool values[3])
@@ -330,41 +300,27 @@ void ComponentRigidBody::GetFreezeRotation(bool values[3])
 
 void ComponentRigidBody::SetVelocity(float3 velocity)
 {
-	if (CanUseRigidBody())
-		body->setLinearVelocity(F3_TO_PXVEC3(velocity));
+	body->setLinearVelocity(F3_TO_PXVEC3(velocity));
 }
 
 float3 ComponentRigidBody::GetVelocity()
 {
-	return (CanUseRigidBody())
-		? PXVEC3_TO_F3(body->getLinearVelocity())
-		: float3::zero();
+	return  PXVEC3_TO_F3(body->getLinearVelocity());
 }
 
 void ComponentRigidBody::SetAngularVelocity(float3 velocity)
 {
-	if (CanUseRigidBody())
-		body->setAngularVelocity(F3_TO_PXVEC3(velocity));
+	body->setAngularVelocity(F3_TO_PXVEC3(velocity));
 }
 
 float3 ComponentRigidBody::GetAngularVelocity()
 {
-	return (CanUseRigidBody())
-		? PXVEC3_TO_F3(body->getAngularVelocity())
-		: float3::zero();
-}
-
-bool ComponentRigidBody::CanUseRigidBody()
-{
-	(physics->actor)
-		? body = physics->actor->is<PxRigidDynamic>()
-		: body = nullptr;
-
-	return (body && enabled);
+	return  PXVEC3_TO_F3(body->getAngularVelocity());
 }
 
 void ComponentRigidBody::SetBodyProperties()
 {
+	body = physics->actor->is<PxRigidDynamic>();
 	SetIsKinematic(is_kinematic);
 	SetMass(mass);
 	SetDrag(drag);

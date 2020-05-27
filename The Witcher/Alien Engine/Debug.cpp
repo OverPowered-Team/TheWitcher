@@ -4,6 +4,7 @@
 
 void Debug::Log(const char file[], int line, const char* format, ...)
 {
+#ifndef GAME_VERSION
 	static char tmp_string[4096];
 	static char tmp_string2[4096];
 	static va_list  ap;
@@ -46,6 +47,7 @@ void Debug::Log(const char file[], int line, const char* format, ...)
 		}
 	}
 	OutputDebugString(std::string('\n' + tmp_string2).data());
+#endif
 }
 
 void Debug::ClearGameConsole()
