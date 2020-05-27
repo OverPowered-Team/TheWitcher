@@ -189,11 +189,21 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
 
   - F3+G: Godmode
 
-  - F3+M: Main_Menu
+  - F3 + 0: Main_Menu 
+  
+  - F3 + 1: Level 1 
+  
+  - F3 + 2: Level 1 - Tutorial
+
+  - F3 + 3: Level 2 - Mahakam
+
+  - F3 + 4: Level 2 - Wagonnetes
+  
+  - F3 + 5: Level 2 - Deepnest
+  
+  - F3 + 6: Level 2 - Mahakam
 
   - F3+W: NewWin_Menu
-
-  - F3+L: Mahakam
 
   - F3+D: EndGame_Menu
 
