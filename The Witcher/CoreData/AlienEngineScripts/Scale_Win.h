@@ -52,6 +52,8 @@ private:
 	float original_position2 = 0.0f;
 	float desired_position1 = 0.0f;
 	float desired_position2 = 0.0f;
+	float start_position1 = 0.0f;
+	float start_position2 = 0.0f;
 	bool in_place = true;
 
 	// Scores
