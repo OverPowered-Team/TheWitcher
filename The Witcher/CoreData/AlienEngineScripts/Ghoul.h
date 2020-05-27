@@ -3,7 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
-
+#include "BlockerObstacle.h"
 class MusicController;
 
 class Ghoul : public Enemy {
@@ -59,7 +59,7 @@ public:
 	void OnDrawGizmosSelected(); 
 
 	void PlaySFX(const char* sfx_name);
-
+	bool IsState(const char* state_str) override;
 // Group tactics
 	//void OnGroupStrengthChange(float strength_multi) override;
 

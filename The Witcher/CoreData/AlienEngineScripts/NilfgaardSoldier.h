@@ -3,6 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
+#include "BlockerObstacle.h"
 
 class MusicController;
 
@@ -49,7 +50,7 @@ public:
 
 	void OnAnimationEnd(const char* name) override;
 	void OnTriggerEnter(ComponentCollider* collider) {};
-
+	bool IsState(const char* state_str);
 public:
 	NilfgaardType nilf_type = NilfgaardType::NONE;
 	NilfgaardSoldierState state = NilfgaardSoldierState::NONE;

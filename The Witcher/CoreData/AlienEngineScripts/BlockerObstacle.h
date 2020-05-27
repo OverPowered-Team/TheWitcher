@@ -5,7 +5,7 @@
 #include "Enemy.h"
 
 class EnemyManager;
-
+class Enemy;
 class ALIEN_ENGINE_API BlockerObstacle : public Enemy {
 
 public:
@@ -27,15 +27,19 @@ public:
 	void ManageHealth();
 	void OnTriggerEnter(ComponentCollider* collider) override;
 	bool IsDead() override;
+	void AddChildren(GameObject* g_o);
+	void ReleaseChildren();
+	void ReleaseMyself(Enemy* en);
 public:
 	//float health = 0.f;
 	//float minimum_health = 0.f;
 	ObstacleState state = ObstacleState::NONE;
 private:
-	std::vector<GameObject*>children_enemies;
+	std::vector<Enemy*>children_enemies;
 	int beginning_enemies = 0.f;
 	ComponentRigidBody* r_body = nullptr;
 	EnemyManager* manager = nullptr;
+	bool has_started = false;
 };
 
 ALIEN_FACTORY BlockerObstacle* CreateBlockerObstacle() {
