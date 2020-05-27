@@ -106,26 +106,7 @@ float NilfgaardSoldier::GetDamaged(float dmg, PlayerController* player, float3 k
 			state = NilfgaardSoldierState::DYING;
 			audio_emitter->StartSound("SoldierDeath");
 
-			float3 head_pos = transform->GetGlobalPosition();
-			head_pos.y += 1.0f;
-
-			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
-			if (decapitated_head)
-			{
-				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
-
-				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
-				head_rb->SetRotation(transform->GetGlobalRotation());
-
-				float decapitation_force = 2.0f;
-				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
-				decapitation_vector += transform->up * decapitation_force;
-	
-				head_rb->AddForce(decapitation_vector);
-				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
-				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
-			}
+			Decapitate(player);
 		}
 	}
 

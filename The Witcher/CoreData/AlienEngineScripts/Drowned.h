@@ -37,7 +37,6 @@ public:
 	void Stun(float time) override;
 	bool IsDead() override;
 
-	void OnTriggerEnter(ComponentCollider* collider) override;
 	void OnAnimationEnd(const char* name) override {};
 
 public:

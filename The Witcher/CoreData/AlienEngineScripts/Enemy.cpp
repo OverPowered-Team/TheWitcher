@@ -14,7 +14,10 @@ void Enemy::Awake()
 	attack_collider->SetEnable(false);
 
 	//0.Head 1.Body 2.Feet 3.Attack
-	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Head_Position"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Body_Position"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Feet_Position"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Attack_Position"));
 }
 
 void Enemy::StartEnemy()
@@ -22,6 +25,7 @@ void Enemy::StartEnemy()
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
+
 	std::string json_str;
 
 	switch (type)
@@ -212,6 +216,27 @@ Quat Enemy::RotateProjectile()
 	float3 newUp = rot1 * float3(0.0f, 1.0f, 0.0f);
 	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
 	return rot2 * rot1;
+}
+
+void Enemy::Decapitate(PlayerController* player)
+{
+	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetLocalPosition());
+	if (decapitated_head)
+	{
+		game_object->GetChild("Head")->SetEnable(false); //disable old head
+		SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
+
+		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
+		head_rb->SetRotation(transform->GetGlobalRotation());
+
+		float decapitation_force = 2.0f;
+		float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+		decapitation_vector += transform->up * decapitation_force;
+
+		head_rb->AddForce(decapitation_vector);
+		head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+		head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
+	}
 }
 
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)

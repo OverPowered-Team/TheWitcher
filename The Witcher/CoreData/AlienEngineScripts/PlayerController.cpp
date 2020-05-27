@@ -115,21 +115,29 @@ void PlayerController::CheckGround()
 
 	RaycastHit hit;
 
-	float3 center_position = transform->GetGlobalPosition();
+	float ground_distance = 0.2F;
+	float4x4 matrix = transform->GetGlobalMatrix();
 	float offset = transform->GetGlobalScale().y * 0.5f;
+	matrix.Translate(float3(0, offset, 0));
+	
+	float3 center_position = transform->GetGlobalPosition();
 	center_position.y += offset;
-
+	
+	
+	is_grounded = false;
 	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Ground")))
+	//if (Physics::CapsuleCast(matrix, 0.4f, 0.2f, -float3::unitY(), 5.0f, hit, Physics::GetLayerMask("Ground")))
 	{
-		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
-		direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
+		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
+		{
+			Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
-		is_grounded = player_data.vertical_speed > 0 ? false : true;
+			is_grounded = player_data.vertical_speed > 0 ? false : true;
+		}
 		/*if (direction_vector.y > 0) //temporal?
 			direction_vector.y = 0;*/
 	}
-	else
-		is_grounded = false;
 }
 
 void PlayerController::UpdateVisualEffects()

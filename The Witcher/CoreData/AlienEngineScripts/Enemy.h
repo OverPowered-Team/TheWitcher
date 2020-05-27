@@ -46,6 +46,7 @@ public:
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
+	virtual void Decapitate(PlayerController* player);
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
@@ -85,11 +86,13 @@ public:
 
 	bool is_frozen = false;
 	bool is_combat = false;
+	Prefab head_prefab;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
 	PlayerController* last_player_hit;
+	GameObject* decapitated_head = nullptr;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
 

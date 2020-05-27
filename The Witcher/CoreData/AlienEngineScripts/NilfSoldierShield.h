@@ -34,6 +34,7 @@ ALIEN_FACTORY NilfSoldierShield* CreateNilfSoldierShield() {
 
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->increase_hit_animation);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->gravity);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldierState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);

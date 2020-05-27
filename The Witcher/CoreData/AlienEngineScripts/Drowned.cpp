@@ -98,9 +98,14 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 
 		animator->SetBool("dead", true);
 		OnDeathHit();
-		state = DrownedState::DYING;
-		audio_emitter->StartSound("Play_Drowner_Hit");
-		player->OnEnemyKill();
+
+		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
+		{
+			state = DrownedState::DYING;
+			audio_emitter->StartSound("Play_Drowner_Hit");
+
+			Decapitate(player);
+		}
 	}
 
 	return damage;
@@ -121,22 +126,4 @@ void Drowned::Stun(float time)
 bool Drowned::IsDead()
 {
 	return (state == DrownedState::DEAD ? true : false);
-}
-
-
-void Drowned::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != DrownedState::DEAD) {
-		if (!is_hide)
-		{
-			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				float3 knock = player->attacks->GetKnockBack(this->transform);
-				player->OnHit(this, GetDamaged(dmg_received, player, knock));
-				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-			}
-		}
-	}
 }
