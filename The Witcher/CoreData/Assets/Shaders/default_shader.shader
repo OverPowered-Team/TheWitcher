@@ -158,7 +158,7 @@ uniform vec3 backgroundColor;
 #define MAX_SPACEMATRIX 10
 #define MAX_LIGHTS_PER_TYPE 10
 uniform DirectionalLight dir_light[MAX_LIGHTS_PER_TYPE];
-uniform PointLight point_light[MAX_LIGHTS_PER_TYPE];
+uniform PointLight point_light[100];
 uniform SpotLight spot_light[MAX_LIGHTS_PER_TYPE];
 
 // Ins

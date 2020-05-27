@@ -180,7 +180,7 @@ void MiniGame_Revive::StartMinigame(PlayerController* player_reviving)
 
 void MiniGame_Revive::EndMinigame()
 {
-	Destroy(this->game_object);
+	Destroy(this->game_object->parent);
 }
 
 void MiniGame_Revive::RestartMinigame()

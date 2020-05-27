@@ -10,6 +10,7 @@ public:
 
 	Stat() {};
 	Stat(std::string name, float base_value);
+	Stat(std::string name, float min_value, float base_value, float max_value);
 	~Stat();
 
 	void ApplyEffect(Effect* effect);

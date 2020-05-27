@@ -6,6 +6,7 @@
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "Effect.h"
+#include "SteeringAvoid.h"
 
 void Enemy::Awake()
 {
@@ -22,6 +23,7 @@ void Enemy::StartEnemy()
 	animator = GetComponent<ComponentAnimator>();
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
+	steeringAvoid = GetComponent<SteeringAvoid>();
 	std::string json_str;
 
 	switch (type)
@@ -91,9 +93,43 @@ void Enemy::UpdateEnemy()
 	}
 	else
 	{
-		distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-		direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
-		current_player = (distance_1 < distance_2) ? 0 : 1;
+		if (!is_battle_circle)
+		{
+			/*if (player_controllers[0]->enemy_battle_circle.size() == player_controllers[1]->enemy_battle_circle.size())
+			{*/
+			distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+			direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+			current_player = (distance_1 < distance_2) ? 0 : 1;
+			/*}
+			else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
+			{
+				distance = distance_1;
+				direction = direction_1;
+				current_player = 0;
+			}
+			else if (player_controllers[1]->enemy_battle_circle.size() < player_controllers[0]->enemy_battle_circle.size())
+			{
+				distance = distance_2;
+				direction = direction_2;
+				current_player = 1;
+			}*/
+		}
+		else
+		{
+			if (current_player == 0 && distance_1 > distance_2 + 10)
+			{
+				RemoveBattleCircle();
+				current_player = 1;
+			}
+			else if (current_player == 1 && distance_2 > distance_1 + 10)
+			{
+				RemoveBattleCircle();
+				current_player = 0;
+			}
+
+			distance = (current_player == 0) ? distance_1 : distance_2;
+			direction = (current_player == 0) ? direction_1 : direction_2;
+		}
 	}
 
 	character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
@@ -172,16 +208,59 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
-	float3 velocity_vec = direction * stats["Agility"].GetValue();
+	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle();
 
-	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
-	animator->SetFloat("speed", stats["Agility"].GetValue());
+	if (avoid_vector.LengthSq() > 0)
+		velocity += avoid_vector;
+	else
+		velocity += velocity_vec;
 
-	float angle = atan2f(direction.z, direction.x);
+	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	{
+		velocity = velocity.Normalized()* stats["Agility"].GetValue();
+	}
+
+	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
+	animator->SetFloat("speed", velocity.LengthSq());
+
+	float angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 
 	CheckDistance();
+}
+
+void Enemy::Guard()
+{
+	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+
+	if (avoid_vector.LengthSq() > 0)
+		velocity += avoid_vector;
+	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance )
+		velocity += velocity_vec;
+	else if (stats["AttackRange"].GetValue() > distance)
+		velocity -= velocity_vec;
+	else
+		velocity = float3::zero();
+
+	animator->SetFloat("speed", velocity.LengthSq());
+
+	if (velocity.LengthSq() > stats["Agility"].GetValue())
+		velocity = velocity.Normalized() * stats["Agility"].GetValue();
+
+	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
+
+	float angle;
+	if(velocity.LengthSq() == 0.0f)
+		angle = atan2f(velocity_vec.z, velocity_vec.x);
+	else
+		angle = atan2f(velocity.z, velocity.x);
+
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+
 }
 
 void Enemy::ActivateCollider()
@@ -216,11 +295,66 @@ Quat Enemy::RotateProjectile()
 
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
+	SetState("Hit");
+
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
+
+	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+		animator->PlayState("Hit");
+		PlaySFX("Hit");
+		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+	}
+
+	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	{
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		can_get_interrupted = false;
+	}
+
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
+
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+	if (stats["Health"].GetValue() == 0.0F) {
+
+		animator->SetBool("dead", true);
+		OnDeathHit();
+
+		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
+		{
+			SetState("Dying");
+			audio_emitter->StartSound("SoldierDeath");
+
+			float3 head_pos = transform->GetGlobalPosition();
+			head_pos.y += 1.0f;
+
+			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
+			if (decapitated_head)
+			{
+				game_object->GetChild("Head")->SetEnable(false); //disable old head
+				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
+
+				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
+				head_rb->SetRotation(transform->GetGlobalRotation());
+
+				float decapitation_force = 2.0f;
+				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+				decapitation_vector += transform->up * decapitation_force;
+
+				head_rb->AddForce(decapitation_vector);
+				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
+			}
+		}
+	}
+
+	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 
 	return aux_health - stats["Health"].GetValue();
 }
@@ -362,5 +496,71 @@ void Enemy::ReleaseAllParticles()
 		GameManager::instance->particle_pool->ReleaseInstance((*it)->GetName(), (*it));
 		it = particles.erase(it);
 	}
+}
+
+void Enemy::ChangeAttackEnemy(bool deleting)
+{
+	RemoveAttacking(player_controllers[current_player]);
+
+	std::vector<Enemy*> enemy_vec = player_controllers[current_player]->enemy_battle_circle;
+	for (int i = 0; i < enemy_vec.size(); ++i)
+	{
+		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
+		{
+			enemy_vec[i]->AddAttacking(player_controllers[current_player]);
+
+			if (player_controllers[current_player]->current_attacking_enemies == player_controllers[current_player]->max_attacking_enemies)
+				return;
+		}
+	}
+
+	if (player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies && !deleting)
+	{
+		AddAttacking(player_controllers[current_player]);
+	}
+		
+}
+
+void Enemy::RemoveBattleCircle()
+{
+	for (auto it_enemy = player_controllers[current_player]->enemy_battle_circle.begin(); it_enemy != player_controllers[current_player]->enemy_battle_circle.end(); ++it_enemy)
+	{
+		if ((*it_enemy) == this)
+		{
+			ChangeAttackEnemy(true);
+			is_battle_circle = false;
+			player_controllers[current_player]->enemy_battle_circle.erase(it_enemy);
+			return;
+		}
+	}
+}
+
+void Enemy::AddBattleCircle(PlayerController* player_controller)
+{
+	is_battle_circle = true;
+	player_controller->enemy_battle_circle.push_back(this);
+
+	if (player_controller->current_attacking_enemies == player_controller->max_attacking_enemies)
+	{
+		SetState("Guard");
+	}
+	else
+	{
+		AddAttacking(player_controller);
+	}
+}
+
+void Enemy::AddAttacking(PlayerController* player_controller)
+{
+	player_controller->current_attacking_enemies++;
+	is_attacking = true;
+	SetState("Move");
+}
+
+void Enemy::RemoveAttacking(PlayerController* player_controller)
+{
+	player_controllers[current_player]->current_attacking_enemies--;
+	is_attacking = false;
+	SetState("Guard");
 }
 	

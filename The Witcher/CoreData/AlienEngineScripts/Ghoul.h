@@ -14,6 +14,7 @@ public:
 		IDLE,
 		MOVE,
 		ATTACK,
+		GUARD,
 		JUMP,
 		DODGE,
 		STUNNED,
@@ -50,8 +51,6 @@ public:
 	void Action();
 
 	void CheckDistance();
-	
-	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
@@ -59,6 +58,10 @@ public:
 
 	void OnDrawGizmosSelected(); 
 
+	void PlaySFX(const char* sfx_name);
+
+// Group tactics
+	//void OnGroupStrengthChange(float strength_multi) override;
 
 // = = = = = = = = = = = = = = = = = = = = = = AWAKE BEHAVIOURS = = = = = = = = = = = = = = = = = = = = = =  
 public:

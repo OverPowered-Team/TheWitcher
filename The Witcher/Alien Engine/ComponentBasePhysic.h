@@ -37,7 +37,7 @@ protected:
 
 protected:
 
-	std::string name = "Collider";
+	std::string name = " Unknown";
 	ComponentTransform* transform = nullptr;
 	ComponentPhysics* physics = nullptr;
 	GameObject* go = nullptr;
