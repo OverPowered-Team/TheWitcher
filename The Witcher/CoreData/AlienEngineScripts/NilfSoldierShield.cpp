@@ -38,6 +38,10 @@ void NilfSoldierShield::UpdateEnemy()
 		Block();
 		break;
 
+	case NilfgaardSoldierState::GUARD:
+		Guard();
+		break;
+
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
@@ -68,11 +72,9 @@ void NilfSoldierShield::Action()
 	int rand_num = Random::GetRandomIntBetweenTwo(0, 1);
 	if (rand_num == 0)
 	{
-		animator->PlayState("Block");
-		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
+		SetState("Block");
 		current_time = Time::GetGameTime();
 		is_blocked = true;
-		state = NilfgaardSoldierState::AUXILIAR;
 	}
 	else
 	{

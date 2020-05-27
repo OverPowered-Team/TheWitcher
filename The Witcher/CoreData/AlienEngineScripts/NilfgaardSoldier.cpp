@@ -172,8 +172,16 @@ void NilfgaardSoldier::SetState(const char* state_str)
 		velocity = float3::zero();
 		animator->SetFloat("speed", 0.0F);
 	}
-	else if (state_str == "Block" || state_str == "Flee")
+	else if (state_str == "Block")
+	{
+		animator->PlayState("Block");
+		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::AUXILIAR;
+	}
+	else if (state_str == "Flee")
+	{
+		state = NilfgaardSoldierState::AUXILIAR;
+	}
 	else if (state_str == "Hit")
 		state = NilfgaardSoldierState::HIT;
 	else if (state_str == "Dying")

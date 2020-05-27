@@ -14,6 +14,7 @@ public:
 		IDLE,
 		MOVE,
 		ATTACK,
+		GUARD,
 		JUMP,
 		DODGE,
 		STUNNED,

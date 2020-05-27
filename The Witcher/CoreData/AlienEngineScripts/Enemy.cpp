@@ -97,9 +97,9 @@ void Enemy::UpdateEnemy()
 		{
 			/*if (player_controllers[0]->enemy_battle_circle.size() == player_controllers[1]->enemy_battle_circle.size())
 			{*/
-				distance = (distance_1 < distance_2) ? distance_1 : distance_2;
-				direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
-				current_player = (distance_1 < distance_2) ? 0 : 1;
+			distance = (distance_1 < distance_2) ? distance_1 : distance_2;
+			direction = (distance_1 < distance_2) ? direction_1.Normalized() : direction_2.Normalized();
+			current_player = (distance_1 < distance_2) ? 0 : 1;
 			/*}
 			else if (player_controllers[0]->enemy_battle_circle.size() < player_controllers[1]->enemy_battle_circle.size())
 			{

@@ -19,7 +19,7 @@ Ghoul::~Ghoul()
 void Ghoul::StartEnemy()
 {
     type = EnemyType::GHOUL;
-    state = GhoulState::AWAKE;
+    state = GhoulState::IDLE;
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
     Enemy::StartEnemy();
 }
@@ -98,12 +98,31 @@ void Ghoul::SetState(const char* state_str)
 {
 	if (state_str == "Awake")
 		state = GhoulState::AWAKE;
-    else if (state_str == "Idle")
+    if (state_str == "Idle")
+    {
         state = GhoulState::IDLE;
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        velocity = float3::zero();
+        animator->SetFloat("speed", 0.0F);
+    }
     else if (state_str == "Move")
+    {
         state = GhoulState::MOVE;
+    }
     else if (state_str == "Attack")
+    {
         state = GhoulState::ATTACK;
+        animator->SetFloat("speed", 0.0F);
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        velocity = float3::zero();
+    }
+    else if (state_str == "Guard")
+    {
+        state = GhoulState::GUARD;
+        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+        velocity = float3::zero();
+        animator->SetFloat("speed", 0.0F);
+    }
     else if (state_str == "Jump")
         state = GhoulState::JUMP;
     else if (state_str == "Hit")
@@ -191,25 +210,25 @@ void Ghoul::OnAnimationEnd(const char* name)
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
         {
-            state = GhoulState::MOVE;
+            SetState("Move");
         }
         else
         {
-            state = GhoulState::IDLE;
+            SetState("Idle");
         }
     }
     else if (strcmp(name, "Jump") == 0)
     {
         if (distance < stats["VisionRange"].GetValue())
-            state = GhoulState::MOVE;
+            SetState("Move");
         else
-            state = GhoulState::IDLE;
+            SetState("Idle");
     }
     else if (strcmp(name, "Hit") == 0)
     {
         ReleaseParticle("hit_particle");
 
-        state = GhoulState::IDLE;
+        SetState("Idle");
     }
 }
 
