@@ -37,7 +37,7 @@ public:
 
 	void PlaySFX(const char* sfx_name);
 
-	void OnTriggerEnter(ComponentCollider* collider) override;
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back) override;
 	void OnAnimationEnd(const char* name) override {};
 
 public:

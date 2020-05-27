@@ -128,29 +128,20 @@ bool NilfSoldierShield::CheckPlayerForward()
 		return false;
 }
 
-void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
+float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
+	float damage = 0.0f;
 
-		if (is_blocked && CheckPlayerForward())
-		{
-			has_been_attacked = true;
-			current_time = Time::GetGameTime();
-			break_shield_attack++;
-			SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition()); // 1 is body position
-			audio_emitter->StartSound("SoldierBlock");
-		}
-		else
-		{
-			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
-				last_player_hit = player;
-
-				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-			}
-		}
+	if (is_blocked && CheckPlayerForward())
+	{
+		has_been_attacked = true;
+		current_time = Time::GetGameTime();
+		break_shield_attack++;
+		SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition());
+		audio_emitter->StartSound("SoldierBlock");
 	}
+	else
+		damage = Enemy::GetDamaged(dmg, player, knock_back);
+
+	return damage;
 }
