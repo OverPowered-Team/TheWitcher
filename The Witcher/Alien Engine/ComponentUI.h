@@ -78,6 +78,7 @@ private:
 	void CheckFirstSelected();
 	void Orientate(ComponentCamera* camera);
 	void Rotate();
+	bool CheckIfApplyBillboard(GameObject* parent);
 	
 	
 public:

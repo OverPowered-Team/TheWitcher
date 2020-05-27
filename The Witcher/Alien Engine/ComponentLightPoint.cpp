@@ -18,10 +18,9 @@ ComponentLightPoint::ComponentLightPoint(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT_POINT;
 	App->objects->point_light_properites.push_back(&light_props);
-	App->objects->AddNumOfPointLights();
-
-	light_props.light = this;
 	light_props.enabled = enabled;
+	light_props.light = this;
+
 #ifndef GAME_VERSION
 	bulb = new ComponentMesh(game_object_attached);
 	bulb->mesh = App->resources->light_mesh;
@@ -42,8 +41,6 @@ ComponentLightPoint::~ComponentLightPoint()
 
 	App->objects->point_light_properites.remove(&light_props);
 
-	App->objects->ReduceNumOfPointLights();
-
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
 #endif // !GAME_VERSION
@@ -54,6 +51,7 @@ void ComponentLightPoint::LightLogic()
 {
 	OPTICK_EVENT();
 	light_props.position = float3(game_object_attached->transform->GetGlobalPosition().x, game_object_attached->transform->GetGlobalPosition().y, game_object_attached->transform->GetGlobalPosition().z);
+
 }
 
 void ComponentLightPoint::Update()
@@ -89,10 +87,7 @@ bool ComponentLightPoint::DrawInspector()
 	if (ImGui::Checkbox("##CmpActive", &en)) {
 		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 		enabled = en;
-		if (!enabled)
-			OnDisable();
-		else
-			OnEnable();
+		light_props.enabled = enabled;
 	}
 	ImGui::PopID();
 	ImGui::SameLine();
@@ -131,14 +126,10 @@ bool ComponentLightPoint::DrawInspector()
 
 void ComponentLightPoint::OnEnable()
 {
-	enabled = true;
-	light_props.enabled = true;
 }
 
 void ComponentLightPoint::OnDisable()
 {
-	enabled = false;
-	light_props.enabled = false;
 }
 
 void ComponentLightPoint::Clone(Component* clone)

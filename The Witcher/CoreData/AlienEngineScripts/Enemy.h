@@ -51,6 +51,7 @@ public:
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
+	virtual void Decapitate(PlayerController* player);
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
@@ -63,7 +64,7 @@ public:
 	void HitFreeze(float freeze_time);
 	void SpawnAttackParticle();
 	void StopHitFreeze(float speed);
-	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = false, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
 	void ChangeAttackEnemy(bool deleting = false);
@@ -100,12 +101,12 @@ public:
 	bool is_battle_circle = false;
 	bool is_obstacle = false;
 	Prefab head_prefab;
-	GameObject* decapitated_head = nullptr;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
 	PlayerController* last_player_hit;
+	GameObject* decapitated_head = nullptr;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
 

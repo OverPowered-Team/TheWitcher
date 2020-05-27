@@ -20,6 +20,7 @@
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
 #include "ComponentParticleSystem.h"
+#include "ComponentTrail.h"
 #include "ParticleSystem.h"
 #include "ComponentImage.h"
 #include "ComponentBar.h"
@@ -1247,6 +1248,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				ComponentParticleSystem* particleSystem = new ComponentParticleSystem(this);
 				particleSystem->LoadComponent(components_to_load);
 				AddComponent(particleSystem);
+				break; }
+			case (int)ComponentType::TRAIL: {
+				ComponentTrail* trail = new ComponentTrail(this);
+				trail->LoadComponent(components_to_load);
+				AddComponent(trail);
 				break; }
 			case (int)ComponentType::CANVAS: {
 				ComponentCanvas* canvas = new ComponentCanvas(this);
