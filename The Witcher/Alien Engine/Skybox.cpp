@@ -116,6 +116,58 @@ uint Skybox::LoadCubeMapFromLibraryFiles(const std::vector<std::string>& texture
 	return texture_id;
 }
 
+uint Skybox::GenereteCubeMapFromTextures(ResourceTexture* skybox_textures[6])
+{
+	OPTICK_EVENT();
+
+	GLuint texture_id;
+	glGenTextures(1, &texture_id);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+
+	for (int i = 0; i < 6; ++i)
+	{
+		ResourceTexture* t = skybox_textures[i];
+		
+		if (t != nullptr)
+		{
+			t->IncreaseReferences();
+
+			glBindTexture(GL_TEXTURE_2D, t->id);
+			unsigned char* data = new unsigned char[sizeof(char) * t->width * t->height * 4];
+			glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+			if (data)
+			{
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, t->width, t->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			}
+			else
+			{
+				LOG_ENGINE("Cubemap texture couldn't be loaded: %s", t->GetAssetsPath());
+			}
+
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+			t->DecreaseReferences();
+
+			RELEASE_ARRAY(data);
+		}
+	}
+
+	return texture_id;
+}
+
+
+
 void Skybox::SetBuffers()
 {
 	glGenVertexArrays(1, &vao);
@@ -128,6 +180,33 @@ void Skybox::SetBuffers()
 	
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+}
+
+void Skybox::ChangeTextureByType(Cubemap::SKYBOX_POS type, const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height)
+{
+	switch (type)
+	{
+	case Cubemap::POSITIVE_X:
+		ChangePositiveX(id_skybox, id_texture, width, height);
+		break;
+	case Cubemap::NEGATIVE_X:
+		ChangeNegativeX(id_skybox, id_texture, width, height);
+		break;
+	case Cubemap::POSITIVE_Y:
+		ChangePositiveY(id_skybox, id_texture, width, height);
+		break;
+	case Cubemap::NEGATIVE_Y:
+		ChangeNegativeY(id_skybox, id_texture, width, height);
+		break;
+	case Cubemap::POSITIVE_Z:
+		ChangePositiveZ(id_skybox, id_texture, width, height);
+		break;
+	case Cubemap::NEGATIVE_Z:
+		ChangeNegativeZ(id_skybox, id_texture, width, height);
+		break;
+	default:
+		break;
+	}
 }
 
 

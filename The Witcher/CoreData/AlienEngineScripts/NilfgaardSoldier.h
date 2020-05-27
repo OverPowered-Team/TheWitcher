@@ -48,7 +48,7 @@ public:
 	void PlaySFX(const char* sfx_name);
 
 	void OnAnimationEnd(const char* name) override;
-	void OnTriggerEnter(ComponentCollider* collider);
+	void OnTriggerEnter(ComponentCollider* collider) {};
 
 public:
 	NilfgaardType nilf_type = NilfgaardType::NONE;

@@ -21,6 +21,14 @@ ComponentBar::ComponentBar(GameObject* obj):ComponentUI(obj)
 	tabbable = false;
 }
 
+ComponentBar::~ComponentBar()
+{
+	if (barTexture != nullptr)
+	{
+		barTexture->DecreaseReferences();
+	}
+}
+
 bool ComponentBar::DrawInspector()
 {
 	static bool check;
@@ -63,9 +71,9 @@ bool ComponentBar::DrawInspector()
 
 		ImGui::PushID(this);
 		ImGui::Text("Offset:	"); ImGui::SameLine(150); ImGui::SetNextItemWidth(100);
-		ImGui::DragFloat("X", &offsetX, 0.1F, 0, 0, "%.1f", 1, game_object_attached->is_static);
+		ImGui::DragFloat("X", &offsetX, 0.01F, 0, 0, "%.3f", 1, game_object_attached->is_static);
 		ImGui::SameLine(); ImGui::SetNextItemWidth(100);
-		ImGui::DragFloat("Y", &offsetY, 0.1F, 0, 0, "%.1f", 1, game_object_attached->is_static);
+		ImGui::DragFloat("Y", &offsetY, 0.01F, 0, 0, "%.3f", 1, game_object_attached->is_static);
 		ImGui::PopID();
 
 		ImGui::Spacing();
@@ -295,6 +303,11 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 		float3 canvasPivot = { canvas_pos.x - canvas->width * 0.5F, canvas_pos.y + canvas->height * 0.5F, 0 };
 		float2 origin = float2((transform->global_transformation[0][3] - canvasPivot.x) / (canvas->width), (transform->global_transformation[1][3] - canvasPivot.y) / (canvas->height));
 
+
+		origin.x = (origin.x - 0.5F) * 2;
+		origin.y = -(-origin.y - 0.5F) * 2;
+
+
 #ifndef GAME_VERSION
 		x = origin.x * App->ui->panel_game->width;
 		y = -origin.y * App->ui->panel_game->height;
@@ -302,79 +315,66 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 		x = origin.x * App->window->width;
 		y = origin.y * App->window->height;
 #endif
-
-		origin.x = (origin.x - 0.5F) * 2;
-		origin.y = -(-origin.y - 0.5F) * 2;
-		if (draw_bar) {
-			matrix[0][3] = origin.x;
-			matrix[1][3] = origin.y;
-		}
-		else {
-			matrix[0][3] = origin.x;
-			matrix[1][3] = origin.y;
-		}
-		//matrix[2][3] = 0.0f;
+		
+		matrix[0][3] = origin.x;
+		matrix[1][3] = origin.y;
 
 		if (tex != nullptr && draw_bar)
 		{
+			matrix[0][3] += offsetX;
+			matrix[1][3] -= offsetY;
 			matrix[0][0] *= barScaleX;
 			matrix[1][1] *= barScaleY;
+
 			glEnable(GL_SCISSOR_TEST);
+			float3 canPivot = { canvas_pos.x - canvas->width * 0.5F, canvas_pos.y + canvas->height * 0.5F, 0 };
+			float textureHalfWidth = ((texture->width * transform->global_transformation[0][0]) / 100) * 0.5F * barScaleX;
 			switch (scType)
 			{
 			case SCISSOR_TYPE::RIGHT_TO_LEFT: {
 #ifndef GAME_VERSION
-				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + offsetX,
-					0,
-					((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
-					10000);
+				float cutX = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width)+offsetX*0.5f) * App->ui->panel_game->width;
+				float cutXend = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float diff = cutXend - cutX;
+				glScissor(cutX, 0, diff * factor, 10000);
 
-
-				/*if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN) {
-					LOG_ENGINE("X: %f", x);
-					LOG_ENGINE("CURRENT: %f", x - (matrix[0][0] * App->ui->panel_game->width) + offsetX);
-					LOG_ENGINE("CURRENT OFFSET: %f", (matrix[0][0] * App->ui->panel_game->width) + offsetX);
-					LOG_ENGINE("WIDTH: %f", ((x + (matrix[0][0] * App->ui->panel_game->width)) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor);
-				}
-				else
-				{
-					LOG_ENGINE("MOUSE: %f", (App->input->GetMouseX() - App->ui->panel_game->posX));
-				}*/
-
+		
 #else
-				glScissor(x - (matrix[0][0] * App->window->width) + offsetX,
-					0,
-					((x + (matrix[0][0] * App->window->width)) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
-					10000);
+				float cutX = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float cutXend = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float diff = cutXend - cutX;
+				glScissor(cutX, 0, diff * factor, 10000);
 #endif		
 				break; }
 
 			case SCISSOR_TYPE::LEFT_TO_RIGHT: {
 #ifndef GAME_VERSION
-				glScissor(x - (matrix[0][0] * App->ui->panel_game->width) + (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor)),
-					0,
-					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width))) * factor,
-					10000);
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float currentWidth = (endPoint - beginPoint) * factor;
+				glScissor(endPoint - currentWidth, 0, currentWidth, 10000);
+
 #else
-				glScissor(x - (matrix[0][0] * App->window->width) + (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor)),
-					0,
-					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width))) * factor,
-					10000);
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float currentWidth = (endPoint - beginPoint) * factor;
+				glScissor(endPoint - currentWidth, 0, currentWidth, 10000);
 #endif	
 				break; }
 
 			case SCISSOR_TYPE::CENTER: {
 #ifndef GAME_VERSION
-				glScissor(x - (((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
-					0,
-					((x + (matrix[0][0] * App->ui->panel_game->width) - offsetX) - (x - (matrix[0][0] * App->ui->panel_game->width) + offsetX)) * factor,
-					10000);
-				
+				float middlePos = (((transform->global_transformation[0][3] - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->ui->panel_game->width;
+				float currentWidth = (endPoint - beginPoint) * factor;
+				glScissor(middlePos - (currentWidth * 0.5F), 0, currentWidth, 10000);
 #else
-				glScissor(x - (((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor * 0.5f) /*+ offsetX*/,
-					0,
-					((x + (matrix[0][0] * App->window->width) - offsetX) - (x - (matrix[0][0] * App->window->width) + offsetX)) * factor,
-					10000);
+				float middlePos = (((transform->global_transformation[0][3] - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float endPoint = (((transform->global_transformation[0][3] + textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float beginPoint = (((transform->global_transformation[0][3] - textureHalfWidth - canvasPivot.x) / canvas->width) + offsetX * 0.5f)* App->window->width;
+				float currentWidth = (endPoint - beginPoint) * factor;
+				glScissor(middlePos - (currentWidth * 0.5F), 0, currentWidth, 10000);
 #endif	
 				break; }
 
