@@ -92,6 +92,6 @@ void Subtitle::Update()
 			audio->Mute(true);
 		if(song)
 			song->Mute(true);
-		SceneManager::LoadScene("Lvl_1");
+		SceneManager::LoadScene("Lvl_1_Art_Colliders");
 	}
 }
