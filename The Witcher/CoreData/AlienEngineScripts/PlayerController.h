@@ -37,9 +37,10 @@ public:
 		float revive_range = 5.0f;
 
 		//BASIC MOVEMENT DATA
-		float3 speed = float3::zero();
+		float3 velocity = float3::zero();
 		float gravity = 9.8f;
 		float slow_speed = -0.07f;
+		float vertical_speed = 0;
 
 		//RECOUNT
 		float total_damage_dealt = 0.0f;
@@ -62,6 +63,7 @@ public:
 	void Start();
 	void Update();
 
+	void CheckGround();
 	void UpdateInput();
 	void UpdateVisualEffects(); 
 	void SetState(StateType new_state);
@@ -72,6 +74,7 @@ public:
 	bool AnyKeyboardInput();
 
 	void HandleMovement();
+	void OnDrawGizmos();
 	void EffectsUpdate();
 	void Jump();
 	void Fall();
@@ -108,7 +111,8 @@ public:
 
 	void HitFreeze(float freeze_time);
 	void RemoveFreeze(float speed);
-
+	void PauseParticle();
+	void ResumeParticle();
 	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 
 	void ReleaseParticle(std::string particle_name);
@@ -138,9 +142,11 @@ public:
 	ComponentAudioEmitter* audio = nullptr;
 
 	float2 movement_input;
+	float3 direction;
 
 	bool mov_input = false;
 	bool is_immune = false;
+	bool is_grounded = false;
 	bool can_move = true;
 	bool input_blocked = false;
 
@@ -156,7 +162,7 @@ public:
 	GameObject* HUD = nullptr;
 
 	//Others
-	float delay_footsteps = 0.5f;
+	float delay_footsteps = 0.2f;
 	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
 

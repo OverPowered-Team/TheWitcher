@@ -13,6 +13,8 @@ class ModulePhysX : public Module
 	friend class PanelPhysics;
 	friend class ModuleObjects;
 	friend class ComponentPhysics;
+	friend class ComponentBasePhysic;
+
 	friend class ComponentCollider;
 	friend class ComponentBoxCollider;
 	friend class ComponentSphereCollider;
@@ -20,7 +22,10 @@ class ModulePhysX : public Module
 	friend class ComponentMeshCollider;
 	friend class ComponentConvexHullCollider;
 	friend class ComponentCharacterController;
-	friend class ComponentBasePhysic;
+
+	friend class ComponentJoint;
+	friend class ComponentConfigurableJoint;
+
 
 public:
 
@@ -32,10 +37,15 @@ public:
 
 	//* ---------- SCENE QUERIES ------------*//
 
-	bool Raycast(float3 origin, float3 unit_dir, float max_distance) const;
-	bool Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit) const;
-	const std::vector<RaycastHit> RaycastAll(float3 origin, float3 unitDir, float maxDistance) const;
-	const std::vector<ComponentCollider*> OverlapSphere(float3 center, float radius) const;
+	bool Raycast(float3 origin, float3 unit_dir, float max_distance, int layer_mask) const;
+	bool Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit, int layer_mask) const;
+	const std::vector<RaycastHit> RaycastAll(float3 origin, float3 unitDir, float maxDistance, int layer_mask) const;
+
+	bool CapsuleCast(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask) const;
+	bool CapsuleCast(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, RaycastHit& hit, int layer_mask) const;
+	const vector<RaycastHit>& CapsuleCastAll(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask) const;
+
+	const std::vector<ComponentCollider*> OverlapSphere(float3 center, float radius, int layer_mask) const;
 
 private:
 
@@ -68,6 +78,8 @@ public:
 
 	CollisionLayers	layers;
 	bool debug_physics = false;
+	int	 layer_mask = -1;
+	int  multiple_hit = false;
 
 private:
 
@@ -92,7 +104,9 @@ private:
 	PxDefaultAllocator			px_allocator;
 	CustomErrorCallback			px_error_callback;
 	SimulationEventCallback*    px_simulation_callback = nullptr;
-	ControllerFilterCallback*	px_controller_filter_callback = nullptr;
+	ControllerFilterCallback*	px_controller_filter = nullptr;
+	RaycastFilterCallback*		px_raycast_filter = nullptr;
+
 	PxFoundation*				px_foundation = nullptr;
 	PxPhysics*					px_physics = nullptr;
 	PxCooking*					px_cooking = nullptr;
@@ -101,5 +115,4 @@ private:
 	PxPvd*						px_pvd = nullptr;
 
 	PxControllerManager*		controllers_manager = nullptr;
-
 };

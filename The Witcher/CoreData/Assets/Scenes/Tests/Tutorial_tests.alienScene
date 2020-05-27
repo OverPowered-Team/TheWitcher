@@ -41,7 +41,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 91.492843627929688,
+                        "HoritzontalFov": 92.479301452636719,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -309,7 +309,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5788829179913950079",
+                        "ID": "3996078879660165961",
                         "Text": "Press     or     to attack",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -558,7 +558,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9461988057964476465",
+                        "ID": "16321718382517142218",
                         "Text": "Press     to Dash",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -620,7 +620,7 @@
                 "ParentID": "1853714135631783709",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -659,7 +659,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -718,7 +718,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -777,7 +777,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -836,7 +836,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -894,8 +894,8 @@
                 "ParentID": "16517040135596273771",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
+                "Selected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -910,10 +910,10 @@
                             -2.6062660217285156
                         ],
                         "Rotation": [
-                            0.4226183295249939,
+                            0.42261835932731628,
                             0,
                             0,
-                            0.9063078761100769
+                            0.90630775690078735
                         ],
                         "Scale": [
                             1,
@@ -922,20 +922,6 @@
                         ],
                         "ScaleNegative": false,
                         "ID": "6607287901855008881"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 1,
-                        "Drag": 0,
-                        "AngularDrag": 0.10000000149011612,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
                     },
                     {
                         "Enabled": true,
@@ -958,6 +944,40 @@
                         "Radius": 0.25,
                         "Height": 1.6000000238418579,
                         "Orientation": 1
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1138693566367057984",
+                        "ResourceID": "11053893611237718551",
+                        "DataName": "Training_Zone",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "oscilation_direction",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "osciling_type",
+                                "enumInt": 3
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "initial_sign",
+                                "int": -1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "cycle_time",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "damage_to_do",
+                                "float": 20
+                            }
+                        ]
                     }
                 ]
             },
@@ -1087,7 +1107,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1117,20 +1137,6 @@
                     },
                     {
                         "Enabled": true,
-                        "Type": 11,
-                        "IsKinematic": 0,
-                        "Mass": 200,
-                        "Drag": 0,
-                        "AngularDrag": 0,
-                        "FreezePosX": false,
-                        "FreezePosY": false,
-                        "FreezePosZ": false,
-                        "FreezeRotX": false,
-                        "FreezeRotY": false,
-                        "FreezeRotZ": false
-                    },
-                    {
-                        "Enabled": true,
                         "Type": 9,
                         "Center": [
                             0,
@@ -1150,6 +1156,40 @@
                         "Radius": 0.25,
                         "Height": 1.7999999523162842,
                         "Orientation": 1
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17243261265909965541",
+                        "ResourceID": "11053893611237718551",
+                        "DataName": "Training_Zone",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "oscilation_direction",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "osciling_type",
+                                "enumInt": 3
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "initial_sign",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "cycle_time",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "damage_to_do",
+                                "float": 20
+                            }
+                        ]
                     }
                 ]
             },
@@ -1161,7 +1201,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1220,7 +1260,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1232,7 +1272,7 @@
                         "Position": [
                             0.0086212158203125,
                             -22.902133941650391,
-                            0.074102163314819336
+                            0.074102401733398438
                         ],
                         "Rotation": [
                             -0.70710664987564087,
@@ -1279,7 +1319,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
