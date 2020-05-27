@@ -15,7 +15,10 @@ void Enemy::Awake()
 	attack_collider->SetEnable(false);
 
 	//0.Head 1.Body 2.Feet 3.Attack
-	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Head_Position"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Body_Position"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Feet_Position"));
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Attack_Position"));
 }
 
 void Enemy::StartEnemy()
@@ -24,6 +27,7 @@ void Enemy::StartEnemy()
 	character_ctrl = GetComponent<ComponentCharacterController>();
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
 	steeringAvoid = GetComponent<SteeringAvoid>();
+
 	std::string json_str;
 
 	switch (type)
@@ -294,6 +298,28 @@ Quat Enemy::RotateProjectile()
 	return rot2 * rot1;
 }
 
+void Enemy::Decapitate(PlayerController* player)
+{
+	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetGlobalPosition());
+
+	if (decapitated_head)
+	{
+		game_object->GetChild("Head")->SetEnable(false); //disable old head
+		SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
+
+		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
+		head_rb->SetRotation(particle_spawn_positions[0]->transform->GetGlobalRotation());
+
+		float decapitation_force = 2.0f;
+		float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
+		decapitation_vector += transform->up * decapitation_force;
+
+		head_rb->AddForce(decapitation_vector);
+		head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
+		head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
+	}
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");
@@ -318,8 +344,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		can_get_interrupted = false;
 	}
 
-	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
-
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetGlobalPosition());
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
@@ -330,28 +355,9 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
 		{
 			SetState("Dying");
-			audio_emitter->StartSound("SoldierDeath");
+			PlaySFX("Death");
 
-			float3 head_pos = transform->GetGlobalPosition();
-			head_pos.y += 1.0f;
-
-			decapitated_head = GameObject::Instantiate(head_prefab, head_pos);
-			if (decapitated_head)
-			{
-				game_object->GetChild("Head")->SetEnable(false); //disable old head
-				SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
-
-				ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
-				head_rb->SetRotation(transform->GetGlobalRotation());
-
-				float decapitation_force = 2.0f;
-				float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;
-				decapitation_vector += transform->up * decapitation_force;
-
-				head_rb->AddForce(decapitation_vector);
-				head_rb->AddTorque(decapitated_head->transform->up * decapitation_force);
-				head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
-			}
+			Decapitate(player);
 		}
 	}
 
@@ -386,7 +392,7 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	if (new_effect->vfx_on_apply != "")
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
-			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
+			particle_spawn_positions[new_effect->vfx_position]->transform->GetGlobalPosition(), float3::zero(), this->game_object, false);
 
 	if (new_effect->ticks_time == 0)
 	{
@@ -434,7 +440,7 @@ void Enemy::HitFreeze(float freeze_time)
 
 void Enemy::SpawnAttackParticle()
 {
-	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetGlobalPosition());
 	HitFreeze(0.05);
 	can_get_interrupted = false;
 	// Sonidito de clinck de iluminacion espada maestra
