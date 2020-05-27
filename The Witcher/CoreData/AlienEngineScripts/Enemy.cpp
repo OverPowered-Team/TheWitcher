@@ -299,15 +299,15 @@ Quat Enemy::RotateProjectile()
 
 void Enemy::Decapitate(PlayerController* player)
 {
-	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetLocalPosition());
+	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetGlobalPosition());
 
 	if (decapitated_head)
 	{
 		game_object->GetChild("Head")->SetEnable(false); //disable old head
-		SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetLocalPosition()); //0 is head position
+		SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
-		head_rb->SetRotation(transform->GetGlobalRotation());
+		head_rb->SetRotation(particle_spawn_positions[0]->transform->GetGlobalRotation());
 
 		float decapitation_force = 2.0f;
 		float3 decapitation_vector = ((transform->GetGlobalPosition() - player->transform->GetGlobalPosition()).Normalized()) * decapitation_force * 0.5f;

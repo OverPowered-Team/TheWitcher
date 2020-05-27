@@ -102,8 +102,6 @@ public:
 	bool is_battle_circle = false;
 
 	Prefab head_prefab;
-	GameObject* decapitated_head = nullptr;
-
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
