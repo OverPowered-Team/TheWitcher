@@ -103,6 +103,8 @@ void PlayerController::Update()
 	animator->SetFloat("speed", float3(player_data.velocity.x, 0, player_data.velocity.z).Length());
 	animator->SetBool("movement_input", mov_input);
 
+	//Battle circle
+	CheckEnemyCircle();
 	// Visual effects
 	UpdateVisualEffects(); 
 
@@ -798,6 +800,31 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	}*/
 }
 
+void PlayerController::CheckEnemyCircle()
+{
+	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
+
+	for (int i = 0; i < colliders.size(); ++i)
+	{
+		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		{
+			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
+			float avoid_distance = avoid_direction.LengthSq();
+			if (avoid_distance > battleCircle)
+				continue;
+
+			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
+
+			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+
+			if (enemy->is_battle_circle || enemy->type != EnemyType::NILFGAARD_SOLDIER)
+				continue;
+
+			enemy->AddBattleCircle(this);
+		}
+	}
+}
+
 void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
 {
 	for (auto& p : particles)
@@ -944,6 +971,7 @@ void PlayerController::OnUltimateDeactivation(float value)
 void PlayerController::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), battleCircle, Color::Green()); //battle circle
 }
 #pragma endregion Events
 float3 PlayerController::GetDirectionVector()

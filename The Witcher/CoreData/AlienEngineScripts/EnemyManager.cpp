@@ -115,10 +115,6 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 void EnemyManager::AddEnemy(Enemy* enemy)
 {
 	enemies.push_back(enemy);
-	if(player1)
-		enemy->player_controllers.push_back(player1->GetComponent<PlayerController>());
-	if(player2)
-		enemy->player_controllers.push_back(player2->GetComponent<PlayerController>());
 }
 
 void EnemyManager::DeleteEnemy(Enemy* enemy)
