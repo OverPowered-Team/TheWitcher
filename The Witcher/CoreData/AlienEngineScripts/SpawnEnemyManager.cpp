@@ -37,7 +37,7 @@ void SpawnEnemyManager::CheckForPlayers()
 	{
 		if (strcmp(colliders[i]->game_object_attached->GetTag(),"Player") == 0)
 		{
-			SpawnEnemies();
+			SpawnEnemiesEnter();
 			has_spawned = true;
 			break;
 		}
@@ -49,5 +49,13 @@ void SpawnEnemyManager::SpawnEnemies()
 	for (int i = 0; i < enemies_to_spawn.size(); ++i)
 	{
 		enemies_to_spawn[i]->InstantiateEnemy(game_object->parent->GetChild("ChildEnemies"));
+	}
+}
+
+void SpawnEnemyManager::SpawnEnemiesEnter()
+{
+	for (int i = 0; i < enemies_to_spawn.size(); ++i)
+	{
+		enemies_to_spawn[i]->InstantiateEnemy();
 	}
 }

@@ -22,10 +22,9 @@ public:
 	void StartEnemy() override;
 	void UpdateEnemy() override;
 	void CleanUpEnemy() override;
-	float GetDamaged(float dmg, PlayerController* player);
+	float GetDamaged(float dmg, PlayerController* player, float3 knockback);
 	void LookForMyChildren();
 	void ManageHealth();
-	void OnTriggerEnter(ComponentCollider* collider) override;
 	bool IsDead() override;
 	void AddChildren(GameObject* g_o);
 	void ReleaseChildren();

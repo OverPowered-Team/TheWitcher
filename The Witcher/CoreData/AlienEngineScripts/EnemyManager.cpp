@@ -106,6 +106,8 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 	}
 
 	if (enemy != nullptr) {
+		enemy->player_controllers.push_back(player1->GetComponent<PlayerController>());
+		enemy->player_controllers.push_back(player2->GetComponent<PlayerController>());
 		enemy->StartEnemy();
 	}
 
