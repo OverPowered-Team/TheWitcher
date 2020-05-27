@@ -60,7 +60,7 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 	game_object->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 
 	if (!particle_instance) {
-		particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object);
+		particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object, true);
 		Invoke(std::bind(&RockThrow::ReleaseExplosionParticle, this), 0.6f);
 	}
 }
