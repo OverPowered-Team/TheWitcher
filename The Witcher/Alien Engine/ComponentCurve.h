@@ -12,13 +12,17 @@ public:
 
 	// 0 - 1
 	float3 ValueAt(float at);
+	float3 ValueAtDistance(float dst);
 	float3 NormalAt(float at);
+	float3 NormalAtDistance(float dst);
 
 	const std::vector<float3>& GetControlPoints();
 	const std::vector<float3>& GetControlPointsNormals();
 
 	void SetControlPointAt(int index, const float3& value);
 	void SetControlPointNormalAt(int index, const float3& value);
+
+	void CalculateLength();
 
 	void SetDetail(int detail);
 
@@ -46,6 +50,8 @@ private:
 	std::vector<float3> control_points_normals;
 
 	float3 position = float3::zero();
+
+	float length = 0.f;
 };
 
 class __declspec(dllexport) ComponentCurve : public Component {

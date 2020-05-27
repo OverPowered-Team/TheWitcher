@@ -110,11 +110,10 @@ void ComponentMesh::DrawPolygon()
 	ComponentMaterial* mat = (ComponentMaterial*)game_object_attached->GetComponent(ComponentType::MATERIAL);
 
 	// Mandatory Material ??
-	if (mat == nullptr)
+	if (mat == nullptr || !mat->IsEnabled())
 		return;
 
 	ResourceMaterial* material = mat->material;
-
 
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);

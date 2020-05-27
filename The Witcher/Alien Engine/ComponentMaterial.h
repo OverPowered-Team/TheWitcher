@@ -50,7 +50,6 @@ private:
 
 // Shaders
 public:
-	void ShowShaderTextEditor();
 	ResourceMaterial* material = nullptr; 
 
 private:
