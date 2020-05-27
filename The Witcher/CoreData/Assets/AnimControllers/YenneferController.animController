@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "YenneferController",
         "NumStates": 30,
-        "NumTransitions": 55,
+        "NumTransitions": 56,
         "States": [
             {
                 "Name": "L",
@@ -77,7 +77,7 @@
             {
                 "Name": "Ice Nova",
                 "Speed": 2,
-                "Clip": "3542243683532859658"
+                "Clip": "5122780513439753696"
             },
             {
                 "Name": "Rock Throw",
@@ -815,6 +815,15 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Chain",
+                "Target": "HH",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -1270,12 +1279,6 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "3542243683532859658",
-                "Frame": 25,
-                "Type": 2
-            },
-            {
                 "Event_Id": "PlayerAttacks::CastSpell",
                 "Animation_Id": "8758664254539189037",
                 "Frame": 21,
@@ -1570,12 +1573,6 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::UpdateCollider",
-                "Animation_Id": "3542243683532859658",
-                "Frame": 21,
-                "Type": 2
-            },
-            {
                 "Event_Id": "PlayerController::PlayAttackParticle",
                 "Animation_Id": "3015327048544619653",
                 "Frame": 28,
@@ -1624,15 +1621,45 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::UpdateCollider",
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
                 "Animation_Id": "16569956316059201057",
-                "Frame": 32,
+                "Frame": 41,
                 "Type": 2
             },
             {
                 "Event_Id": "PlayerAttacks::UpdateCollider",
                 "Animation_Id": "16569956316059201057",
-                "Frame": 27,
+                "Frame": 28,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::UpdateCollider",
+                "Animation_Id": "16569956316059201057",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "3542243683532859658",
+                "Frame": 32,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "5122780513439753696",
+                "Frame": 21,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "5122780513439753696",
+                "Frame": 22,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AttackShake",
+                "Animation_Id": "5122780513439753696",
+                "Frame": 23,
                 "Type": 2
             }
         ]
