@@ -34,7 +34,9 @@ public:
 		BATS,
 		CAVE,
 		TREES_SQUEAKING,
-		DRIPPING
+		DRIPPING,
+		ROCKS_FALLING,
+		MINECART
 		);
 	struct MovingSpatial {
 		GameObject* spatial_place = nullptr;

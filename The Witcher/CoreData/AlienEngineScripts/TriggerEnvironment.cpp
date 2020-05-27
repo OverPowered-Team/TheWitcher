@@ -165,6 +165,12 @@ std::string TriggerEnvironment::GetAudioElementByEnum(AudioEffects eff)
 	case AudioEffects::DRIPPING:
 		return name = "Play_Dripping";
 		break;
+	case AudioEffects::MINECART:
+		return name = "Play_Minecart";
+		break;
+	case AudioEffects::ROCKS_FALLING:
+		return name = "Play_RocksFalling";
+		break;
 	}
 }
 
