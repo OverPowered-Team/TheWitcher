@@ -39,6 +39,8 @@ private:
 
 private:
 
+	ComponentRigidBody* rb = nullptr;
+
 	float max_oscilation_pos = 0.0f;
 	float current_oscilating_time = 0.0f;
 
