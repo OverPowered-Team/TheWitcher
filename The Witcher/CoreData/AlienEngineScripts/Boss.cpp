@@ -186,9 +186,10 @@ float Boss::GetDamaged(float dmg, float3 knock_back)
 {
 	float damage = Enemy::GetDamaged(dmg, knock_back);
 
-	HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
+	if (HUD)
+		HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
 
-	return Enemy::GetDamaged(dmg, knock_back);
+	return damage;
 }
 
 void Boss::SetStats(const char* json)

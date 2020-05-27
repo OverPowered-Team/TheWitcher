@@ -40,7 +40,7 @@ void Ciri::CleanUpEnemy()
 
 float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	float damage = Enemy::GetDamaged(dmg, player, knock_back);
+	float damage = Boss::GetDamaged(dmg, player, knock_back);
 
 	if (stats["Health"].GetValue() == 0.0) {
 		fight_controller->OnCloneDead(this->game_object);
@@ -52,13 +52,10 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 	}
 	else {
-		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+		if (can_get_interrupted) {
 			animator->PlayState("Hit");
-			LOG("animation speed %f", animator->GetCurrentStateSpeed());
 			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
 			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-			//if(animator->GetCurrentStateSpeed() > player->attacks->GetCurrentAttack()->info.freeze_time)
-			//	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 			if (current_action)current_action->state = Boss::ActionState::ENDED;
 			SetIdleState();
 		}
@@ -130,20 +127,17 @@ void Ciri::LaunchAction()
 
 float Ciri::GetDamaged(float dmg, float3 knock_back)
 {
-	float damage = Enemy::GetDamaged(dmg, knock_back);
+	float damage = Boss::GetDamaged(dmg, knock_back);
 	if (stats["Health"].GetValue() == 0.0F) {
 		fight_controller->OnCloneDead(this->game_object);
 		animator->PlayState("Death");
 		state = Boss::BossState::DYING;
 	}
 	else {
-		if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+		if (can_get_interrupted) {
 			animator->PlayState("Hit");
-			LOG("animation speed %f", animator->GetCurrentStateSpeed());
 			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
 			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-			//if(animator->GetCurrentStateSpeed() > player->attacks->GetCurrentAttack()->info.freeze_time)
-			//	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 			if (current_action)current_action->state = Boss::ActionState::ENDED;
 			SetIdleState();
 		}
@@ -170,6 +164,7 @@ void Ciri::LaunchDashAction()
 		target = Random::GetRandomIntBetweenTwo(0, 1);
 	}
 	dash_direction = (player_controllers[target]->game_object->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+	dash_direction.y = 0;
 	animator->PlayState("Dash");
 	animator->SetStateSpeed("Dash", 1.0f);
 
