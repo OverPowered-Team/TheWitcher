@@ -8,6 +8,7 @@
 
 class PlayerController;
 class Effect;
+class SteeringAvoid;
 
 enum (EnemyType,
 	NONE = -1,
@@ -37,11 +38,15 @@ public:
 
 	virtual void SetStats(const char* json);
 	virtual void Move(float3 direction);
+	virtual void Guard();
 	virtual void CheckDistance() {};
 	virtual void Action() {}
+
 	void ActivateCollider();
 	void DeactivateCollider();
 	Quat RotateProjectile();
+
+	virtual void PlaySFX(const char* sfx_name) {}
 
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
@@ -63,6 +68,12 @@ public:
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
 
+	void ChangeAttackEnemy(bool deleting = false);
+	void RemoveBattleCircle();
+	void AddBattleCircle(PlayerController* player_controller);
+	void AddAttacking(PlayerController* player_controller);
+	void RemoveAttacking(PlayerController* player_controller);
+
 public:
 	float distance = 0.0F;
 	float3 direction; 
@@ -77,6 +88,7 @@ public:
 	ComponentCharacterController* character_ctrl = nullptr;
 	ComponentCollider* attack_collider = nullptr;
 	ComponentAudioEmitter* audio_emitter = nullptr;
+	SteeringAvoid* steeringAvoid = nullptr;
 	bool can_get_interrupted = true;
 
 	std::vector<PlayerController*> player_controllers;
@@ -86,7 +98,12 @@ public:
 
 	bool is_frozen = false;
 	bool is_combat = false;
+	bool is_attacking = false;
+	bool is_battle_circle = false;
+
 	Prefab head_prefab;
+	GameObject* decapitated_head = nullptr;
+
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;

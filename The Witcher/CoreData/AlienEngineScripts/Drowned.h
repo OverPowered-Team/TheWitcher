@@ -37,6 +37,8 @@ public:
 	void Stun(float time) override;
 	bool IsDead() override;
 
+	void PlaySFX(const char* sfx_name);
+
 	void OnAnimationEnd(const char* name) override {};
 
 public:

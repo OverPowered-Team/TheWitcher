@@ -14,7 +14,8 @@ public:
 	void Action() override;
 	void Block();
 	bool CheckPlayerForward();
-	void OnTriggerEnter(ComponentCollider* collider) override;
+
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back) override;
 
 public:
 	float block_time = 2.0f;
