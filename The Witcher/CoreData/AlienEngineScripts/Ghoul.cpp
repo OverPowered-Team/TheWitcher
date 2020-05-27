@@ -176,7 +176,7 @@ void Ghoul::CheckDistance()
         Action();
     }
 
-    if (distance > stats["VisionRange"].GetValue())
+    if (distance > stats["VisionRange"].GetValue() && !is_obstacle)
     {
         state = GhoulState::IDLE;
         character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
@@ -257,6 +257,24 @@ void Ghoul::PlaySFX(const char* sfx_name)
         audio_emitter->StartSound("GhoulDeath");
     else
         LOG("Sound effect with name %s not found!", sfx_name);
+}
+
+bool Ghoul::IsState(const char* state_str)
+{
+    if (state_str == "Idle")
+        return (state == GhoulState::IDLE ? true : false);
+    else if (state_str == "Move")
+        return (state == GhoulState::MOVE ? true : false);
+    else if (state_str == "Attack")
+        return (state == GhoulState::ATTACK ? true : false);
+    else if (state_str == "Hit")
+        return (state == GhoulState::HIT ? true : false);
+    else if (state_str == "Dying")
+        return (state == GhoulState::DYING ? true : false);
+    else if (state_str == "Stunned")
+        return (state == GhoulState::STUNNED ? true : false);
+    else
+        LOG("Incorrect state name: %s", state_str);
 }
 
 void Ghoul::DoAwake() // Do this in other enemies
@@ -390,15 +408,18 @@ void Ghoul::Dying() // TODO: in other enemies
 		is_combat = false;
 		m_controller->EnemyLostSight((Enemy*)this);
 	}
-
+    if (is_obstacle)
+    {
+        game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+    }
 
 	// Enemy leader logic -> after setting it to dead 
-	GameObject* group = game_object->parent->parent;
+	/*GameObject* group = game_object->parent->parent;
 	if (group != nullptr)
 	{
 		EnemyGroupLogic* logic = group->GetComponent<EnemyGroupLogic>();
 		if (logic)
 			logic->OnEnemyDying(game_object);
 
-	}
+	}*/
 }

@@ -45,7 +45,7 @@
                 "Source": "Dizzy",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -60,7 +60,7 @@
                 "Source": "Dizzy",
                 "Target": "Death",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -92,26 +92,6 @@
                 ]
             },
             {
-                "Source": "Hit",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    },
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 0
-                    }
-                ]
-            },
-            {
                 "Source": "Attack",
                 "Target": "Idle",
                 "Blend": 0.25,
@@ -137,6 +117,21 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
             }
         ],
         "IntParameters": [],

@@ -202,7 +202,7 @@ public:
 	//Battle Circle
 	std::vector<Enemy*> enemy_battle_circle;
 	int current_attacking_enemies = 0;
-	int max_attacking_enemies = 1;
+	int max_attacking_enemies = 2;
 	float battleCircle = 2.0f;
 
 	AABB max_aabb;
