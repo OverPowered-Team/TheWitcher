@@ -11,7 +11,6 @@ class EventManager;
 class RelicNotification;
 
 enum (Relic_Type,
-	BASE,
 	ATTACK,
 	DASH,
 	NONE_TYPE
@@ -22,11 +21,6 @@ enum (Relic_Effect,
 	EARTH = 3,
 	LIGHTNING = 4,
 	POISON = 5,
-	NATURE = 6,
-	SEA = 7,
-	DJINN = 8,
-	STRIGAS = 9,
-	RAGE = 10,
 	NONE_EFFECT = 0
 	);
 

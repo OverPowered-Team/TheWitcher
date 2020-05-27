@@ -32,7 +32,7 @@ void IdleState::Update(PlayerController* player)
 
 void IdleState::OnEnter(PlayerController* player)
 {
-	player->player_data.speed = float3::zero();
+	player->player_data.velocity = float3::zero();
 }
 
 void IdleState::OnExit(PlayerController* player)
@@ -56,7 +56,7 @@ void RunningState::Update(PlayerController* player)
 {
 	if (Time::GetGameTime() - player->timer >= player->delay_footsteps) {
 		player->timer = Time::GetGameTime();
-		player->audio->StartSound();
+		player->audio->StartSound("Player_Footstep");
 	}
 	player->HandleMovement();
 
@@ -68,8 +68,27 @@ void RunningState::Update(PlayerController* player)
 
 void RunningState::OnEnter(PlayerController* player)
 {
-	player->SpawnParticle("p_run");
-	player->audio->StartSound();
+	bool found_running = false; 
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_run") == 0)
+		{
+			found_running = true; 
+			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+			// sub-emitters 
+			for(auto& child : (*it)->GetChildren())
+				child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+			break;
+		}
+	}
+
+	if(found_running == false)
+		player->SpawnParticle("p_run", float3(0.f, 0.f, -0.15f));	
+	
+	player->audio->StartSound("Player_Footstep");
 	player->timer = Time::GetGameTime();
 }
 
@@ -79,18 +98,22 @@ void RunningState::OnExit(PlayerController* player)
 	{
 		if (std::strcmp((*it)->GetName(), "p_run") == 0)
 		{
-			(*it)->SetEnable(false);
+			(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+			// sub-emitters 
+			for (auto& child : (*it)->GetChildren())
+				child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
 			break;
 		}
 	}
-	//player->particles["p_run"]->SetEnable(false);
 }
 
 State* JumpingState::HandleInput(PlayerController* player)
 {
 	if (player->controller->isGrounded)
 	{
-		player->game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Player_Fall");
+		player->audio->StartSound("Player_Fall");
 
 		if (!player->mov_input)
 		{
@@ -100,7 +123,6 @@ State* JumpingState::HandleInput(PlayerController* player)
 		{
 			return new RunningState();
 		}
-
 	}
 
 	return nullptr;
@@ -113,11 +135,44 @@ void JumpingState::Update(PlayerController* player)
 
 void JumpingState::OnEnter(PlayerController* player)
 {
+	bool found_jumping = false;
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
+		{
+			found_jumping = true;
+			auto particles = (*it)->GetComponent<ComponentParticleSystem>(); 
+			particles->OnStop();
+			particles->GetSystem()->emmitter.ResetBursts();
+			particles->OnPlay();
+			break;
+		}
+	}
+
+	if (found_jumping == false)
+		player->SpawnParticle("p_jump");
+
 	player->animator->SetBool("air", true);
 }
 
 void JumpingState::OnExit(PlayerController* player)
 {
+	bool found_jumping = false;
+
+	for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), "p_jump") == 0)
+		{
+			found_jumping = true;
+			auto particles = (*it)->GetComponent<ComponentParticleSystem>();
+			particles->OnStop();
+			particles->GetSystem()->emmitter.ResetBursts();
+			particles->OnPlay();
+			break;
+		}
+	}
+
 	player->animator->SetBool("air", false);
 }
 
@@ -176,7 +231,7 @@ State* AttackingState::OnAnimationEnd(PlayerController* player, const char* name
 
 void AttackingState::OnEnter(PlayerController* player)
 {
-	player->audio->StartSound("Hit_Sword");
+
 }
 
 void AttackingState::OnExit(PlayerController* player)
@@ -186,7 +241,7 @@ void AttackingState::OnExit(PlayerController* player)
 
 void RollingState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 	player->UpdateDashEffect();
 }
 
@@ -210,34 +265,86 @@ void RollingState::OnEnter(PlayerController* player)
 	{
 		float3 direction_vector = player->GetDirectionVector();
 
-		player->player_data.speed = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
+		player->player_data.velocity = direction_vector.Normalized() * player->player_data.stats["Dash_Power"].GetValue();
 
 		float angle_dir = atan2f(direction_vector.z, direction_vector.x);
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle_dir * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		player->transform->SetGlobalRotation(rot);
 	}
 	else
-		player->player_data.speed = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
+		player->player_data.velocity = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
 	player->animator->PlayState("Roll");
+	player->audio->StartSound("Play_Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
+
+	// Special stuff to make it look cooler
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		// Animation
+		if (player->dashData.start_speed == 0.0f)
+			player->dashData.start_speed = player->animator->GetCurrentStateSpeed();
+
+		// Particles
+		bool found_dash = false;
+
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				found_dash = true;
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				break;
+			}
+		}
+
+		if (found_dash == false)
+			player->SpawnParticle("Y_Dash_Particle_Emitter", float3(0.f, 0.15f, 0.f));
+	}
+		
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		// Animation
+		player->ToggleDashMultiplier();
 
+		// Particles
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				break;
+			}
+		}
+
+	}
+		
 }
 
 void HitState::Update(PlayerController* player)
 {
-	player->player_data.speed += player->player_data.speed * player->player_data.slow_speed * Time::GetDT();
+	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 }
 
 State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 {
 	if (strcmp(name, "Hit") == 0) {
 		player->animator->SetBool("reviving", false);
-		player->player_data.speed = float3::zero();
+		player->player_data.velocity = float3::zero();
 		return new IdleState();
 	}
 	return nullptr;
@@ -263,7 +370,7 @@ void RevivingState::Update(PlayerController* player)
 void RevivingState::OnEnter(PlayerController* player)
 {
 	player->input_blocked = true;
-	player->player_data.speed = float3::zero();
+	player->player_data.velocity = float3::zero();
 	player->animator->SetBool("reviving", true);
 	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
@@ -279,7 +386,8 @@ void DeadState::OnEnter(PlayerController* player)
 {
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
-	player->player_data.speed = float3::zero();
+	//player->play
+	player->player_data.velocity = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);
 	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
@@ -352,7 +460,7 @@ State* GroundState::HandleInput(PlayerController* player)
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive)
 		|| Input::GetKeyDown(player->keyboard_revive)) {
 		if (player->CheckForPossibleRevive()) {
-			player->player_data.speed = float3::zero();
+			player->player_data.velocity = float3::zero();
 			player->animator->SetBool("reviving", true);
 			return new RevivingState();
 		}

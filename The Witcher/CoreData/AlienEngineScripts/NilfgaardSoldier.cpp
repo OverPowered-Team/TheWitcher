@@ -37,11 +37,21 @@ void NilfgaardSoldier::SetStats(const char* json)
 				break;
 
 		stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
+		stats["Health"].SetMinValue(stat_weapon->GetNumber("MinHealth"));
 		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
+		stats["Agility"].SetMinValue(stat_weapon->GetNumber("MinAgility"));
 		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
+		stats["Damage"].SetMinValue(stat_weapon->GetNumber("MinDamage"));
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
-		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
+		stats["AttackSpeed"].SetMinValue(stat_weapon->GetNumber("MinAttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
+		stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
 		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
@@ -250,23 +260,5 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		state = NilfgaardSoldierState::DYING;
 		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
-	}
-}
-
-void NilfgaardSoldier::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
-			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
-
-			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-			last_player_hit = player;
-
-			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-		}
 	}
 }

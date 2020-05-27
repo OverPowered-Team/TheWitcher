@@ -52,6 +52,10 @@
 #include "ComponentRigidBody.h"
 #include "ComponentCharacterController.h"
 
+#include "ComponentJoint.h"
+#include "ComponentConfigurableJoint.h"
+
+
 #include "Optick/include/optick.h"
 
 #define DAE_FPS 30
@@ -699,6 +703,14 @@ void PanelInspector::ButtonAddComponent()
 						comp = new ComponentCharacterController(selected);
 						selected->AddComponent(comp);
 					}
+					break; }
+				case ComponentType::CHARACTER_JOINT: {
+						comp = new ComponentConfigurableJoint(selected);
+						selected->AddComponent(comp);
+					break; }
+				case ComponentType::CONFIGURABLE_JOINT: {
+						comp = new ComponentConfigurableJoint(selected);
+						selected->AddComponent(comp);
 					break; }
 				}
 

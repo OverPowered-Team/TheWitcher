@@ -38,16 +38,24 @@ void Drowned::SetStats(const char* json)
 				break;
 
 		stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
+		stats["Health"].SetMinValue(stat_weapon->GetNumber("MinHealth"));
 		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
+		stats["Agility"].SetMinValue(stat_weapon->GetNumber("MinAgility"));
 		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
+		stats["Damage"].SetMinValue(stat_weapon->GetNumber("MinDamage"));
 		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
-		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
+		stats["AttackSpeed"].SetMinValue(stat_weapon->GetNumber("MinAttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
-		stats["HideDistance"] = Stat("HideDistance", stat_weapon->GetNumber("HideDistance"));
+		stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
+		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+		stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
 		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
-		if (drowned_type == DrownedType::RANGE)
 			stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
 	/*	else if (drowned_type == DrownedType::GRAB)
 			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));*/
@@ -125,11 +133,8 @@ void Drowned::OnTriggerEnter(ComponentCollider* collider)
 			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
 			{
 				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
-
-				if (state == DrownedState::DYING)
-					player->OnEnemyKill();
-
+				float3 knock = player->attacks->GetKnockBack(this->transform);
+				player->OnHit(this, GetDamaged(dmg_received, player, knock));
 				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
 			}
 		}

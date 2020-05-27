@@ -7,6 +7,7 @@ Stat::Stat(std::string name, float base_value)
     this->base_value = base_value;
     this->current_value = base_value;
     this->max_value = base_value;
+	this->min_value = base_value; 
 }
 
 Stat::~Stat()
@@ -68,10 +69,11 @@ void Stat::SetBaseStat(float _value)
 
 void Stat::SetCurrentStat(float value)
 {
-    if (value >= base_value && value <= max_value)
+     
+    if (value >= min_value && value <= max_value)
         current_value = value;
-    else if (value < base_value)
-        current_value = base_value;
+	else if (value < min_value)
+		current_value = min_value;
     else if (value > max_value)
         current_value = max_value;
 }
@@ -79,6 +81,11 @@ void Stat::SetCurrentStat(float value)
 void Stat::SetMaxValue(float _value)
 {
     max_value = _value;
+}
+
+void Stat::SetMinValue(float _value)
+{
+	min_value = _value;
 }
 
 void Stat::IncreaseStat(float value)

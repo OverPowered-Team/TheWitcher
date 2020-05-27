@@ -16,7 +16,7 @@ ComponentCurve::ComponentCurve(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::CURVE;
 
-	curve = Curve(float3{ -10,0,0 }, float3{ 10,0,0 }, game_object_attached->transform->GetGlobalPosition());
+	curve = Curve(float3{ -10.f, 0.f, 0.f }, float3{ 10.f, 0.f, 0.f }, game_object_attached->transform->GetGlobalPosition());
 
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCurve::DrawScene, this));
@@ -268,14 +268,16 @@ void ComponentCurve::DrawScene()
 	// Draw Control Points
 	glPointSize(9);
 	glBegin(GL_POINTS);
-	for (uint i = 0; i < curve.GetControlPoints().size(); ++i) {
+
+	auto control_points = curve.GetControlPoints();
+	for (uint i = 0; i < control_points.size(); ++i) {
 		if (i % 3 == 0) {
-			glColor3f(0, 1, 0);
+			glColor3f(0.f, 1.f, 0.f);
 		}
 		else {
-			glColor3f(1, 0, 0);
+			glColor3f(1.f, 0.f, 0.f);
 		}
-		glVertex3f(curve.GetControlPoints()[i].x, curve.GetControlPoints()[i].y, curve.GetControlPoints()[i].z);
+		glVertex3f(control_points[i].x, control_points[i].y, control_points[i].z);
 	}
 	glEnd();
 	glPointSize(1);
@@ -291,21 +293,21 @@ void ComponentCurve::DrawScene()
 	
 	if (renderTensors) {
 		// Draw Tensors
-		glColor3f(1, 1, 0);
-		for (uint i = 0; i < curve.GetControlPoints().size(); i += 3) {
+		glColor3f(1.f, 1.f, 0.f);
+		for (uint i = 0; i < control_points.size(); i += 3) {
 			glBegin(GL_LINE_STRIP);
 			if (i == 0) {
-				glVertex3f(curve.GetControlPoints()[i].x, curve.GetControlPoints()[i].y, curve.GetControlPoints()[i].z);
-				glVertex3f(curve.GetControlPoints()[i + 1].x, curve.GetControlPoints()[i + 1].y, curve.GetControlPoints()[i + 1].z);
+				glVertex3f(control_points[i].x, control_points[i].y, control_points[i].z);
+				glVertex3f(control_points[i + 1].x, control_points[i + 1].y, control_points[i + 1].z);
 			}
-			else if (i == curve.GetControlPoints().size() - 1) {
-				glVertex3f(curve.GetControlPoints()[i].x, curve.GetControlPoints()[i].y, curve.GetControlPoints()[i].z);
-				glVertex3f(curve.GetControlPoints()[i - 1].x, curve.GetControlPoints()[i - 1].y, curve.GetControlPoints()[i - 1].z);
+			else if (i == control_points.size() - 1) {
+				glVertex3f(control_points[i].x, control_points[i].y, control_points[i].z);
+				glVertex3f(control_points[i - 1].x, control_points[i - 1].y, control_points[i - 1].z);
 			}
 			else {
-				glVertex3f(curve.GetControlPoints()[i - 1].x, curve.GetControlPoints()[i - 1].y, curve.GetControlPoints()[i - 1].z);
-				glVertex3f(curve.GetControlPoints()[i].x, curve.GetControlPoints()[i].y, curve.GetControlPoints()[i].z);
-				glVertex3f(curve.GetControlPoints()[i + 1].x, curve.GetControlPoints()[i + 1].y, curve.GetControlPoints()[i + 1].z);
+				glVertex3f(control_points[i - 1].x, control_points[i - 1].y, control_points[i - 1].z);
+				glVertex3f(control_points[i].x, control_points[i].y, control_points[i].z);
+				glVertex3f(control_points[i + 1].x, control_points[i + 1].y, control_points[i + 1].z);
 			}
 			glEnd();
 		}
@@ -313,7 +315,7 @@ void ComponentCurve::DrawScene()
 
 	// Draw Normals
 	if (renderNormals) {
-		glColor3f(1, 0.5F, 1);
+		glColor3f(1.f, 0.5F, 1.f);
 		glBegin(GL_LINES);
 		for (int f = 0; f <= curve.detail; ++f) {
 			float3 point = curve.ValueAt(f / (float)curve.detail);
@@ -332,8 +334,8 @@ Curve::Curve(const float3& begin, const float3& end, const float3& position)
 	this->position = position;
 
 	control_points.push_back(begin + position);
-	control_points.push_back(begin + float3(5,10,0) + position);
-	control_points.push_back(end + float3(-5, 10, 0) + position);
+	control_points.push_back(begin + float3(5.f, 10.f, 0.f) + position);
+	control_points.push_back(end + float3(-5.f, 10.f, 0.f) + position);
 	control_points.push_back(end + position);
 
 	control_points_normals.push_back(float3::unitY());
@@ -366,9 +368,19 @@ float3 Curve::NormalAt(float at)
 {
 	at = Clamp01<float>(at);
 
-	/*uint index = Maths::Map(at, 0, 1, 0, curve_normals.size() - 1);*/
-	//return curve_normals[index];
-	return { 0,1,0 };
+	if(at <= 0.f)
+		return control_points_normals.front().Normalized();
+	else if (at >= 1.f)
+		return control_points_normals.back().Normalized();
+
+	int num_segments = (control_points.size() - 1) / 3;
+	int indexControl = at / (1.f / (float)num_segments);
+	
+	return Quat::SlerpVector(
+		control_points_normals[indexControl].Normalized(), 
+		control_points_normals[indexControl + 1].Normalized(), 
+		at * (float)num_segments - indexControl // t in Slerp must be from 0 to 1 in that segment so we have to multiply the global t with the number of segments and substract the index of the point
+	).Normalized();
 }
 
 const std::vector<float3>& Curve::GetControlPoints()
@@ -403,9 +415,9 @@ void Curve::AddSegment(bool begin)
 	float3 tensor2 = float3::zero();
 
 	if (begin) {
-		newPoint = control_points.front() + float3(-10, 0, 0);
-		tensor1 = newPoint + float3(2.5F, 10, 0);
-		tensor2 = control_points.front() + float3(-2.5F, 0, 0);
+		newPoint = control_points.front() + float3(-10.f, 0.f, 0.f);
+		tensor1 = newPoint + float3(2.5F, 10.f, 0.f);
+		tensor2 = control_points.front() + float3(-2.5F, 0.f, 0.f);
 		
 		control_points.insert(control_points.begin(), tensor2);
 		control_points.insert(control_points.begin(), tensor1);
@@ -414,9 +426,9 @@ void Curve::AddSegment(bool begin)
 		control_points_normals.insert(control_points_normals.begin(), float3::unitY());
 	}
 	else {
-		newPoint = control_points.back() + float3(10, 0, 0);
-		tensor1 = control_points.back() + float3(2.5F, 10, 0);
-		tensor2 = newPoint + float3(-2.5F, 10, 0);
+		newPoint = control_points.back() + float3(10.f, 0.f, 0.f);
+		tensor1 = control_points.back() + float3(2.5F, 10.f, 0.f);
+		tensor2 = newPoint + float3(-2.5F, 10.f, 0.f);
 
 		control_points.push_back(tensor1);
 		control_points.push_back(tensor2);
@@ -432,8 +444,8 @@ void Curve::InsertControlPoint(int index)
 	float3 end = control_points[index + 3];
 
 	float3 mid = (begin + end) * 0.5F;
-	float3 tensor1 = mid + float3(-5, 10, 0);
-	float3 tensor2 = mid + float3(5, 10, 0);
+	float3 tensor1 = mid + float3(-5.f, 10.f, 0.f);
+	float3 tensor2 = mid + float3(5.f, 10.f, 0.f);
 
 	std::vector<float3> points;
 	points.push_back(tensor1);

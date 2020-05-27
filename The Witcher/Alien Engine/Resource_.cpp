@@ -58,7 +58,10 @@ const bool Resource::NeedToLoad() const
 void Resource::IncreaseReferences()
 {
 	if (references == 0) {
-		LoadMemory();
+		if (!LoadMemory())
+		{
+			LOG_ENGINE("Couldn't load from memory %s", this->name.c_str());
+		}
 	}
 	if (App->objects->enable_instancies) {
 		++references;

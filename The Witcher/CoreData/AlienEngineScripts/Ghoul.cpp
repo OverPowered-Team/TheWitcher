@@ -6,6 +6,10 @@
 #include "PlayerAttacks.h"
 #include "PlayerController.h"
 #include "MusicController.h"
+#include "GhoulOriginal.h"
+#include "EnemyGroupLogic.h"
+#include "Stat.h"
+ 
 
 Ghoul::Ghoul() : Enemy()
 {
@@ -18,7 +22,7 @@ Ghoul::~Ghoul()
 void Ghoul::StartEnemy()
 {
     type = EnemyType::GHOUL;
-    state = GhoulState::IDLE;
+    state = GhoulState::AWAKE;
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
     Enemy::StartEnemy();
 }
@@ -42,9 +46,17 @@ void Ghoul::SetStats(const char* json)
                 break;
 
         stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
+		stats["Health"].SetMinValue(stat_weapon->GetNumber("MinHealth"));
         stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
+		stats["Agility"].SetMinValue(stat_weapon->GetNumber("MinAgility"));
         stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
+		stats["Damage"].SetMinValue(stat_weapon->GetNumber("MinDamage"));
         stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
+		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
+		stats["AttackSpeed"].SetMinValue(stat_weapon->GetNumber("MinAttackSpeed"));
         stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
@@ -58,7 +70,15 @@ void Ghoul::SetStats(const char* json)
 
 void Ghoul::CleanUpEnemy()
 {
-    ReleaseAllParticles();
+	Enemy::CleanUpEnemy(); 
+
+	auto script = GetComponent<GhoulOriginal>();  // TODO: do this in other enemies
+	if (script)
+	{
+		auto curve = script->awake_curve; 
+		if (curve)
+			curve->ToDelete(); 
+	}
 }
 
 void Ghoul::JumpImpulse()
@@ -95,7 +115,9 @@ bool Ghoul::IsDead()
 
 void Ghoul::SetState(const char* state_str)
 {
-    if (state_str == "Idle")
+	if (state_str == "Awake")
+		state = GhoulState::AWAKE;
+    else if (state_str == "Idle")
         state = GhoulState::IDLE;
     else if (state_str == "Move")
         state = GhoulState::MOVE;
@@ -133,6 +155,9 @@ void Ghoul::Action()
 
 void Ghoul::CheckDistance()
 {
+	if (state == GhoulState::AWAKE)
+		return; 
+
     if (distance < stats["JumpRange"].GetValue())
     {
         animator->SetFloat("speed", 0.0F);
@@ -205,11 +230,9 @@ void Ghoul::OnTriggerEnter(ComponentCollider* collider)
         if (player && player->attacks->GetCurrentAttack()->CanHit(this))
         {
             float dmg_received = player->attacks->GetCurrentDMG();
-            float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
-            knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
+            float3 knock = player->attacks->GetKnockBack(this->transform);
 
             player->OnHit(this, GetDamaged(dmg_received, player, knock));
-            last_player_hit = player;
 
             HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
         }
@@ -243,6 +266,159 @@ void Ghoul::OnAnimationEnd(const char* name)
 
         state = GhoulState::IDLE;
     }
+
+
 }
 
 
+void Ghoul::OnDrawGizmosSelected()
+{
+	if(awake_behaviour == AwakeBehaviour::WANDER)
+		Gizmos::DrawWireSphere(start_pos, wander_radius, Color::Blue());
+	
+}
+
+
+void Ghoul::DoAwake() // Do this in other enemies
+{
+	if (is_combat)
+	{
+		Move(direction);
+		return; 
+	}
+
+	if (distance < stats["VisionRange"].GetValue())
+	{
+		state = GhoulState::MOVE;
+		return;
+	}
+
+	float3 current_position = game_object->transform->GetGlobalPosition();
+
+	switch (awake_behaviour)
+	{
+	case AwakeBehaviour::FOLLOW_CURVE:
+	{
+		Curve& curve = awake_curve->GetComponent<ComponentCurve>()->curve;
+
+		if(patrol)
+			LOG("Current patrol enemy curve point: %f", current_curve_point); 
+
+		// Go forwards
+		if(!patrol)
+			current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+		else
+		{
+			// Go forwards or backwards
+			if(curve_patrol_go)
+				current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+			else
+				current_curve_point -= curve_speed * Time::GetScaleTime() * Time::GetDT();
+		}
+		
+		// Reached end
+		if (((current_curve_point >= 1.f)) || ((current_curve_point < 0.f) && patrol))
+		{
+			// Current point set to the beginning
+			
+			// If patrol, now go the other way around 
+			if (patrol)
+			{
+				// Cap the current point to either 1 or 0
+				if (current_curve_point >= 1.f)
+					current_curve_point = 1.f; 
+				else
+					current_curve_point = 0.f;
+
+				// Go the other way around
+				curve_patrol_go = !curve_patrol_go;
+
+				// Speed has a + or - multiplier
+				if (curve_patrol_go)
+					current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+				else
+					current_curve_point -= curve_speed * Time::GetScaleTime() * Time::GetDT();
+			}
+			else
+			{
+				// Otherwise just keep going
+				current_curve_point = 0.f;
+				current_curve_point += curve_speed * Time::GetScaleTime() * Time::GetDT();
+			}
+			
+	
+		}
+
+		float3 next_position = curve.ValueAt(current_curve_point);
+		next_position.y = current_position.y;
+		float3 direction = (next_position - current_position).Normalized();
+
+		Move(direction);
+
+		break;
+
+	}
+
+	case AwakeBehaviour::WANDER:
+	{
+		if (wander_rest) // Resting
+		{
+
+			if ((current_wander_time += Time::GetDT()) >= wander_rest_time)
+			{
+				wander_rest = false;
+				current_wander_time = 0.0f;
+				float delta = (float)hypot(wander_radius, wander_radius);
+				float deltaX = Random::GetRandomFloatBetweenTwo(-delta, delta);
+				float deltaZ = Random::GetRandomFloatBetweenTwo(-delta, delta);
+				lastWanderTargetPos = float3(start_pos.x + deltaX, start_pos.y, start_pos.z + deltaZ);
+
+			}
+		}
+		else // Going to next position
+		{
+			Move((lastWanderTargetPos - current_position).Normalized());
+
+			if ((lastWanderTargetPos - current_position).Length() <= wander_precision) // Arrived to next position
+			{
+				wander_rest = true;
+				character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+				animator->SetFloat("speed", 0.0F);
+			}
+
+		}
+
+		break;
+	}
+
+	}
+
+
+}
+
+void Ghoul::Dying() // TODO: in other enemies
+{
+	EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+	//Ori Ori function sintaxis
+	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
+	animator->PlayState("Death");
+	audio_emitter->StartSound("GhoulDeath");
+	last_player_hit->OnEnemyKill();
+	state = GhoulState::DEAD;
+	if (m_controller && is_combat)
+	{
+		is_combat = false;
+		m_controller->EnemyLostSight((Enemy*)this);
+	}
+
+
+	// Enemy leader logic -> after setting it to dead 
+	GameObject* group = game_object->parent->parent;
+	if (group != nullptr)
+	{
+		EnemyGroupLogic* logic = group->GetComponent<EnemyGroupLogic>();
+		if (logic)
+			logic->OnEnemyDying(game_object);
+
+	}
+}

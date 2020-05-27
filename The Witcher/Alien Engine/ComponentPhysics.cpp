@@ -74,47 +74,17 @@ void ComponentPhysics::HandleAlienEvent(const AlienEvent& e)
 		if (script->game_object_attached == game_object_attached && script->need_alien == true)
 			scripts.remove(script);
 		break; }
-	case AlienEventType::COLLIDER_ADDED: {
-		ComponentCollider* object = (ComponentCollider*)e.object;
-		AddCollider(object);
-		break; }
 	case AlienEventType::COLLIDER_DELETED: {
 		ComponentCollider* object = (ComponentCollider*)e.object;
 		RemoveCollider(object);
-		break; }
-	case AlienEventType::COLLIDER_ENABLED: {
-		ComponentCollider* object = (ComponentCollider*)e.object;
-		AttachCollider(object);
-		break; }
-	case AlienEventType::COLLIDER_DISABLED: {
-		ComponentCollider* object = (ComponentCollider*)e.object;
-		DettachCollider(object);
-		break; }
-	case AlienEventType::RIGIDBODY_ADDED: {
-		ComponentRigidBody* object = (ComponentRigidBody*)e.object;
-		AddRigidBody(object);
 		break; }
 	case AlienEventType::RIGIDBODY_DELETED: {
 		ComponentRigidBody* object = (ComponentRigidBody*)e.object;
 		RemoveRigidBody(object);
 		break; }
-	case AlienEventType::RIGIDBODY_ENABLED:
-	case AlienEventType::RIGIDBODY_DISABLED: {
-		ComponentRigidBody* object = (ComponentRigidBody*)e.object;
-		SwitchedRigidBody(object);
-		break; }
-	case AlienEventType::CHARACTER_CTRL_ADDED: {
-		ComponentCharacterController* object = (ComponentCharacterController*)e.object;
-		AddController(object);
-		break; }
 	case AlienEventType::CHARACTER_CTRL_DELETED: {
 		ComponentCharacterController* object = (ComponentCharacterController*)e.object;
 		RemoveController(object);
-		break; }
-	case AlienEventType::CHARACTER_CTRL_ENABLED:
-	case AlienEventType::CHARACTER_CTRL_DISABLED: {
-		ComponentCharacterController* object = (ComponentCharacterController*)e.object;
-		SwitchedController(object);
 		break; }
 	}
 }
@@ -285,11 +255,7 @@ bool ComponentPhysics::CheckChangeState()
 
 	PhysicState new_state = PhysicState::DISABLED;
 
-	//if (controller && controller->IsEnabled())
-	//{
-	//	new_state = PhysicState::CTRL_CHARACTER;
-	//}
-	/*else*/ if (rigid_body  && rigid_body->IsEnabled())
+	if (rigid_body  /*&& rigid_body->IsEnabled()*/)
 	{
 		new_state = PhysicState::DYNAMIC;
 	}
@@ -336,7 +302,9 @@ void ComponentPhysics::UpdateBody()
 				actor->attachShape(*collider->shape);
 
 		if (IsDynamic())
+		{
 			rigid_body->SetBodyProperties();
+		}
 	}
 }
 

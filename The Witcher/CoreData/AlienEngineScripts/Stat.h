@@ -23,6 +23,7 @@ public:
 	void SetBaseStat(float _value);
 	void SetCurrentStat(float value);
 	void SetMaxValue(float _value);
+	void SetMinValue(float _value);
 	void IncreaseStat(float value);
 	void DecreaseStat(float value);
 
@@ -36,4 +37,5 @@ private:
 	float base_value = 0.0f;
 	float current_value = 0.0f;
 	float max_value = 0.0f;
+	float min_value = 0.0f; 
 };

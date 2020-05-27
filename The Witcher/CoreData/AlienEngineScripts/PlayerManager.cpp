@@ -20,6 +20,7 @@ void PlayerManager::Start()
 	}
 
 	in_game_ui = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetComponent<InGame_UI>();
+	ultibar = GameObject::FindWithName("Ulti_Bar")->GetComponent<UltiBar>();
 }
 
 void PlayerManager::Update()
@@ -74,7 +75,7 @@ void PlayerManager::IncreaseUltimateCharge(uint value)
 	}
 	
 	// UI
-	in_game_ui->StartLerpParticleUltibar(float3(0, 0, 0));
+	in_game_ui->StartLerpParticleUltibar(float3(0, -38.f, 0));
 }
 
 void PlayerManager::ActivateUltimate()
@@ -90,6 +91,7 @@ void PlayerManager::ActivateUltimate()
 
 	// UI
 	ultibar->GetComponent<UltiBar>()->UpdateBar(collective_ultimate_charge);
+	in_game_ui->ShowUltiFilter(true);
 }
 
 void PlayerManager::CancelUltimate()
@@ -100,4 +102,6 @@ void PlayerManager::CancelUltimate()
 	for (std::vector<PlayerController*>::iterator it = players.begin(); it != players.end(); ++it) {
 		(*it)->OnUltimateDeactivation(1/ultimate_effect_value);
 	}
+
+	in_game_ui->ShowUltiFilter(false);
 }

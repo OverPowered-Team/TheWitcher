@@ -56,6 +56,8 @@ void Enemy::StartEnemy()
 
 	SetStats(json_str.data());
 
+	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition(); 
+
 	/*if (game_object->GetChild("Particles"))
 	{
 		std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
@@ -94,9 +96,8 @@ void Enemy::UpdateEnemy()
 		current_player = (distance_1 < distance_2) ? 0 : 1;
 	}
 
-	//MOVEMENT
-	if(type != EnemyType::DROWNED)
-		character_ctrl->Move(float3::unitY() * -20 * Time::GetDT());
+	character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
+	animator->SetBool("grounded", character_ctrl->isGrounded);
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
@@ -172,6 +173,7 @@ void Enemy::SetStats(const char* json)
 void Enemy::Move(float3 direction)
 {
 	float3 velocity_vec = direction * stats["Agility"].GetValue();
+
 	character_ctrl->Move(velocity_vec * Time::GetScaleTime() * Time::GetDT());
 	animator->SetFloat("speed", stats["Agility"].GetValue());
 
@@ -212,18 +214,13 @@ Quat Enemy::RotateProjectile()
 	return rot2 * rot1;
 }
 
-void Enemy::KnockBack(float3 knock)
-{
-	velocity = knock;
-	velocity.y = 0;
-}
-
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 
-	KnockBack(knock_back);
+	last_player_hit = player;
+	velocity = knock_back; //This will replace old knockback if there was any...
 
 	return aux_health - stats["Health"].GetValue();
 }
@@ -233,7 +230,7 @@ float Enemy::GetDamaged(float dmg, float3 knock_back)
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 
-	KnockBack(knock_back);
+	velocity = knock_back;
 
 	return aux_health - stats["Health"].GetValue();
 }
