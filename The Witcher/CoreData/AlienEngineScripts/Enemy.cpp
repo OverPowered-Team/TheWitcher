@@ -343,7 +343,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		can_get_interrupted = false;
 	}
 
-	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
+	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetGlobalPosition());
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() == 0.0F) {
@@ -391,7 +391,7 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	if (new_effect->vfx_on_apply != "")
 		new_effect->spawned_particle = GameManager::instance->particle_pool->GetInstance(new_effect->vfx_on_apply,
-			particle_spawn_positions[new_effect->vfx_position]->transform->GetLocalPosition(), float3::zero(), this->game_object, true);
+			particle_spawn_positions[new_effect->vfx_position]->transform->GetGlobalPosition(), float3::zero(), this->game_object, false);
 
 	if (new_effect->ticks_time == 0)
 	{
@@ -439,7 +439,7 @@ void Enemy::HitFreeze(float freeze_time)
 
 void Enemy::SpawnAttackParticle()
 {
-	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetLocalPosition());
+	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetGlobalPosition());
 	HitFreeze(0.05);
 	can_get_interrupted = false;
 	// Sonidito de clinck de iluminacion espada maestra

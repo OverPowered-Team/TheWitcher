@@ -137,7 +137,7 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 		has_been_attacked = true;
 		current_time = Time::GetGameTime();
 		break_shield_attack++;
-		SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition());
+		SpawnParticle("ClinckEmitter", particle_spawn_positions[3]->transform->GetGlobalPosition());
 		audio_emitter->StartSound("SoldierBlock");
 	}
 	else
