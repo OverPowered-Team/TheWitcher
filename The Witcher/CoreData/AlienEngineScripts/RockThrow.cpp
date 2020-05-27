@@ -1,5 +1,7 @@
 #include "RockThrow.h"
 #include "PlayerController.h"
+#include "GameManager.h"
+#include "ParticlePool.h"
 #include "Enemy.h"
 
 RockThrow::RockThrow() : Alien()
@@ -23,6 +25,13 @@ void RockThrow::Update()
 	}
 }
 
+void RockThrow::ReleaseExplosionParticle()
+{
+	if(particle_instance)
+		GameManager::instance->particle_pool->ReleaseInstance("Ciri_Rock_Particle", particle_instance);
+	Destroy(game_object);
+}
+
 void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
@@ -39,5 +48,9 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 			enemy->GetDamaged(10, dir * 10);
 		}
 	}
-	Destroy(game_object);
+	game_object->GetComponent<ComponentMesh>()->SetEnable(false);
+	if (!particle_instance) {
+		particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object);
+		Invoke(std::bind(&RockThrow::ReleaseExplosionParticle, this), 0.6f);
+	}
 }
