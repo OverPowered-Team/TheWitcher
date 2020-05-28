@@ -18,6 +18,7 @@ public:
 	float phase_4_time = 2.0f;
 	bool phase_change = false;
 	float clone_dead_damage = 12.50f;
+	bool died = false;
 
 	int clones_dead = 0;
 
