@@ -50,6 +50,7 @@ void SpawnEnemyManager::SpawnEnemies()
 	{
 		enemies_to_spawn[i]->InstantiateEnemy(game_object->parent->GetChild("ChildEnemies"));
 	}
+	GameObject::Destroy(game_object);
 }
 
 void SpawnEnemyManager::SpawnEnemiesEnter()
@@ -58,4 +59,5 @@ void SpawnEnemyManager::SpawnEnemiesEnter()
 	{
 		enemies_to_spawn[i]->InstantiateEnemy();
 	}
+	GameObject::Destroy(game_object);
 }
