@@ -852,10 +852,6 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 		tex_pos->DecreaseReferences();
 	}
 
-#ifdef GAME_VERSION
-	skybox_texture_id = skybox->GenereteCubeMapFromTextures(cubemap->skybox_textures);
-#endif
-
 	frustum.nearPlaneDistance = near_plane;
 	frustum.farPlaneDistance = far_plane;
 	frustum.verticalFov = vertical_fov * Maths::Deg2Rad();
