@@ -22,10 +22,16 @@ void Scale_Win::Start()
 	connector = game_object->GetChild("Connector");
 	start_position1 = right_scale->transform->GetLocalPosition().y;
 	start_position2 = left_scale->transform->GetLocalPosition().y;
-
+	
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
 	spawner_r = GameObject::FindWithName("Right_Spawner")->GetComponent<Spawner>();
+	std::vector<float2> spawn_points;
+	spawn_points.reserve(3);
+	spawn_points.emplace_back(float2(-2.f, 1.5f));
+	spawn_points.emplace_back(float2(2.f, 1.5f));
+	spawn_points.emplace_back(float2(0.f, -2.f));
+
 
 	// Texts
 	score_text_1 = GameObject::FindWithName("Score_Player_1")->GetComponent<ComponentText>();
@@ -55,14 +61,13 @@ void Scale_Win::Start()
 		for (int i = 1; i <= Scores_Data::player1_kills; ++i)
 		{
 			float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-			float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-			float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
 
-			Invoke([this, random_pos_x, random_pos_z]() -> void
+			Invoke([this, spawn_points, random_spawn]() -> void
 				{
-					spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + random_pos_x,
+					spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
 						spawner_l->transform->GetGlobalPosition().y,
-						spawner_l->transform->GetGlobalPosition().z + random_pos_z));
+						spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
 				}
 				,
 					random_time * i);
@@ -74,14 +79,13 @@ void Scale_Win::Start()
 		for (int i = 1; i <= Scores_Data::player2_kills; ++i)
 		{
 			float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-			float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-			float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
+			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
 
-			Invoke([this, random_pos_x, random_pos_z]() -> void
+			Invoke([this, spawn_points, random_spawn]() -> void
 				{
-					spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + random_pos_x,
+					spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
 						spawner_r->transform->GetGlobalPosition().y,
-						spawner_r->transform->GetGlobalPosition().z + random_pos_z));
+						spawner_r->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
 				}
 				,
 					random_time * i);
@@ -149,19 +153,23 @@ void Scale_Win::CalculateInclination()
 	if (desired_position1 > (start_position1 + (max_Y * value)))
 	{
 		desired_position1 = start_position1 + (max_Y * value);
+		desired_position2 = start_position2 - (max_Y * value);
 	}
-	else if (desired_position1 < (start_position1 + (max_Y * value)))
+	else if (desired_position1 < (start_position1 - (max_Y * value)))
 	{
 		desired_position1 = start_position1 - (max_Y * value);
+		desired_position2 = start_position2 + (max_Y * value);
 	}
 
 	if (desired_position2 > (start_position2 + (max_Y * value)))
 	{
 		desired_position2 = start_position2 + (max_Y * value);
+		desired_position1 = start_position1 - (max_Y * value);
 	}
-	else if (desired_position2 < (start_position2 + (max_Y * value)))
+	else if (desired_position2 < (start_position2 - (max_Y * value)))
 	{
 		desired_position2 = start_position2 - (max_Y * value);
+		desired_position1 = start_position1 + (max_Y * value);
 	}
 
 	in_place = false;

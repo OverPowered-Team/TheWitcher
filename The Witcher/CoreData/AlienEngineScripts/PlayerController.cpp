@@ -72,6 +72,11 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
+	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
+	{
+		ReceiveDamage(100);
+	}
+
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
@@ -105,8 +110,6 @@ void PlayerController::Update()
 
 	//Battle circle
 	CheckEnemyCircle();
-	// Visual effects
-	UpdateVisualEffects(); 
 
 	CheckGround();
 }
@@ -142,35 +145,19 @@ void PlayerController::CheckGround()
 	}
 }
 
-void PlayerController::UpdateVisualEffects()
-{
-	if (state->type == StateType::RUNNING)
-	{
-		float lerp = player_data.velocity.Length() / player_data.stats["Movement_Speed"].GetValue();
-		animator->SetStateSpeed("Run", lerp);
-	}
-	else if (state->type == StateType::ROLLING)
-	{
-		if (player_data.type == PlayerController::PlayerType::YENNEFER)
-		{
-			float current_speed = animator->GetCurrentStateSpeed();
-			float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT();
-
-			if (target_speed > dashData.max_speed)
-				target_speed = dashData.max_speed;
-			else if (target_speed < dashData.min_speed)
-				target_speed = dashData.min_speed;
-
-			animator->SetStateSpeed("Roll", target_speed);
-		}
-		
-	}
-}
-
 void PlayerController::ToggleDashMultiplier()
 {   
 	if (player_data.type == PlayerController::PlayerType::YENNEFER)
-		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
+	{
+		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi;
+
+		if (dashData.disappear_on_dash)
+		{
+			auto meshes = game_object->GetChild("Meshes");
+			meshes->SetEnable(!meshes->IsEnabled());
+		}
+	}
+		
 }
 
 void PlayerController::UpdateInput()
@@ -453,6 +440,9 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		return;
 	}
 
+	if (player_data.stats["Health"].GetValue() == 0.0f)
+		return;
+
 	player_data.stats["Health"].DecreaseStat(dmg);
 
 	switch (player_data.type)
@@ -657,7 +647,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_STATIC
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
-							|| cam->state == CameraMovement::CameraState::AXIS)
+							|| cam->state == CameraMovement::CameraState::AXIS
+							|| p->state->type == StateType::JUMPING)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -691,6 +682,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	return true;
 }
+
 bool PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
@@ -932,8 +924,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				// Heal
 				(*player)->player_data.stats["Health"].IncreaseStat((*player)->player_data.stats["Health"].GetMaxValue());
 				(*player)->player_data.stats["Chaos"].IncreaseStat((*player)->player_data.stats["Chaos"].GetMaxValue());
-				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange((*player)->player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange((*player)->player_data.stats["Health"].GetValue(), (*player)->player_data.stats["Health"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), (*player)->player_data.stats["Chaos"].GetMaxValue());
 			}
 
 			// Player Used this Bonfire
