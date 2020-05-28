@@ -10,8 +10,8 @@ struct Scores_Data
 	static float3 last_checkpoint_position;
 };
 
-int Scores_Data::player1_kills = 14;
-int Scores_Data::player2_kills = 0;
+int Scores_Data::player1_kills = 25;
+int Scores_Data::player2_kills = 16;
 bool Scores_Data::won_level1 = false;
 bool Scores_Data::won_level2 = false;
 bool Scores_Data::dead = false;
