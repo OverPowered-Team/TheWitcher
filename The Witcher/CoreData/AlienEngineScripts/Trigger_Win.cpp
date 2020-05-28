@@ -36,9 +36,7 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 			Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 		}
 
-		Scores_Data::last_scene = SceneManager::GetCurrentScene();
-
-		if (strcmp(current_scene.c_str(), "Lvl_1") == 0)
+		if (strcmp(current_scene.c_str(), "Lvl_1_Art_Colliders") == 0)
 		{
 			Scores_Data::won_level1 = true;
 			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
@@ -49,7 +47,11 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 		}
 		else if (strcmp(current_scene.c_str(), "VagonetaTest") == 0)
 		{
-			SceneManager::LoadScene("boss_test");
+			SceneManager::LoadScene("Level_Mahakam_Deepnest");
+		}
+		else if (strcmp(current_scene.c_str(), "Level_Mahakam_Deepnest") == 0)
+		{
+			SceneManager::LoadScene("Level_Mahakam_Boss");
 		}
 		else
 		{

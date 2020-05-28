@@ -191,12 +191,6 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
-	ReleaseAllParticles();
-	if (decapitated_head)
-	{
-		decapitated_head->ToDelete();
-		decapitated_head = nullptr;
-	}
 }
 
 void Enemy::SetStats(const char* json)
@@ -313,7 +307,7 @@ void Enemy::Decapitate(PlayerController* player)
 	if (decapitated_head)
 	{
 		game_object->GetChild("Head")->SetEnable(false); //disable old head
-		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
+		SpawnParticle("decapitation_particle", particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 		head_rb->SetRotation(particle_spawn_positions[0]->transform->GetGlobalRotation());
@@ -582,7 +576,6 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 {
 	player_controllers[current_player]->current_attacking_enemies--;
 	is_attacking = false;
-	if(!IsDead())
-		SetState("Guard");
+	SetState("Guard");
 }
 	
