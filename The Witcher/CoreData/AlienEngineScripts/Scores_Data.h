@@ -11,7 +11,7 @@ struct Scores_Data
 };
 
 int Scores_Data::player1_kills = 14;
-int Scores_Data::player2_kills = 10;
+int Scores_Data::player2_kills = 0;
 bool Scores_Data::won_level1 = false;
 bool Scores_Data::won_level2 = false;
 bool Scores_Data::dead = false;

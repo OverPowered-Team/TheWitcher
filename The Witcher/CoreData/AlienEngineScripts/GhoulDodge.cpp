@@ -15,13 +15,17 @@ void GhoulDodge::UpdateEnemy()
 {
     Enemy::UpdateEnemy();
 
+    float angle = atan2f(direction.z, direction.x);
+    Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+    transform->SetGlobalRotation(rot);
+
     switch (state)
     {
 	case GhoulState::AWAKE:
 		DoAwake();
 		break;
     case GhoulState::IDLE:
-        if (distance < stats["VisionRange"].GetValue())
+        if (distance < stats["VisionRange"].GetValue() || is_obstacle)
             state = GhoulState::MOVE;
         break;
 

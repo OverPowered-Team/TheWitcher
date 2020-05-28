@@ -25,6 +25,7 @@ void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
 		Enemy* enemy = collider->game_object_attached->GetComponent<Enemy>();
 		if(enemy && !enemy->IsDead() && player->attacks->GetCurrentAttack()->CanHit(enemy))
 		{
+			LOG("BANG BANG");
 			float damage = player->attacks->GetCurrentDMG();
 			float3 knock = enemy->can_get_interrupted ? player->attacks->GetKnockBack(transform) : float3::zero();
 

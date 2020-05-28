@@ -19,9 +19,9 @@ void NilfSoldierRange::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if ((distance > stats["FleeRange"].GetValue() && distance < stats["VisionRange"].GetValue()) || is_obstacle)
 			state = NilfgaardSoldierState::MOVE;
-		else if (distance < stats["FleeRange"].GetValue())
+		if (distance < stats["FleeRange"].GetValue())
 			state = NilfgaardSoldierState::AUXILIAR;
 		break;
 
@@ -85,6 +85,10 @@ void NilfSoldierRange::UpdateEnemy()
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
 		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+		}
 		break;
 	}
 	}
@@ -103,7 +107,7 @@ void NilfSoldierRange::CheckDistance()
 		state = NilfgaardSoldierState::AUXILIAR;
 		last_flee_distance = 0.0f;
 	}
-	else if (distance > stats["VisionRange"].GetValue())
+	else if (distance > stats["VisionRange"].GetValue() && !is_obstacle)
 	{
 		state = NilfgaardSoldierState::IDLE;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);

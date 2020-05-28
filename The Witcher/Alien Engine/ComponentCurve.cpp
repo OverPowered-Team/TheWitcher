@@ -359,9 +359,15 @@ float3 Curve::ValueAt(float at)
 	int indexControl = (current_segment - 1) * 3;
 	
 	float time = Maths::Map(at, ratio_segments * (current_segment - 1), ratio_segments * current_segment, 0.0F, 1.0F);
-
+	
 	return CubicCurve(control_points[indexControl], control_points[indexControl + 1], 
 		control_points[indexControl + 2], control_points[indexControl + 3], time);
+}
+
+float3 Curve::ValueAtDistance(float dst) {
+	if(length == 0.f) CalculateLength();
+	float t = dst / length;
+	return ValueAt(t);
 }
 
 float3 Curve::NormalAt(float at)
@@ -381,6 +387,21 @@ float3 Curve::NormalAt(float at)
 		control_points_normals[indexControl + 1].Normalized(), 
 		at * (float)num_segments - indexControl // t in Slerp must be from 0 to 1 in that segment so we have to multiply the global t with the number of segments and substract the index of the point
 	).Normalized();
+}
+
+float3 Curve::NormalAtDistance(float dst)
+{
+	if (length == 0.f) CalculateLength();
+	float t = dst / length;
+	return NormalAt(t);
+}
+
+void Curve::CalculateLength() {
+	length = 0.f;
+	float speed = 0.0001f;
+	for (float f = speed; f <= 1.0f; f += speed) {
+		length += std::abs(ValueAt(f).Distance(ValueAt(f - speed)));
+	}
 }
 
 const std::vector<float3>& Curve::GetControlPoints()
