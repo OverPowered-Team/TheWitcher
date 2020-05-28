@@ -355,6 +355,27 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		if (rb)
 			rb->SetPosition(pos);
 
+
+		ComponentUI* ui_aux = obj->GetComponent<ComponentUI>();
+		if (ui_aux != nullptr) {
+			GameObject* p = obj->parent;
+
+			bool changed = true;
+			while (changed) {
+				if (p != nullptr) {
+					ComponentCanvas* canvas = p->GetComponent <ComponentCanvas>();
+					if (canvas != nullptr) {
+						ui_aux->SetCanvas(canvas);
+						changed = false;
+					}
+					p = p->parent;
+				}
+				else {
+					changed = false;
+					ui_aux->SetCanvas(nullptr);
+				}
+			}
+		}
 		// TODO: check this
 		/*ComponentCharacterController* character_controller = (ComponentCharacterController*)(obj)->GetComponent(ComponentType::CHARACTER_CONTROLLER);
 		if (character_controller)

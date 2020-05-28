@@ -72,10 +72,10 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
-	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
-	{
-		ReceiveDamage(100);
-	}
+	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
+	//{
+	//	ReceiveDamage(100);
+	//}
 
 	UpdateInput();
 
@@ -130,7 +130,7 @@ void PlayerController::CheckGround()
 	
 	
 	is_grounded = false;
-	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Ground")))
+	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Default")))
 	//if (Physics::CapsuleCast(matrix, 0.4f, 0.2f, -float3::unitY(), 5.0f, hit, Physics::GetLayerMask("Ground")))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
