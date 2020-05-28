@@ -84,6 +84,7 @@ public:
 	float knock_slow = -4.2f;
 	float increase_hit_animation = 1.0f;
 	float gravity = -20.0f;
+	bool is_immune = false;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;
