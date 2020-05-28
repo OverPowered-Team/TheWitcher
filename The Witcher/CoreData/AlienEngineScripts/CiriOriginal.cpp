@@ -97,7 +97,7 @@ void CiriOriginal::LaunchAction()
 
 void CiriOriginal::Scream()
 {
-	SpawnParticle("Ciri_Scream", { 0, 0.6, 0 });
+	SpawnParticle("Ciri_Scream", { 0, 0.6, 0 }, true);
 
 	if (player_distance[0] <= scream_range) {
 		float3 knockbak_direction = (player_controllers[0]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();

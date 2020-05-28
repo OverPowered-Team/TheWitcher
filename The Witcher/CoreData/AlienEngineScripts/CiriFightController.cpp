@@ -148,7 +148,10 @@ void CiriFightController::UpdatePhaseFour()
 		this->GetComponent<ComponentCharacterController>()->Move(float3(0, -0.05f, 0));
 	}
 	else {
-		game_object->GetComponent<ComponentAnimator>()->PlayState("Death");
+		if (!died) {
+			game_object->GetComponent<ComponentAnimator>()->PlayState("Death");
+			died = true;
+		}
 		if (game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition()) < 5 || game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition()) < 5) {
 			FinishPhaseFour();
 		}
