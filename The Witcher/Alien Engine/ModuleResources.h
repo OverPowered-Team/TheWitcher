@@ -139,7 +139,6 @@ public:
 	ResourceShader* water_shader = nullptr;
 	ResourceShader* shield_fresnel_shader = nullptr;
 	ResourceShader* shield_shader = nullptr;
-	ResourceShader* trail_shader = nullptr;
 	FileNode* assets = nullptr;
 	ResourceTexture* default_skybox_textures[6] = { nullptr,nullptr,nullptr,nullptr,nullptr,nullptr };
 private:
