@@ -20,7 +20,8 @@ public:
 		MIDDLE_AREA,
 		PRE_BOSS,
 		RAVINE,
-		SLOPE_TO_CAVE
+		SLOPE_TO_CAVE,
+		MINE
 		);
 	TriggerMusicInteractive();
 	virtual ~TriggerMusicInteractive();

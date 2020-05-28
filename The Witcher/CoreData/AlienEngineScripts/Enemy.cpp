@@ -322,6 +322,11 @@ void Enemy::Decapitate(PlayerController* player)
 	}
 }
 
+void Enemy::CanGetInterrupted()
+{
+	can_get_interrupted = true;
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");

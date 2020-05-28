@@ -274,12 +274,6 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* meshes_
 			float distance = camera->frustum.pos.Distance(obj_pos);
 			meshes_to_draw_transparency->push_back({ distance, this });
 		}
-		else if (GetComponent<ComponentTrail>() != nullptr)
-		{
-			float3 obj_pos = transform->GetGlobalPosition();
-			float distance = camera->frustum.pos.Distance(obj_pos);
-			meshes_to_draw_transparency->push_back({ distance, this });
-		}
 
 		dynamic_objects->push_back(this);
 	}
