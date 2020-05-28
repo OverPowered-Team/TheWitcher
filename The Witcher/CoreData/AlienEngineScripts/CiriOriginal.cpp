@@ -24,7 +24,7 @@ void CiriOriginal::StartEnemy()
 
 	meshes = game_object->GetChild("Meshes");
 
-	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
+	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	fight_controller = GetComponent<CiriFightController>();
 
