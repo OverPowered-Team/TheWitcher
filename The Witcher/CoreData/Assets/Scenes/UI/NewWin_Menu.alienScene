@@ -3,77 +3,6 @@
         "Name": "NewWin_Menu",
         "GameObjects": [
             {
-                "Name": "Directional light",
-                "FamilyNumber": 1,
-                "ID": "8275406848848438453",
-                "ParentID": "17232811697877510915",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            1.5858489632591954e-08,
-                            0.93186593055725098,
-                            -0.36280310153961182,
-                            -4.0732960115974493e-08
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "4681244636418935577"
-                    },
-                    {
-                        "Type": 3,
-                        "Enabled": true,
-                        "ID": "3410374433364700363",
-                        "PrintIcon": true,
-                        "Intensity": 1,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Direction": [
-                            -8.7422314720697614e-08,
-                            -0.67616772651672363,
-                            -0.73674821853637695
-                        ],
-                        "Ambient": [
-                            0.16666668653488159,
-                            0.16666501760482788,
-                            0.16666501760482788
-                        ],
-                        "Diffuse": [
-                            1,
-                            0.99998998641967773,
-                            0.99998998641967773
-                        ],
-                        "Specular": [
-                            0.53921568393707275,
-                            0.53921025991439819,
-                            0.53921025991439819
-                        ],
-                        "CastShadows": true,
-                        "SizeBakedShadow": 0
-                    }
-                ]
-            },
-            {
                 "Name": "Camera",
                 "FamilyNumber": 1,
                 "ID": "3139537393299070191",
@@ -91,14 +20,14 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            12,
-                            21.083597183227539
+                            12.906820297241211,
+                            25.319890975952148
                         ],
                         "Rotation": [
-                            6.4527592158469815e-09,
-                            0.98904377222061157,
-                            -0.14762261509895325,
-                            -4.3232354585143185e-08
+                            8.861096745249597e-09,
+                            0.9792366623878479,
+                            -0.20272046327590942,
+                            -4.2803616651099219e-08
                         ],
                         "Scale": [
                             1,
@@ -146,7 +75,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "6614237717751499353",
-                        "ListenerID": "2265665723"
+                        "ListenerID": "100206935"
                     }
                 ]
             },
@@ -157,7 +86,7 @@
                 "ParentID": "17232811697877510915",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -215,7 +144,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -273,8 +202,8 @@
                 "ParentID": "17479058229871892067",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
+                "Selected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -333,7 +262,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -429,7 +358,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -604,6 +533,68 @@
                 ]
             },
             {
+                "Name": "Left_Spawner",
+                "FamilyNumber": 3,
+                "ID": "4969170276803995513",
+                "ParentID": "15357815709789583193",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1129397650820665848",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.058187961578369141,
+                            -0.12456130981445313,
+                            8.9204845428466797
+                        ],
+                        "Rotation": [
+                            -0.4999966025352478,
+                            0.4999966025352478,
+                            0.50001013278961182,
+                            -0.49999666213989258
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            4
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2833828335121254064"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17271625313762199128",
+                        "ResourceID": "777922129843890485",
+                        "DataName": "Spawner",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "enemy_heads",
+                                "prefab": "2488502543085242696"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "coin",
+                                "prefab": "0"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "relic",
+                                "prefab": "0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
                 "Name": "Right_Scale",
                 "FamilyNumber": 2,
                 "ID": "5365456327342036107",
@@ -611,7 +602,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -707,7 +698,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -882,99 +873,37 @@
                 ]
             },
             {
-                "Name": "Left_Spawner",
-                "FamilyNumber": 1,
-                "ID": "4969170276803995513",
-                "ParentID": "17232811697877510915",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "2624213426393209673",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -7.7121729850769043,
-                            7,
-                            0.32296276092529297
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "2833828335121254064"
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "17271625313762199128",
-                        "ResourceID": "777922129843890485",
-                        "DataName": "Spawner",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 8,
-                                "Name": "enemy_heads",
-                                "prefab": "2488502543085242696"
-                            },
-                            {
-                                "VarType": 8,
-                                "Name": "coin",
-                                "prefab": "0"
-                            },
-                            {
-                                "VarType": 8,
-                                "Name": "relic",
-                                "prefab": "0"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
                 "Name": "Right_Spawner",
-                "FamilyNumber": 1,
+                "FamilyNumber": 3,
                 "ID": "4526556153693581292",
-                "ParentID": "17232811697877510915",
+                "ParentID": "5365456327342036107",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "2624213426393209673",
+                "PrefabID": "1129397650820665848",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            7.685760498046875,
-                            7,
-                            0.37233257293701172
+                            -0.25587499141693115,
+                            0.56035041809082031,
+                            2.2455215454101563
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
+                            -0.49999678134918213,
+                            0.49999678134918213,
+                            0.50000977516174316,
+                            -0.49999678134918213
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            3.9999995231628418,
+                            3.9999995231628418,
+                            3.9999995231628418
                         ],
                         "ScaleNegative": false,
                         "ID": "1218161576577502627"
@@ -1085,7 +1014,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6219937305657021061",
+                        "ID": "3683653694056252095",
                         "Text": "4872",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -1139,7 +1068,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12465098382325655697",
+                        "ID": "4517900744941456958",
                         "Text": "5623",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -1161,7 +1090,7 @@
                 "FamilyNumber": 2,
                 "ID": "11228745552395536587",
                 "ParentID": "15963664901747148926",
-                "Enabled": true,
+                "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -1173,8 +1102,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -60,
-                            35,
+                            0,
+                            -33,
                             0
                         ],
                         "Rotation": [
@@ -1184,8 +1113,8 @@
                             1
                         ],
                         "Scale": [
-                            5,
-                            5,
+                            10,
+                            10,
                             1
                         ],
                         "ScaleNegative": false,
@@ -1213,7 +1142,7 @@
                 "ID": "9750648177085762287",
                 "ParentID": "11228745552395536587",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -1224,8 +1153,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -2.25,
-                            -15.295999526977539,
+                            -7.0887537002563477,
+                            -0.81757760047912598,
                             0
                         ],
                         "Rotation": [
@@ -1235,8 +1164,8 @@
                             1
                         ],
                         "Scale": [
-                            0.0024000001139938831,
-                            0.0024000001139938831,
+                            0.0010000000474974513,
+                            0.0010000000474974513,
                             1
                         ],
                         "ScaleNegative": false,
@@ -1244,7 +1173,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "2842737440645294757",
+                        "ID": "15530844474026976449",
                         "Text": "Go to Level 2",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1298,7 +1227,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "977938865446181067",
+                        "ID": "811312560667937615",
                         "Text": "-Geralt-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1352,7 +1281,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18379314778252728455",
+                        "ID": "3686069262778859316",
                         "Text": "-Yennefer-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1374,7 +1303,7 @@
                 "FamilyNumber": 2,
                 "ID": "6167678599204295045",
                 "ParentID": "15963664901747148926",
-                "Enabled": false,
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -1386,8 +1315,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -60,
-                            35,
+                            0,
+                            -31.5,
                             0
                         ],
                         "Rotation": [
@@ -1397,8 +1326,8 @@
                             1
                         ],
                         "Scale": [
-                            5,
-                            5,
+                            10,
+                            10,
                             1
                         ],
                         "ScaleNegative": false,
@@ -1426,7 +1355,7 @@
                 "ID": "6892438007333696270",
                 "ParentID": "6167678599204295045",
                 "Enabled": true,
-                "ParentEnabled": false,
+                "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -1437,8 +1366,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -2.5,
-                            -15.295999526977539,
+                            -7.1416764259338379,
+                            -1.0209803581237793,
                             0
                         ],
                         "Rotation": [
@@ -1448,8 +1377,8 @@
                             1
                         ],
                         "Scale": [
-                            0.0024000001139938831,
-                            0.0024000001139938831,
+                            0.0010000000474974513,
+                            0.0010000000474974513,
                             1
                         ],
                         "ScaleNegative": false,
@@ -1457,7 +1386,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17208673736955148142",
+                        "ID": "8474945706334705275",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1522,6 +1451,288 @@
                             0.99998998641967773,
                             1
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "IndoorHouse_LP",
+                "FamilyNumber": 1,
+                "ID": "10329767297058129723",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.14097785949707031,
+                            -7.0035810470581055,
+                            -14.505110740661621
+                        ],
+                        "Rotation": [
+                            -3.6061109653928725e-08,
+                            0.41249039769172668,
+                            -7.9638923011771112e-08,
+                            0.91096198558807373
+                        ],
+                        "Scale": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17779199916351276177"
+                    }
+                ]
+            },
+            {
+                "Name": "Floor",
+                "FamilyNumber": 2,
+                "ID": "4590772675330570778",
+                "ParentID": "10329767297058129723",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -33.904994964599609,
+                            0.787322998046875,
+                            27.869606018066406
+                        ],
+                        "Rotation": [
+                            -0.70710676908493042,
+                            0,
+                            0,
+                            0.70710676908493042
+                        ],
+                        "Scale": [
+                            1.430467963218689,
+                            1.430467963218689,
+                            0.24715900421142578
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7614855953707041022"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "7434299653729412429",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "7926666522758342132",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "11372171015006984743",
+                        "HasMaterial": true,
+                        "MaterialID": "4652795949745033494",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Wall2",
+                "FamilyNumber": 2,
+                "ID": "17802664915420293681",
+                "ParentID": "10329767297058129723",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -34.036628723144531,
+                            99.701339721679688,
+                            -73.415443420410156
+                        ],
+                        "Rotation": [
+                            -0.70710676908493042,
+                            0.70710676908493042,
+                            0,
+                            -3.0908619663705394e-08
+                        ],
+                        "Scale": [
+                            1.4491679668426514,
+                            1.4491679668426514,
+                            0.48794001340866089
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8534252127802963963"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "10005319325465437307",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "15486512010568917660",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "39172137499248879",
+                        "HasMaterial": true,
+                        "MaterialID": "4652795949745033494",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Wall1",
+                "FamilyNumber": 2,
+                "ID": "9287786287830254274",
+                "ParentID": "10329767297058129723",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            65.521041870117188,
+                            99.701339721679688,
+                            28.496627807617188
+                        ],
+                        "Rotation": [
+                            0.49999991059303284,
+                            -0.49999994039535522,
+                            -0.50000011920928955,
+                            0.50000005960464478
+                        ],
+                        "Scale": [
+                            1.4491679668426514,
+                            1.4491679668426514,
+                            0.48794001340866089
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10037481589482160568"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "14941346957114758592",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "15353801293727802258",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "2229470309413744411",
+                        "HasMaterial": true,
+                        "MaterialID": "4652795949745033494",
+                        "Enabled": true
+                    }
+                ]
+            },
+            {
+                "Name": "Directional light",
+                "FamilyNumber": 1,
+                "ID": "10719009895665560987",
+                "ParentID": "17232811697877510915",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            9.9191436767578125,
+                            -15.363542556762695
+                        ],
+                        "Rotation": [
+                            -0.012322369962930679,
+                            0.93238765001296997,
+                            -0.35983622074127197,
+                            -0.031930364668369293
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "721970073107311534"
+                    },
+                    {
+                        "Type": 3,
+                        "Enabled": true,
+                        "ID": "15298287633204078164",
+                        "PrintIcon": true,
+                        "Intensity": 1.6000000238418579,
+                        "Position": [
+                            0,
+                            9.9191436767578125,
+                            -15.363542556762695
+                        ],
+                        "Direction": [
+                            -0.050674863159656525,
+                            -0.67180049419403076,
+                            -0.73899686336517334
+                        ],
+                        "Ambient": [
+                            0.98529410362243652,
+                            0.67845350503921509,
+                            0.40570932626724243
+                        ],
+                        "Diffuse": [
+                            0.11764705181121826,
+                            0.11764587461948395,
+                            0.11764587461948395
+                        ],
+                        "Specular": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773
+                        ],
+                        "CastShadows": true,
+                        "SizeBakedShadow": 153
                     }
                 ]
             }

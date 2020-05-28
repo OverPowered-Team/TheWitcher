@@ -60,7 +60,7 @@ void Scale_Win::Start()
 	{
 		for (int i = 1; i <= Scores_Data::player1_kills; ++i)
 		{
-			float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
+			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
 			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
 
 			Invoke([this, spawn_points, random_spawn]() -> void
@@ -78,7 +78,7 @@ void Scale_Win::Start()
 	{
 		for (int i = 1; i <= Scores_Data::player2_kills; ++i)
 		{
-			float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
+			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
 			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
 
 			Invoke([this, spawn_points, random_spawn]() -> void
@@ -212,9 +212,10 @@ void Scale_Win::Scale()
 	// ------------------------------------------
 
 	// Connector between plates
-	//float3 vector = (left_scale->transform->GetGlobalPosition() - right_scale->transform->GetGlobalPosition()).Normalized();
-	//Quat quat = Quat::RotateAxisAngle(float3(0, 0, 1), vector.AngleBetweenNorm(connector->transform->right));
-	//connector->transform->SetLocalRotation(quat);
+	float3 vector = (right_scale->transform->GetLocalPosition() - left_scale->transform->GetLocalPosition()).Normalized();
+	Quat quat = Quat::RotateAxisAngle(connector->transform->right, vector.AngleBetweenNorm(connector->transform->right));
+	connector->transform->SetLocalRotation(connector->transform->GetLocalRotation() * quat);
+
 
 	if (Time::GetGameTime() > time + time_to_scale)
 	{
@@ -233,7 +234,7 @@ void Scale_Win::HandleSceneLoad()
 		}
 		else
 		{
-			SceneManager::LoadScene("Lvl_1_Art_Colliders", FadeToBlackType::VERTICAL_CURTAIN);
+			SceneManager::LoadScene("Lvl_1", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 	}
 	else
@@ -241,13 +242,16 @@ void Scale_Win::HandleSceneLoad()
 		Scores_Data::last_checkpoint_position = float3::inf();
 		if (Scores_Data::won_level1)
 		{
-			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-		}
-		else if (Scores_Data::won_level2)
-		{
-			Scores_Data::won_level1 = false;
-			Scores_Data::won_level2 = false;
-			SceneManager::LoadScene("EndGame_Menu", FadeToBlackType::VERTICAL_CURTAIN);
+			if (Scores_Data::won_level2)
+			{
+				Scores_Data::won_level1 = false;
+				Scores_Data::won_level2 = false;
+				SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
+			}
+			else
+			{
+				SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+			}
 		}
 	}
 }
