@@ -26,6 +26,8 @@ public:
 
 public:
 
+	GameObject* boss			= nullptr;
+
 	float time_to_lerp			= 0.25f;
 	float time_to_show			= 0.5f;
 
