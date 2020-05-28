@@ -51,6 +51,7 @@ public:
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
+	virtual bool IsRangeEnemy() { LOG("Calling virtual function of IsDead!"); return false; }
 	virtual void Decapitate(PlayerController* player);
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
