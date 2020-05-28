@@ -34,7 +34,13 @@ void NilfSoldierRange::UpdateEnemy()
 	case NilfgaardSoldierState::ATTACK:
 		RotateSoldier();
 		break;
-
+	case NilfgaardSoldierState::HIT:
+	{
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+	}
+	break;
 	case NilfgaardSoldierState::AUXILIAR:
 	{
 		current_flee_distance = transform->GetGlobalPosition().LengthSq();
