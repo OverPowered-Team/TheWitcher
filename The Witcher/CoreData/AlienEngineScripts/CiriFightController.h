@@ -41,7 +41,6 @@ public:
 	std::vector<GameObject*> rings_enabled;
 	std::vector<GameObject*> rings_disabled;
 	float3 position_respawn = { 0, 0, 0 };
-	bool first_wall_door = true;
 
 public:
 
