@@ -110,7 +110,6 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
-	
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -124,7 +123,8 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
-	UpdatePlatform();
+	if(!first_wall_door)
+		UpdatePlatform();
 	TransportPlayer();
 }
 
@@ -135,8 +135,6 @@ void CiriFightController::FinishPhaseThree()
 
 void CiriFightController::FinishPhaseFour()
 {
-	Scores_Data::won_level2 = true;
-	Scores_Data::last_scene = SceneManager::GetCurrentScene();
 	Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 	Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
@@ -186,7 +184,7 @@ void CiriFightController::MoveWall()
 	{
 		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
 
-		if (time_platform > count_circle)
+		if (time_platform > count_circle && !first_wall_door)
 		{
 			int random_index = Random::GetRandomIntBetweenTwo(1, 4);
 
@@ -209,6 +207,11 @@ void CiriFightController::MoveWall()
 			rings_enabled.erase(rings_enabled.begin());
 			time_platform = 0.0f;
 			changing_platform = true;
+		}
+		else if (time_platform > count_circle && first_wall_door)
+		{
+			first_wall_door = false;
+			time_platform = 0.0f;
 		}
 	}
 }

@@ -218,16 +218,12 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		ReleaseParticle("hit_particle");
 		if (stats["Health"].GetValue() == 0.0F) {
 			SetState("Hit");
-			if (!IsRangeEnemy())
-				RemoveBattleCircle();
+			RemoveBattleCircle();
 		}
-		else if (is_attacking)
+		else if(is_attacking)
 		{
 			ChangeAttackEnemy();
 		}
-		else
-			SetState("Idle");
-
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{

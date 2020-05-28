@@ -576,7 +576,6 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 {
 	player_controllers[current_player]->current_attacking_enemies--;
 	is_attacking = false;
-	if(!IsDead())
-		SetState("Guard");
+	SetState("Guard");
 }
 	
