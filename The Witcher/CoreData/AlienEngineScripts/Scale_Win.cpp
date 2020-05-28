@@ -20,6 +20,8 @@ void Scale_Win::Start()
 	rigid_body1 = left_scale->GetComponent<ComponentRigidBody>();
 	rigid_body2 = right_scale->GetComponent<ComponentRigidBody>();
 	connector = game_object->GetChild("Connector");
+	start_position1 = right_scale->transform->GetLocalPosition().y;
+	start_position2 = left_scale->transform->GetLocalPosition().y;
 
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
@@ -130,18 +132,36 @@ void Scale_Win::CalculateInclination()
 		value = 1 - ((ratio - 0.5f) * 2);
 	}
 
-	original_position1 = left_scale->transform->GetLocalPosition().y;
-	original_position2 = right_scale->transform->GetLocalPosition().y;
+	original_position1 = right_scale->transform->GetLocalPosition().y;
+	original_position2 = left_scale->transform->GetLocalPosition().y;
 
-	if (Maths::Min(player1_points, player2_points) == player1_points)
+	if (Maths::Min(player1_points, player2_points) == player2_points)
 	{
-		desired_position1 = max_Y * value;
-		desired_position2 = -max_Y * value;
+		desired_position1 = original_position1 + (max_Y * value);
+		desired_position2 = original_position2 - (max_Y * value);
 	}
 	else
 	{
-		desired_position1 = -max_Y * value;
-		desired_position2 = max_Y * value;
+		desired_position1 = original_position1 - (max_Y * value);
+		desired_position2 = original_position2 + (max_Y * value);
+	}
+
+	if (desired_position1 > (start_position1 + (max_Y * value)))
+	{
+		desired_position1 = start_position1 + (max_Y * value);
+	}
+	else if (desired_position1 < (start_position1 + (max_Y * value)))
+	{
+		desired_position1 = start_position1 - (max_Y * value);
+	}
+
+	if (desired_position2 > (start_position2 + (max_Y * value)))
+	{
+		desired_position2 = start_position2 + (max_Y * value);
+	}
+	else if (desired_position2 < (start_position2 + (max_Y * value)))
+	{
+		desired_position2 = start_position2 - (max_Y * value);
 	}
 
 	in_place = false;
@@ -175,8 +195,8 @@ void Scale_Win::LerpingText()
 
 void Scale_Win::Scale()
 {
-	left_scale->transform->SetGlobalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
-	right_scale->transform->SetGlobalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
+	right_scale->transform->SetLocalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
+	left_scale->transform->SetLocalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
 
 	// Delete this when physics updated rigid body position with GO
 	rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());

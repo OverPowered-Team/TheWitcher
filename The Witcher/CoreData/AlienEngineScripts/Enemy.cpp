@@ -77,10 +77,10 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
 	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetLocalPosition());
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	if (player_controllers[0]->state->type == StateType::DEAD)
@@ -137,7 +137,8 @@ void Enemy::UpdateEnemy()
 	}
 
 	character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
-	animator->SetBool("grounded", character_ctrl->isGrounded);
+	if(type != EnemyType::BLOCKER_OBSTACLE)
+		animator->SetBool("grounded", character_ctrl->isGrounded);
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{

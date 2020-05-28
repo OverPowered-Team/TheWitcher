@@ -42,19 +42,21 @@ void BlockerObstacle::UpdateEnemy()
 	//LOG("MY LIFE: %f", stats["Health"].GetValue());
 	switch (state)
 	{
-	case ObstacleState::IDLE: {
+	case ObstacleState::IDLE: 
+	{
 		if (distance < stats["VisionRange"].GetValue() && !has_started)
 			LookForMyChildren();
-			break;
 	}
+	break;
 	case ObstacleState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 0.5f);
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5.0f);
+		if(!children_enemies.empty())
+			ReleaseChildren();
 		state = ObstacleState::DEAD;
-
-		break;
 	}
+	break;
 	case ObstacleState::DEAD:
 		break;
 	default:
@@ -68,15 +70,16 @@ void BlockerObstacle::CleanUpEnemy()
 	children_enemies.clear();
 }
 
-float BlockerObstacle::GetDamaged(float dmg, PlayerController* player)
+float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 knockback)
 {
-	float damage = Enemy::GetDamaged(dmg, player);
-	if (stats["Health"].GetValue() == 0.0F) {
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
+
+	if (stats["Health"].GetValue() <= 0.f)
 		state = ObstacleState::DYING;
-		/*audio_emitter->StartSound("GhoulDeath");*/
-		player->OnEnemyKill();
-	}
-	return damage;
+
+	last_player_hit = player;
+	return aux_health - stats["Health"].GetValue();
 }
 
 void BlockerObstacle::LookForMyChildren()
@@ -87,7 +90,11 @@ void BlockerObstacle::LookForMyChildren()
 				(*iter2)->is_obstacle = true;
 			}
 			has_started = true;
-			game_object->GetChild("SpawnerManager")->GetComponent<SpawnEnemyManager>()->SpawnEnemies();
+			GameObject* spawner = game_object->GetChild("SpawnerManager");
+			if (spawner)
+				spawner->GetComponent<SpawnEnemyManager>()->SpawnEnemies();
+			else
+				LOG("No spawner");
 		}
 	}
 }
@@ -98,23 +105,6 @@ void BlockerObstacle::ManageHealth()
 	if (children_enemies.size() <= 0 || stats["Health"].GetValue() <= 0) {
 		state = ObstacleState::DYING;
 		LOG("ESTOY MUERTO");
-	}
-}
-
-void BlockerObstacle::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != ObstacleState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player)
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			player->OnHit(this, GetDamaged(dmg_received, player));
-
-			if (state == ObstacleState::DYING)
-				player->OnEnemyKill();
-
-			HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-		}
 	}
 }
 
@@ -135,6 +125,7 @@ void BlockerObstacle::ReleaseChildren()
 {
 	for (auto it = children_enemies.begin(); it != children_enemies.end(); ++it)
 	{
+		(*it)->game_object->SetNewParent(game_object->parent->parent);
 		(*it)->is_obstacle = false;
 	}
 }
