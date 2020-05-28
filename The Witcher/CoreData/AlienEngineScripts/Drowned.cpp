@@ -49,6 +49,7 @@ void Drowned::SetStats(const char* json)
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
 		stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
+		stats["HideDistance"] = Stat("HideDistance", stat_weapon->GetNumber("HideDistance"));
 
 		stat_weapon->GetAnotherNode();
 	}
@@ -78,6 +79,24 @@ bool Drowned::IsDead()
 	return (state == DrownedState::DEAD ? true : false);
 }
 
+bool Drowned::IsState(const char* state_str)
+{
+	if (state_str == "Idle")
+		return (state == DrownedState::IDLE ? true : false);
+	else if (state_str == "Move")
+		return (state == DrownedState::MOVE ? true : false);
+	else if (state_str == "Attack")
+		return (state == DrownedState::ATTACK ? true : false);
+	else if (state_str == "Hit")
+		return (state == DrownedState::HIT ? true : false);
+	else if (state_str == "Dying")
+		return (state == DrownedState::DYING ? true : false);
+	else if (state_str == "Stunned")
+		return (state == DrownedState::STUNNED ? true : false);
+	else
+		LOG("Incorrect state name: %s", state_str);
+}
+
 void Drowned::PlaySFX(const char* sfx_name)
 {
 	if (sfx_name == "Hit")
@@ -96,4 +115,45 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 		damage = Enemy::GetDamaged(dmg, player, knock_back);
 
 	return damage;
+}
+
+void Drowned::SetState(const char* state_str)
+{
+	if (state_str == "Idle")
+	{
+		state = DrownedState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+	}
+	else if (state_str == "Move")
+	{
+		state = DrownedState::MOVE;
+	}
+	else if (state_str == "Attack")
+	{
+		state = DrownedState::ATTACK;
+		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+	}
+	else if (state_str == "GetOff")
+	{
+		state = DrownedState::GETOFF;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+	}
+	else if (state_str == "Hide")
+		state = DrownedState::HIDE;
+	else if (state_str == "Hit")
+		state = DrownedState::HIT;
+	else if (state_str == "Dying")
+		state = DrownedState::DYING;
+	else if (state_str == "Dead")
+		state = DrownedState::DEAD;
+	else if (state_str == "Stunned")
+		state = DrownedState::STUNNED;
+	else
+		LOG("Incorrect state name: %s", state_str);
 }

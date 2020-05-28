@@ -45,6 +45,7 @@ enum class ComponentType {
 	CURVE = 31,
 	MESH_COLLIDER = 32,
 	CHARACTER_JOINT = 33,
+	TRAIL = 34,
 	MAX //LAST LAST LAST
 };
 

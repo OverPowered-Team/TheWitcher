@@ -18,7 +18,7 @@ ComponentLightSpot::ComponentLightSpot(GameObject* attach) : Component(attach)
 {
 	type = ComponentType::LIGHT_SPOT;
 	App->objects->spot_light_properites.push_back(&light_props);
-	App->objects->AddNumOfSpotLights();
+
 	light_props.enabled = enabled;
 	light_props.light = this;
 
@@ -41,7 +41,7 @@ ComponentLightSpot::~ComponentLightSpot()
 #endif
 
 	App->objects->spot_light_properites.remove(&light_props);
-	App->objects->ReduceNumOfSpotLights();
+
 
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
@@ -87,10 +87,7 @@ bool ComponentLightSpot::DrawInspector()
 	if (ImGui::Checkbox("##CmpActive", &en)) {
 		ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this);
 		enabled = en;
-		if (!enabled)
-			OnDisable();
-		else
-			OnEnable();
+		light_props.enabled = enabled; 
 	}
 	ImGui::PopID();
 	ImGui::SameLine();
@@ -131,14 +128,10 @@ bool ComponentLightSpot::DrawInspector()
 
 void ComponentLightSpot::OnEnable()
 {
-	enabled = true;
-	light_props.enabled = true;
 }
 
 void ComponentLightSpot::OnDisable()
 {
-	enabled = false;
-	light_props.enabled = false;
 }
 
 void ComponentLightSpot::Clone(Component* clone)

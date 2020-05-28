@@ -20,6 +20,7 @@
 #include "ModuleObjects.h"
 #include "ComponentCamera.h"
 #include "ComponentParticleSystem.h"
+#include "ComponentTrail.h"
 #include "ParticleSystem.h"
 #include "ComponentImage.h"
 #include "ComponentBar.h"
@@ -268,6 +269,12 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* meshes_
 			}
 		}
 		else if (GetComponent<ComponentParticleSystem>() != nullptr)
+		{
+			float3 obj_pos = transform->GetGlobalPosition();
+			float distance = camera->frustum.pos.Distance(obj_pos);
+			meshes_to_draw_transparency->push_back({ distance, this });
+		}
+		else if (GetComponent<ComponentTrail>() != nullptr)
 		{
 			float3 obj_pos = transform->GetGlobalPosition();
 			float distance = camera->frustum.pos.Distance(obj_pos);
@@ -1247,6 +1254,11 @@ void GameObject::LoadObject(JSONArraypack* to_load, GameObject* parent, bool for
 				ComponentParticleSystem* particleSystem = new ComponentParticleSystem(this);
 				particleSystem->LoadComponent(components_to_load);
 				AddComponent(particleSystem);
+				break; }
+			case (int)ComponentType::TRAIL: {
+				ComponentTrail* trail = new ComponentTrail(this);
+				trail->LoadComponent(components_to_load);
+				AddComponent(trail);
 				break; }
 			case (int)ComponentType::CANVAS: {
 				ComponentCanvas* canvas = new ComponentCanvas(this);

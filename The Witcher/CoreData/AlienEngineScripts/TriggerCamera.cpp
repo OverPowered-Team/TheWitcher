@@ -42,6 +42,10 @@ void TriggerCamera::StartTransition(const TransitionInfo& transition_info)
 			break;
 		}
 		cam_script->curr_transition = transition_info;
+		cam_script->hor_angle = transition_info.hor_angle;
+		cam_script->vert_angle = transition_info.vert_angle;
+		cam_script->distance = transition_info.distance;
+
 		//cam_script->start_transition_pos = camera->transform->GetGlobalPosition();
 		LOG("Started transition");
 	}
@@ -120,19 +124,59 @@ void TriggerCamera::VisualizeCameraTransition(const TransitionInfo& transition_i
 	}
 }
 
+bool TriggerCamera::AllPlayersMovedForward()
+{
+	int is_in = 0;
+	for (int i = 0; i < cam_script->players.size(); ++i) {
+		int size = registered_position[i].size();
+		if (size < 2) {
+			return false;
+		}
+		if (registered_position[i][size - 2] == 1
+			&& registered_position[i][size - 1] == 2) {
+			LOG("FRONT");
+			++is_in;
+		}
+	}
+	if (is_in == cam_script->players.size())
+		return true;
+
+	return false;
+}
+
+bool TriggerCamera::AllPlayersMovedBackward()
+{
+	int is_in = 0;
+	for (int i = 0; i < cam_script->players.size(); ++i) {
+		int size = registered_position[i].size();
+		if (size < 2) {
+			return false;
+		}
+		if (registered_position[i][size - 2] == 1
+			&& registered_position[i][size - 1] == 0) {
+			LOG("BACK");
+			++is_in;
+		}
+	}
+	if (is_in == cam_script->players.size())
+		return true;
+
+	return false;
+}
+
 void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 {
 	//TODO: Remove this workaround when we fix the bug that collider enters 2 times on OnTriggerEnter
 	//INFO: This is done to avoid duplicates
-	int size = registered_position[player_num].size();
-	if (!(size > 0
-		&& registered_position[player_num][size - 1] == collider_position))
-	{
+	//int size = registered_position[player_num].size();
+	//if (!(size > 0
+	//	&& registered_position[player_num][size - 1] == collider_position))
+	//{
 		LOG("entered collider: %i", collider_position);
 		registered_position[player_num].push_back(collider_position);
 
 		//TODO: Create a for that checks for all players
-		if (PlayerMovedForward(0) && PlayerMovedForward(1)) {
+		if (AllPlayersMovedForward()) {
 			LOG("All players moved forward - Transition to next camera");
 			switch (next_camera.type)
 			{
@@ -152,7 +196,7 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 				break;
 			}
 		}
-		if (PlayerMovedBackward(0) && PlayerMovedBackward(1)) {
+		if (AllPlayersMovedBackward()) {
 			LOG("All players moved back - Transition to prev camera");
 			switch (prev_camera.type)
 			{
@@ -172,7 +216,7 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 				break;
 			}
 		}
-	}
+	//}
 }
 
 bool TriggerCamera::PlayerMovedForward(int player_num) {

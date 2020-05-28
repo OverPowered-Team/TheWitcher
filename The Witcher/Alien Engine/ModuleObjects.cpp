@@ -33,6 +33,8 @@
 #include "ModuleFileSystem.h"
 #include "ModuleAudio.h"
 #include "ComponentParticleSystem.h"
+#include "ComponentTrail.h"
+#include "Trail.h"
 #include "ReturnZ.h"
 #include "Time.h"
 #include "Prefab.h"
@@ -413,12 +415,25 @@ update_status ModuleObjects::PostUpdate(float dt)
 				else
 				{
 					ComponentParticleSystem* partSystem = (*it).second->GetComponent<ComponentParticleSystem>();
-					if (partSystem == nullptr)
+					if (partSystem != nullptr)
+					{
+
+						ResourceMaterial* mat = partSystem->GetSystem()->material;
+						if (mat != nullptr)
+							wanted_shader = mat->used_shader;
+					}
+
+					ComponentTrail* trail = (*it).second->GetComponent<ComponentTrail>();
+					if (trail != nullptr)
+					{
+						ResourceMaterial* mat = trail->GetTrail()->material;
+						if (mat != nullptr)
+							wanted_shader = mat->used_shader;
+					}
+
+					if (partSystem && trail == nullptr)
 						continue;
 
-					ResourceMaterial* mat = partSystem->GetSystem()->material;
-					if (mat != nullptr)
-						wanted_shader = mat->used_shader;
 				}
 
 				if (wanted_shader != current_used_shader)
@@ -675,17 +690,16 @@ void ModuleObjects::CalculateShadows(std::vector<GameObject*>& dynamic_to_draw, 
 				{
 					(*iter)->light->sizefrustrum = viewport->GetCamera()->frustum.farPlaneDistance * 0.5f;
 					float3 camera_pos = viewport->GetCamera()->frustum.CenterPoint() / (*iter)->light->sizefrustrum;
-					float3 camera_direction = viewport->GetCamera()->frustum.front;
 					float halfFarPlaneD = (*iter)->light->sizefrustrum * 0.5f;
 					float3 light_pos = float3((camera_pos.x - (*iter)->direction.x * halfFarPlaneD), (camera_pos.y - (*iter)->direction.y * halfFarPlaneD), (camera_pos.z - (*iter)->direction.z * halfFarPlaneD));
 
-					glm::mat4 viewMatrix = glm::lookAt(glm::vec3((float)camera_pos.x, (float)camera_pos.y, (float)camera_pos.z),
+					glm::mat4 viewMatrix = glm::lookAt(glm::vec3((float)camera_pos.x, (float)camera_pos.y, (float)-camera_pos.z),
 						glm::vec3((float)light_pos.x, (float)light_pos.y, (float)-light_pos.z), 
 						glm::vec3(0.0, 1.0, 0.0));
 
 					(*iter)->viewMat.Set(&viewMatrix[0][0]);
 
-					(*iter)->fake_position = light_pos;
+					(*iter)->fake_position = camera_pos;
 
 					(*it)->PreDrawGame(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);
 				}
@@ -2721,6 +2735,13 @@ void ModuleObjects::CreateEffect(ComponentType type)
 		object->AddComponent(comp);
 		break;
 	}
+	case ComponentType::TRAIL:
+	{
+		object->SetName("Trail");
+		comp = new ComponentTrail(object);
+		object->AddComponent(comp);
+		break;
+	}
 	default:
 		break;
 	}
@@ -2731,45 +2752,27 @@ void ModuleObjects::CreateEffect(ComponentType type)
 
 uint ModuleObjects::GetNumOfPointLights() const
 {
-	return num_of_point_lights;
+	uint lights = 0;
+	for (auto iter = point_light_properites.cbegin(); iter != point_light_properites.cend(); ++iter)
+		lights += (*iter)->isEnabled();
+
+	return lights;
 }
 
 uint ModuleObjects::GetNumOfDirLights() const
 {
-	return num_of_dir_lights;
+	uint lights = 0;
+	for (auto iter = directional_light_properites.cbegin(); iter != directional_light_properites.cend(); ++iter)
+		lights += (*iter)->light->game_object_attached->IsEnabled() && (*iter)->enabled;
+
+	return lights;
 }
 
 uint ModuleObjects::GetNumOfSpotLights() const
 {
-	return num_of_spot_lights;
-}
+	uint lights = 0;
+	for (auto iter = spot_light_properites.cbegin(); iter != spot_light_properites.cend(); ++iter)
+		lights += (*iter)->isEnabled();
 
-void ModuleObjects::AddNumOfPointLights()
-{
-	++num_of_point_lights;
-}
-
-void ModuleObjects::AddNumOfDirLights()
-{
-	++num_of_dir_lights;
-}
-
-void ModuleObjects::AddNumOfSpotLights()
-{
-	++num_of_spot_lights;
-}
-
-void ModuleObjects::ReduceNumOfPointLights()
-{
-	--num_of_point_lights;
-}
-
-void ModuleObjects::ReduceNumOfDirLights()
-{
-	--num_of_dir_lights;
-}
-
-void ModuleObjects::ReduceNumOfSpotLights()
-{
-	--num_of_spot_lights;
+	return lights;
 }

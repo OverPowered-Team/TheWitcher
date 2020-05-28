@@ -13,17 +13,17 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	//audioEmitter = GetComponent<ComponentAudioEmitter>();
-	//text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
+	audioEmitter = GetComponent<ComponentAudioEmitter>();
+	text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
 
-	//audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
-	//LoadJSONDialogues();
+	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
+	LoadJSONDialogues();
 }
 
 void DialogueManager::LoadJSONDialogues()
 {
 	// Credits to Yessica
-	std::string json_path = std::string("Configuration/Subtitles/InGameDialogues.json");
+	std::string json_path = std::string("GameData/Subtitles/InGameDialogues.json");
 	LOG("READING %s", json_path.data());
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
 	if (jsonDoc)
@@ -55,7 +55,7 @@ void DialogueManager::LoadJSONDialogues()
 
 void DialogueManager::Update()
 {
-	/*if (playing)
+	if (playing)
 	{
 		LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
@@ -65,10 +65,10 @@ void DialogueManager::Update()
 			currentDialogue.Reset();
 			audioEmitter->ChangeVolume(0.5f);
 		}
-	}*/
-	//else {
-	//audioEmitter->SetState("GameVolumes", "None");
-	//}
+	}
+	else {
+	audioEmitter->SetState("GameVolumes", "None");
+	}
 
 }
 

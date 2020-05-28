@@ -21,14 +21,20 @@ void NilfSoldierShield::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue() || is_obstacle)
 			state = NilfgaardSoldierState::MOVE;
 		break;
 
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
 		break;
-
+	case NilfgaardSoldierState::HIT:
+	{
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+	}
+	break;
 	case NilfgaardSoldierState::AUXILIAR:
 		if (stats["BlockRange"].GetValue() < distance)
 		{
@@ -61,6 +67,10 @@ void NilfSoldierShield::UpdateEnemy()
 		{
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
 		}
 		break;
 	}
@@ -137,7 +147,7 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 		has_been_attacked = true;
 		current_time = Time::GetGameTime();
 		break_shield_attack++;
-		SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition());
+		SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
 		audio_emitter->StartSound("SoldierBlock");
 	}
 	else

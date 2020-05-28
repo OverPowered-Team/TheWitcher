@@ -18,6 +18,7 @@ public:
 
 	void CheckForPlayers();
 	void SpawnEnemies();
+	void SpawnEnemiesEnter();
 
 public:
 	float spawnerRange = 50.0f;

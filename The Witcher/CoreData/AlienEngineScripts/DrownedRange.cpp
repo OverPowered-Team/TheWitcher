@@ -81,7 +81,13 @@ void DrownedRange::UpdateEnemy()
 			state = DrownedState::IDLE;
 		}
 		break;
-
+	case DrownedState::HIT:
+	{
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+	}
+		break;
 	case DrownedState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
@@ -94,6 +100,10 @@ void DrownedRange::UpdateEnemy()
 		{
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
 		}
 	}
 	}

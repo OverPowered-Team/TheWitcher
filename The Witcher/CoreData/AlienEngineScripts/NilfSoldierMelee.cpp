@@ -18,7 +18,7 @@ void NilfSoldierMelee::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue() || is_obstacle)
 			SetState("Move");
 		break;
 
@@ -43,6 +43,7 @@ void NilfSoldierMelee::UpdateEnemy()
 	case NilfgaardSoldierState::HIT:
 	{
 		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
 		character_ctrl->Move(velocity * Time::GetDT());
 	}
 	break;
@@ -59,6 +60,10 @@ void NilfSoldierMelee::UpdateEnemy()
 		{
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
 		}
 		break;
 	}
