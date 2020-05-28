@@ -75,6 +75,9 @@ std::string TriggerMusicInteractive::GetNameByEnum(Music mat)
 	case Music::SLOPE_TO_CAVE:
 		return name = "Slope_To_Cave";
 		break;
+	case Music::MINE:
+		return name = "Mine";
+		break;
 	}
 	
 

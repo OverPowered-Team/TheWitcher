@@ -19,6 +19,7 @@ void MusicController::Awake()
 	emitter->StartSound("Play_No_Surrender");
 	emitter->StartSound("Play_Random_Level1_Music");
 	emitter->StartSound("Play_Trial_Of_The_Grasses");
+	emitter->StartSound("Play_Coal_Mine_Music");
 	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
 	last_music = "Quiet";
 }
