@@ -41,7 +41,8 @@ ALIEN_FACTORY GhoulDodge* CreateGhoulDodge() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(ghoul->awake_curve);
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
-	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
+	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul); 
+	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, ghoul);
 
 	return ghoul;
 }

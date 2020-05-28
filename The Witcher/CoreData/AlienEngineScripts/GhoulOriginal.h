@@ -52,6 +52,7 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
+	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, ghoul);
 
 	return ghoul;
 }

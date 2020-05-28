@@ -130,7 +130,7 @@ void PlayerController::CheckGround()
 	
 	
 	is_grounded = false;
-	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Ground")))
+	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Default")))
 	//if (Physics::CapsuleCast(matrix, 0.4f, 0.2f, -float3::unitY(), 5.0f, hit, Physics::GetLayerMask("Ground")))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
