@@ -26,6 +26,8 @@ public:
 
 public:
 
+	GameObject* boss = nullptr;
+
 	float time_to_lerp			= 0.25f;
 	float time_to_show			= 0.5f;
 
@@ -57,6 +59,8 @@ ALIEN_FACTORY Boss_Lifebar* CreateBoss_Lifebar() {
 	Boss_Lifebar* alien = new Boss_Lifebar();
 	// To show in inspector here
 
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->boss);
+	
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_lerp);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_show);
 
