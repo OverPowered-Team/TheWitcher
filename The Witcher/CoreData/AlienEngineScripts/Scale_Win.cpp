@@ -232,14 +232,9 @@ void Scale_Win::HandleSceneLoad()
 	if (Scores_Data::dead)
 	{
 		Scores_Data::dead = false;
-		if (Scores_Data::won_level1)
-		{
-			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-		}
-		else
-		{
-			SceneManager::LoadScene("Lvl_1", FadeToBlackType::VERTICAL_CURTAIN);
-		}
+		Scores_Data::player1_kills = 0;
+		Scores_Data::player2_kills = 0;
+		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
 	}
 	else
 	{
