@@ -4,6 +4,7 @@
 #include "PlayerController.h"
 #include "CiriFightController.h"
 #include "CiriOriginal.h"
+#include "Boss_Lifebar.h"
 
 
 void CiriOriginal::StartEnemy()
@@ -23,6 +24,8 @@ void CiriOriginal::StartEnemy()
 
 	meshes = game_object->GetChild("Meshes");
 
+	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
+
 	fight_controller = GetComponent<CiriFightController>();
 
 }
@@ -37,9 +40,9 @@ void CiriOriginal::CleanUpEnemy()
 	Boss::CleanUpEnemy();
 }
 
-float CiriOriginal::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
+float CiriOriginal::GetDamaged(float dmg, float3 knock_back)
 {
-	return Boss::GetDamaged(dmg, player);
+	return Boss::GetDamaged(dmg);
 }
 
 void CiriOriginal::SetActionProbabilities()
@@ -94,6 +97,8 @@ void CiriOriginal::LaunchAction()
 
 void CiriOriginal::Scream()
 {
+	SpawnParticle("Ciri_Scream", { 0, 0.6, 0 }, true);
+
 	if (player_distance[0] <= scream_range) {
 		float3 knockbak_direction = (player_controllers[0]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 		player_controllers[0]->ReceiveDamage(0, knockbak_direction * scream_force);
@@ -162,6 +167,9 @@ void CiriOriginal::EndAction(GameObject* go_ended)
 
 void CiriOriginal::OnAnimationEnd(const char* name)
 {
+	if (strcmp(name, "Scream") == 0) {
+		ReleaseParticle("Ciri_Scream");
+	}
 }
 
 void CiriOriginal::OnDrawGizmosSelected()

@@ -79,6 +79,7 @@ public:
 	virtual void SetIdleState();
 	virtual void SetAttackState();
 	virtual bool IsOnAction();
+	bool IsDead() { return (state == BossState::DEAD ? true : false); }
 
 	virtual void LaunchAction();
 	virtual ActionState UpdateAction();

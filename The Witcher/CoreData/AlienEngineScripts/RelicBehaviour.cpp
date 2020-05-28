@@ -142,8 +142,25 @@ void RelicBehaviour::Start()
 
 void RelicBehaviour::Update()
 {
-	float3 rot = {0, 2, 0};
-	transform->AddRotation(rot);
+	transform->AddRotation({ 0, -2, 0 });
+
+	if (count_position >= 1.0)
+		going_down = true;
+	else if(count_position <= 0.0)
+		going_down = false;
+
+	if (!going_down)
+	{
+		count_position += 0.01f;
+		transform->AddPosition({ 0, 0.01, 0 });
+	}
+	else 
+	{
+		count_position -= 0.01f;
+		transform->AddPosition({ 0, -0.01, 0 });
+	}
+
+	
 }
 
 void RelicBehaviour::SetRelic(const char* json_array)
