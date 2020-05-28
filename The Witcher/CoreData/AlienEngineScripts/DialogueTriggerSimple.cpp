@@ -34,7 +34,11 @@ static std::string GetName(bool Geralt)
 void DialogueTriggerSimple::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (!specificEntity && (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) || (specificEntity && strcmp(collider->game_object_attached->GetName(), GetName(Geralt).c_str()) == 0))
+	{
+		LOG("works fine");
 		EmitDialogue();
+
+	}
 }
 
 
