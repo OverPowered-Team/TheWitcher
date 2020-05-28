@@ -36,6 +36,7 @@ private:
 	friend class ComponentPhysics;
 	friend class ModuleAudio;
 	friend class ComponentParticleSystem;
+	friend class ComponentTrail;
 	friend class ComponentUI;
 	friend class ComponentCheckbox;
 	friend class ComponentSlider;

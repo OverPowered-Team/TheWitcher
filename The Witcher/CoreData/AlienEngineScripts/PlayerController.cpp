@@ -72,6 +72,11 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
+	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
+	{
+		ReceiveDamage(100);
+	}
+
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
@@ -434,6 +439,9 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		AbsorbHit();
 		return;
 	}
+
+	if (player_data.stats["Health"].GetValue() == 0.0f)
+		return;
 
 	player_data.stats["Health"].DecreaseStat(dmg);
 
@@ -916,8 +924,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				// Heal
 				(*player)->player_data.stats["Health"].IncreaseStat((*player)->player_data.stats["Health"].GetMaxValue());
 				(*player)->player_data.stats["Chaos"].IncreaseStat((*player)->player_data.stats["Chaos"].GetMaxValue());
-				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange((*player)->player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange((*player)->player_data.stats["Health"].GetValue(), (*player)->player_data.stats["Health"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), (*player)->player_data.stats["Chaos"].GetMaxValue());
 			}
 
 			// Player Used this Bonfire
