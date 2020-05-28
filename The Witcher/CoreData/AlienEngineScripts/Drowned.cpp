@@ -49,6 +49,7 @@ void Drowned::SetStats(const char* json)
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
 		stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
+		stats["HideDistance"] = Stat("HideDistance", stat_weapon->GetNumber("HideDistance"));
 
 		stat_weapon->GetAnotherNode();
 	}
