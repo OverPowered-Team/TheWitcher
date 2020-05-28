@@ -23,6 +23,7 @@ void Ghoul::StartEnemy()
 {
     type = EnemyType::GHOUL;
     state = GhoulState::IDLE;
+    decapitation_particle = "decapitation_particle_ghoul";
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
     Enemy::StartEnemy();
 }
