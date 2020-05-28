@@ -35,6 +35,7 @@ class __declspec(dllexport) ComponentUI :public Component {
 	friend class ComponentImage;
 	friend class ModuleObjects;
 	friend class Component;
+	friend class ResourcePrefab;
 	friend class ReturnZ;
 	friend class CompZ;
 public:
