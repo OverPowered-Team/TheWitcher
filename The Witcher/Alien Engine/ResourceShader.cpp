@@ -164,6 +164,8 @@ void ResourceShader::TryToSetShaderType()
 		shaderType = SHADER_TEMPLATE::ILUMINATED;
 	else if (std::strcmp(name.c_str(), "particle_shader") == 0)
 		shaderType = SHADER_TEMPLATE::PARTICLE;
+	else if (std::strcmp(name.c_str(), "trail_shader") == 0)
+		shaderType = SHADER_TEMPLATE::TRAIL;
 	else if (std::strcmp(name.c_str(), "simple_depth_shader") == 0)
 		shaderType = SHADER_TEMPLATE::SHADOW;
 	else if (std::strcmp(name.c_str(), "water_shader") == 0)
@@ -211,6 +213,9 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 
 	case SHADER_TEMPLATE::PARTICLE: {
 		SetUniform4f("objectMaterial.diffuse_color", inputs.particleShaderProperties.color);
+		break; }
+	case SHADER_TEMPLATE::TRAIL: {
+		SetUniform4f("objectMaterial.diffuse_color", inputs.trailShaderProperties.color);
 		break; }
 	case SHADER_TEMPLATE::SHADOW: {
 
@@ -268,6 +273,18 @@ void ResourceShader::ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera)
 		break;
 
 	case SHADER_TEMPLATE::PARTICLE:
+		SetUniformMat4f("view", camera->GetViewMatrix4x4());
+		SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
+		SetUniform1i("activeFog", camera->activeFog);
+		if (camera->activeFog)
+		{
+			SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+			SetUniform1f("density", camera->fogDensity);
+			SetUniform1f("gradient", camera->fogGradient);
+		}
+		break;
+
+	case SHADER_TEMPLATE::TRAIL:
 		SetUniformMat4f("view", camera->GetViewMatrix4x4());
 		SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
 		SetUniform1i("activeFog", camera->activeFog);
