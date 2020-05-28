@@ -108,11 +108,12 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
+	changing_platform = false;
 }
 
 void CiriFightController::FinishPhaseTwo()
 {
-	changing_platform = false;
+	
 }
 
 void CiriFightController::UpdatePhaseThree()
