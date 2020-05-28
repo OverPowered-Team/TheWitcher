@@ -14,8 +14,12 @@ public:
 	
 	void Start();
 	void Update();
-
+	void ReleaseExplosionParticle();
 	void OnTriggerEnter(ComponentCollider* collider);
+
+	GameObject* particle_instance = nullptr;
+
+	bool collided = false;
 
 };
 
