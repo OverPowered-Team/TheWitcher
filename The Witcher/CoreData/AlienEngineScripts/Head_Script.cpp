@@ -14,15 +14,15 @@ void Head_Script::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (first)
 	{
-		if (collider->game_object_attached == GameObject::FindWithName("Left_Scale"))
-		{
-			script_scale->current_points1 = script_scale->player1_points;
-			script_scale->player1_points += points;
-		}
-		else
+		if (collider->game_object_attached == GameObject::FindWithName("Right_Scale"))
 		{
 			script_scale->current_points2 = script_scale->player2_points;
 			script_scale->player2_points += points;
+		}
+		else
+		{
+			script_scale->current_points1 = script_scale->player1_points;
+			script_scale->player1_points += points;
 		}
 
 		script_scale->CalculateInclination();

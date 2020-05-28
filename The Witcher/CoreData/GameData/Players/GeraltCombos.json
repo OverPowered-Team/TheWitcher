@@ -3,7 +3,7 @@
     {
       "name": "L",
       "button": "L",
-      "particle_name": "L_particle_Test",
+      "particle_name": "L_slash_particle",
       "particle_pos": {
         "pos_x": 0.0,
         "pos_y": 0.465,
@@ -35,7 +35,7 @@
         },
         {
           "name": "KnockBack",
-          "value": 16
+          "value": 5
         }
       ],
       "activation_frame": 25,
@@ -52,24 +52,26 @@
     {
       "name": "LH",
       "button": "LH",
-      "particle_name": "LH_slash_particle",
+      "particle_name": "LH_new_slash_particle",
       "particle_pos": {
         "pos_x": 0.0,
         "pos_y": 0.255,
         "pos_z": 0
       },
-      "collider": {
-        "type": "Weapon",
-        "pos_x": 0,
-        "pos_y": -0.15,
-        "pos_z": 300,
-        "width": 233.214,
-        "height": 267.356,
-        "depth": 600,
-        "rot_x": 0,
-        "rot_y": 0,
-        "rot_z": 0
-      },
+      "colliders": [
+        {
+          "type": "Weapon",
+          "pos_x": 0,
+          "pos_y": -0.15,
+          "pos_z": 300,
+          "width": 233.214,
+          "height": 267.356,
+          "depth": 600,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
       "knock_back": {
         "x": 0,
         "y": 0,
@@ -123,12 +125,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.5
+        },
+        {
+          "name": "KnockBack",
+          "value": 10
         }
       ],
       "activation_frame": 11,
@@ -136,7 +142,7 @@
       "max_distance_traveled": 2.5,
       "min_distance_to_target": 1.2,
       "next_attack_light": "LLL",
-      "next_attack_heavy": "LLH",
+      "next_attack_heavy": "End",
       "freeze_time": 0.14,
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
@@ -169,12 +175,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.6
+        },
+        {
+          "name": "KnockBack",
+          "value": 15
         }
       ],
       "activation_frame": 17,
@@ -182,7 +192,7 @@
       "max_distance_traveled": 2.5,
       "min_distance_to_target": 1.2,
       "next_attack_light": "LLLL",
-      "next_attack_heavy": "LLLH",
+      "next_attack_heavy": "End",
       "freeze_time": 0.16,
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
@@ -197,22 +207,24 @@
         "pos_y": 0.0,
         "pos_z": 0.0
       },
-      "collider": {
-        "type": "Box",
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0,
-        "width": 70,
-        "height": 50,
-        "depth": 70,
-        "rot_x": 0,
-        "rot_y": 0,
-        "rot_z": 0
-      },
+      "colliders": [
+        {
+          "type": "Box",
+          "pos_x": -2.350,
+          "pos_y": 0,
+          "pos_z": 1.650,
+          "width": 70,
+          "height": 50,
+          "depth": 70,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
       "knock_back": {
         "x": 0,
-        "y": 0,
-        "z": -1
+        "y": 0.3,
+        "z": 1
       },
       "stats": [
         {
@@ -231,96 +243,6 @@
       "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.18,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4
-    },
-    {
-      "name": "LLH",
-      "button": "LLH",
-      "particle_name": "LLH_slash_particle",
-      "particle_pos": {
-        "pos_x": -0.053,
-        "pos_y": 0.581,
-        "pos_z": 1.025
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 0,
-          "pos_y": 6.2,
-          "pos_z": 6.05,
-          "width": 9,
-          "height": 10.8,
-          "depth": 9.2,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 0.7
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 2.1,
-      "movement_strength": 2.4,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "LLHL",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.17,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4
-    },
-    {
-      "name": "LLHL",
-      "button": "LLHL",
-      "particle_name": "LLHL_slash_particle",
-      "particle_pos": {
-        "pos_x": 0.316,
-        "pos_y": 0.323,
-        "pos_z": 0
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 0,
-          "pos_y": 0,
-          "pos_z": 0,
-          "width": 200,
-          "height": 200,
-          "depth": 200,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.5
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 2.2,
-      "movement_strength": 1.2,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "End",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.1,
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4
@@ -350,13 +272,17 @@
       ],
       "knock_back": {
         "x": 0,
-        "y": 0,
-        "z": 0
+        "y": 0.1,
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.7
+        },
+        {
+          "name": "KnockBack",
+          "value": 16
         }
       ],
       "activation_frame": 31,
@@ -396,12 +322,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 1
+        },
+        {
+          "name": "KnockBack",
+          "value": 17
         }
       ],
       "activation_frame": 17,
@@ -415,97 +345,6 @@
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4
     },
-    {
-      "name": "LLLH",
-      "button": "LLLH",
-      "particle_name": "LLLH_slash_particle",
-      "particle_pos": {
-        "pos_x": 0.199,
-        "pos_y": 0.304,
-        "pos_z": -0.131
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 2.75,
-          "pos_y": 5.45,
-          "pos_z": 8.4,
-          "width": 10.4,
-          "height": 10.3,
-          "depth": 10.4,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 0.7
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 2.0,
-      "movement_strength": 1.2,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "End",
-      "next_attack_heavy": "LLLHH",
-      "freeze_time": 0.16,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4
-    },
-    {
-      "name": "LLLHH",
-      "button": "LLLHH",
-      "particle_name": "LLLHH_slash_particle",
-      "particle_pos": {
-        "pos_x": 0,
-        "pos_y": 0,
-        "pos_z": 0
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 1.35,
-          "pos_y": 5.6,
-          "pos_z": 6.1,
-          "width": 17.1,
-          "height": 10.3,
-          "depth": 15.6,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.0
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 2.0,
-      "movement_strength": 1.8,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "End",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.21,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4
-    },
-
     {
       "name": "H",
       "button": "H",
@@ -630,7 +469,7 @@
         },
         {
           "name": "KnockBack",
-          "value": 70
+          "value": 30
         }
       ],
       "activation_frame": 25,

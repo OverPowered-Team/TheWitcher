@@ -14,7 +14,8 @@ public:
 	void Action() override;
 	void Block();
 	bool CheckPlayerForward();
-	void OnTriggerEnter(ComponentCollider* collider) override;
+
+	float GetDamaged(float dmg, PlayerController* player, float3 knock_back) override;
 
 public:
 	float block_time = 2.0f;
@@ -34,6 +35,7 @@ ALIEN_FACTORY NilfSoldierShield* CreateNilfSoldierShield() {
 
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->increase_hit_animation);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->gravity);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldierState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);

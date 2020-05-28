@@ -18,18 +18,25 @@ void NilfSoldierMelee::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
-			state = NilfgaardSoldierState::MOVE;
+		if (distance < stats["VisionRange"].GetValue() || is_obstacle)
+			SetState("Move");
 		break;
 
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
 		break;
 
+	case NilfgaardSoldierState::GUARD:
+	{
+		//Tiene que estar animacion de guardia
+		Guard();
+	}
+		break;
+
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
-			state = NilfgaardSoldierState::IDLE;
+			SetState("Idle");
 		}
 		break;
 
@@ -53,6 +60,10 @@ void NilfSoldierMelee::UpdateEnemy()
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
 		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+		}
 		break;
 	}
 	}
@@ -60,7 +71,7 @@ void NilfSoldierMelee::UpdateEnemy()
 
 void NilfSoldierMelee::Action()
 {
+	SetState("Attack");
 	animator->PlayState("Attack");
 	animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
-	state = NilfgaardSoldierState::ATTACK;
 }

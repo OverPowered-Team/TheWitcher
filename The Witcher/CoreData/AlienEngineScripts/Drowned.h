@@ -3,6 +3,7 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 #include "Enemy.h"
+#include "BlockerObstacle.h"
 
 class MusicController;
 
@@ -36,10 +37,10 @@ public:
 
 	void Stun(float time) override;
 	bool IsDead() override;
+	bool IsState(const char*) override;
+	void PlaySFX(const char* sfx_name);
 
-	void OnTriggerEnter(ComponentCollider* collider) override;
 	void OnAnimationEnd(const char* name) override {};
-
 public:
 	DrownedState state = DrownedState::NONE;
 	DrownedType drowned_type = DrownedType::NONE;

@@ -64,6 +64,7 @@ public:
 	void Start();
 	void Update();
 
+	void CheckGround();
 	void UpdateInput();
 	void SetState(StateType new_state);
 	void SwapState(State* new_state);
@@ -116,6 +117,8 @@ public:
 
 	void ReleaseParticle(std::string particle_name);
 
+	//Battle Circles
+	void CheckEnemyCircle();
 	// Terrain - particles
 	void OnTerrainEnter(float4 initial_color, float4 final_color); 
 
@@ -141,9 +144,11 @@ public:
 	ComponentAudioEmitter* audio = nullptr;
 
 	float2 movement_input;
+	float3 direction;
 
 	bool mov_input = false;
 	bool is_immune = false;
+	bool is_grounded = false;
 	bool can_move = true;
 	bool input_blocked = false;
 
@@ -194,6 +199,12 @@ public:
 	Input::CONTROLLER_BUTTONS controller_ultimate = Input::CONTROLLER_BUTTON_LEFTSHOULDER;
 	Input::CONTROLLER_BUTTONS controller_revive = Input::CONTROLLER_BUTTON_B;
 
+	//Battle Circle
+	std::vector<Enemy*> enemy_battle_circle;
+	int current_attacking_enemies = 0;
+	int max_attacking_enemies = 2;
+	float battleCircle = 2.0f;
+
 	AABB max_aabb;
 
 	// Dash data
@@ -229,6 +240,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->battleCircle);
 	SHOW_TEXT("Dash animation cool data"); 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 3.f, 5.f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 2.f, 3.f);

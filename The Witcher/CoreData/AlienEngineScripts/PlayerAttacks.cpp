@@ -435,7 +435,7 @@ void PlayerAttacks::CastSpell()
 void PlayerAttacks::OnHit(Enemy* enemy)
 {
 	current_attack->enemies_hit.push_back(enemy);
-
+	AttackShake();
 	if (GameManager::instance->player_manager && !current_attack->HasTag(Attack_Tags::T_Spell) && current_attack->IsLast())
 		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 
