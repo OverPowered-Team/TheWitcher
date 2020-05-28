@@ -44,6 +44,8 @@ public:
 	void OnDeathHit();
 	void CheckDistance();
 
+	bool IsRangeEnemy();
+
 	void RotateSoldier();
 
 	void PlaySFX(const char* sfx_name);
