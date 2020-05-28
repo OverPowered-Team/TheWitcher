@@ -73,6 +73,7 @@ void Training_Zone::Update()
 		initial_sign = -initial_sign;
 		current_oscilating_time = Time::GetGameTime();
 	}
+
 }
 
 void Training_Zone::OnTriggerEnter(ComponentCollider* col)
@@ -92,7 +93,7 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			}
 			case OSCILATION_DIRECTION::Y:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, float3(0, 0, initial_sign * push_force));
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, float3(0, -initial_sign * push_force, 0));
 				break;
 			}
 			case OSCILATION_DIRECTION::Z:
@@ -117,10 +118,10 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			{
 				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, transform->right * initial_sign * push_force);
 				break;
-			} 
+			}
 			case OSCILATION_DIRECTION::Y:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, transform->forward * -initial_sign * push_force);
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(0, -initial_sign * push_force, 0));
 				break;
 			}
 			case OSCILATION_DIRECTION::Z:

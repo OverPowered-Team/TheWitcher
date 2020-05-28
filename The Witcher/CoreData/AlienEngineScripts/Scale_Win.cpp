@@ -203,6 +203,9 @@ void Scale_Win::LerpingText()
 
 void Scale_Win::Scale()
 {
+	float3 posR = right_scale->transform->GetGlobalPosition();
+	float3 posL = left_scale->transform->GetGlobalPosition();
+
 	right_scale->transform->SetLocalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
 	left_scale->transform->SetLocalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
 
@@ -213,8 +216,9 @@ void Scale_Win::Scale()
 
 	// Connector between plates
 	float3 vector = (right_scale->transform->GetLocalPosition() - left_scale->transform->GetLocalPosition()).Normalized();
-	Quat quat = Quat::RotateAxisAngle(connector->transform->right, vector.AngleBetweenNorm(connector->transform->right));
-	connector->transform->SetLocalRotation(connector->transform->GetLocalRotation() * quat);
+	/*Quat quat = Quat::RotateFromTo(vector, connector->transform->up);
+	connector->transform->SetGlobalRotation(connector->transform->GetLocalRotation() * quat);*/
+	connector->transform->SetGlobalRotation(connector->transform->GetGlobalRotation() * Quat::RotateAxisAngle(float3::unitX(), vector.AngleBetween(posR - posL)));
 
 
 	if (Time::GetGameTime() > time + time_to_scale)
@@ -228,14 +232,9 @@ void Scale_Win::HandleSceneLoad()
 	if (Scores_Data::dead)
 	{
 		Scores_Data::dead = false;
-		if (Scores_Data::won_level1)
-		{
-			SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-		}
-		else
-		{
-			SceneManager::LoadScene("Lvl_1", FadeToBlackType::VERTICAL_CURTAIN);
-		}
+		Scores_Data::player1_kills = 0;
+		Scores_Data::player2_kills = 0;
+		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
 	}
 	else
 	{
