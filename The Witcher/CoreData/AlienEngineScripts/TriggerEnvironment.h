@@ -80,6 +80,7 @@ public:
 	void PlayEnvironment();
 	void PlayInstant();
 	void MoveSpatial();
+	void LookForPlayers();
 public:
 	EnvironmentElement audio1;
 	EnvironmentElement audio2;
@@ -92,6 +93,7 @@ public:
 	GameObject* p2 = nullptr;
 	std::vector<EnvironmentElement> env_elements;
 	int player_counter = 0;
+	std::vector<GameObject*> players;
 };
 ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	TriggerEnvironment* alien = new TriggerEnvironment();
