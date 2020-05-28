@@ -249,8 +249,9 @@ void ComponentCurve::LoadComponent(JSONArraypack* to_load)
 	}
 
 	JSONArraypack* normalPoints = to_load->GetArray("NormalsPoints");
-	for (auto item = 0; item < control_points.size() / 3; ++item) {
-		control_points_normals.push_back(float3(0.f, 1.f, 0.f));
+	for (uint i = 0; i < normalPoints->GetArraySize(); ++i) {
+		control_points_normals.push_back(normalPoints->GetFloat3("NormalPoint"));
+		normalPoints->GetAnotherNode();
 	}
 
 	curve.SetPoints(control_points, control_points_normals);

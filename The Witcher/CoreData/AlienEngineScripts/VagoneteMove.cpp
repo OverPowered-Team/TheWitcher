@@ -80,7 +80,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 				}
 			}
 			actual_pos = 0.0F;
-			speed = direction->velocity;
+			speed = 10.f; // CHANGED :( We R sorry direction->velocity;
 		}
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
@@ -146,8 +146,8 @@ void VagoneteMove::FollowCurve()
 	float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
 	float3 Y = vector.Cross(normal);
 	float3x3 rot = float3x3(vector, normal, Y);
-	rigid_body->SetRotation(rot.ToQuat());
-	rigid_body->SetPosition(currentPos);
+	rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
+	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
 
 	/*float3 next_pos = curve->curve.ValueAtDistance(actual_pos);
 	float3 diff_pos = (curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5) - next_pos).Normalized();
