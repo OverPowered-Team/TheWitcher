@@ -75,7 +75,7 @@ void NilfgaardSoldier::OnDeathHit()
 
 void NilfgaardSoldier::CheckDistance()
 {
-	if ((distance < stats["AttackRange"].GetValue()))
+	if ((distance < stats["AttackRange"].GetValue()) && is_attacking)
 	{
 		float angle = atan2f(direction.z, direction.x);
 		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad()));
