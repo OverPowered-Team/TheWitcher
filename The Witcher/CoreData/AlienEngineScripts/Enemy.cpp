@@ -445,9 +445,10 @@ void Enemy::HitFreeze(float freeze_time)
 	{
 		is_frozen = true;
 		float speed = animator->GetCurrentStateSpeed();
+		std::string state_freezed = animator->GetCurrentStateName();
 		animator->SetCurrentStateSpeed(0);
 		ComponentAnimator* anim = animator;
-		Invoke([this, speed]() -> void {Enemy::StopHitFreeze(speed); }, freeze_time);
+		Invoke([this, speed, state_freezed]() -> void {Enemy::StopHitFreeze(speed, state_freezed); }, freeze_time);
 	}
 }
 
@@ -460,10 +461,10 @@ void Enemy::SpawnAttackParticle()
 }
 
 
-void Enemy::StopHitFreeze(float speed)
+void Enemy::StopHitFreeze(float speed, std::string name)
 {
 	is_frozen = false;
-	animator->SetCurrentStateSpeed(speed);
+	animator->SetStateSpeed(name.c_str(), speed);
 }
 
 void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
@@ -581,6 +582,7 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 {
 	player_controllers[current_player]->current_attacking_enemies--;
 	is_attacking = false;
-	SetState("Guard");
+	if(!IsDead())
+		SetState("Guard");
 }
 	
