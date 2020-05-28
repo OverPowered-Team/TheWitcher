@@ -218,7 +218,6 @@ void Scale_Win::Scale()
 	float3 posR = right_scale->transform->GetGlobalPosition();
 	float3 posL = left_scale->transform->GetGlobalPosition();
 
-	bool is_right_up = posR.y >= posL.y;
 
 	right_scale->transform->SetLocalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
 	left_scale->transform->SetLocalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
@@ -230,6 +229,7 @@ void Scale_Win::Scale()
 
 	// Connector between plates
 	float3 vector = right_scale->transform->GetGlobalPosition() - left_scale->transform->GetGlobalPosition();
+	bool is_right_up = vector.y >= (posR-posL).y;
 	connector->transform->SetGlobalRotation(connector->transform->GetGlobalRotation() * Quat::RotateAxisAngle((is_right_up) ? -float3::unitX() : float3::unitX(), vector.AngleBetween(posR - posL)));
 
 	if (Time::GetGameTime() > time + time_to_scale)
