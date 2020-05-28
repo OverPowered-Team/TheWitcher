@@ -13,9 +13,9 @@ public:
 	float scream_cd_timer = 0.0f;
 	bool can_mini_scream = true;
 	float phase_0_timer = 0.0f;
-	float phase_0_time = 3.0f;
+	float phase_0_time = 2.0f;
 	float phase_4_timer = 0.0f;
-	float phase_4_time = 3.0f;
+	float phase_4_time = 2.0f;
 	bool phase_change = false;
 	float clone_dead_damage = 12.50f;
 
