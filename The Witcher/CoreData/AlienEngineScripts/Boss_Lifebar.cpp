@@ -13,7 +13,7 @@ void Boss_Lifebar::Start()
 	lifebar = game_object->GetChild("Boss_Life")->GetComponent<ComponentBar>();
 
 	boss_name = lifebar->game_object_attached->GetChild("Text")->GetComponent<ComponentText>();
-	boss_name->SetText(game_object->parent->GetName());
+	boss_name->SetText(boss->GetName());
 
 	lifebar->SetBackgroundColor(1, 1, 1, 0.0f);
 	lifebar->SetBarColor(1, 1, 1, 0.0f);
