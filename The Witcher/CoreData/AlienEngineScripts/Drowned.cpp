@@ -57,11 +57,6 @@ void Drowned::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-void Drowned::CleanUpEnemy()
-{
-	ReleaseAllParticles();
-}
-
 void Drowned::Stun(float time)
 {
 	if (state != DrownedState::STUNNED && state != DrownedState::DEAD && state != DrownedState::DYING)

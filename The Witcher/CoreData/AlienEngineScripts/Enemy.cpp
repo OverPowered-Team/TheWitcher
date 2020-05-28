@@ -191,6 +191,12 @@ void Enemy::UpdateEnemy()
 
 void Enemy::CleanUpEnemy()
 {
+	ReleaseAllParticles();
+	if (decapitated_head)
+	{
+		decapitated_head->ToDelete();
+		decapitated_head = nullptr;
+	}
 }
 
 void Enemy::SetStats(const char* json)

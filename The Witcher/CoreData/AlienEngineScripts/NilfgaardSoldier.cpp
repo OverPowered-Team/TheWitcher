@@ -126,15 +126,6 @@ void NilfgaardSoldier::PlaySFX(const char* sfx_name)
 		LOG("Sound effect with name %s not found!", sfx_name);
 }
 
-void NilfgaardSoldier::CleanUpEnemy()
-{
-	ReleaseAllParticles();
-	if (decapitated_head)
-	{
-		decapitated_head->ToDelete();
-		decapitated_head = nullptr;
-	}
-}
 
 void NilfgaardSoldier::Stun(float time)
 {
