@@ -136,7 +136,9 @@ void Enemy::UpdateEnemy()
 		}
 	}
 
-	character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
+	if(type != EnemyType::DROWNED)
+		character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
+
 	if(type != EnemyType::BLOCKER_OBSTACLE)
 		animator->SetBool("grounded", character_ctrl->isGrounded);
 
