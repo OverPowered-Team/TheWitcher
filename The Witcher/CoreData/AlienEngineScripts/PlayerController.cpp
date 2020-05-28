@@ -435,6 +435,9 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		return;
 	}
 
+	if (player_data.stats["Health"].GetValue() == 0.0f)
+		return;
+
 	player_data.stats["Health"].DecreaseStat(dmg);
 
 	switch (player_data.type)
