@@ -64,6 +64,9 @@ void RunningState::Update(PlayerController* player)
 	{
 		player->Fall();
 	}
+
+	float lerp = player->player_data.velocity.Length() / player->player_data.stats["Movement_Speed"].GetValue();
+	player->animator->SetStateSpeed("Run", lerp);
 }
 
 void RunningState::OnEnter(PlayerController* player)
@@ -243,6 +246,19 @@ void RollingState::Update(PlayerController* player)
 {
 	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 	player->UpdateDashEffect();
+
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		float current_speed = player->animator->GetCurrentStateSpeed();
+		float target_speed = current_speed + player->dashData.current_acel_multi * Time::GetDT();
+
+		if (target_speed > player->dashData.max_speed)
+			target_speed = player->dashData.max_speed;
+		else if (target_speed < player->dashData.min_speed)
+			target_speed = player->dashData.min_speed;
+
+		player->animator->SetStateSpeed("Roll", target_speed);
+	}
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
