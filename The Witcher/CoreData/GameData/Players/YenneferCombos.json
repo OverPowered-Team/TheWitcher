@@ -55,7 +55,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 0.5
+          "value": 0.6
         }
       ],
       "activation_frame": 30,
@@ -64,11 +64,57 @@
       "snap_detection_range": 5.5,
       "min_distance_to_target": 4.5,
       "next_attack_light": "LL",
-      "next_attack_heavy": "End",
+      "next_attack_heavy": "LH",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test"
     },
+    {
+      "name": "LH",
+      "button": "LH",
+      "particle_name": "y_heavy_basic",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "colliders": [
+        {
+          "type": "Box",
+          "pos_x": 0,
+          "pos_y": 0.550,
+          "pos_z": 1.150,
+          "width": 1.7,
+          "height": 1,
+          "depth": 1.7,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.5
+        }
+      ],
+      "activation_frame": 25,
+      "movement_strength": 0.0,
+      "max_distance_traveled": 1.0,
+      "snap_detection_range": 5.5,
+      "min_distance_to_target": 4.5,
+      "next_attack_light": "LHL",
+      "next_attack_heavy": "LHH",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+
     {
       "name": "LL",
       "button": "LL",
@@ -170,7 +216,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 0.7
+          "value": 0.9
         }
       ],
       "activation_frame": 18,
@@ -179,6 +225,51 @@
       "snap_detection_range": 5.5,
       "min_distance_to_target": 4.5,
       "next_attack_light": "LLLL",
+      "next_attack_heavy": "LLLH",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "LHH",
+      "button": "LHH",
+      "particle_name": "p_yen_atk_2",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "colliders": [
+        {
+          "type": "Box",
+          "pos_x": 0,
+          "pos_y": 0.75,
+          "pos_z": 1.8,
+          "width": 2.3,
+          "height": 1.7,
+          "depth": 2.5,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.9
+        }
+      ],
+      "activation_frame": 18,
+      "movement_strength": 0,
+      "max_distance_traveled": 1.0,
+      "snap_detection_range": 5.5,
+      "min_distance_to_target": 4.5,
+      "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
@@ -215,7 +306,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 1.6
+          "value": 0.7
         }
       ],
       "activation_frame": 25,
@@ -223,7 +314,7 @@
       "movement_strength": 0,
       "min_distance_to_target": 4.5,
       "snap_detection_range": 5.5,
-      "next_attack_light": "End",
+      "next_attack_light": "LLHL",
       "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
@@ -305,7 +396,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 1.3
+          "value": 1.2
         }
       ],
       "activation_frame": 39,
@@ -350,7 +441,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 0.8
+          "value": 0
         }
       ],
       "activation_frame": 25,
@@ -358,10 +449,145 @@
       "movement_strength": 0.0,
       "min_distance_to_target": 3.4,
       "snap_detection_range": 5.5,
-      "next_attack_light": "End",
+      "next_attack_light": "HL",
       "next_attack_heavy": "HH",
       "freeze_time": 0.1,
       "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "HL",
+      "button": "HL",
+      "particle_name": "y_heavy_basic",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "colliders": [
+        {
+          "type": "Box",
+          "pos_x": 0,
+          "pos_y": 0.4,
+          "pos_z": 2.35,
+          "width": 2.6,
+          "height": 1,
+          "depth": 3.6,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.5
+        }
+      ],
+      "activation_frame": 25,
+      "max_distance_traveled": 1.0,
+      "movement_strength": 0.0,
+      "min_distance_to_target": 4.5,
+      "snap_detection_range": 5.5,
+      "next_attack_light": "HLL",
+      "next_attack_heavy": "End",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "HLL",
+      "button": "HLL",
+      "particle_name": "y_heavy_basic",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "colliders": [
+        {
+          "type": "Box",
+          "pos_x": 0,
+          "pos_y": 0.4,
+          "pos_z": 2.35,
+          "width": 2.6,
+          "height": 1,
+          "depth": 3.6,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.8
+        }
+      ],
+      "activation_frame": 25,
+      "max_distance_traveled": 1.0,
+      "movement_strength": 0.0,
+      "min_distance_to_target": 4.5,
+      "snap_detection_range": 5.5,
+      "next_attack_light": "End",
+      "next_attack_heavy": "HLLH",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test"
+    },
+    {
+      "name": "HLLH",
+      "button": "HLLH",
+      "particle_name": "y_heavy_basic",
+      "particle_pos": {
+        "pos_x": -0.25,
+        "pos_y": 0.5,
+        "pos_z": 1
+      },
+      "colliders": [
+        {
+          "type": "Box",
+          "pos_x": 0,
+          "pos_y": 0.75,
+          "pos_z": 2.2,
+          "width": 2.8,
+          "height": 1.7,
+          "depth": 3.4,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.8
+        }
+      ],
+      "activation_frame": 25,
+      "max_distance_traveled": 1.0,
+      "movement_strength": 0.0,
+      "min_distance_to_target": 4.5,
+      "snap_detection_range": 5.5,
+      "next_attack_light": "End",
+      "next_attack_heavy": "End",
+      "freeze_time": 0.1,
+      "cam_shake": 1,
       "allow_particle": "allow_test"
     },
     {
@@ -395,7 +621,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 0.9
+          "value": 0.7
         }
       ],
       "activation_frame": 25,
@@ -440,7 +666,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 1
+          "value": 0.8
         }
       ],
       "activation_frame": 25,
@@ -485,7 +711,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 1.2 
+          "value": 0.8
         }
       ],
       "activation_frame": 25,
@@ -575,7 +801,7 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 1.2
+          "value": 0.7
         }
       ],
       "activation_frame": 25,

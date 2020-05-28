@@ -83,7 +83,9 @@ void DrownedRange::UpdateEnemy()
 		break;
 	case DrownedState::HIT:
 	{
-		
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
 	}
 		break;
 	case DrownedState::DYING:
@@ -91,7 +93,7 @@ void DrownedRange::UpdateEnemy()
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = DrownedState::DEAD;
-		animator->PlayState("Death");
+		animator->PlayState("Dead");
 		last_player_hit->OnEnemyKill();
 		audio_emitter->StartSound("Play_Drowner_Death");
 		if (m_controller && is_combat)

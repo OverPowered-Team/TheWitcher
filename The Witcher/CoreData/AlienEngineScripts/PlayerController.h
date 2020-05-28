@@ -152,8 +152,6 @@ public:
 	bool can_move = true;
 	bool input_blocked = false;
 
-	int ground_layer_mask = 0;
-
 	//Relics
 	std::vector<Effect*> effects;
 	std::vector<Relic*> relics;

@@ -27,7 +27,6 @@ void CiriOriginal::StartEnemy()
 	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	fight_controller = GetComponent<CiriFightController>();
-	is_immune = true;
 
 }
 
