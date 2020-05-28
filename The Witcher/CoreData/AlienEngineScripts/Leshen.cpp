@@ -22,7 +22,7 @@ void Leshen::StartEnemy()
 
 	Boss::StartEnemy();
 
-	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
+	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
