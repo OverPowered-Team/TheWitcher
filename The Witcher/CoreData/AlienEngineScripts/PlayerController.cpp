@@ -72,10 +72,10 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
-	if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
-	{
-		ReceiveDamage(100);
-	}
+	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
+	//{
+	//	ReceiveDamage(100);
+	//}
 
 	UpdateInput();
 
