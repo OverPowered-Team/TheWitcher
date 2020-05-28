@@ -43,6 +43,7 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
 		Scores_Data::won_level1 = true;
+		Scores_Data::last_scene = SceneManager::GetCurrentScene();
 		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
