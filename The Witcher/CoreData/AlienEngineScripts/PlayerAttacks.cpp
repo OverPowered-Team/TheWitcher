@@ -391,6 +391,8 @@ void PlayerAttacks::CastSpell()
 		{
 			if (GameManager::instance->rumbler_manager)
 			{ 
+				shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+
 				if (strcmp("Igni", current_attack->info.name.c_str()) == 0)
 					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
 				else 
@@ -419,6 +421,8 @@ void PlayerAttacks::CastSpell()
 		{
 			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particle_spawn_positions[1]->transform->GetGlobalPosition());
+
+			shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
 
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
 			Quat rot = projectile_go->transform->GetGlobalRotation();
@@ -523,7 +527,7 @@ float3 PlayerAttacks::GetKnockBack(ComponentTransform* enemy_transform)
 		}
 		if (current_attack->info.knock_direction.x != 0)
 		{
-			knockback += (Quat::RotateAxisAngle(float3::unitY(), -90 * current_attack->info.knock_direction.x) * enemy_direction) * current_attack->info.knock_direction.x;
+			knockback += Quat::RotateAxisAngle(float3::unitY(), -90 * current_attack->info.knock_direction.x) * enemy_direction;
 		}
 		//float2 tmp_f = float2(player_controller->game_object->transform->forward.x, player_controller->game_object->transform->forward.z);
 		//float2 tmp_e = float2(enemy_direction.x, enemy_direction.z);

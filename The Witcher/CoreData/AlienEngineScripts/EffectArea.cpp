@@ -32,14 +32,11 @@ void EffectArea::Update()
 void EffectArea::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "Enemy") == 0) {
-		auto comps = col->game_object_attached->GetComponents<Alien>();
-		for (auto i = comps.begin(); i != comps.end(); ++i) {
-			Enemy* enemy = dynamic_cast<Enemy*>(*i);
-			if (enemy) {
-				Effect* new_effect = GameManager::instance->effects_factory->CreateEffect(effect_to_apply);
-				enemy->AddEffect(new_effect);
-				enemies_afflicted.insert(std::pair(enemy,new_effect));
-			}
+		Enemy* enemy = col->game_object_attached->GetComponent<Enemy>();
+		if (enemy && !enemy->IsDead()) {
+			Effect* new_effect = GameManager::instance->effects_factory->CreateEffect(effect_to_apply);
+			enemy->AddEffect(new_effect);
+			enemies_afflicted.insert(std::pair(enemy,new_effect));
 		}
 	}
 }
@@ -47,14 +44,11 @@ void EffectArea::OnTriggerEnter(ComponentCollider* col)
 void EffectArea::OnTriggerExit(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "Enemy") == 0) {
-		auto comps = col->game_object_attached->GetComponents<Alien>();
-		for (auto i = comps.begin(); i != comps.end(); ++i) {
-			Enemy* enemy = dynamic_cast<Enemy*>(*i);
-			if (enemy) {
-				if (auto it = enemies_afflicted.find(enemy); it != enemies_afflicted.end()) {				
-					enemy->RemoveEffect(it->second);
-					enemies_afflicted.erase(enemy);
-				}
+		Enemy* enemy = col->game_object_attached->GetComponent<Enemy>();
+		if (enemy) {
+			if (auto it = enemies_afflicted.find(enemy); it != enemies_afflicted.end()) {				
+				enemy->RemoveEffect(it->second);
+				enemies_afflicted.erase(enemy);
 			}
 		}
 	}

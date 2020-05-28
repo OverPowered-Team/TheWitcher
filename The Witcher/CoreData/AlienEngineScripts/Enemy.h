@@ -51,10 +51,13 @@ public:
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
+	virtual bool IsRangeEnemy() { LOG("Calling virtual function of IsDead!"); return false; }
 	virtual void Decapitate(PlayerController* player);
 
 	virtual void OnTriggerEnter(ComponentCollider* collider) {};
 	virtual void OnDeathHit() {}
+
+	virtual void CanGetInterrupted();
 
 	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero());

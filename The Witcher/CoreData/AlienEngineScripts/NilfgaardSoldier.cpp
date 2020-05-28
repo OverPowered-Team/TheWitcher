@@ -101,6 +101,14 @@ void NilfgaardSoldier::CheckDistance()
 	}
 }
 
+bool NilfgaardSoldier::IsRangeEnemy()
+{
+	if (nilf_type == NilfgaardType::ARCHER)
+		return true;
+	else
+		return false;
+}
+
 void NilfgaardSoldier::RotateSoldier()
 {
 	float angle = atan2f(direction.z, direction.x);

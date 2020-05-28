@@ -27,6 +27,7 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfSoldierMelee() {
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
+	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, nilfgaard);
 
 	return nilfgaard;
 }
