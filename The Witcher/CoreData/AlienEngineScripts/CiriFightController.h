@@ -26,13 +26,22 @@ public:
 
 	std::vector<GameObject*> clone_positions;
 
+	// Platform
 	GameObject* platform = nullptr;
 	GameObject* circle = nullptr;
 	ComponentMaterial* material_platform = nullptr;
-	int count_circle = 50;
+	int count_circle = 58;
+	bool changing_platform = false;
 	float time_platform = 0.0;
 	bool desactived_mid_platform = false;
 	float rescale_platform_value = 0.1;
+
+	// Wall
+	GameObject* wall = nullptr;
+	std::vector<GameObject*> rings_enabled;
+	std::vector<GameObject*> rings_disabled;
+	float3 position_respawn = { 0, 0, 0 };
+
 public:
 
 	CiriFightController();
@@ -58,6 +67,11 @@ public:
 
 	void OnCloneDead(GameObject* clone);
 
+	void MoveWall();
+	void ScaleWall();
+	void UpdatePlatform();
+	void TransportPlayer();
+
 };
 
 ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
@@ -66,6 +80,7 @@ ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(cirifightcontroller->ciri_clones_scream_cd);
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->platform);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->wall);
 
 	return cirifightcontroller;
 } 
