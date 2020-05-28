@@ -369,8 +369,10 @@ void PlayerAttacks::UpdateCollider()
 
 void PlayerAttacks::DeactivateCollider()
 {
-	if (colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
-		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
+	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
+	{
+		(*it)->SetEnable(false);
+	}
 }
 
 void PlayerAttacks::CastSpell()
