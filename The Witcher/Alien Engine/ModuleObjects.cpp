@@ -34,7 +34,6 @@
 #include "ModuleAudio.h"
 #include "ComponentParticleSystem.h"
 #include "ComponentTrail.h"
-#include "Trail.h"
 #include "ReturnZ.h"
 #include "Time.h"
 #include "Prefab.h"
@@ -415,25 +414,12 @@ update_status ModuleObjects::PostUpdate(float dt)
 				else
 				{
 					ComponentParticleSystem* partSystem = (*it).second->GetComponent<ComponentParticleSystem>();
-					if (partSystem != nullptr)
-					{
-
-						ResourceMaterial* mat = partSystem->GetSystem()->material;
-						if (mat != nullptr)
-							wanted_shader = mat->used_shader;
-					}
-
-					ComponentTrail* trail = (*it).second->GetComponent<ComponentTrail>();
-					if (trail != nullptr)
-					{
-						ResourceMaterial* mat = trail->GetTrail()->material;
-						if (mat != nullptr)
-							wanted_shader = mat->used_shader;
-					}
-
-					if (partSystem && trail == nullptr)
+					if (partSystem == nullptr)
 						continue;
 
+					ResourceMaterial* mat = partSystem->GetSystem()->material;
+					if (mat != nullptr)
+						wanted_shader = mat->used_shader;
 				}
 
 				if (wanted_shader != current_used_shader)
