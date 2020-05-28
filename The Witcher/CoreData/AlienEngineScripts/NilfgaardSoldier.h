@@ -35,7 +35,6 @@ public:
 
 	void StartEnemy() override;
 	void SetStats(const char* json) override;
-	void CleanUpEnemy() override;
 
 	void Stun(float time) override;
 	bool IsDead() override;
