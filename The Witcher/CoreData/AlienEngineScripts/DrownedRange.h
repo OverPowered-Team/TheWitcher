@@ -36,6 +36,7 @@ ALIEN_FACTORY DrownedRange* CreateDrownedRange() {
 	SHOW_IN_INSPECTOR_AS_ENUM(Drowned::DrownedState, drowned->state);
 	SHOW_VOID_FUNCTION(DrownedRange::ShootSlime, drowned);
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, drowned);
+	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, drowned);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(drowned->increase_hit_animation);
 
 	return drowned;
