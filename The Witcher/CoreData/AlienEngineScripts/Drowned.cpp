@@ -115,3 +115,44 @@ float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back
 
 	return damage;
 }
+
+void Drowned::SetState(const char* state_str)
+{
+	if (state_str == "Idle")
+	{
+		state = DrownedState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+	}
+	else if (state_str == "Move")
+	{
+		state = DrownedState::MOVE;
+	}
+	else if (state_str == "Attack")
+	{
+		state = DrownedState::ATTACK;
+		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+	}
+	else if (state_str == "GetOff")
+	{
+		state = DrownedState::GETOFF;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+	}
+	else if (state_str == "Hide")
+		state = DrownedState::HIDE;
+	else if (state_str == "Hit")
+		state = DrownedState::HIT;
+	else if (state_str == "Dying")
+		state = DrownedState::DYING;
+	else if (state_str == "Dead")
+		state = DrownedState::DEAD;
+	else if (state_str == "Stunned")
+		state = DrownedState::STUNNED;
+	else
+		LOG("Incorrect state name: %s", state_str);
+}

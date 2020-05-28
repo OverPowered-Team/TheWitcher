@@ -34,6 +34,7 @@ public:
 	void CleanUpEnemy() override;
 
 	float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero()) override;
+	void SetState(const char* state_str) override;
 
 	void Stun(float time) override;
 	bool IsDead() override;
