@@ -19,6 +19,8 @@ public:
 	GameObject* root_1 = nullptr;
 	GameObject* root_2 = nullptr;
 
+	GameObject* cloud_collider = nullptr;
+
 	Prefab crow_prefab;
 	GameObject* crows = nullptr;
 
@@ -72,7 +74,6 @@ public:
 	void SetRandomDirection();
 
 	void OnAnimationEnd(const char* name);
-	void OnTriggerEnter(ComponentCollider* collider);
 	void ChangeScene();
 
 	void SetStats(const char* json) override;
