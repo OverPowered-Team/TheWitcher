@@ -14,9 +14,10 @@ SpawnEnemy::~SpawnEnemy()
 
 void SpawnEnemy::InstantiateEnemy(GameObject* parent)
 {
-	Enemy* enemy = GameManager::instance->enemy_manager->CreateEnemy(enemy_type, game_object->transform->GetGlobalPosition(), (ExtraEnumType)extra_type, parent);
+	Enemy* enemy = GameManager::instance->enemy_manager->CreateEnemy(enemy_type, game_object->transform->GetGlobalPosition(), (ExtraEnumType)extra_type);
 	enemy->character_ctrl->SetPosition(game_object->transform->GetGlobalPosition());
-	parent->GetComponent<BlockerObstacle>()->AddChildren(enemy->game_object);
+	enemy->is_obstacle = true;
+	enemy->game_object->SetNewParent(parent);
 	Destroy(game_object);
 }
 
