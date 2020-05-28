@@ -105,8 +105,6 @@ void PlayerController::Update()
 
 	//Battle circle
 	CheckEnemyCircle();
-	// Visual effects
-	UpdateVisualEffects(); 
 
 	CheckGround();
 }
@@ -436,6 +434,9 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		AbsorbHit();
 		return;
 	}
+
+	if (player_data.stats["Health"].GetValue() == 0.0f)
+		return;
 
 	player_data.stats["Health"].DecreaseStat(dmg);
 

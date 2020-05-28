@@ -18,7 +18,7 @@ void PlayerProjectile::Start()
 void PlayerProjectile::Update()
 {
 	if ((Time::GetGameTime() - start_time) > duration)
-		GameObject::Destroy(game_object);
+		GameObject::Destroy(this->game_object);
 	else
 	{
 		float3 pos = transform->GetGlobalPosition() + (direction * speed * Time::GetDT());
