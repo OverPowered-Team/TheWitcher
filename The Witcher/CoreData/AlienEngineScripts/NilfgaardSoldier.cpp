@@ -14,6 +14,7 @@ void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
 	state = NilfgaardSoldierState::IDLE;
+	decapitation_particle = "decapitation_particle_human";
 	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }

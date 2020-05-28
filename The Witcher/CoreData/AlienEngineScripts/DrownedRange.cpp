@@ -83,9 +83,7 @@ void DrownedRange::UpdateEnemy()
 		break;
 	case DrownedState::HIT:
 	{
-		velocity += velocity * knock_slow * Time::GetDT();
-		velocity.y += gravity * Time::GetDT();
-		character_ctrl->Move(velocity * Time::GetDT());
+		
 	}
 		break;
 	case DrownedState::DYING:
