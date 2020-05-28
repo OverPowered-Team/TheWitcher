@@ -102,18 +102,23 @@ void CiriFightController::UpdatePhaseOne()
 
 void CiriFightController::FinishPhaseOne()
 {
+	phase = 2;
+	phase_change = true;
 	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
 }
 
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
-	changing_platform = false;
+	
 }
 
 void CiriFightController::FinishPhaseTwo()
 {
-	
+	time_platform = 0.0f;
+	changing_platform = false;
+	phase = 3;
+	phase_change = true;
 }
 
 void CiriFightController::UpdatePhaseThree()
@@ -125,7 +130,7 @@ void CiriFightController::UpdatePhaseThree()
 
 void CiriFightController::FinishPhaseThree()
 {
-	
+	phase = 4;
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -153,35 +158,17 @@ void CiriFightController::UpdatePhaseFour()
 	}
 }
 
-void CiriFightController::ChangeToPhase2()
-{
-	phase = 2;
-	phase_change = true;
-	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
-}
-
-void CiriFightController::ChangeToPhase3()
-{
-	phase = 3;
-	phase_change = true;
-}
-
-void CiriFightController::ChangeToPhase4()
-{
-	phase = 4;
-}
-
 void CiriFightController::OnCloneDead(GameObject* clone)
 {
 	clones_dead++;
 	game_object->GetComponent<CiriOriginal>()->GetDamaged(clone_dead_damage);
 	if (clones_dead == 2) {
-		ChangeToPhase2();
+		FinishPhaseOne();
 	}
 	else if (clones_dead == 5)
-		ChangeToPhase3();
+		FinishPhaseTwo();
 	else if (clones_dead == 8)
-		ChangeToPhase4();
+		FinishPhaseThree();
 	
 	if(clones_dead < 6)
 		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
