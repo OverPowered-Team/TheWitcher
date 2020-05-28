@@ -37,7 +37,7 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (!collided) {
 		std::vector<ComponentCollider*> hitted;
-		hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 8);
+		hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 5);
 		for (auto it = hitted.begin(); it != hitted.end(); ++it) {
 
 			if (strcmp((*it)->game_object_attached->GetTag(), "Player") == 0) {

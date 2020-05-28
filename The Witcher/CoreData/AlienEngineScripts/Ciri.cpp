@@ -190,7 +190,7 @@ void Ciri::LaunchMiniScreamAction()
 	fight_controller->can_mini_scream = false;
 	animator->PlayState("Scream");
 	fight_controller->scream_cd_timer = 0;
-	SpawnParticle("Ciri_MiniScream", {0, 0.6, 0});
+	SpawnParticle("Ciri_MiniScream", { 0, 0.6, 0 }, true);
 }
 
 void Ciri::MiniScream()
