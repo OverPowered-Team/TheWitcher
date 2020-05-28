@@ -222,6 +222,32 @@ PxQueryHitType::Enum ControllerFilterCallback::postFilter(const PxFilterData& fi
 	return PxQueryHitType::Enum::eTOUCH;
 }
 
+PxQueryHitType::Enum RaycastFilterCallback::preFilter(const PxFilterData& filterData, const PxShape* shape, const PxRigidActor* actor, PxHitFlags& queryFlags)
+{
+	PxFilterData filterData1 = shape->getSimulationFilterData();
+	int value = 1 << (int)filterData1.word0;
+	int layer_mask = App->physx->layer_mask;
+
+
+	if (App->physx->layer_mask == -1)
+	{
+		return (App->physx->multiple_hit) ? PxQueryHitType::Enum::eTOUCH : PxQueryHitType::Enum::eBLOCK;
+	}
+
+	if ((value & layer_mask) != 0)
+	{
+		return  (App->physx->multiple_hit) ? PxQueryHitType::Enum::eTOUCH : PxQueryHitType::Enum::eBLOCK;
+	}
+	else
+		return PxQueryHitType::Enum::eNONE;
+}
+
+PxQueryHitType::Enum RaycastFilterCallback::postFilter(const PxFilterData& filterData, const PxQueryHit& hit)
+{
+	return PxQueryHitType::Enum::eTOUCH;
+}
+
+
 LayerChangedData::LayerChangedData(int layer_0, int layer_1) : layer_0(layer_0), layer_1(layer_1) {}
 
 ContactPoint::ContactPoint(const float3& normal, const float3& point, float separation, ComponentCollider* this_collider, ComponentCollider* other_collider) :
@@ -240,3 +266,13 @@ void RaycastHit::SetRaycastHit(const PxRaycastHit& _hit) {
 	point = PXVEC3_TO_F3(_hit.position);
 	texture_coords = float2(_hit.u, _hit.v);
 }
+
+void RaycastHit::SetRaycastHit(const PxSweepHit& _hit) {
+	collider = (ComponentCollider*)_hit.shape->userData;
+	rigid_body = collider->physics->GetRigidBody();
+	transform = collider->physics->transform;
+	distance = _hit.distance;
+	normal = PXVEC3_TO_F3(_hit.normal);
+	point = PXVEC3_TO_F3(_hit.position);
+}
+

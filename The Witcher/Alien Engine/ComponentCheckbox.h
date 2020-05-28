@@ -17,7 +17,7 @@ class __declspec(dllexport) ComponentCheckbox :public ComponentUI
 public:
 
 	ComponentCheckbox(GameObject* obj);
-	~ComponentCheckbox() {};
+	~ComponentCheckbox();
 
 	bool DrawInspector();
 

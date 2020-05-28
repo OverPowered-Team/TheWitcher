@@ -62,6 +62,9 @@ void PlayerController::Start()
 
 	state = new IdleState();
 	state->OnEnter(this);
+
+	// Dash
+	dashData.current_acel_multi = dashData.accel_multi; 
 }
 
 void PlayerController::Update()
@@ -82,19 +85,82 @@ void PlayerController::Update()
 	//Effects-----------------------------
 	EffectsUpdate();
 
-	//MOVEMENT
-	player_data.speed.y -= player_data.gravity * Time::GetDT();
-	if(CheckBoundaries() && can_move)
-		controller->Move(player_data.speed * Time::GetDT());
+	//Movement
+	player_data.vertical_speed -= player_data.gravity * Time::GetDT();
+	player_data.velocity.y += player_data.vertical_speed;
 
-	if (controller->isGrounded) //RESET Y SPEED IF ON GROUND
+	if (CheckBoundaries() && can_move)
 	{
-		player_data.speed.y = 0;
+		controller->Move(player_data.velocity * Time::GetDT());
+	}
+
+	if (is_grounded)
+	{
+		player_data.vertical_speed = 0;
 	}
 
 	//Update animator variables
-	animator->SetFloat("speed", float3(player_data.speed.x, 0, player_data.speed.z).Length());
+	animator->SetFloat("speed", float3(player_data.velocity.x, 0, player_data.velocity.z).Length());
 	animator->SetBool("movement_input", mov_input);
+
+	// Visual effects
+	UpdateVisualEffects(); 
+
+	CheckGround();
+}
+
+void PlayerController::CheckGround()
+{
+	direction = GetDirectionVector();
+
+	RaycastHit hit;
+
+	float3 center_position = transform->GetGlobalPosition();
+	float offset = transform->GetGlobalScale().y * 0.5f;
+	center_position.y += offset;
+
+	if (Physics::Raycast(center_position, -float3::unitY(), offset + 0.1f, hit, Physics::GetLayerMask("Ground")))
+	{
+		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+		direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
+
+		is_grounded = player_data.vertical_speed > 0 ? false : true;
+		/*if (direction_vector.y > 0) //temporal?
+			direction_vector.y = 0;*/
+	}
+	else
+		is_grounded = false;
+}
+
+void PlayerController::UpdateVisualEffects()
+{
+	if (state->type == StateType::RUNNING)
+	{
+		float lerp = player_data.velocity.Length() / player_data.stats["Movement_Speed"].GetValue();
+		animator->SetStateSpeed("Run", lerp);
+	}
+	else if (state->type == StateType::ROLLING)
+	{
+		if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		{
+			float current_speed = animator->GetCurrentStateSpeed();
+			float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT();
+
+			if (target_speed > dashData.max_speed)
+				target_speed = dashData.max_speed;
+			else if (target_speed < dashData.min_speed)
+				target_speed = dashData.min_speed;
+
+			animator->SetStateSpeed("Roll", target_speed);
+		}
+		
+	}
+}
+
+void PlayerController::ToggleDashMultiplier()
+{   
+	if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
 }
 
 void PlayerController::UpdateInput()
@@ -206,26 +272,29 @@ bool PlayerController::AnyKeyboardInput()
 }
 
 void PlayerController::HandleMovement()
-{
-	/*float3 direction_vector = float3(movement_input.x, 0.f, movement_input.y);
-	direction_vector = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalRotation().Mul(direction_vector);
-	direction_vector.y = 0.f;
-
-	float speed_y = player_data.speed.y;
-	player_data.speed = direction_vector.Normalized() * (player_data.stats["Movement_Speed"].GetValue() * movement_input.Length());
-	player_data.speed.y = speed_y;*/
-	float3 direction_vector = GetDirectionVector();
-
-	float tmp_y = player_data.speed.y;
-	player_data.speed = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
-	player_data.speed.y = tmp_y;
-
+{	
+	player_data.velocity = direction * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
 
 	//rotate
 	if (mov_input)
 	{
-		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction.x, direction.z)));
 	}
+}
+
+void PlayerController::OnDrawGizmos()
+{
+	/*float4x4 matrix = transform->GetGlobalMatrix();
+	matrix = matrix.Translate(float3(0, 0.5f, 0)); //middle point of character
+	float3 origin = matrix.TranslatePart();
+	RaycastHit hit;
+
+	if (Physics::CapsuleCast(matrix, 0.1f, 0.25f, -float3::unitY(), 0.5f, hit, Physics::GetLayerMask("Ground")))
+	{
+		Gizmos::DrawLine(origin, hit.point, Color::Green());
+		float rest_dist = 0.2f - origin.Distance(hit.point);
+		Gizmos::DrawLine(hit.point, hit.point + hit.normal * rest_dist, Color::Green());
+	}*/
 }
 
 void PlayerController::EffectsUpdate()
@@ -309,28 +378,23 @@ void PlayerController::ReleaseAttackParticle()
 	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
-	/*for (auto it = particles.begin(); it != particles.end();)
-	{
-		if (it->first == attacks->GetCurrentAttack()->info.particle_name)
-		{
-			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.particle_name, it->second);
-			it = particles.erase(it);
-		}
-		if (it->first == attacks->GetCurrentAttack()->info.allow_combo_p_name)
-		{
-			GameManager::instance->particle_pool->ReleaseInstance(attacks->GetCurrentAttack()->info.allow_combo_p_name, it->second);
-			it = particles.erase(it);
-		}
-		else
-			++it;
-	}*/
 }
 
 #pragma region PlayerActions
 void PlayerController::Jump()
 {
-	player_data.speed.y = player_data.stats["Jump_Power"].GetValue();
+	player_data.vertical_speed = player_data.stats["Jump_Power"].GetValue();
+	is_grounded = false;
 	animator->PlayState("Air");
+	switch (player_data.type)
+	{
+	case PlayerController::PlayerType::GERALT:
+		audio->StartSound("Play_GeraltJump");
+		break;
+	case PlayerController::PlayerType::YENNEFER:
+		audio->StartSound("Play_YennJump");
+		break;
+	}
 	animator->SetBool("air", true);
 }
 
@@ -381,6 +445,16 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 	player_data.stats["Health"].DecreaseStat(dmg);
 
+	switch (player_data.type)
+	{
+	case PlayerController::PlayerType::GERALT:
+		audio->StartSound("Play_GeraltGetDamaged");
+		break;
+	case PlayerController::PlayerType::YENNEFER:
+		audio->StartSound("Play_YennGetDamaged");
+		break;
+	}
+
 	if (HUD)
 	{
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
@@ -396,7 +470,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		else
 		{
 			animator->PlayState("Hit");
-			player_data.speed = knock_speed;
+			player_data.velocity = knock_speed;
 			SetState(StateType::HIT);
 		}
 	}
@@ -539,7 +613,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 }
 bool PlayerController::CheckBoundaries()
 {
-	float3 next_pos = transform->GetGlobalPosition() + player_data.speed * Time::GetDT();
+	float3 next_pos = transform->GetGlobalPosition() + player_data.velocity * Time::GetDT();
 
 	float3 moved = (next_pos - transform->GetGlobalPosition());
 	AABB fake_aabb(max_aabb.minPoint + moved + transform->GetGlobalPosition(), max_aabb.maxPoint + moved + transform->GetGlobalPosition());
@@ -589,7 +663,7 @@ bool PlayerController::CheckBoundaries()
 						return true;
 					}
 					else {
-						player_data.speed = float3::zero();
+						player_data.velocity = float3::zero();
 						return false;
 					}
 				}
@@ -602,7 +676,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	else {
 		if (transform->GetGlobalPosition().Distance(fake_frustum.CenterPoint()) < next_pos.Distance(fake_frustum.CenterPoint())) {
-			player_data.speed = float3::zero();
+			player_data.velocity = float3::zero();
 			return false;
 		}
 	}
@@ -629,14 +703,43 @@ void PlayerController::HitFreeze(float freeze_time)
 
 	float speed = animator->GetCurrentStateSpeed();
 	animator->SetCurrentStateSpeed(0);
+	//PauseParticle();
 	is_immune = true;
 	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
 }
 
 void PlayerController::RemoveFreeze(float speed)
 {
+	//ResumeParticle();
 	animator->SetCurrentStateSpeed(speed);
+	
 	is_immune = false;
+}
+
+void PlayerController::PauseParticle()
+{
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(),attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			(*it)->GetComponent<ParticleSystem>()->Pause();
+
+			return;
+		}
+	}
+}
+
+void PlayerController::ResumeParticle()
+{
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			(*it)->GetComponent<ParticleSystem>()->Play();
+
+			return;
+		}
+	}
 }
 
 void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
@@ -650,13 +753,14 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		{
 			(*it)->SetEnable(false);
 			(*it)->SetEnable(true);
+			
 			return;
 		}
 	}
 	parent = parent != nullptr ? parent : this->game_object;
 	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
-
+	
 	if (new_particle == nullptr)
 		return;
 
@@ -696,7 +800,23 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	}*/
 }
 
+void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
+{
+	for (auto& p : particles)
+		if (strcmp(p->GetName(), "p_run") == 0 || strcmp(p->GetName(), "p_jump") == 0)
+		{
+			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
+			p->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
 
+			// Sub-emitters
+			for (auto& child : p->GetChildren())
+			{
+				child->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(initial_color);
+				child->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(final_color);
+
+			}
+		}
+}
 
 #pragma region Events
 void PlayerController::OnAnimationEnd(const char* name) {

@@ -57,7 +57,7 @@ public:
 	ResourceTexture* LoadTextureFile(const char* path, bool has_been_dropped = false, bool is_custom = true); // when dropped
 	ResourceTexture* LoadEngineTexture(const char* path);
 	ResourceFont* LoadFontFile(const char* path);
-	void LoadTextureToResource(const char* path, ResourceTexture* texture);
+	bool LoadTextureToResource(const char* path, ResourceTexture* texture);
 	void ApplyTextureToSelectedObject(ResourceTexture* texture);
 	void ApplyParticleSystemToSelectedObject(std::string path); // For the moment there are no resource particle system (no need meta)
 

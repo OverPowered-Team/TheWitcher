@@ -344,6 +344,8 @@ void PanelBuild::CreateBuild()
 
 
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Engine Icons"), std::string(folder_location + "/Configuration/Engine Icons"), std::experimental::filesystem::copy_options::recursive);
+	CreateDirectoryA(std::string(folder_location + "/Configuration/EngineTextures").data(), NULL);
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/EngineTextures/Skybox"), std::string(folder_location + "/Configuration/EngineTextures/Skybox"), std::experimental::filesystem::copy_options::recursive);
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Tags"), std::string(folder_location + "/Configuration/Tags"), std::experimental::filesystem::copy_options::recursive);
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/BuildSettings.alienBuild"), std::string(folder_location + "/Configuration/BuildSettings.alienBuild"));
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/DefaultConfiguration.json"), std::string(folder_location + "/Configuration/DefaultConfiguration.json"));
