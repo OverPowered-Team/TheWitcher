@@ -657,7 +657,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_STATIC
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
-							|| cam->state == CameraMovement::CameraState::AXIS)
+							|| cam->state == CameraMovement::CameraState::AXIS
+							|| p->state->type == StateType::JUMPING)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -691,6 +692,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	return true;
 }
+
 bool PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {

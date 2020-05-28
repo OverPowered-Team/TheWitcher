@@ -151,8 +151,10 @@ float3 CameraMovement::CalculateCameraPos(const float& ang1, const float& ang2, 
 void CameraMovement::OnDrawGizmos()
 {
     float3 mid_point = float3::zero();
-    if (players.size() < 2) {
+    if (players.size() == 0 || search_players) {
+        players.clear();
         SearchAndAssignPlayers();
+        search_players = false;
     }
     else {
          mid_point = CalculateMidPoint();
@@ -187,10 +189,10 @@ float3 CameraMovement::CalculateMidPoint()
         }
        
     }
-    if (players.size() == 0)
-        return mid_pos;
-    return mid_pos / players.size();
+
+    return (players.size() == 0) ? mid_pos : mid_pos / players.size();
 }
+
 float3 CameraMovement::CalculateAxisMidPoint()
 {
     float3 mid_pos(0, 0, 0);
