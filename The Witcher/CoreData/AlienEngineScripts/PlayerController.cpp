@@ -105,8 +105,6 @@ void PlayerController::Update()
 
 	//Battle circle
 	CheckEnemyCircle();
-	// Visual effects
-	UpdateVisualEffects(); 
 
 	CheckGround();
 }

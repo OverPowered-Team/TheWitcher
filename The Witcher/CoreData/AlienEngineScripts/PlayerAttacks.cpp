@@ -369,7 +369,7 @@ void PlayerAttacks::UpdateCollider()
 
 void PlayerAttacks::DeactivateCollider()
 {
-	for (std::vector<ComponentCollider*>::iterator it = colliders.begin; it != colliders.end; ++it)
+	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 	{
 		(*it)->SetEnable(false);
 	}
