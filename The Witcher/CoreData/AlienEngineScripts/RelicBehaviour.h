@@ -82,6 +82,8 @@ public:
 	Relic_Type relic_type = Relic_Type::NONE_TYPE;
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
+	float count_position = 0.0f;
+	bool going_down = false;
 
 private:
 	ComponentAudioEmitter* audio_emitter = nullptr;
