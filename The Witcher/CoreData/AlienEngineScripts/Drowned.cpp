@@ -15,6 +15,7 @@ void Drowned::StartEnemy()
 {
 	type = EnemyType::DROWNED;
 	state = DrownedState::IDLE;
+	decapitation_particle = "decapitation_particle_drowned";
 	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }
@@ -55,11 +56,6 @@ void Drowned::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
-}
-
-void Drowned::CleanUpEnemy()
-{
-	ReleaseAllParticles();
 }
 
 void Drowned::Stun(float time)

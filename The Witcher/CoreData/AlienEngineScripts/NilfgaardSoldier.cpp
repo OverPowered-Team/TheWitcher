@@ -14,6 +14,7 @@ void NilfgaardSoldier::StartEnemy()
 {
 	type = EnemyType::NILFGAARD_SOLDIER;
 	state = NilfgaardSoldierState::IDLE;
+	decapitation_particle = "decapitation_particle_human";
 	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }
@@ -126,15 +127,6 @@ void NilfgaardSoldier::PlaySFX(const char* sfx_name)
 		LOG("Sound effect with name %s not found!", sfx_name);
 }
 
-void NilfgaardSoldier::CleanUpEnemy()
-{
-	ReleaseAllParticles();
-	if (decapitated_head)
-	{
-		decapitated_head->ToDelete();
-		decapitated_head = nullptr;
-	}
-}
 
 void NilfgaardSoldier::Stun(float time)
 {
