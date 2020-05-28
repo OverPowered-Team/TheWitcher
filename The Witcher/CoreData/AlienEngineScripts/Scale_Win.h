@@ -62,6 +62,9 @@ private:
 
 	// Time
 	float time = 0.0f;
+
+	bool first_frame = true;
+	bool spawned_invoke = false;
 };
 
 ALIEN_FACTORY Scale_Win* CreateScale_Win() {

@@ -26,11 +26,8 @@ void Scale_Win::Start()
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
 	spawner_r = GameObject::FindWithName("Right_Spawner")->GetComponent<Spawner>();
-	std::vector<float2> spawn_points;
-	spawn_points.reserve(3);
-	spawn_points.emplace_back(float2(-2.f, 1.5f));
-	spawn_points.emplace_back(float2(2.f, 1.5f));
-	spawn_points.emplace_back(float2(0.f, -2.f));
+	
+	
 
 
 	// Texts
@@ -55,46 +52,59 @@ void Scale_Win::Start()
 		GameObject::FindWithName("Defeat")->SetEnable(true);
 	}
 
-	// Head Spawns
-	if (Scores_Data::player1_kills > 0)
-	{
-		for (int i = 1; i <= Scores_Data::player1_kills; ++i)
-		{
-			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
-			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
-
-			Invoke([this, spawn_points, random_spawn]() -> void
-				{
-					spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
-						spawner_l->transform->GetGlobalPosition().y,
-						spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
-				}
-				,
-					random_time * i);
-		}
-	}
-
-	if (Scores_Data::player2_kills > 0)
-	{
-		for (int i = 1; i <= Scores_Data::player2_kills; ++i)
-		{
-			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
-			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
-
-			Invoke([this, spawn_points, random_spawn]() -> void
-				{
-					spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
-						spawner_r->transform->GetGlobalPosition().y,
-						spawner_r->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
-				}
-				,
-					random_time * i);
-		}
-	}
+	first_frame = true;
+	spawned_invoke = false;
 }
 
 void Scale_Win::Update()
 {
+	if (!first_frame && !spawned_invoke) {
+		std::vector<float2> spawn_points;
+
+		spawn_points.reserve(3);
+		spawn_points.emplace_back(float2(-2.f, 1.5f));
+		spawn_points.emplace_back(float2(2.f, 1.5f));
+		spawn_points.emplace_back(float2(0.f, -2.f));
+
+		// Head Spawns
+		if (Scores_Data::player1_kills > 0)
+		{
+			for (int i = 1; i <= Scores_Data::player1_kills; ++i)
+			{
+				float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
+				int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
+
+				Invoke([this, spawn_points, random_spawn]() -> void
+					{
+						spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
+							spawner_l->transform->GetGlobalPosition().y,
+							spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
+					}
+					,
+						random_time * i);
+			}
+		}
+
+		if (Scores_Data::player2_kills > 0)
+		{
+			for (int i = 1; i <= Scores_Data::player2_kills; ++i)
+			{
+				float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
+				int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
+
+				Invoke([this, spawn_points, random_spawn]() -> void
+					{
+						spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
+							spawner_r->transform->GetGlobalPosition().y,
+							spawner_r->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
+					}
+					,
+						random_time * i);
+			}
+		}
+		spawned_invoke = true;
+	}
+
 	LerpingText();
 
 	if (!in_place)
@@ -106,6 +116,8 @@ void Scale_Win::Update()
 	{
 		HandleSceneLoad();
 	}
+
+	first_frame = false;
 }
 
 void Scale_Win::CalculateInclination()
@@ -206,6 +218,7 @@ void Scale_Win::Scale()
 	float3 posR = right_scale->transform->GetGlobalPosition();
 	float3 posL = left_scale->transform->GetGlobalPosition();
 
+
 	right_scale->transform->SetLocalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
 	left_scale->transform->SetLocalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
 
@@ -215,11 +228,9 @@ void Scale_Win::Scale()
 	// ------------------------------------------
 
 	// Connector between plates
-	float3 vector = (right_scale->transform->GetLocalPosition() - left_scale->transform->GetLocalPosition()).Normalized();
-	/*Quat quat = Quat::RotateFromTo(vector, connector->transform->up);
-	connector->transform->SetGlobalRotation(connector->transform->GetLocalRotation() * quat);*/
-	connector->transform->SetGlobalRotation(connector->transform->GetGlobalRotation() * Quat::RotateAxisAngle(float3::unitX(), vector.AngleBetween(posR - posL)));
-
+	float3 vector = right_scale->transform->GetGlobalPosition() - left_scale->transform->GetGlobalPosition();
+	bool is_right_up = vector.y >= (posR-posL).y;
+	connector->transform->SetGlobalRotation(connector->transform->GetGlobalRotation() * Quat::RotateAxisAngle((is_right_up) ? -float3::unitX() : float3::unitX(), vector.AngleBetween(posR - posL)));
 
 	if (Time::GetGameTime() > time + time_to_scale)
 	{
