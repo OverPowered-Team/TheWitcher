@@ -220,7 +220,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			SetState("Hit");
 			RemoveBattleCircle();
 		}
-		else if(is_attacking)
+		else if (is_attacking)
 		{
 			ChangeAttackEnemy();
 		}
