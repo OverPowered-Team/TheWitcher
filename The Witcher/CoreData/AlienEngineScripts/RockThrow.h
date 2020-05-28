@@ -19,6 +19,8 @@ public:
 
 	GameObject* particle_instance = nullptr;
 
+	bool collided = false;
+
 };
 
 ALIEN_FACTORY RockThrow* CreateRockThrow() {

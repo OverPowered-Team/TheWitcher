@@ -55,7 +55,7 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		if (can_get_interrupted) {
 			animator->PlayState("Hit");
 			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
 			if (current_action)current_action->state = Boss::ActionState::ENDED;
 			SetIdleState();
 		}
@@ -63,7 +63,7 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
 		{
 			stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
 			can_get_interrupted = false;
 		}
 	}
@@ -137,7 +137,7 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 		if (can_get_interrupted) {
 			animator->PlayState("Hit");
 			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
 			if (current_action)current_action->state = Boss::ActionState::ENDED;
 			SetIdleState();
 		}
@@ -145,7 +145,7 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 		if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
 		{
 			stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
 			can_get_interrupted = false;
 		}
 	}
