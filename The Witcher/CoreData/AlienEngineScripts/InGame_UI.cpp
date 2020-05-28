@@ -4,6 +4,7 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "UltiBar.h"
+#include "Scores_Data.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -106,7 +107,18 @@ void InGame_UI::Update()
 			}
 			else
 			{
-				SceneManager::LoadScene("NewWin_Menu");
+				if (strcmp(SceneManager::GetCurrentScene(), "Lvl_1_Tutorial") == 0)
+				{
+					SceneManager::LoadScene("Lvl_1_Tutorial");
+				}
+				else
+				{
+					Scores_Data::dead = true;
+					Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+					Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+					Scores_Data::last_scene = SceneManager::GetCurrentScene();
+					SceneManager::LoadScene("NewWin_Menu");
+				}
 			}
 		}
 	}
