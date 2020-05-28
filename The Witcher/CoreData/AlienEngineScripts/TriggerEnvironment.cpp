@@ -1,6 +1,6 @@
 #include "TriggerEnvironment.h"
 #include "PlayerController.h"
-#include "CameraMovement.h"
+#include "PlayerManager.h"
 
 TriggerEnvironment::TriggerEnvironment() : Alien()
 {
@@ -13,6 +13,7 @@ TriggerEnvironment::~TriggerEnvironment()
 void TriggerEnvironment::Start()
 {
 	emitter = game_object->GetComponent<ComponentAudioEmitter>();
+	LookForPlayers();//This is the result of what you made me do
 	//I know this is ugly but right now we can't do it dynamically to show in inspector
 	emitter->SetState("Env_Lvl1", "Quiet");
 	env_elements.push_back(audio1);
@@ -33,6 +34,7 @@ void TriggerEnvironment::Update()
 void TriggerEnvironment::CleanUp()
 {
 	env_elements.clear();
+	players.clear();
 }
 
 void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
@@ -55,7 +57,7 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 				LOG("ENTER p2");
 			}
 		}
-		if (emitter != nullptr && player_counter == 2) {
+		if (emitter != nullptr && player_counter == players.size()) {
 			emitter->SetState("Env_Lvl1", GetZoneByEnum(zone).c_str());
 			PlayInstant();
 			LOG("ENTER");
@@ -65,25 +67,21 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 
 void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 {
-	//Component* c = (Component*)collider;
-	//if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
-	//	if (c->game_object_attached == p1)
-	//	{
-	//		p1 = nullptr;
-	//		player_counter--;
-	//		LOG("EXIT p1");
-	//	}
-	//	else if (c->game_object_attached == p2)
-	//	{
-	//		p2 = nullptr;
-	//		player_counter--;
-	//		LOG("EXIT p2");
-	//	}
-	//	if (emitter != nullptr && player_counter == 0) {
-	//		emitter->SetState("Env_Lvl1", "Quiet");
-	//		LOG("EXIT");
-	//	}
-	//}
+	Component* c = (Component*)collider;
+	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
+		if (c->game_object_attached == p1)
+		{
+			p1 = nullptr;
+			player_counter--;
+			LOG("EXIT p1");
+		}
+		else if (c->game_object_attached == p2)
+		{
+			p2 = nullptr;
+			player_counter--;
+			LOG("EXIT p2");
+		}
+	}
 }
 
 void TriggerEnvironment::OnDrawGizmosSelected()
@@ -164,6 +162,12 @@ std::string TriggerEnvironment::GetAudioElementByEnum(AudioEffects eff)
 		break;
 	case AudioEffects::DRIPPING:
 		return name = "Play_Dripping";
+		break;
+	case AudioEffects::MINECART:
+		return name = "Play_Minecart";
+		break;
+	case AudioEffects::ROCKS_FALLING:
+		return name = "Play_RocksFalling";
 		break;
 	}
 }
@@ -302,4 +306,14 @@ void TriggerEnvironment::MoveSpatial()
 			}
 		}
 	}
+}
+
+void TriggerEnvironment::LookForPlayers()
+{
+	auto objs = GameObject::FindGameObjectsWithTag("Player");
+	for (auto i = objs.begin(); i != objs.end(); i++) {
+		if (std::find(players.begin(), players.end(), *i) == players.end())
+			players.push_back(*i);
+	}
+	LOG("I HAVE THIS PLAYERS %i", players.size());
 }
