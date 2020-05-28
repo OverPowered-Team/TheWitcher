@@ -19,8 +19,10 @@ void RockThrow::Start()
 
 void RockThrow::Update()
 {
-	if (timer < lifetime)
+	if (timer < lifetime) {
 		timer += Time::GetDT();
+		game_object->transform->AddRotation({ 0.0f, 2.0f, 10.0f });
+	}
 	else {
 		Destroy(game_object);
 	}
