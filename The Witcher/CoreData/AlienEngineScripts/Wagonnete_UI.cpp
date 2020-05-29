@@ -37,13 +37,13 @@ void Wagonnete_UI::Update()
 			if (t < 0.5f)
 			{
 				color_lerp = Maths::Lerp(1.0f, 0.f, t / lerping_time);
-				red = Maths::Lerp(1.0f, 0.5f, t / lerping_time);
+				red = Maths::Lerp(1.0f, 0.25f, t / lerping_time);
 				lifebar->SetBarColor(red, color_lerp, color_lerp, 1);
 			}
 			else
 			{
 				color_lerp = Maths::Lerp(0.f, 1.f, t / lerping_time);
-				red = Maths::Lerp(0.5f, 1.f, t / lerping_time);
+				red = Maths::Lerp(0.25f, 1.f, t / lerping_time);
 				lifebar->SetBarColor(red, color_lerp, color_lerp, 1);
 			}
 		}
