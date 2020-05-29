@@ -174,7 +174,7 @@ void Leshen::LaunchCloudAction()
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	SpawnParticle("Cloud");
+	SpawnParticle("Cloud", float3::zero(), true);
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
 }
