@@ -45,7 +45,7 @@
                 "Source": "Dizzy",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -60,7 +60,7 @@
                 "Source": "Dizzy",
                 "Target": "Death",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -82,31 +82,6 @@
                     {
                         "Type": "bool",
                         "CompText": "True",
-                        "ParameterIndex": 1
-                    },
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 0
-                    }
-                ]
-            },
-            {
-                "Source": "Hit",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    },
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
                         "ParameterIndex": 0
                     }
                 ]
@@ -131,6 +106,15 @@
             },
             {
                 "Source": "GetOff",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
@@ -174,6 +158,12 @@
                 "Event_Id": "Enemy::SpawnAttackParticle",
                 "Animation_Id": "5753173194275656717",
                 "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::CanGetInterrupted",
+                "Animation_Id": "5753173194275656717",
+                "Frame": 50,
                 "Type": 2
             }
         ]

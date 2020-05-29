@@ -7,6 +7,7 @@
 #include "CrowsLeshen.h"
 #include "Leshen.h"
 #include "Scores_Data.h"
+#include "Boss_Lifebar.h"
 
 void Leshen::StartEnemy()
 {
@@ -21,7 +22,11 @@ void Leshen::StartEnemy()
 
 	Boss::StartEnemy();
 
+	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
+
 	meshes = game_object->GetChild("Meshes");
+	cloud_collider = game_object->GetChild("CloudCollider");
+	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 }
 
 void Leshen::UpdateEnemy()
@@ -39,13 +44,14 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 	HandleHitCount();
 	float damage = Boss::GetDamaged(dmg, player);
 
-	if (stats["Health"].GetValue() == 0.0F) {
+	if (stats["Health"].GetValue() <= 0.f) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
 		Scores_Data::won_level1 = true;
+		Scores_Data::last_scene = SceneManager::GetCurrentScene();
 		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
+		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
 	}
 
 	return damage;
@@ -59,7 +65,7 @@ void Leshen::SetActionProbabilities()
 		actions.find("Cloud")->second->probability = 100.0f;
 		return;
 	}
-	else if (player_distance[0] <= melee_range || player_distance[1] <= melee_range) {
+	else if (player_distance[0] <= melee_range && player_controllers[0]->state->type != StateType::DEAD || player_distance[1] <= melee_range && player_controllers[1]->state->type != StateType::DEAD) {
 		actions.find("Melee")->second->probability = 100.0f;
 		return;
 	}
@@ -118,14 +124,17 @@ void Leshen::LaunchAction()
 
 void Leshen::LaunchRootAction()
 {
-	root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
-	root_1->GetComponent<RootLeshen>()->leshen = this;
-	root_1->GetComponent<RootLeshen>()->target = 0;
+	if (player_controllers[0]->state->type != StateType::DEAD) {
+		root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_1->GetComponent<RootLeshen>()->leshen = this;
+		root_1->GetComponent<RootLeshen>()->target = 0;
+	}
 
-
-	root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
-	root_2->GetComponent<RootLeshen>()->leshen = this;
-	root_2->GetComponent<RootLeshen>()->target = 1;
+	if (player_controllers[1]->state->type != StateType::DEAD) {
+		root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_2->GetComponent<RootLeshen>()->leshen = this;
+		root_2->GetComponent<RootLeshen>()->target = 1;
+	}
 }
 
 void Leshen::LaunchMeleeAction()
@@ -136,17 +145,25 @@ void Leshen::LaunchMeleeAction()
 void Leshen::LaunchCrowsAction()
 {
 	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z), true);
-	if (player_rooted[0]) {
+	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
 	}
-	else if (player_rooted[1]){
+	else if (player_rooted[1] && player_controllers[1]->state->type != StateType::DEAD){
 		crows->GetComponent<CrowsLeshen>()->target = 1;
 		crows_target = 1;
 	}
-	else {
+	else if(player_controllers[0]->state->type != StateType::DEAD && player_controllers[1]->state->type != StateType::DEAD){
 		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
 		crows_target = crows->GetComponent<CrowsLeshen>()->target;
+	}
+	else if (player_controllers[0]->state->type != StateType::DEAD) {
+		crows->GetComponent<CrowsLeshen>()->target = 0;
+		crows_target = 0;
+	}
+	else if (player_controllers[1]->state->type != StateType::DEAD) {
+		crows->GetComponent<CrowsLeshen>()->target = 1;
+		crows_target = 1;
 	}
 
 	crows->GetComponent<CrowsLeshen>()->leshen = this;
@@ -157,8 +174,9 @@ void Leshen::LaunchCloudAction()
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	SpawnParticle("Cloud");
+	SpawnParticle("Cloud", float3::zero(), true);
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
+	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
 }
 
 Boss::ActionState Leshen::UpdateAction()
@@ -197,9 +215,9 @@ Leshen::ActionState Leshen::UpdateMeleeAction()
 {
 	LOG("UPDATING MELEE ACTION");
 
-	if (player_distance[0] < player_distance[1])
+	if (player_distance[0] < player_distance[1] && player_controllers[0]->state->type != StateType::DEAD)
 		OrientToPlayer(0);
-	else {
+	else if(player_controllers[1]->state->type != StateType::DEAD){
 		OrientToPlayer(1);
 	}
 
@@ -228,6 +246,7 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 			SetRandomDirection();
 			times_switched++;
 			direction_time = 0;
+			LaunchCrowsAction();
 		}
 	}
 	else {
@@ -289,6 +308,7 @@ void Leshen::EndCloudAction()
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
 	times_switched = 0;
+	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 }
 
 void Leshen::SetActionVariables()
@@ -361,23 +381,7 @@ void Leshen::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-
-void Leshen::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != BossState::DEAD) {
-		PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-		if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-		{
-			float dmg_received = player->attacks->GetCurrentDMG();
-			float3 knock = (this->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
-			knock = knock * player->attacks->GetCurrentAttack()->info.stats["KnockBack"].GetValue();
-
-			player->OnHit(this, GetDamaged(dmg_received, player, knock));
-		}
-	}
-}
-
 void Leshen::ChangeScene()
 {
-	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+	SceneManager::LoadScene("Wagonnetes", FadeToBlackType::FADE);
 }

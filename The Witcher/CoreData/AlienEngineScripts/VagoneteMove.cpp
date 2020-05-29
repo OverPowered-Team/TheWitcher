@@ -53,9 +53,41 @@ void VagoneteMove::Update()
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_6)) {
-		SceneManager::LoadScene("Level_Mahakam_Deepnest");
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_G))
+	{
+		godmode = !godmode;
+		HUD->godmode->SetEnable(godmode);
 	}
+
+	if (Input::GetKeyDown(SDL_SCANCODE_0))
+	{
+		SceneManager::LoadScene("Main_Menu");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_1))
+	{
+		SceneManager::LoadScene("Lvl_1_Tutorial");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_2))
+	{
+		SceneManager::LoadScene("Lvl_1");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_3))
+	{
+		SceneManager::LoadScene("Wagonnetes");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_4))
+	{
+		SceneManager::LoadScene("boss_test");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_W))
+	{
+		SceneManager::LoadScene("NewWin_Menu");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_D))
+	{
+		SceneManager::LoadScene("EndGame_Menu");
+	}
+
 }
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
@@ -80,7 +112,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 				}
 			}
 			actual_pos = 0.0F;
-			speed = direction->velocity;
+			speed = 10.f; // CHANGED :( We R sorry direction->velocity;
 		}
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
@@ -110,31 +142,62 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 
 void VagoneteMove::DecreaseLife()
 {
-	vagonete_life -= 20;
-	HUD->UpdateLifebar(vagonete_life, max_life);
+	if (!godmode)
+	{
+		vagonete_life -= 10;
+		HUD->UpdateLifebar(vagonete_life, max_life);
 
-	if (vagonete_life <= 0) {
-		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+		if (vagonete_life <= 0) {
+			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+		}
 	}
 }
 
 void VagoneteMove::FollowCurve()
 {
-	float3 currentPos = curve->curve.ValueAt(actual_pos);
-	float3 nextPos = curve->curve.ValueAt(actual_pos + speed * Time::GetDT() * 5);
+	/*
+	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
+	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
 
 	//Pitch (slope)
 	float3 railVector = (currentPos - nextPos).Normalized();
 	Quat rot = Quat::LookAt(float3::unitX(), railVector, float3::unitY(), float3::unitY());
 
 	//Inclination (normals + players)
-	float3 inclinationVector = curve->curve.NormalAt(actual_pos).Normalized();
+	float3 inclinationVector = curve->curve.NormalAtDistance(actual_pos).Normalized();
 	Quat inclinationRot = Quat::RotateFromTo(float3::unitY(), inclinationVector);
 	inclinationRot.Inverse();
 	rot = rot * inclinationRot;
 
 	rigid_body->SetRotation(rot * VagoneteInputs::playerRotation);
 	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
+	actual_pos += speed * Time::GetDT();
+	*/
+
+	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
+	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
+
+	float3 vector = (currentPos - nextPos).Normalized();
+	float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
+	float3 Y = vector.Cross(normal);
+	float3x3 rot = float3x3(vector, normal, Y);
+	rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
+	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
+
+	/*float3 next_pos = curve->curve.ValueAtDistance(actual_pos);
+	float3 diff_pos = (curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5) - next_pos).Normalized();
+	float3 jajauqeloco = transform->up.Cross(-diff_pos);
+	float3 HEIL = transform->right;
+
+	rigid_body->SetRotation(
+		  Quat::RotateFromTo(transform->up, curve->curve.NormalAtDistance(actual_pos)) 
+		* Quat::RotateFromTo(-transform->right.Normalized(), diff_pos.Normalized())
+		* rigid_body->GetRotation()
+	);
+
+
+
+	rigid_body->SetPosition(next_pos);*/
 
 	actual_pos += speed * Time::GetDT();
 }

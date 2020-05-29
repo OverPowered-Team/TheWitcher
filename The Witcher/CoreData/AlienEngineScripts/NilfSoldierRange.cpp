@@ -19,22 +19,44 @@ void NilfSoldierRange::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if ((distance > stats["FleeRange"].GetValue() && distance < stats["VisionRange"].GetValue()) || is_obstacle)
 			state = NilfgaardSoldierState::MOVE;
-		else if (distance < stats["FleeRange"].GetValue())
+		if (distance < stats["FleeRange"].GetValue())
 			state = NilfgaardSoldierState::AUXILIAR;
 		break;
 
 	case NilfgaardSoldierState::MOVE:
+		if (distance > stats["VisionRange"].GetValue())//sorry alex for having this piece of code in a lot of places Att: Ivan
+		{
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
+		}
 		Move(direction);
 		if (distance < stats["FleeRange"].GetValue())
 			state = NilfgaardSoldierState::AUXILIAR;
 		break;
 
 	case NilfgaardSoldierState::ATTACK:
+		if (distance > stats["VisionRange"].GetValue())
+		{
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+			}
+		}
 		RotateSoldier();
 		break;
-
+	case NilfgaardSoldierState::HIT:
+	{
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+	}
+	break;
 	case NilfgaardSoldierState::AUXILIAR:
 	{
 		current_flee_distance = transform->GetGlobalPosition().LengthSq();
@@ -69,6 +91,10 @@ void NilfSoldierRange::UpdateEnemy()
 			is_combat = false;
 			m_controller->EnemyLostSight((Enemy*)this);
 		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+		}
 		break;
 	}
 	}
@@ -87,7 +113,7 @@ void NilfSoldierRange::CheckDistance()
 		state = NilfgaardSoldierState::AUXILIAR;
 		last_flee_distance = 0.0f;
 	}
-	else if (distance > stats["VisionRange"].GetValue())
+	else if (distance > stats["VisionRange"].GetValue() && !is_obstacle)
 	{
 		state = NilfgaardSoldierState::IDLE;
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);

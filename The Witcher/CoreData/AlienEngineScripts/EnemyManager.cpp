@@ -98,7 +98,8 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 		break;
 	}
 	case EnemyType::CIRI_CLONE: {
-		enemy = GameObject::Instantiate(ciri_clone, position, false, parent)->GetComponent<Enemy>();
+		enemy = GameObject::Instantiate(ciri_clone, position, true, parent)->GetComponent<Enemy>();
+		enemy->GetComponent<ComponentCharacterController>()->SetPosition(position);
 		break;
 	}
 	default:
@@ -106,6 +107,8 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 	}
 
 	if (enemy != nullptr) {
+		enemy->player_controllers.push_back(player1->GetComponent<PlayerController>());
+		enemy->player_controllers.push_back(player2->GetComponent<PlayerController>());
 		enemy->StartEnemy();
 	}
 
@@ -115,10 +118,6 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 void EnemyManager::AddEnemy(Enemy* enemy)
 {
 	enemies.push_back(enemy);
-	if(player1)
-		enemy->player_controllers.push_back(player1->GetComponent<PlayerController>());
-	if(player2)
-		enemy->player_controllers.push_back(player2->GetComponent<PlayerController>());
 }
 
 void EnemyManager::DeleteEnemy(Enemy* enemy)

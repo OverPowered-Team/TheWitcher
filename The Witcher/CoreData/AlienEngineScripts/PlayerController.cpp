@@ -72,12 +72,12 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
-	UpdateInput();
-
 	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
 	//{
-	//	ReceiveDamage(1000);
+	//	ReceiveDamage(100);
 	//}
+
+	UpdateInput();
 
 	//State Machine--------------------------------------------------------
 	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
@@ -90,7 +90,7 @@ void PlayerController::Update()
 	//Effects-----------------------------
 	EffectsUpdate();
 
-	//MOVEMENT
+	//Movement
 	player_data.vertical_speed -= player_data.gravity * Time::GetDT();
 	player_data.velocity.y += player_data.vertical_speed;
 
@@ -99,7 +99,7 @@ void PlayerController::Update()
 		controller->Move(player_data.velocity * Time::GetDT());
 	}
 
-	if (controller->isGrounded)
+	if (is_grounded)
 	{
 		player_data.vertical_speed = 0;
 	}
@@ -108,40 +108,52 @@ void PlayerController::Update()
 	animator->SetFloat("speed", float3(player_data.velocity.x, 0, player_data.velocity.z).Length());
 	animator->SetBool("movement_input", mov_input);
 
-	// Visual effects
-	UpdateVisualEffects(); 
+	//Battle circle
+	CheckEnemyCircle();
 
+	CheckGround();
 }
 
-void PlayerController::UpdateVisualEffects()
+void PlayerController::CheckGround()
 {
-	if (state->type == StateType::RUNNING)
+	direction = GetDirectionVector();
+
+	RaycastHit hit;
+
+	float ground_distance = 0.2F;
+	float offset = transform->GetGlobalScale().y * 0.5f;
+	
+	float3 center_position = transform->GetGlobalPosition();
+	center_position.y += offset;
+	
+	is_grounded = false;
+	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask("Ground")))
 	{
-		float lerp = player_data.velocity.Length() / player_data.stats["Movement_Speed"].GetValue();
-		animator->SetStateSpeed("Run", lerp);
-	}
-	else if (state->type == StateType::ROLLING)
-	{
-		if (player_data.type == PlayerController::PlayerType::YENNEFER)
+		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
-			float current_speed = animator->GetCurrentStateSpeed();
-			float target_speed = current_speed + dashData.current_acel_multi * Time::GetDT();
+			Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
-			if (target_speed > dashData.max_speed)
-				target_speed = dashData.max_speed;
-			else if (target_speed < dashData.min_speed)
-				target_speed = dashData.min_speed;
-
-			animator->SetStateSpeed("Roll", target_speed);
+			is_grounded = player_data.vertical_speed > 0 ? false : true;
 		}
-		
+		/*if (direction_vector.y > 0) //temporal?
+			direction_vector.y = 0;*/
 	}
 }
 
 void PlayerController::ToggleDashMultiplier()
 {   
 	if (player_data.type == PlayerController::PlayerType::YENNEFER)
-		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi; 
+	{
+		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi;
+
+		if (dashData.disappear_on_dash)
+		{
+			auto meshes = game_object->GetChild("Meshes");
+			meshes->SetEnable(!meshes->IsEnabled());
+		}
+	}
+		
 }
 
 void PlayerController::UpdateInput()
@@ -253,35 +265,29 @@ bool PlayerController::AnyKeyboardInput()
 }
 
 void PlayerController::HandleMovement()
-{
-	float3 direction_vector = GetDirectionVector();
-
-	RaycastHit hit;
-
-	float3 center_position = transform->GetGlobalPosition();
-	center_position.y += transform->GetGlobalScale().y * 0.5f;
-	
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.0f, hit, Physics::GetLayerMask("Ground")))
-	{
-		Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
-		direction_vector = ground_rot * direction_vector; //We rotate the direction vector for the amount of slope we currently are on.
-
-		if (direction_vector.y > 0) //temporal?
-			direction_vector.y = 0;
-	}
-	
-	player_data.velocity = direction_vector * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
+{	
+	player_data.velocity = direction * player_data.stats["Movement_Speed"].GetValue() * movement_input.Length();
 
 	//rotate
 	if (mov_input)
 	{
-		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction_vector.x, direction_vector.z)));
+		transform->SetGlobalRotation(Quat::RotateAxisAngle(float3::unitY(), atan2f(direction.x, direction.z)));
 	}
 }
 
 void PlayerController::OnDrawGizmos()
 {
+	/*float4x4 matrix = transform->GetGlobalMatrix();
+	matrix = matrix.Translate(float3(0, 0.5f, 0)); //middle point of character
+	float3 origin = matrix.TranslatePart();
+	RaycastHit hit;
 
+	if (Physics::CapsuleCast(matrix, 0.1f, 0.25f, -float3::unitY(), 0.5f, hit, Physics::GetLayerMask("Ground")))
+	{
+		Gizmos::DrawLine(origin, hit.point, Color::Green());
+		float rest_dist = 0.2f - origin.Distance(hit.point);
+		Gizmos::DrawLine(hit.point, hit.point + hit.normal * rest_dist, Color::Green());
+	}*/
 }
 
 void PlayerController::EffectsUpdate()
@@ -371,6 +377,7 @@ void PlayerController::ReleaseAttackParticle()
 void PlayerController::Jump()
 {
 	player_data.vertical_speed = player_data.stats["Jump_Power"].GetValue();
+	is_grounded = false;
 	animator->PlayState("Air");
 	switch (player_data.type)
 	{
@@ -423,71 +430,76 @@ void PlayerController::Revive(float minigame_value)
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 {
-	if (player_data.stats["Absorb"].GetValue() > 0)
+	if (!godmode && !is_immune)
 	{
-		AbsorbHit();
-		return;
-	}
-
-	player_data.stats["Health"].DecreaseStat(dmg);
-
-	switch (player_data.type)
-	{
-	case PlayerController::PlayerType::GERALT:
-		audio->StartSound("Play_GeraltGetDamaged");
-		break;
-	case PlayerController::PlayerType::YENNEFER:
-		audio->StartSound("Play_YennGetDamaged");
-		break;
-	}
-
-	if (HUD)
-	{
-		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	}
-
-	attacks->CancelAttack();
-	if (knock) {
-		if (player_data.stats["Health"].GetValue() == 0)
+		if (player_data.stats["Absorb"].GetValue() > 0)
 		{
-			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-			Die();
+			AbsorbHit();
+			return;
+		}
+
+		if (player_data.stats["Health"].GetValue() == 0.0f)
+			return;
+
+		player_data.stats["Health"].DecreaseStat(dmg);
+
+		switch (player_data.type)
+		{
+		case PlayerController::PlayerType::GERALT:
+			audio->StartSound("Play_GeraltGetDamaged");
+			break;
+		case PlayerController::PlayerType::YENNEFER:
+			audio->StartSound("Play_YennGetDamaged");
+			break;
+		}
+
+		if (HUD)
+		{
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+		}
+
+		attacks->CancelAttack();
+		if (knock) {
+			if (player_data.stats["Health"].GetValue() == 0)
+			{
+				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+				Die();
+			}
+			else
+			{
+				animator->PlayState("Hit");
+				player_data.velocity = knock_speed;
+				SetState(StateType::HIT);
+			}
+		}
+
+		if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+
+		// Heartbeat effect 
+		static float percentage = 0.f, thresholdPercentage = 0.3f;
+		static bool playing = false;
+
+		percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue();
+		if (playing == false)
+		{
+			if (percentage <= thresholdPercentage)
+			{
+				playing = true;
+				audio->StartSound("Play_Heartbeats");
+			}
 		}
 		else
 		{
-			animator->PlayState("Hit");
-			player_data.velocity = knock_speed;
-			SetState(StateType::HIT);
+			if (percentage > thresholdPercentage)
+			{
+				playing = false;
+				audio->StopSoundByName("Play_Heartbeats");
+			}
 		}
+
+		audio->SetRTPCValue("PlayerLife", player_data.stats["Health"].GetValue());
 	}
-
-	if(GameManager::instance->rumbler_manager)
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
-
-	// Heartbeat effect 
-	static float percentage = 0.f, thresholdPercentage = 0.3f; 
-	static bool playing = false; 
-
-	percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue(); 
-	if (playing == false)
-	{
-		if (percentage <= thresholdPercentage)
-		{
-			playing = true;
-			audio->StartSound("Play_Heartbeats");
-		}
-	}
-	else
-	{
-		if (percentage > thresholdPercentage)
-		{
-			playing = false;
-			audio->StopSoundByName("Play_Heartbeats");
-		}
-	}
-		
-	audio->SetRTPCValue("PlayerLife", player_data.stats["Health"].GetValue()); 
-
 }
 
 void PlayerController::AbsorbHit()
@@ -633,7 +645,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_STATIC
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
-							|| cam->state == CameraMovement::CameraState::AXIS)
+							|| cam->state == CameraMovement::CameraState::AXIS
+							|| p->state->type == StateType::JUMPING)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -667,6 +680,7 @@ bool PlayerController::CheckBoundaries()
 	}
 	return true;
 }
+
 bool PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
@@ -784,6 +798,29 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 	}*/
 }
 
+void PlayerController::CheckEnemyCircle()
+{
+	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
+
+	for (int i = 0; i < colliders.size(); ++i)
+	{
+		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
+		{
+			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
+			float avoid_distance = avoid_direction.LengthSq();
+			if (avoid_distance > battleCircle)
+				continue;
+
+			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
+
+			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+
+			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
+				enemy->AddBattleCircle(this);
+		}
+	}
+}
+
 void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
 {
 	for (auto& p : particles)
@@ -848,7 +885,7 @@ void PlayerController::UpdateDashEffect()
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
-						float3::zero(), float3::zero(), dash_coll->game_object);
+						float3::zero(), float3::zero(), dash_coll->game_object, true);
 			}
 		}
 	}
@@ -881,10 +918,10 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				}
 
 				// Heal
-				(*player)->player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue());
-				(*player)->player_data.stats["Chaos"].IncreaseStat(player_data.stats["Chaos"].GetMaxValue());
-				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange(player_data.stats["Chaos"].GetValue(), player_data.stats["Chaos"].GetMaxValue());
+				(*player)->player_data.stats["Health"].IncreaseStat((*player)->player_data.stats["Health"].GetMaxValue());
+				(*player)->player_data.stats["Chaos"].IncreaseStat((*player)->player_data.stats["Chaos"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->LifeChange((*player)->player_data.stats["Health"].GetValue(), (*player)->player_data.stats["Health"].GetMaxValue());
+				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), (*player)->player_data.stats["Chaos"].GetMaxValue());
 			}
 
 			// Player Used this Bonfire
@@ -930,6 +967,7 @@ void PlayerController::OnUltimateDeactivation(float value)
 void PlayerController::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), battleCircle, Color::Green()); //battle circle
 }
 #pragma endregion Events
 float3 PlayerController::GetDirectionVector()

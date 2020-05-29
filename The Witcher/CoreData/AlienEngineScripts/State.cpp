@@ -24,7 +24,7 @@ State* IdleState::HandleInput(PlayerController* player)
 
 void IdleState::Update(PlayerController* player)
 {
-	if (!player->controller->isGrounded)
+	if (!player->is_grounded)
 	{
 		player->Fall();
 	}
@@ -60,10 +60,13 @@ void RunningState::Update(PlayerController* player)
 	}
 	player->HandleMovement();
 
-	if (!player->controller->isGrounded)
+	if (!player->is_grounded)
 	{
 		player->Fall();
 	}
+
+	float lerp = player->player_data.velocity.Length() / player->player_data.stats["Movement_Speed"].GetValue();
+	player->animator->SetStateSpeed("Run", lerp);
 }
 
 void RunningState::OnEnter(PlayerController* player)
@@ -111,7 +114,7 @@ void RunningState::OnExit(PlayerController* player)
 
 State* JumpingState::HandleInput(PlayerController* player)
 {
-	if (player->controller->isGrounded)
+	if (player->is_grounded)
 	{
 		player->audio->StartSound("Player_Fall");
 
@@ -211,7 +214,7 @@ State* AttackingState::HandleInput(PlayerController* player)
 	}
 
 	if ((Input::GetControllerButtonDown(player->controller_index, player->controller_jump)
-		|| Input::GetKeyDown(player->keyboard_jump)) && player->attacks->CanBeInterrupted() && player->controller->isGrounded) {
+		|| Input::GetKeyDown(player->keyboard_jump)) && player->attacks->CanBeInterrupted() && player->is_grounded) {
 		player->Jump();
 		return new JumpingState();
 	}
@@ -243,6 +246,19 @@ void RollingState::Update(PlayerController* player)
 {
 	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 	player->UpdateDashEffect();
+
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		float current_speed = player->animator->GetCurrentStateSpeed();
+		float target_speed = current_speed + player->dashData.current_acel_multi * Time::GetDT();
+
+		if (target_speed > player->dashData.max_speed)
+			target_speed = player->dashData.max_speed;
+		else if (target_speed < player->dashData.min_speed)
+			target_speed = player->dashData.min_speed;
+
+		player->animator->SetStateSpeed("Roll", target_speed);
+	}
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -392,7 +408,7 @@ void DeadState::OnEnter(PlayerController* player)
 	GameManager::instance->event_manager->OnPlayerDead(player);
 	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
 	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, float3(player->game_object->transform->GetGlobalPosition().x + vector.x, player->game_object->transform->GetGlobalPosition().y + vector.y + 1, player->game_object->transform->GetGlobalPosition().z + vector.z));
-	revive_world_ui->transform->SetLocalScale(1, 1, 1);
+	revive_world_ui->transform->SetLocalScale(0.1f, 0.1f, 0.1f);
 	revive_world_ui->SetNewParent(player->game_object);
 	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
@@ -403,7 +419,7 @@ void DeadState::OnExit(PlayerController* player)
 
 State* GroundState::HandleInput(PlayerController* player)
 {
-	if (!player->controller->isGrounded)
+	if (!player->is_grounded)
 	{
 		player->Fall();
 		return new JumpingState();
@@ -451,7 +467,7 @@ State* GroundState::HandleInput(PlayerController* player)
 	}
 
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_jump)
-		|| Input::GetKeyDown(player->keyboard_jump) && player->controller->isGrounded)
+		|| Input::GetKeyDown(player->keyboard_jump) && player->is_grounded)
 	{
 		player->Jump();
 		return new JumpingState();

@@ -52,7 +52,8 @@ public:
 	bool PlayerMovedForward(int player_num);
 	bool PlayerMovedBackward(int player_num);
 	void VisualizeCameraTransition(const TransitionInfo& transition_info, Color color);
-
+	bool AllPlayersMovedForward();
+	bool AllPlayersMovedBackward();
 	void OnDrawGizmos() override;
 
 public:

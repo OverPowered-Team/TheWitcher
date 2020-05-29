@@ -15,6 +15,7 @@ void Drowned::StartEnemy()
 {
 	type = EnemyType::DROWNED;
 	state = DrownedState::IDLE;
+	decapitation_particle = "decapitation_particle_drowned";
 	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 }
@@ -37,18 +38,10 @@ void Drowned::SetStats(const char* json)
 			else
 				break;
 
-		stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
-		stats["Health"].SetMaxValue(stat_weapon->GetNumber("MaxHealth"));
-		stats["Health"].SetMinValue(stat_weapon->GetNumber("MinHealth"));
-		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
-		stats["Agility"].SetMaxValue(stat_weapon->GetNumber("MaxAgility"));
-		stats["Agility"].SetMinValue(stat_weapon->GetNumber("MinAgility"));
-		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
-		stats["Damage"].SetMaxValue(stat_weapon->GetNumber("MaxDamage"));
-		stats["Damage"].SetMinValue(stat_weapon->GetNumber("MinDamage"));
-		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
-		stats["AttackSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxAttackSpeed"));
-		stats["AttackSpeed"].SetMinValue(stat_weapon->GetNumber("MinAttackSpeed"));
+		stats["Health"] = Stat("Health", stat_weapon->GetNumber("MinHealth"), stat_weapon->GetNumber("Health"), stat_weapon->GetNumber("MaxHealth"));
+		stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("MinAgility"), stat_weapon->GetNumber("Agility"), stat_weapon->GetNumber("MaxAgility"));
+		stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("MinDamage"), stat_weapon->GetNumber("Damage"), stat_weapon->GetNumber("MaxDamage"));
+		stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("MinAttackSpeed"), stat_weapon->GetNumber("AttackSpeed"), stat_weapon->GetNumber("MaxAttackSpeed"));
 		stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
 		stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
 		stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
@@ -56,54 +49,13 @@ void Drowned::SetStats(const char* json)
 		stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
 		stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
 
-			stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
-	/*	else if (drowned_type == DrownedType::GRAB)
-			stats["BlockRange"] = Stat("BlockRange", stat_weapon->GetNumber("BlockRange"));*/
+		stats["GetOffRange"] = Stat("GetOffRange", stat_weapon->GetNumber("GetOffRange"));
+		stats["HideDistance"] = Stat("HideDistance", stat_weapon->GetNumber("HideDistance"));
 
 		stat_weapon->GetAnotherNode();
 	}
 
 	JSONfilepack::FreeJSON(stat);
-}
-
-void Drowned::CleanUpEnemy()
-{
-	ReleaseAllParticles();
-}
-
-float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
-{
-	float damage = Enemy::GetDamaged(dmg, player);
-
-	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
-		state = DrownedState::HIT;
-		animator->PlayState("Hit");
-		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		audio_emitter->StartSound("Play_Drowner_Hit");
-	}
-
-	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
-	{
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		can_get_interrupted = false;
-	}
-
-	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetLocalPosition());
-
-	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-
-	if (stats["Health"].GetValue() == 0.0F) {
-
-		animator->SetBool("dead", true);
-		OnDeathHit();
-		state = DrownedState::DYING;
-		audio_emitter->StartSound("Play_Drowner_Hit");
-		player->OnEnemyKill();
-	}
-
-	return damage;
 }
 
 void Drowned::Stun(float time)
@@ -123,20 +75,81 @@ bool Drowned::IsDead()
 	return (state == DrownedState::DEAD ? true : false);
 }
 
-
-void Drowned::OnTriggerEnter(ComponentCollider* collider)
+bool Drowned::IsState(const char* state_str)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != DrownedState::DEAD) {
-		if (!is_hide)
-		{
-			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				float3 knock = player->attacks->GetKnockBack(this->transform);
-				player->OnHit(this, GetDamaged(dmg_received, player, knock));
-				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-			}
-		}
+	if (state_str == "Idle")
+		return (state == DrownedState::IDLE ? true : false);
+	else if (state_str == "Move")
+		return (state == DrownedState::MOVE ? true : false);
+	else if (state_str == "Attack")
+		return (state == DrownedState::ATTACK ? true : false);
+	else if (state_str == "Hit")
+		return (state == DrownedState::HIT ? true : false);
+	else if (state_str == "Dying")
+		return (state == DrownedState::DYING ? true : false);
+	else if (state_str == "Stunned")
+		return (state == DrownedState::STUNNED ? true : false);
+	else
+		LOG("Incorrect state name: %s", state_str);
+}
+
+void Drowned::PlaySFX(const char* sfx_name)
+{
+	if (sfx_name == "Hit")
+		audio_emitter->StartSound("Play_Drowner_Hit");
+	else if (sfx_name == "Death")
+		audio_emitter->StartSound("Play_Drowner_Hit"); // TODO: Put Death sfx
+	else
+		LOG("Sound effect with name %s not found!", sfx_name);
+}
+
+float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
+{
+	float damage = 0.0f;
+
+	if (!is_hide)
+		damage = Enemy::GetDamaged(dmg, player, knock_back);
+
+	return damage;
+}
+
+void Drowned::SetState(const char* state_str)
+{
+	if (state_str == "Idle")
+	{
+		state = DrownedState::IDLE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
 	}
+	else if (state_str == "Move")
+	{
+		state = DrownedState::MOVE;
+	}
+	else if (state_str == "Attack")
+	{
+		state = DrownedState::ATTACK;
+		animator->SetFloat("speed", 0.0F);
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+	}
+	else if (state_str == "GetOff")
+	{
+		state = DrownedState::GETOFF;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+	}
+	else if (state_str == "Hide")
+		state = DrownedState::HIDE;
+	else if (state_str == "Hit")
+		state = DrownedState::HIT;
+	else if (state_str == "Dying")
+		state = DrownedState::DYING;
+	else if (state_str == "Dead")
+		state = DrownedState::DEAD;
+	else if (state_str == "Stunned")
+		state = DrownedState::STUNNED;
+	else
+		LOG("Incorrect state name: %s", state_str);
 }

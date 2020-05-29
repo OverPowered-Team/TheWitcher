@@ -28,17 +28,29 @@ void DebugManager::Update()
 			geralt_controller->HUD->GetComponent<UI_Char_Frame>()->LifeChange(geralt_controller->player_data.stats["Health"].GetMaxValue(), geralt_controller->player_data.stats["Health"].GetMaxValue());
 			yennefer_controller->HUD->GetComponent<UI_Char_Frame>()->LifeChange(yennefer_controller->player_data.stats["Health"].GetMaxValue(), yennefer_controller->player_data.stats["Health"].GetMaxValue());
 		}
-		if (Input::GetKeyDown(SDL_SCANCODE_M))
+		if (Input::GetKeyDown(SDL_SCANCODE_0))
 		{
 			SceneManager::LoadScene("Main_Menu");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_1))
+		{
+			SceneManager::LoadScene("Lvl_1_Tutorial");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_2))
+		{
+			SceneManager::LoadScene("Lvl_1");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_3))
+		{
+			SceneManager::LoadScene("Wagonnetes");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_4))
+		{
+			SceneManager::LoadScene("boss_test");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_W))
 		{
 			SceneManager::LoadScene("NewWin_Menu");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_L))
-		{
-			SceneManager::LoadScene("Level_Mahakam");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_D))
 		{

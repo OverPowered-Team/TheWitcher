@@ -114,6 +114,9 @@ std::string Component::EnumToString(ComponentType type)
 	case ComponentType::PARTICLES:
 		return std::string("Particles");
 		break;
+	case ComponentType::TRAIL:
+		return std::string("Trail");
+		break;
 	case ComponentType::A_EMITTER:
 		return std::string("Audio Emitter");
 		break;

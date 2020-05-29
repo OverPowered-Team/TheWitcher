@@ -11,22 +11,24 @@ Training_Zone::~Training_Zone()
 
 void Training_Zone::Start()
 {
+	rb = GetComponent<ComponentRigidBody>();
+
 	current_oscilating_time = Time::GetGameTime();
 	switch (oscilation_direction)
 	{
 	case OSCILATION_DIRECTION::X:
 	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x * Maths::Rad2Deg());
+		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
 		break;
 	}
 	case OSCILATION_DIRECTION::Y:
 	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y * Maths::Rad2Deg());
+		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
 		break;
 	}
 	case OSCILATION_DIRECTION::Z:
 	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z * Maths::Rad2Deg());
+		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
 		break;
 	}
 	}
@@ -34,7 +36,6 @@ void Training_Zone::Start()
 
 void Training_Zone::Update()
 {
-	float3 rotation_to_add = float3(0,0,0);
 	float acceleration_factor = 0.0f;
 
 	if ((cycle_time * 0.5f) >= (Time::GetGameTime() - current_oscilating_time))
@@ -46,32 +47,33 @@ void Training_Zone::Update()
 		acceleration_factor = (cycle_time - (Time::GetGameTime() - current_oscilating_time)) / (cycle_time * 0.5f * 0.5f);
 	}
 
+	float rotation_to_add = (max_oscilation_pos * 2 / cycle_time) * Time::GetDT() * initial_sign * acceleration_factor;
+
 	switch (oscilation_direction)
 	{
 	case OSCILATION_DIRECTION::X:
 	{
-		rotation_to_add = float3((max_oscilation_pos * 2 / cycle_time) * Time::GetDT() * initial_sign * acceleration_factor, 0, 0);
+		rb->SetRotation(transform->GetGlobalRotation() * Quat::RotateX(rotation_to_add));
 		break;
 	}
 	case OSCILATION_DIRECTION::Y:
 	{
-		rotation_to_add = float3(0, (max_oscilation_pos * 2 / cycle_time) * Time::GetDT() * initial_sign * acceleration_factor, 0);
+		rb->SetRotation(transform->GetGlobalRotation() * Quat::RotateY(rotation_to_add));
 		break;
 	}
 	case OSCILATION_DIRECTION::Z:
 	{
-		rotation_to_add = float3(0, 0, (max_oscilation_pos * 2 / cycle_time) * Time::GetDT() * initial_sign * acceleration_factor);
+		rb->SetRotation(transform->GetGlobalRotation() * Quat::RotateZ(rotation_to_add));
 		break;
 	}
 	}
-
-	transform->AddRotation(rotation_to_add);
 
 	if (Time::GetGameTime() - current_oscilating_time >= cycle_time)
 	{
 		initial_sign = -initial_sign;
 		current_oscilating_time = Time::GetGameTime();
 	}
+
 }
 
 void Training_Zone::OnTriggerEnter(ComponentCollider* col)
@@ -82,7 +84,25 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 		{
 		case TYPE::PUSH:
 		{
-			col->game_object_attached->GetComponent<ComponentRigidBody>()->AddForce(float3(initial_sign * 50, 0, 0));
+			switch (oscilation_direction)
+			{
+			case OSCILATION_DIRECTION::X:
+			{
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, transform->right * initial_sign * push_force);
+				break;
+			}
+			case OSCILATION_DIRECTION::Y:
+			{
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, float3(0, -initial_sign * push_force, 0));
+				break;
+			}
+			case OSCILATION_DIRECTION::Z:
+			{
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, transform->forward * initial_sign * push_force);
+				break;
+			}
+			}
+			
 			break;
 		}
 		case TYPE::DAMAGE:
@@ -92,7 +112,25 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 		}
 		case TYPE::BOTH:
 		{
-			col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(initial_sign * 50, 0, 0));
+			switch (oscilation_direction)
+			{
+			case OSCILATION_DIRECTION::X:
+			{
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, transform->right * initial_sign * push_force);
+				break;
+			}
+			case OSCILATION_DIRECTION::Y:
+			{
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, float3(0, -initial_sign * push_force, 0));
+				break;
+			}
+			case OSCILATION_DIRECTION::Z:
+			{
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(damage_to_do, transform->forward * initial_sign * push_force);
+				break;
+			}
+			}
+			
 			break;
 		}
 		case TYPE::ANY:

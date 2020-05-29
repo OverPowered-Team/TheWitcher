@@ -9,7 +9,7 @@ class CiriFightController;
 
 class ALIEN_ENGINE_API Ciri : public Boss {
 public:
-	float combo_range = 2.0f;
+	float combo_range = 1.0f;
 	float mini_scream_range = 5.0f;
 	float mini_scream_damage = 5.0f;
 	float mini_scream_force = 7.0f;
@@ -19,8 +19,13 @@ public:
 	float dash_time = 0.1f;
 	float dash_timer = 0.0f;
 	int target = 0;
+	bool gap_closer = false;
+	float gap_closer_speed = 4.0f;
+	float gap_closer_decay = 0.08f;
 
 	CiriFightController* fight_controller = nullptr;
+
+	
 public:
 
 	void StartEnemy() override;
@@ -47,6 +52,8 @@ public:
 	ActionState UpdateComboAction();
 	ActionState UpdateMiniScreamAction();
 
+	void CheckForGapCloser();
+
 	void EndAction(GameObject* go_ended) override;
 	
 	void EndDashAction(GameObject* go_ended);
@@ -54,11 +61,14 @@ public:
 	void EndMiniScreamAction(GameObject* go_ended);
 
 	void OnAnimationEnd(const char* name);
-	void OnTriggerEnter(ComponentCollider* collider);
+	void OnCloneDeath();
 
 	void OnDrawGizmosSelected();
 	
 	void SetStats(const char* json) override;
+
+private:
+	void ChangeScene();
 
 };
 
@@ -75,6 +85,7 @@ ALIEN_FACTORY Ciri* CreateCiri() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->mini_scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_speed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_time);
+	
 
 	return ciri;
 } 

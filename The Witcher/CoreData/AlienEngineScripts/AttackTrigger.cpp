@@ -23,10 +23,11 @@ void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Enemy") == 0)
 	{
 		Enemy* enemy = collider->game_object_attached->GetComponent<Enemy>();
-		if(enemy && !enemy->IsDead() && player->attacks->GetCurrentAttack()->CanHit(enemy))
+		if(enemy && !enemy->IsDead() && player->attacks->GetCurrentAttack()->CanHit(enemy) && !enemy->is_immune)
 		{
+			LOG("BANG BANG");
 			float damage = player->attacks->GetCurrentDMG();
-			float3 knock = enemy->can_get_interrupted ? player->attacks->GetKnockBack(transform) : float3::zero();
+			float3 knock = enemy->can_get_interrupted ? player->attacks->GetKnockBack(enemy->transform) : float3::zero();
 
 			float damage_dealt = enemy->GetDamaged(damage, player, knock);
 			player->OnHit(enemy, damage_dealt);

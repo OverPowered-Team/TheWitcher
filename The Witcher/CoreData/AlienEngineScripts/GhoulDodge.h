@@ -29,7 +29,9 @@ ALIEN_FACTORY GhoulDodge* CreateGhoulDodge() {
 
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulType, ghoul->ghoul_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulState, ghoul->state);
+	SHOW_IN_INSPECTOR_AS_PREFAB(ghoul->head_prefab);
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::AwakeBehaviour, ghoul->awake_behaviour);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ghoul->gravity);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->curve_speed);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_radius);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_speed);
@@ -39,7 +41,8 @@ ALIEN_FACTORY GhoulDodge* CreateGhoulDodge() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(ghoul->awake_curve);
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
-	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
+	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul); 
+	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, ghoul);
 
 	return ghoul;
 }

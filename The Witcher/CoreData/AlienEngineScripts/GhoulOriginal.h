@@ -22,6 +22,8 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulType, ghoul->ghoul_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulState, ghoul->state);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ghoul->gravity);
+	SHOW_IN_INSPECTOR_AS_PREFAB(ghoul->head_prefab);
 
 	SHOW_SPACING();
 	SHOW_SEPARATOR();
@@ -50,6 +52,7 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
+	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, ghoul);
 
 	return ghoul;
 }
