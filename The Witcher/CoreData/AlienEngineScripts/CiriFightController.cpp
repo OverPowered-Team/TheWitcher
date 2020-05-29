@@ -110,7 +110,6 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
-	
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -124,7 +123,8 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
-	UpdatePlatform();
+	if (!first_wall_door)
+		UpdatePlatform();
 	TransportPlayer();
 }
 
@@ -186,7 +186,7 @@ void CiriFightController::MoveWall()
 	{
 		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
 
-		if (time_platform > count_circle)
+		if (time_platform > count_circle && !first_wall_door)
 		{
 			int random_index = Random::GetRandomIntBetweenTwo(1, 4);
 
@@ -209,6 +209,11 @@ void CiriFightController::MoveWall()
 			rings_enabled.erase(rings_enabled.begin());
 			time_platform = 0.0f;
 			changing_platform = true;
+		}
+		else if (time_platform > count_circle&& first_wall_door)
+		{
+			first_wall_door = false;
+			time_platform = 0.0f;
 		}
 	}
 }
