@@ -883,7 +883,7 @@ void PlayerController::UpdateDashEffect()
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
-						float3::zero(), float3::zero(), dash_coll->game_object);
+						float3::zero(), float3::zero(), dash_coll->game_object, true);
 			}
 		}
 	}
