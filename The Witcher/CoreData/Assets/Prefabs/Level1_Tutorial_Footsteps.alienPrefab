@@ -1,0 +1,1453 @@
+{
+    "Name": "Level1_Tutorial_Footsteps",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Level1_Tutorial_Footsteps",
+                "FamilyNumber": 1,
+                "ID": "15726083672330751647",
+                "ParentID": "13662032347109013547",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1807858565740090974"
+                    }
+                ]
+            },
+            {
+                "Name": "Sand",
+                "FamilyNumber": 2,
+                "ID": "13094651167912435963",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -439.22967529296875,
+                            -15.415848731994629,
+                            -226.8953857421875
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            31.887645721435547,
+                            6.9281840324401855,
+                            7.3751702308654785
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4619167973283038699"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "8649125086908791348",
+                        "ResourceID": "11479817035125242678",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Grass",
+                "FamilyNumber": 2,
+                "ID": "14040775251572358893",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -444.58441162109375,
+                            -14.532315254211426,
+                            -221.97541809082031
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            6.7446928024291992,
+                            6.6758384704589844,
+                            3.2692790031433105
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9486976090114149895"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4223181399083225452",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Sand (1)",
+                "FamilyNumber": 2,
+                "ID": "16079789514740280491",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -438.55892944335938,
+                            -15.415848731994629,
+                            -220.41195678710938
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5.5055832862854004,
+                            6.9281840324401855,
+                            7.3751702308654785
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16111555960536115029"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13587834712064115964",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Sand (2)",
+                "FamilyNumber": 2,
+                "ID": "2311138099871085206",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -450.02288818359375,
+                            -15.415848731994629,
+                            -221.66738891601563
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5.5055832862854004,
+                            6.9281840324401855,
+                            7.3751702308654785
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3803992417987080138"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16591387783966751078",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Sand (3)",
+                "FamilyNumber": 2,
+                "ID": "5029374540790142805",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -428.77969360351563,
+                            -15.415848731994629,
+                            -221.66738891601563
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5.5055832862854004,
+                            6.9281840324401855,
+                            10.087089538574219
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11618787600609011553"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5349129967889633054",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Sand (4)",
+                "FamilyNumber": 2,
+                "ID": "2877299006092123323",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -442.94552612304688,
+                            -15.415848731994629,
+                            -205.57440185546875
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            10.71635627746582,
+                            6.9281840324401855,
+                            5.7540545463562012
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13713556601395433533"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17355680339304801054",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Sand (5)",
+                "FamilyNumber": 2,
+                "ID": "10009631428272702737",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -436.060791015625,
+                            -14.658115386962891,
+                            -202.02357482910156
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5.7410554885864258,
+                            6.9281840324401855,
+                            5.3408975601196289
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17203850054920513077"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2019706323738920781",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Grass (1)",
+                "FamilyNumber": 2,
+                "ID": "6541927535365662517",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -433.89517211914063,
+                            -14.532315254211426,
+                            -219.68229675292969
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            4.435600757598877,
+                            6.6758384704589844,
+                            6.6416311264038086
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2578832847157382701"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17179373290228426751",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Grass (2)",
+                "FamilyNumber": 2,
+                "ID": "15413841984605078422",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -442.474609375,
+                            -14.532315254211426,
+                            -213.43034362792969
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            10.569771766662598,
+                            6.6758384704589844,
+                            6.6416311264038086
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10898821080380157854"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "14982202022165884734",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.30000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Stone",
+                "FamilyNumber": 2,
+                "ID": "18441389717218393860",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -431.4315185546875,
+                            -14.532315254211426,
+                            -206.49061584472656
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            3.313086986541748,
+                            6.6758384704589844,
+                            8.6855602264404297
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17150819252840217981"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15291473445412887793",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Stone (1)",
+                "FamilyNumber": 2,
+                "ID": "13801315697777665536",
+                "ParentID": "15726083672330751647",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "10634592180341918749",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -444.77584838867188,
+                            -12.949320793151855,
+                            -202.01701354980469
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            11.096010208129883,
+                            6.6758384704589844,
+                            1.3887883424758911
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6082945060451408851"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6929590347165189560",
+                        "ResourceID": "0",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
