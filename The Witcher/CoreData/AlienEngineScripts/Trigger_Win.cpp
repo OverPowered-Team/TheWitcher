@@ -38,16 +38,17 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 
 		Scores_Data::last_scene = SceneManager::GetCurrentScene();
 
-		if (strcmp(current_scene.c_str(), "Lvl_1") == 0)
-		{
-			Scores_Data::won_level1 = true;
-			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
-		}
-		else if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
-		{
-			SceneManager::LoadScene("VagonetaTest");
-		}
-		else if (strcmp(current_scene.c_str(), "VagonetaTest") == 0)
+		//if (strcmp(current_scene.c_str(), "Lvl_1") == 0)
+		//{
+		//	Scores_Data::won_level1 = true;
+		//	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		//}
+		//else if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
+		//{
+		//	SceneManager::LoadScene("Wagonnetes");
+		//}
+		//else 
+		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
 		{
 			SceneManager::LoadScene("boss_test");
 		}

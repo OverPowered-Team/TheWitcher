@@ -26,9 +26,6 @@ void Scale_Win::Start()
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
 	spawner_r = GameObject::FindWithName("Right_Spawner")->GetComponent<Spawner>();
-	
-	
-
 
 	// Texts
 	score_text_1 = GameObject::FindWithName("Score_Player_1")->GetComponent<ComponentText>();
@@ -241,29 +238,33 @@ void Scale_Win::Scale()
 
 void Scale_Win::HandleSceneLoad()
 {
-	if (Scores_Data::dead)
-	{
-		Scores_Data::dead = false;
-		Scores_Data::player1_kills = 0;
-		Scores_Data::player2_kills = 0;
-		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
-	}
-	else
-	{
-		Scores_Data::last_checkpoint_position = float3::inf();
-		//if (Scores_Data::won_level1)
-		//{
-			if (Scores_Data::won_level2)
-			{
-				Scores_Data::won_level1 = false;
-				Scores_Data::won_level2 = false;
-				SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
-			}
-			else
-			{
-				SceneManager::LoadScene("Wagonnetes", FadeToBlackType::VERTICAL_CURTAIN);
-			}
-		//}
-	}
+	//if (Scores_Data::dead)
+	//{
+	//	Scores_Data::dead = false;
+	//	Scores_Data::player1_kills = 0;
+	//	Scores_Data::player2_kills = 0;
+	//	SceneManager::LoadScene(Scores_Data::last_scene.c_str());
+	//}
+	//else
+	//{
+	//	Scores_Data::last_checkpoint_position = float3::inf();
+	//	if (Scores_Data::won_level1)
+	//	{
+	//		if (Scores_Data::won_level2)
+	//		{
+	//			//Scores_Data::won_level1 = false;
+	//			//Scores_Data::won_level2 = false;
+	//			SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
+	//		}
+	//		else
+	//		{
+	//			SceneManager::LoadScene("Wagonnetes", FadeToBlackType::VERTICAL_CURTAIN);
+	//		}
+	//	}
+	//	else {
+	//		LOG("WTF are you doing entering here stupid?");
+	//	}
+	//}
+	SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
 }
 

@@ -44,14 +44,14 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 	HandleHitCount();
 	float damage = Boss::GetDamaged(dmg, player);
 
-	if (stats["Health"].GetValue() == 0.0F) {
+	if (stats["Health"].GetValue() <= 0.f) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
 		Scores_Data::won_level1 = true;
 		Scores_Data::last_scene = SceneManager::GetCurrentScene();
 		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
+		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
 	}
 
 	return damage;
@@ -383,5 +383,5 @@ void Leshen::SetStats(const char* json)
 
 void Leshen::ChangeScene()
 {
-	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+	SceneManager::LoadScene("Wagonnetes", FadeToBlackType::FADE);
 }
