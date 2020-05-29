@@ -112,7 +112,8 @@ void Scale_Win::Update()
 		Scale();
 	}
 
-	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y))
+	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y)
+		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_Y))
 	{
 		HandleSceneLoad();
 	}
@@ -250,8 +251,8 @@ void Scale_Win::HandleSceneLoad()
 	else
 	{
 		Scores_Data::last_checkpoint_position = float3::inf();
-		if (Scores_Data::won_level1)
-		{
+		//if (Scores_Data::won_level1)
+		//{
 			if (Scores_Data::won_level2)
 			{
 				Scores_Data::won_level1 = false;
@@ -260,9 +261,9 @@ void Scale_Win::HandleSceneLoad()
 			}
 			else
 			{
-				SceneManager::LoadScene("Level_Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
+				SceneManager::LoadScene("Wagonnetes", FadeToBlackType::VERTICAL_CURTAIN);
 			}
-		}
+		//}
 	}
 }
 
