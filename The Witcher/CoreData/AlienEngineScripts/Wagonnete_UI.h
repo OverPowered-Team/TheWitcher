@@ -19,6 +19,7 @@ public:
 
 public:
 
+	GameObject* godmode = nullptr;
 	float lerping_time = 1.f;
 
 private:

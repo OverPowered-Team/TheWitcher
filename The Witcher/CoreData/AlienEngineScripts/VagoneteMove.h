@@ -80,6 +80,8 @@ public:
 
 	float speed = 1;
 
+	bool godmode = false;
+
 private:
 
 	void FollowCurve();
