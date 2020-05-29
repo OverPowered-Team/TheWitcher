@@ -430,74 +430,76 @@ void PlayerController::Revive(float minigame_value)
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 {
-	if (player_data.stats["Absorb"].GetValue() > 0)
+	if (!godmode && !is_immune)
 	{
-		AbsorbHit();
-		return;
-	}
-
-	if (player_data.stats["Health"].GetValue() == 0.0f)
-		return;
-
-	player_data.stats["Health"].DecreaseStat(dmg);
-
-	switch (player_data.type)
-	{
-	case PlayerController::PlayerType::GERALT:
-		audio->StartSound("Play_GeraltGetDamaged");
-		break;
-	case PlayerController::PlayerType::YENNEFER:
-		audio->StartSound("Play_YennGetDamaged");
-		break;
-	}
-
-	if (HUD)
-	{
-		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-	}
-
-	attacks->CancelAttack();
-	if (knock) {
-		if (player_data.stats["Health"].GetValue() == 0)
+		if (player_data.stats["Absorb"].GetValue() > 0)
 		{
-			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-			Die();
+			AbsorbHit();
+			return;
+		}
+
+		if (player_data.stats["Health"].GetValue() == 0.0f)
+			return;
+
+		player_data.stats["Health"].DecreaseStat(dmg);
+
+		switch (player_data.type)
+		{
+		case PlayerController::PlayerType::GERALT:
+			audio->StartSound("Play_GeraltGetDamaged");
+			break;
+		case PlayerController::PlayerType::YENNEFER:
+			audio->StartSound("Play_YennGetDamaged");
+			break;
+		}
+
+		if (HUD)
+		{
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+		}
+
+		attacks->CancelAttack();
+		if (knock) {
+			if (player_data.stats["Health"].GetValue() == 0)
+			{
+				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+				Die();
+			}
+			else
+			{
+				animator->PlayState("Hit");
+				player_data.velocity = knock_speed;
+				SetState(StateType::HIT);
+			}
+		}
+
+		if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
+
+		// Heartbeat effect 
+		static float percentage = 0.f, thresholdPercentage = 0.3f;
+		static bool playing = false;
+
+		percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue();
+		if (playing == false)
+		{
+			if (percentage <= thresholdPercentage)
+			{
+				playing = true;
+				audio->StartSound("Play_Heartbeats");
+			}
 		}
 		else
 		{
-			animator->PlayState("Hit");
-			player_data.velocity = knock_speed;
-			SetState(StateType::HIT);
+			if (percentage > thresholdPercentage)
+			{
+				playing = false;
+				audio->StopSoundByName("Play_Heartbeats");
+			}
 		}
+
+		audio->SetRTPCValue("PlayerLife", player_data.stats["Health"].GetValue());
 	}
-
-	if(GameManager::instance->rumbler_manager)
-		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
-
-	// Heartbeat effect 
-	static float percentage = 0.f, thresholdPercentage = 0.3f; 
-	static bool playing = false; 
-
-	percentage = player_data.stats["Health"].GetValue() / player_data.stats["Health"].GetMaxValue(); 
-	if (playing == false)
-	{
-		if (percentage <= thresholdPercentage)
-		{
-			playing = true;
-			audio->StartSound("Play_Heartbeats");
-		}
-	}
-	else
-	{
-		if (percentage > thresholdPercentage)
-		{
-			playing = false;
-			audio->StopSoundByName("Play_Heartbeats");
-		}
-	}
-		
-	audio->SetRTPCValue("PlayerLife", player_data.stats["Health"].GetValue()); 
-
 }
 
 void PlayerController::AbsorbHit()
