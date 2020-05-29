@@ -22,7 +22,7 @@ void Leshen::StartEnemy()
 
 	Boss::StartEnemy();
 
-	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
+	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
@@ -44,14 +44,14 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 	HandleHitCount();
 	float damage = Boss::GetDamaged(dmg, player);
 
-	if (stats["Health"].GetValue() == 0.0F) {
+	if (stats["Health"].GetValue() <= 0.f) {
 		state = Boss::BossState::DYING;
 		animator->PlayState("Death");
 		Scores_Data::won_level1 = true;
 		Scores_Data::last_scene = SceneManager::GetCurrentScene();
 		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-		Invoke(std::bind(&Leshen::ChangeScene, this), 4);
+		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
 	}
 
 	return damage;
@@ -174,7 +174,7 @@ void Leshen::LaunchCloudAction()
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
 	meshes->SetEnable(false);
-	SpawnParticle("Cloud");
+	SpawnParticle("Cloud", float3::zero(), true);
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
 }
@@ -383,5 +383,5 @@ void Leshen::SetStats(const char* json)
 
 void Leshen::ChangeScene()
 {
-	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+	SceneManager::LoadScene("Wagonnetes", FadeToBlackType::FADE);
 }

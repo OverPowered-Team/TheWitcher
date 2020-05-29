@@ -42,10 +42,11 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	float damage = Boss::GetDamaged(dmg, player, knock_back);
 
-	if (stats["Health"].GetValue() == 0.0) {
+	if (stats["Health"].GetValue() <= 0.f) {
 		fight_controller->OnCloneDead(this->game_object);
 		animator->PlayState("Death");
 		state = Boss::BossState::DYING;
+		Invoke(std::bind(&Ciri::ChangeScene, this), 4.f);
 
 		Scores_Data::won_level2 = true;
 		Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
@@ -369,3 +370,9 @@ void Ciri::SetStats(const char* json)
 
 	JSONfilepack::FreeJSON(stat);
 }
+
+void Ciri::ChangeScene()
+{
+	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+}
+

@@ -18,17 +18,17 @@ void Training_Zone::Start()
 	{
 	case OSCILATION_DIRECTION::X:
 	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
+		max_oscilation_pos = -Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
 		break;
 	}
 	case OSCILATION_DIRECTION::Y:
 	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
+		max_oscilation_pos = -Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
 		break;
 	}
 	case OSCILATION_DIRECTION::Z:
 	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
+		max_oscilation_pos = -Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
 		break;
 	}
 	}

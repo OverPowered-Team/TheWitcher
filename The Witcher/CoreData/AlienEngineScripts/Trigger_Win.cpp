@@ -25,6 +25,12 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) 
 	{
 		std::string current_scene = SceneManager::GetCurrentScene();
+
+		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
+		{
+			SceneManager::LoadScene("boss_test");
+		}
+
 		if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
 		{
 			Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
@@ -38,16 +44,17 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 
 		Scores_Data::last_scene = SceneManager::GetCurrentScene();
 
-		if (strcmp(current_scene.c_str(), "Lvl_1") == 0)
-		{
-			Scores_Data::won_level1 = true;
-			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
-		}
-		else if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
-		{
-			SceneManager::LoadScene("VagonetaTest");
-		}
-		else if (strcmp(current_scene.c_str(), "VagonetaTest") == 0)
+		//if (strcmp(current_scene.c_str(), "Lvl_1") == 0)
+		//{
+		//	Scores_Data::won_level1 = true;
+		//	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		//}
+		//else if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
+		//{
+		//	SceneManager::LoadScene("Wagonnetes");
+		//}
+		//else 
+		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
 		{
 			SceneManager::LoadScene("boss_test");
 		}

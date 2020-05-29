@@ -34,27 +34,19 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_1))
 		{
-			SceneManager::LoadScene("Lvl_1");
+			SceneManager::LoadScene("Lvl_1_Tutorial");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_2))
 		{
-			SceneManager::LoadScene("Lvl_1_Tutorial");
+			SceneManager::LoadScene("Lvl_1");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
-			SceneManager::LoadScene("Level_Mahakam");
+			SceneManager::LoadScene("Wagonnetes");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
 		{
-			SceneManager::LoadScene("Wagonnetes");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_5))
-		{
-			SceneManager::LoadScene("Level_Mahakam_Deepnest");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_6))
-		{
-			SceneManager::LoadScene("Level_Mahakam_Boss");
+			SceneManager::LoadScene("boss_test");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_W))
 		{

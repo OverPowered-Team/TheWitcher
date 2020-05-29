@@ -11,6 +11,8 @@ Wagonnete_UI::~Wagonnete_UI()
 void Wagonnete_UI::Start()
 {
 	lifebar = game_object->GetChild("Lifebar")->GetComponent<ComponentBar>();
+	godmode = game_object->GetChild("Godmode");
+	godmode->SetEnable(false);
 }
 
 void Wagonnete_UI::Update()
@@ -30,16 +32,19 @@ void Wagonnete_UI::Update()
 		if (has_been_hit)
 		{
 			float color_lerp = 0.0f;
+			float red = 0.0f;
 
 			if (t < 0.5f)
 			{
 				color_lerp = Maths::Lerp(1.0f, 0.f, t / lerping_time);
-				lifebar->SetBarColor(color_lerp, 1 - color_lerp, 0, 1);
+				red = Maths::Lerp(1.0f, 0.25f, t / lerping_time);
+				lifebar->SetBarColor(red, color_lerp, color_lerp, 1);
 			}
 			else
 			{
 				color_lerp = Maths::Lerp(0.f, 1.f, t / lerping_time);
-				lifebar->SetBarColor(1 - color_lerp, color_lerp, 0, 1);
+				red = Maths::Lerp(0.25f, 1.f, t / lerping_time);
+				lifebar->SetBarColor(red, color_lerp, color_lerp, 1);
 			}
 		}
 
@@ -47,7 +52,7 @@ void Wagonnete_UI::Update()
 		{
 			changing_life = false;
 			lifebar->SetBarValue(life_percentatge);
-			lifebar->SetBarColor(0, 1, 0, 1);
+			lifebar->SetBarColor(1, 1, 1, 1);
 		}
 
 	}

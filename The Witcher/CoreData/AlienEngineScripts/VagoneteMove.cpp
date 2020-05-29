@@ -53,9 +53,41 @@ void VagoneteMove::Update()
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_6)) {
-		SceneManager::LoadScene("Level_Mahakam_Deepnest");
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_G))
+	{
+		godmode = !godmode;
+		HUD->godmode->SetEnable(godmode);
 	}
+
+	if (Input::GetKeyDown(SDL_SCANCODE_0))
+	{
+		SceneManager::LoadScene("Main_Menu");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_1))
+	{
+		SceneManager::LoadScene("Lvl_1_Tutorial");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_2))
+	{
+		SceneManager::LoadScene("Lvl_1");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_3))
+	{
+		SceneManager::LoadScene("Wagonnetes");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_4))
+	{
+		SceneManager::LoadScene("boss_test");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_W))
+	{
+		SceneManager::LoadScene("NewWin_Menu");
+	}
+	if (Input::GetKeyDown(SDL_SCANCODE_D))
+	{
+		SceneManager::LoadScene("EndGame_Menu");
+	}
+
 }
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
@@ -110,11 +142,14 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 
 void VagoneteMove::DecreaseLife()
 {
-	vagonete_life -= 20;
-	HUD->UpdateLifebar(vagonete_life, max_life);
+	if (!godmode)
+	{
+		vagonete_life -= 10;
+		HUD->UpdateLifebar(vagonete_life, max_life);
 
-	if (vagonete_life <= 0) {
-		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+		if (vagonete_life <= 0) {
+			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+		}
 	}
 }
 

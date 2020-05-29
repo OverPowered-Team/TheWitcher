@@ -24,7 +24,7 @@ void CiriOriginal::StartEnemy()
 
 	meshes = game_object->GetChild("Meshes");
 
-	HUD = game_object->GetChild("Boss_HUD")->GetComponent<Boss_Lifebar>();
+	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	fight_controller = GetComponent<CiriFightController>();
 	is_immune = true;
@@ -114,7 +114,17 @@ void CiriOriginal::Scream()
 
 void CiriOriginal::LaunchRockAction()
 {
-	int target = Random::GetRandomIntBetweenTwo(0, 1);
+	int target = 0;
+
+	if (player_controllers[0]->state->type == StateType::DEAD) {
+		target = 1;
+	}
+	else if (player_controllers[1]->state->type == StateType::DEAD) {
+		target = 0;
+	}
+	else {
+		target = Random::GetRandomIntBetweenTwo(0, 1);
+	}
 	float3 throw_direction = (player_controllers[target]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 	float distance_force_factor = 0.0f;
 	distance_force_factor = transform->GetGlobalPosition().Distance(player_controllers[target]->transform->GetGlobalPosition()) * rock_force;
