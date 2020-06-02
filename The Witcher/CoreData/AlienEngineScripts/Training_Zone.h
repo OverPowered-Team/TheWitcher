@@ -45,6 +45,8 @@ private:
 	float max_oscilation_pos = 0.0f;
 	float current_oscilating_time = 0.0f;
 
+	float internal_timer = 0.0f;
+	float time_paused = 0.0f;
 };
 
 ALIEN_FACTORY Training_Zone* CreateTraining_Zone() {

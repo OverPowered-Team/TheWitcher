@@ -32,19 +32,38 @@ void Training_Zone::Start()
 		break;
 	}
 	}
+
+	internal_timer = Time::GetGameTime();
+
 }
 
 void Training_Zone::Update()
 {
-	float acceleration_factor = 0.0f;
-
-	if ((cycle_time * 0.5f) >= (Time::GetGameTime() - current_oscilating_time))
+	if (!Time::IsGamePaused())
 	{
-		acceleration_factor = (Time::GetGameTime() - current_oscilating_time) / (cycle_time * 0.5f * 0.5f);
+		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
+
+		if (time_paused != 0.0f)
+		{
+			current_oscilating_time += time_paused;
+			time_paused = 0.0f;
+		}
 	}
 	else
 	{
-		acceleration_factor = (cycle_time - (Time::GetGameTime() - current_oscilating_time)) / (cycle_time * 0.5f * 0.5f);
+		time_paused = Time::GetGameTime() - internal_timer;
+		return;
+	}
+
+	float acceleration_factor = 0.0f;
+
+	if ((cycle_time * 0.5f) >= (internal_timer - current_oscilating_time))
+	{
+		acceleration_factor = (internal_timer - current_oscilating_time) / (cycle_time * 0.5f * 0.5f);
+	}
+	else
+	{
+		acceleration_factor = (cycle_time - (internal_timer - current_oscilating_time)) / (cycle_time * 0.5f * 0.5f);
 	}
 
 	float rotation_to_add = (max_oscilation_pos * 2 / cycle_time) * Time::GetDT() * initial_sign * acceleration_factor;
@@ -68,12 +87,11 @@ void Training_Zone::Update()
 	}
 	}
 
-	if (Time::GetGameTime() - current_oscilating_time >= cycle_time)
+	if (internal_timer - current_oscilating_time >= cycle_time)
 	{
 		initial_sign = -initial_sign;
-		current_oscilating_time = Time::GetGameTime();
+		current_oscilating_time = internal_timer;
 	}
-
 }
 
 void Training_Zone::OnTriggerEnter(ComponentCollider* col)
