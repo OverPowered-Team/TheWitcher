@@ -106,7 +106,7 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			{
 			case OSCILATION_DIRECTION::X:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, transform->right * initial_sign * push_force);
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, game_object->parent->transform->right * initial_sign * push_force);
 				break;
 			}
 			case OSCILATION_DIRECTION::Y:
@@ -116,7 +116,7 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			}
 			case OSCILATION_DIRECTION::Z:
 			{
-				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, transform->forward * initial_sign * push_force);
+				col->game_object_attached->GetComponent<PlayerController>()->ReceiveDamage(0, game_object->parent->transform->forward * initial_sign * push_force);
 				break;
 			}
 			}
