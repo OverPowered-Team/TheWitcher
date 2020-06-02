@@ -20,6 +20,6 @@ void Trigger_To_Lvl1_Tutorial::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "Player") == 0)
 	{
-		SceneManager::LoadScene("Lvl_1");
+		SceneManager::LoadScene("Lvl_1", FadeToBlackType::FADE);
 	}
 }
