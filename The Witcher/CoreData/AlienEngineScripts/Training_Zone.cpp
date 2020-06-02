@@ -13,7 +13,7 @@ void Training_Zone::Start()
 {
 	rb = GetComponent<ComponentRigidBody>();
 
-	current_oscilating_time = Time::GetGameTime();
+	
 	switch (oscilation_direction)
 	{
 	case OSCILATION_DIRECTION::X:
@@ -33,8 +33,8 @@ void Training_Zone::Start()
 	}
 	}
 
+	current_oscilating_time = Time::GetGameTime();
 	internal_timer = Time::GetGameTime();
-
 }
 
 void Training_Zone::Update()
