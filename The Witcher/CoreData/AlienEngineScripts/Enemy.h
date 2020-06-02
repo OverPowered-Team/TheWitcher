@@ -104,6 +104,7 @@ public:
 	bool is_attacking = false;
 	bool is_battle_circle = false;
 	bool is_obstacle = false;
+	bool is_hit_inmune = false;
 	Prefab head_prefab;
 
 protected:

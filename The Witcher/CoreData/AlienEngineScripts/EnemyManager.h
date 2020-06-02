@@ -23,6 +23,8 @@ public:
 
 	void AddEnemy(Enemy* enemy);
 	void DeleteEnemy(Enemy* enemy);
+
+	void ChangeIsHitInmune();
 	const std::vector<Enemy*>&GetEnemies();
 
 public:
@@ -40,6 +42,8 @@ public:
 	Prefab drowned_grab;
 
 	Prefab ciri_clone;
+
+	bool is_hit_inmune = false;
 
 private:
 	std::vector<Enemy*> enemies;

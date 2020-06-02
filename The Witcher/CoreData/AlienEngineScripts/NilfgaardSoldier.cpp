@@ -123,6 +123,8 @@ void NilfgaardSoldier::PlaySFX(const char* sfx_name)
 		audio_emitter->StartSound("SoldierHit");
 	else if (sfx_name == "Death")
 		audio_emitter->StartSound("SoldierDeath");
+	else if (sfx_name == "Block")
+		audio_emitter->StartSound("SoldierBlock");
 	else
 		LOG("Sound effect with name %s not found!", sfx_name);
 }
@@ -175,7 +177,7 @@ void NilfgaardSoldier::SetState(const char* state_str)
 	else if (state_str == "Block")
 	{
 		animator->PlayState("Block");
-		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
+		//animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::AUXILIAR;
 	}
 	else if (state_str == "Flee")

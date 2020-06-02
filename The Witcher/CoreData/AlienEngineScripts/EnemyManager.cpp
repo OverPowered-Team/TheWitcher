@@ -31,6 +31,12 @@ void EnemyManager::Update()
 	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
 		(*item)->UpdateEnemy();	
 	}
+
+	if (Input::GetKeyDown(SDL_SCANCODE_E))
+	{
+		ChangeIsHitInmune();
+		LOG("Is hit enemies: %i", is_hit_inmune);
+	}
 }
 
 void EnemyManager::CleanUp()
@@ -129,6 +135,15 @@ void EnemyManager::DeleteEnemy(Enemy* enemy)
 			enemies.erase(item);
 			break;
 		}
+	}
+}
+
+void EnemyManager::ChangeIsHitInmune()
+{
+	is_hit_inmune = !is_hit_inmune;
+
+	for (auto item = enemies.begin(); item != enemies.end(); ++item) {
+		(*item)->is_hit_inmune = is_hit_inmune;
 	}
 }
 
