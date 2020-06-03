@@ -67,9 +67,6 @@ public:
 	
 	void SetStats(const char* json) override;
 
-private:
-	void ChangeScene();
-
 };
 
 ALIEN_FACTORY Ciri* CreateCiri() {
