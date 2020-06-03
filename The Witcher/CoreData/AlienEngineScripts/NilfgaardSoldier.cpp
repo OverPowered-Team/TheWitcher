@@ -221,8 +221,18 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			ChangeAttackEnemy();
 		}
-		else
+		else if(!is_dead)
 			SetState("Idle");
+		else
+		{
+			if (!was_dizzy)
+				was_dizzy = true;
+			else
+			{
+				state = NilfgaardSoldierState::DYING;
+				GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+			}
+		}
 
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
