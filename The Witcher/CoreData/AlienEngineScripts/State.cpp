@@ -66,6 +66,7 @@ void RunningState::Update(PlayerController* player)
 	}
 
 	float lerp = player->player_data.velocity.Length() / player->player_data.stats["Movement_Speed"].GetValue();
+	lerp = lerp * (1 / Time::GetScaleTime());
 	player->animator->SetStateSpeed("Run", lerp);
 }
 
