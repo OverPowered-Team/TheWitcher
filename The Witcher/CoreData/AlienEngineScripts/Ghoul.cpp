@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "PlayerManager.h"
 #include "ParticlePool.h"
 #include "Ghoul.h"
 #include "MusicController.h"
@@ -105,6 +106,11 @@ bool Ghoul::IsDead()
 {
     return (state == GhoulState::DEAD ? true : false);
 }
+bool Ghoul::IsDying()
+{
+    return (state == GhoulState::DYING ? true : false);
+}
+
 
 void Ghoul::SetState(const char* state_str)
 {
@@ -238,7 +244,14 @@ void Ghoul::OnAnimationEnd(const char* name)
     {
         ReleaseParticle("hit_particle");
 
-        SetState("Idle");
+        if(!is_dead)
+            SetState("Idle");
+    }
+    else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
+    {
+        state = GhoulState::DYING;
+        //GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+        GameManager::instance->player_manager->IncreaseUltimateCharge(10);
     }
 }
 

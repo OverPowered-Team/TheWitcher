@@ -74,6 +74,10 @@ bool Drowned::IsDead()
 {
 	return (state == DrownedState::DEAD ? true : false);
 }
+bool Drowned::IsDying()
+{
+	return (state == DrownedState::DYING ? true : false);
+}
 
 bool Drowned::IsState(const char* state_str)
 {
