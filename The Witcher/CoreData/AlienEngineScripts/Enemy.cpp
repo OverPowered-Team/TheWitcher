@@ -155,9 +155,10 @@ void Enemy::UpdateEnemy()
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
-					if (stats["Health"].GetValue() == 0)
+					if (stats["Health"].GetValue() <= 0)
 					{
 						SetState("Dying");
+						PlaySFX("Death");
 					}
 				}
 			}
