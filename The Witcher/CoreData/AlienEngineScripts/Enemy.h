@@ -77,6 +77,8 @@ public:
 	void AddAttacking(PlayerController* player_controller);
 	void RemoveAttacking(PlayerController* player_controller);
 
+	void SpawnHealthOrb();
+
 public:
 	float distance = 0.0F;
 	float3 direction; 
@@ -108,7 +110,7 @@ public:
 	bool is_obstacle = false;
 	bool is_hit_inmune = false;
 	Prefab head_prefab;
-
+	Prefab life_orb;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;

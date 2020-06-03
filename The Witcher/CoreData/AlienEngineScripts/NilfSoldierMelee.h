@@ -24,7 +24,9 @@ ALIEN_FACTORY NilfgaardSoldier* CreateNilfSoldierMelee() {
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldierState, nilfgaard->state);
 	SHOW_IN_INSPECTOR_AS_ENUM(NilfgaardSoldier::NilfgaardType, nilfgaard->nilf_type);
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->head_prefab);
+	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->life_orb);
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, nilfgaard);
+	SHOW_VOID_FUNCTION(Enemy::SpawnHealthOrb, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::ActivateCollider, nilfgaard);
 	SHOW_VOID_FUNCTION(NilfgaardSoldier::DeactivateCollider, nilfgaard);
 	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, nilfgaard);
