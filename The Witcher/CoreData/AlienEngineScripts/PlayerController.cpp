@@ -86,7 +86,7 @@ void PlayerController::Update()
 
 	if (CheckBoundaries() && can_move)
 	{
-		controller->Move(player_data.velocity * Time::GetDT() * (1 / Time::GetScaleTime()));
+		controller->Move(player_data.velocity * Time::GetDT() / Time::GetScaleTime());
 	}
 
 	if (is_grounded)
