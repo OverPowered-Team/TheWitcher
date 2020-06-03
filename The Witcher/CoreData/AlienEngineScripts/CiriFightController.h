@@ -62,10 +62,6 @@ public:
 	void FinishPhaseFour();
 	void UpdatePhaseFour();
 
-	void ChangeToPhase2();
-	void ChangeToPhase3();
-	void ChangeToPhase4();
-
 	void OnCloneDead(GameObject* clone);
 
 	void MoveWall();
