@@ -63,7 +63,11 @@ void NilfSoldierMelee::UpdateEnemy()
 		}
 		if (is_obstacle)
 		{
-			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+			BlockerObstacle* blocker = game_object->parent->parent->GetComponent<BlockerObstacle>();
+			if (blocker)
+				blocker->ReleaseMyself(this);
+			else
+				LOG("There's no blocker");
 		}
 		break;
 	}
