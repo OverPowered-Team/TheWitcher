@@ -14,7 +14,7 @@ void Pickup::Update()
 
 void Pickup::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
+	/*if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 
 		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player && !player)
@@ -31,5 +31,5 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 	else if (strcmp(collider->game_object_attached->GetTag(), "Player") != 0)
 	{
 		GameObject::Destroy(this->game_object);
-	}
+	}*/
 }
