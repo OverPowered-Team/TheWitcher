@@ -40,11 +40,6 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
-	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
-		particles.insert(std::pair((*it)->GetName(), (*it)));
-		(*it)->SetEnable(false);
-	}*/
 
 	LoadStats();
 	CalculateAABB();
@@ -72,11 +67,6 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
-	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
-	//{
-	//	ReceiveDamage(100);
-	//}
-
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
@@ -96,7 +86,7 @@ void PlayerController::Update()
 
 	if (CheckBoundaries() && can_move)
 	{
-		controller->Move(player_data.velocity * Time::GetDT());
+		controller->Move(player_data.velocity * Time::GetDT() / Time::GetScaleTime());
 	}
 
 	if (is_grounded)
@@ -510,7 +500,11 @@ void PlayerController::AbsorbHit()
 		{
 			if (mods->identifier == "Absorb")
 			{
-				RemoveEffect(it);
+				mods->amount--;
+				if (mods->amount == 0)
+				{
+					RemoveEffect(it);
+				}
 				return;
 			}
 		}
@@ -837,6 +831,15 @@ void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
 
 			}
 		}
+}
+
+void PlayerController::IncreaseStat(std::string stat, float value)
+{
+	auto stat_it = player_data.stats.find(stat);
+	if (stat_it != player_data.stats.end())
+	{
+		player_data.stats[stat].IncreaseStat(value);
+	}
 }
 
 #pragma region Events

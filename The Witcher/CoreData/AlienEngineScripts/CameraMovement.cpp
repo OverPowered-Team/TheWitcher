@@ -36,6 +36,7 @@ void CameraMovement::Update()
     }
     case CameraState::FREE: {
         float3 pos = players[closest_player]->transform->GetGlobalPosition() + prev_middle;
+        
         auto frustum = GetComponent<ComponentCamera>()->frustum;
         frustum.pos = pos;
         bool inside = true;
@@ -50,7 +51,7 @@ void CameraMovement::Update()
             }
         }
         if (inside)
-            transform->SetGlobalPosition(pos);
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (pos - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
 
         inside = true;
         pos = CalculateMidPoint() + trg_offset;
@@ -64,10 +65,15 @@ void CameraMovement::Update()
         }
         if (inside) {
             if (prev_state == CameraState::FREE)
-                prev_state = CameraState::DYNAMIC;
+                prev_state = CameraState::FREE_TO_DYNAMIC;
 
             state = prev_state;
         }
+        break;
+    }
+    case CameraState::FREE_TO_DYNAMIC: {
+        float3 pos = transform->GetGlobalPosition();
+        transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * 1 * Time::GetDT());
         break;
     }
     case CameraState::STATIC:

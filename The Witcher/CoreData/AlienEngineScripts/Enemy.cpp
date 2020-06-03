@@ -368,6 +368,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (stats["Health"].GetValue() == 0.0F) {
 
 		animator->SetBool("dead", true);
+		is_dead = true;
 		OnDeathHit();
 
 		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
@@ -587,7 +588,7 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 {
 	player_controllers[current_player]->current_attacking_enemies--;
 	is_attacking = false;
-	if(!IsDead())
+	if(!is_dead)
 		SetState("Guard");
 }
 	

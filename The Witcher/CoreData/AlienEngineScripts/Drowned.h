@@ -37,6 +37,7 @@ public:
 
 	void Stun(float time) override;
 	bool IsDead() override;
+	bool IsDying() override;
 	bool IsState(const char*) override;
 	void PlaySFX(const char* sfx_name);
 

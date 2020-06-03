@@ -38,6 +38,7 @@ public:
 
 	void Stun(float time) override;
 	bool IsDead() override;
+	bool IsDying() override;
 	void SetState(const char* state_str) override;
 
 	void OnDeathHit();

@@ -143,21 +143,6 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Hit",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
                 "Source": "Dizzy",
                 "Target": "Idle",
                 "Blend": 0.25,
@@ -203,6 +188,21 @@
                     {
                         "Type": "bool",
                         "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
                         "ParameterIndex": 0
                     }
                 ]

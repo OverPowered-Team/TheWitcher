@@ -51,6 +51,7 @@ public:
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
+	virtual bool IsDying() { LOG("Calling virtual function of IsDying()"); return false; }
 	virtual bool IsRangeEnemy() { LOG("Calling virtual function of IsDead!"); return false; }
 	virtual void Decapitate(PlayerController* player);
 
@@ -86,6 +87,7 @@ public:
 	float gravity = -20.0f;
 	bool is_immune = false;
 
+
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;
 	ComponentCharacterController* character_ctrl = nullptr;
@@ -107,6 +109,7 @@ public:
 	bool is_hit_inmune = false;
 	Prefab head_prefab;
 
+
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
@@ -116,4 +119,6 @@ protected:
 	float stun_time = 0.0f;
 	std::string decapitation_particle = "";
 	int current_player = 0;
+	bool is_dead = false;
+	bool was_dizzy = false;
 };

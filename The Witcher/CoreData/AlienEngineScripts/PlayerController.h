@@ -122,6 +122,8 @@ public:
 	// Terrain - particles
 	void OnTerrainEnter(float4 initial_color, float4 final_color); 
 
+	void IncreaseStat(std::string stat, float value);
+
 	// Dash wonders
 	void ToggleDashMultiplier(); 
 
