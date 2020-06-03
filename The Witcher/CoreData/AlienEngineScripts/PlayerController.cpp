@@ -500,7 +500,11 @@ void PlayerController::AbsorbHit()
 		{
 			if (mods->identifier == "Absorb")
 			{
-				RemoveEffect(it);
+				mods->amount--;
+				if (mods->amount == 0)
+				{
+					RemoveEffect(it);
+				}
 				return;
 			}
 		}
