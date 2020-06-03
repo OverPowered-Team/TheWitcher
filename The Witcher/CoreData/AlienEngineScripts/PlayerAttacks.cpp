@@ -547,8 +547,8 @@ void PlayerAttacks::AttackShake()
 	if (current_attack->info.shake == 1)
 	{
 		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
-		if (GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);
+		/*if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);*/
 	}
 }
 
