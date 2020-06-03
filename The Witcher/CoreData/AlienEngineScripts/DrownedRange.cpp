@@ -2,6 +2,8 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "GameManager.h"
+#include "PlayerManager.h"
 #include "MusicController.h"
 #include "ArrowScript.h"
 
@@ -133,9 +135,19 @@ void DrownedRange::OnAnimationEnd(const char* name)
 		set_attack = true;
 		movement = 0;
 	}
-	else if (strcmp(name, "Hit") == 0 && state != DrownedState::DEAD) {
-		state = DrownedState::ATTACK;
-		set_attack = true;
-		movement = 0;
+	else if (strcmp(name, "Hit") == 0) {
+		ReleaseParticle("hit_particle");
+		if (!is_dead)
+		{
+			state = DrownedState::ATTACK;
+			set_attack = true;
+			movement = 0;
+		}
+	}
+	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
+	{
+		state = DrownedState::DYING;
+		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 }
