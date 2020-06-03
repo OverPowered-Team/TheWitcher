@@ -62,7 +62,9 @@ void Enemy::StartEnemy()
 
 	SetStats(json_str.data());
 
-	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition(); 
+	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition();
+
+	is_hit_inmune = GameManager::instance->enemy_manager->is_hit_inmune;
 
 	/*if (game_object->GetChild("Particles"))
 	{
@@ -346,11 +348,14 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
-		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		if (!is_hit_inmune)
+		{
+			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		}
 	}
 
-	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	if ((stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue()))
 	{
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());

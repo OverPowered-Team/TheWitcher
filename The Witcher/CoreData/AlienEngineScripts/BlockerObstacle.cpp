@@ -3,6 +3,7 @@
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "SpawnEnemyManager.h"
+#include "GameManager.h"
 
 BlockerObstacle::BlockerObstacle() : Enemy()
 {
@@ -30,10 +31,19 @@ void BlockerObstacle::SetStats(const char* json)
 void BlockerObstacle::StartEnemy()
 {
 	type = EnemyType::BLOCKER_OBSTACLE;
-	Enemy::StartEnemy();
 	state = ObstacleState::IDLE;
 	children_enemies = this->game_object->GetChild("ChildEnemies")->GetComponentsInChildren<Enemy>();
 	manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
+
+	SetStats("blockerobstacle");
+
+	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition();
+	is_hit_inmune = GameManager::instance->enemy_manager->is_hit_inmune;
+
+	boxCollider = GetComponent<ComponentBoxCollider>();
+	audio_emitter = GetComponent<ComponentAudioEmitter>();
+
+	roots = game_object->GetChild("Roots")->GetChildren();
 }
 
 void BlockerObstacle::UpdateEnemy()
@@ -74,8 +84,9 @@ float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 kn
 {
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
+	CheckRootHealth();
 
-	if (stats["Health"].GetValue() <= 0.f)
+	if(stats["Health"].GetValue() <= 0.f)
 		state = ObstacleState::DYING;
 
 	last_player_hit = player;
@@ -95,13 +106,16 @@ void BlockerObstacle::LookForMyChildren()
 				spawner->GetComponent<SpawnEnemyManager>()->SpawnEnemies();
 			else
 				LOG("No spawner");
+
+			enemy_die_damage = stats["Health"].GetMaxValue() / children_enemies.size();
 		}
 	}
 }
 
 void BlockerObstacle::ManageHealth()
 {
-	stats["Health"].DecreaseStat(200.f);
+	stats["Health"].DecreaseStat(enemy_die_damage);
+	CheckRootHealth();
 	if (children_enemies.size() <= 0 || stats["Health"].GetValue() <= 0) {
 		state = ObstacleState::DYING;
 		LOG("ESTOY MUERTO");
@@ -136,4 +150,21 @@ void BlockerObstacle::ReleaseMyself(Enemy* en)
 	children_enemies.erase(iter);
 	ManageHealth();
 	LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
+}
+
+void BlockerObstacle::CheckRootHealth()
+{
+	float current_health = stats["Health"].GetValue();
+	float max_health = stats["Health"].GetMaxValue();
+	float two_third_life = max_health * 0.66f;
+	float one_third_life = max_health * 0.33f;
+
+	LOG("Two: %f", two_third_life);
+	LOG("One: %f", one_third_life);
+
+	if (current_health <= two_third_life && current_health > one_third_life && roots[2]->IsEnabled())
+		roots[2]->SetEnable(false);
+	else if (current_health <= one_third_life && roots[1]->IsEnabled())
+		roots[1]->SetEnable(false);
+
 }
