@@ -833,6 +833,15 @@ void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
 		}
 }
 
+void PlayerController::IncreaseStat(std::string stat, float value)
+{
+	auto stat_it = player_data.stats.find(stat);
+	if (stat_it != player_data.stats.end())
+	{
+		player_data.stats[stat].IncreaseStat(value);
+	}
+}
+
 #pragma region Events
 void PlayerController::OnAnimationEnd(const char* name) {
 

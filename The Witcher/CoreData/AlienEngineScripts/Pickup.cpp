@@ -17,19 +17,10 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 
 		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
-		if (player && !player)
+		if (player && player->state->type != StateType::DEAD)
 		{
-			float3 knock = direction * knock_back;
-			float damage_dealt = enemy->GetDamaged(damage, player, knock);
-
-			player->player_data.total_damage_dealt += damage_dealt;
-
-			if (!enemy->IsDead())
-				GameObject::Destroy(this->game_object);
+			player->IncreaseStat(stat_to_change, value);
+			GameObject::Destroy(this->game_object);
 		}
-	}
-	else if (strcmp(collider->game_object_attached->GetTag(), "Player") != 0)
-	{
-		GameObject::Destroy(this->game_object);
 	}
 }
