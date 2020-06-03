@@ -40,11 +40,6 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-	/*std::vector<GameObject*> particle_gos = game_object->GetChild("Particles")->GetChildren();
-	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
-		particles.insert(std::pair((*it)->GetName(), (*it)));
-		(*it)->SetEnable(false);
-	}*/
 
 	LoadStats();
 	CalculateAABB();
@@ -72,11 +67,6 @@ void PlayerController::Update()
 	if (Time::IsGamePaused())
 		return;
 
-	//if (Input::GetKeyDown(SDL_SCANCODE_LSHIFT) && controller_index == 2)
-	//{
-	//	ReceiveDamage(100);
-	//}
-
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
@@ -96,7 +86,7 @@ void PlayerController::Update()
 
 	if (CheckBoundaries() && can_move)
 	{
-		controller->Move(player_data.velocity * Time::GetDT());
+		controller->Move(player_data.velocity * Time::GetDT() / Time::GetScaleTime());
 	}
 
 	if (is_grounded)

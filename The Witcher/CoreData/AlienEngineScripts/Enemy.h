@@ -51,6 +51,7 @@ public:
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
+	virtual bool IsDying() { LOG("Calling virtual function of IsDying()"); return false; }
 	virtual bool IsRangeEnemy() { LOG("Calling virtual function of IsDead!"); return false; }
 	virtual void Decapitate(PlayerController* player);
 
@@ -85,6 +86,7 @@ public:
 	float increase_hit_animation = 1.0f;
 	float gravity = -20.0f;
 	bool is_immune = false;
+	bool is_dead = false;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;

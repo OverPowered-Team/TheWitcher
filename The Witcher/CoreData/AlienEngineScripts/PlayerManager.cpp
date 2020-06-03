@@ -25,7 +25,15 @@ void PlayerManager::Start()
 
 void PlayerManager::Update()
 {
-	if (ultimate_buttons_pressed == players.size() && collective_ultimate_charge == max_ultimate_charge)
+	int num_pressed = 0;
+	for (auto it = players.begin(); it != players.end(); ++it)
+	{
+		if (Input::GetControllerButtonRepeat((*it)->controller_index, (*it)->controller_ultimate) || Input::GetKeyRepeat((*it)->keyboard_ultimate))
+		{
+			num_pressed++;
+		}
+	}
+	if (num_pressed == players.size() && collective_ultimate_charge >= max_ultimate_charge)
 	{
 		ActivateUltimate();
 	}

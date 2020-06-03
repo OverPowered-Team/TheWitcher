@@ -144,6 +144,10 @@ bool NilfgaardSoldier::IsDead()
 {
 	return (state == NilfgaardSoldierState::DEAD ? true : false);
 }
+bool NilfgaardSoldier::IsDying()
+{
+	return (state == NilfgaardSoldierState::DYING ? true : false);
+}
 
 void NilfgaardSoldier::SetState(const char* state_str)
 {
