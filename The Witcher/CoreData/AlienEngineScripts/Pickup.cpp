@@ -1,6 +1,14 @@
 #include "PlayerController.h"
 #include "Pickup.h"
 
+Pickup::Pickup() : Alien()
+{
+}
+
+Pickup::~Pickup()
+{
+}
+
 void Pickup::Start()
 {
 	start_time = Time::GetGameTime();
