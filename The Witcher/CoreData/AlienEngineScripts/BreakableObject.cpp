@@ -13,7 +13,7 @@ BreakableObject::~BreakableObject()
 
 void BreakableObject::Explode()
 {
-	GameObject* new_obj = GameObject::Instantiate(object_broken, transform->GetGlobalPosition());
+	GameObject* new_obj = GameObject::Instantiate(object_broken, transform->GetGlobalPosition(), false, game_object->parent);
 	auto c = new_obj->GetComponent<ExplodeChildren>();
 	if (c != nullptr)
 		c->SetVars(force, time_to_despawn);
