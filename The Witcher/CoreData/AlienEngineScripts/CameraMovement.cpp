@@ -39,6 +39,11 @@ void CameraMovement::Update()
                 else
                     transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
             }
+            else {
+                float2 vec = float2((l2 - l1).x, (l2 - l1).z);
+                float2 proj = vec * ((float2(futurePos.x, futurePos.z) - float2(l1.x, l1.z)).Dot(vec)) / (vec.Dot(vec));
+                transform->SetGlobalPosition(float3(l1.x + proj.x, futurePos.y, l1.z + proj.y));
+            }
         }
         else {
             if (smooth_camera) {
