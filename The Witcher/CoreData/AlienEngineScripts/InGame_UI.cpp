@@ -38,7 +38,7 @@ void InGame_UI::Start()
 
 void InGame_UI::Update()
 {
-	if (((Input::GetControllerButtonUp(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonUp(2, Input::CONTROLLER_BUTTON_START))||(Input::GetKeyDown(SDL_SCANCODE_ESCAPE)))&&!died)
+	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START))||(Input::GetKeyDown(SDL_SCANCODE_ESCAPE)))&&!died)
 	{
 		PauseMenu(!Time::IsGamePaused());
 	}
