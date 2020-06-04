@@ -33,7 +33,6 @@ public:
 	float3 CalculateAxisMidPoint();
 	void LookAtMidPoint();
 	float3 CalculateCameraPos(const float& vertical, const float& top_view, const float& dst);
-	Quat RotationBetweenVectors(math::float3& front, math::float3& direction);
 
 	TransitionInfo curr_transition;
 	CameraState state = CameraState::DYNAMIC;
@@ -57,6 +56,10 @@ public:
 	float3 prev_middle = float3::zero();
 	int closest_player = -1;
 	CameraState prev_state = CameraState::FREE;
+
+	//Limit Camera
+	GameObject* limiter1 = nullptr;
+	GameObject* limiter2 = nullptr;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
@@ -74,6 +77,10 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->smooth_cam_vel);
 
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->search_players);
+
+	SHOW_SEPARATOR();
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->limiter1);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->limiter2);
 
 	return alien;
 }
