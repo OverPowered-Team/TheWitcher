@@ -18,7 +18,6 @@ uniform mat4 projection;
 
 uniform int num_space_matrix;
 uniform mat4 lightSpaceMatrix[MAX_SPACEMATRIX];
-uniform mat4 lightSpaceMatrixBaked[MAX_SPACEMATRIX];
 uniform int animate;
 
 uniform float density = 0;
@@ -30,7 +29,6 @@ out vec3 norms;
 out mat3 TBN; 
 out float visibility; 
 out vec4 FragPosLightSpace[MAX_SPACEMATRIX];
-out vec4 FragPosLightSpaceBaked[5];
 //out float visibility;
 
 uniform vec4 clip_plane;
@@ -53,11 +51,12 @@ void main()
     //gl_ClipDistance[0] = -1;
     // --------------------------------------- 
 
+    
     // --------------- Animation -------------
     vec3 blendpos = vec3(0,0,0);
     if(animate == 1)
     {
-         for(int i=0; i<4; i++)
+        for(int i=0; i<4; i++)
         {
             blendpos += vec3(gBones[BoneIDs[i]] * pos) * Weights[i];
         }
@@ -67,14 +66,7 @@ void main()
     frag_pos = vec3(model * pos);
     
     for(int i = 0; i < num_space_matrix; i++)
-    {
         FragPosLightSpace[i] = lightSpaceMatrix[i] * vec4(frag_pos, 1.0);
-        for(int j = 0; j < 3; j++)
-        {
-            int iterator = i*3 + j;
-            FragPosLightSpaceBaked[iterator] = lightSpaceMatrixBaked[iterator] * vec4(frag_pos, 1.0);
-        }
-    }
 
     // --------------- Normals ---------------
     norms = mat3(transpose(inverse(model))) * normals;
@@ -107,9 +99,6 @@ struct DirectionalLight
     vec3 dirLightProperties[5];
     sampler2D depthMap;
     vec3 lightPos;
-
-    sampler2D bakeShadows[3];
-    vec3 lightPosBaked[3];
 
     bool castShadow;
 };
@@ -151,10 +140,10 @@ struct Material {
 };
 
 // Function declarations
-vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir, Material objectMaterial, vec2 texCoords, vec4 lightSpaceMat, vec4 lightSpaceMatBaked0, vec4 lightSpaceMatBaked1, vec4 lightSpaceMatBaked2);
+vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir, Material objectMat, vec2 texCoords,vec4 lightSpaceMat);
 vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_dir, Material objectMat, vec2 texCoords);
 vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_dir, Material objectMat, vec2 texCoords);
-float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, sampler2D depthMap);
+float ShadowCalculation(DirectionalLight light, vec4 fragPosLightSpace, vec3 normal, vec3 lightDir);
 
 // Uniforms
 uniform Material objectMaterial;
@@ -168,9 +157,8 @@ uniform vec3 backgroundColor;
 
 #define MAX_SPACEMATRIX 10
 #define MAX_LIGHTS_PER_TYPE 10
-
 uniform DirectionalLight dir_light[MAX_LIGHTS_PER_TYPE];
-uniform PointLight point_light[70];
+uniform PointLight point_light[100];
 uniform SpotLight spot_light[MAX_LIGHTS_PER_TYPE];
 
 // Ins
@@ -180,7 +168,6 @@ in vec3 norms;
 in mat3 TBN;
 in float visibility;
 in vec4 FragPosLightSpace[MAX_SPACEMATRIX];
-in vec4 FragPosLightSpaceBaked[5];
 // Outs
 out vec4 FragColor;
 
@@ -220,12 +207,7 @@ void main()
     // Light calculations
 
     for(int i = 0; i < max_lights.x; i++)
-    {
-        int it0 = i*3;
-        int it1 = i*3 + 1;
-        int it2 = i*3 + 2;
-        result += CalculateDirectionalLight(dir_light[i], normal, view_dir, objectMaterial, texCoords, FragPosLightSpace[i],FragPosLightSpaceBaked[it0], FragPosLightSpaceBaked[it1], FragPosLightSpaceBaked[it2]);
-    }
+        result += CalculateDirectionalLight(dir_light[i], normal, view_dir, objectMaterial, texCoords, FragPosLightSpace[i]);
     for(int i = 0; i < max_lights.y; i++)
         result += CalculatePointLight(point_light[i], normal, frag_pos, view_dir, objectMaterial, texCoords);    
     for(int i = 0; i < max_lights.z; i++)
@@ -242,7 +224,7 @@ void main()
 }
 
 // Function definitions
-vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir, Material objectMaterial, vec2 texCoords, vec4 lightSpaceMat, vec4 lightSpaceMatBaked0, vec4 lightSpaceMatBaked1, vec4 lightSpaceMatBaked2)
+vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_dir, Material objectMaterial, vec2 texCoords, vec4 lightSpaceMat)
 {
     // Intensity
     float intensity = light.intensity;
@@ -270,22 +252,9 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 view_di
     // Final Calculation 
     vec3 result = vec3(0);
 
-    //calculate shadows
     if(light.castShadow == true)
     {
-        float shadow = ShadowCalculation(lightSpaceMat, normal, fake_lightDir, light.depthMap);
-        
-        vec3 fake_lightDirBaked0 = normalize(light.lightPosBaked[0] - frag_pos);
-        vec3 fake_lightDirBaked1 = normalize(light.lightPosBaked[1] - frag_pos);
-        vec3 fake_lightDirBaked2 = normalize(light.lightPosBaked[2] - frag_pos);
-
-
-        shadow += ShadowCalculation(lightSpaceMatBaked0, normal, fake_lightDirBaked0, light.bakeShadows[0]);
-        shadow += ShadowCalculation(lightSpaceMatBaked1, normal, fake_lightDirBaked1, light.bakeShadows[1]);
-        shadow += ShadowCalculation(lightSpaceMatBaked2, normal, fake_lightDirBaked2, light.bakeShadows[2]);
-        
-        if(shadow > 1.0)
-            shadow = 1.0;
+        float shadow = ShadowCalculation(light,lightSpaceMat, normal, fake_lightDir);
         result = (ambient + (1.0 - shadow) * (diffuse + specular)) * vec3(intensity, intensity, intensity);
     }
     else 
@@ -368,34 +337,22 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 frag_pos, vec3 view_d
     return (ambient + diffuse + specular) * intensity;
 }
 
-float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir, sampler2D depthMap)
+float ShadowCalculation(DirectionalLight light,vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 {
     // perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     // transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
     // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(depthMap, projCoords.xy).r; 
+    float closestDepth = texture(light.depthMap, projCoords.xy).r; 
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
-    float bias = max(0.002 * (1.0 - dot(normal, lightDir)), 0.002);
-        
-    float shadow = 0.0;
-    vec2 texelSize = 1.0/ textureSize(depthMap,0);
-
-    for(int x = -1; x <= 1; ++x)
-    {
-        for(int y = -1; y <= 1; ++y)
-        {
-            float pcfDepth = texture(depthMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
-        }    
-    }
-    shadow /= 9.0;
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;  
 
     if(projCoords.z > 1.0)
-       shadow = 0.0;
-       
+        shadow = 0.0;
+        
     return shadow;
 }

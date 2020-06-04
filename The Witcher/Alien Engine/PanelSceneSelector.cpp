@@ -158,6 +158,11 @@ void PanelSceneSelector::SaveSceneAsNew()
 		scene->SetAssetsPath(path.data());
 		scene->CreateMetaData();
 
+		auto objs = App->objects->GetRoot(true);
+		for (auto item = objs->children.begin(); item != objs->children.end(); ++item) {
+			(*item)->parent->ID = scene->GetID();
+		}
+
 		if (force_save == nullptr && App->objects->GetGlobalRoot()->children.size() == 1) {
 			force_save = App->objects->GetGlobalRoot()->children.front();
 		}

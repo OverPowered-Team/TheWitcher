@@ -55,6 +55,8 @@ public:
 		
 	virtual void HandleEvent(EventType eventType) {}
 
+	virtual void PanelConfigOption() {};
+
 	void SetEnable(bool enable)
 	{
 		enabled = enable;
