@@ -119,10 +119,6 @@ void RelicBehaviour::Start()
 	
 	switch (relic_type)
 	{
-	case Relic_Type::BASE:
-		relic = new Relic();
-		json_str = "BASE";
-		break;
 	case Relic_Type::ATTACK:
 		relic = new AttackRelic();
 		json_str = "ATTACK";
@@ -146,6 +142,24 @@ void RelicBehaviour::Start()
 
 void RelicBehaviour::Update()
 {
+	transform->AddRotation({ 0, -2, 0 });
+
+	if (count_position >= 1.0)
+		going_down = true;
+	else if(count_position <= 0.0)
+		going_down = false;
+
+	if (!going_down)
+	{
+		count_position += 0.01f;
+		transform->AddPosition({ 0, 0.01, 0 });
+	}
+	else 
+	{
+		count_position -= 0.01f;
+		transform->AddPosition({ 0, -0.01, 0 });
+	}
+
 	
 }
 
@@ -188,6 +202,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = flat_modifiers->GetString("identifier");
 					mod.amount = flat_modifiers->GetNumber("value");
 					_effect->additive_modifiers.push_back(mod);
+					flat_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -201,6 +216,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = mult_modifiers->GetString("identifier");
 					mod.amount = mult_modifiers->GetNumber("value");
 					_effect->multiplicative_modifiers.push_back(mod);
+					mult_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -223,6 +239,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = flat_modifiers->GetString("identifier");
 					mod.amount = flat_modifiers->GetNumber("value");
 					_effect->additive_modifiers.push_back(mod);
+					flat_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -236,6 +253,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mod.identifier = mult_modifiers->GetString("identifier");
 					mod.amount = mult_modifiers->GetNumber("value");
 					_effect->multiplicative_modifiers.push_back(mod);
+					mult_modifiers->GetAnotherNode();
 				}
 			}
 
@@ -252,13 +270,20 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 	{
 		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
+			std::vector<Effect*> effects = collider->game_object_attached->GetComponent<PlayerController>()->effects;
+
+			for (auto it = effects.begin(); it != effects.end(); ++it)
+			{
+				if (dynamic_cast<DashEffect*>(*it) != nullptr && relic_type == Relic_Type::DASH)
+				{
+					relic = new AttackRelic();
+					SetRelic("ATTACK");
+				}
+			}
+
 			relic->OnPickUp(collider->game_object_attached->GetComponent<PlayerController>());
-			if(relic_type == Relic_Type::ATTACK)
-				audio_emitter->StartSound("Play_Collect_Runestone");
-			else if (relic_type == Relic_Type::DASH)
-				audio_emitter->StartSound("Play_Collect_Runestone");
-			else
-				audio_emitter->StartSound("Play_Collect_Runestone");
+
+			audio_emitter->StartSound("Play_Collect_Runestone");
 
 			Destroy(this->game_object);		
 		}

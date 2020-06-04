@@ -38,6 +38,8 @@ public:
 
 	void StartLerpParticleUltibar(const float3& world_position);
 
+	void ShowUltiFilter(bool show);
+
 public:
 
 	GameObject* in_game = nullptr;
@@ -47,6 +49,8 @@ public:
 	Prefab killcount_particle;
 
 	float time_lerp_ult_part = 0.75f;
+
+	float ulti_filter_alpha = 0.2f;
 
 private:
 
@@ -59,6 +63,11 @@ private:
 	GameObject* you_died = nullptr;
 	GameObject* relics_panel = nullptr;
 	ComponentCanvas* canvas = nullptr;
+
+	ComponentImage* ulti_filter = nullptr;
+	bool changing_alpha_filter = false;
+	float time_ulti_filter = 0.0f;
+	bool ulti_active = false;
 
 	bool pause_active = false;
 
@@ -76,14 +85,10 @@ private:
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {
 	InGame_UI* alien = new InGame_UI();
 	// To show in inspector here
-
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->in_game);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->pause_menu);
 	
 	SHOW_IN_INSPECTOR_AS_PREFAB(alien->ulti_particle);
-	SHOW_IN_INSPECTOR_AS_PREFAB(alien->killcount_particle);
-
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_lerp_ult_part);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->ulti_filter_alpha);
 
 	return alien;
 } 

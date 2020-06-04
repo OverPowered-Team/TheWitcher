@@ -24,6 +24,10 @@ ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component
 
 	ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
 	
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentParticleSystem::DrawScene, this));
+#endif // !GAME_VERSION
+
 }
 
 ComponentParticleSystem::~ComponentParticleSystem()
@@ -45,6 +49,10 @@ ComponentParticleSystem::~ComponentParticleSystem()
 	
 	/*if (material != nullptr)
 		material = nullptr;*/
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 void ComponentParticleSystem::OnPlay()
@@ -98,22 +106,34 @@ void ComponentParticleSystem::PostUpdate()
 		particleSystem->PostUpdate(Time::GetCurrentDT());
 }
 
-void ComponentParticleSystem::DrawScene(ComponentCamera* camera)
+void ComponentParticleSystem::DrawScene()
 {
 	OPTICK_EVENT();
 
 	if (game_object_attached->selected)
 	{
-		Draw();
 		DebugDraw();
 	}
 }
 
-void ComponentParticleSystem::DrawGame(ComponentCamera* camera)
+void ComponentParticleSystem::DrawGame()
 {
 	OPTICK_EVENT();
 
+#ifndef GAME_VERSION
+	if (App->objects->printing_scene)
+	{
+		if(game_object_attached->selected)
+			Draw();
+	}
+	else 
+		Draw();
+#else
+
 	Draw();
+
+#endif
+
 }
 
 void ComponentParticleSystem::DebugDraw()

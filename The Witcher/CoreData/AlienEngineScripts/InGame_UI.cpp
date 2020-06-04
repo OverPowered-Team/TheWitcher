@@ -4,6 +4,7 @@
 #include "GameManager.h"
 #include "PlayerManager.h"
 #include "UltiBar.h"
+#include "Scores_Data.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -15,14 +16,20 @@ InGame_UI::~InGame_UI()
 
 void InGame_UI::Start()
 {
+	pause_menu = game_object->GetChild("Pause_Menu");
 	pause_menu->SetEnable(false);
+	in_game = game_object->GetChild("InGame");
+	in_game->SetEnable(true);
+	ulti_filter = in_game->GetChild("Ulti_Filter")->GetComponent<ComponentImage>();
+	ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
+
 	GameObject::FindWithName("Menu")->SetEnable(true);
 	canvas = game_object->GetComponent<ComponentCanvas>();
 	you_died = GameObject::FindWithName("YouDied");
 	relics_panel = GameObject::FindWithName("Relics_Notification");
 	relics_panel->SetEnable(false);
 	you_died->SetEnable(false);
-	in_game->SetEnable(true);
+	
 	ulti_bar = game_object->GetChild("InGame")->GetChild("Ulti_Bar")->GetComponent<UltiBar>();
 	checkpoint_saved_text = in_game->GetChild("NewCheckpoint");
 	component_checkpoint_saved_text = checkpoint_saved_text->GetComponent<ComponentText>();
@@ -100,7 +107,18 @@ void InGame_UI::Update()
 			}
 			else
 			{
-				SceneManager::LoadScene("NewWin_Menu");
+				if (strcmp(SceneManager::GetCurrentScene(), "Lvl_1_Tutorial") == 0)
+				{
+					SceneManager::LoadScene("Lvl_1_Tutorial");
+				}
+				else
+				{
+					Scores_Data::dead = true;
+					Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+					Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+					Scores_Data::last_scene = SceneManager::GetCurrentScene();
+					SceneManager::LoadScene("NewWin_Menu");
+				}
 			}
 		}
 	}
@@ -128,6 +146,37 @@ void InGame_UI::Update()
 				particles.erase(particle);
 				--particle;
 			}
+		}
+	}
+
+	if (changing_alpha_filter)
+	{
+		float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.25f;
+		float lerp = 0.0f;
+
+		if (ulti_active)
+		{
+			lerp = Maths::Lerp(0.0f, 0.2f, t);
+		}
+		else
+		{
+			lerp = Maths::Lerp(0.2f, 0.0f, t);
+		}
+
+		ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, lerp);
+
+		if (t >= 1)
+		{
+			if (ulti_active)
+			{
+				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.2f);
+			}
+			else
+			{
+				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
+			}
+
+			changing_alpha_filter = false;
 		}
 	}
 }
@@ -158,10 +207,17 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	particle->origin_position = float3(0, 0, 0);
+	particle->origin_position = float3(0, 43.f, 0);
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
 	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
 	particle->time_passed = Time::GetGameTime();
 
 	particles.push_back(particle);
+}
+
+void InGame_UI::ShowUltiFilter(bool show)
+{
+	ulti_active = show;
+	changing_alpha_filter = true;
+	time_ulti_filter = Time::GetTimeSinceStart();
 }

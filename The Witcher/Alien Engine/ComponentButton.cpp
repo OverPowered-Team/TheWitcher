@@ -25,6 +25,45 @@ ComponentButton::ComponentButton(GameObject* obj) :ComponentUI(obj)
 	current_tex_array = &idle_info;
 }
 
+ComponentButton::~ComponentButton()
+{
+	for (auto item = idle_info.tex_array.begin(); item != idle_info.tex_array.end(); ++item)
+	{
+		if ((*item) != nullptr)
+		{
+			(*item)->DecreaseReferences();
+		}
+	}
+	for (auto item = hover_info.tex_array.begin(); item != hover_info.tex_array.end(); ++item)
+	{
+		if ((*item) != nullptr)
+		{
+			(*item)->DecreaseReferences();
+		}
+	}
+	for (auto item = clicked_info.tex_array.begin(); item != clicked_info.tex_array.end(); ++item)
+	{
+		if ((*item) != nullptr)
+		{
+			(*item)->DecreaseReferences();
+		}
+	}
+	for (auto item = pressed_info.tex_array.begin(); item != pressed_info.tex_array.end(); ++item)
+	{
+		if ((*item) != nullptr)
+		{
+			(*item)->DecreaseReferences();
+		}
+	}
+	for (auto item = disabled_info.tex_array.begin(); item != disabled_info.tex_array.end(); ++item)
+	{
+		if ((*item) != nullptr)
+		{
+			(*item)->DecreaseReferences();
+		}
+	}
+}
+
 void ComponentButton::SaveComponent(JSONArraypack* to_save)
 {
 	to_save->SetNumber("Width", size.x);
@@ -1746,6 +1785,7 @@ void ComponentButton::Draw(bool isGame)
 		{
 			SetSize(tex->width, tex->height);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, tex->id);
 		}
 	}
@@ -1805,6 +1845,7 @@ void ComponentButton::Draw(bool isGame)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 

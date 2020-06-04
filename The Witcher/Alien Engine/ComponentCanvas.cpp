@@ -22,6 +22,10 @@ ComponentCanvas::ComponentCanvas(GameObject* obj):Component(obj)
 	height = 90;
 
 	type = ComponentType::CANVAS;
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCanvas::DrawScene, this));
+#endif // !GAME_VERSION
 }
 
 ComponentCanvas::~ComponentCanvas()
@@ -30,9 +34,12 @@ ComponentCanvas::~ComponentCanvas()
 	text_shader = nullptr;
 	text_ortho->DecreaseReferences();
 	text_ortho = nullptr;*/
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
-void ComponentCanvas::DrawScene(ComponentCamera* camera)
+void ComponentCanvas::DrawScene()
 {
 	Draw();
 }
@@ -64,7 +71,7 @@ bool ComponentCanvas::DrawInspector()
 		{
 			ImGui::Text("BillBoard Type");
 			ImGui::SameLine();
-			static int type = 0;
+			int type = (int)bbtype;
 			ImGui::Combo("##BillBoardType", &type, "Screen\0World\0Axis\0");
 			switch (BillboardType(type))
 			{

@@ -1,19 +1,51 @@
 {
     "Controller": {
         "Name": "CiriController",
-        "NumStates": 1,
-        "NumTransitions": 0,
+        "NumStates": 4,
+        "NumTransitions": 1,
         "States": [
             {
                 "Name": "Idle",
                 "Speed": 1,
-                "Clip": "6535522296308659848"
+                "Clip": "9374596325273108046"
+            },
+            {
+                "Name": "Scream",
+                "Speed": 1,
+                "Clip": "10301984109761866307"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "17791728914183688181"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "17791728914183688181"
             }
         ],
-        "Transitions": [],
+        "Transitions": [
+            {
+                "Source": "Scream",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            }
+        ],
         "IntParameters": [],
         "FloatParameters": [],
         "BoolParameters": [],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "CiriOriginal::Scream",
+                "Animation_Id": "10301984109761866307",
+                "Frame": 62,
+                "Type": 2
+            }
+        ]
     }
 }

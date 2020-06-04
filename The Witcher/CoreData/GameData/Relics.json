@@ -1,31 +1,4 @@
 {
-  "BASE": [
-    {
-      "effect": 6,
-      "name": "Nature Soul",
-      "description": "Increases life regeneration by X"
-    },
-    {
-      "effect": 7,
-      "name": "Sea Soul",
-      "description": "Increases chaos regeneration by X"
-    },
-    {
-      "effect": 8,
-      "name": "Djinn Jar",
-      "description": "Invulnerable to first enemy attack"
-    },
-    {
-      "effect": 9,
-      "name": "Strigas Claws",
-      "description": "Increases attack speed when you use different combos"
-    },
-    {
-      "effect": 10,
-      "name": "Witcher Rage",
-      "description": "Relic that revives the player an extra life with the 50% of hp"
-    }
-  ],
   "ATTACK": [
     {
       "effect": 1,
@@ -40,7 +13,7 @@
         "flat_modifiers": [
           {
             "identifier": "Health",
-            "value": -5
+            "value": -3
           }
         ]
       }
@@ -51,13 +24,17 @@
       "description": "slows enemies hit",
       "hit_effect": {
         "name": "ice_runestone",
+        "vfx_on_apply": "p_ice_runestone",
+        "vfx_position": 0,
         "time": 0.5,
         "ticks_time": 0.0,
-        "vfx_on_apply": "p_ice_runestone",
-		    "vfx_position": 0,
         "multiplicative_modifiers": [
           {
             "identifier": "Agility",
+            "value": 0.5
+          },
+          {
+            "identifier": "AttackSpeed",
             "value": 0.5
           }
         ]
@@ -94,13 +71,13 @@
       "hit_effect": {
         "name": "poison_runestone",
         "vfx_on_apply": "p_poison_runestone",
-		    "vfx_position": 0,
-        "time": 1.0,
-        "ticks_time": 1.0,
+        "vfx_position": 0,
+        "time": 0.0,
+        "ticks_time": 0.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
-            "value": -5
+            "value": -3
           }
         ]
       }
@@ -113,12 +90,14 @@
       "description": "Dodge leaves a burning trail",
       "dash_effect": {
         "name": "fire_oil",
+        "vfx_on_apply": "p_fire_runestone",
+        "vfx_position": 0,
         "time": 3.0,
-        "ticks_time": 2.0,
+        "ticks_time": 1.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
-            "value": -5
+            "value": -3
           }
         ]
       }
@@ -135,6 +114,10 @@
           {
             "identifier": "Agility",
             "value": 0.5
+          },
+          {
+            "identifier": "AttackSpeed",
+            "value": 0.5
           }
         ]
       }
@@ -145,8 +128,10 @@
       "description": "Dodge leaves a rock traps",
       "dash_effect": {
         "name": "earth_oil",
-        "time": 3.0,
-        "ticks_time": 2.0,
+        "vfx_on_apply": "p_earth_runestone",
+        "vfx_position": 0,
+        "time": 0.0,
+        "ticks_time": 0.0,
         "flat_modifiers": [
           {
             "identifier": "Health",
@@ -161,12 +146,14 @@
       "description": "Dodge leaves a poisonous trail",
       "dash_effect": {
         "name": "poison_oil",
-        "time": 3.0,
-        "ticks_time": 2.0,
+        "vfx_on_apply": "p_poison_runestone",
+        "vfx_position": 0,
+        "time": 5.0,
+        "ticks_time": 0.5,
         "flat_modifiers": [
           {
             "identifier": "Health",
-            "value": -5
+            "value": -1
           }
         ]
       }

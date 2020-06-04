@@ -101,11 +101,7 @@ bool ResourceTexture::CreateMetaData(const u64& force_id)
 
 bool ResourceTexture::LoadMemory()
 {
-	bool ret = true;
-
-	App->importer->LoadTextureToResource(meta_data_path.data(), this);
-
-	return ret;
+	return App->importer->LoadTextureToResource(meta_data_path.data(), this);
 }
 
 void ResourceTexture::FreeMemory()

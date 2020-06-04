@@ -23,7 +23,7 @@ enum class ComponentType {
 	CAPSULE_COLLIDER = 9,
 	CONVEX_HULL_COLLIDER = 10,
 	RIGID_BODY = 11,
-	POINT_CONSTRAINT = 12,
+	CONFIGURABLE_JOINT = 12,
 	CHARACTER_CONTROLLER = 13,
 	ANIMATOR = 14,
 	PARTICLES = 15,
@@ -43,7 +43,9 @@ enum class ComponentType {
 	SCRIPT = 29,
 	UI = 30,
 	CURVE = 31,
-
+	MESH_COLLIDER = 32,
+	CHARACTER_JOINT = 33,
+	TRAIL = 34,
 	MAX //LAST LAST LAST
 };
 
@@ -102,8 +104,8 @@ protected:
 	virtual void Update() {}
 	virtual void PostUpdate() {}
 
-	virtual void DrawScene(ComponentCamera* camera) {}
-	virtual void DrawGame(ComponentCamera* camera) {}
+	virtual void DrawScene() {}
+	virtual void DrawGame() {}
 
 	virtual void ResetIDs();
 

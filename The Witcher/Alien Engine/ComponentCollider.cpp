@@ -11,6 +11,9 @@
 #include "Time.h"
 #include "Event.h"
 
+#include "Gizmos.h"
+#include "Physics.h"
+
 ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
 {
 	// Default values 
@@ -18,18 +21,25 @@ ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
 	rotation = float3::zero();
 	material = App->physx->CreateMaterial();
 	InitMaterial();
+
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCollider::DrawScene, this));
+#endif // !GAME_VERSION
 }
 
 ComponentCollider::~ComponentCollider()
 {
 	if (!IsController()) {
 		go->SendAlientEventThis(this, AlienEventType::COLLIDER_DELETED);
+		material->release();
+		material = nullptr;
 		shape->release();
 		shape = nullptr;
 	}
 
-	material->release();
-	material = nullptr;
+#ifndef GAME_VERSION
+	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
+#endif // !GAME_VERSION
 }
 
 // Colliders Functions --------------------------------
@@ -167,23 +177,46 @@ void ComponentCollider::Update()
 void ComponentCollider::OnEnable()
 {
 	if (!IsController())
-		go->SendAlientEventThis(this, AlienEventType::COLLIDER_ENABLED);
+		physics->AttachCollider(this);
 	else
-		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ENABLED);
+		physics->SwitchedController((ComponentCharacterController*)this);
 }
 
 void ComponentCollider::OnDisable()
 {
 	if (!IsController())
-		go->SendAlientEventThis(this, AlienEventType::COLLIDER_DISABLED);
+		physics->DettachCollider(this);
 	else
-		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DISABLED);
+		physics->SwitchedController((ComponentCharacterController*)this);
 }
 
-void ComponentCollider::DrawScene(ComponentCamera* camera)
+void ComponentCollider::DrawScene()
 {
 	if (enabled == true && (game_object_attached->IsSelected() || App->physx->debug_physics))
 	{
+		
+		RaycastHit hit;
+		float4x4 trans = PXTRANS_TO_F4X4(physics->actor->getGlobalPose());
+		float3 origin = trans.TranslatePart();
+		float3 dir = -trans.WorldY();
+		float dist = 10.f;
+		int player_mask = 0;
+		vector<const char*> layers;
+		layers.push_back("Player");
+		layers.push_back("Ground");
+		int layer_mask = Physics::GetLayerMask(layers);
+
+		if (Physics::CapsuleCast(trans, 1, 0.5f, dir, 10.f, hit, layer_mask))
+		{
+			Gizmos::DrawLine(origin, hit.point, Color(1.f, 0.f, 0.f));
+			float rest_dist =  dist - origin.Distance(hit.point);
+			Gizmos::DrawLine(hit.point, hit.point + hit.normal * rest_dist, Color(1.f, 0.f, 1.f));
+		}
+		else
+		{
+			Gizmos::DrawLine(origin, origin + dir * dist, Color(1.f, 0.f, 0.f));
+		}
+
 		App->physx->DrawCollider(this);
 	}
 }
@@ -335,8 +368,8 @@ void ComponentCollider::HandleAlienEvent(const AlienEvent& e)
 void ComponentCollider::InitCollider()
 {
 	shape->userData = this;
-	go->SendAlientEventThis(this, AlienEventType::COLLIDER_ADDED);
 	SetCollisionLayer("Default");
+	physics->AddCollider(this);
 }
 
 void ComponentCollider::InitMaterial()

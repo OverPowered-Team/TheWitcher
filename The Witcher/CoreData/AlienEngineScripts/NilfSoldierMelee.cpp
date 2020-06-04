@@ -1,6 +1,7 @@
 #include "NilfSoldierMelee.h"
 #include "PlayerController.h"
 #include "EnemyManager.h"
+#include "MusicController.h"
 
 NilfSoldierMelee::NilfSoldierMelee() : NilfgaardSoldier()
 {
@@ -17,24 +18,32 @@ void NilfSoldierMelee::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
-			state = NilfgaardSoldierState::MOVE;
+		if (distance < stats["VisionRange"].GetValue() || is_obstacle)
+			SetState("Move");
 		break;
 
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
 		break;
 
+	case NilfgaardSoldierState::GUARD:
+	{
+		//Tiene que estar animacion de guardia
+		Guard();
+	}
+		break;
+
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
-			state = NilfgaardSoldierState::IDLE;
+			SetState("Idle");
 		}
 		break;
 
 	case NilfgaardSoldierState::HIT:
 	{
 		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
 		character_ctrl->Move(velocity * Time::GetDT());
 	}
 	break;
@@ -47,6 +56,19 @@ void NilfSoldierMelee::UpdateEnemy()
 		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		if (is_obstacle)
+		{
+			BlockerObstacle* blocker = game_object->parent->parent->GetComponent<BlockerObstacle>();
+			if (blocker)
+				blocker->ReleaseMyself(this);
+			else
+				LOG("There's no blocker");
+		}
 		break;
 	}
 	}
@@ -54,7 +76,7 @@ void NilfSoldierMelee::UpdateEnemy()
 
 void NilfSoldierMelee::Action()
 {
+	SetState("Attack");
 	animator->PlayState("Attack");
 	animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
-	state = NilfgaardSoldierState::ATTACK;
 }

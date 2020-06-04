@@ -198,7 +198,6 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		SetUniform4f("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
 		SetUniform1f("objectMaterial.smoothness", inputs.standardShaderProperties.smoothness);
 		SetUniform1f("objectMaterial.metalness", inputs.standardShaderProperties.metalness);
-		ApplyLightsUniforms();
 		break; }
 
 	case SHADER_TEMPLATE::WAVE: {
@@ -245,6 +244,51 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 
 	default:
 		LOG_ENGINE("We currently don't support editing this type of uniform...");
+		break;
+
+	}
+}
+
+void ResourceShader::ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera)
+{
+	switch (shaderType)
+	{
+	case SHADER_TEMPLATE::DEFAULT:
+		SetUniformMat4f("view", camera->GetViewMatrix4x4());
+		SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
+		SetUniformFloat3("view_pos", camera->GetCameraPosition());
+		SetUniform1i("activeFog", camera->activeFog);
+		if (camera->activeFog)
+		{
+			SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+			SetUniform1f("density", camera->fogDensity);
+			SetUniform1f("gradient", camera->fogGradient);
+		}
+		ApplyLightsUniforms();
+		break;
+
+	case SHADER_TEMPLATE::PARTICLE:
+		SetUniformMat4f("view", camera->GetViewMatrix4x4());
+		SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
+		SetUniform1i("activeFog", camera->activeFog);
+		if (camera->activeFog)
+		{
+			SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+			SetUniform1f("density", camera->fogDensity);
+			SetUniform1f("gradient", camera->fogGradient);
+		}
+		break;
+
+	case SHADER_TEMPLATE::SHIELD_FRESNEL:
+		SetUniformMat4f("view", camera->GetViewMatrix4x4());
+		SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
+		SetUniform1i("activeFog", camera->activeFog);
+		if (camera->activeFog)
+		{
+			SetUniformFloat3("backgroundColor", float3(camera->camera_color_background.r, camera->camera_color_background.g, camera->camera_color_background.b));
+			SetUniform1f("density", camera->fogDensity);
+			SetUniform1f("gradient", camera->fogGradient);
+		}
 		break;
 
 	}
@@ -404,14 +448,10 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 	SetUniform1i("num_space_matrix", dirLights.size());
 	for (std::list<DirLightProperties*>::const_iterator iter = dirLights.begin(); iter != dirLights.end(); iter++)
 	{
-		if ((*iter)->light->IsEnabled())
+		if ((*iter)->light->game_object_attached->IsEnabled() && (*iter)->enabled)
 		{
 			char cname[128];
 			sprintf_s(cname, tmp_name.c_str(), i);
-
-			// All uniforms
-			std::string cenabled = std::string(cname).append(".enabled");
-			SetUniform1f(cenabled, (*iter)->enabled);
 
 			std::string cintensity = std::string(cname).append(".intensity");
 			SetUniform1f(cintensity, (*iter)->intensity);
@@ -422,39 +462,39 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 			std::string variablesLocation = std::string(cname).append(".dirLightProperties");
 			SetUniformFloat3v(variablesLocation, variablesVec3, 5);
 
-		std::string cshadow = std::string(cname).append(".castShadow");
-		if ((*iter)->light->castShadows)
-		{
-			SetUniform1i(cshadow, 1);
-			glActiveTexture(GL_TEXTURE4);
-			glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
-			std::string cdepthmap = std::string(cname).append(".depthMap");
-			SetUniform1i(cdepthmap, 4);
+			std::string cshadow = std::string(cname).append(".castShadow");
+			if ((*iter)->light->castShadows)
+			{
+				SetUniform1i(cshadow, 1);
+				glActiveTexture(GL_TEXTURE4);
+				glBindTexture(GL_TEXTURE_2D, (*iter)->depthMap);
+				std::string cdepthmap = std::string(cname).append(".depthMap");
+				SetUniform1i(cdepthmap, 4);
 
-			(*iter)->light->BindForReading();
-			int bakedDepthMap[3] = { 5,6,7 };
-			std::string cdepthmapbaked = std::string(cname).append(".bakeShadows");
-			SetUniformIntv(cdepthmapbaked, bakedDepthMap, 3);
-		}
-		else
-			SetUniform1i(cshadow, 0);
+				(*iter)->light->BindForReading();
+				int bakedDepthMap[3] = { 5,6,7 };
+				std::string cdepthmapbaked = std::string(cname).append(".bakeShadows");
+				SetUniformIntv(cdepthmapbaked, bakedDepthMap, 3);
 
-			char clightspaceM[128];
-			sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);
-			SetUniformMat4f(clightspaceM, (*iter)->projMat * (*iter)->viewMat);
+				char clightspaceM[128];
+				sprintf_s(clightspaceM, clightSpaceMatrix.c_str(), i);
+				SetUniformMat4f(clightspaceM, (*iter)->projMat * (*iter)->viewMat);
 
-		std::string clightPos = std::string(cname).append(".lightPos");
-		SetUniformFloat3(clightPos, (*iter)->fake_position);
+				std::string clightPos = std::string(cname).append(".lightPos");
+				SetUniformFloat3(clightPos, (*iter)->fake_position);
 
-		std::string clightPosBaked = std::string(cname).append(".lightPosBaked");
-		SetUniformFloat3v(clightPosBaked, (*iter)->fake_position_baked, 3);
-		
-		for (int it = 0; it < 3; ++it)
-		{
-			char clightspaceMB[128];
-			sprintf_s(clightspaceMB, clightSpaceMatrixBaked.c_str(), i*3 + it);
-			SetUniformMat4f(clightspaceMB, (*iter)->light->projMatrix * (*iter)->light->viewMatrix[it]);
-		}
+				std::string clightPosBaked = std::string(cname).append(".lightPosBaked");
+				SetUniformFloat3v(clightPosBaked, (*iter)->fake_position_baked, 3);
+
+				for (int it = 0; it < 3; ++it)
+				{
+					char clightspaceMB[128];
+					sprintf_s(clightspaceMB, clightSpaceMatrixBaked.c_str(), i * 3 + it);
+					SetUniformMat4f(clightspaceMB, (*iter)->light->projMatrix * (*iter)->light->viewMatrix[it]);
+				}
+			}
+			else
+				SetUniform1i(cshadow, 0);
 
 			++i;
 		}
@@ -470,14 +510,12 @@ void ResourceShader::SetPointLights(const std::string& name, const std::list<Poi
 	tmp_name.append("[%i]");
 	for (std::list<PointLightProperties*>::const_iterator iter = pointLights.begin(); iter != pointLights.end(); iter++)
 	{
-		if ((*iter)->light->IsEnabled())
+		if ((*iter)->isEnabled())
 		{
 			char cname[128];
 			sprintf_s(cname, tmp_name.c_str(), i);
 
-			// All uniforms
-			std::string cenabled = std::string(cname).append(".enabled");
-			SetUniform1f(cenabled, (*iter)->enabled);
+			// All uniforms 
 
 			std::string cintensity = std::string(cname).append(".intensity");
 			SetUniform1f(cintensity, (*iter)->intensity);
@@ -511,14 +549,12 @@ void ResourceShader::SetSpotLights(const std::string& name, const std::list<Spot
 	tmp_name.append("[%i]");
 	for (std::list<SpotLightProperties*>::const_iterator iter = spotLights.begin(); iter != spotLights.end(); iter++)
 	{
-		if ((*iter)->light->IsEnabled())
+		if ((*iter)->isEnabled())
 		{
 			char cname[128];
 			sprintf_s(cname, tmp_name.c_str(), i);
 
 			// All uniforms
-			std::string cenabled = std::string(cname).append(".enabled");
-			SetUniform1f(cenabled, (*iter)->enabled);
 
 			std::string cintensity = std::string(cname).append(".intensity");
 			SetUniform1f(cintensity, (*iter)->intensity);
@@ -589,7 +625,7 @@ uint ResourceShader::CreateShader(const std::string& vertex_shader, const std::s
 	//assert(vertex_s == 0, "Vertex Failed To Compile");
 	uint fragment_s = CompileShader(GL_FRAGMENT_SHADER, fragment_shader);
 	//assert(fragment_s == 0, "Fragment Failed To Compile");
-
+	//OriiOri
 	glAttachShader(program, vertex_s);
 	glAttachShader(program, fragment_s);
 		

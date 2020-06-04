@@ -19,7 +19,12 @@ struct __declspec(dllexport) PointLightProperties
 	float linear = 0.1f;
 	float quadratic = 0.02f;
 
-	ComponentLightPoint* light = nullptr;
+	Component* light = nullptr;
+
+	bool isEnabled() const
+	{
+		return light->game_object_attached->IsEnabled() && enabled;
+	}
 };
 
 class __declspec(dllexport) ComponentLightPoint : public Component {
@@ -32,7 +37,7 @@ public:
 private:
 	void LightLogic();
 	void Update() override;
-	void DrawScene(ComponentCamera* camera) override; 
+	void DrawScene() override; 
 
 	bool DrawInspector();
 	void OnEnable();
@@ -54,5 +59,6 @@ private:
 
 	uint renderer_id = 0;
 
+public:
 	PointLightProperties light_props;
 };

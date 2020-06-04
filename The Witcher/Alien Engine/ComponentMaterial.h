@@ -41,12 +41,15 @@ public:
 	void SetMaterial(ResourceMaterial* mat);
 	const ResourceMaterial* GetMaterial() const;
 
+	ResourceShader* GetUsedShader() const; 
+
+	bool IsTransparent() const;
+
 private:
 	bool change_texture_menu = false;
 
 // Shaders
 public:
-	void ShowShaderTextEditor();
 	ResourceMaterial* material = nullptr; 
 
 private:

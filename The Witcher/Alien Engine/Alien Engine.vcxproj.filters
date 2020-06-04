@@ -118,11 +118,11 @@
     <Filter Include="Components\Physics\Colliders">
       <UniqueIdentifier>{d333f66d-da68-46f3-adda-33d2d14d7bba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\Physics\Constraints">
-      <UniqueIdentifier>{70f05f8c-bd98-4422-a1e5-e125d4dbfcb3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components\Physics\Controllers">
       <UniqueIdentifier>{1867fcbc-9bd2-48f6-bd5b-2dc3dba4f928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Physics\Joints">
+      <UniqueIdentifier>{70f05f8c-bd98-4422-a1e5-e125d4dbfcb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -606,9 +606,6 @@
     <ClInclude Include="stb_image.h">
       <Filter>Tools\Stb</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentPointConstraint.h">
-      <Filter>Components\Physics\Constraints</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentCharacterController.h">
       <Filter>Components\Physics\Controllers</Filter>
     </ClInclude>
@@ -631,6 +628,9 @@
       <Filter>Components\Lights</Filter>
     </ClInclude>
     <ClInclude Include="ComponentLightDirectional.h">
+      <Filter>Components\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
       <Filter>Components\Lights</Filter>
     </ClInclude>
     <ClInclude Include="ComponentParticleSystem.h">
@@ -678,9 +678,17 @@
     <ClInclude Include="ComponentCurve.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentMaterial.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="ComponentMeshCollider.h">
+      <Filter>Components\Physics\Colliders</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentConfigurableJoint.h">
+      <Filter>Components\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentJoint.h">
+      <Filter>Components\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTrail.h" />
+    <ClInclude Include="Trail.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -1553,9 +1561,6 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentPointConstraint.cpp">
-      <Filter>Components\Physics\Constraints</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentCharacterController.cpp">
       <Filter>Components\Physics\Controllers</Filter>
     </ClCompile>
@@ -1622,6 +1627,17 @@
     <ClCompile Include="ComponentCurve.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentMeshCollider.cpp">
+      <Filter>Components\Physics\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentConfigurableJoint.cpp">
+      <Filter>Components\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentJoint.cpp">
+      <Filter>Components\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTrail.cpp" />
+    <ClCompile Include="Trail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">

@@ -614,6 +614,10 @@ void PanelHierarchy::RightClickMenu()
 			{
 				App->objects->CreateEffect(ComponentType::PARTICLES);
 			}
+			if (ImGui::MenuItem("Trail"))
+			{
+				App->objects->CreateEffect(ComponentType::TRAIL);
+			}
 			
 			ImGui::EndMenu();
 		}

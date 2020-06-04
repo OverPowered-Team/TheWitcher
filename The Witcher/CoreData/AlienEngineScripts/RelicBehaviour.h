@@ -11,7 +11,6 @@ class EventManager;
 class RelicNotification;
 
 enum (Relic_Type,
-	BASE,
 	ATTACK,
 	DASH,
 	NONE_TYPE
@@ -22,11 +21,6 @@ enum (Relic_Effect,
 	EARTH = 3,
 	LIGHTNING = 4,
 	POISON = 5,
-	NATURE = 6,
-	SEA = 7,
-	DJINN = 8,
-	STRIGAS = 9,
-	RAGE = 10,
 	NONE_EFFECT = 0
 	);
 
@@ -88,6 +82,8 @@ public:
 	Relic_Type relic_type = Relic_Type::NONE_TYPE;
 	Relic_Effect relic_effect = Relic_Effect::NONE_EFFECT;
 	Relic* relic = nullptr;
+	float count_position = 0.0f;
+	bool going_down = false;
 
 private:
 	ComponentAudioEmitter* audio_emitter = nullptr;

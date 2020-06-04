@@ -2,42 +2,42 @@
     "Controller": {
         "Name": "DrownedAnimController",
         "NumStates": 7,
-        "NumTransitions": 5,
+        "NumTransitions": 7,
         "States": [
             {
                 "Name": "Idle",
                 "Speed": 1,
-                "Clip": "6542782511744458619"
+                "Clip": "6151341537419743983"
             },
             {
                 "Name": "Hide",
                 "Speed": 1,
-                "Clip": "1762198616440259956"
+                "Clip": "15252659645406112804"
             },
             {
                 "Name": "GetOff",
                 "Speed": 1,
-                "Clip": "18340410648732439690"
+                "Clip": "15252659645406112804"
             },
             {
                 "Name": "Death",
                 "Speed": 1,
-                "Clip": "5529202383922436625"
+                "Clip": "3843420451715123426"
             },
             {
                 "Name": "Hit",
                 "Speed": 1,
-                "Clip": "14101932209812305813"
+                "Clip": "1336200346231563366"
             },
             {
                 "Name": "Dizzy",
                 "Speed": 1,
-                "Clip": "1819462398251699905"
+                "Clip": "9901289912322635148"
             },
             {
                 "Name": "Attack",
                 "Speed": 1,
-                "Clip": "14101932209812305813"
+                "Clip": "5753173194275656717"
             }
         ],
         "Transitions": [
@@ -45,7 +45,7 @@
                 "Source": "Dizzy",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -60,7 +60,7 @@
                 "Source": "Dizzy",
                 "Target": "Death",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": [
@@ -87,22 +87,34 @@
                 ]
             },
             {
-                "Source": "Hit",
+                "Source": "Attack",
                 "Target": "Idle",
                 "Blend": 0.25,
-                "End": false,
+                "End": true,
                 "IntConditions": [],
                 "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 0
-                    }
-                ]
+                "BoolConditions": []
             },
             {
-                "Source": "Attack",
+                "Source": "Hide",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "GetOff",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
@@ -117,8 +129,49 @@
             {
                 "Name": "dead",
                 "Value": false
+            },
+            {
+                "Name": "grounded",
+                "Value": false
             }
         ],
-        "Events": []
+        "Events": [
+            {
+                "Event_Id": "DrownedRange::ShootSlime",
+                "Animation_Id": "4037813064645979005",
+                "Frame": 24,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnAttackParticle",
+                "Animation_Id": "4037813064645979005",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "DrownedRange::ShootSlime",
+                "Animation_Id": "5753173194275656717",
+                "Frame": 35,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnAttackParticle",
+                "Animation_Id": "5753173194275656717",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::CanGetInterrupted",
+                "Animation_Id": "5753173194275656717",
+                "Frame": 50,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnHealthOrb",
+                "Animation_Id": "3843420451715123426",
+                "Frame": 65,
+                "Type": 2
+            }
+        ]
     }
 }

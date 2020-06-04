@@ -90,14 +90,20 @@ std::string Component::EnumToString(ComponentType type)
 	case ComponentType::CAPSULE_COLLIDER:
 		return std::string("Collider Capsule");
 		break;
+	case ComponentType::MESH_COLLIDER:
+		return std::string("Collider Mesh");
+		break;
 	case ComponentType::CONVEX_HULL_COLLIDER:
 		return std::string("Collider Convex Hull");
 		break;
 	case ComponentType::RIGID_BODY:
 		return std::string("Rigid Body");
 		break;
-	case ComponentType::POINT_CONSTRAINT:
-		return std::string("Point Constraint");
+	case ComponentType::CONFIGURABLE_JOINT:
+		return std::string("Configurable Joint");
+		break;
+	case ComponentType::CHARACTER_JOINT:
+		return std::string("Character Joint");
 		break;
 	case ComponentType::CHARACTER_CONTROLLER:
 		return std::string("Character Controller");
@@ -107,6 +113,9 @@ std::string Component::EnumToString(ComponentType type)
 		break;
 	case ComponentType::PARTICLES:
 		return std::string("Particles");
+		break;
+	case ComponentType::TRAIL:
+		return std::string("Trail");
 		break;
 	case ComponentType::A_EMITTER:
 		return std::string("Audio Emitter");

@@ -1,0 +1,124 @@
+{
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Barrel3Breakable",
+                "FamilyNumber": 1,
+                "ID": "9846813289838448255",
+                "ParentID": "16735381944195016108",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1600529673689020588",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            1.0096409320831299,
+                            1.0136563777923584,
+                            -12.820274353027344
+                        ],
+                        "Rotation": [
+                            1.1641534958251043e-10,
+                            -4.4710773750011867e-08,
+                            -1.7462301049597784e-10,
+                            1
+                        ],
+                        "Scale": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "631129235534467623"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "12815939541404696373",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "1096953912451294089",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "9310943644394984702",
+                        "HasMaterial": true,
+                        "MaterialID": "18012963031525131083",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5162879804869481181",
+                        "ResourceID": "6638633781827320816",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "5579701708834442290"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "force",
+                                "float": 15
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_despawn",
+                                "float": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Name": "Barrel3Breakable"
+}

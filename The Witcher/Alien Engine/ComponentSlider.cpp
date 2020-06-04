@@ -26,6 +26,12 @@ ComponentSlider::ComponentSlider(GameObject* obj) : ComponentUI(obj)
 	tabbable = true;
 }
 
+ComponentSlider::~ComponentSlider()
+{
+	if (sliderTexture != nullptr)
+		sliderTexture->DecreaseReferences();
+}
+
 bool ComponentSlider::DrawInspector()
 {
 	static bool check;
@@ -525,34 +531,42 @@ void ComponentSlider::Update()
 		
 		GetValue();
 
-		switch (state)
+		(game_object_attached->enabled) ? active = true : active = false;
+
+		if (active)
+			(game_object_attached->IsUpWardsEnabled()) ? active = true : active = false;
+
+		if (active)
 		{
-		case Idle:
-			OnIdle();
-			break;
-		case Hover:
-			OnHover();
-			break;
-		case Click:
-			OnClick();
-			break;
-		case Pressed:
-			OnPressed();
-			break;
-		case Release:
-			OnRelease();
-			break;
-		case Exit:
-			OnExit();
-			break;
-		case Enter:
-			OnEnter();
-			break;
-		default:
-			break;
+			switch (state)
+			{
+			case Idle:
+				OnIdle();
+				break;
+			case Hover:
+				OnHover();
+				break;
+			case Click:
+				OnClick();
+				break;
+			case Pressed:
+				OnPressed();
+				break;
+			case Release:
+				OnRelease();
+				break;
+			case Exit:
+				OnExit();
+				break;
+			case Enter:
+				OnEnter();
+				break;
+			default:
+				break;
+			}
+			if (canvas->game_object_attached->enabled || canvas->allow_navigation)
+				UILogicGamePad();
 		}
-		if (canvas->game_object_attached->enabled || canvas->allow_navigation)
-			UILogicGamePad();
 	}
 }
 
@@ -610,6 +624,7 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex, bool backgr
 	if (tex != nullptr) {
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex->id);
 	}
 
@@ -648,6 +663,7 @@ void ComponentSlider::DrawTexture(bool isGame, ResourceTexture* tex, bool backgr
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 

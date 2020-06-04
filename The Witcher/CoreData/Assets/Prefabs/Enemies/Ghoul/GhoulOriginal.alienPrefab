@@ -4,8 +4,8 @@
             {
                 "Name": "GhoulOriginal",
                 "FamilyNumber": 1,
-                "ID": "3293844848056779840",
-                "ParentID": "2899346851082009407",
+                "ID": "12473313909578731505",
+                "ParentID": "10483582611963396440",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,9 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -1.1529639959335327,
-                            0.992340087890625,
-                            2.7645268440246582
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -35,11 +35,11 @@
                             0.20000000298023224
                         ],
                         "ScaleNegative": false,
-                        "ID": "9021027120520976258"
+                        "ID": "16832682004881093662"
                     },
                     {
                         "Type": 14,
-                        "ID": "15845245802798244551",
+                        "ID": "11825830048943711697",
                         "ControllerID": "13897926906647891719",
                         "Enabled": true
                     },
@@ -62,7 +62,7 @@
                         "CollisionLayer": "Default"
                     },
                     {
-                        "ID": "4605478254836671546",
+                        "ID": "15840065266868278840",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -73,7 +73,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "1058395242926519139",
+                        "ID": "7467033110610580785",
                         "ResourceID": "12018496776880695159",
                         "DataName": "GhoulOriginal",
                         "HasInspector": true,
@@ -87,6 +87,124 @@
                                 "VarType": 14,
                                 "Name": "state",
                                 "enumInt": -1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "gravity",
+                                "float": -8
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "head_prefab",
+                                "prefab": "16640449274355359828"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "life_orb",
+                                "prefab": "3321757820737973051"
+                            },
+                            {
+                                "VarType": 13,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "What does the enemy do before aggro-ing the players?"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "awake_behaviour",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 13,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If follow curve"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "awake_curve",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "curve_speed",
+                                "float": 0.019999999552965164
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "patrol",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 13,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If wander"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "wander_radius",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "wander_speed",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "wander_rest_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "wander_precision",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 13,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "increase_hit_animation",
+                                "float": 1
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4975511589653271651",
+                        "ResourceID": "12801810116240641154",
+                        "DataName": "SteeringAvoid",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "avoidRange",
+                                "float": 2.5
                             }
                         ]
                     }
@@ -95,8 +213,8 @@
             {
                 "Name": "Hip",
                 "FamilyNumber": 2,
-                "ID": "2115809126456960829",
-                "ParentID": "3293844848056779840",
+                "ID": "14771711519566478694",
+                "ParentID": "12473313909578731505",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -126,11 +244,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "4996261311033148598"
+                        "ID": "961261971915349004"
                     },
                     {
                         "Type": 28,
-                        "ID": "12089031261244713060",
+                        "ID": "4171893965398627509",
                         "BoneID": "2913713814675351617",
                         "Enabled": true
                     }
@@ -139,8 +257,8 @@
             {
                 "Name": "RB_LegTop",
                 "FamilyNumber": 3,
-                "ID": "880690672342026086",
-                "ParentID": "2115809126456960829",
+                "ID": "10852356396584514045",
+                "ParentID": "14771711519566478694",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -170,11 +288,11 @@
                             0.9999997615814209
                         ],
                         "ScaleNegative": false,
-                        "ID": "2302411077843373334"
+                        "ID": "10605868693815247808"
                     },
                     {
                         "Type": 28,
-                        "ID": "600577548598599599",
+                        "ID": "400346211686763808",
                         "BoneID": "1638274380347161505",
                         "Enabled": true
                     }
@@ -183,8 +301,8 @@
             {
                 "Name": "RB_Knee1",
                 "FamilyNumber": 4,
-                "ID": "10160649964959998614",
-                "ParentID": "880690672342026086",
+                "ID": "15465902383244528772",
+                "ParentID": "10852356396584514045",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -214,11 +332,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "8200439595074046685"
+                        "ID": "2748593901501577524"
                     },
                     {
                         "Type": 28,
-                        "ID": "10724560806299358267",
+                        "ID": "880114481415676381",
                         "BoneID": "9744151601818662119",
                         "Enabled": true
                     }
@@ -227,8 +345,8 @@
             {
                 "Name": "RB_Knee2",
                 "FamilyNumber": 5,
-                "ID": "15045769610425220733",
-                "ParentID": "10160649964959998614",
+                "ID": "4326562020626647547",
+                "ParentID": "15465902383244528772",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -258,11 +376,11 @@
                             0.99999994039535522
                         ],
                         "ScaleNegative": false,
-                        "ID": "6296815638735331139"
+                        "ID": "14626305508583115642"
                     },
                     {
                         "Type": 28,
-                        "ID": "14457649698257085860",
+                        "ID": "4846450939839430300",
                         "BoneID": "18402080307887118558",
                         "Enabled": true
                     }
@@ -271,8 +389,8 @@
             {
                 "Name": "RB_Ankle",
                 "FamilyNumber": 6,
-                "ID": "11837279575448513889",
-                "ParentID": "15045769610425220733",
+                "ID": "12376957210205156626",
+                "ParentID": "4326562020626647547",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -302,11 +420,11 @@
                             1.0000005960464478
                         ],
                         "ScaleNegative": false,
-                        "ID": "10164746119489156445"
+                        "ID": "1493976822164448150"
                     },
                     {
                         "Type": 28,
-                        "ID": "5253445540469362991",
+                        "ID": "4886806130008383611",
                         "BoneID": "11665932736378389288",
                         "Enabled": true
                     }
@@ -315,8 +433,8 @@
             {
                 "Name": "RB_Feet",
                 "FamilyNumber": 7,
-                "ID": "6364436804054387848",
-                "ParentID": "11837279575448513889",
+                "ID": "2279062731925882823",
+                "ParentID": "12376957210205156626",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -346,11 +464,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "10827815853246821832"
+                        "ID": "6177394807196002419"
                     },
                     {
                         "Type": 28,
-                        "ID": "10552590070642824265",
+                        "ID": "11458620137322614391",
                         "BoneID": "8582459034202143748",
                         "Enabled": true
                     }
@@ -359,8 +477,8 @@
             {
                 "Name": "RB_FeetTip",
                 "FamilyNumber": 8,
-                "ID": "6863598173358772229",
-                "ParentID": "6364436804054387848",
+                "ID": "9015020116796948479",
+                "ParentID": "2279062731925882823",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -390,11 +508,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14561400195867065832"
+                        "ID": "13342158918344401288"
                     },
                     {
                         "Type": 28,
-                        "ID": "6869276771272297638",
+                        "ID": "13705508740240203113",
                         "BoneID": "2052285207262919382",
                         "Enabled": true
                     }
@@ -403,8 +521,8 @@
             {
                 "Name": "LB_LegTop",
                 "FamilyNumber": 3,
-                "ID": "5369402305934696757",
-                "ParentID": "2115809126456960829",
+                "ID": "12465812679564615176",
+                "ParentID": "14771711519566478694",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -434,11 +552,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "10925951428656701121"
+                        "ID": "1678263728028012893"
                     },
                     {
                         "Type": 28,
-                        "ID": "13154218220099261167",
+                        "ID": "8932529978355993668",
                         "BoneID": "8762303715319960354",
                         "Enabled": true
                     }
@@ -447,8 +565,8 @@
             {
                 "Name": "LB_Knee1",
                 "FamilyNumber": 4,
-                "ID": "11394428182052084146",
-                "ParentID": "5369402305934696757",
+                "ID": "6822486097800498120",
+                "ParentID": "12465812679564615176",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -478,11 +596,11 @@
                             1.0000003576278687
                         ],
                         "ScaleNegative": false,
-                        "ID": "1930003065568432678"
+                        "ID": "12370622516294540524"
                     },
                     {
                         "Type": 28,
-                        "ID": "11566644010511078860",
+                        "ID": "4663586278463030483",
                         "BoneID": "2316084800078199587",
                         "Enabled": true
                     }
@@ -491,8 +609,8 @@
             {
                 "Name": "LB_Knee2",
                 "FamilyNumber": 5,
-                "ID": "3767952102738614817",
-                "ParentID": "11394428182052084146",
+                "ID": "4349080681111776539",
+                "ParentID": "6822486097800498120",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -522,11 +640,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "4807516809348694428"
+                        "ID": "17955008074495099605"
                     },
                     {
                         "Type": 28,
-                        "ID": "9642067133344201574",
+                        "ID": "7990625946485125359",
                         "BoneID": "13682727144850352470",
                         "Enabled": true
                     }
@@ -535,8 +653,8 @@
             {
                 "Name": "LB_Ankle",
                 "FamilyNumber": 6,
-                "ID": "5952128025972454340",
-                "ParentID": "3767952102738614817",
+                "ID": "6700179169426891707",
+                "ParentID": "4349080681111776539",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -566,11 +684,11 @@
                             0.9999997615814209
                         ],
                         "ScaleNegative": false,
-                        "ID": "15395786083829782929"
+                        "ID": "17072835803565329221"
                     },
                     {
                         "Type": 28,
-                        "ID": "13935672773789731385",
+                        "ID": "13172145165922894317",
                         "BoneID": "1456435070940629959",
                         "Enabled": true
                     }
@@ -579,8 +697,8 @@
             {
                 "Name": "LB_Feet",
                 "FamilyNumber": 7,
-                "ID": "15297118624232890606",
-                "ParentID": "5952128025972454340",
+                "ID": "3351387822923967067",
+                "ParentID": "6700179169426891707",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -610,11 +728,11 @@
                             1.0000003576278687
                         ],
                         "ScaleNegative": false,
-                        "ID": "11526580922691695357"
+                        "ID": "5053760014042334182"
                     },
                     {
                         "Type": 28,
-                        "ID": "10116904147894498106",
+                        "ID": "4790787365527897689",
                         "BoneID": "91956341566045829",
                         "Enabled": true
                     }
@@ -623,8 +741,8 @@
             {
                 "Name": "LB_FeetTip",
                 "FamilyNumber": 8,
-                "ID": "10458847747328777236",
-                "ParentID": "15297118624232890606",
+                "ID": "7215833235079171822",
+                "ParentID": "3351387822923967067",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -644,9 +762,9 @@
                         ],
                         "Rotation": [
                             0,
+                            1,
                             0,
-                            0,
-                            1
+                            5.9167532526771538e-06
                         ],
                         "Scale": [
                             1,
@@ -654,11 +772,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10937151398971507786"
+                        "ID": "17296733614443742220"
                     },
                     {
                         "Type": 28,
-                        "ID": "2541682277343469801",
+                        "ID": "10339886207729619660",
                         "BoneID": "3520065537233881714",
                         "Enabled": true
                     }
@@ -667,8 +785,8 @@
             {
                 "Name": "Hip2",
                 "FamilyNumber": 3,
-                "ID": "9991712801389754413",
-                "ParentID": "2115809126456960829",
+                "ID": "18032693896782673570",
+                "ParentID": "14771711519566478694",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -698,11 +816,11 @@
                             0.99999964237213135
                         ],
                         "ScaleNegative": false,
-                        "ID": "11711859592342232451"
+                        "ID": "12942124549753116883"
                     },
                     {
                         "Type": 28,
-                        "ID": "1071873805380362123",
+                        "ID": "6368300989069490524",
                         "BoneID": "10672694739728114718",
                         "Enabled": true
                     }
@@ -711,8 +829,8 @@
             {
                 "Name": "LF_LegTop",
                 "FamilyNumber": 4,
-                "ID": "14658776811334697979",
-                "ParentID": "9991712801389754413",
+                "ID": "18207228667112676935",
+                "ParentID": "18032693896782673570",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -742,11 +860,11 @@
                             0.9999997615814209
                         ],
                         "ScaleNegative": false,
-                        "ID": "6807842271197917917"
+                        "ID": "591066016937685754"
                     },
                     {
                         "Type": 28,
-                        "ID": "10489265814142700108",
+                        "ID": "15899883718956419939",
                         "BoneID": "6585023508346121598",
                         "Enabled": true
                     }
@@ -755,8 +873,8 @@
             {
                 "Name": "LF_Knee",
                 "FamilyNumber": 5,
-                "ID": "16167110462903631447",
-                "ParentID": "14658776811334697979",
+                "ID": "43229184326358938",
+                "ParentID": "18207228667112676935",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -786,11 +904,11 @@
                             1.0000002384185791
                         ],
                         "ScaleNegative": false,
-                        "ID": "4292380703159172641"
+                        "ID": "9673367888808787741"
                     },
                     {
                         "Type": 28,
-                        "ID": "5930685844154201657",
+                        "ID": "13452103211041961809",
                         "BoneID": "8094795343947324732",
                         "Enabled": true
                     }
@@ -799,8 +917,8 @@
             {
                 "Name": "LF_Ankle",
                 "FamilyNumber": 6,
-                "ID": "10682793988289820739",
-                "ParentID": "16167110462903631447",
+                "ID": "11304952014605695818",
+                "ParentID": "43229184326358938",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -830,11 +948,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10242258212908769395"
+                        "ID": "7805659157648017444"
                     },
                     {
                         "Type": 28,
-                        "ID": "15247590615946754368",
+                        "ID": "5603910307597888161",
                         "BoneID": "5319585684973754909",
                         "Enabled": true
                     }
@@ -843,8 +961,8 @@
             {
                 "Name": "LF_Feet",
                 "FamilyNumber": 7,
-                "ID": "14346990792227451627",
-                "ParentID": "10682793988289820739",
+                "ID": "10918330677167298789",
+                "ParentID": "11304952014605695818",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -874,11 +992,11 @@
                             0.99999970197677612
                         ],
                         "ScaleNegative": false,
-                        "ID": "11061383412635906689"
+                        "ID": "15368485714054929349"
                     },
                     {
                         "Type": 28,
-                        "ID": "3555009565834040226",
+                        "ID": "8379632132422648428",
                         "BoneID": "13044053783533366119",
                         "Enabled": true
                     }
@@ -887,8 +1005,8 @@
             {
                 "Name": "LF_FeetTop",
                 "FamilyNumber": 8,
-                "ID": "1969755721289785953",
-                "ParentID": "14346990792227451627",
+                "ID": "1292445188569670490",
+                "ParentID": "10918330677167298789",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -918,11 +1036,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15853310652917374740"
+                        "ID": "4159597781723526098"
                     },
                     {
                         "Type": 28,
-                        "ID": "5022813650702004462",
+                        "ID": "13036380210375144225",
                         "BoneID": "13463265878434986730",
                         "Enabled": true
                     }
@@ -931,8 +1049,8 @@
             {
                 "Name": "RF_RegTop",
                 "FamilyNumber": 4,
-                "ID": "5419812070106364889",
-                "ParentID": "9991712801389754413",
+                "ID": "13584518873365151855",
+                "ParentID": "18032693896782673570",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -962,11 +1080,11 @@
                             0.99999982118606567
                         ],
                         "ScaleNegative": false,
-                        "ID": "2167951114996877112"
+                        "ID": "15207365140590980664"
                     },
                     {
                         "Type": 28,
-                        "ID": "14972003235298215253",
+                        "ID": "11386587669454959442",
                         "BoneID": "473275284679887704",
                         "Enabled": true
                     }
@@ -975,8 +1093,8 @@
             {
                 "Name": "RF_Knee",
                 "FamilyNumber": 5,
-                "ID": "5222545095375178607",
-                "ParentID": "5419812070106364889",
+                "ID": "230103421233051829",
+                "ParentID": "13584518873365151855",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1006,11 +1124,11 @@
                             0.99999970197677612
                         ],
                         "ScaleNegative": false,
-                        "ID": "665180737403664003"
+                        "ID": "4091646753734244597"
                     },
                     {
                         "Type": 28,
-                        "ID": "17111483839738581933",
+                        "ID": "11073935374031903810",
                         "BoneID": "2545109499677530364",
                         "Enabled": true
                     }
@@ -1019,8 +1137,8 @@
             {
                 "Name": "RF_Ankle",
                 "FamilyNumber": 6,
-                "ID": "777980299427694348",
-                "ParentID": "5222545095375178607",
+                "ID": "10538863537212964719",
+                "ParentID": "230103421233051829",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1050,11 +1168,11 @@
                             1.0000005960464478
                         ],
                         "ScaleNegative": false,
-                        "ID": "3065547888603767851"
+                        "ID": "3842007667726712916"
                     },
                     {
                         "Type": 28,
-                        "ID": "10913500463957029967",
+                        "ID": "1416476708471550119",
                         "BoneID": "16163321066878118979",
                         "Enabled": true
                     }
@@ -1063,8 +1181,8 @@
             {
                 "Name": "RF_Feet",
                 "FamilyNumber": 7,
-                "ID": "7717794511401727679",
-                "ParentID": "777980299427694348",
+                "ID": "11374997030060377228",
+                "ParentID": "10538863537212964719",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1094,11 +1212,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "2785897489934471373"
+                        "ID": "5529787887356631937"
                     },
                     {
                         "Type": 28,
-                        "ID": "16819615778605230883",
+                        "ID": "8800096018276799210",
                         "BoneID": "16767546060041966282",
                         "Enabled": true
                     }
@@ -1107,8 +1225,8 @@
             {
                 "Name": "RF_FeetTop",
                 "FamilyNumber": 8,
-                "ID": "13046503842817940611",
-                "ParentID": "7717794511401727679",
+                "ID": "16349421956289623243",
+                "ParentID": "11374997030060377228",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1138,11 +1256,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13241702514482848499"
+                        "ID": "10403985725581409480"
                     },
                     {
                         "Type": 28,
-                        "ID": "11077260816035574402",
+                        "ID": "4054369091644006790",
                         "BoneID": "7885716864322165924",
                         "Enabled": true
                     }
@@ -1151,8 +1269,8 @@
             {
                 "Name": "Neck",
                 "FamilyNumber": 4,
-                "ID": "4274250543585311529",
-                "ParentID": "9991712801389754413",
+                "ID": "15189887668646617432",
+                "ParentID": "18032693896782673570",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1182,11 +1300,11 @@
                             0.99999982118606567
                         ],
                         "ScaleNegative": false,
-                        "ID": "16410422920457444512"
+                        "ID": "12179031833837252756"
                     },
                     {
                         "Type": 28,
-                        "ID": "13816309931900016791",
+                        "ID": "15647810267828676551",
                         "BoneID": "17383931680239377252",
                         "Enabled": true
                     }
@@ -1195,8 +1313,8 @@
             {
                 "Name": "Head",
                 "FamilyNumber": 5,
-                "ID": "14229688200883639172",
-                "ParentID": "4274250543585311529",
+                "ID": "7569240235584015235",
+                "ParentID": "15189887668646617432",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1226,11 +1344,11 @@
                             1.0000002384185791
                         ],
                         "ScaleNegative": false,
-                        "ID": "14204532324115076333"
+                        "ID": "1278794262089103366"
                     },
                     {
                         "Type": 28,
-                        "ID": "11153957130300129094",
+                        "ID": "8916962533694542631",
                         "BoneID": "12779292453864389611",
                         "Enabled": true
                     }
@@ -1239,8 +1357,8 @@
             {
                 "Name": "HeadTip",
                 "FamilyNumber": 6,
-                "ID": "9467770463654564127",
-                "ParentID": "14229688200883639172",
+                "ID": "10477011581418037493",
+                "ParentID": "7569240235584015235",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1270,21 +1388,97 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "64068199852350200"
+                        "ID": "11981698234296921224"
                     },
                     {
                         "Type": 28,
-                        "ID": "11628989530063839783",
+                        "ID": "6002171724260932117",
                         "BoneID": "5313636721219583998",
                         "Enabled": true
                     }
                 ]
             },
             {
+                "Name": "Head_Position",
+                "FamilyNumber": 6,
+                "ID": "231168549108902668",
+                "ParentID": "7569240235584015235",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1002626583312131147",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.27180671691894531,
+                            0.03070068359375,
+                            -0.081844329833984375
+                        ],
+                        "Rotation": [
+                            0.62657946348190308,
+                            0.64291727542877197,
+                            -0.27761784195899963,
+                            0.34202909469604492
+                        ],
+                        "Scale": [
+                            0.99999934434890747,
+                            1.0000007152557373,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14828780183906017841"
+                    }
+                ]
+            },
+            {
+                "Name": "Body_Position",
+                "FamilyNumber": 4,
+                "ID": "17089542207735543049",
+                "ParentID": "18032693896782673570",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1002626583312131147",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.92248153686523438,
+                            0.023824691772460938,
+                            -0.44845318794250488
+                        ],
+                        "Rotation": [
+                            0.74799036979675293,
+                            0.33118835091590881,
+                            0.24367965757846832,
+                            0.52100372314453125
+                        ],
+                        "Scale": [
+                            0.99999964237213135,
+                            1.0000002384185791,
+                            0.99999982118606567
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6471908111747773049"
+                    }
+                ]
+            },
+            {
                 "Name": "Tail1",
                 "FamilyNumber": 3,
-                "ID": "6688085764049219772",
-                "ParentID": "2115809126456960829",
+                "ID": "16193961511226836521",
+                "ParentID": "14771711519566478694",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1314,11 +1508,11 @@
                             1.0000001192092896
                         ],
                         "ScaleNegative": false,
-                        "ID": "10514026409603115548"
+                        "ID": "6963355795821574860"
                     },
                     {
                         "Type": 28,
-                        "ID": "2704680126493254780",
+                        "ID": "7225960803946220546",
                         "BoneID": "5012277073868192576",
                         "Enabled": true
                     }
@@ -1327,8 +1521,8 @@
             {
                 "Name": "Tail2",
                 "FamilyNumber": 4,
-                "ID": "5950540838919827671",
-                "ParentID": "6688085764049219772",
+                "ID": "4728765956380757517",
+                "ParentID": "16193961511226836521",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1358,11 +1552,11 @@
                             0.99999988079071045
                         ],
                         "ScaleNegative": false,
-                        "ID": "11962506389149725361"
+                        "ID": "16674937726293189536"
                     },
                     {
                         "Type": 28,
-                        "ID": "17698946497614635208",
+                        "ID": "5985913219234202952",
                         "BoneID": "9195573028528655897",
                         "Enabled": true
                     }
@@ -1371,8 +1565,8 @@
             {
                 "Name": "Tail3",
                 "FamilyNumber": 5,
-                "ID": "15489395098195445714",
-                "ParentID": "5950540838919827671",
+                "ID": "15821359809663711314",
+                "ParentID": "4728765956380757517",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1402,11 +1596,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "16889809586736120744"
+                        "ID": "6174519203582108470"
                     },
                     {
                         "Type": 28,
-                        "ID": "10491768027288205013",
+                        "ID": "3503691360988511959",
                         "BoneID": "14573187705927509266",
                         "Enabled": true
                     }
@@ -1415,8 +1609,8 @@
             {
                 "Name": "Ghoul_LP",
                 "FamilyNumber": 2,
-                "ID": "16111251468120834096",
-                "ParentID": "3293844848056779840",
+                "ID": "7209238431678074064",
+                "ParentID": "12473313909578731505",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1446,7 +1640,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11081378929906299431"
+                        "ID": "10385731340864309342"
                     },
                     {
                         "Type": 27,
@@ -1456,14 +1650,14 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "1706005466625695150",
+                        "ID": "10648904205556528851",
                         "MeshID": "4512077240784556087",
-                        "RootBoneID": "2115809126456960829",
+                        "RootBoneID": "14771711519566478694",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "17982662313650291251",
+                        "ID": "5405189750148992595",
                         "HasMaterial": true,
                         "MaterialID": "3459758886109933022",
                         "Enabled": true
@@ -1473,8 +1667,8 @@
             {
                 "Name": "EnemyAttack",
                 "FamilyNumber": 2,
-                "ID": "10184509206215760211",
-                "ParentID": "3293844848056779840",
+                "ID": "14460054734282449142",
+                "ParentID": "12473313909578731505",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1504,7 +1698,7 @@
                             3.3333332538604736
                         ],
                         "ScaleNegative": false,
-                        "ID": "12941767197373613521"
+                        "ID": "1374392038692324023"
                     },
                     {
                         "Enabled": true,
@@ -1535,8 +1729,8 @@
             {
                 "Name": "Particle_Positions",
                 "FamilyNumber": 2,
-                "ID": "5227786045656340725",
-                "ParentID": "3293844848056779840",
+                "ID": "14224138849914634837",
+                "ParentID": "12473313909578731505",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1566,91 +1760,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1627890136642769993"
+                        "ID": "7975737632595212018"
                     }
                 ]
             },
             {
-                "Name": "Head",
+                "Name": "Feet_Position",
                 "FamilyNumber": 3,
-                "ID": "3121254742246621358",
-                "ParentID": "5227786045656340725",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "1002626583312131147",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0.35510700941085815,
-                            0.0091420002281665802,
-                            0.16679799556732178
-                        ],
-                        "Rotation": [
-                            -0.015253758989274502,
-                            -0.47981786727905273,
-                            -0.023105576634407043,
-                            0.87693119049072266
-                        ],
-                        "Scale": [
-                            0.9999997615814209,
-                            1,
-                            1.0000002384185791
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "3026547139866148535"
-                    }
-                ]
-            },
-            {
-                "Name": "Body",
-                "FamilyNumber": 3,
-                "ID": "16387658618617886748",
-                "ParentID": "5227786045656340725",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "1002626583312131147",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0.2491302490234375,
-                            4.8787765502929688,
-                            0.43745994567871094
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "8956460637154580758"
-                    }
-                ]
-            },
-            {
-                "Name": "Feet",
-                "FamilyNumber": 3,
-                "ID": "10202957260578025957",
-                "ParentID": "5227786045656340725",
+                "ID": "11708407173873454030",
+                "ParentID": "14224138849914634837",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1680,15 +1798,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2832957358361269642"
+                        "ID": "18420766992753759854"
                     }
                 ]
             },
             {
-                "Name": "Attack",
+                "Name": "Attack_Position",
                 "FamilyNumber": 3,
-                "ID": "17542255178909194068",
-                "ParentID": "5227786045656340725",
+                "ID": "9042837126239439115",
+                "ParentID": "14224138849914634837",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1718,7 +1836,45 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12920414544771572487"
+                        "ID": "523291207589457797"
+                    }
+                ]
+            },
+            {
+                "Name": "Head",
+                "FamilyNumber": 2,
+                "ID": "7739590745550382731",
+                "ParentID": "12473313909578731505",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "1002626583312131147",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12875542818766928904"
                     }
                 ]
             }

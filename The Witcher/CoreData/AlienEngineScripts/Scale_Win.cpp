@@ -20,7 +20,9 @@ void Scale_Win::Start()
 	rigid_body1 = left_scale->GetComponent<ComponentRigidBody>();
 	rigid_body2 = right_scale->GetComponent<ComponentRigidBody>();
 	connector = game_object->GetChild("Connector");
-
+	start_position1 = right_scale->transform->GetLocalPosition().y;
+	start_position2 = left_scale->transform->GetLocalPosition().y;
+	
 	// Spawners
 	spawner_l = GameObject::FindWithName("Left_Spawner")->GetComponent<Spawner>();
 	spawner_r = GameObject::FindWithName("Right_Spawner")->GetComponent<Spawner>();
@@ -47,42 +49,59 @@ void Scale_Win::Start()
 		GameObject::FindWithName("Defeat")->SetEnable(true);
 	}
 
-	// Head Spawns
-	for (int i = 1; i <= Scores_Data::player1_kills; ++i)
-	{
-		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-
-		Invoke([this, random_pos_x, random_pos_z]() -> void
-			{
-				spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + random_pos_x,
-					spawner_l->transform->GetGlobalPosition().y,
-					spawner_l->transform->GetGlobalPosition().z + random_pos_z));
-			}
-			,
-				random_time* i);
-	}
-
-	for (int i = 1; i <= Scores_Data::player2_kills; ++i)
-	{
-		float random_time = Random::GetRandomFloatBetweenTwo(0.25f, 0.5f);
-		float random_pos_x = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-		float random_pos_z = Random::GetRandomFloatBetweenTwo(-3.25f, 3.25f);
-
-		Invoke([this, random_pos_x, random_pos_z]() -> void
-			{
-				spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + random_pos_x,
-					spawner_r->transform->GetGlobalPosition().y,
-					spawner_r->transform->GetGlobalPosition().z + random_pos_z));
-			}
-			,
-				random_time * i);
-	}
+	first_frame = true;
+	spawned_invoke = false;
 }
 
 void Scale_Win::Update()
 {
+	if (!first_frame && !spawned_invoke) {
+		std::vector<float2> spawn_points;
+
+		spawn_points.reserve(3);
+		spawn_points.emplace_back(float2(-2.f, 1.5f));
+		spawn_points.emplace_back(float2(2.f, 1.5f));
+		spawn_points.emplace_back(float2(0.f, -2.f));
+
+		// Head Spawns
+		if (Scores_Data::player1_kills > 0)
+		{
+			for (int i = 1; i <= Scores_Data::player1_kills; ++i)
+			{
+				float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
+				int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
+
+				Invoke([this, spawn_points, random_spawn]() -> void
+					{
+						spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
+							spawner_l->transform->GetGlobalPosition().y,
+							spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
+					}
+					,
+						random_time * i);
+			}
+		}
+
+		if (Scores_Data::player2_kills > 0)
+		{
+			for (int i = 1; i <= Scores_Data::player2_kills; ++i)
+			{
+				float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
+				int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
+
+				Invoke([this, spawn_points, random_spawn]() -> void
+					{
+						spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
+							spawner_r->transform->GetGlobalPosition().y,
+							spawner_r->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
+					}
+					,
+						random_time * i);
+			}
+		}
+		spawned_invoke = true;
+	}
+
 	LerpingText();
 
 	if (!in_place)
@@ -90,10 +109,13 @@ void Scale_Win::Update()
 		Scale();
 	}
 
-	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y))
+	if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_Y)
+		|| Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_Y))
 	{
 		HandleSceneLoad();
 	}
+
+	first_frame = false;
 }
 
 void Scale_Win::CalculateInclination()
@@ -124,18 +146,40 @@ void Scale_Win::CalculateInclination()
 		value = 1 - ((ratio - 0.5f) * 2);
 	}
 
-	original_position1 = left_scale->transform->GetLocalPosition().y;
-	original_position2 = right_scale->transform->GetLocalPosition().y;
+	original_position1 = right_scale->transform->GetLocalPosition().y;
+	original_position2 = left_scale->transform->GetLocalPosition().y;
 
-	if (Maths::Min(player1_points, player2_points) == player1_points)
+	if (Maths::Min(player1_points, player2_points) == player2_points)
 	{
-		desired_position1 = max_Y * value;
-		desired_position2 = -max_Y * value;
+		desired_position1 = original_position1 + (max_Y * value);
+		desired_position2 = original_position2 - (max_Y * value);
 	}
 	else
 	{
-		desired_position1 = -max_Y * value;
-		desired_position2 = max_Y * value;
+		desired_position1 = original_position1 - (max_Y * value);
+		desired_position2 = original_position2 + (max_Y * value);
+	}
+
+	if (desired_position1 > (start_position1 + (max_Y * value)))
+	{
+		desired_position1 = start_position1 + (max_Y * value);
+		desired_position2 = start_position2 - (max_Y * value);
+	}
+	else if (desired_position1 < (start_position1 - (max_Y * value)))
+	{
+		desired_position1 = start_position1 - (max_Y * value);
+		desired_position2 = start_position2 + (max_Y * value);
+	}
+
+	if (desired_position2 > (start_position2 + (max_Y * value)))
+	{
+		desired_position2 = start_position2 + (max_Y * value);
+		desired_position1 = start_position1 - (max_Y * value);
+	}
+	else if (desired_position2 < (start_position2 - (max_Y * value)))
+	{
+		desired_position2 = start_position2 - (max_Y * value);
+		desired_position1 = start_position1 + (max_Y * value);
 	}
 
 	in_place = false;
@@ -169,8 +213,12 @@ void Scale_Win::LerpingText()
 
 void Scale_Win::Scale()
 {
-	left_scale->transform->SetGlobalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
-	right_scale->transform->SetGlobalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
+	float3 posR = right_scale->transform->GetGlobalPosition();
+	float3 posL = left_scale->transform->GetGlobalPosition();
+
+
+	right_scale->transform->SetLocalPosition(float3(7.5f, Maths::Lerp(original_position1, desired_position1, (Time::GetGameTime() - time) / time_to_scale), 0));
+	left_scale->transform->SetLocalPosition(float3(-7.5f, Maths::Lerp(original_position2, desired_position2, (Time::GetGameTime() - time) / time_to_scale), 0));
 
 	// Delete this when physics updated rigid body position with GO
 	rigid_body1->SetPosition(left_scale->transform->GetLocalPosition());
@@ -178,9 +226,9 @@ void Scale_Win::Scale()
 	// ------------------------------------------
 
 	// Connector between plates
-	//float3 vector = (left_scale->transform->GetGlobalPosition() - right_scale->transform->GetGlobalPosition()).Normalized();
-	//Quat quat = Quat::RotateAxisAngle(float3(0, 0, 1), vector.AngleBetweenNorm(connector->transform->right));
-	//connector->transform->SetLocalRotation(quat);
+	float3 vector = right_scale->transform->GetGlobalPosition() - left_scale->transform->GetGlobalPosition();
+	bool is_right_up = vector.y >= (posR-posL).y;
+	connector->transform->SetGlobalRotation(connector->transform->GetGlobalRotation() * Quat::RotateAxisAngle((is_right_up) ? -float3::unitX() : float3::unitX(), vector.AngleBetween(posR - posL)));
 
 	if (Time::GetGameTime() > time + time_to_scale)
 	{
@@ -193,27 +241,25 @@ void Scale_Win::HandleSceneLoad()
 	if (Scores_Data::dead)
 	{
 		Scores_Data::dead = false;
-		if (Scores_Data::won_level1)
-		{
-			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-		}
-		else
-		{
-			SceneManager::LoadScene("Lvl_1_Art_Colliders", FadeToBlackType::VERTICAL_CURTAIN);
-		}
+		Scores_Data::player1_kills = 0;
+		Scores_Data::player2_kills = 0;
+		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
 	}
 	else
 	{
 		Scores_Data::last_checkpoint_position = float3::inf();
 		if (Scores_Data::won_level1)
 		{
-			SceneManager::LoadScene("Mahakam", FadeToBlackType::VERTICAL_CURTAIN);
-		}
-		else if (Scores_Data::won_level2)
-		{
-			Scores_Data::won_level1 = false;
-			Scores_Data::won_level2 = false;
-			SceneManager::LoadScene("EndGame_Menu", FadeToBlackType::VERTICAL_CURTAIN);
+			if (Scores_Data::won_level2)
+			{
+				Scores_Data::won_level1 = false;
+				Scores_Data::won_level2 = false;
+				SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
+			}
+			else
+			{
+				SceneManager::LoadScene("Wagonnetes", FadeToBlackType::VERTICAL_CURTAIN);
+			}
 		}
 	}
 }

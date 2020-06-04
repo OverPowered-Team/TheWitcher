@@ -6,6 +6,9 @@
 
 #define TOTAL_PLAYERS 2
 
+class MusicController;
+class Boss_Lifebar;
+
 class ALIEN_ENGINE_API Boss : public Enemy {
 
 public:
@@ -27,7 +30,9 @@ public:
 		DASH,
 		COMBO,
 		SCREAM,
-		MINISCREAM
+		MINISCREAM,
+		ROCKTHROW,
+		AFK
 		);
 
 	enum(ActionState,
@@ -58,6 +63,9 @@ public:
 	float rotate_time = 0.0f;
 
 	float player_distance[TOTAL_PLAYERS];
+	MusicController* m_controller = nullptr;
+
+	Boss_Lifebar* HUD = nullptr;
 
 public:
 	virtual void StartEnemy() override;
@@ -71,14 +79,17 @@ public:
 	virtual void SetIdleState();
 	virtual void SetAttackState();
 	virtual bool IsOnAction();
+	bool IsDead() { return (state == BossState::DEAD ? true : false); }
 
 	virtual void LaunchAction();
 	virtual ActionState UpdateAction();
 	virtual void EndAction(GameObject* go_ended);
+	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero()) override;
 
-	void SetStats(const char* json) override;
+	virtual void SetStats(const char* json) override;
 
 	void OrientToPlayer(int target);
+	void OrientToPlayerWithoutSlerp(int target);
 
 };
 

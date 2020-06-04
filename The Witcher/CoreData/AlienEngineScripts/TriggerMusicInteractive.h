@@ -11,9 +11,17 @@ public:
 	enum (Music,
 		QUIET,
 		COMBAT,
-		NORMAL,
-		MOUNTAIN,
-		LAKE
+		AFTER_BOSS,
+		BOSS,
+		CAVE,
+		DROWNERS,
+		FORTRESS,
+		GHOUL_NESTS,
+		MIDDLE_AREA,
+		PRE_BOSS,
+		RAVINE,
+		SLOPE_TO_CAVE,
+		MINE
 		);
 	TriggerMusicInteractive();
 	virtual ~TriggerMusicInteractive();

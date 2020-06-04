@@ -4,7 +4,7 @@
             {
                 "Name": "Poison_Oil",
                 "FamilyNumber": 1,
-                "ID": "11285272821686609139",
+                "ID": "14050208514373752166",
                 "ParentID": "14046935774256790219",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -14,14 +14,14 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "3987566163270230324",
+                "PrefabID": "3969662563114968370",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -16.355993270874023,
-                            1.3825457096099854,
-                            7.8102855682373047
+                            4.2784805297851563,
+                            1.0253374576568604,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -35,7 +35,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1360010912317105293"
+                        "ID": "3901739675014532906"
                     },
                     {
                         "Type": 1,
@@ -45,22 +45,22 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "6195333413133284173",
+                        "ID": "7946112993035833662",
                         "HasMesh": true,
-                        "IsPrimitive": true,
-                        "PrimType": 1,
+                        "IsPrimitive": false,
+                        "MeshID": "9526335529349955647",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "6490263483369005778",
+                        "ID": "18231627840793826794",
                         "HasMaterial": true,
-                        "MaterialID": "4067749186061296870",
+                        "MaterialID": "1409320524893316212",
                         "Enabled": true
                     },
                     {
                         "Enabled": true,
-                        "Type": 8,
+                        "Type": 7,
                         "Center": [
                             0,
                             0,
@@ -76,11 +76,25 @@
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
-                        "Radius": 1
+                        "Size": [
+                            0.57313299179077148,
+                            0.61674070358276367,
+                            0.26140260696411133
+                        ]
+                    },
+                    {
+                        "ID": "11979497219448691039",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "3698921875",
+                        "Event": "3145159334",
+                        "PlayOnAwake": false
                     },
                     {
                         "Type": 29,
-                        "ID": "5540607321065868984",
+                        "ID": "11476745154729571220",
                         "ResourceID": "14777702257696053657",
                         "DataName": "RelicBehaviour",
                         "HasInspector": true,
@@ -88,7 +102,7 @@
                             {
                                 "VarType": 14,
                                 "Name": "relic_type",
-                                "enumInt": 2
+                                "enumInt": 1
                             },
                             {
                                 "VarType": 14,
@@ -96,19 +110,205 @@
                                 "enumInt": 5
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "p_poison",
+                "FamilyNumber": 2,
+                "ID": "3279387794496106049",
+                "ParentID": "14050208514373752166",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "3969662563114968370",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -1.4901161193847656e-08,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1623384946375136313"
                     },
                     {
-                        "ID": "7641943410684028297",
-                        "Type": 16,
-                        "Enabled": true,
-                        "Volume": 1,
-                        "Mute": false,
-                        "Bank": "3698921875",
-                        "Event": "3145159334",
-                        "PlayOnAwake": true
+                        "Type": 15,
+                        "ID": "10339421458702431568",
+                        "Billboard": 0,
+                        "Start": {
+                            "Position": [
+                                4.2784805297851563,
+                                1.0253374576568604,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                0,
+                                1,
+                                -1.1920930376163597e-07
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 1,
+                            "Color": [
+                                0.14089502394199371,
+                                0.45999997854232788,
+                                0.091999992728233337,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 0.10000000149011612,
+                            "Size3D": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 2,
+                            "AxisRotationStart": false,
+                            "Angle3D": [
+                                0,
+                                0,
+                                180
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "FinalTime": 2,
+                            "Speed": 1,
+                            "Color": [
+                                0.25691959261894226,
+                                0.5,
+                                0.087500005960464478,
+                                0
+                            ],
+                            "Size": 1,
+                            "Size3D": [
+                                1,
+                                1,
+                                1
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                1,
+                                0
+                            ],
+                            "AxisRotation": false,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 3,
+                            "Zone": 0,
+                            "Distance": 4,
+                            "Radius": 5,
+                            "OutRadius": 0,
+                            "CubeSize": [
+                                10,
+                                5,
+                                10
+                            ],
+                            "MaxLife": 1,
+                            "CurrentLife": 0.016000000759959221,
+                            "SpawnRate": 1,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                4.2784805297851563,
+                                1.0253374576568604,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                -90.000007629394531,
+                                0,
+                                0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "17981693510372123425",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false
                     }
                 ]
             }
         ]
-    }
+    },
+    "Name": "Poison_Oil"
 }

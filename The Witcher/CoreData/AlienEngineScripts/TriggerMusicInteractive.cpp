@@ -42,17 +42,41 @@ std::string TriggerMusicInteractive::GetNameByEnum(Music mat)
 	case Music::COMBAT:
 		return name = "Combat";
 		break;
-	case Music::NORMAL:
-		return name = "Normal";
+	case Music::AFTER_BOSS:
+		return name = "After_Boss";
 		break;
-	case Music::MOUNTAIN:
-		return name = "Mountain";
+	case Music::BOSS:
+		return name = "Boss";
 		break;
-	case Music::LAKE:
-		return name = "Lake";
+	case Music::CAVE:
+		return name = "Cave";
 		break;
 	case Music::QUIET:
 		return name = "Quiet";
+		break;
+	case Music::DROWNERS:
+		return name = "Drowners";
+		break;
+	case Music::FORTRESS:
+		return name = "Fortress";
+		break;
+	case Music::GHOUL_NESTS:
+		return name = "Ghoul_Nests";
+		break;
+	case Music::MIDDLE_AREA:
+		return name = "Middle_Area";
+		break;
+	case Music::PRE_BOSS:
+		return name = "Pre_Boss";
+		break;
+	case Music::RAVINE:
+		return name = "Ravine";
+		break;
+	case Music::SLOPE_TO_CAVE:
+		return name = "Slope_To_Cave";
+		break;
+	case Music::MINE:
+		return name = "Mine";
 		break;
 	}
 	

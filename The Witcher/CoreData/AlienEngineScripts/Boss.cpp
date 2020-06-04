@@ -2,9 +2,9 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "MusicController.h"
 #include "Boss.h"
-
-
+#include "Boss_Lifebar.h"
 
 Boss::BossAction::BossAction(ActionType _type, float _probability)
 {
@@ -14,6 +14,7 @@ Boss::BossAction::BossAction(ActionType _type, float _probability)
 
 void Boss::StartEnemy()
 {
+	m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
 	Enemy::StartEnemy();
 
 	state = BossState::IDLE;
@@ -21,16 +22,38 @@ void Boss::StartEnemy()
 
 void Boss::UpdateEnemy()
 {
+	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
+	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
+
 	switch (state)
 	{
 	case Boss::BossState::NONE:
 		break;
 	case Boss::BossState::IDLE:
 		if (player_distance[0] < stats["VisionRange"].GetValue() || player_distance[1] < stats["VisionRange"].GetValue()) {
+			LOG("IDLESATATE");
 			if (time_to_action <= action_cooldown)
 				time_to_action += Time::GetDT();
 			else {
 				SetAttackState();
+			}
+			if (m_controller)
+			{
+				if (!is_combat) {
+					is_combat = true;
+					m_controller->EnemyInSight((Enemy*)this);
+					if (HUD)
+						HUD->ShowLifeBar(true);
+				}
+			}
+		}
+		else {
+			if (m_controller && is_combat)
+			{
+				is_combat = false;
+				m_controller->EnemyLostSight((Enemy*)this);
+				if (HUD)
+					HUD->ShowLifeBar(false);
 			}
 		}
 		break;
@@ -53,8 +76,13 @@ void Boss::UpdateEnemy()
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = BossState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
 	}
-								 break;
+	break;
 	case Boss::BossState::DEAD:
 		break;
 	default:
@@ -64,17 +92,21 @@ void Boss::UpdateEnemy()
 
 void Boss::CleanUpEnemy()
 {
-	for (auto it = actions.begin(); it != actions.end(); ++it) {
-		delete (*it).second;
-	}
+	//for (auto it = actions.begin(); it != actions.end(); ++it) {
+	//	delete (*it).second;
+	//}
 
-	current_action = nullptr;
-	delete current_action;
+	//current_action = nullptr;
+	//delete current_action;
 }
 
 float Boss::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	return Enemy::GetDamaged(dmg, player);
+	float damage = Enemy::GetDamaged(dmg, player, knock_back);
+	if(HUD)
+		HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
+
+	return damage;
 }
 
 void Boss::SetActionVariables()
@@ -85,6 +117,8 @@ void Boss::SetActionVariables()
 	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
 	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
 }
+
+
 
 void Boss::SetActionProbabilities()
 {
@@ -118,10 +152,15 @@ void Boss::SetAttackState()
 	SetActionVariables();
 	SetActionProbabilities();
 	SelectAction();
-	time_to_action = 0.0f;
-	state = Boss::BossState::ATTACK;
-	current_action->state = ActionState::LAUNCH;
-	LaunchAction();
+	if (current_action) {
+		time_to_action = 0.0f;
+		state = Boss::BossState::ATTACK;
+		current_action->state = ActionState::LAUNCH;
+		LaunchAction();
+	}
+	else {
+		SetIdleState();
+	}
 }
 
 bool Boss::IsOnAction()
@@ -143,9 +182,19 @@ void Boss::EndAction(GameObject* go_ended)
 {
 }
 
+float Boss::GetDamaged(float dmg, float3 knock_back)
+{
+	float damage = Enemy::GetDamaged(dmg, knock_back);
+
+	if (HUD)
+		HUD->UpdateLifebar(stats["Health"].GetValue(), stats["Health"].GetMaxValue());
+
+	return damage;
+}
+
 void Boss::SetStats(const char* json)
 {
-	Enemy::SetStats(json);
+
 }
 
 void Boss::OrientToPlayer(int target)
@@ -158,4 +207,13 @@ void Boss::OrientToPlayer(int target)
 	transform->SetGlobalRotation(current_rot);
 	if(rotate_time < time_to_rotate)
 		rotate_time += Time::GetDT();
+}
+
+void Boss::OrientToPlayerWithoutSlerp(int target)
+{
+	direction = -(player_controllers[target]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
+	float desired_angle = atan2f(direction.z, direction.x);
+	desired_angle = -(desired_angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad();
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), desired_angle);
+	transform->SetGlobalRotation(rot);
 }

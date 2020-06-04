@@ -103,6 +103,13 @@ bool ModuleResources::Start()
 
 #endif
 
+	default_skybox_textures[0] = App->importer->LoadEngineTexture("Configuration/EngineTextures/Skybox/skyboxright.png");
+	default_skybox_textures[1] = App->importer->LoadEngineTexture("Configuration/EngineTextures/Skybox/skyboxleft.png");
+	default_skybox_textures[2] = App->importer->LoadEngineTexture("Configuration/EngineTextures/Skybox/skyboxtop.png");
+	default_skybox_textures[3] = App->importer->LoadEngineTexture("Configuration/EngineTextures/Skybox/skyboxbottom.png");
+	default_skybox_textures[4] = App->importer->LoadEngineTexture("Configuration/EngineTextures/Skybox/skyboxback.png");
+	default_skybox_textures[5] = App->importer->LoadEngineTexture("Configuration/EngineTextures/Skybox/skyboxfront.png");
+
 	// Load Primitives as resource
 	cube = new ResourceMesh();
 	sphere = new ResourceMesh();
@@ -704,6 +711,7 @@ void ModuleResources::ReadAllMetaData()
 	default_particle_shader = GetShaderByName("particle_shader");
 	skybox_shader = GetShaderByName("skybox_shader");
 	water_shader = GetShaderByName("water_shader");
+	shield_fresnel_shader = GetShaderByName("shield_fresnel_shader");
 
 	// Init Materials
 	App->file_system->DiscoverFiles(MATERIALS_FOLDER, files, directories);
@@ -723,6 +731,9 @@ void ModuleResources::ReadAllMetaData()
 	App->file_system->DiscoverFiles(ANIM_CONTROLLER_FOLDER, files, directories);
 	ReadAnimControllers(directories, files, ANIM_CONTROLLER_FOLDER);
 
+	files.clear();
+	directories.clear();
+
 	// Init Prefabs
 	App->file_system->DiscoverFiles(ASSETS_PREFAB_FOLDER, files, directories);
 	ReadPrefabs(directories, files, ASSETS_PREFAB_FOLDER);
@@ -740,6 +751,8 @@ void ModuleResources::ReadAllMetaData()
 	// Init Scripts
 	ReadScripts();
 
+	files.clear();
+	directories.clear();
 	// Init Scenes
 	App->file_system->DiscoverFiles(SCENE_FOLDER, files, directories);
 	ReadScenes(directories, files, SCENE_FOLDER);

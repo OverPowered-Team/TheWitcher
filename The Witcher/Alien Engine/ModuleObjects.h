@@ -80,7 +80,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
-	void CalculateShadows(std::vector<std::pair<float, GameObject*>>& dynamic_to_draw, Viewport* viewport, std::vector<std::pair<float, GameObject*>>& static_to_draw, ComponentCamera* frustum_camera);
+	void CalculateShadows(std::vector<GameObject*>& dynamic_to_draw, Viewport* viewport, std::vector<GameObject*>& static_to_draw, ComponentCamera* frustum_camera);
 	void DrawRay();
 	bool CleanUp();
 
@@ -160,7 +160,7 @@ public:
 	void MoveComponentUp(GameObject* object, Component* component, bool top);
 	
 	// get object
-	GameObject* GetGameObjectByID(const u64& id);
+	GameObject* GetGameObjectByID(const u64 id);
 
 	//reparent object in the next preupdate
 	void ReparentGameObject(GameObject* object, GameObject* next_parent, bool to_cntrlZ = true);
@@ -321,6 +321,8 @@ public:
 	std::list<SpotLightProperties*> spot_light_properites;
 	std::vector<std::pair<u64, GameObject**>> to_add;
 
+	std::map<Component*, std::function<void()>> debug_draw_list;
+
 	std::string sceneNameToChange;
 
 	WaterFrameBuffers* wfbos = nullptr;
@@ -336,11 +338,5 @@ private:
 
 
 	std::list<InvokeInfo*> invokes;
-
-	// Lights knowledge
-	uint num_of_dir_lights = 0u;
-	uint num_of_point_lights = 0u;
-	uint num_of_spot_lights = 0u;
-	uint num_of_area_lights = 0u;
 };
 

@@ -25,6 +25,7 @@ class __declspec(dllexport) GameObject
 	friend class Component;
 	friend class ComponentCamera;
 	friend class ComponentParticleSystem;
+	friend class ComponentTrail;
 	friend class ComponentLightDirectional;
 	friend class ComponentLightSpot;
 	friend class ComponentLightPoint;
@@ -55,9 +56,10 @@ class __declspec(dllexport) GameObject
 	friend class ComponentSphereCollider;
 	friend class ComponentCapsuleCollider;
 	friend class ComponentConvexHullCollider;
-	friend class ComponentPointConstraint;
+	friend class ComponentConfigurableJoint;
 	friend class ComponentRigidBody;
 	friend class ComponentCharacterController;
+	friend class ComponentJoint;
 
 	friend class PanelHierarchy;
 	friend class PanelAnimTimeline;
@@ -187,11 +189,11 @@ private:
 	void OnStop();
 
 	// here we call Component Mesh, Material & light
-	void DrawScene(ComponentCamera* camera);
-	void DrawGame(ComponentCamera* camera);
 	void PreDrawGame(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position);
 	void PreDrawScene(ComponentCamera* camera, const float4x4& ViewMat, const float4x4& ProjMatrix, const float3& position);
-	void SetDrawList(std::vector<std::pair<float, GameObject*>>* to_draw, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera);
+	void DrawGame();
+	void DrawScene(); 
+	void SetDrawList(std::vector<std::pair<float, GameObject*>>* meshes_to_draw, std::vector<std::pair<float, GameObject*>>* meshes_to_draw_transparency, std::vector<GameObject*>* dynamic_objects, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera);
 
 	ComponentCanvas* GetCanvas();
 
@@ -264,8 +266,8 @@ private:
 
 	// find
 	GameObject* Find(const char* name);
-	GameObject* GetGameObjectByID(const u64& id);
-	GameObject* GetGameObjectByIDReverse(const u64& id);
+	GameObject* GetGameObjectByID(const u64 id);
+	GameObject* GetGameObjectByIDReverse(const u64 id);
 	GameObject* FindTag(const char* tag_to_find);
 	void FindTags(const char* tag_to_find, std::vector<GameObject*>* objects);
 

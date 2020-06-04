@@ -1,0 +1,190 @@
+{
+    "Controller": {
+        "Name": "CiriCloneController",
+        "NumStates": 9,
+        "NumTransitions": 7,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "7250869410207821458"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "17791728914183688181"
+            },
+            {
+                "Name": "Dash",
+                "Speed": 1,
+                "Clip": "10102294807834635566"
+            },
+            {
+                "Name": "Combo",
+                "Speed": 2,
+                "Clip": "7248207069647093727"
+            },
+            {
+                "Name": "Combo2",
+                "Speed": 2,
+                "Clip": "18170072330846271788"
+            },
+            {
+                "Name": "Combo3",
+                "Speed": 2,
+                "Clip": "14815255185429996614"
+            },
+            {
+                "Name": "Scream",
+                "Speed": 3,
+                "Clip": "10301984109761866307"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 1,
+                "Clip": "2539962578311142380"
+            },
+            {
+                "Name": "Spawn",
+                "Speed": 1,
+                "Clip": "16989326587477936744"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Combo",
+                "Target": "Combo2",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Combo2",
+                "Target": "Combo3",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Combo3",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Dash",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Scream",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Spawn",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": []
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [],
+        "BoolParameters": [],
+        "Events": [
+            {
+                "Event_Id": "Ciri::MiniScream",
+                "Animation_Id": "10301984109761866307",
+                "Frame": 53,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::ActivateCollider",
+                "Animation_Id": "7248207069647093727",
+                "Frame": 25,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::DeactivateCollider",
+                "Animation_Id": "7248207069647093727",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::ActivateCollider",
+                "Animation_Id": "18170072330846271788",
+                "Frame": 33,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::DeactivateCollider",
+                "Animation_Id": "18170072330846271788",
+                "Frame": 37,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::ActivateCollider",
+                "Animation_Id": "14815255185429996614",
+                "Frame": 31,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::DeactivateCollider",
+                "Animation_Id": "14815255185429996614",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::SpawnAttackParticle",
+                "Animation_Id": "7248207069647093727",
+                "Frame": 10,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::SpawnAttackParticle",
+                "Animation_Id": "18170072330846271788",
+                "Frame": 26,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ciri::SpawnAttackParticle",
+                "Animation_Id": "14815255185429996614",
+                "Frame": 18,
+                "Type": 2
+            },
+            {
+                "Event_Id": "831621349",
+                "Animation_Id": "2539962578311142380",
+                "Frame": 5,
+                "Type": 0
+            }
+        ]
+    }
+}

@@ -1,19 +1,20 @@
-#include "PlayerController.h"
-#include "State.h"
-#include "Effect.h"
+#include "GameManager.h"
 #include "RumblerManager.h"
 #include "EnemyManager.h"
-#include "Enemy.h"
-#include "GameManager.h"
 #include "PlayerManager.h"
-#include "PlayerProjectile.h"
-#include "ParticlePool.h"
-#include "..\..\Alien Engine\ParticleEmitter.h"
-#include "PlayerAttacks.h"
 #include "EffectsFactory.h"
 #include "CameraShake.h"
 #include "RumblerManager.h"
+#include "ParticlePool.h"
+
 #include "UI_Char_Frame.h"
+
+#include "PlayerController.h"
+#include "PlayerProjectile.h"
+
+#include "Enemy.h"
+
+#include "PlayerAttacks.h"
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
@@ -27,6 +28,15 @@ Attack_Tags GetTag(std::string str)
 	return Attack_Tags::T_None;
 }
 
+static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon} };
+
+Collider_Type GetColliderType(std::string str)
+{
+	if (auto it = coll_table.find(str); it != coll_table.end()) {
+		return it->second;
+	}
+	return Collider_Type::C_Box;
+}
 
 PlayerAttacks::PlayerAttacks() : Alien()
 {
@@ -39,8 +49,15 @@ PlayerAttacks::~PlayerAttacks()
 void PlayerAttacks::Start()
 {
 	player_controller = GetComponent<PlayerController>();
-	collider = game_object->GetChild("Attacks_Collider")->GetComponent<ComponentBoxCollider>();
-	collider->SetEnable(false);
+
+	colliders = game_object->GetChild("Attacks_Collider")->GetComponents<ComponentCollider>();
+	if (weapon_obj)
+		colliders.push_back(weapon_obj->GetComponent<ComponentCollider>());
+
+	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
+	{
+		(*it)->SetEnable(false);
+	}
 	
 	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
@@ -60,6 +77,7 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 	{
 		if (current_attack)
 		{
+			player_controller->ReleaseAttackParticle();
 			//take the links of the attack we were doing so we can continue the combo after the spell.
 			spells[spell_index]->heavy_attack_link = current_attack->heavy_attack_link;
 			spells[spell_index]->light_attack_link = current_attack->light_attack_link;
@@ -93,7 +111,7 @@ void PlayerAttacks::UpdateCurrentAttack()
 		SnapToTarget();
 	else
 	{
-		player_controller->player_data.speed += player_controller->player_data.speed * player_controller->player_data.slow_speed * Time::GetDT(); //SLOW DOWN
+		player_controller->player_data.velocity += player_controller->player_data.velocity * player_controller->player_data.slow_speed * Time::GetDT(); //SLOW DOWN
 	}
 		
 	//IF ANIM FINISHED 
@@ -107,11 +125,12 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 	if (can_execute_input && next_attack != AttackType::NONE)
 	{
-		player_controller->ReleaseAttackParticle();
 		if (next_attack == AttackType::SPELL)
 			StartSpell(next_spell);
 		else
 			StartAttack(next_attack);
+		
+		next_attack = AttackType::NONE;
 	}
 }
 
@@ -121,6 +140,7 @@ void PlayerAttacks::DoAttack()
 	can_execute_input = false;
 	next_attack = AttackType::NONE;
 	current_target = nullptr;
+	current_attack->current_collider = 0;
 	distance_snapped = 0.0f;
 	current_attack->enemies_hit.clear();
 
@@ -143,6 +163,7 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 	}
 	else
 	{
+		player_controller->ReleaseAttackParticle();
 		if (attack == AttackType::LIGHT)
 		{
 			if (current_attack->light_attack_link)
@@ -158,9 +179,6 @@ void PlayerAttacks::SelectAttack(AttackType attack)
 				current_attack = base_heavy_attack;
 		}		
 	}
-
-	if(GameManager::instance->player_manager && current_attack && current_attack->IsLast())
-		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 }
 
 std::vector<std::string> PlayerAttacks::GetFinalAttacks()
@@ -195,8 +213,10 @@ void PlayerAttacks::CancelAttack()
 	if (current_attack != nullptr)
 	{
 		player_controller->ReleaseAttackParticle();
+		if(colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+			colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
+		
 		current_attack = nullptr;
-		collider->SetEnable(false);
 	}
 }
 
@@ -234,7 +254,7 @@ void PlayerAttacks::SnapToTarget()
 	float3 velocity = transform->forward * speed;
 	distance_snapped += velocity.Length() * Time::GetDT();
 
-	player_controller->player_data.speed = velocity;
+	player_controller->player_data.velocity = velocity;
 }
 
 bool PlayerAttacks::FindSnapTarget()
@@ -244,7 +264,7 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0 && !(*i)->game_object_attached->GetComponent<Enemy>()->IsDead())
 		{
 			enemies_in_range.push_back((*i)->game_object_attached);
 		}
@@ -306,24 +326,53 @@ void PlayerAttacks::AttackMovement()
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
 		
-		player_controller->player_data.speed = direction * current_attack->info.movement_strength;
+		player_controller->player_data.velocity = direction * current_attack->info.movement_strength;
 	}	
 }
 
 void PlayerAttacks::ActivateCollider()
 {
-	if (collider && current_attack)
+	if (current_attack && colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
 	{
-		collider->SetCenter(current_attack->info.collider_position);
-		collider->SetSize(current_attack->info.collider_size);
-		collider->SetEnable(true);
+		switch (current_attack->info.colliders[current_attack->current_collider].type)
+		{
+		case Collider_Type::C_Sphere:
+		{
+			ComponentSphereCollider* sphere_collider = (ComponentSphereCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
+			sphere_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
+			sphere_collider->SetRadius(current_attack->info.colliders[current_attack->current_collider].radius);
+			sphere_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		}
+			break;
+		default:
+		{
+			ComponentBoxCollider* box_collider = (ComponentBoxCollider*)colliders[(int)current_attack->info.colliders[current_attack->current_collider].type];
+			box_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
+			box_collider->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
+			box_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+		}
+			break;
+		}
+		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(true);
+	}
+}
+
+void PlayerAttacks::UpdateCollider()
+{
+	if (current_attack->current_collider + 1 < current_attack->info.colliders.size())
+	{
+		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
+		current_attack->current_collider++;
+		ActivateCollider();
 	}
 }
 
 void PlayerAttacks::DeactivateCollider()
 {
-	if(collider)
-		collider->SetEnable(false);
+	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
+	{
+		(*it)->SetEnable(false);
+	}
 }
 
 void PlayerAttacks::CastSpell()
@@ -331,9 +380,8 @@ void PlayerAttacks::CastSpell()
 	if (current_attack)
 	{
 		LOG("Casting Spell %s", current_attack->info.name.c_str());
-		if (!current_attack->HasTag(Attack_Tags::T_Chaining))
-			player_controller->PlayAttackParticle();
-
+		player_controller->PlayAttackParticle();
+		player_controller->audio->StartSound(current_attack->info.audio_name.c_str());
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
 
 		if(player_controller->HUD)
@@ -343,6 +391,8 @@ void PlayerAttacks::CastSpell()
 		{
 			if (GameManager::instance->rumbler_manager)
 			{ 
+				shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+
 				if (strcmp("Igni", current_attack->info.name.c_str()) == 0)
 					GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index, 0.2);
 				else 
@@ -372,11 +422,15 @@ void PlayerAttacks::CastSpell()
 			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particle_spawn_positions[1]->transform->GetGlobalPosition());
 
+			shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
 			Quat rot = projectile_go->transform->GetGlobalRotation();
 			rot = rot.LookAt(projectile_go->transform->forward, direction, projectile_go->transform->up, float3::unitY());
 			projectile_go->transform->SetGlobalRotation(rot);
-			projectile_go->GetComponent<PlayerProjectile>()->direction = direction;
+			PlayerProjectile* projectile = projectile_go->GetComponent<PlayerProjectile>();
+			projectile->direction = direction;
+			projectile->player = player_controller;
 
 			if (GameManager::instance->rumbler_manager)
 				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::INCREASING, player_controller->controller_index);
@@ -387,6 +441,11 @@ void PlayerAttacks::CastSpell()
 void PlayerAttacks::OnHit(Enemy* enemy)
 {
 	current_attack->enemies_hit.push_back(enemy);
+	if (current_attack->info.shake == 1)
+		shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+	
+	if (GameManager::instance->player_manager && !current_attack->HasTag(Attack_Tags::T_Spell) && current_attack->IsLast())
+		GameManager::instance->player_manager->IncreaseUltimateCharge(5);
 
 	if (current_attack->HasTag(Attack_Tags::T_Debuff))
 	{
@@ -399,7 +458,7 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 		{
 			SpawnChainParticle(this->game_object->transform->GetGlobalPosition() , enemy->transform->GetGlobalPosition());
 		}
-		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), 4);
+		std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(enemy->transform->GetGlobalPosition(), current_attack->info.chain_range);
 
 		for (auto it = colliders.begin(); it != colliders.end(); ++it)
 		{
@@ -430,8 +489,8 @@ void PlayerAttacks::AllowCombo()
 
 bool PlayerAttacks::CanBeInterrupted()
 {
-	if (collider)
-		return !collider->IsEnabled();
+	if (colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+		return !colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->IsEnabled();
 	else
 		return true;
 }
@@ -450,13 +509,46 @@ float3 PlayerAttacks::GetMovementVector()
 	return direction_vector;
 }
 
+float3 PlayerAttacks::GetKnockBack(ComponentTransform* enemy_transform)
+{
+	float3 knockback = float3::zero();
+
+	if (current_attack)
+	{
+		float3 enemy_direction = (enemy_transform->GetGlobalPosition() - player_controller->game_object->transform->GetGlobalPosition()).Normalized();
+		enemy_direction.y = 0;
+		if (current_attack->info.knock_direction.z != 0)
+		{
+			knockback = enemy_direction * current_attack->info.knock_direction.z;
+		}
+		if (current_attack->info.knock_direction.y != 0)
+		{
+			knockback += float3::unitY() * current_attack->info.knock_direction.y;
+		}
+		if (current_attack->info.knock_direction.x != 0)
+		{
+			knockback += Quat::RotateAxisAngle(float3::unitY(), -90 * current_attack->info.knock_direction.x) * enemy_direction;
+		}
+		//float2 tmp_f = float2(player_controller->game_object->transform->forward.x, player_controller->game_object->transform->forward.z);
+		//float2 tmp_e = float2(enemy_direction.x, enemy_direction.z);
+		//float angle = acos(math::Dot(tmp_f, tmp_e) / (tmp_f.Length() * tmp_e.Length()));
+
+		//knockback = player_controller->game_object->transform->GetGlobalMatrix().MulDir(current_attack->info.knock_direction).Normalized();
+		//knockback = Quat::RotateAxisAngle(float3::unitY(), angle) * knockback;
+
+		knockback *= current_attack->info.stats["KnockBack"].GetValue();
+	}
+
+	return knockback;
+}
+
 void PlayerAttacks::AttackShake()
 {
 	if (current_attack->info.shake == 1)
 	{
 		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
-		if (GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);
+		/*if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);*/
 	}
 }
 
@@ -488,18 +580,54 @@ void PlayerAttacks::CreateAttacks()
 		{
 			Attack::AttackInfo info;
 
+			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
 			info.name = attack_combo->GetString("name");
 			info.input = attack_combo->GetString("button");
 			info.particle_name = attack_combo->GetString("particle_name");
 			info.particle_pos = float3(attack_combo->GetNumber("particle_pos.pos_x"),
 				attack_combo->GetNumber("particle_pos.pos_y"),
 				attack_combo->GetNumber("particle_pos.pos_z"));
-			info.collider_position = float3(attack_combo->GetNumber("collider.pos_x"),
-				attack_combo->GetNumber("collider.pos_y"),
-				attack_combo->GetNumber("collider.pos_z"));
-			info.collider_size = float3(attack_combo->GetNumber("collider.width"),
-				attack_combo->GetNumber("collider.height"),
-				attack_combo->GetNumber("collider.depth"));
+
+			JSONArraypack* colliders_array = attack_combo->GetArray("colliders");
+			if(colliders_array)
+			{
+				colliders_array->GetFirstNode();
+				for (uint j = 0; j < colliders_array->GetArraySize(); j++)
+				{
+					Attack::AttackCollider collider;
+					collider.type = GetColliderType(colliders_array->GetString("type"));
+					if (collider.type == Collider_Type::C_Sphere)
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.radius = colliders_array->GetNumber("radius");
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+					else
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.size = float3(colliders_array->GetNumber("width"),
+							colliders_array->GetNumber("height"),
+							colliders_array->GetNumber("depth"));
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+
+					info.colliders.push_back(collider);
+					colliders_array->GetAnotherNode();
+				}
+			}
+
+			info.knock_direction = float3(attack_combo->GetNumber("knock_back.x"),
+				attack_combo->GetNumber("knock_back.y"),
+				attack_combo->GetNumber("knock_back.z"));
+
 			info.freeze_time = attack_combo->GetNumber("freeze_time");
 			info.movement_strength = attack_combo->GetNumber("movement_strength");
 			info.activation_frame = attack_combo->GetNumber("activation_frame");
@@ -510,8 +638,6 @@ void PlayerAttacks::CreateAttacks()
 			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
 			info.snap_detection_range = attack_combo->GetNumber("snap_detection_range");
 			info.min_distance_to_target = attack_combo->GetNumber("min_distance_to_target");
-
-			Stat::FillStats(info.stats, attack_combo->GetArray("stats"));
 
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
@@ -529,17 +655,49 @@ void PlayerAttacks::CreateAttacks()
 		{
 			Attack::AttackInfo info;
 
+			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 			info.name = spells_json->GetString("name");
 			info.particle_name = spells_json->GetString("particle_name");
 			info.particle_pos = float3(spells_json->GetNumber("particle_pos.pos_x"),
 				spells_json->GetNumber("particle_pos.pos_y"),
 				spells_json->GetNumber("particle_pos.pos_z"));
-			info.collider_position = float3(spells_json->GetNumber("collider.pos_x"),
-				spells_json->GetNumber("collider.pos_y"),
-				spells_json->GetNumber("collider.pos_z"));
-			info.collider_size = float3(spells_json->GetNumber("collider.width"),
-				spells_json->GetNumber("collider.height"),
-				spells_json->GetNumber("collider.depth"));
+
+			JSONArraypack* colliders_array = spells_json->GetArray("colliders");
+			if (colliders_array)
+			{
+				colliders_array->GetFirstNode();
+				for (uint j = 0; j < colliders_array->GetArraySize(); j++)
+				{
+					Attack::AttackCollider collider;
+					collider.type = GetColliderType(colliders_array->GetString("type"));
+					if (collider.type == Collider_Type::C_Sphere)
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.radius = colliders_array->GetNumber("radius");
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+					else
+					{
+						collider.position = float3(colliders_array->GetNumber("pos_x"),
+							colliders_array->GetNumber("pos_y"),
+							colliders_array->GetNumber("pos_z"));
+						collider.size = float3(colliders_array->GetNumber("width"),
+							colliders_array->GetNumber("height"),
+							colliders_array->GetNumber("depth"));
+						collider.rotation = float3(colliders_array->GetNumber("rot_x"),
+							colliders_array->GetNumber("rot_y"),
+							colliders_array->GetNumber("rot_z"));
+					}
+
+					info.colliders.push_back(collider);
+					colliders_array->GetAnotherNode();
+				}
+			}
+
 			info.movement_strength = spells_json->GetNumber("movement_strength");
 			info.activation_frame = spells_json->GetNumber("activation_frame");
 			info.max_distance_traveled = spells_json->GetNumber("max_distance_traveled");
@@ -548,8 +706,11 @@ void PlayerAttacks::CreateAttacks()
 			info.prefab_to_spawn = spells_json->GetString("prefab_to_spawn");
 			info.snap_detection_range = spells_json->GetNumber("snap_detection_range");
 			info.min_distance_to_target = spells_json->GetNumber("min_distance_to_target");
+			info.audio_name = spells_json->GetString("audio_name");
+			info.knock_direction = float3(spells_json->GetNumber("knock_back.x"),
+				spells_json->GetNumber("knock_back.y"),
+				spells_json->GetNumber("knock_back.z"));
 
-			Stat::FillStats(info.stats, spells_json->GetArray("stats"));
 
 			JSONArraypack* tags = spells_json->GetArray("tags");
 			uint num_tags = tags->GetArraySize();
@@ -559,7 +720,14 @@ void PlayerAttacks::CreateAttacks()
 				for (uint j = 0; j < num_tags; j++)
 				{
 					std::string tag_str = tags->GetString("tag");
-					info.tags.push_back(GetTag(tag_str));
+					Attack_Tags tag = GetTag(tag_str);
+					if (tag == Attack_Tags::T_Chaining)
+					{
+						info.chain_range = spells_json->GetNumber("chain_range");
+						info.chain_particle = spells_json->GetString("chain_particle");
+					}	
+					info.tags.push_back(tag);
+
 					tags->GetAnotherNode();
 				}
 			}
@@ -609,7 +777,9 @@ void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 	float distance = from.DistanceSq(to);
 	
 	float3 direction = (to - from).Normalized();
-	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.particle_name, mid_point);
+	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(current_attack->info.chain_particle, mid_point);
+	if (new_particle == nullptr)
+		return;
 
 	Quat rot = new_particle->transform->GetGlobalRotation().LookAt(new_particle->transform->forward, direction, new_particle->transform->up, float3::unitY());
 	new_particle->transform->SetGlobalRotation(rot);

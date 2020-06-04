@@ -17,6 +17,15 @@ ComponentAnimatedImage::ComponentAnimatedImage(GameObject* obj): ComponentUI(obj
 	tabbable = false;
 }
 
+ComponentAnimatedImage::~ComponentAnimatedImage()
+{
+	for (auto item = images.begin(); item != images.end(); ++item)
+	{
+		if ((*item) != nullptr)
+			(*item)->DecreaseReferences();
+	}
+}
+
 bool ComponentAnimatedImage::DrawInspector()
 {
 	static bool check;
@@ -212,6 +221,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 		{
 			SetSize(tex->width, tex->height);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, tex->id);
 		}
 	}
@@ -271,6 +281,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 
 	glPopMatrix();
 

@@ -149,7 +149,7 @@ void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 		life_change = actual_life;
 		this->max_life = max_life;
 
-		if (life_percentate <= 0.15f)
+		if (life_percentate <= 0.35f)
 		{
 			low_life = true;
 			low_life_glow_time = Time::GetGameTime();
@@ -227,39 +227,50 @@ void UI_Char_Frame::StartFadeKillCount(int new_kill_count)
 // Effects
 void UI_Char_Frame::HitEffect(float lerp_time)
 {
-	//float lerp_portrait = 0.0f;
+	if (lerp_time >= 1.f)
+	{
+		lifebar->SetBarColor(1.0f, 1.0f, 1.0f, 1.f);
+		portrait->SetBackgroundColor(1.0f, 1.0f, 1.0f, 1.f);
+		return;
+	}
+
 	float lerp_life = 0.0f;
+	float blood_color = 0.0f;
 
 	if (lerp_time <= 0.5f)
 	{
-		//lerp_portrait = Maths::Lerp(1.0f, 0.5f, lerp_time * 2);
-		lerp_life = Maths::Lerp(1.0f, 0.575f, lerp_time * 2);
+		lerp_life = Maths::Lerp(1.0f, 0.f, lerp_time * 2);
+		blood_color = Maths::Lerp(1.0f, 0.5f, lerp_time * 2);
 	}
 	else
 	{
-		//lerp_portrait = Maths::Lerp(0.5f, 1.0f, (lerp_time - 0.5f) * 2);
-		lerp_life = Maths::Lerp(0.575f, 1.0f, (lerp_time - 0.5f) * 2);
+		lerp_life = Maths::Lerp(0.f, 1.0f, (lerp_time - 0.5f) * 2);
+		blood_color = Maths::Lerp(0.5f, 1.0f, (lerp_time - 0.5f) * 2);
 	}
 
-	//portrait->SetBackgroundColor(1.f, lerp_portrait, lerp_portrait, 1.f);
-	lifebar->SetBarColor(1.f, lerp_life, lerp_life, 1.f);
+	lifebar->SetBarColor(blood_color, lerp_life, lerp_life, 1.f);
+	portrait->SetBackgroundColor(blood_color, lerp_life, lerp_life, 1.f);
+	
 }
 
 void UI_Char_Frame::LowLifeGlow()
 {
 	float color = 0.0f;
+	float blood_color = 0.0f;
 	float t = (Time::GetGameTime() - low_life_glow_time);
 
 	if (low_life_sign < 0)
 	{
 		color = Maths::Lerp(1.0f, 0.f, t);
+		blood_color = Maths::Lerp(1.0f, 0.5f, t);
 	}
 	else
 	{
 		color = Maths::Lerp(0.f, 1.f, t);
+		blood_color = Maths::Lerp(0.5f, 1.f, t);
 	}
 
-	lifebar->SetBarColor(1, color, color, 1);
+	lifebar->SetBarColor(blood_color, color, color, 1);
 
 	if (t >= 1)
 	{

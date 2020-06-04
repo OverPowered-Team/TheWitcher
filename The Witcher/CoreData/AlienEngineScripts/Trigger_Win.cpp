@@ -22,17 +22,47 @@ void Trigger_Win::Update()
 
 void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 {
-	Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
-	Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-
-	if (!Scores_Data::won_level1)
+	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) 
 	{
-		Scores_Data::won_level1 = true;
-	}
-	else
-	{
-		Scores_Data::won_level2 = true;
-	}
+		std::string current_scene = SceneManager::GetCurrentScene();
 
-	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
+		{
+			SceneManager::LoadScene("boss_test");
+		}
+
+		if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
+		{
+			Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+			Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+		}
+		else
+		{
+			Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
+			Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+		}
+
+		Scores_Data::last_scene = SceneManager::GetCurrentScene();
+
+		//if (strcmp(current_scene.c_str(), "Lvl_1") == 0)
+		//{
+		//	Scores_Data::won_level1 = true;
+		//	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		//}
+		//else if (strcmp(current_scene.c_str(), "Level_Mahakam") == 0)
+		//{
+		//	SceneManager::LoadScene("Wagonnetes");
+		//}
+		//else 
+		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
+		{
+			SceneManager::LoadScene("boss_test");
+		}
+		else
+		{
+			Scores_Data::won_level2 = true;
+			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		}
+	}
+	
 }

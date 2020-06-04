@@ -38,7 +38,7 @@ void RootLeshen::Update()
 		}
 	}
 	else if (state == ROOTSTATE::ROOT) {
-		transform->AddPosition(rooted_effect_direction * root_speed);
+		//transform->AddPosition(rooted_effect_direction * root_speed);
 		if (root_time <= total_root_time)
 			root_time += Time::GetDT();
 		else {
@@ -51,20 +51,21 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
-		if (player_ctrl && !player_ctrl->is_immune && player_ctrl->can_move) {
+		if (player_ctrl && !player_ctrl->is_immune && player_ctrl->can_move && state != ROOTSTATE::ROOT) {
 			state = ROOTSTATE::ROOT;
 			transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
 			player_ctrl->ApplyRoot(total_root_time);
 			leshen->EndAction(game_object);
 			game_object->SetNewParent(player_ctrl->game_object);
 			game_object->transform->SetLocalPosition(float3::zero());
+			game_object->GetComponent<ComponentAnimator>()->PlayState("Root");
 		}
 		else {
 			LOG("There's no Player Controller in GO in ArrowScript!");
 		}
 	}
-	else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
-	{
-		GameObject::Destroy(game_object);
-	}
+	//else if (strcmp(collider->game_object_attached->GetTag(), "Enemy") != 0)
+	//{
+	//	GameObject::Destroy(game_object);
+	//}
 }

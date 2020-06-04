@@ -22,7 +22,13 @@ struct __declspec(dllexport) SpotLightProperties
 	float cut_off = 1.75f;
 	float outer_cut_off = 15.0f;
 
-	ComponentLightSpot* light = nullptr;
+	Component* light = nullptr;
+
+	bool isEnabled() const
+	{
+		return light->game_object_attached->IsEnabled() && enabled;
+	}
+
 };
 
 class __declspec(dllexport) ComponentLightSpot : public Component {
@@ -34,7 +40,7 @@ public:
 
 private:
 	void Update() override;
-	void DrawScene(ComponentCamera* camera) override;
+	void DrawScene() override;
 	void LightLogic();
 
 	bool DrawInspector();
@@ -57,5 +63,6 @@ private:
 
 	uint renderer_id = 0;
 
+public:
 	SpotLightProperties light_props;
 };

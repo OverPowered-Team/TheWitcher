@@ -29,8 +29,8 @@ void RelicManager::Update()
 
 void RelicManager::DropRelic(float3 position)
 {
-	int random_index = Random::GetRandomIntBetweenTwo(1, 80);
-	if (random_index > 0 && random_index <= 60)
+	int random_index = Random::GetRandomIntBetweenTwo(1, 100);
+	if (random_index > 0 && random_index <= 75)
 	{
 		random_index = Random::GetRandomIntBetweenTwo(1, 5);
 		switch (random_index)
@@ -54,7 +54,7 @@ void RelicManager::DropRelic(float3 position)
 			break;
 		}
 	}
-	else if (random_index <= 80)
+	else 
 	{
 		random_index = Random::GetRandomIntBetweenTwo(1, 4);
 		switch (random_index)
@@ -75,27 +75,4 @@ void RelicManager::DropRelic(float3 position)
 			break;
 		}
 	}
-	else if (random_index <= 95)
-	{
-		random_index = Random::GetRandomIntBetweenTwo(1, 4);
-		switch (random_index)
-		{
-		case 1:
-			GameObject::Instantiate(nature_soul, position);
-			break;
-		case 2:
-			GameObject::Instantiate(sea_soul, position);
-			break;
-		case 3:
-			GameObject::Instantiate(djinn_jar, position);
-			break;
-		case 4:
-			GameObject::Instantiate(strigas_claws, position);
-			break;
-		default:
-			break;
-		}
-	}
-	else if(random_index <= 100)
-		GameObject::Instantiate(witcher_rage, position);
 }

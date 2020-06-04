@@ -167,10 +167,9 @@ void PanelBuild::GetAllScenes(const std::vector<std::string>& directories, const
 		full_path_scenes.push_back(std::string(current_folder + files[i]));
 	}
 	if (!directories.empty()) {
-		std::vector<std::string> new_files;
-		std::vector<std::string> new_directories;
-
 		for (uint i = 0; i < directories.size(); ++i) {
+			std::vector<std::string> new_files;
+			std::vector<std::string> new_directories;
 			std::string dir = current_folder + directories[i] + "/";
 			App->file_system->DiscoverFiles(dir.data(), new_files, new_directories);
 			GetAllScenes(new_directories, new_files, dir);
@@ -344,6 +343,8 @@ void PanelBuild::CreateBuild()
 
 
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Engine Icons"), std::string(folder_location + "/Configuration/Engine Icons"), std::experimental::filesystem::copy_options::recursive);
+	CreateDirectoryA(std::string(folder_location + "/Configuration/EngineTextures").data(), NULL);
+	std::experimental::filesystem::copy(std::string(dir + "/Configuration/EngineTextures/Skybox"), std::string(folder_location + "/Configuration/EngineTextures/Skybox"), std::experimental::filesystem::copy_options::recursive);
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/Tags"), std::string(folder_location + "/Configuration/Tags"), std::experimental::filesystem::copy_options::recursive);
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/BuildSettings.alienBuild"), std::string(folder_location + "/Configuration/BuildSettings.alienBuild"));
 	std::experimental::filesystem::copy(std::string(dir + "/Configuration/DefaultConfiguration.json"), std::string(folder_location + "/Configuration/DefaultConfiguration.json"));

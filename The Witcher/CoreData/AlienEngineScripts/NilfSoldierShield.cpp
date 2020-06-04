@@ -4,6 +4,7 @@
 #include "EnemyManager.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
+#include "MusicController.h"
 
 NilfSoldierShield::NilfSoldierShield() : NilfgaardSoldier()
 {
@@ -20,14 +21,20 @@ void NilfSoldierShield::UpdateEnemy()
 	switch (state)
 	{
 	case NilfgaardSoldierState::IDLE:
-		if (distance < stats["VisionRange"].GetValue())
+		if (distance < stats["VisionRange"].GetValue() || is_obstacle)
 			state = NilfgaardSoldierState::MOVE;
 		break;
 
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
 		break;
-
+	case NilfgaardSoldierState::HIT:
+	{
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+	}
+	break;
 	case NilfgaardSoldierState::AUXILIAR:
 		if (stats["BlockRange"].GetValue() < distance)
 		{
@@ -35,6 +42,10 @@ void NilfSoldierShield::UpdateEnemy()
 			animator->PlayState("Idle");
 		}
 		Block();
+		break;
+
+	case NilfgaardSoldierState::GUARD:
+		Guard();
 		break;
 
 	case NilfgaardSoldierState::STUNNED:
@@ -52,6 +63,15 @@ void NilfSoldierShield::UpdateEnemy()
 		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill();
 		state = NilfgaardSoldierState::DEAD;
+		if (m_controller && is_combat)
+		{
+			is_combat = false;
+			m_controller->EnemyLostSight((Enemy*)this);
+		}
+		if (is_obstacle)
+		{
+			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+		}
 		break;
 	}
 	}
@@ -62,11 +82,9 @@ void NilfSoldierShield::Action()
 	int rand_num = Random::GetRandomIntBetweenTwo(0, 1);
 	if (rand_num == 0)
 	{
-		animator->PlayState("Block");
-		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
+		SetState("Block");
 		current_time = Time::GetGameTime();
 		is_blocked = true;
-		state = NilfgaardSoldierState::AUXILIAR;
 	}
 	else
 	{
@@ -120,29 +138,20 @@ bool NilfSoldierShield::CheckPlayerForward()
 		return false;
 }
 
-void NilfSoldierShield::OnTriggerEnter(ComponentCollider* collider)
+float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != NilfgaardSoldierState::DEAD) {
+	float damage = 0.0f;
 
-		if (is_blocked && CheckPlayerForward())
-		{
-			has_been_attacked = true;
-			current_time = Time::GetGameTime();
-			break_shield_attack++;
-			SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetLocalPosition()); // 1 is body position
-			audio_emitter->StartSound("SoldierBlock");
-		}
-		else
-		{
-			PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-			if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-			{
-				float dmg_received = player->attacks->GetCurrentDMG();
-				player->OnHit(this, GetDamaged(dmg_received, player));
-				last_player_hit = player;
-
-				HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-			}
-		}
+	if (is_blocked && CheckPlayerForward())
+	{
+		has_been_attacked = true;
+		current_time = Time::GetGameTime();
+		break_shield_attack++;
+		//SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
+		PlaySFX("Block");
 	}
+	else
+		damage = Enemy::GetDamaged(dmg, player, knock_back);
+
+	return damage;
 }

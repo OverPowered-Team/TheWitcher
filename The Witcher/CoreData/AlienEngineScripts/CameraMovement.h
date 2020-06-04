@@ -12,7 +12,8 @@ public:
 	//	MAX
 	//};
 	enum (CameraState,
-		DYNAMIC, MOVING_TO_DYNAMIC, FREE,
+		DYNAMIC, MOVING_TO_DYNAMIC, 
+		FREE, FREE_TO_DYNAMIC,
 		STATIC, MOVING_TO_STATIC,
 		AXIS, MOVING_TO_AXIS
 		);
@@ -50,6 +51,8 @@ public:
 	bool smooth_camera = true;
 	float smooth_cam_vel = 5.f;
 
+	bool search_players = false;
+
 	//TEST ALLOW MOVEMENT WHEN OTHER IS BLOCKING
 	float3 prev_middle = float3::zero();
 	int closest_player = -1;
@@ -69,6 +72,8 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->smooth_camera);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->smooth_cam_vel);
+
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->search_players);
 
 	return alien;
 }

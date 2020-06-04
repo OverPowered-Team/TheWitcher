@@ -107,7 +107,7 @@ protected:
 	void Reset() {}*/
 	void Clone(Component* clone) {}
 	void Update();
-	void DrawScene(ComponentCamera* camera) override;
+	void DrawScene() override;
 	bool DrawInspector();
 
 	void HandleAlienEvent(const AlienEvent& e);
