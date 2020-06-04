@@ -47,6 +47,8 @@ private:
 
 	float internal_timer = 0.0f;
 	float time_paused = 0.0f;
+
+	bool is_first_frame = true;
 };
 
 ALIEN_FACTORY Training_Zone* CreateTraining_Zone() {
