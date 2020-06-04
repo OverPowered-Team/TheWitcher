@@ -702,40 +702,54 @@ void PlayerController::HitFreeze(float freeze_time)
 		return;
 
 	float speed = animator->GetCurrentStateSpeed();
-	animator->SetCurrentStateSpeed(0);
-	//PauseParticle();
+	std::string state_name = animator->GetCurrentStateName();
+
+	LOG("FREEZING %s",state_name.c_str());
+	animator->SetStateSpeed(state_name.c_str(), 0);
+	PauseParticle();
 	is_immune = true;
-	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
+	Invoke([this, speed, state_name]() -> void {this->RemoveFreeze(speed, state_name); }, freeze_time);
 }
 
-void PlayerController::RemoveFreeze(float speed)
+void PlayerController::RemoveFreeze(float speed, std::string state_name)
 {
-	//ResumeParticle();
-	animator->SetCurrentStateSpeed(speed);
+	ResumeParticle();
+	animator->SetStateSpeed(state_name.c_str(), speed);
 	
 	is_immune = false;
 }
 
 void PlayerController::PauseParticle()
 {
-	for (auto it = particles.begin(); it != particles.end(); ++it)
-	{
-		if (std::strcmp((*it)->GetName(),attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
-		{
-			(*it)->GetComponent<ParticleSystem>()->Pause();
+	if (!attacks->GetCurrentAttack())
+		return;
 
-			return;
-		}
-	}
-}
-
-void PlayerController::ResumeParticle()
-{
 	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
 		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 		{
-			(*it)->GetComponent<ParticleSystem>()->Play();
+			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
+			if (p_system)
+				p_system->Pause();
+
+			return;
+		}
+	}
+
+}
+
+void PlayerController::ResumeParticle()
+{
+	if (!attacks->GetCurrentAttack())
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
+			if (p_system)
+				p_system->Play();
 
 			return;
 		}

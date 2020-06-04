@@ -484,7 +484,8 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 void PlayerAttacks::AllowCombo()
 {
 	can_execute_input = true;
-	player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());
+	if(current_attack)
+		player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());
 }
 
 bool PlayerAttacks::CanBeInterrupted()
