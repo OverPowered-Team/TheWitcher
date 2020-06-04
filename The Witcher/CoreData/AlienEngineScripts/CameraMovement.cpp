@@ -1,5 +1,6 @@
 #include "CameraMovement.h"
 #include "PlayerController.h"
+#include "CutsceneCamera.h"
 
 CameraMovement::CameraMovement() : Alien()
 {
@@ -26,48 +27,62 @@ void CameraMovement::Update()
 {
     switch (state) {
     case CameraState::DYNAMIC: {
-        if (smooth_camera) {
-            float3 pos = transform->GetGlobalPosition();
-            transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
+        if (is_cinematic)
+        {
+            prev_state = state;
+            state = CameraState::MOVING_TO_CINEMATIC;
         }
-        else
-            transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        else {
+            if (smooth_camera) {
+                float3 pos = transform->GetGlobalPosition();
+                transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
+            }
+            else
+                transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        }
         break;
     }
     case CameraState::FREE: {
-        float3 pos = players[closest_player]->transform->GetGlobalPosition() + prev_middle;
-        
-        auto frustum = GetComponent<ComponentCamera>()->frustum;
-        frustum.pos = pos;
-        bool inside = true;
-        AABB aabbs[2] = { players[0]->GetComponent<PlayerController>()->max_aabb, players[1]->GetComponent<PlayerController>()->max_aabb };
-        for (int i = 0; i < players.size(); ++i)
+        if (is_cinematic)
         {
-            aabbs[i].minPoint += players[i]->transform->GetGlobalPosition();
-            aabbs[i].maxPoint += players[i]->transform->GetGlobalPosition();
-            if (!frustum.Contains(aabbs[i]))
-            {
-                inside = false;
-            }
+            prev_state = state;
+            state = CameraState::MOVING_TO_CINEMATIC;
         }
-        if (inside)
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + (pos - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+        else {
+            float3 pos = players[closest_player]->transform->GetGlobalPosition() + prev_middle;
 
-        inside = true;
-        pos = CalculateMidPoint() + trg_offset;
-        frustum.pos = pos;
-        for (int i = 0; i < players.size(); ++i)
-        {
-            if (!frustum.Contains(aabbs[i]))
+            auto frustum = GetComponent<ComponentCamera>()->frustum;
+            frustum.pos = pos;
+            bool inside = true;
+            AABB aabbs[2] = { players[0]->GetComponent<PlayerController>()->max_aabb, players[1]->GetComponent<PlayerController>()->max_aabb };
+            for (int i = 0; i < players.size(); ++i)
             {
-                inside = false;
+                aabbs[i].minPoint += players[i]->transform->GetGlobalPosition();
+                aabbs[i].maxPoint += players[i]->transform->GetGlobalPosition();
+                if (!frustum.Contains(aabbs[i]))
+                {
+                    inside = false;
+                }
             }
-        }
-        if (inside) {
-            if (prev_state == CameraState::FREE)
-                prev_state = CameraState::FREE_TO_DYNAMIC;
+            if (inside)
+                transform->SetGlobalPosition(transform->GetGlobalPosition() + (pos - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
 
-            state = prev_state;
+            inside = true;
+            pos = CalculateMidPoint() + trg_offset;
+            frustum.pos = pos;
+            for (int i = 0; i < players.size(); ++i)
+            {
+                if (!frustum.Contains(aabbs[i]))
+                {
+                    inside = false;
+                }
+            }
+            if (inside) {
+                if (prev_state == CameraState::FREE)
+                    prev_state = CameraState::FREE_TO_DYNAMIC;
+
+                state = prev_state;
+            }
         }
         break;
     }
@@ -77,16 +92,28 @@ void CameraMovement::Update()
         break;
     }
     case CameraState::STATIC:
-        LookAtMidPoint();
+        if (is_cinematic)
+        {
+            prev_state = state;
+            state = CameraState::MOVING_TO_CINEMATIC;
+        }
+        else
+            LookAtMidPoint();
         break;
     case CameraState::AXIS: {
-        if (smooth_camera)
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
-        else {
-            transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
+        if (is_cinematic)
+        {
+            prev_state = state;
+            state = CameraState::MOVING_TO_CINEMATIC;
         }
-        LookAtMidPoint();
-        LOG("POSITION X: %f Y: %f Z: %f", transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
+        else {
+            if (smooth_camera)
+                transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+            else {
+                transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
+            }
+            LookAtMidPoint();
+        }
         break;
     }
     case CameraState::MOVING_TO_AXIS: {
@@ -134,6 +161,32 @@ void CameraMovement::Update()
             //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent * time_percent));//Even less fast on the beggining
         }
         LookAtMidPoint();
+        break;
+    }
+    case CameraState::MOVING_TO_CINEMATIC:
+    {
+        current_transition_time += Time::GetDT();
+        float3 trg_pos = CalculateMidPoint() + cutscene_game_object->transform->GetGlobalPosition();
+        float3 curr_pos = transform->GetGlobalPosition();
+        float min_dist = 0.1f;
+        if ((trg_pos - curr_pos).Length() < min_dist) {
+            LOG("Finished transition");
+            transform->SetGlobalPosition(trg_pos);
+            if (cutscene_game_object) {
+                cutscene_game_object->GetComponent<CutsceneCamera>()->PrepareCutscene();
+                state = CameraState::CINEMATIC;
+            }
+        }
+        else {
+            float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
+        }
+        break;
+    }
+    case CameraState::CINEMATIC: 
+    {
+        if(cutscene_game_object)
+            cutscene_game_object->GetComponent<CutsceneCamera>()->ExecuteCutscene();
         break;
     }
     }

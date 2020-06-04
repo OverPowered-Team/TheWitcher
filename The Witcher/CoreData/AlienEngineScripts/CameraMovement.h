@@ -15,7 +15,7 @@ public:
 		DYNAMIC, MOVING_TO_DYNAMIC, 
 		FREE, FREE_TO_DYNAMIC,
 		STATIC, MOVING_TO_STATIC,
-		AXIS, MOVING_TO_AXIS
+		AXIS, MOVING_TO_AXIS, CINEMATIC, MOVING_TO_CINEMATIC
 		);
 	enum (
 		CameraAxis,
@@ -53,6 +53,8 @@ public:
 
 	bool search_players = false;
 
+	bool is_cinematic = false;
+	GameObject* cutscene_game_object = nullptr;
 	//TEST ALLOW MOVEMENT WHEN OTHER IS BLOCKING
 	float3 prev_middle = float3::zero();
 	int closest_player = -1;
@@ -72,6 +74,9 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->smooth_camera);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->smooth_cam_vel);
+	
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->is_cinematic);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->cutscene_game_object);
 
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->search_players);
 
