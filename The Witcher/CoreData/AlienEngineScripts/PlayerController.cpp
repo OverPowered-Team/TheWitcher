@@ -569,7 +569,18 @@ void PlayerController::AddEffect(Effect* _effect)
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
 	Effect* tmp_effect = (*it);
+	if (!tmp_effect)
+	{
+		LOG("Error trying to remove null effect.");
+		return it;
+	}
+
 	it = effects.erase(it);
+
+	if (tmp_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
+	}
 
 	if (dynamic_cast<AttackEffect*>(tmp_effect) != nullptr)
 	{
@@ -584,10 +595,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-	if (tmp_effect->spawned_particle != nullptr)
-	{
-		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
-	}
+
 
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{

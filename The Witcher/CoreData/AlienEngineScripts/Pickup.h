@@ -3,14 +3,11 @@
 #include "..\..\Alien Engine\Alien.h"
 #include "Macros/AlienScripts.h"
 
-class Enemy;
-class Effect;
-
 class ALIEN_ENGINE_API Pickup : public Alien {
 
 public:
-	Pickup() {};
-	virtual ~Pickup() {};
+	Pickup();
+	virtual ~Pickup();
 
 	void Start();
 	void Update();
