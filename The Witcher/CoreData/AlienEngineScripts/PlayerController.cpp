@@ -961,12 +961,20 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	}
 }
 
-void PlayerController::OnEnemyKill()
+void PlayerController::OnEnemyKill(uint enemy_type)
 {
 	LOG("ENEMY KILL");
+	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
+	{
+		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));
+	}
+
 	player_data.total_kills++;
-	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
+	player_data.type_kills[enemy_type]++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+
+	//UI
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 

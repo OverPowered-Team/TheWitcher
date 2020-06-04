@@ -366,7 +366,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetGlobalPosition());
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
-	if (stats["Health"].GetValue() == 0.0F) {
+	if (stats["Health"].GetValue() <= 0.0F) {
 
 		animator->SetBool("dead", true);
 		is_dead = true;

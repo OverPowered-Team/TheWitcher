@@ -94,7 +94,7 @@ void DrownedRange::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = DrownedState::DEAD;
 		animator->PlayState("Death");
-		last_player_hit->OnEnemyKill();
+		last_player_hit->OnEnemyKill((uint)type);
 		audio_emitter->StartSound("Play_Drowner_Death");
 		if (m_controller && is_combat)
 		{

@@ -45,6 +45,7 @@ public:
 		//RECOUNT
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+		std::map<uint, uint> type_kills;
 	};
 
 	struct DashData
@@ -103,7 +104,7 @@ public:
 	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void UpdateDashEffect();
-	void OnEnemyKill();
+	void OnEnemyKill(uint enemy_type);
 	void OnTriggerEnter(ComponentCollider* col);
 
 	void StartImmune() { is_immune = true; };

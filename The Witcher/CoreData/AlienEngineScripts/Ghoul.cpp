@@ -424,7 +424,7 @@ void Ghoul::Dying() // TODO: in other enemies
 	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 	animator->PlayState("Death");
 	audio_emitter->StartSound("GhoulDeath");
-	last_player_hit->OnEnemyKill();
+	last_player_hit->OnEnemyKill((uint)type);
 	state = GhoulState::DEAD;
 	if (m_controller && is_combat)
 	{
