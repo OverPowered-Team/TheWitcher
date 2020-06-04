@@ -362,8 +362,8 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 		can_get_interrupted = false;
 	}
-
-	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetGlobalPosition());
+	
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition());
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() <= 0.0F) {
