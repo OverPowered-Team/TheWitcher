@@ -308,7 +308,7 @@ void PlayerController::EffectsUpdate()
 				if (it_stats->first == "Health")
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-					if (player_data.stats["Health"].GetValue() == 0)
+					if (player_data.stats["Health"].GetValue() <= 0)
 					{
 						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
@@ -428,7 +428,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			return;
 		}
 
-		if (player_data.stats["Health"].GetValue() == 0.0f)
+		if (player_data.stats["Health"].GetValue() <= 0.0f)
 			return;
 
 		player_data.stats["Health"].DecreaseStat(dmg);
@@ -501,7 +501,7 @@ void PlayerController::AbsorbHit()
 			if (mods->identifier == "Absorb")
 			{
 				mods->amount--;
-				if (mods->amount == 0)
+				if (mods->amount <= 0)
 				{
 					RemoveEffect(it);
 				}
@@ -556,7 +556,7 @@ void PlayerController::AddEffect(Effect* _effect)
 	{
 		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
 		{
-			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time == 0)
+			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time <= 0)
 				it->second.ApplyEffect(_effect);
 		}
 	}
@@ -847,6 +847,10 @@ void PlayerController::IncreaseStat(std::string stat, float value)
 	if (stat_it != player_data.stats.end())
 	{
 		player_data.stats[stat].IncreaseStat(value);
+		if (stat == "Health" && HUD)
+		{
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+		}
 	}
 }
 

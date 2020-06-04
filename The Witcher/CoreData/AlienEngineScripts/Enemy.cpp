@@ -565,6 +565,9 @@ void Enemy::RemoveBattleCircle()
 
 void Enemy::AddBattleCircle(PlayerController* player_controller)
 {
+	if (is_dead)
+		return;
+
 	is_battle_circle = true;
 	player_controller->enemy_battle_circle.push_back(this);
 
@@ -582,7 +585,8 @@ void Enemy::AddAttacking(PlayerController* player_controller)
 {
 	player_controller->current_attacking_enemies++;
 	is_attacking = true;
-	SetState("Move");
+	if(!is_dead)
+		SetState("Move");
 }
 
 void Enemy::RemoveAttacking(PlayerController* player_controller)
