@@ -41,6 +41,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	damage_num->text = new ComponentText(damage_num->go);
 	damage_num->text->SetText(std::to_string((int)damage).c_str());
 	damage_num->text->SetColor(float3(0.961f, 0.961f, 0.961f));
+	damage_num->text->SetAlpha(1);
 	damage_num->current_timer = internal_timer;
 
 	if (player->controller_index == 1)
