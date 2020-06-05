@@ -185,15 +185,27 @@ void UI_DamageCount::DamageCount_Handling(int index)
 					if (index == 1)
 					{
 						damage_count1_time = internal_timer;
+						scaling_time1 = internal_timer;
 					}
 					else
 					{
 						damage_count2_time = internal_timer;
+						scaling_time2 = internal_timer;
 					}
-					
 				}
 
 				--iter;
+
+				if (index == 1)
+				{
+					is_scaling1 = true;
+					scaling_time1 = internal_timer;
+				}
+				else
+				{
+					is_scaling2 = true;
+					scaling_time2 = internal_timer;
+				}
 			}
 		}
 	}
@@ -202,15 +214,43 @@ void UI_DamageCount::DamageCount_Handling(int index)
 void UI_DamageCount::ScaleDamageCount(int index)
 {
 	GameObject* damage_count = nullptr;
+	float time = 0.0f;
 
 	if (index == 1)
 	{
 		damage_count = damagecount_player1->game_object_attached;
+		time = scaling_time1;
 	}
 	else
 	{
 		damage_count = damagecount_player2->game_object_attached;
+		time = scaling_time2;
 	}
 
+	float t = (internal_timer - time) / 0.5f;
+	float lerp = 0.0f;
 
+	if (t <= 0.5f)
+	{
+		lerp = Maths::Lerp(original_scale, original_scale * (1.f + 1.f / 4.f), t / 0.5f);
+	}
+	else
+	{
+		lerp = Maths::Lerp(original_scale * (1.f + 1.f / 4.f), original_scale, (t - 0.5f) / 0.5f);
+	}
+
+	damage_count->transform->SetLocalScale(float3(lerp, lerp, 1));
+
+	if (t >= 1)
+	{
+		damage_count->transform->SetLocalScale(float3(original_scale, original_scale, 1));
+		if (index == 1)
+		{
+			is_scaling1 = false;
+		}
+		else
+		{
+			is_scaling2 = false;
+		}
+	}
 }

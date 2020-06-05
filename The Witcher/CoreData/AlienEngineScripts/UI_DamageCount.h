@@ -63,6 +63,8 @@ private:
 	bool is_scaling2 = false;
 	float original_scale = 0.0f;
 
+	float scaling_time1 = 0.0f;
+	float scaling_time2 = 0.0f;
 	// --------------------------
 };
 
