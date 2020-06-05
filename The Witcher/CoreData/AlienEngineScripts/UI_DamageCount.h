@@ -12,8 +12,8 @@ public:
 	ComponentText* text = nullptr;
 	int damage = 0.0f;
 	float current_timer = 0.0f;
-	bool is_transitioning = false;
 	float starting_y_position = 0.0f;
+	bool is_last = false;
 };
 
 class ALIEN_ENGINE_API UI_DamageCount : public Alien {
@@ -43,7 +43,9 @@ private:
 private:
 
 	// vectors
+	std::vector<DamageNum*> transition_player1_damagenums;
 	std::vector<DamageNum*> player1_damagenums;
+	std::vector<DamageNum*> transition_player2_damagenums;
 	std::vector<DamageNum*> player2_damagenums;
 
 	ComponentText* damagecount_player1 = nullptr;

@@ -1,6 +1,7 @@
 #include "UI_DamageCount.h"
 #include "PlayerController.h"
 #include "Scores_Data.h"
+#include "PlayerAttacks.h"
 
 UI_DamageCount::UI_DamageCount() : Alien()
 {
@@ -14,15 +15,32 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 {
 	DamageNum* damage_num = new DamageNum();
 	
+	if (player->attacks->GetCurrentAttack()->IsLast())
+	{
+		damage_num->is_last = true;
+		// Add Last Combo Image
+	}
+
 	if (player->controller_index == 1)
 	{
 		if (player1_damagenums.empty())
 		{
-			damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y;
+			damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y - 175;
 		}
 		else
 		{
 			damage_num->starting_y_position = player1_damagenums.back()->starting_y_position - 175;
+			if (player->attacks->GetCurrentAttack()->info.name.size() == 1 && player1_damagenums.size() > 1 && player1_damagenums.back()->is_last == false)
+			{
+				auto iter = player1_damagenums.begin();
+				for (; iter != player1_damagenums.end(); ++iter)
+				{
+					(*iter)->current_timer = internal_timer;
+					transition_player1_damagenums.push_back((*iter));
+					player1_damagenums.erase(iter);
+					--iter;
+				}
+			}
 		}
 
 		damage_num->go = GameObject::Instantiate(text,
@@ -44,11 +62,22 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	{
 		if (player2_damagenums.empty())
 		{
-			damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y;
+			damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y - 175;
 		}
 		else
 		{
 			damage_num->starting_y_position = player2_damagenums.back()->starting_y_position - 175;
+			if (player->attacks->GetCurrentAttack()->info.name.size() == 1 && player2_damagenums.size() > 1 && player2_damagenums.back()->is_last == false)
+			{
+				auto iter = player2_damagenums.begin();
+				for (; iter != player2_damagenums.end(); ++iter)
+				{
+					(*iter)->current_timer = internal_timer;
+					transition_player2_damagenums.push_back((*iter));
+					player2_damagenums.erase(iter);
+					--iter;
+				}
+			}
 		}
 
 		damage_num->go = GameObject::Instantiate(text, 
@@ -140,7 +169,7 @@ void UI_DamageCount::Update()
 		}
 	}
 
-	if (!player1_damagenums.empty())
+	if (!player1_damagenums.empty() || !transition_player1_damagenums.empty())
 	{
 		DamageCount_Handling(1);
 	}
@@ -163,7 +192,7 @@ void UI_DamageCount::Update()
 	}
 
 
-	if (!player2_damagenums.empty())
+	if (!player2_damagenums.empty() || !transition_player2_damagenums.empty())
 	{
 		DamageCount_Handling(2);
 	}
@@ -200,29 +229,75 @@ void UI_DamageCount::DamageCount_Handling(int index)
 {
 	ComponentText* text = nullptr;
 	std::vector<DamageNum*>* vector_to_handle = nullptr;
+	std::vector<DamageNum*>* vector_to_transition = nullptr;
 
 	if (index == 1)
 	{
 		text = damagecount_player1;
 		vector_to_handle = &player1_damagenums;
+		vector_to_transition = &transition_player1_damagenums;
 	}
 	else
 	{
 		text = damagecount_player2;
 		vector_to_handle = &player2_damagenums;
+		vector_to_transition = &transition_player2_damagenums;
 	}
 
-	auto iter = (*vector_to_handle).begin();
-	for (; iter != (*vector_to_handle).end(); ++iter)
+	if (!(*vector_to_handle).empty())
 	{
-		if (!(*iter)->is_transitioning)
+		// Checking if enough time has passed to quit combo counting
+		if ((*vector_to_handle).back()->current_timer + 3 <= internal_timer)
 		{
-			if (((*iter)->current_timer + 1 <= internal_timer))
+			auto iter = (*vector_to_handle).begin();
+			for (; iter != (*vector_to_handle).end(); ++iter)
 			{
-				(*iter)->is_transitioning = true;
 				(*iter)->current_timer = internal_timer;
+				(*vector_to_transition).push_back((*iter));
+				(*vector_to_handle).erase(iter);
+				--iter;
 			}
-			else if ((*iter)->current_timer + 0.25f >= internal_timer)
+		}
+
+		auto iter = (*vector_to_handle).begin();
+		for (; iter != (*vector_to_handle).end(); ++iter)
+		{
+			if ((*iter) == (*vector_to_handle).front() && (*iter)->go->transform->GetLocalPosition().y != -175)
+			{
+				auto iter = (*vector_to_handle).begin();
+				for (; iter != (*vector_to_handle).end(); ++iter)
+				{
+					float t = (internal_timer - (*iter)->current_timer) / 0.25f;
+					float lerp = 0.0f;
+
+					if ((*iter) == (*vector_to_handle).front())
+					{
+						lerp = Maths::Lerp((*iter)->starting_y_position, -175.f, t);
+					}
+					else
+					{
+						lerp = Maths::Lerp((*iter)->starting_y_position, (*(iter - 1))->go->transform->GetLocalPosition().y - 175.f, t);
+					}
+
+					(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, lerp, 0));
+
+					if (t >= 1)
+					{
+						if ((*iter) == (*vector_to_handle).front())
+						{
+							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -175.0f, 0));
+						}
+						else
+						{
+							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -(*(iter - 1))->go->transform->GetLocalPosition().y - 175.f, 0));
+						}
+						(*iter)->starting_y_position = (*iter)->go->transform->GetLocalPosition().y;
+					}
+				}
+			}
+
+			// New DamageNum Effect
+			if ((*iter)->current_timer + 0.25f >= internal_timer)
 			{
 				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
 				float lerp = Maths::Lerp(0.75f, 0.5f, t);
@@ -234,9 +309,26 @@ void UI_DamageCount::DamageCount_Handling(int index)
 					(*iter)->go->transform->SetLocalScale(0.5f, 0.5f, 1);
 				}
 			}
-		}
 
-		if ((*iter)->is_transitioning)
+			if ((*iter)->is_last && (*iter)->current_timer + 1.5f <= internal_timer)
+			{
+				auto iter = (*vector_to_handle).begin();
+				for (; iter != (*vector_to_handle).end(); ++iter)
+				{
+					(*iter)->current_timer = internal_timer;
+					(*vector_to_transition).push_back((*iter));
+					(*vector_to_handle).erase(iter);
+					--iter;
+				}
+				iter = (*vector_to_handle).begin();
+			}
+		}
+	}
+
+	if (!(*vector_to_transition).empty())
+	{
+		auto iter = (*vector_to_transition).begin();
+		for (; iter != (*vector_to_transition).end(); ++iter)
 		{
 			float t = (internal_timer - (*iter)->current_timer) / 0.25f;
 			float lerp = Maths::Lerp((*iter)->starting_y_position, 0.0f, t);
