@@ -359,7 +359,7 @@ void PlayerAttacks::ActivateCollider()
 
 void PlayerAttacks::UpdateCollider()
 {
-	if (current_attack->current_collider + 1 < current_attack->info.colliders.size())
+	if (current_attack && current_attack->current_collider + 1 < current_attack->info.colliders.size())
 	{
 		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
 		current_attack->current_collider++;
@@ -422,7 +422,8 @@ void PlayerAttacks::CastSpell()
 			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particle_spawn_positions[1]->transform->GetGlobalPosition());
 
-			shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+			if(shake)
+				shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
 
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
 			Quat rot = projectile_go->transform->GetGlobalRotation();
@@ -545,7 +546,7 @@ float3 PlayerAttacks::GetKnockBack(ComponentTransform* enemy_transform)
 
 void PlayerAttacks::AttackShake()
 {
-	if (current_attack->info.shake == 1)
+	if (current_attack && current_attack->info.shake == 1)
 	{
 		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
 		/*if (GameManager::instance->rumbler_manager)
