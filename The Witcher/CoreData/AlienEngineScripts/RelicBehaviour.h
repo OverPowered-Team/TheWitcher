@@ -84,10 +84,12 @@ public:
 	Relic* relic = nullptr;
 	float count_position = 0.0f;
 	bool going_down = false;
+	bool picked = false;
+	
 
 private:
 	ComponentAudioEmitter* audio_emitter = nullptr;
-
+	ComponentMaterial* material = nullptr;
 };
 
 ALIEN_FACTORY RelicBehaviour* CreateRelicBehaviour() {
