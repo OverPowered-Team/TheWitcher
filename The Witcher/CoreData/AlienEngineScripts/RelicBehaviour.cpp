@@ -138,6 +138,10 @@ void RelicBehaviour::Start()
 		SetRelic(json_str.data());
 	}
 
+	material = game_object->GetComponent<ComponentMaterial>();
+	if (material)
+		material->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	
 }
 
 void RelicBehaviour::Update()
@@ -149,18 +153,27 @@ void RelicBehaviour::Update()
 	else if(count_position <= 0.0)
 		going_down = false;
 
-	if (!going_down)
+	if (!going_down && !picked)
 	{
 		count_position += 0.01f;
 		transform->AddPosition({ 0, 0.01, 0 });
 	}
-	else 
+	else if(!picked)
 	{
 		count_position -= 0.01f;
 		transform->AddPosition({ 0, -0.01, 0 });
 	}
 
-	
+	if (picked)
+	{
+		material->material->shaderInputs.dissolveFresnelShaderProperties.burn -= 0.01;
+		if (material->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+		{
+			material->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+			Destroy(this->game_object);
+		}
+	}
+		
 }
 
 void RelicBehaviour::SetRelic(const char* json_array)
@@ -266,7 +279,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 
 void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
+	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0 && !picked)
 	{
 		if (collider->game_object_attached->GetComponent<PlayerController>())
 		{
@@ -285,7 +298,7 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 
 			audio_emitter->StartSound("Play_Collect_Runestone");
 
-			Destroy(this->game_object);		
+			picked = true;
 		}
 	}
 }

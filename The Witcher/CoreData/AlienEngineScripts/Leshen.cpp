@@ -27,6 +27,8 @@ void Leshen::StartEnemy()
 	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
+
+	initial_position = transform->GetGlobalPosition();
 }
 
 void Leshen::UpdateEnemy()
@@ -237,8 +239,12 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 {
 	LOG("UPDATING CLOUD ACTION");
 
+	float distance_to_initial = initial_position.Distance(transform->GetGlobalPosition());
+
 	if (times_switched < total_switch_times) {
 		if (direction_time <= switch_direction_time) {
+			if (distance_to_initial > cloud_max_distance)
+				direction = -direction;
 			character_ctrl->Move(direction * speed * Time::GetDT());
 			direction_time += Time::GetDT();
 		}
