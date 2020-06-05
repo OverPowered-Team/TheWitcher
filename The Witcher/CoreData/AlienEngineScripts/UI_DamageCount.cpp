@@ -16,12 +16,12 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	
 	if (player->controller_index == 1)
 	{
-		damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y - 350 * (player1_damagenums.size() + 1);
+		damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y - 225 * (player1_damagenums.size() + 1);
 
 		damage_num->go = GameObject::Instantiate(text,
-			float3(damagecount_player1->game_object_attached->transform->GetGlobalPosition().x + 75,
+			float3(damagecount_player1->game_object_attached->transform->GetGlobalPosition().x + 150,
 				damage_num->starting_y_position,
-				0), false, damagecount_player1->game_object_attached);
+				0), false, GameObject::FindWithName("List_DmgNums1"));
 
 		if (!is_fading_in1 && damagecount_player1->current_color.a == 0)
 		{
@@ -35,12 +35,12 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 	else
 	{
-		damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y - 350 * (player2_damagenums.size() + 1);
+		damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y - 175 * (player2_damagenums.size() + 1);
 
 		damage_num->go = GameObject::Instantiate(text, 
-			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x + 75,
+			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x + 100,
 			damage_num->starting_y_position,
-			0), false, damagecount_player2->game_object_attached);
+			0), false, GameObject::FindWithName("List_DmgNums2"));
 
 		if (!is_fading_in2 && damagecount_player2->current_color.a == 0)
 		{
@@ -54,6 +54,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 		
 	damage_num->damage = damage;
+	damage_num->go->transform->SetLocalScale(float3(0.5f, 0.5f, 1));
 	damage_num->text = damage_num->go->GetComponent<ComponentText>();
 	damage_num->text->SetText(std::to_string((int)damage).c_str());
 	damage_num->text->SetColor(float3(1, 1, 1));
@@ -142,7 +143,7 @@ void UI_DamageCount::Update()
 			{
 				damagecount_player1->SetAlpha(0);
 				Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
-				damagecount_player1->SetText("00");
+				damagecount_player1->SetText("0");
 			}
 		}
 	}
@@ -165,7 +166,7 @@ void UI_DamageCount::Update()
 			{
 				damagecount_player2->SetAlpha(0);
 				Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
-				damagecount_player2->SetText("00");
+				damagecount_player2->SetText("0");
 			}
 		}
 	}
