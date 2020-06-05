@@ -506,7 +506,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 void PlayerController::AbsorbHit()
 {
-	for (auto it = effects.begin(); it != effects.end();)
+	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
 		{
