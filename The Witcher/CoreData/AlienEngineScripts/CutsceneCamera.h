@@ -5,7 +5,7 @@
 
 class CutsceneShot;
 class CameraMovement;
-
+class CameraShake;
 
 class ALIEN_ENGINE_API CutsceneCamera : public Alien {
 
@@ -29,6 +29,7 @@ public:
 public:
 	vector<CutsceneShot*> shots;
 	CameraMovement* cam_movement = nullptr;
+	CameraShake* cam_shaking = nullptr;
 	int shots_counter = 0;
 	CutsceneState state = CutsceneState::IDLE;
 	float current_move_time = 0.f;

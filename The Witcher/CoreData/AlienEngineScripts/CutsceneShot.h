@@ -10,13 +10,14 @@ struct ShakeInfo {
 	float maxyaw = 1.f;
 	float maxpitch = 1.f;
 	float maxroll = 1.f;
+	float shake_time = 1.f;
+	float shake_timer = 0.f;
+	bool has_shaked = false;
 };
 
 struct CutsceneElement {
 	int id_shot = 0;
 	float transition_speed = 0.f;
-	float play_time = 1.f;
-	float play_timer = 0.f;
 	float stay_time = 1.f;
 	float stay_timer = 0.f;
 	bool it_shake = false;
@@ -54,6 +55,7 @@ ALIEN_FACTORY CutsceneShot* CreateCutsceneShot() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.info_shake.maxyaw);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.info_shake.maxpitch);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.info_shake.maxroll);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.info_shake.shake_time);
 	SHOW_SEPARATOR();
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->element.it_focus);
 	SHOW_TEXT("Only fill the below field if it will focus some place");

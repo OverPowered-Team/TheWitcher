@@ -1,6 +1,7 @@
 #include "CutsceneCamera.h"
 #include "CutsceneShot.h"
 #include "CameraMovement.h"
+#include "CameraShake.h"
 
 CutsceneCamera::CutsceneCamera() : Alien()
 {
@@ -13,6 +14,7 @@ CutsceneCamera::~CutsceneCamera()
 void CutsceneCamera::Start()
 {
 	cam_movement = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraMovement>();
+	cam_shaking = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 	BuildCutscene();
 }
 
@@ -46,7 +48,6 @@ void CutsceneCamera::PrepareCutscene()
 	}
 	else {
 		state = CutsceneState::MOVING;
-		LOG("MOVE");
 	}
 }
 
@@ -60,8 +61,12 @@ void CutsceneCamera::ExecuteCutscene()
 		if (Time::GetGameTime() - shots[shots_counter]->element.stay_timer >= shots[shots_counter]->element.stay_time)
 		{
 			shots_counter++;
-			LOG("COUNTER: %i", shots_counter);
 			PrepareCutscene();
+		}
+		if (Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_time >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
+		{
+			cam_shaking->Shake(shots[shots_counter]->element.info_shake.strength, shots[shots_counter]->element.info_shake.traumaDecay, shots[shots_counter]->element.info_shake.off_set, shots[shots_counter]->element.info_shake.maxyaw, shots[shots_counter]->element.info_shake.maxpitch, shots[shots_counter]->element.info_shake.maxroll);
+			shots[shots_counter]->element.info_shake.has_shaked = true;
 		}
 		break;
 	}
@@ -74,6 +79,7 @@ void CutsceneCamera::ExecuteCutscene()
 			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
 			current_move_time = 0.f;
 			shots[shots_counter]->element.stay_timer = Time::GetGameTime();
+			shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
 			state = CutsceneState::IDLE;
 		}
 		else
