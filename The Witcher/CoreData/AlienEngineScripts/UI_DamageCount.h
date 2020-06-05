@@ -36,6 +36,10 @@ private:
 	void Start();
 	void Update();
 
+	void DamageCount_Handling(int index);
+
+	void ScaleDamageCount(int index);
+
 private:
 
 	// vectors
@@ -52,6 +56,14 @@ private:
 	float damage_count1_time = 0.0f;
 	float damage_count2_time = 0.0f;
 
+	// Effects ------------------ 
+	// Scaling
+
+	bool is_scaling1 = false;
+	bool is_scaling2 = false;
+	float original_scale = 0.0f;
+
+	// --------------------------
 };
 
 ALIEN_FACTORY UI_DamageCount* CreateUI_DamageCount() {

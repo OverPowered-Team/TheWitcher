@@ -60,6 +60,8 @@ void UI_DamageCount::Start()
 	damagecount_player2 = game_object->GetChild("DamageCount_Player2")->GetComponent<ComponentText>();
 	damagecount_player1->SetAlpha(0);
 	damagecount_player2->SetAlpha(0);
+
+	original_scale = game_object->GetChild("DamageCount_Player1")->transform->GetLocalScale().x;
 }
 
 void UI_DamageCount::Update()
@@ -81,42 +83,7 @@ void UI_DamageCount::Update()
 
 	if (!player1_damagenums.empty())
 	{
-		auto iter = player1_damagenums.begin();
-		for (; iter != player1_damagenums.end(); ++iter)
-		{
-			if (!(*iter)->is_transitioning && ((*iter)->current_timer + 1 <= internal_timer))
-			{
-				(*iter)->is_transitioning = true;
-				(*iter)->current_timer = internal_timer;
-			}
-
-			if ((*iter)->is_transitioning)
-			{
-				float t = (internal_timer - (*iter)->current_timer) / 0.5f;
-				float lerp = Maths::Lerp((*iter)->starting_y_position, 0.0f, t);
-				float alpha = Maths::Lerp(1.0f, 0.0f, t);
-
-				(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, lerp, 0));
-				(*iter)->text->SetAlpha(alpha);
-
-				if (t >= 1)
-				{
-					(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, 0, 0));
-					(*iter)->text->SetAlpha(0.0f);
-					damagecount_player1->SetText(std::to_string(std::stoi(damagecount_player1->GetText()) + (*iter)->damage).c_str());
-					GameObject::Destroy((*iter)->go);
-					(*iter)->go = nullptr;
-					player1_damagenums.erase(iter);
-
-					if (player1_damagenums.size() == 0)
-					{
-						damage_count1_time = internal_timer;
-					}
-
-					--iter;
-				}
-			}
-		}
+		DamageCount_Handling(1);
 	}
 	else
 	{
@@ -131,7 +98,7 @@ void UI_DamageCount::Update()
 			{
 				damagecount_player1->SetAlpha(0);
 				Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
-				damagecount_player1->SetText("000");
+				damagecount_player1->SetText("00");
 			}
 		}
 	}
@@ -139,42 +106,7 @@ void UI_DamageCount::Update()
 
 	if (!player2_damagenums.empty())
 	{
-		auto iter = player2_damagenums.begin();
-		for (; iter != player2_damagenums.end(); ++iter)
-		{
-			if (!(*iter)->is_transitioning && ((*iter)->current_timer + 1 <= internal_timer))
-			{
-				(*iter)->is_transitioning = true;
-				(*iter)->current_timer = internal_timer;
-			}
-
-			if ((*iter)->is_transitioning)
-			{
-				float t = (internal_timer - (*iter)->current_timer) / 0.5f;
-				float lerp = Maths::Lerp((*iter)->starting_y_position, game_object->parent->transform->GetGlobalPosition().y, t);
-				float alpha = Maths::Lerp(0.0f, 1.0f, t);
-
-				(*iter)->go->transform->SetGlobalPosition(float3((*iter)->go->transform->GetGlobalPosition().x, lerp, 0));
-				(*iter)->text->SetAlpha(alpha);
-
-				if (t >= 1)
-				{
-					(*iter)->go->transform->SetGlobalPosition(game_object->parent->transform->GetGlobalPosition());
-					(*iter)->text->SetAlpha(0.0f);
-					damagecount_player2->SetText(std::to_string(std::stoi(damagecount_player2->GetText()) + (*iter)->damage).c_str());
-					GameObject::Destroy((*iter)->go);
-					(*iter)->go = nullptr;
-					player2_damagenums.erase(iter);
-
-					if (player2_damagenums.size() == 0)
-					{
-						damage_count2_time = internal_timer;
-					}
-
-					--iter;
-				}
-			}
-		}
+		DamageCount_Handling(2);
 	}
 	else
 	{
@@ -189,8 +121,96 @@ void UI_DamageCount::Update()
 			{
 				damagecount_player2->SetAlpha(0);
 				Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
-				damagecount_player2->SetText("000");
+				damagecount_player2->SetText("00");
 			}
 		}
 	}
+
+	if (is_scaling1)
+	{
+		ScaleDamageCount(1);
+	}
+
+	if (is_scaling2)
+	{
+		ScaleDamageCount(2);
+	}
+}
+
+void UI_DamageCount::DamageCount_Handling(int index)
+{
+	ComponentText* text = nullptr;
+	std::vector<DamageNum*>* vector_to_handle = nullptr;
+
+	if (index == 1)
+	{
+		text = damagecount_player1;
+		vector_to_handle = &player1_damagenums;
+	}
+	else
+	{
+		text = damagecount_player2;
+		vector_to_handle = &player2_damagenums;
+	}
+
+	auto iter = (*vector_to_handle).begin();
+	for (; iter != (*vector_to_handle).end(); ++iter)
+	{
+		if (!(*iter)->is_transitioning && ((*iter)->current_timer + 1 <= internal_timer))
+		{
+			(*iter)->is_transitioning = true;
+			(*iter)->current_timer = internal_timer;
+		}
+
+		if ((*iter)->is_transitioning)
+		{
+			float t = (internal_timer - (*iter)->current_timer) / 0.5f;
+			float lerp = Maths::Lerp((*iter)->starting_y_position, 0.0f, t);
+			float alpha = Maths::Lerp(0.0f, 1.0f, t);
+
+			(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, lerp, 0));
+			(*iter)->text->SetAlpha(alpha);
+
+			if (t >= 1)
+			{
+				(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, 0, 0));
+				(*iter)->text->SetAlpha(0.0f);
+				text->SetText(std::to_string(std::stoi(text->GetText()) + (*iter)->damage).c_str());
+				GameObject::Destroy((*iter)->go);
+				(*iter)->go = nullptr;
+				(*vector_to_handle).erase(iter);
+
+				if ((*vector_to_handle).size() == 0)
+				{
+					if (index == 1)
+					{
+						damage_count1_time = internal_timer;
+					}
+					else
+					{
+						damage_count2_time = internal_timer;
+					}
+					
+				}
+
+				--iter;
+			}
+		}
+	}
+}
+
+void UI_DamageCount::ScaleDamageCount(int index)
+{
+	GameObject* damage_count = nullptr;
+
+	if (index == 1)
+	{
+		damage_count = damagecount_player1->game_object_attached;
+	}
+	else
+	{
+		damage_count = damagecount_player2->game_object_attached;
+	}
+
+
 }
