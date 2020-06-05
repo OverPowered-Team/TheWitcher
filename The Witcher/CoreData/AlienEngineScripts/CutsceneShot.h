@@ -16,6 +16,7 @@ struct CutsceneElement {
 	int id_shot = 0;
 	float transition_speed = 0.f;
 	float play_time = 1.f;
+	float play_timer = 0.f;
 	bool it_shake = false;
 	ShakeInfo info_shake;
 	bool it_focus = false;

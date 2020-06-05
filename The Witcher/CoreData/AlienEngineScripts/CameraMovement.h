@@ -15,7 +15,8 @@ public:
 		DYNAMIC, MOVING_TO_DYNAMIC, 
 		FREE, FREE_TO_DYNAMIC,
 		STATIC, MOVING_TO_STATIC,
-		AXIS, MOVING_TO_AXIS, CINEMATIC, MOVING_TO_CINEMATIC
+		AXIS, MOVING_TO_AXIS, CINEMATIC, MOVING_TO_CINEMATIC,
+		CINEMATIC_TO_AXIS, CINEMATIC_TO_STATIC
 		);
 	enum (
 		CameraAxis,
@@ -47,7 +48,7 @@ public:
 	float distance = 10.f;
 	float hor_angle = 0.f;
 	float vert_angle = 35.f;
-
+	float transition_time = 0.f;
 	bool smooth_camera = true;
 	float smooth_cam_vel = 5.f;
 

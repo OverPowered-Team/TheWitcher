@@ -27,28 +27,15 @@ void CameraMovement::Update()
 {
     switch (state) {
     case CameraState::DYNAMIC: {
-        if (is_cinematic)
-        {
-            prev_state = state;
-            state = CameraState::MOVING_TO_CINEMATIC;
-        }
-        else {
             if (smooth_camera) {
                 float3 pos = transform->GetGlobalPosition();
                 transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
             }
             else
                 transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
-        }
         break;
     }
     case CameraState::FREE: {
-        if (is_cinematic)
-        {
-            prev_state = state;
-            state = CameraState::MOVING_TO_CINEMATIC;
-        }
-        else {
             float3 pos = players[closest_player]->transform->GetGlobalPosition() + prev_middle;
 
             auto frustum = GetComponent<ComponentCamera>()->frustum;
@@ -83,7 +70,6 @@ void CameraMovement::Update()
 
                 state = prev_state;
             }
-        }
         break;
     }
     case CameraState::FREE_TO_DYNAMIC: {
@@ -92,31 +78,19 @@ void CameraMovement::Update()
         break;
     }
     case CameraState::STATIC:
-        if (is_cinematic)
-        {
-            prev_state = state;
-            state = CameraState::MOVING_TO_CINEMATIC;
-        }
-        else
             LookAtMidPoint();
         break;
     case CameraState::AXIS: {
-        if (is_cinematic)
-        {
-            prev_state = state;
-            state = CameraState::MOVING_TO_CINEMATIC;
-        }
-        else {
             if (smooth_camera)
                 transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
             else {
                 transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
             }
             LookAtMidPoint();
-        }
         break;
     }
-    case CameraState::MOVING_TO_AXIS: {
+    case CameraState::CINEMATIC_TO_AXIS:
+    {
         float min_dist = 0.5f;
         if (trg_offset.Distance(transform->GetGlobalPosition()) < min_dist) {
             LOG("Finished transition");
@@ -128,7 +102,21 @@ void CameraMovement::Update()
         LookAtMidPoint();
         break;
     }
-    case CameraState::MOVING_TO_STATIC: {
+    case CameraState::MOVING_TO_AXIS: {
+        if (is_cinematic)
+        {
+            prev_state = CameraState::MOVING_TO_AXIS;
+            state = CameraState::MOVING_TO_CINEMATIC;
+        }
+        else {
+            Tween::TweenMoveTo(this->game_object, trg_offset, transition_time);
+            state = CameraState::CINEMATIC_TO_AXIS;
+        }
+        break;
+    }
+    case CameraState::CINEMATIC_TO_STATIC:
+    {
+
         float min_dist = 0.1f;
         if (trg_offset.Distance(transform->GetGlobalPosition()) < min_dist) {
             LOG("Finished transition");
@@ -138,29 +126,41 @@ void CameraMovement::Update()
         LookAtMidPoint();
         break;
     }
-    case CameraState::MOVING_TO_DYNAMIC:
-    {
-        current_transition_time += Time::GetDT();
-        float3 trg_pos = CalculateMidPoint() + trg_offset;
-        float3 curr_pos = transform->GetGlobalPosition();
-        float min_dist = 0.1f;
-        if ((trg_pos - curr_pos).Length() < min_dist) {
-            LOG("Finished transition");
-            transform->SetGlobalPosition(trg_pos);
-            state = CameraState::DYNAMIC;
+    case CameraState::MOVING_TO_STATIC: {
+        if (is_cinematic)
+        {
+            prev_state = CameraState::MOVING_TO_STATIC;
+            state = CameraState::MOVING_TO_CINEMATIC;
         }
         else {
-            //INFO: This is more like an accelerated movement than a lerp since we're using the current position as the starting point
-
-            float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
-
-            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
-
-            //TODO: We could add the option to configure smoothness (cuadratic t, cubic t, etc.)
-            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent));//Less fast on the beggining
-            //transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent * time_percent * time_percent));//Even less fast on the beggining
+            Tween::TweenMoveTo(this->game_object, trg_offset, transition_time);
+            state = CameraState::CINEMATIC_TO_STATIC;
         }
-        LookAtMidPoint();
+        break;
+    }
+    case CameraState::MOVING_TO_DYNAMIC:
+    {
+        if (is_cinematic)
+        {
+            prev_state = CameraState::MOVING_TO_DYNAMIC;
+            state = CameraState::MOVING_TO_CINEMATIC;
+        }
+        else {
+            current_transition_time += Time::GetDT();
+            float3 trg_pos = CalculateMidPoint() + trg_offset;
+            float3 curr_pos = transform->GetGlobalPosition();
+            float min_dist = 0.1f;
+            if ((trg_pos - curr_pos).Length() < min_dist) {
+                LOG("Finished transition");
+                transform->SetGlobalPosition(trg_pos);
+                state = CameraState::DYNAMIC;
+            }
+            else {
+                float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
+                transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
+            }
+            LookAtMidPoint();
+        }
         break;
     }
     case CameraState::MOVING_TO_CINEMATIC:

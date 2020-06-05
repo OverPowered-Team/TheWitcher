@@ -6,9 +6,15 @@
 class CutsceneShot;
 class CameraMovement;
 
+
 class ALIEN_ENGINE_API CutsceneCamera : public Alien {
 
 public:
+
+	enum(CutsceneState,
+		IDLE, SHAKING, MOVING, LOOKING);
+
+
 
 	CutsceneCamera();
 	virtual ~CutsceneCamera();
@@ -23,6 +29,9 @@ public:
 public:
 	vector<CutsceneShot*> shots;
 	CameraMovement* cam_movement = nullptr;
+	int shots_counter = 0;
+	CutsceneState state = CutsceneState::IDLE;
+	float current_move_time = 0.f;
 };
 
 ALIEN_FACTORY CutsceneCamera* CreateCutsceneCamera() {
