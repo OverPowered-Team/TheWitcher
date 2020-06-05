@@ -8,6 +8,7 @@
 class PlayerController;
 struct Dialogue;
 class DialogueManager;
+class GameManager; 
 
 class ALIEN_ENGINE_API EventManager : public Alien {
 
@@ -25,7 +26,8 @@ public:
 	void ReceiveDialogueEvent(int index, float volume = 0.5f) const;
 
 	
-	
+private: 
+	GameManager* gameManager = nullptr; 
 
 public:
 	std::map<const char*, uint> eventPriorities; // event and priority

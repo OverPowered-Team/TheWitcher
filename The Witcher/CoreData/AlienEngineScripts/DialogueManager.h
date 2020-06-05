@@ -72,7 +72,7 @@ public:
 
 	Dialogue GetCurrentDialogue() const { return currentDialogue; };
 
-private:
+private: 
 	void OverrideDialogue(Dialogue& newDialogue, float volume = 0.5f);
 	void LoadJSONDialogues();
 
@@ -84,8 +84,12 @@ private:
 	ComponentAudioEmitter* audioEmitter = nullptr;
 	ComponentText* text = nullptr;
 
+
 	// to read from JSON
 	std::vector <std::tuple<std::string, std::string, float>> dialogueData; // event name, subtitles and subtitle time 
+
+public: 
+	GameObject* textObj = nullptr;
 
 };
 
@@ -93,5 +97,7 @@ ALIEN_FACTORY DialogueManager* CreateDialogueManager() {
 	DialogueManager* alien = new DialogueManager();
 	// To show in inspector here
 
+
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->textObj);
 	return alien;
 }
