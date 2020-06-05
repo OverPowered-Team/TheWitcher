@@ -451,4 +451,17 @@ void ModuleRenderer3D::DebugDrawMesh(const float4x4& transform, float* vertices,
 	glPopMatrix();
 }
 
+void ModuleRenderer3D::PanelConfigOption()
+{
+	ImGui::ColorEdit3("Background Color", &scene_fake_camera->camera_color_background, ImGuiColorEditFlags_Float);
+	ImGui::Checkbox("Camera Fog", &scene_fake_camera->activeFog);
+	if (scene_fake_camera->activeFog)
+	{
+		ImGui::DragFloat("Fog Density", &scene_fake_camera->fogDensity, 0.001f, 0.0f, 10.f);
+		ImGui::DragFloat("Fog Gradient", &scene_fake_camera->fogGradient, 0.02f, 0.0f, 10.f);
+	}
+	if (ImGui::Button("Reset Camera Properties"))
+		scene_fake_camera->Reset();
+}
+
 

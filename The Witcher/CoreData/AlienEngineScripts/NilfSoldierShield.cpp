@@ -61,7 +61,7 @@ void NilfSoldierShield::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
-		last_player_hit->OnEnemyKill();
+		last_player_hit->OnEnemyKill((uint)type);
 		state = NilfgaardSoldierState::DEAD;
 		if (m_controller && is_combat)
 		{
@@ -147,8 +147,8 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 		has_been_attacked = true;
 		current_time = Time::GetGameTime();
 		break_shield_attack++;
-		SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
-		audio_emitter->StartSound("SoldierBlock");
+		//SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
+		PlaySFX("Block");
 	}
 	else
 		damage = Enemy::GetDamaged(dmg, player, knock_back);

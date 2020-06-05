@@ -20,7 +20,7 @@ GameManager::~GameManager()
 
 void GameManager::Awake()
 {
-	effects_factory = new EffectsFactory();
+	//effects_factory = new EffectsFactory();
 
 	event_manager = game_object->GetComponent<EventManager>();
 	enemy_manager = game_object->GetComponent<EnemyManager>();

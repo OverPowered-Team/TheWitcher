@@ -200,25 +200,14 @@ void PanelConfig::PanelLogic()
 		}
 		ImGui::EndChild();
 	}
+
 	if (ImGui::CollapsingHeader("Camera"))
 	{
-		ImGui::InputFloat("Camera Speed", &App->camera->camera_speed, 1, 5, 2);
-		ImGui::InputFloat("Camera Zoom Speed", &App->camera->camera_zoom_speed, 1, 5, 2);
-		ImGui::InputFloat("Camera Rotation Speed", &App->camera->camera_rotation_speed, 1, 5, 2);
-		ImGui::InputFloat("Camera Orbit Speed", &App->camera->camera_orbit_speed, 1, 5, 2);
-
+		App->camera->PanelConfigOption();
 		ImGui::Separator();
-		ImGui::ColorEdit3("Background Color", &App->renderer3D->scene_fake_camera->camera_color_background, ImGuiColorEditFlags_Float);
-		ImGui::Checkbox("Camera Fog", &App->renderer3D->scene_fake_camera->activeFog);
-		if (App->renderer3D->scene_fake_camera->activeFog)
-		{
-			ImGui::DragFloat("Fog Density", &App->renderer3D->scene_fake_camera->fogDensity, 0.001f, 0.0f, 10.f);
-			ImGui::DragFloat("Fog Gradient", &App->renderer3D->scene_fake_camera->fogGradient, 0.02f, 0.0f, 10.f);
-		}
-		if (ImGui::Button("Reset Camera Properties"))
-			App->renderer3D->scene_fake_camera->Reset();
-
+		App->renderer3D->PanelConfigOption();
 	}
+
 	if (ImGui::CollapsingHeader("Input")) 
 	{
 		ImGui::Spacing();
@@ -288,10 +277,6 @@ void PanelConfig::PanelLogic()
 		ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored({ 255,216,0,100 }, "0.1f Mb", (float)video_mem_reserved);
 
 		ImGui::Spacing();
-	}
-	if (ImGui::CollapsingHeader("View"))
-	{
-		App->camera->PanelConfigOption();
 	}
 	ImGui::Spacing();
 	if (ImGui::Button("Save Configuration", { 150,30 })) {

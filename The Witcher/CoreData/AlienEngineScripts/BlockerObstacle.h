@@ -29,6 +29,9 @@ public:
 	void AddChildren(GameObject* g_o);
 	void ReleaseChildren();
 	void ReleaseMyself(Enemy* en);
+
+	void CheckRootHealth();
+
 public:
 	//float health = 0.f;
 	//float minimum_health = 0.f;
@@ -39,6 +42,10 @@ private:
 	ComponentRigidBody* r_body = nullptr;
 	EnemyManager* manager = nullptr;
 	bool has_started = false;
+	float enemy_die_damage = 0.0f;
+
+	ComponentCollider* boxCollider = nullptr;
+	std::vector<GameObject*> roots;
 };
 
 ALIEN_FACTORY BlockerObstacle* CreateBlockerObstacle() {

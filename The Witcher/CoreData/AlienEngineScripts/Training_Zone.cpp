@@ -12,7 +12,6 @@ Training_Zone::~Training_Zone()
 void Training_Zone::Start()
 {
 	rb = GetComponent<ComponentRigidBody>();
-
 	
 	switch (oscilation_direction)
 	{
@@ -32,9 +31,6 @@ void Training_Zone::Start()
 		break;
 	}
 	}
-
-	current_oscilating_time = Time::GetGameTime();
-	internal_timer = Time::GetGameTime();
 }
 
 void Training_Zone::Update()
@@ -52,6 +48,15 @@ void Training_Zone::Update()
 	else
 	{
 		time_paused = Time::GetGameTime() - internal_timer;
+		return;
+	}
+
+	if (is_first_frame)
+	{
+		is_first_frame = false;
+
+		current_oscilating_time = Time::GetGameTime();
+		internal_timer = Time::GetGameTime();
 		return;
 	}
 

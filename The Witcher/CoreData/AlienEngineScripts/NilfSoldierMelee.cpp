@@ -54,7 +54,7 @@ void NilfSoldierMelee::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
-		last_player_hit->OnEnemyKill();
+		last_player_hit->OnEnemyKill((uint)type);
 		state = NilfgaardSoldierState::DEAD;
 		if (m_controller && is_combat)
 		{
@@ -63,7 +63,11 @@ void NilfSoldierMelee::UpdateEnemy()
 		}
 		if (is_obstacle)
 		{
-			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
+			BlockerObstacle* blocker = game_object->parent->parent->GetComponent<BlockerObstacle>();
+			if (blocker)
+				blocker->ReleaseMyself(this);
+			else
+				LOG("There's no blocker");
 		}
 		break;
 	}

@@ -114,7 +114,6 @@ void ComponentMesh::DrawPolygon()
 		return;
 
 	ResourceMaterial* material = mat->material;
-
 	if (transform->IsScaleNegative())
 		glFrontFace(GL_CW);
 

@@ -123,6 +123,8 @@ void NilfgaardSoldier::PlaySFX(const char* sfx_name)
 		audio_emitter->StartSound("SoldierHit");
 	else if (sfx_name == "Death")
 		audio_emitter->StartSound("SoldierDeath");
+	else if (sfx_name == "Block")
+		audio_emitter->StartSound("SoldierBlock");
 	else
 		LOG("Sound effect with name %s not found!", sfx_name);
 }
@@ -179,7 +181,7 @@ void NilfgaardSoldier::SetState(const char* state_str)
 	else if (state_str == "Block")
 	{
 		animator->PlayState("Block");
-		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
+		//animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::AUXILIAR;
 	}
 	else if (state_str == "Flee")
@@ -212,18 +214,25 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");
-		if (stats["Health"].GetValue() == 0.0F) {
+		if (stats["Health"].GetValue() <= 0.0F) {
 			SetState("Hit");
 			if (!IsRangeEnemy())
 				RemoveBattleCircle();
+
+			if (!was_dizzy)
+				was_dizzy = true;
+			else
+			{
+				state = NilfgaardSoldierState::DYING;
+				GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+			}
 		}
 		else if (is_attacking)
 		{
-			ChangeAttackEnemy();
+			ChangeAttackEnemy();		
 		}
-		else
+		else if (!is_dead)
 			SetState("Idle");
-
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{

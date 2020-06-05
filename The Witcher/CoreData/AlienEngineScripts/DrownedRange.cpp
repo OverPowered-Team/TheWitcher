@@ -94,7 +94,7 @@ void DrownedRange::UpdateEnemy()
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = DrownedState::DEAD;
 		animator->PlayState("Death");
-		last_player_hit->OnEnemyKill();
+		last_player_hit->OnEnemyKill((uint)type);
 		audio_emitter->StartSound("Play_Drowner_Death");
 		if (m_controller && is_combat)
 		{
@@ -143,11 +143,21 @@ void DrownedRange::OnAnimationEnd(const char* name)
 			set_attack = true;
 			movement = 0;
 		}
+		else
+		{
+			if(!was_dizzy)
+				was_dizzy = true;
+			else
+			{
+				state = DrownedState::DYING;
+				GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+			}
+		}
+			
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
 		state = DrownedState::DYING;
-		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 }

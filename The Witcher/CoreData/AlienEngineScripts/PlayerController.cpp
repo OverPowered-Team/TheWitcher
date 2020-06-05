@@ -308,7 +308,7 @@ void PlayerController::EffectsUpdate()
 				if (it_stats->first == "Health")
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-					if (player_data.stats["Health"].GetValue() == 0)
+					if (player_data.stats["Health"].GetValue() <= 0)
 					{
 						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
@@ -428,7 +428,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			return;
 		}
 
-		if (player_data.stats["Health"].GetValue() == 0.0f)
+		if (player_data.stats["Health"].GetValue() <= 0.0f)
 			return;
 
 		player_data.stats["Health"].DecreaseStat(dmg);
@@ -449,7 +449,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		}
 
 		attacks->CancelAttack();
-		if (knock) {
+		//if (knock) {
 			if (player_data.stats["Health"].GetValue() == 0)
 			{
 				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
@@ -461,7 +461,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 				player_data.velocity = knock_speed;
 				SetState(StateType::HIT);
 			}
-		}
+		//}
 
 		if (GameManager::instance->rumbler_manager)
 			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
@@ -500,7 +500,11 @@ void PlayerController::AbsorbHit()
 		{
 			if (mods->identifier == "Absorb")
 			{
-				RemoveEffect(it);
+				mods->amount--;
+				if (mods->amount <= 0)
+				{
+					RemoveEffect(it);
+				}
 				return;
 			}
 		}
@@ -552,7 +556,7 @@ void PlayerController::AddEffect(Effect* _effect)
 	{
 		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
 		{
-			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time == 0)
+			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time <= 0)
 				it->second.ApplyEffect(_effect);
 		}
 	}
@@ -565,7 +569,18 @@ void PlayerController::AddEffect(Effect* _effect)
 std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect*>::iterator it)
 {
 	Effect* tmp_effect = (*it);
+	if (!tmp_effect)
+	{
+		LOG("Error trying to remove null effect.");
+		return it;
+	}
+
 	it = effects.erase(it);
+
+	if (tmp_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
+	}
 
 	if (dynamic_cast<AttackEffect*>(tmp_effect) != nullptr)
 	{
@@ -580,10 +595,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-	if (tmp_effect->spawned_particle != nullptr)
-	{
-		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
-	}
+
 
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
@@ -690,40 +702,54 @@ void PlayerController::HitFreeze(float freeze_time)
 		return;
 
 	float speed = animator->GetCurrentStateSpeed();
-	animator->SetCurrentStateSpeed(0);
-	//PauseParticle();
+	std::string state_name = animator->GetCurrentStateName();
+
+	LOG("FREEZING %s",state_name.c_str());
+	animator->SetStateSpeed(state_name.c_str(), 0);
+	PauseParticle();
 	is_immune = true;
-	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
+	Invoke([this, speed, state_name]() -> void {this->RemoveFreeze(speed, state_name); }, freeze_time);
 }
 
-void PlayerController::RemoveFreeze(float speed)
+void PlayerController::RemoveFreeze(float speed, std::string state_name)
 {
-	//ResumeParticle();
-	animator->SetCurrentStateSpeed(speed);
+	ResumeParticle();
+	animator->SetStateSpeed(state_name.c_str(), speed);
 	
 	is_immune = false;
 }
 
 void PlayerController::PauseParticle()
 {
-	for (auto it = particles.begin(); it != particles.end(); ++it)
-	{
-		if (std::strcmp((*it)->GetName(),attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
-		{
-			(*it)->GetComponent<ParticleSystem>()->Pause();
+	if (!attacks->GetCurrentAttack())
+		return;
 
-			return;
-		}
-	}
-}
-
-void PlayerController::ResumeParticle()
-{
 	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
 		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 		{
-			(*it)->GetComponent<ParticleSystem>()->Play();
+			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
+			if (p_system)
+				p_system->Pause();
+
+			return;
+		}
+	}
+
+}
+
+void PlayerController::ResumeParticle()
+{
+	if (!attacks->GetCurrentAttack())
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
+			if (p_system)
+				p_system->Play();
 
 			return;
 		}
@@ -827,6 +853,19 @@ void PlayerController::OnTerrainEnter(float4 initial_color, float4 final_color)
 
 			}
 		}
+}
+
+void PlayerController::IncreaseStat(std::string stat, float value)
+{
+	auto stat_it = player_data.stats.find(stat);
+	if (stat_it != player_data.stats.end())
+	{
+		player_data.stats[stat].IncreaseStat(value);
+		if (stat == "Health" && HUD)
+		{
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+		}
+	}
 }
 
 #pragma region Events
@@ -936,12 +975,20 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	}
 }
 
-void PlayerController::OnEnemyKill()
+void PlayerController::OnEnemyKill(uint enemy_type)
 {
 	LOG("ENEMY KILL");
+	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
+	{
+		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));
+	}
+
 	player_data.total_kills++;
-	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
+	player_data.type_kills[enemy_type]++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+
+	//UI
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
