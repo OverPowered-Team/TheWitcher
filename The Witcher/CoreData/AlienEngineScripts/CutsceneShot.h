@@ -17,6 +17,8 @@ struct CutsceneElement {
 	float transition_speed = 0.f;
 	float play_time = 1.f;
 	float play_timer = 0.f;
+	float stay_time = 1.f;
+	float stay_timer = 0.f;
 	bool it_shake = false;
 	ShakeInfo info_shake;
 	bool it_focus = false;
@@ -42,7 +44,7 @@ ALIEN_FACTORY CutsceneShot* CreateCutsceneShot() {
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_SLIDER_INT(alien->element.id_shot, 0, 100);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.transition_speed);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.play_time);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->element.stay_time);
 	SHOW_SEPARATOR();
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->element.it_shake);
 	SHOW_TEXT("Only fill the below fields if the camera will shake");

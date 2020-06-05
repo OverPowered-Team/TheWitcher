@@ -25,7 +25,7 @@ public:
 	void BuildCutscene();
 	void PrepareCutscene();
 	void ExecuteCutscene();
-	bool myfunction(int i, int j) { return (i < j); }
+	static bool OrderCutscenes(CutsceneShot* i, CutsceneShot* j);
 public:
 	vector<CutsceneShot*> shots;
 	CameraMovement* cam_movement = nullptr;

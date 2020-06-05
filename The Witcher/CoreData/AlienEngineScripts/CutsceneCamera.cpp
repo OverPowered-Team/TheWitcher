@@ -34,31 +34,37 @@ void CutsceneCamera::BuildCutscene()
 		if (shot)
 			shots.push_back(shot);
 	}
-	std::sort(shots.begin(), shots.end());
+	std::sort(shots.begin(), shots.end(), OrderCutscenes);
 }
 
 void CutsceneCamera::PrepareCutscene()
 {
-	if (shots_counter > shots.size())
+	if (shots_counter >= shots.size())
 	{
 		cam_movement->state = cam_movement->prev_state;
 		cam_movement->is_cinematic = false;
 	}
-	else
-		shots[shots_counter]->element.play_timer = Time::GetGameTime();
+	else {
+		state = CutsceneState::MOVING;
+		LOG("MOVE");
+	}
 }
 
 void CutsceneCamera::ExecuteCutscene()
 {
-	if (Time::GetGameTime() - shots[shots_counter]->element.play_timer >= shots[shots_counter]->element.play_time)
-	{
-		shots_counter++;
-		PrepareCutscene();
-		return;
-	}
 
 	switch (state)
 	{
+	case CutsceneState::IDLE:
+	{
+		if (Time::GetGameTime() - shots[shots_counter]->element.stay_timer >= shots[shots_counter]->element.stay_time)
+		{
+			shots_counter++;
+			LOG("COUNTER: %i", shots_counter);
+			PrepareCutscene();
+		}
+		break;
+	}
 	case CutsceneState::MOVING:
 	{
 		float min_dist = 0.1f;
@@ -67,6 +73,7 @@ void CutsceneCamera::ExecuteCutscene()
 		if ((shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
 			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
 			current_move_time = 0.f;
+			shots[shots_counter]->element.stay_timer = Time::GetGameTime();
 			state = CutsceneState::IDLE;
 		}
 		else
@@ -85,4 +92,9 @@ void CutsceneCamera::ExecuteCutscene()
 		break;
 	}
 	}
+}
+
+bool CutsceneCamera::OrderCutscenes(CutsceneShot* i, CutsceneShot* j)
+{
+	return (i->element.id_shot < j->element.id_shot); 
 }
