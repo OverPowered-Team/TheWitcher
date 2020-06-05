@@ -132,7 +132,7 @@ void InGame_UI::Update()
 			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
 			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
-			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 1);
+			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0);
 
 			if (lerp >= 1)
 			{
@@ -207,7 +207,16 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	particle->origin_position = float3(0, 43.f, 0);
+	float random = Random::GetRandomIntBetweenTwo(1, 2);
+	if (random == 1)
+	{
+		particle->origin_position = float3(-25.f, 43.f, 0);
+	}
+	else
+	{
+		particle->origin_position = float3(25.f, 43.f, 0);
+	}
+
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
 	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
 	particle->time_passed = Time::GetGameTime();

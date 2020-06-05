@@ -27,6 +27,10 @@ public:
 
 	void AddDamageCount(float damage, PlayerController* player);
 
+public:
+
+	Prefab text;
+
 private:
 
 	void Start();
@@ -53,6 +57,8 @@ private:
 ALIEN_FACTORY UI_DamageCount* CreateUI_DamageCount() {
 	UI_DamageCount* alien = new UI_DamageCount();
 	// To show in inspector here
+
+	SHOW_IN_INSPECTOR_AS_PREFAB(alien->text);
 
 	return alien;
 } 
