@@ -13,8 +13,9 @@ CutsceneCamera::~CutsceneCamera()
 
 void CutsceneCamera::Start()
 {
-	cam_movement = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraMovement>();
-	cam_shaking = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
+	camera = Camera::GetCurrentCamera()->game_object_attached;
+	cam_movement = camera->GetComponent<CameraMovement>();
+	cam_shaking = camera->GetComponent<CameraShake>();
 	BuildCutscene();
 }
 
@@ -86,6 +87,11 @@ void CutsceneCamera::ExecuteCutscene()
 		{
 			float time_percent = (current_move_time / shots[shots_counter]->element.transition_speed);
 			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() + (shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()) * (time_percent));
+		}
+		if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus) {
+			float3 direction = (shots[shots_counter]->element.g_o_focus->transform->GetGlobalPosition() - camera->transform->GetGlobalPosition()).Normalized();
+
+			camera->transform->SetGlobalRotation(Quat::LookAt(float3::unitZ(), direction, float3::unitY(), float3::unitY()));
 		}
 		break;
 	}

@@ -28,6 +28,7 @@ public:
 	static bool OrderCutscenes(CutsceneShot* i, CutsceneShot* j);
 public:
 	vector<CutsceneShot*> shots;
+	GameObject* camera = nullptr;
 	CameraMovement* cam_movement = nullptr;
 	CameraShake* cam_shaking = nullptr;
 	int shots_counter = 0;
