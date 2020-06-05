@@ -25,10 +25,6 @@ public:
 	void ReceiveDialogueEvent(Dialogue& dialogue, float delay = 0.f) const;
 	void ReceiveDialogueEvent(int index, float volume = 0.5f) const;
 
-	
-private: 
-	GameManager* gameManager = nullptr; 
-
 public:
 	std::map<const char*, uint> eventPriorities; // event and priority
 };
