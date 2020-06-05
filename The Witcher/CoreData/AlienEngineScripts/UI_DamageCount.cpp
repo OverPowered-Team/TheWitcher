@@ -23,7 +23,15 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 				damage_num->starting_y_position,
 				0), false, damagecount_player1->game_object_attached);
 
-		damagecount_player1->SetAlpha(1);
+		if (!is_fading_in1 && damagecount_player1->current_color.a == 0)
+		{
+			is_fading_in1 = true;
+			fadein_timer1 = internal_timer;
+		}
+		else
+		{
+			damagecount_player1->SetAlpha(1);
+		}
 	}
 	else
 	{
@@ -34,7 +42,15 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 			damage_num->starting_y_position,
 			0), false, damagecount_player2->game_object_attached);
 
-		damagecount_player2->SetAlpha(1.0f);
+		if (!is_fading_in2 && damagecount_player2->current_color.a == 0)
+		{
+			is_fading_in2 = true;
+			fadein_timer2 = internal_timer;
+		}
+		else
+		{
+			damagecount_player2->SetAlpha(1.0f);
+		}
 	}
 		
 	damage_num->damage = damage;
@@ -79,6 +95,34 @@ void UI_DamageCount::Update()
 	{
 		time_paused = Time::GetGameTime() - internal_timer;
 		return;
+	}
+
+	if (is_fading_in1)
+	{
+		float t = internal_timer - fadein_timer1;
+		float lerp = Maths::Lerp(0.0f, 1.0f, t);
+
+		damagecount_player1->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			damagecount_player1->SetAlpha(1);
+			is_fading_in1 = false;
+		}
+	}
+
+	if (is_fading_in2)
+	{
+		float t = internal_timer - fadein_timer2;
+		float lerp = Maths::Lerp(0.0f, 1.0f, t);
+
+		damagecount_player2->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			damagecount_player2->SetAlpha(1);
+			is_fading_in2 = false;
+		}
 	}
 
 	if (!player1_damagenums.empty())

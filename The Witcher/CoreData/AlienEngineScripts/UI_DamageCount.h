@@ -56,7 +56,14 @@ private:
 	float damage_count1_time = 0.0f;
 	float damage_count2_time = 0.0f;
 
-	// Effects ------------------ 
+	// Effects ------------------
+	// Fade
+
+	bool is_fading_in1 = false;
+	bool is_fading_in2 = false;
+	float fadein_timer1 = 0.0f;
+	float fadein_timer2 = 0.0f;
+
 	// Scaling
 
 	bool is_scaling1 = false;
@@ -65,6 +72,7 @@ private:
 
 	float scaling_time1 = 0.0f;
 	float scaling_time2 = 0.0f;
+
 	// --------------------------
 };
 
