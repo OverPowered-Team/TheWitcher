@@ -2,6 +2,7 @@
 #include "CutsceneShot.h"
 #include "CameraMovement.h"
 #include "CameraShake.h"
+#include "PlayerController.h"
 
 CutsceneCamera::CutsceneCamera() : Alien()
 {
@@ -46,9 +47,13 @@ void CutsceneCamera::PrepareCutscene()
 	{
 		cam_movement->state = cam_movement->prev_state;
 		cam_movement->is_cinematic = false;
+		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = false;
+		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = false;
 	}
 	else {
 		state = CutsceneState::MOVING;
+		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = true;
+		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = true;
 	}
 }
 
