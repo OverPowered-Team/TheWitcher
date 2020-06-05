@@ -449,7 +449,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		}
 
 		attacks->CancelAttack();
-		if (knock) {
+		//if (knock) {
 			if (player_data.stats["Health"].GetValue() == 0)
 			{
 				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
@@ -461,7 +461,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 				player_data.velocity = knock_speed;
 				SetState(StateType::HIT);
 			}
-		}
+		//}
 
 		if (GameManager::instance->rumbler_manager)
 			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
