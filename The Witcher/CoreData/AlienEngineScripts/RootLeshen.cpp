@@ -54,11 +54,13 @@ void RootLeshen::OnTriggerEnter(ComponentCollider* collider)
 		if (player_ctrl && !player_ctrl->is_immune && player_ctrl->can_move && state != ROOTSTATE::ROOT) {
 			state = ROOTSTATE::ROOT;
 			transform->SetGlobalPosition(collider->game_object_attached->transform->GetGlobalPosition());
-			player_ctrl->ApplyRoot(total_root_time);
 			leshen->EndAction(game_object);
 			game_object->SetNewParent(player_ctrl->game_object);
 			game_object->transform->SetLocalPosition(float3::zero());
 			game_object->GetComponent<ComponentAnimator>()->PlayState("Root");
+			float distance = leshen->transform->GetGlobalPosition().Distance(leshen->player_controllers[target]->transform->GetGlobalPosition());
+			total_root_time = base_total_root_time + (distance * root_time_distance_factor);
+			player_ctrl->ApplyRoot(total_root_time);
 		}
 		else {
 			LOG("There's no Player Controller in GO in ArrowScript!");
