@@ -839,7 +839,7 @@ void PlayerController::CheckEnemyCircle()
 
 			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
 
-			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
 			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);

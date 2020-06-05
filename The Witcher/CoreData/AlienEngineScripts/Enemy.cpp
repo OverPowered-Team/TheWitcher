@@ -146,6 +146,7 @@ void Enemy::UpdateEnemy()
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
+		LOG("estoy en efectos %f", stats["Health"].GetValue());
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
 		{
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
@@ -342,7 +343,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-
+	LOG("estoy en getdamage %f", stats["Health"].GetValue());
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
 
@@ -441,6 +442,11 @@ void Enemy::AddEffect(Effect* new_effect)
 
 void Enemy::RemoveEffect(Effect* _effect)
 {
+	if (_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(_effect->vfx_on_apply, _effect->spawned_particle);
+	}
+
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
 		if (_effect->AffectsStat(it->second.name))
