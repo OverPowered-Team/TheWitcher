@@ -16,10 +16,17 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	
 	if (player->controller_index == 1)
 	{
-		damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y - 225 * (player1_damagenums.size() + 1);
+		if (player1_damagenums.empty())
+		{
+			damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y;
+		}
+		else
+		{
+			damage_num->starting_y_position = player1_damagenums.back()->starting_y_position - 175;
+		}
 
 		damage_num->go = GameObject::Instantiate(text,
-			float3(damagecount_player1->game_object_attached->transform->GetGlobalPosition().x + 150,
+			float3(damagecount_player1->game_object_attached->transform->GetGlobalPosition().x + 75,
 				damage_num->starting_y_position,
 				0), false, GameObject::FindWithName("List_DmgNums1"));
 
@@ -35,10 +42,17 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 	else
 	{
-		damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y - 175 * (player2_damagenums.size() + 1);
+		if (player2_damagenums.empty())
+		{
+			damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y;
+		}
+		else
+		{
+			damage_num->starting_y_position = player2_damagenums.back()->starting_y_position - 175;
+		}
 
 		damage_num->go = GameObject::Instantiate(text, 
-			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x + 100,
+			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x - 25,
 			damage_num->starting_y_position,
 			0), false, GameObject::FindWithName("List_DmgNums2"));
 
@@ -54,7 +68,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 		
 	damage_num->damage = damage;
-	damage_num->go->transform->SetLocalScale(float3(0.5f, 0.5f, 1));
+	damage_num->go->transform->SetLocalScale(float3(0.75f, 0.75f, 1));
 	damage_num->text = damage_num->go->GetComponent<ComponentText>();
 	damage_num->text->SetText(std::to_string((int)damage).c_str());
 	damage_num->text->SetColor(float3(1, 1, 1));
@@ -201,15 +215,30 @@ void UI_DamageCount::DamageCount_Handling(int index)
 	auto iter = (*vector_to_handle).begin();
 	for (; iter != (*vector_to_handle).end(); ++iter)
 	{
-		if (!(*iter)->is_transitioning && ((*iter)->current_timer + 1 <= internal_timer))
+		if (!(*iter)->is_transitioning)
 		{
-			(*iter)->is_transitioning = true;
-			(*iter)->current_timer = internal_timer;
+			if (((*iter)->current_timer + 1 <= internal_timer))
+			{
+				(*iter)->is_transitioning = true;
+				(*iter)->current_timer = internal_timer;
+			}
+			else if ((*iter)->current_timer + 0.25f >= internal_timer)
+			{
+				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
+				float lerp = Maths::Lerp(0.75f, 0.5f, t);
+
+				(*iter)->go->transform->SetLocalScale(lerp, lerp, 1);
+
+				if (t >= 1)
+				{
+					(*iter)->go->transform->SetLocalScale(0.5f, 0.5f, 1);
+				}
+			}
 		}
 
 		if ((*iter)->is_transitioning)
 		{
-			float t = (internal_timer - (*iter)->current_timer) / 0.5f;
+			float t = (internal_timer - (*iter)->current_timer) / 0.25f;
 			float lerp = Maths::Lerp((*iter)->starting_y_position, 0.0f, t);
 			float alpha = Maths::Lerp(0.0f, 1.0f, t);
 
@@ -272,16 +301,16 @@ void UI_DamageCount::ScaleDamageCount(int index)
 		time = scaling_time2;
 	}
 
-	float t = (internal_timer - time) / 0.5f;
+	float t = (internal_timer - time) / 0.25f;
 	float lerp = 0.0f;
 
-	if (t <= 0.5f)
+	if (t <= 0.25f)
 	{
-		lerp = Maths::Lerp(original_scale, original_scale * (1.f + 1.f / 4.f), t / 0.5f);
+		lerp = Maths::Lerp(original_scale, original_scale * (1.f + 1.f / 4.f), t / 0.25f);
 	}
 	else
 	{
-		lerp = Maths::Lerp(original_scale * (1.f + 1.f / 4.f), original_scale, (t - 0.5f) / 0.5f);
+		lerp = Maths::Lerp(original_scale * (1.f + 1.f / 4.f), original_scale, (t - 0.25f) / (4 / 3));
 	}
 
 	damage_count->transform->SetLocalScale(float3(lerp, lerp, 1));
