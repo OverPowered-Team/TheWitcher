@@ -14,7 +14,7 @@ DialogueManager::~DialogueManager()
 void DialogueManager::Start()
 {
 	audioEmitter = GetComponent<ComponentAudioEmitter>();
-	text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
+	//text = textObj->GetComponent<ComponentText>(); // TODO: when UI works
 
 	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
 	LoadJSONDialogues();
@@ -61,7 +61,7 @@ void DialogueManager::Update()
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
 		{
 			playing = false;
-			text->SetEnable(false);
+		//	text->SetEnable(false); // TODO: when UI works
 			currentDialogue.Reset();
 			audioEmitter->ChangeVolume(0.5f);
 		}
@@ -127,10 +127,10 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 	currentDialogue.subtitlesTime = newDialogue.subtitlesTime;
 
 	// Set Subtitles 
-	if (text->IsEnabled() == false)
+	/*if (text->IsEnabled() == false)
 		text->SetEnable(true);
 	//text->Reset(); 
-	text->SetText(newDialogue.subtitlesText.c_str());
+	text->SetText(newDialogue.subtitlesText.c_str());*/ // TODO: when UI works
 
 
 	// Play new
