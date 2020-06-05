@@ -10,8 +10,6 @@ class VagoneteInputs {
 public:
 	enum class State {
 		IDLE,
-		JUMP,
-		JUMPING,
 		INCLINATION,
 		COVER
 	};
@@ -37,7 +35,6 @@ public:
 	int inclinationZone = 1;
 
 	struct {
-		SDL_Scancode jump = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode inclinationLeft = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode inclinationRight = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode cover = SDL_SCANCODE_UNKNOWN;

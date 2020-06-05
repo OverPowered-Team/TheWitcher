@@ -212,7 +212,6 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationLeft = SDL_SCANCODE_A;
 		keyboardInput.inclinationRight = SDL_SCANCODE_D;
 		keyboardInput.cover = SDL_SCANCODE_S;
-		keyboardInput.jump = SDL_SCANCODE_W;
 		player = GameObject::FindWithName("Geralt_Prefab"); // TODO: Change this to only find in children of GameObject
 		break; }
 	case PlayerController::PlayerType::YENNEFER: {
@@ -220,7 +219,6 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationLeft = SDL_SCANCODE_LEFT;
 		keyboardInput.inclinationRight = SDL_SCANCODE_RIGHT;
 		keyboardInput.cover = SDL_SCANCODE_DOWN;
-		keyboardInput.jump = SDL_SCANCODE_UP;
 		player = GameObject::FindWithName("Yenn_Ready");
 		break; }
 	default: {
@@ -242,7 +240,6 @@ void VagoneteInputs::UpdateInputs()
 	case VagoneteInputs::State::IDLE: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
-		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump) || Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_A);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex,Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::COVER) {
@@ -257,10 +254,6 @@ void VagoneteInputs::UpdateInputs()
 				state = State::INCLINATION;
 				globalState = State::INCLINATION;
 			}
-			else if (jumpInput) {
-				state = State::JUMP;
-				globalState = State::JUMP;
-			}
 			else if (coverInput) {
 				state = State::COVER;
 			}
@@ -268,9 +261,6 @@ void VagoneteInputs::UpdateInputs()
 				state = State::IDLE;
 			}
 		}
-
-		break; }
-	case VagoneteInputs::State::JUMPING: {
 
 		break; }
 	case VagoneteInputs::State::INCLINATION: {
@@ -318,12 +308,6 @@ void VagoneteInputs::DoAction()
 {
 	switch (state)
 	{
-	case VagoneteInputs::State::JUMP: {
-		state = State::IDLE;
-		break; }
-	case VagoneteInputs::State::JUMPING: {
-		state = State::IDLE;
-		break; }
 	case VagoneteInputs::State::INCLINATION: {
 		Inclination();
 		break; }
