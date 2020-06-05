@@ -262,7 +262,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 		auto iter = (*vector_to_handle).begin();
 		for (; iter != (*vector_to_handle).end(); ++iter)
 		{
-			if ((*iter) == (*vector_to_handle).front() && (*iter)->go->transform->GetLocalPosition().y != -175)
+			if ((*iter) == (*vector_to_handle).front() && (*iter)->go->transform->GetLocalPosition().y != -154.5f)
 			{
 				auto iter = (*vector_to_handle).begin();
 				for (; iter != (*vector_to_handle).end(); ++iter)
@@ -272,7 +272,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 
 					if ((*iter) == (*vector_to_handle).front())
 					{
-						lerp = Maths::Lerp((*iter)->starting_y_position, -175.f, t);
+						lerp = Maths::Lerp((*iter)->starting_y_position, -154.5f, t);
 					}
 					else
 					{
@@ -285,28 +285,15 @@ void UI_DamageCount::DamageCount_Handling(int index)
 					{
 						if ((*iter) == (*vector_to_handle).front())
 						{
-							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -175.0f, 0));
+							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -154.5f, 0));
 						}
 						else
 						{
 							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -(*(iter - 1))->go->transform->GetLocalPosition().y - 175.f, 0));
 						}
 						(*iter)->starting_y_position = (*iter)->go->transform->GetLocalPosition().y;
+						
 					}
-				}
-			}
-
-			// New DamageNum Effect
-			if ((*iter)->current_timer + 0.25f >= internal_timer)
-			{
-				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
-				float lerp = Maths::Lerp(0.75f, 0.5f, t);
-
-				(*iter)->go->transform->SetLocalScale(lerp, lerp, 1);
-
-				if (t >= 1)
-				{
-					(*iter)->go->transform->SetLocalScale(0.5f, 0.5f, 1);
 				}
 			}
 
@@ -321,6 +308,20 @@ void UI_DamageCount::DamageCount_Handling(int index)
 					--iter;
 				}
 				iter = (*vector_to_handle).begin();
+			}
+
+			// New DamageNum Effect
+			if ((*iter)->current_timer + 0.25f >= internal_timer)
+			{
+				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
+				float lerp = Maths::Lerp(0.75f, 0.5f, t);
+
+				(*iter)->go->transform->SetLocalScale(lerp, lerp, 1);
+
+				if (t >= 1)
+				{
+					(*iter)->go->transform->SetLocalScale(0.5f, 0.5f, 1);
+				}
 			}
 		}
 	}
@@ -344,9 +345,9 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				text->SetText(std::to_string(std::stoi(text->GetText()) + (*iter)->damage).c_str());
 				GameObject::Destroy((*iter)->go);
 				(*iter)->go = nullptr;
-				(*vector_to_handle).erase(iter);
+				(*vector_to_transition).erase(iter);
 
-				if ((*vector_to_handle).size() == 0)
+				if ((*vector_to_transition).size() == 0)
 				{
 					if (index == 1)
 					{
