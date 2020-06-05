@@ -7,6 +7,7 @@
 #include "PlayerAttacks.h"
 #include "Effect.h"
 #include "SteeringAvoid.h"
+#include "UI_DamageCount.h"
 
 void Enemy::Awake()
 {
@@ -339,6 +340,11 @@ void Enemy::CanGetInterrupted()
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");
+
+	if (GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>())
+	{
+		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddDamageCount(dmg, player);
+	}
 
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);

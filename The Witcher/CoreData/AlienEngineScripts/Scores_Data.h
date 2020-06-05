@@ -11,5 +11,7 @@ struct Scores_Data
 	static std::string last_scene;
 	static bool dead;
 	static float3 last_checkpoint_position;
+	static int player1_damage;
+	static int player2_damage;
 };
 
