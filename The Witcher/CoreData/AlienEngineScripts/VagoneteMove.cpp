@@ -147,7 +147,7 @@ void VagoneteMove::DecreaseLife()
 		HUD->UpdateLifebar(vagonete_life, max_life);
 
 		if (vagonete_life <= 0) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+			SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
 		}
 	}
 }
