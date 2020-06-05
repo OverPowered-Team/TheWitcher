@@ -146,7 +146,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z), true);
+	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.5f, transform->GetGlobalPosition().z), true);
 	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
@@ -156,7 +156,7 @@ void Leshen::LaunchCrowsAction()
 		crows_target = 1;
 	}
 	else if(player_controllers[0]->state->type != StateType::DEAD && player_controllers[1]->state->type != StateType::DEAD){
-		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
+		crows->GetComponent<CrowsLeshen>()->target = Random::GetRandomIntBetweenTwo(0, 1);
 		crows_target = crows->GetComponent<CrowsLeshen>()->target;
 	}
 	else if (player_controllers[0]->state->type != StateType::DEAD) {

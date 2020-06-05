@@ -15,7 +15,10 @@ public:
 	int target = 0;
 	bool setted_direction;
 	Leshen* leshen = nullptr;
+	float current_rot_multiplicator = 1.0f;
 
+	float max_track_distance = 4.0f;
+	bool tracking = true;
 	CrowsLeshen();
 	virtual ~CrowsLeshen();
 	

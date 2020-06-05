@@ -23,11 +23,28 @@ void CrowsLeshen::Update()
 	if (!setted_direction) {
 		direction = (leshen->player_controllers[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 		float angle = atan2f(direction.z, direction.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg()) * Maths::Deg2Rad());
+		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
 		setted_direction = true;
 	}
-	transform->AddPosition(direction * speed);
+
+	float distance_to_player = transform->GetGlobalPosition().Distance(leshen->player_controllers[target]->transform->GetGlobalPosition());
+
+	if (tracking) {
+		if (distance_to_player > max_track_distance) {
+			direction = -(leshen->player_controllers[target]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
+			float desired_angle = atan2f(direction.z, direction.x);
+			desired_angle = -(desired_angle * Maths::Rad2Deg() + 90.f) * Maths::Deg2Rad();
+			Quat rot = Quat::RotateAxisAngle(float3::unitY(), desired_angle);
+			Quat current_rot = Quat::Slerp(transform->GetGlobalRotation(), rot, 0.05f);
+			transform->SetGlobalRotation(current_rot);
+		}
+		else {
+			tracking = false;
+		}
+	}
+
+	transform->AddPosition(transform->forward * speed);
 
 	if (life_time <= total_life_time)
 		life_time += Time::GetDT();
