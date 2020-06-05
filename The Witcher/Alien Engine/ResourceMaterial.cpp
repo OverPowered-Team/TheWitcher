@@ -922,6 +922,20 @@ void ResourceMaterial::TextureBrowser(TextureType selectedType)
 		}
 		ImGui::EndPopup();
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

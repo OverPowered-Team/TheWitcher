@@ -233,6 +233,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 
 	if (!canvas->isWorld)
 	{
+		game_object_attached->transform->SetGlobalRotation({ 0.0f,0.0f,0.0f,0.0f });
 		glPushMatrix();
 		glMultMatrixf(matrix.Transposed().ptr());
 	}
@@ -347,7 +348,6 @@ void ComponentAnimatedImage::LoadComponent(JSONArraypack* to_load)
 		}
 	}
 	catch (...) {}
-	
 
 	GameObject* p = game_object_attached->parent;
 	bool changed = true;

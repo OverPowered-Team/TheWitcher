@@ -194,29 +194,6 @@ void ComponentCollider::DrawScene()
 {
 	if (enabled == true && (game_object_attached->IsSelected() || App->physx->debug_physics))
 	{
-		
-		RaycastHit hit;
-		float4x4 trans = PXTRANS_TO_F4X4(physics->actor->getGlobalPose());
-		float3 origin = trans.TranslatePart();
-		float3 dir = -trans.WorldY();
-		float dist = 10.f;
-		int player_mask = 0;
-		vector<const char*> layers;
-		layers.push_back("Player");
-		layers.push_back("Ground");
-		int layer_mask = Physics::GetLayerMask(layers);
-
-		if (Physics::CapsuleCast(trans, 1, 0.5f, dir, 10.f, hit, layer_mask))
-		{
-			Gizmos::DrawLine(origin, hit.point, Color(1.f, 0.f, 0.f));
-			float rest_dist =  dist - origin.Distance(hit.point);
-			Gizmos::DrawLine(hit.point, hit.point + hit.normal * rest_dist, Color(1.f, 0.f, 1.f));
-		}
-		else
-		{
-			Gizmos::DrawLine(origin, origin + dir * dist, Color(1.f, 0.f, 0.f));
-		}
-
 		App->physx->DrawCollider(this);
 	}
 }

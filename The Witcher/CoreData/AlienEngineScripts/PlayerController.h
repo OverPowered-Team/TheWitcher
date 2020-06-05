@@ -223,6 +223,7 @@ private:
 
 	CameraShake* shake = nullptr;
 	float last_regen_tick = 0.0f;
+	std::vector<const char*> layers;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {

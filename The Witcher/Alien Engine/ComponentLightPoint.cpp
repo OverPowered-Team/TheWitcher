@@ -59,7 +59,7 @@ void ComponentLightPoint::Update()
 	OPTICK_EVENT();
 
 	//If Light is attached to GameObject or Emmitter, we call this function
-	if(!light_props.casting_particles)
+	if(light_props.enabled)
 		LightLogic();
 
 	//Else, we update light position from every particle
