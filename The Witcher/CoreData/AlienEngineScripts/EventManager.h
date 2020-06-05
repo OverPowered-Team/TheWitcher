@@ -8,6 +8,7 @@
 class PlayerController;
 struct Dialogue;
 class DialogueManager;
+class GameManager; 
 
 class ALIEN_ENGINE_API EventManager : public Alien {
 
@@ -23,9 +24,6 @@ public:
 	// Audio name in the dialogue object's emitter bank, priority (use event map), can it be stopped and then continued?, entity name, delay to invoke the audio
 	void ReceiveDialogueEvent(Dialogue& dialogue, float delay = 0.f) const;
 	void ReceiveDialogueEvent(int index, float volume = 0.5f) const;
-
-	
-	
 
 public:
 	std::map<const char*, uint> eventPriorities; // event and priority

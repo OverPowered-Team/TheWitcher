@@ -121,8 +121,12 @@ void PlayerController::CheckGround()
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
+			float angle = RadToDeg(transform->up.AngleBetweenNorm(hit.normal));
 			Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
 			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
+
+			if (angle > 45)
+				direction = -direction;
 
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
 		}
@@ -449,18 +453,16 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		}
 
 		attacks->CancelAttack();
-		if (knock) {
-			if (player_data.stats["Health"].GetValue() == 0)
-			{
-				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-				Die();
-			}
-			else
-			{
-				animator->PlayState("Hit");
-				player_data.velocity = knock_speed;
-				SetState(StateType::HIT);
-			}
+		if (player_data.stats["Health"].GetValue() == 0)
+		{
+			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+			Die();
+		}
+		else
+		{
+			animator->PlayState("Hit");
+			player_data.velocity = knock_speed;
+			SetState(StateType::HIT);
 		}
 
 		if (GameManager::instance->rumbler_manager)
@@ -575,8 +577,6 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		return it;
 	}
 
-	it = effects.erase(it);
-
 	if (tmp_effect->spawned_particle != nullptr)
 	{
 		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
@@ -595,7 +595,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-
+	it = effects.erase(it);
 
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
