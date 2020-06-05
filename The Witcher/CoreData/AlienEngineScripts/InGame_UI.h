@@ -49,7 +49,6 @@ public:
 	Prefab killcount_particle;
 
 	float time_lerp_ult_part = 1.5f;
-
 	float ulti_filter_alpha = 0.2f;
 
 private:
