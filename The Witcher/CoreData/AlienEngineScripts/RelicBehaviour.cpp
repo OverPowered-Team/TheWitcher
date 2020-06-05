@@ -44,23 +44,29 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	effect->on_hit_effect = effect_to_apply;
 	effect->name = name;
 
+
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Fire";
 		break;
 	case Relic_Effect::ICE:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Ice";
 		break;
 	case Relic_Effect::EARTH:
 		effect->OnHit = &ApplyEffectOnHit;
 		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
+		effect->element = "Earth";
 		break;
 	case Relic_Effect::LIGHTNING:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Lightning";
 		break;
 	case Relic_Effect::POISON:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Poison";
 		break;
 	}
 

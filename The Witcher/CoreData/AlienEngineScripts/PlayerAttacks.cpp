@@ -18,7 +18,7 @@
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
-{"Earth",Attack_Tags::T_Earth}, {"Lightning",Attack_Tags::T_Lightning}, {"Chaining",Attack_Tags::T_Chaining}, {"Spell",Attack_Tags::T_Spell} };
+{"Earth",Attack_Tags::T_Earth}, {"Lightning",Attack_Tags::T_Lightning}, {"Poison",Attack_Tags::T_Poison}, {"Chaining",Attack_Tags::T_Chaining}, {"Spell",Attack_Tags::T_Spell} };
 
 Attack_Tags GetTag(std::string str)
 {
@@ -199,6 +199,9 @@ void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 	{
 		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
+			Attack_Tags element_tag = GetTag(new_effect->element);
+			if(element_tag != Attack_Tags::T_None)
+				(*it)->info.tags.push_back(element_tag);
 			(*it)->info.stats["Damage"].ApplyEffect(new_effect);
 		}
 	}
