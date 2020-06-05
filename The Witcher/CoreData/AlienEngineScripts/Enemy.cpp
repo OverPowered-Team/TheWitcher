@@ -79,10 +79,10 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	if (player_controllers[0]->state->type == StateType::DEAD)

@@ -61,6 +61,9 @@ public:
 
 	void PlaySFX(const char* sfx_name);
 	bool IsState(const char* state_str) override;
+
+	void CanJump();
+	void CanNotJump();
 // Group tactics
 	//void OnGroupStrengthChange(float strength_multi) override;
 
@@ -74,6 +77,8 @@ private:
 	float3 lastWanderTargetPos;
 	bool curve_patrol_go = true; 
 	float current_curve_point = 0.f;
+	float jump_speed = 0.0f;
+
 public: 
 	float curve_speed = 0.02f;
 	bool patrol = false;
@@ -82,6 +87,7 @@ public:
 	float wander_precision = 0.5f; 
 	float wander_rest_time = 1.f;
 	bool wander_rest = true; 
+	bool can_jump = false;
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
 	AwakeBehaviour awake_behaviour = AwakeBehaviour::DEFAULT;

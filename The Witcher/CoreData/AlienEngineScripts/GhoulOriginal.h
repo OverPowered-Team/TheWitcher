@@ -26,7 +26,7 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(ghoul->head_prefab);
 	SHOW_IN_INSPECTOR_AS_PREFAB(ghoul->life_orb);
 
-	SHOW_SPACING();
+	/*SHOW_SPACING();
 	SHOW_SEPARATOR();
 	SHOW_TEXT("What does the enemy do before aggro-ing the players?");
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::AwakeBehaviour, ghoul->awake_behaviour); 
@@ -44,12 +44,14 @@ ALIEN_FACTORY GhoulOriginal* CreateGhoulOriginal() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_radius);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_speed);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_rest_time);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_precision);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(ghoul->wander_precision);*/
 
 	SHOW_SPACING();
 	SHOW_SEPARATOR();
 
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ghoul->increase_hit_animation);
+	SHOW_VOID_FUNCTION(Ghoul::CanJump, ghoul);
+	SHOW_VOID_FUNCTION(Ghoul::CanNotJump, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::ActivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Ghoul::DeactivateCollider, ghoul);
 	SHOW_VOID_FUNCTION(Enemy::SpawnAttackParticle, ghoul);
