@@ -213,7 +213,7 @@ void PlayerAttacks::CancelAttack()
 	if (current_attack != nullptr)
 	{
 		player_controller->ReleaseAttackParticle();
-		if(colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+		if(colliders.size() > 0 && colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
 			colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
 		
 		current_attack = nullptr;
