@@ -523,8 +523,15 @@ void PanelInspector::ButtonAddComponent()
 				case ComponentType::PARTICLES: {
 					if (!selected->HasComponent(ComponentType::PARTICLES))
 					{
-						comp = new ComponentParticleSystem(selected);
-						selected->AddComponent(comp);
+						//A GameObject can't have two shaders because binding order, thats why we check if obj has a material
+						//Also, we check if it has a Mesh cause drawing order deals with mesh 
+						if (!selected->HasComponent(ComponentType::MATERIAL) && !selected->HasComponent(ComponentType::MESH))
+						{
+							comp = new ComponentParticleSystem(selected);
+							selected->AddComponent(comp);
+						}
+						else
+							LOG_ENGINE("The selected object already has a Shader Material to bind!");
 					}
 					else
 						LOG_ENGINE("The selected object already has this component!");
@@ -532,8 +539,13 @@ void PanelInspector::ButtonAddComponent()
 				case ComponentType::TRAIL: {
 					if (!selected->HasComponent(ComponentType::TRAIL))
 					{
-						comp = new ComponentTrail(selected);
-						selected->AddComponent(comp);
+						if (!selected->HasComponent(ComponentType::MATERIAL) && !selected->HasComponent(ComponentType::MESH))
+						{
+							comp = new ComponentTrail(selected);
+							selected->AddComponent(comp);
+						}
+						else
+							LOG_ENGINE("The selected object already has a Shader Material to bind!");
 					}
 					else
 						LOG_ENGINE("The selected object already has this component!");

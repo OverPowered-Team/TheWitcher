@@ -113,20 +113,18 @@ bool ResourceScene::ReadBaseInfo(const char* assets_file_path)
 void ResourceScene::ReadLibrary(const char* meta_data)
 {
 	meta_data_path = meta_data;
-	try {
-		ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 
-		JSON_Value* value = json_parse_file(meta_data_path.data());
-		JSON_Object* object = json_value_get_object(value);
+	ID = std::stoull(App->file_system->GetBaseFileName(meta_data_path.data()));
 
-		if (value != nullptr && object != nullptr)
-		{
-			JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
-			name = meta->GetString("Scene.Name");
-			delete meta;
-		}
+	JSON_Value* value = json_parse_file(meta_data_path.data());
+	JSON_Object* object = json_value_get_object(value);
+
+	if (value != nullptr && object != nullptr)
+	{
+		JSONfilepack* meta = new JSONfilepack(meta_data_path.data(), object, value);
+		name = meta->GetString("Scene.Name");
+		delete meta;
 	}
-	catch(...) {}
 
 	App->resources->AddResource(this);
 }

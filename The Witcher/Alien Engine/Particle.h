@@ -87,6 +87,11 @@ struct ParticleInfo
 	float lengthScale = 1.0f;
 	float speedScale = 0.0f;
 	float velocityScale = 0.0f;
+
+	//Random
+	float2 randomAngleZ = float2::zero();
+	float2 randomAngleY = float2::zero();
+	float2 randomAngleX = float2::zero();
 };
 
 struct ParticleMutableInfo

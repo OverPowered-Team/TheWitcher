@@ -9,15 +9,18 @@
 #include "ComponentCamera.h"
 #include "ModuleObjects.h"
 #include "Viewport.h"
+#include "RandomHelper.h"
 #include "mmgr/mmgr.h"
 #include "ModuleResources.h"
 #include "ComponentLightPoint.h"
+
 Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo endInfo) : owner(owner), particleInfo(info), startInfo(info), endInfo(endInfo)
 {
 	owner->sourceFactor = GL_SRC_ALPHA;
 	owner->destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
 	currentFrame = owner->currentFrame;
 	
+	// Material Particle
 	if (owner->material != nullptr) 
 	{
 		p_material = new ResourceMaterial();
@@ -27,15 +30,44 @@ Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo
 		p_material->shaderInputs = owner->material->shaderInputs;
 	}
 
+
+	// Light Particle
 	if (owner->point_light != nullptr && owner->point_light->light_props.casting_particles)
 	{
 		if (owner->totalLights < owner->lightProperties.max_lights)
 		{
-			p_light = new ComponentLightPoint(owner->point_light->game_object_attached);
-			p_light->SetProperties(owner->point_light->light_props);
+			//Random distribution
+			if (owner->lightProperties.random_distribution)
+			{
+				int rand = Random::GetRandomIntBetweenTwo(0, 2);
+				
+				if (rand == 1)
+				{
+					p_light = new ComponentLightPoint(owner->point_light->game_object_attached);
+					p_light->SetProperties(owner->point_light->light_props);
+					owner->totalLights++;
+				}
 
-			//p_light = owner->point_light;
-			owner->totalLights++;
+			}
+			else
+			{
+				p_light = new ComponentLightPoint(owner->point_light->game_object_attached);
+				p_light->SetProperties(owner->point_light->light_props);
+				owner->totalLights++;
+			}
+
+			//Range affects intensity
+			if (owner->lightProperties.size_range && p_light != nullptr)
+			{
+				float size = owner->emmitter.GetRadius();
+
+				if (size <= 0) // Radius is setted as 0
+					size = 0.01f;
+
+				float factor = particleInfo.size3D.x / size;
+				p_light->light_props.intensity *= factor;
+			}
+
 		}
 	}
 
