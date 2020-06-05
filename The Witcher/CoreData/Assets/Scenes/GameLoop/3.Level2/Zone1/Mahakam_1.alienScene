@@ -94515,7 +94515,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "11935655825889445179",
-                        "ListenerID": "3692222125"
+                        "ListenerID": "823121539"
                     },
                     {
                         "Type": 29,
@@ -95117,6 +95117,88 @@
                     {
                         "Type": 2,
                         "ID": "13770612386139532000",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Ground",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cube (2)",
+                "FamilyNumber": 3,
+                "ID": "15583134536483227882",
+                "ParentID": "13920140466014207074",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -31.265071868896484,
+                            -36.938846588134766,
+                            -3.653653621673584
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            98.79730224609375,
+                            1.940000057220459,
+                            108.01842498779297
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2822469712391011301"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "5855737522987171712",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": false
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "17650972527961921451",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -96400,6 +96482,813 @@
                     {
                         "Type": 29,
                         "ID": "5217045442318452745",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Camera Position (1)",
+                "FamilyNumber": 2,
+                "ID": "10748744441930630779",
+                "ParentID": "1939214512579668347",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            13.454153060913086,
+                            -15.365974426269531,
+                            -9.6884708404541016
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12770390510286124928"
+                    }
+                ]
+            },
+            {
+                "Name": "CameraTrigger",
+                "FamilyNumber": 2,
+                "ID": "10297645232630901035",
+                "ParentID": "1939214512579668347",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10.420578956604004,
+                            8.8022403717041016,
+                            -9.5754098892211914
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.69707804918289185,
+                            0,
+                            0.71699529886245728
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "764664617085146078"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6908153845450975803",
+                        "ResourceID": "1885528461117586920",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Previous camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.distance",
+                                "float": 17.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.hor_angle",
+                                "float": -90
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.vert_angle",
+                                "float": 48
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static & Axis"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Next camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.distance",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.vert_angle",
+                                "float": 30
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static & Axis"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "10748744441930630779"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Enter",
+                "FamilyNumber": 3,
+                "ID": "3713277428332167308",
+                "ParentID": "10297645232630901035",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            -5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "266746467736664050"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "14116159279145217878",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Middle",
+                "FamilyNumber": 3,
+                "ID": "6100492773224216942",
+                "ParentID": "10297645232630901035",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "609030689922927594"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2381106134346716357",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Exit",
+                "FamilyNumber": 3,
+                "ID": "14181175264035997350",
+                "ParentID": "10297645232630901035",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13848210851773875948"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9024422197638876712",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "CameraTrigger",
+                "FamilyNumber": 2,
+                "ID": "7696494336652776313",
+                "ParentID": "1939214512579668347",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -23.818603515625,
+                            -30.455799102783203,
+                            -5.9771761894226074
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.7071068286895752,
+                            0,
+                            0.70710670948028564
+                        ],
+                        "Scale": [
+                            2.2923386096954346,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "2406504597920371550"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "9484086053573048549",
+                        "ResourceID": "1885528461117586920",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Previous camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.distance",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.vert_angle",
+                                "float": 30
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static & Axis"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "10748744441930630779"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Next camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.distance",
+                                "float": 11.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.vert_angle",
+                                "float": 27.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static & Axis"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Enter",
+                "FamilyNumber": 3,
+                "ID": "12816248058778558438",
+                "ParentID": "7696494336652776313",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            -5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "530996805780940400"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1626381724769667051",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Middle",
+                "FamilyNumber": 3,
+                "ID": "5015779443519549131",
+                "ParentID": "7696494336652776313",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "132193948844333317"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6512055203312536284",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Exit",
+                "FamilyNumber": 3,
+                "ID": "14940637900202305772",
+                "ParentID": "7696494336652776313",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14397169949268255342"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4981096501414415343",
                         "ResourceID": "9621870720438282818",
                         "DataName": "CameraEnterExit",
                         "HasInspector": true,
@@ -99748,7 +100637,7 @@
                 "ParentID": "3078573658595286453",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -99932,6 +100821,390 @@
                     {
                         "Type": 29,
                         "ID": "958987875105891912",
+                        "ResourceID": "11479817035125242678",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 4
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.60000002384185791
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.20000000298023224
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.60000002384185791
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.40000000596046448
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.20000000298023224
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TriggerFootsteps",
+                "FamilyNumber": 2,
+                "ID": "11871936148704898481",
+                "ParentID": "3078573658595286453",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14097118158796311783",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            91.472343444824219,
+                            0,
+                            -5.831331729888916
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            46.019519805908203,
+                            32.655399322509766,
+                            57.952537536621094
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10167783090728769625"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15436961607783054632",
+                        "ResourceID": "11479817035125242678",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TriggerFootsteps",
+                "FamilyNumber": 2,
+                "ID": "13137724133908793016",
+                "ParentID": "3078573658595286453",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14097118158796311783",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            34.635646820068359,
+                            5.8535199165344238,
+                            -8.955322265625
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            52.953712463378906,
+                            14.483858108520508,
+                            20.132564544677734
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13301369741589745846"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "8794040094846218375",
+                        "ResourceID": "11479817035125242678",
+                        "DataName": "TriggerFootsteps",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "material_1",
+                                "enumInt": 4
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Player particles color associated with this terrain:"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Initial Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.x",
+                                "float": 0.80000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.z",
+                                "float": 0.60000002384185791
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color.w",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Final Color"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.x",
+                                "float": 0.80000001192092896
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.y",
+                                "float": 0.69999998807907104
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.z",
+                                "float": 0.60000002384185791
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "terrain_particle_color_final.w",
+                                "float": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "TriggerFootsteps",
+                "FamilyNumber": 2,
+                "ID": "14568069537305947061",
+                "ParentID": "3078573658595286453",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "14097118158796311783",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -21.630270004272461,
+                            -29.745759963989258,
+                            -6.2822136878967285
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            82.105918884277344,
+                            32.655399322509766,
+                            88.299606323242188
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16062147684110091147"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2643144096988086084",
                         "ResourceID": "11479817035125242678",
                         "DataName": "TriggerFootsteps",
                         "HasInspector": true,
