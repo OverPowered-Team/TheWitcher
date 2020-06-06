@@ -297,17 +297,6 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				}
 			}
 
-			if ((*iter)->is_last && (*iter)->current_timer + 1.5f <= internal_timer)
-			{
-				auto iter_ = iter;
-				for (; iter_ != (*vector_to_handle).begin(); --iter_)
-				{
-					(*iter_)->current_timer = internal_timer;
-					(*vector_to_transition).push_back((*iter_));
-					(*vector_to_handle).erase(iter_);
-				}
-			}
-
 			// New DamageNum Effect
 			if ((*iter)->current_timer + 0.25f >= internal_timer)
 			{
@@ -320,6 +309,18 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					(*iter)->go->transform->SetLocalScale(0.5f, 0.5f, 1);
 				}
+			}
+
+			if ((*iter)->is_last && (*iter)->current_timer + 1.5f <= internal_timer)
+			{
+				auto iter_ = iter;
+				for (; iter_ != (*vector_to_handle).begin(); --iter_)
+				{
+					(*iter_)->current_timer = internal_timer;
+					(*vector_to_transition).push_back((*iter_));
+					(*vector_to_handle).erase(iter_);
+				}
+				break;
 			}
 		}
 	}
