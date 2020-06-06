@@ -25,7 +25,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	{
 		if (player1_damagenums.empty())
 		{
-			damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y - 175;
+			damage_num->starting_y_position = damagecount_player1->game_object_attached->transform->GetGlobalPosition().y - 195.5f;
 		}
 		else
 		{
@@ -62,7 +62,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	{
 		if (player2_damagenums.empty())
 		{
-			damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y - 175;
+			damage_num->starting_y_position = damagecount_player2->game_object_attached->transform->GetGlobalPosition().y - 195.5f;
 		}
 		else
 		{
@@ -262,7 +262,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 		auto iter = (*vector_to_handle).begin();
 		for (; iter != (*vector_to_handle).end(); ++iter)
 		{
-			if ((*iter) == (*vector_to_handle).front() && (*iter)->go->transform->GetLocalPosition().y != -154.5f)
+			if ((*iter) == (*vector_to_handle).front() && (*iter)->go->transform->GetLocalPosition().y != -175)
 			{
 				auto iter = (*vector_to_handle).begin();
 				for (; iter != (*vector_to_handle).end(); ++iter)
@@ -272,7 +272,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 
 					if ((*iter) == (*vector_to_handle).front())
 					{
-						lerp = Maths::Lerp((*iter)->starting_y_position, -154.5f, t);
+						lerp = Maths::Lerp((*iter)->starting_y_position, -175.f, t);
 					}
 					else
 					{
@@ -285,7 +285,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 					{
 						if ((*iter) == (*vector_to_handle).front())
 						{
-							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -154.5f, 0));
+							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -175, 0));
 						}
 						else
 						{
@@ -299,15 +299,13 @@ void UI_DamageCount::DamageCount_Handling(int index)
 
 			if ((*iter)->is_last && (*iter)->current_timer + 1.5f <= internal_timer)
 			{
-				auto iter = (*vector_to_handle).begin();
-				for (; iter != (*vector_to_handle).end(); ++iter)
+				auto iter_ = iter;
+				for (; iter_ != (*vector_to_handle).begin(); --iter_)
 				{
-					(*iter)->current_timer = internal_timer;
-					(*vector_to_transition).push_back((*iter));
-					(*vector_to_handle).erase(iter);
-					--iter;
+					(*iter_)->current_timer = internal_timer;
+					(*vector_to_transition).push_back((*iter_));
+					(*vector_to_handle).erase(iter_);
 				}
-				iter = (*vector_to_handle).begin();
 			}
 
 			// New DamageNum Effect
@@ -333,7 +331,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 		{
 			float t = (internal_timer - (*iter)->current_timer) / 0.25f;
 			float lerp = Maths::Lerp((*iter)->starting_y_position, 0.0f, t);
-			float alpha = Maths::Lerp(0.0f, 1.0f, t);
+			float alpha = Maths::Lerp(1.0f, 0.0f, t);
 
 			(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, lerp, 0));
 			(*iter)->text->SetAlpha(alpha);
