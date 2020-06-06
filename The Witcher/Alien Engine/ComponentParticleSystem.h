@@ -46,6 +46,9 @@ private:
 	void LoadParticles();
 	void SaveParticles();
 
+	void SetConfigurationArrow();
+	float CalculateRandomBetweenTwoConstants(float2 constants);
+
 public: 
 
 	ParticleSystem* GetSystem();
@@ -98,4 +101,7 @@ private:
 	int texColumns = 1;
 	int startFrame = 0;
 	int endFrame = (texRows * texColumns) - 1;
+	
+	//Temporal stuff
+	bool random_rot = false;
 };

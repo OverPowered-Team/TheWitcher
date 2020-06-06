@@ -23,8 +23,10 @@ public:
 	float3 rooted_effect_direction = {0.0f, 1.0f, 0.0f};
 	float life_time = 0.0f;
 	float root_time = 0.0f;
-	float total_life_time = 10.0f;
-	float total_root_time = 4.0f;
+	float total_life_time = 5.0f;
+	float total_root_time = 0.0f;
+	float root_time_distance_factor = 0.08f;
+	float base_total_root_time = 2.0f;
 	float3 direction;
 	int target = 0;
 

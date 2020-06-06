@@ -68,6 +68,7 @@ public:
 	std::string GetAttackIdentifier();
 
 	std::string attack_name = "";
+	std::string element;
 	EffectData* on_hit_effect = nullptr;
 };
 

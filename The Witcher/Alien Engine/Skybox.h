@@ -19,6 +19,8 @@ struct Cubemap
 		NEGATIVE_Z,
 	};
 
+	Cubemap();
+
 	std::string path_pos[6];
 
 	void Reset()
@@ -85,24 +87,25 @@ struct Cubemap
 class Skybox
 {
 public:
-	Skybox();
+	Skybox(Cubemap* cubemap);
 	~Skybox();
 
-	uint LoadCubeMap(const std::vector<std::string>& texture_files);
-	uint LoadCubeMapFromLibraryFiles(const std::vector<std::string>& texture_files);
 	uint GenereteCubeMapFromTextures(ResourceTexture* skybox_textures[6]);
 	void SetBuffers();
-	void ChangeTextureByType(Cubemap::SKYBOX_POS type, const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
-	void ChangePositiveX(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
-	void ChangeNegativeX(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
-	void ChangePositiveY(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
-	void ChangeNegativeY(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
-	void ChangePositiveZ(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
-	void ChangeNegativeZ(const uint& id_skybox, const uint& id_texture, const uint& width, const uint& height);
+	void ChangeTextureByType(Cubemap::SKYBOX_POS type, const uint& id_texture, const uint& width, const uint& height);
+	void ChangePositiveX(const uint& id_texture, const uint& width, const uint& height);
+	void ChangeNegativeX(const uint& id_texture, const uint& width, const uint& height);
+	void ChangePositiveY(const uint& id_texture, const uint& width, const uint& height);
+	void ChangeNegativeY(const uint& id_texture, const uint& width, const uint& height);
+	void ChangePositiveZ(const uint& id_texture, const uint& width, const uint& height);
+	void ChangeNegativeZ(const uint& id_texture, const uint& width, const uint& height);
 
 public:
+
 	std::vector<std::string> textures[6];
-	uint vao, vbo;
+	uint vao = 0;
+	uint vbo = 0;
+	uint skybox_texture = 0;
 
 private:
 	float vertices[108] = {

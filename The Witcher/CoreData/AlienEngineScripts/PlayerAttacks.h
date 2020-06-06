@@ -19,6 +19,7 @@ enum class Attack_Tags {
 	T_Ice,
 	T_Earth,
 	T_Lightning,
+	T_Poison,
 	T_Chaining,
 	T_None
 };

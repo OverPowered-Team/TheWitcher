@@ -146,6 +146,7 @@ void Enemy::UpdateEnemy()
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
+		LOG("estoy en efectos %f", stats["Health"].GetValue());
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
 		{
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
@@ -342,7 +343,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-
+	LOG("estoy en getdamage %f", stats["Health"].GetValue());
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
 
@@ -362,8 +363,20 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 		can_get_interrupted = false;
 	}
+
+	//float3 direction = (particle_spawn_positions[1]->transform->GetGlobalPosition() - last_player_hit->transform->GetGlobalPosition()).Normalized();
+	//------------
+	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
+	float2 temp_pl = float2(last_player_hit->transform->GetGlobalPosition().x, last_player_hit->transform->GetGlobalPosition().z);
+	float angle = acos(math::Dot(temp_e, temp_pl) / (temp_e.LengthSq() * temp_pl.LengthSq())); //sino provar Length	
+	LOG("%f", angle);
+	float3 rotated_particle = float3(
+		temp_e.x * cos(angle) - temp_pl.y * sin(angle),
+		0.0f,
+		temp_e.x * sin(angle) + temp_pl.y * cos(angle));
+
 	
-	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition());
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, float3(0.0f,0.0f,-20.0f));
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() <= 0.0F) {
@@ -429,6 +442,11 @@ void Enemy::AddEffect(Effect* new_effect)
 
 void Enemy::RemoveEffect(Effect* _effect)
 {
+	if (_effect->spawned_particle != nullptr)
+	{
+		GameManager::instance->particle_pool->ReleaseInstance(_effect->vfx_on_apply, _effect->spawned_particle);
+	}
+
 	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
 		if (_effect->AffectsStat(it->second.name))
