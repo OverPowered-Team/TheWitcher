@@ -128,13 +128,13 @@ void Leshen::LaunchAction()
 void Leshen::LaunchRootAction()
 {
 	if (player_controllers[0]->state->type != StateType::DEAD) {
-		root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_1 = GameManager::instance->particle_pool->GetInstance("Leshen_roots_attack", this->transform->GetGlobalPosition());
 		root_1->GetComponent<RootLeshen>()->leshen = this;
 		root_1->GetComponent<RootLeshen>()->target = 0;
 	}
 
 	if (player_controllers[1]->state->type != StateType::DEAD) {
-		root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_2 = GameManager::instance->particle_pool->GetInstance("Leshen_roots_attack", this->transform->GetGlobalPosition());
 		root_2->GetComponent<RootLeshen>()->leshen = this;
 		root_2->GetComponent<RootLeshen>()->target = 1;
 	}
@@ -147,7 +147,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z));
+	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z), float3::zero(), GameManager::instance->game_object->parent, true);
 	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
