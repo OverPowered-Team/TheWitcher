@@ -3,45 +3,21 @@
     {
       "name": "L",
       "button": "L",
-      "particle_name": "p_yen_atk_1_parent",
+      "particle_name": "Yenn_Laser",
       "particle_pos": {
-        "pos_x": -0.18,
-        "pos_y": 0.75,
-        "pos_z": 0.6
+        "pos_x": 0.0,
+        "pos_y": 0.57,
+        "pos_z": 0.58
       },
       "colliders": [
         {
           "type": "Box",
           "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.1,
+          "pos_y": 0.55,
+          "pos_z": 3.4,
           "width": 1,
           "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.9,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 2.7,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
+          "depth": 5.5,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -73,45 +49,21 @@
     {
       "name": "LL",
       "button": "LL",
-      "particle_name": "p_yen_atk_1_parent_2",
+      "particle_name": "Yenn_Knockup",
       "particle_pos": {
-        "pos_x": 0.05,
-        "pos_y": 0.75,
-        "pos_z": 0.6
+        "pos_x": 0.00,
+        "pos_y": 0.6,
+        "pos_z": 3.6
       },
       "colliders": [
         {
           "type": "Box",
           "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.1,
+          "pos_y": 0.25,
+          "pos_z": 3.4,
           "width": 1,
           "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.9,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 2.7,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
+          "depth": 5.5,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -119,13 +71,17 @@
       ],
       "knock_back": {
         "x": 0,
-        "y": 0,
+        "y": 1,
         "z": 0
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.6
+        },
+        {
+          "name": "KnockBack",
+          "value": 40
         }
       ],
       "activation_frame": 10,
@@ -144,21 +100,21 @@
     {
       "name": "LLL",
       "button": "LLL",
-      "particle_name": "yenn_LLL_particle",
+      "particle_name": "Yenn_Knockdown",
       "particle_pos": {
-        "pos_x": 0.018,
-        "pos_y": 0.465,
-        "pos_z": 0.743
+        "pos_x": 0.0,
+        "pos_y": 2.7,
+        "pos_z": 3.6
       },
       "colliders": [
         {
           "type": "Box",
-          "pos_x": 0.0,
-          "pos_y": 0.4,
-          "pos_z": 2.35,
-          "width": 2.6,
+          "pos_x": 0,
+          "pos_y": 2.7,
+          "pos_z": 3.4,
+          "width": 1,
           "height": 1,
-          "depth": 3.6,
+          "depth": 5.5,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -166,13 +122,17 @@
       ],
       "knock_back": {
         "x": 0,
-        "y": 0,
+        "y": -1,
         "z": 0
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.7
+        },
+        {
+          "name": "KnockBack",
+          "value": 25
         }
       ],
       "activation_frame": 18,
