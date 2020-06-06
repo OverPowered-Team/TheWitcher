@@ -10,8 +10,6 @@ class VagoneteInputs {
 public:
 	enum class State {
 		IDLE,
-		JUMP,
-		JUMPING,
 		INCLINATION,
 		COVER
 	};
@@ -37,7 +35,6 @@ public:
 	int inclinationZone = 1;
 
 	struct {
-		SDL_Scancode jump = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode inclinationLeft = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode inclinationRight = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode cover = SDL_SCANCODE_UNKNOWN;
@@ -69,6 +66,8 @@ public:
 
 	void DecreaseLife();
 
+	void SetVelocity(float max_velocity, float acceleration);
+
 public:
 	float actual_pos = 0.0F;
 	float vagonete_life = 100.f;
@@ -78,7 +77,9 @@ public:
 	ComponentCurve* curve = nullptr;
 	ComponentRigidBody* rigid_body = nullptr;
 
-	float speed = 1;
+	float current_speed = 0.0F;
+	float max_velocity = 0.0F;
+	float acceleration = 0.0F;
 
 	bool godmode = false;
 
@@ -95,7 +96,9 @@ private:
 ALIEN_FACTORY VagoneteMove* CreateVagoneteMove() {
 	VagoneteMove* alien = new VagoneteMove();
 	// To show in inspector here
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->speed);
+
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->current_speed);
+
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->vagonete_life);
 
 	ComponentScript::InspectorDragableFloat(&VagoneteInputs::speedInclination, "speedInclination");

@@ -263,6 +263,7 @@ void ParticleSystem::DrawParticles()
 	}
 	
 	RenderLight();
+	
 
 }
 
@@ -553,6 +554,7 @@ void ParticleSystem::RemoveLight()
 	light->DecreaseReferences();
 	light = nullptr;
 
+	delete point_light;
 	point_light = nullptr;
 }
 

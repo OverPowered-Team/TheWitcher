@@ -28,7 +28,7 @@ class CollisionLayers
 public :
 
 	bool GetIndexByName(string name, int& index);
-	bool GetNameByIndex(int index, string& name);
+	bool GetNameByIndex(int index, string& name = string());
 
 	void AddLayer(string layer);
 	void RemoveLayer(string layer);

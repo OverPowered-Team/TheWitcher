@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
@@ -28,6 +29,8 @@ void Leshen::StartEnemy()
 	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
+
+	initial_position = transform->GetGlobalPosition();
 }
 
 void Leshen::UpdateEnemy()
@@ -146,7 +149,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z), true);
+	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z));
 	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
@@ -156,7 +159,7 @@ void Leshen::LaunchCrowsAction()
 		crows_target = 1;
 	}
 	else if(player_controllers[0]->state->type != StateType::DEAD && player_controllers[1]->state->type != StateType::DEAD){
-		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
+		crows->GetComponent<CrowsLeshen>()->target = Random::GetRandomIntBetweenTwo(0, 1);
 		crows_target = crows->GetComponent<CrowsLeshen>()->target;
 	}
 	else if (player_controllers[0]->state->type != StateType::DEAD) {
@@ -239,8 +242,12 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 {
 	LOG("UPDATING CLOUD ACTION");
 
+	float distance_to_initial = initial_position.Distance(transform->GetGlobalPosition());
+
 	if (times_switched < total_switch_times) {
 		if (direction_time <= switch_direction_time) {
+			if (distance_to_initial > cloud_max_distance)
+				direction = -direction;
 			character_ctrl->Move(direction * speed * Time::GetDT());
 			direction_time += Time::GetDT();
 		}

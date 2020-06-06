@@ -233,6 +233,7 @@ void ComponentAnimatedImage::Draw(bool isGame)
 
 	if (!canvas->isWorld)
 	{
+		game_object_attached->transform->SetGlobalRotation({ 0.0f,0.0f,0.0f,0.0f });
 		glPushMatrix();
 		glMultMatrixf(matrix.Transposed().ptr());
 	}
@@ -323,7 +324,6 @@ void ComponentAnimatedImage::LoadComponent(JSONArraypack* to_load)
 	current_color = to_load->GetColor("ColorCurrent");
 	current_frame = 0.0f;
 	last_frame = 0;
-
 	try {
 		if (to_load->GetBoolean("HasAnimatedImages")) {
 			JSONArraypack* imagesVector = to_load->GetArray("AnimatedImages");
