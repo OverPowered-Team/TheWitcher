@@ -139,6 +139,8 @@ void CiriFightController::FinishPhaseFour()
 	Scores_Data::last_scene = SceneManager::GetCurrentScene();
 	Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 	Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+	Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
+	Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 	Destroy(game_object);
 }

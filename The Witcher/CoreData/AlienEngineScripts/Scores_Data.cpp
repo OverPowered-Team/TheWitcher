@@ -1,7 +1,10 @@
+#include "RelicBehaviour.h"
 #include "Scores_Data.h"
 
 int Scores_Data::player1_kills = 25;
 int Scores_Data::player2_kills = 16;
+std::vector<Relic*> Scores_Data::player1_relics;
+std::vector<Relic*> Scores_Data::player2_relics;
 bool Scores_Data::won_level1 = false;
 bool Scores_Data::won_level2 = false;
 bool Scores_Data::dead = false;
