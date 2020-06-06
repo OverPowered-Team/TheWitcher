@@ -50,6 +50,7 @@ public:
 	static State globalState;
 
 	GameObject* player = nullptr;
+	VagoneteInputs* other_player = nullptr;
 };
 
 class ALIEN_ENGINE_API VagoneteMove : public Alien {

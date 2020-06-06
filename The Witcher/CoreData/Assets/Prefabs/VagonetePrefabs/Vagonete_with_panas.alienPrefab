@@ -13,7 +13,7 @@
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
-                "Tag": "UnTagged",
+                "Tag": "Player",
                 "PrefabID": "11711539892061820283",
                 "Components": [
                     {
@@ -25,9 +25,9 @@
                         ],
                         "Rotation": [
                             0,
+                            1,
                             0,
-                            0,
-                            1
+                            -4.3711388286737929e-08
                         ],
                         "Scale": [
                             1,
@@ -38,31 +38,6 @@
                         "ID": "13771744386776657816"
                     },
                     {
-                        "Type": 29,
-                        "ID": "7720081055592747511",
-                        "ResourceID": "7308023687165620906",
-                        "DataName": "VagoneteMove",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "speed",
-                                "float": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "speedInclination",
-                                "float": 120
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "inclination4player",
-                                "float": 20
-                            }
-                        ]
-                    },
-                    {
-                        "Enabled": true,
                         "Type": 11,
                         "IsKinematic": 1,
                         "Mass": 1,
@@ -97,6 +72,35 @@
                             0.60000002384185791,
                             1.8999999761581421,
                             1.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7720081055592747511",
+                        "ResourceID": "7308023687165620906",
+                        "DataName": "VagoneteMove",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vagonete_life",
+                                "float": 100
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "speedInclination",
+                                "float": 120
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "inclination4player",
+                                "float": 20
+                            }
                         ]
                     }
                 ]
@@ -290,21 +294,21 @@
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
-                "Tag": "Player",
+                "Tag": "UnTagged",
                 "PrefabID": "11711539892061820283",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            0.4215705394744873,
+                            0.78689289093017578,
                             0.59016609191894531,
                             -0.29193019866943359
                         ],
                         "Rotation": [
-                            0,
-                            0.90196490287780762,
-                            0,
-                            0.43180933594703674
+                            -6.1582944965721254e-08,
+                            0.64292126893997192,
+                            6.1582944965721254e-08,
+                            -0.76593226194381714
                         ],
                         "Scale": [
                             1,
@@ -317,7 +321,7 @@
                     {
                         "Type": 14,
                         "ID": "17997255051015982152",
-                        "ControllerID": "15002182811656056871",
+                        "ControllerID": "0",
                         "Enabled": true
                     },
                     {
@@ -3169,21 +3173,21 @@
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
-                "Tag": "Player",
+                "Tag": "UnTagged",
                 "PrefabID": "11711539892061820283",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
-                            -0.50998759269714355,
+                            -0.21648931503295898,
                             0.60221672058105469,
                             -0.14561748504638672
                         ],
                         "Rotation": [
                             0,
-                            0.83924341201782227,
+                            -0.7071068286895752,
                             0,
-                            0.54375594854354858
+                            0.70710670948028564
                         ],
                         "Scale": [
                             1,
@@ -3196,7 +3200,7 @@
                     {
                         "Type": 14,
                         "ID": "5676183416424174363",
-                        "ControllerID": "3382881927827430631",
+                        "ControllerID": "0",
                         "Enabled": true
                     },
                     {
@@ -5622,8 +5626,247 @@
                         "Enabled": true
                     }
                 ]
+            },
+            {
+                "Name": "Faroliho",
+                "FamilyNumber": 2,
+                "ID": "14535770212500844257",
+                "ParentID": "2222943206643224903",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11711539892061820283",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -8.9656333923339844,
+                            0.77490615844726563,
+                            -0.00079631805419921875
+                        ],
+                        "Rotation": [
+                            0,
+                            1,
+                            0,
+                            4.3711388286737929e-08
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "13130293589004998919"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "5589686321463197217",
+                        "PrintIcon": true,
+                        "Intensity": 2.5,
+                        "Position": [
+                            11.852958679199219,
+                            24.539905548095703,
+                            -8.753204345703125
+                        ],
+                        "Ambient": [
+                            0.087696291506290436,
+                            0.06689734011888504,
+                            0.15686273574829102
+                        ],
+                        "Diffuse": [
+                            0.85294115543365479,
+                            0.79059231281280518,
+                            0.14633794128894806
+                        ],
+                        "Specular": [
+                            0.76470589637756348,
+                            0.72788786888122559,
+                            0.14619377255439758
+                        ],
+                        "Constant": 1,
+                        "Linear": 0.10000000149011612,
+                        "Quadratic": 0.019999999552965164
+                    }
+                ]
+            },
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 2,
+                "ID": "16046207366882336748",
+                "ParentID": "2222943206643224903",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11711539892061820283",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            3.016690731048584,
+                            3.5362396240234375,
+                            0
+                        ],
+                        "Rotation": [
+                            0.20329557359218597,
+                            -0.67725372314453125,
+                            0.2032962441444397,
+                            0.67725104093551636
+                        ],
+                        "Scale": [
+                            1.0000001192092896,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "621951766044088503"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.22803731262683868,
+                            0.30821558833122253,
+                            0.35784316062927246,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "17037683743412382425",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Fog": true,
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "Skybox_PositiveX": "Library\/Textures\/17871350930873594524.dds",
+                        "Skybox_NegativeX": "Library\/Textures\/14059935274421270400.dds",
+                        "Skybox_PositiveY": "Library\/Textures\/5118434943308934301.dds",
+                        "Skybox_NegativeY": "Library\/Textures\/14265519993990640998.dds",
+                        "Skybox_PositiveZ": "Library\/Textures\/3680900417465944678.dds",
+                        "Skybox_NegativeZ": "Library\/Textures\/16155666848095087743.dds"
+                    },
+                    {
+                        "ID": "5336583862068038062",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 0.46399998664855957,
+                        "Mute": false,
+                        "Bank": "3991942870",
+                        "Event": "4145153789",
+                        "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 17,
+                        "Enabled": true,
+                        "ID": "10174971471921705235",
+                        "ListenerID": "1416151732"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16097427010177501558",
+                        "ResourceID": "8894711529836489338",
+                        "DataName": "CameraShake",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "traumaDecayDef",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxYaw",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxPitch",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxRoll",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "off_set",
+                                "float": 5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "13167226905783161377",
+                        "ResourceID": "16057303148137039602",
+                        "DataName": "CameraUltiMode",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "zoom_out_fov",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "staying_time",
+                                "float": 0
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17072174310521074895",
+                        "ResourceID": "3479373960671141251",
+                        "DataName": "MusicController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "minimum_volume",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_start_decrease",
+                                "float": 1
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3477911705901142569",
+                        "ResourceID": "3387414836720929942",
+                        "DataName": "CameraWagonette",
+                        "HasInspector": false
+                    }
+                ]
             }
         ]
-    },
-    "Name": "Vagonete_with_panas"
+    }
 }
