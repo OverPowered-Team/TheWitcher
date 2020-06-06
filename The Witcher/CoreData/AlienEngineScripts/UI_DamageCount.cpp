@@ -125,12 +125,22 @@ void UI_DamageCount::PlayerHasBeenHit(PlayerController* player)
 		text = damagecount_player1;
 		vector_to_handle = &player1_damagenums;
 		vector_to_transition = &transition_player1_damagenums;
+		if (!(*vector_to_handle).empty())
+		{
+			is_shaking1 = true;
+			start_shake_time1 = internal_timer;
+		}
 	}
 	else
 	{
 		text = damagecount_player2;
 		vector_to_handle = &player2_damagenums;
 		vector_to_transition = &transition_player2_damagenums;
+		if (!(*vector_to_handle).empty())
+		{
+			is_shaking2 = true;
+			start_shake_time2 = internal_timer;
+		}
 	}
 
 	auto iter = (*vector_to_handle).begin();
@@ -145,12 +155,18 @@ void UI_DamageCount::PlayerHasBeenHit(PlayerController* player)
 
 void UI_DamageCount::Start()
 {
-	damagecount_player1 = game_object->GetChild("DamageCount_Player1")->GetComponent<ComponentText>();
-	damagecount_player2 = game_object->GetChild("DamageCount_Player2")->GetComponent<ComponentText>();
+	damagecount_player1 = game_object->GetChild("Parent_DamageCount_Player1")->GetChild("DamageCount_Player1")->GetComponent<ComponentText>();
+	damagecount_player2 = game_object->GetChild("Parent_DamageCount_Player2")->GetChild("DamageCount_Player2")->GetComponent<ComponentText>();
 	damagecount_player1->SetAlpha(0);
 	damagecount_player2->SetAlpha(0);
 
-	original_scale = game_object->GetChild("DamageCount_Player1")->transform->GetLocalScale().x;
+	original_scale = game_object->GetChild("Parent_DamageCount_Player1")->transform->GetLocalScale().x;
+
+	original_position_x1= game_object->GetChild("Parent_DamageCount_Player1")->transform->GetLocalPosition().x;
+	original_position_y1= game_object->GetChild("Parent_DamageCount_Player1")->transform->GetLocalPosition().y;
+	original_position_x2= game_object->GetChild("Parent_DamageCount_Player2")->transform->GetLocalPosition().x;
+	original_position_y2= game_object->GetChild("Parent_DamageCount_Player2")->transform->GetLocalPosition().y;
+
 }
 
 void UI_DamageCount::Update()
@@ -251,6 +267,16 @@ void UI_DamageCount::Update()
 	if (is_scaling2)
 	{
 		ScaleDamageCount(2);
+	}
+
+	if (is_shaking1)
+	{
+		Shake(1);
+	}
+
+	if (is_shaking2)
+	{
+		Shake(2);
 	}
 }
 
@@ -413,12 +439,12 @@ void UI_DamageCount::ScaleDamageCount(int index)
 
 	if (index == 1)
 	{
-		damage_count = damagecount_player1->game_object_attached;
+		damage_count = damagecount_player1->game_object_attached->parent;
 		time = scaling_time1;
 	}
 	else
 	{
-		damage_count = damagecount_player2->game_object_attached;
+		damage_count = damagecount_player2->game_object_attached->parent;
 		time = scaling_time2;
 	}
 
@@ -446,6 +472,50 @@ void UI_DamageCount::ScaleDamageCount(int index)
 		else
 		{
 			is_scaling2 = false;
+		}
+	}
+}
+
+void UI_DamageCount::Shake(int index)
+{
+	GameObject* damage_count = nullptr;
+	float original_position_x = 0.0f;
+	float original_position_y = 0.0f;
+	float time = 0.0f;
+
+	if (index == 1)
+	{
+		damage_count = damagecount_player1->game_object_attached->parent;
+		original_position_x = original_position_x1;
+		original_position_y = original_position_y1;
+		time = start_shake_time1;
+	}
+	else
+	{
+		damage_count = damagecount_player2->game_object_attached->parent;
+		original_position_x = original_position_x2;
+		original_position_y = original_position_y2;
+		time = start_shake_time2;
+	}
+
+	post_off_set += off_set * Time::GetDT();
+
+	damage_count->transform->SetLocalPosition(original_position_x + ((Maths::PerlinNoise(0, post_off_set, 0.8f, 0.8f) * 2) - 1),
+		original_position_y + ((Maths::PerlinNoise(1, 0.8f, post_off_set, 0.8f) * 2) - 1),
+		0.f);
+
+	if ((internal_timer - time) > 0.5f)
+	{
+		post_off_set = off_set;
+		damage_count->transform->SetLocalPosition(original_position_x, original_position_y, 0.f);
+
+		if (index == 1)
+		{
+			is_shaking1 = false;
+		}
+		else
+		{
+			is_shaking2 = false;
 		}
 	}
 }
