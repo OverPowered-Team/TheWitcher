@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "Leshen.h"
@@ -14,8 +15,16 @@ CrowsLeshen::~CrowsLeshen()
 
 void CrowsLeshen::Start()
 {
+	speed = 0.2f;
 	life_time = 0.0f;
+	total_life_time = 3.0f;
+	direction = { 1, 0, 1 };
+	target = 0;
 	setted_direction = false;
+	leshen = nullptr;
+
+	max_track_distance = 4.0f;
+	tracking = true;
 }
 
 void CrowsLeshen::Update()
@@ -49,7 +58,7 @@ void CrowsLeshen::Update()
 	if (life_time <= total_life_time)
 		life_time += Time::GetDT();
 	else {
-		Destroy(game_object);
+		GameManager::instance->particle_pool->ReleaseInstance("Crow", game_object);
 	}
 }
 

@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
@@ -146,7 +147,7 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.5f, transform->GetGlobalPosition().z), true);
+	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z));
 	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
