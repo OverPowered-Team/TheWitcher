@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GhoulCoolAnimController",
-        "NumStates": 7,
-        "NumTransitions": 10,
+        "NumStates": 8,
+        "NumTransitions": 12,
         "States": [
             {
                 "Name": "Idle",
@@ -38,6 +38,11 @@
                 "Name": "Hit",
                 "Speed": 1,
                 "Clip": "15700505528773980406"
+            },
+            {
+                "Name": "Dodge",
+                "Speed": 1,
+                "Clip": "11649184176354562492"
             }
         ],
         "Transitions": [
@@ -201,6 +206,38 @@
                         "ParameterIndex": 0
                     }
                 ]
+            },
+            {
+                "Source": "Dodge",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Dodge",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
             }
         ],
         "IntParameters": [],
@@ -273,6 +310,18 @@
                 "Event_Id": "Ghoul::CanNotJump",
                 "Animation_Id": "4553196690288991447",
                 "Frame": 47,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateRangeCollider",
+                "Animation_Id": "4553196690288991447",
+                "Frame": 51,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateRangeCollider",
+                "Animation_Id": "4553196690288991447",
+                "Frame": 55,
                 "Type": 2
             }
         ]

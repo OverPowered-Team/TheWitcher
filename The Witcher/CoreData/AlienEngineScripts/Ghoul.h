@@ -59,6 +59,9 @@ public:
 
 	void OnDrawGizmosSelected(); 
 
+	void ActivateRangeCollider();
+	void DeactivateRangeCollider();
+
 	void PlaySFX(const char* sfx_name);
 	bool IsState(const char* state_str) override;
 
@@ -78,6 +81,7 @@ private:
 	bool curve_patrol_go = true; 
 	float current_curve_point = 0.f;
 	float jump_speed = 0.0f;
+	ComponentCollider* range_collider = nullptr;
 
 public: 
 	float curve_speed = 0.02f;

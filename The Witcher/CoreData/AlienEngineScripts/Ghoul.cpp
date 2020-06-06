@@ -27,6 +27,7 @@ void Ghoul::StartEnemy()
     decapitation_particle = "decapitation_particle_ghoul";
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
     range_collider = game_object->GetChild("EnemyRangeAttack")->GetComponent<ComponentBoxCollider>();
+    range_collider->SetEnable(false);
     Enemy::StartEnemy();
 }
 
@@ -86,17 +87,6 @@ void Ghoul::JumpImpulse()
         float3 jump_direction = direction * jump_speed;
         character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
     }
-
-    /*if (distance > stats["AttackRange"].GetValue())
-    {*
-
-    /*}*/
-    /*else
-    {
-        animator->PlayState("Slash");
-        animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
-        state = GhoulState::ATTACK;
-    }*/
 }
 
 void Ghoul::Stun(float time)
@@ -179,8 +169,9 @@ void Ghoul::Action()
     }
     else if (distance < stats["JumpRange"].GetValue() && distance > stats["MoveRange"].GetValue())
     {
+        RotatePlayer();
         animator->PlayState("Jump");
-        jump_speed = (distance - 1) / 1.13f * animator->GetCurrentStateSpeed();
+        jump_speed = (distance + 1) / 1.13f * animator->GetCurrentStateSpeed();
         state = GhoulState::JUMP;
     }
 
@@ -242,12 +233,13 @@ void Ghoul::OnAnimationEnd(const char* name)
         {
             SetState("Idle");
         }
+        CheckDistance();
     }
     else if (strcmp(name, "Jump") == 0)
     {
         if (distance < stats["AttackRange"].GetValue())
             SetState("Attack");
-        if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
             SetState("Move");
         else
             SetState("Idle");
@@ -284,6 +276,16 @@ void Ghoul::OnDrawGizmosSelected()
 	if(awake_behaviour == AwakeBehaviour::WANDER)
 		Gizmos::DrawWireSphere(start_pos, wander_radius, Color::Blue());
 	
+}
+
+void Ghoul::ActivateRangeCollider()
+{
+    range_collider->SetEnable(true);
+}
+
+void Ghoul::DeactivateRangeCollider()
+{
+    range_collider->SetEnable(false);
 }
 
 void Ghoul::PlaySFX(const char* sfx_name)

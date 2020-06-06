@@ -1,7 +1,9 @@
 #include "GhoulDodge.h"
 #include "EnemyManager.h"
+#include "PlayerManager.h"
 #include "PlayerController.h"
 #include "MusicController.h"
+#include "GameManager.h"
 
 GhoulDodge::GhoulDodge() : Ghoul()
 {
@@ -15,15 +17,12 @@ void GhoulDodge::UpdateEnemy()
 {
     Enemy::UpdateEnemy();
 
-    float angle = atan2f(direction.z, direction.x);
-    Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-    transform->SetGlobalRotation(rot);
-
     switch (state)
     {
 	case GhoulState::AWAKE:
 		DoAwake();
 		break;
+
     case GhoulState::IDLE:
         if (distance < stats["VisionRange"].GetValue() || is_obstacle)
             state = GhoulState::MOVE;
@@ -32,6 +31,14 @@ void GhoulDodge::UpdateEnemy()
     case GhoulState::MOVE:
         Move(direction);
         break;
+
+    case GhoulState::HIT:
+    {
+        velocity += velocity * knock_slow * Time::GetDT();
+        velocity.y += gravity * Time::GetDT();
+        character_ctrl->Move(velocity * Time::GetDT());
+    }
+    break;
 
     case GhoulState::JUMP:
         JumpImpulse();
@@ -48,16 +55,9 @@ void GhoulDodge::UpdateEnemy()
         if (player_controllers[current_player]->state->type == StateType::ATTACKING && rand_num == 0)
         {
             state = GhoulState::DODGE;
-            animator->PlayState("Jump");
+            animator->PlayState("Dodge");
         }
         break;
-    case GhoulState::HIT:
-    {
-        velocity += velocity * knock_slow * Time::GetDT();
-        velocity.y += gravity * Time::GetDT();
-        character_ctrl->Move(velocity * Time::GetDT());
-    }
-    break;
     case GhoulState::DODGE:
         Dodge();
         break;
@@ -73,40 +73,59 @@ void GhoulDodge::UpdateEnemy()
 
 void GhoulDodge::Dodge()
 {
-    if (distance < stats["JumpRange"].GetValue())
-    {
-        float3 jump_direction = -direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
-        character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
-    }
+    float3 jump_direction = -direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
+    character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
 }
 
 void GhoulDodge::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
-        if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
-        {
-            state = GhoulState::MOVE;
-        }
+        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        ReleaseParticle("EnemyAttackParticle");
+        if (distance < stats["AttackRange"].GetValue())
+            SetState("Attack");
+        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+            SetState("Move");
         else
-        {
-            state = GhoulState::IDLE;
-        }
+            SetState("Idle");
+
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
-    else if (strcmp(name, "Jump") == 0)
+    else if (strcmp(name, "Jump") == 0 || strcmp(name, "Dodge") == 0)
     {
-        if (distance < stats["VisionRange"].GetValue())
-            state = GhoulState::MOVE;
+        if (distance < stats["AttackRange"].GetValue())
+            SetState("Attack");
+        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+            SetState("Move");
         else
-            state = GhoulState::IDLE;
+            SetState("Idle");
 
+        can_jump = false;
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if (strcmp(name, "Hit") == 0)
     {
-        state = GhoulState::IDLE;
+        ReleaseParticle("hit_particle");
+
+        if (!is_dead)
+            SetState("Idle");
+        else
+        {
+            if (!was_dizzy)
+                was_dizzy = true;
+            else
+            {
+                state = GhoulState::DYING;
+                GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+            }
+        }
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
+    }
+    else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
+    {
+        state = GhoulState::DYING;
+        GameManager::instance->player_manager->IncreaseUltimateCharge(10);
     }
 }
 

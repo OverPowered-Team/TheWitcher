@@ -337,6 +337,13 @@ void Enemy::CanGetInterrupted()
 	can_get_interrupted = true;
 }
 
+void Enemy::RotatePlayer()
+{
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");
