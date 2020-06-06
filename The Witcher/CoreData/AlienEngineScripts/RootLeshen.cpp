@@ -27,6 +27,7 @@ void RootLeshen::Reset()
 
 	state = ROOTSTATE::SEEK;
 	game_object->GetComponent<ComponentAnimator>()->PlayState("Idle");
+	game_object->GetComponent<ComponentCollider>()->SetEnable(false);
 }
 
 void RootLeshen::Start()

@@ -29,6 +29,9 @@ public:
 	float root_time_distance_factor = 0.08f;
 	float base_total_root_time = 2.0f;
 	float3 direction;
+
+	ComponentRigidBody* rbody = nullptr;
+
 	int target = 0;
 
 	bool active = false;
