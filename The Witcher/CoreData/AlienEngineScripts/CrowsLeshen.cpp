@@ -25,6 +25,7 @@ void CrowsLeshen::Start()
 
 	max_track_distance = 4.0f;
 	tracking = true;
+
 }
 
 void CrowsLeshen::Update()
@@ -54,6 +55,7 @@ void CrowsLeshen::Update()
 	}
 
 	transform->AddPosition(transform->forward * speed);
+	
 
 	if (life_time <= total_life_time) {
 		life_time += Time::GetDT();
@@ -76,6 +78,9 @@ void CrowsLeshen::Reset()
 
 	max_track_distance = 4.0f;
 	tracking = true;
+
+	transform->SetGlobalPosition(float3::zero());
+	game_object->GetComponent<ComponentCollider>()->SetEnable(false);
 }
 
 void CrowsLeshen::OnTriggerEnter(ComponentCollider* collider)
