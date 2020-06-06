@@ -393,12 +393,12 @@ void UI_DamageCount::DamageCount_Handling(int index)
 
 			if ((*iter)->is_last && (*iter)->current_timer + 1.5f <= internal_timer)
 			{
-				auto iter_ = iter;
-				for (; iter_ != (*vector_to_handle).begin(); --iter_)
+				auto iter_ = std::make_reverse_iterator(iter + 1);
+				for (; iter_ != (*vector_to_handle).rend(); ++iter_)
 				{
 					(*iter_)->current_timer = internal_timer;
 					(*vector_to_transition).push_back((*iter_));
-					(*vector_to_handle).erase(iter_);
+					(*vector_to_handle).erase((iter_ + 1).base());
 				}
 				iter = (*vector_to_handle).begin();
 			}
@@ -439,28 +439,19 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (index == 1)
 					{
+						is_scaling1 = true;
 						damage_count1_time = internal_timer;
 						scaling_time1 = internal_timer;
 					}
 					else
 					{
+						is_scaling2 = true;
 						damage_count2_time = internal_timer;
 						scaling_time2 = internal_timer;
 					}
 				}
 
 				--iter;
-
-				if (index == 1)
-				{
-					is_scaling1 = true;
-					scaling_time1 = internal_timer;
-				}
-				else
-				{
-					is_scaling2 = true;
-					scaling_time2 = internal_timer;
-				}
 			}
 		}
 	}
@@ -534,8 +525,8 @@ void UI_DamageCount::Shake(int index)
 
 	post_off_set += off_set * Time::GetDT();
 
-	damage_count->transform->SetLocalPosition(original_position_x + ((Maths::PerlinNoise(0, post_off_set, 0.8f, 0.8f) * 2) - 1),
-		original_position_y + ((Maths::PerlinNoise(1, 0.8f, post_off_set, 0.8f) * 2) - 1),
+	damage_count->transform->SetLocalPosition(original_position_x + ((Maths::PerlinNoise(0, post_off_set, 0.8f, 0.8f) * 4) - 2),
+		original_position_y + ((Maths::PerlinNoise(1, 0.8f, post_off_set, 0.8f) * 4) - 2),
 		0.f);
 
 	if ((internal_timer - time) > 0.5f)

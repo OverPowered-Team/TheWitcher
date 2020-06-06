@@ -16,6 +16,8 @@ void UI_Char_Frame::Start()
 	if (character == CHARACTER::YENNEFER)
 	{
 		portrait = yen_img->GetComponent<ComponentImage>();
+		original_portrait_x = yen_img->transform->GetLocalPosition().x;
+		original_portrait_y = yen_img->transform->GetLocalPosition().y;
 
 		if (geralt_img->IsEnabled())
 		{
@@ -29,10 +31,13 @@ void UI_Char_Frame::Start()
 	else
 	{
 		portrait = geralt_img->GetComponent<ComponentImage>();
+		original_portrait_x = geralt_img->transform->GetLocalPosition().x;
+		original_portrait_y = geralt_img->transform->GetLocalPosition().y;
 
 		if (!geralt_img->IsEnabled())
 		{
 			geralt_img->SetEnable(true);
+
 		}
 		if (yen_img->IsEnabled())
 		{
@@ -57,6 +62,12 @@ void UI_Char_Frame::Update()
 
 		if (player_hit)
 		{
+			shake_post_off_set += shake_off_set * Time::GetDT();
+
+			portrait->game_object_attached->transform->SetLocalPosition(original_portrait_x + (Maths::PerlinNoise(0, shake_post_off_set, 0.8f, 0.8f) - 0.5f),
+				original_portrait_y + (Maths::PerlinNoise(1, 0.8f, shake_post_off_set, 0.8f) - 0.5f),
+				0.f);
+
 			HitEffect(t);
 		}
 
@@ -64,6 +75,8 @@ void UI_Char_Frame::Update()
 		{
 			changing_life = false;
 			player_hit = false;
+			shake_post_off_set = shake_off_set;
+			portrait->game_object_attached->transform->SetLocalPosition(original_portrait_x, original_portrait_y, 0.f);
 		}
 	}
 
