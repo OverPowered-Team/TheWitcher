@@ -17,8 +17,6 @@ void CameraMovement::Start()
     trg_offset = CalculateCameraPos(hor_angle, vert_angle, distance);
     transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
     first_pos = CalculateMidPoint() + trg_offset;
-    LOG("TRG_OFFSET X: %f Y: %f Z: %f", trg_offset.x, trg_offset.y, trg_offset.z);
-    LOG("FIRSTPOS X: %f Y: %f Z: %f", first_pos.x, first_pos.y, first_pos.z);
     LookAtMidPoint();
     prev_state = CameraState::FREE;
 }
@@ -234,7 +232,6 @@ void CameraMovement::SearchAndAssignPlayers()
             players.push_back(*i);
     }
     num_curr_players = objs.size();
-    LOG("player num %i", num_curr_players);
 }
 
 float3 CameraMovement::CalculateMidPoint()

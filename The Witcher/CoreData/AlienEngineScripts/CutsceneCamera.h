@@ -12,7 +12,7 @@ class ALIEN_ENGINE_API CutsceneCamera : public Alien {
 public:
 
 	enum(CutsceneState,
-		IDLE, SHAKING, MOVING, LOOKING);
+		IDLE, MOVING);
 
 
 

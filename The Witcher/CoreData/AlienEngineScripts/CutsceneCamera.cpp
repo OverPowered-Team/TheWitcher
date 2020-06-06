@@ -59,7 +59,6 @@ void CutsceneCamera::PrepareCutscene()
 
 void CutsceneCamera::ExecuteCutscene()
 {
-
 	switch (state)
 	{
 	case CutsceneState::IDLE:
@@ -98,14 +97,6 @@ void CutsceneCamera::ExecuteCutscene()
 
 			camera->transform->SetGlobalRotation(Quat::LookAt(float3::unitZ(), direction, float3::unitY(), float3::unitY()));
 		}
-		break;
-	}
-	case CutsceneState::SHAKING:
-	{
-		break;
-	}
-	case CutsceneState::LOOKING:
-	{
 		break;
 	}
 	}
