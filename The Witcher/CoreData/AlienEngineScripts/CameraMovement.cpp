@@ -156,6 +156,15 @@ void CameraMovement::Update()
         LookAtMidPoint();
         break;
     }
+    case CameraState::CENTERED: {
+        float3 dir_vec = (CalculateMidPoint() - centered_obj->transform->GetGlobalPosition()).Normalized();
+        float additional_dist = 10.f;//TODO: This should also take into account that the players don't exit the camera borders
+        float3 pos = CalculateMidPoint() + dir_vec * additional_dist;
+        pos.y += 5.f;
+        transform->SetGlobalPosition(pos);
+        transform->SetGlobalRotation(Quat::LookAt(float3::unitZ(), -dir_vec, float3::unitY(), float3::unitY()));
+        break;
+    }
     }
 }
 

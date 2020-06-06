@@ -15,7 +15,8 @@ public:
 		DYNAMIC, MOVING_TO_DYNAMIC, 
 		FREE, FREE_TO_DYNAMIC,
 		STATIC, MOVING_TO_STATIC,
-		AXIS, MOVING_TO_AXIS
+		AXIS, MOVING_TO_AXIS,
+		CENTERED,//For Ciri boss
 		);
 	enum (
 		CameraAxis,
@@ -60,6 +61,9 @@ public:
 	//Limit Camera
 	GameObject* limiter1 = nullptr;
 	GameObject* limiter2 = nullptr;
+
+	//Centered camera
+	GameObject* centered_obj = nullptr;
 };
 
 ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
@@ -81,6 +85,9 @@ ALIEN_FACTORY CameraMovement* CreateCameraMovement() {
 	SHOW_SEPARATOR();
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->limiter1);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->limiter2);
+
+	SHOW_SEPARATOR();
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->centered_obj);
 
 	return alien;
 }
