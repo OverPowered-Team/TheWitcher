@@ -135,6 +135,12 @@ ParticleSystem::~ParticleSystem()
 		default_material = nullptr;
 	}
 
+	if (point_light != nullptr)
+	{
+		delete point_light;
+		point_light = nullptr;
+	}
+
 	DeactivateLight();
 }
 
@@ -181,6 +187,8 @@ bool ParticleSystem::Update(float dt)
 		particles[i]->Update(dt);
 	}
 
+	if (point_light != nullptr)
+		point_light->Update();
 
 	return true;
 }
@@ -223,13 +231,15 @@ void ParticleSystem::CreateParticle(ParticleInfo info, ParticleMutableInfo endIn
 
 	particles.push_back(particle);
 	totalParticles++;
+
+	
 }
 
 void ParticleSystem::InstantiateParticles(int particles)
 {
 	for (uint i = 0; i < particles; ++i)
 	{
-		emmitter.GetInitialValues(particleInfo.position, particleInfo.velocity, particleInfo.speed, particleInfo.globalTransform);
+		emmitter.GetInitialValues(particleInfo.position, particleInfo.velocity, particleInfo.rotation, particleInfo.speed, particleInfo.globalTransform);
 		CreateParticle(particleInfo, endInfo);
 	}
 }
@@ -253,6 +263,7 @@ void ParticleSystem::DrawParticles()
 	}
 	
 	RenderLight();
+	
 
 }
 
@@ -506,6 +517,45 @@ void ParticleSystem::RemoveMaterial()
 	SetMaterial(default_material);
 	/*material->DecreaseReferences();
 	material = nullptr;*/
+}
+
+void ParticleSystem::SetLight(ResourcePrefab* prefab, GameObject* go)
+{
+	if (prefab == nullptr)
+		return;
+
+	if (light != nullptr)
+	{
+		light->DecreaseReferences();
+	}
+
+	light = prefab;
+	light->IncreaseReferences();
+
+	GameObject* prefab_parent = nullptr;
+	prefab_parent = App->objects->GetRoot(false);
+	GameObject* obj = prefab->ConvertToGameObjects(prefab_parent);
+
+	ComponentLightPoint* point = (ComponentLightPoint*)(obj)->GetComponent(ComponentType::LIGHT_POINT);
+	
+	if(point != nullptr)
+	{
+		point_light = new ComponentLightPoint(go);
+		point_light->SetProperties(point->light_props);
+	}
+
+	obj->Destroy(obj);
+	point = nullptr;
+	prefab_parent = nullptr;
+}
+
+void ParticleSystem::RemoveLight()
+{
+	light->DecreaseReferences();
+	light = nullptr;
+
+	delete point_light;
+	point_light = nullptr;
 }
 
 void ParticleSystem::SetMesh(ResourceMesh* m)

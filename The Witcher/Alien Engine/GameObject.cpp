@@ -105,7 +105,10 @@ GameObject::~GameObject()
 	}
 #endif
 
-	App->objects->octree.Remove(this);
+
+	if (is_static) {
+		App->objects->octree.Remove(this);
+	}
 
 	std::vector<Component*>::iterator component = components.begin();
 
@@ -269,6 +272,12 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* meshes_
 			}
 		}
 		else if (GetComponent<ComponentParticleSystem>() != nullptr)
+		{
+			float3 obj_pos = transform->GetGlobalPosition();
+			float distance = camera->frustum.pos.Distance(obj_pos);
+			meshes_to_draw_transparency->push_back({ distance, this });
+		}
+		else if (GetComponent<ComponentTrail>() != nullptr)
 		{
 			float3 obj_pos = transform->GetGlobalPosition();
 			float distance = camera->frustum.pos.Distance(obj_pos);

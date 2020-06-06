@@ -13,14 +13,17 @@ public:
 	float total_life_time = 3.0f;
 	float3 direction = {1, 0, 1};
 	int target = 0;
-	bool setted_direction;
+	bool setted_direction = false;
 	Leshen* leshen = nullptr;
 
+	float max_track_distance = 4.0f;
+	bool tracking = true;
 	CrowsLeshen();
 	virtual ~CrowsLeshen();
 	
 	void Start();
 	void Update();
+	void Reset();
 
 	void OnTriggerEnter(ComponentCollider* collider);
 };

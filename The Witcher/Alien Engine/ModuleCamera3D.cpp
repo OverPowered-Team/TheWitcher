@@ -11,6 +11,7 @@
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "Viewport.h"
+#include "Physics.h"
 #include "ComponentCurve.h"
 #include "ShortCutManager.h"
 #include "mmgr/mmgr.h"
@@ -43,6 +44,8 @@ bool ModuleCamera3D::Start()
 	max_distance = 10;
 
 	focus_short = App->shortcut_manager->AddShortCut("Focus", SDL_SCANCODE_F, std::bind(&ModuleCamera3D::Focus, App->camera));
+	camera_zoom_speed = 2000.f;
+
 	return ret;
 }
 // -----------------------------------------------------------------
@@ -85,7 +88,8 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		if (is_scene_hovered)
 		{
-			Zoom();
+			Zoom(dt);
+
 			if ((App->objects->GetSelectedObjects().empty() || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
 				CreateRay();
@@ -98,25 +102,25 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN)
 		{
-			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		//	std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 
-			if (selected.size() > 0)
-			{
-				float4x4 trans = float4x4::zero();
-				for (auto item = selected.begin(); item != selected.end(); ++item)
-				{
-					if (*item != nullptr)
-					{
-						trans += (*item)->transform->GetGlobalMatrix();
-					}
-				}
-				trans /= selected.size();
-				reference = trans.TranslatePart();
-			}
-			else
-			{
-				reference = fake_camera->frustum.pos + (fake_camera->frustum.front) * (fake_camera->frustum.pos - reference).Length();
-			}
+		//	if (selected.size() > 0)
+		//	{
+		//		float4x4 trans = float4x4::zero();
+		//		for (auto item = selected.begin(); item != selected.end(); ++item)
+		//		{
+		//			if (*item != nullptr)
+		//			{
+		//				trans += (*item)->transform->GetGlobalMatrix();
+		//			}
+		//		}
+		//		trans /= selected.size();
+		//		reference = trans.TranslatePart();
+		//	}
+		//	else
+		//	{
+			reference = fake_camera->frustum.pos + (fake_camera->frustum.front) * (fake_camera->frustum.pos - reference).Length();
+		//	}
 		}
 
 		if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && is_scene_hovered)
@@ -130,6 +134,11 @@ update_status ModuleCamera3D::Update(float dt)
 				Rotation(dt);
 			}
 
+		}
+		else if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
+		{
+			final_yaw = current_yaw;
+			final_pitch = current_pitch;
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
@@ -207,7 +216,7 @@ void ModuleCamera3D::Movement(float dt)
 	}
 }
 
-void ModuleCamera3D::Zoom()
+void ModuleCamera3D::Zoom(float dt)
 {
 	float3 zoom(float3::zero());
 
@@ -220,7 +229,7 @@ void ModuleCamera3D::Zoom()
 		zoom -= frustum->front;
 	}
 
-	frustum->Translate(zoom * zoom_speed);
+	frustum->Translate(zoom * zoom_speed * dt);
 }
 
 void ModuleCamera3D::Rotation(float dt)
@@ -230,11 +239,14 @@ void ModuleCamera3D::Rotation(float dt)
 	final_yaw += mouse_motion_x * rotation_speed;
 	final_pitch += mouse_motion_y * rotation_speed;
 
-	current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
-	current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
+	if (current_pitch != final_pitch && current_yaw != final_yaw)
+	{
+		current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
+		current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
 
-	Rotate(current_yaw, current_pitch);
-
+		Rotate(current_yaw, current_pitch);
+	}
+	
 	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 	SDL_SetCursor(cursor);
 
@@ -273,6 +285,8 @@ void ModuleCamera3D::Focus()
 
 		point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
 		start_lerp = true;
+		camera_zoom_speed = bounding_box.Diagonal().Length() * 1000;
+	
 	}
 }
 
@@ -314,10 +328,26 @@ void ModuleCamera3D::CreateRay()
 	}
 
 	// Add Physic Raycast ------------------------
-	RaycastHit physic_hit;
-	bool collider_found = App->physx->Raycast(ray.a, ray.Dir(), 1000, physic_hit, -1);
-	if (collider_found)
-		hits_triangle.push_back({ physic_hit.distance ,physic_hit.collider->game_object_attached });
+
+	bool collider_found = false;
+
+	if (App->physx->mouse_pick_colliders)
+	{
+		RaycastHit physic_hit;
+		bool last_overlap_init = App->physx->query_initial_overlap;
+		bool last_pick_triggers = App->physx->query_hit_triggers;
+		Physics::SetQueryInitialOverlaping(false);
+		Physics::SetQueryHitTriggers(App->physx->mouse_pick_triggers);
+
+		if (Physics::Raycast(ray.a, ray.Dir(), 1000.f, physic_hit)) {
+			collider_found = true;
+			hits_triangle.push_back({ physic_hit.distance ,physic_hit.collider->game_object_attached });
+		}
+			
+		Physics::SetQueryInitialOverlaping(last_overlap_init);
+		Physics::SetQueryHitTriggers(last_pick_triggers);
+	}
+
 
 	// Sort by distance ---------------------
 	std::sort(hits_triangle.begin(), hits_triangle.end(), ModuleCamera3D::SortByDistance);
@@ -427,7 +457,7 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 	float distance = 0.f;
 	local_ray.Transform(object->transform->global_transformation.Inverted());
 
-	if (mesh != nullptr && mesh->mesh != nullptr) {
+	if (mesh != nullptr && mesh->mesh != nullptr && mesh->enabled) {
 		ComponentTransform* transform = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);
 
 		for (uint i = 0; i < mesh->mesh->num_index; i += 3) {
@@ -464,11 +494,15 @@ bool ModuleCamera3D::SortByDistance(const std::pair<float, GameObject*> pair1, c
 
 void ModuleCamera3D::PanelConfigOption()
 {
-	if (fake_camera)
-	{
+	ImGui::InputFloat("Camera Speed", &App->camera->camera_speed, 1, 5, 2);
+	ImGui::InputFloat("Camera Zoom Speed", &App->camera->camera_zoom_speed, 1, 5, 2);
+	ImGui::InputFloat("Camera Rotation Speed", &App->camera->camera_rotation_speed, 1, 5, 2);
+	ImGui::InputFloat("Camera Orbit Speed", &App->camera->camera_orbit_speed, 1, 5, 2);
 
-		ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
-	}
+
+	ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
+
+	
 }
 
 void ModuleCamera3D::Rotate(float yaw, float pitch)

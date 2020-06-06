@@ -1,12 +1,16 @@
 #pragma once
 
 #include "Module.h"
-//#include "PxPhysicsAPI.h"
 #include "UtilitiesPhysX.h"
-#include <wtypes.h>
 #include "CollisionLayers.h"
 
 using namespace physx;
+typedef ComponentCollider* Collider;
+typedef vector<RaycastHit> RaycastHits;
+typedef vector<Collider> Colliders;
+
+#define BUFFER_SIZE 64
+#define DEFAULT_LAYER_MASK -1
 
 class ModulePhysX : public Module
 {
@@ -35,19 +39,37 @@ public:
 	void SetGravity(float3 gravity);
 	float3 GetGravity();
 
-	//* ---------- SCENE QUERIES ------------*//
+	// Queries -----------------------------------------
+	enum QueryType { RAYCAST, SWEEPCAST, OVERLAP, NO_TYPE };
 
-	bool Raycast(float3 origin, float3 unit_dir, float max_distance, int layer_mask) const;
-	bool Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit, int layer_mask) const;
-	const std::vector<RaycastHit> RaycastAll(float3 origin, float3 unitDir, float maxDistance, int layer_mask) const;
+	bool			ClosestPoint(float3 point, float3& closest_point, Collider collider);
+	bool 			ClosestPoint(float3 point , float3& closest_point, Collider collider, float3 position, Quat rotation);
 
-	bool CapsuleCast(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask) const;
-	bool CapsuleCast(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, RaycastHit& hit, int layer_mask) const;
-	const vector<RaycastHit>& CapsuleCastAll(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask) const;
+	bool			Raycast(float3 origin, float3 unit_dir, float max_distance, int layer_mask);
+	bool			Raycast(float3 origin, float3 unit_dir, float max_distance, RaycastHit& hit, int layer_mask);
+	RaycastHits		RaycastAll(float3 origin, float3 unitDir, float maxDistance, int layer_mask);
 
-	const std::vector<ComponentCollider*> OverlapSphere(float3 center, float radius, int layer_mask) const;
+	bool			CheckBox(float4x4& trans, float half_size, int layer_mask);
+	bool			BoxCast(float4x4& trans, float half_size, float3 unit_dir, float max_dist, int layer_mask);
+	bool			BoxCast(float4x4& trans, float half_size, float3 unit_dir, float max_dist, RaycastHit& hit, int layer_mask);
+	RaycastHits		BoxCastAll(float4x4 trans, float half_size, float3 unit_dir, float max_dist, int layer_mask);
+	Colliders		OverlapBox(float4x4& trans, float half_size, int layer_mask);
+	
+	bool			CheckSphere(float3 center, float radius, int layer_mask);	
+	bool			SphereCast(float3 center, float radius, float3 unit_dir, float max_dist, int layer_mask);
+	bool			SphereCast(float3 center, float radius, float3 unit_dir, float max_dist, RaycastHit& hit, int layer_mask);
+	RaycastHits		SphereCastAll(float3 center, float radius, float3 unit_dir, float max_dist, int layer_mask);
+	Colliders		OverlapSphere(float3 center, float radius, int layer_mask);
+
+	bool			CheckCapsule(float4x4& trans, float height, float radius, int layer_mask);
+	bool			CapsuleCast(float4x4& trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask);
+	bool			CapsuleCast(float4x4& trans, float height, float radius, float3 unit_dir, float max_dist, RaycastHit& hit, int layer_mask);
+	RaycastHits		CapsuleCastAll(float4x4 trans, float height, float radius, float3 unit_dir, float max_dist, int layer_mask);
+	Colliders		OverlapCapsule(float4x4& trans, float height, float radius, int layer_mask);
 
 private:
+
+
 
 	bool Init();
 	bool Start();
@@ -55,7 +77,19 @@ private:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-private:
+	// Queries -----------------------------------------
+
+	PxHitFlags GetHitFlags();
+	PxQueryFilterData GetFilterData(bool any_hit);
+	void BeginQueryFilter(QueryType query_type, int layer_mask,  bool generate_vector = false);
+	void EndQueryFilter();
+
+	bool SweepAny(PxGeometry& geometry, float4x4& trans, float3& unit_dir, float max_dist, int layer_mask);
+	bool Sweep(PxGeometry& geometry, float4x4& trans, float3& unit_dir, float max_dist, RaycastHit& hit,  int layer_mask);
+	void SweepAll(PxGeometry& geometry, float4x4& trans, float3& unit_dir, float max_dist, RaycastHits& hits, int layer_mask);
+
+	bool Check(PxGeometry& geometry, float4x4& trans, int layer_mask);
+	void Overlap(PxGeometry& geometry, float4x4& trans, Colliders& colliders, int layer_mask);
 
 	void DebugDrawConvex(const float4x4& transform, const float3& scale , const PxConvexMesh* mesh, const float3& color = float3::one()) const;
 	void DrawCollider(ComponentCollider* collider);
@@ -69,17 +103,24 @@ private:
 	uint GetNbControllers() const;
 	PxMaterial* CreateMaterial(float staticFriction = 0.5f, float dynamicFriction = 0.5f, float restitution = 0.5f) const;
 
-	// Delay Libraries -----------------------------------------
+	// Delay Libraries -------------------------------------
 
 	bool LoadPhysicsExplicitely();
 	void UnloadPhysicsExplicitely();
 
 public:
-
+	QueryType query_type = QueryType::NO_TYPE;
+	
 	CollisionLayers	layers;
 	bool debug_physics = false;
-	int	 layer_mask = -1;
+	bool mouse_pick_colliders = true;
+	bool mouse_pick_triggers = true;
+
+	int	layer_mask = DEFAULT_LAYER_MASK;
 	int  multiple_hit = false;
+	bool query_hit_triggers = true;
+	bool query_hit_backfaces = false;
+	bool query_initial_overlap = true;
 
 private:
 
@@ -105,7 +146,7 @@ private:
 	CustomErrorCallback			px_error_callback;
 	SimulationEventCallback*    px_simulation_callback = nullptr;
 	ControllerFilterCallback*	px_controller_filter = nullptr;
-	RaycastFilterCallback*		px_raycast_filter = nullptr;
+	QueryFilterCallback*		px_query_filter = nullptr;
 
 	PxFoundation*				px_foundation = nullptr;
 	PxPhysics*					px_physics = nullptr;

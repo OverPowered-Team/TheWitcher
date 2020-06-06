@@ -38,6 +38,7 @@ public:
 	void DebugDrawSphere(const float4x4& transform, float radius, const float3& color = float3::one()) const;
 	void DebugDrawCapsule(const float4x4& transform,  float radius, float height, const float3& color = float3::one()) const;
 	void DebugDrawMesh(const float4x4& transform, float* vertices, uint num_vertices,  uint* indices, uint num_indices , const float3 & color = float3::one()) const;
+	void PanelConfigOption();
 
 	ComponentCamera* GetCurrentMainCamera();
 	

@@ -58,7 +58,13 @@ void ComponentLightPoint::Update()
 {
 	OPTICK_EVENT();
 
-	LightLogic();
+	//If Light is attached to GameObject or Emmitter, we call this function
+	if(light_props.enabled)
+		LightLogic();
+
+	//Else, we update light position from every particle
+
+
 }
 
 void ComponentLightPoint::DrawScene()
@@ -202,4 +208,25 @@ void ComponentLightPoint::DrawIconLight()
 		Gizmos::DrawPoly(bulb->mesh, matrix, Color(0.0f, 255.0f, 0.0f));
 		glEnable(GL_LIGHTING);
 	}
+}
+
+void ComponentLightPoint::SetPosition(float3 pos)
+{
+	light_props.position = pos;
+}
+
+void ComponentLightPoint::SetProperties(PointLightProperties props)
+{
+	light_props.intensity = props.intensity;
+	light_props.position = props.position;
+
+	light_props.ambient = props.ambient;
+	light_props.diffuse = props.diffuse;
+	light_props.specular = props.specular;
+
+	light_props.constant = props.constant;
+	light_props.linear = props.linear;
+	light_props.quadratic = props.quadratic;
+	light_props.casting_particles = props.casting_particles;
+
 }

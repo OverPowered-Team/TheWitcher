@@ -25,12 +25,32 @@ void CameraMovement::Update()
 {
     switch (state) {
     case CameraState::DYNAMIC: {
+        float3 pos = transform->GetGlobalPosition();
+        float3 futurePos = pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT();
+        if (limiter1 != nullptr && limiter2 != nullptr) {
+            float3 l1 = limiter1->transform->GetGlobalPosition();
+            float3 l2 = limiter2->transform->GetGlobalPosition();
+            float d = (futurePos.x - l1.x) * (l2.z - l1.z) - (futurePos.z - l1.z) * (l2.x - l1.x);
+            if (d < 0) {
+                if (smooth_camera) {
+                    transform->SetGlobalPosition(futurePos);
+                }
+                else
+                    transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+            }
+            else {
+                float2 vec = float2((l2 - l1).x, (l2 - l1).z);
+                float2 proj = vec * ((float2(futurePos.x, futurePos.z) - float2(l1.x, l1.z)).Dot(vec)) / (vec.Dot(vec));
+                transform->SetGlobalPosition(float3(l1.x + proj.x, futurePos.y, l1.z + proj.y));
+            }
+        }
+        else {
             if (smooth_camera) {
-                float3 pos = transform->GetGlobalPosition();
-                transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
+                transform->SetGlobalPosition(futurePos);
             }
             else
                 transform->SetGlobalPosition(CalculateMidPoint() + trg_offset);
+        }
         break;
     }
     case CameraState::FREE: {
@@ -72,19 +92,20 @@ void CameraMovement::Update()
     }
     case CameraState::FREE_TO_DYNAMIC: {
         float3 pos = transform->GetGlobalPosition();
-        transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * 1 * Time::GetDT());
+        transform->SetGlobalPosition(pos + ((CalculateMidPoint() + trg_offset) - pos) * smooth_cam_vel * Time::GetDT());
         break;
     }
     case CameraState::STATIC:
             LookAtMidPoint();
         break;
     case CameraState::AXIS: {
-            if (smooth_camera)
-                transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
-            else {
-                transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
-            }
-            LookAtMidPoint();
+        if (smooth_camera)
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + ((CalculateAxisMidPoint()) - transform->GetGlobalPosition()) * smooth_cam_vel * Time::GetDT());
+        else {
+            transform->SetGlobalPosition(CalculateAxisMidPoint()/* + trg_offset*/);
+        }
+        LookAtMidPoint();
+        //LOG("POSITION X: %f Y: %f Z: %f", transform->GetGlobalPosition().x, transform->GetGlobalPosition().y, transform->GetGlobalPosition().z);
         break;
     }
     case CameraState::CINEMATIC_TO_AXIS:
@@ -222,6 +243,16 @@ void CameraMovement::OnDrawGizmos()
     Gizmos::DrawWireSphere(cam_pos, 0.15f, Color::Green());
 
     Gizmos::DrawLine(mid_point, cam_pos, Color::Red()); // line mid -> future camera pos
+
+    if (limiter1 != nullptr && limiter2 != nullptr) {
+        Gizmos::DrawSphere(limiter1->transform->GetGlobalPosition(), 0.3f, Color::Blue());
+        Gizmos::DrawSphere(limiter2->transform->GetGlobalPosition(), 0.3f, Color::Blue());
+        Gizmos::DrawLine(limiter1->transform->GetGlobalPosition(), limiter2->transform->GetGlobalPosition(), Color::Black());
+        float3 mid = (limiter1->transform->GetGlobalPosition() + limiter2->transform->GetGlobalPosition()) * 0.5f;
+        float3 dir = mid + (limiter1->transform->GetGlobalPosition() - limiter2->transform->GetGlobalPosition()).Cross(float3::unitY()).Normalized();
+        Gizmos::DrawLine(mid, dir, Color::Blue());
+        Gizmos::DrawSphere(dir, 0.2f, Color::Cyan());
+    }
 }
 
 void CameraMovement::SearchAndAssignPlayers()
@@ -243,7 +274,6 @@ float3 CameraMovement::CalculateMidPoint()
         {
             mid_pos += (*it)->transform->GetGlobalPosition();
         }
-       
     }
 
     return (players.size() == 0) ? mid_pos : mid_pos / players.size();
@@ -281,36 +311,4 @@ float3 CameraMovement::CalculateAxisMidPoint()
     }
     }
     return mid_pos;
-}
-Quat CameraMovement::RotationBetweenVectors(math::float3& start, math::float3& dest) // Include in MathGeoLib
-{
-    start.Normalize();
-    dest.Normalize();
-
-    float cosTheta = Dot(start, dest);
-    float3 rotationAxis;
-
-    if (cosTheta < -1 + 0.001f) {
-        // special case when vectors in opposite directions:
-        // there is no "ideal" rotation axis
-        // So guess one; any will do as long as it's perpendicular to start
-        rotationAxis = Cross(float3(0.0f, 0.0f, 1.0f), start);
-        if (Length(rotationAxis) < 0.01f) // bad luck, they were parallel, try again!
-            rotationAxis = Cross(float3(1.0f, 0.0f, 0.0f), start);
-
-        rotationAxis.Normalize();
-        return Quat(rotationAxis, math::DegToRad(180.f));
-    }
-
-    rotationAxis = Cross(start, dest);
-
-    float s = sqrt((1 + cosTheta) * 2);
-    float invs = 1 / s;
-
-    return Quat(
-        rotationAxis.x * invs,
-        rotationAxis.y * invs,
-        rotationAxis.z * invs,
-        s * 0.5f
-    );
 }

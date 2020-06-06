@@ -214,7 +214,7 @@ bool ComponentPhysics::CheckRigidBody(ComponentRigidBody* rb)
 
 bool ComponentPhysics::AddController(ComponentCharacterController* ctrl)
 {
-	if (CheckController(ctrl))
+	if (CheckController(ctrl)) // TODO: review this
 	{
 		controller = ctrl;
 		if (CheckChangeState()) UpdateBody();
@@ -225,7 +225,7 @@ bool ComponentPhysics::AddController(ComponentCharacterController* ctrl)
 
 bool ComponentPhysics::RemoveController(ComponentCharacterController* ctrl)
 {
-	if (ctrl == controller)
+	if (ctrl == controller) // TODO: review this
 	{
 		controller = nullptr;
 		if (CheckChangeState()) UpdateBody();
@@ -235,8 +235,24 @@ bool ComponentPhysics::RemoveController(ComponentCharacterController* ctrl)
 
 void ComponentPhysics::SwitchedController(ComponentCharacterController* ctrl)
 {
-	if (ctrl == controller)
-		if (CheckChangeState()) UpdateBody();
+	if (!ctrl->enabled )
+	{
+		ctrl->controller->release();
+		ctrl->controller = nullptr;
+		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
+	}
+	else
+	{
+		ctrl->controller = App->physx->CreateCharacterController(ctrl->desc);
+		// relink shapes
+		ctrl->LinkShapesToComponent();
+		// relink controller to base physics
+		AddController(ctrl);
+		// send event
+		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED); // this do nothing
+		// update parameters
+		ctrl->UpdateParameters();
+	}
 }
 
 bool ComponentPhysics::CheckController(ComponentCharacterController* ctrl)

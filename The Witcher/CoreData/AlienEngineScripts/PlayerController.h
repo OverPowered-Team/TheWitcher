@@ -45,6 +45,7 @@ public:
 		//RECOUNT
 		float total_damage_dealt = 0.0f;
 		uint total_kills = 0;
+		std::map<uint, uint> type_kills;
 	};
 
 	struct DashData
@@ -103,19 +104,21 @@ public:
 	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void UpdateDashEffect();
-	void OnEnemyKill();
+	void OnEnemyKill(uint enemy_type);
 	void OnTriggerEnter(ComponentCollider* col);
 
 	void StartImmune() { is_immune = true; };
 	void StopImmune() { is_immune = false; };
 
 	void HitFreeze(float freeze_time);
-	void RemoveFreeze(float speed);
+	void RemoveFreeze(float speed, std::string state_name);
 	void PauseParticle();
 	void ResumeParticle();
 	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
 
 	void ReleaseParticle(std::string particle_name);
+
+	void ChangeColorParticle();
 
 	//Battle Circles
 	void CheckEnemyCircle();
@@ -222,6 +225,7 @@ private:
 
 	CameraShake* shake = nullptr;
 	float last_regen_tick = 0.0f;
+	std::vector<const char*> layers;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {

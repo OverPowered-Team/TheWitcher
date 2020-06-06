@@ -11,34 +11,15 @@ Training_Zone::~Training_Zone()
 
 void Training_Zone::Start()
 {
-	rb = GetComponent<ComponentRigidBody>();
-
-	
-	switch (oscilation_direction)
-	{
-	case OSCILATION_DIRECTION::X:
-	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
-		break;
-	}
-	case OSCILATION_DIRECTION::Y:
-	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
-		break;
-	}
-	case OSCILATION_DIRECTION::Z:
-	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
-		break;
-	}
-	}
-
-	current_oscilating_time = Time::GetGameTime();
-	internal_timer = Time::GetGameTime();
+	Invoke(std::bind(&Training_Zone::Init, this), 3);
 }
 
 void Training_Zone::Update()
 {
+	if (!has_started) {
+		return;
+	}
+
 	if (!Time::IsGamePaused())
 	{
 		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
@@ -155,4 +136,33 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 			break;
 		}
 	}
+}
+
+void Training_Zone::Init()
+{
+	rb = GetComponent<ComponentRigidBody>();
+
+	switch (oscilation_direction)
+	{
+	case OSCILATION_DIRECTION::X:
+	{
+		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
+		break;
+	}
+	case OSCILATION_DIRECTION::Y:
+	{
+		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
+		break;
+	}
+	case OSCILATION_DIRECTION::Z:
+	{
+		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
+		break;
+	}
+	}
+
+	current_oscilating_time = Time::GetGameTime();
+	internal_timer = Time::GetGameTime();
+
+	has_started = true;
 }

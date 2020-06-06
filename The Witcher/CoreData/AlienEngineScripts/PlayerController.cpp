@@ -58,6 +58,10 @@ void PlayerController::Start()
 	state = new IdleState();
 	state->OnEnter(this);
 
+	layers.push_back("Ground");
+	layers.push_back("Default");
+	layers.push_back("Player");
+
 	// Dash
 	dashData.current_acel_multi = dashData.accel_multi; 
 }
@@ -109,15 +113,23 @@ void PlayerController::CheckGround()
 	direction = GetDirectionVector();
 
 	RaycastHit hit;
-
-	float ground_distance = 0.2F;
+	is_grounded = false;
+	float ground_distance = 0.3F;
 	float offset = transform->GetGlobalScale().y * 0.5f;
+
+	//capsulecast
+	float4x4 cast_transform = transform->GetGlobalMatrix();
+	cast_transform.Translate(float3(0, offset, 0));
 	
+	//raycast
 	float3 center_position = transform->GetGlobalPosition();
 	center_position.y += offset;
-	
-	is_grounded = false;
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask("Ground")))
+
+	Physics::SetQueryHitTriggers(false);
+	Physics::SetQueryInitialOverlaping(false);
+
+	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
@@ -125,9 +137,11 @@ void PlayerController::CheckGround()
 			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
+
+			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+			if (angle > 45 && direction.y > 0)
+				is_grounded = false;
 		}
-		/*if (direction_vector.y > 0) //temporal?
-			direction_vector.y = 0;*/
 	}
 }
 
@@ -308,7 +322,7 @@ void PlayerController::EffectsUpdate()
 				if (it_stats->first == "Health")
 				{
 					HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
-					if (player_data.stats["Health"].GetValue() == 0)
+					if (player_data.stats["Health"].GetValue() <= 0)
 					{
 						shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 						Die();
@@ -338,6 +352,8 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
+		ChangeColorParticle();
+
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
@@ -428,7 +444,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			return;
 		}
 
-		if (player_data.stats["Health"].GetValue() == 0.0f)
+		if (player_data.stats["Health"].GetValue() <= 0.0f)
 			return;
 
 		player_data.stats["Health"].DecreaseStat(dmg);
@@ -449,18 +465,16 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		}
 
 		attacks->CancelAttack();
-		if (knock) {
-			if (player_data.stats["Health"].GetValue() == 0)
-			{
-				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-				Die();
-			}
-			else
-			{
-				animator->PlayState("Hit");
-				player_data.velocity = knock_speed;
-				SetState(StateType::HIT);
-			}
+		if (player_data.stats["Health"].GetValue() == 0)
+		{
+			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+			Die();
+		}
+		else
+		{
+			animator->PlayState("Hit");
+			player_data.velocity = knock_speed;
+			SetState(StateType::HIT);
 		}
 
 		if (GameManager::instance->rumbler_manager)
@@ -494,14 +508,14 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 void PlayerController::AbsorbHit()
 {
-	for (auto it = effects.begin(); it != effects.end();)
+	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
 		{
 			if (mods->identifier == "Absorb")
 			{
 				mods->amount--;
-				if (mods->amount == 0)
+				if (mods->amount <= 0)
 				{
 					RemoveEffect(it);
 				}
@@ -556,7 +570,7 @@ void PlayerController::AddEffect(Effect* _effect)
 	{
 		for (auto it = player_data.stats.begin(); it != player_data.stats.end(); ++it)
 		{
-			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time == 0)
+			if(_effect->AffectsStat(it->second.name) && _effect->ticks_time <= 0)
 				it->second.ApplyEffect(_effect);
 		}
 	}
@@ -574,8 +588,6 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		LOG("Error trying to remove null effect.");
 		return it;
 	}
-
-	it = effects.erase(it);
 
 	if (tmp_effect->spawned_particle != nullptr)
 	{
@@ -595,7 +607,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-
+	it = effects.erase(it);
 
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
@@ -702,40 +714,54 @@ void PlayerController::HitFreeze(float freeze_time)
 		return;
 
 	float speed = animator->GetCurrentStateSpeed();
-	animator->SetCurrentStateSpeed(0);
-	//PauseParticle();
+	std::string state_name = animator->GetCurrentStateName();
+
+	LOG("FREEZING %s",state_name.c_str());
+	animator->SetStateSpeed(state_name.c_str(), 0);
+	PauseParticle();
 	is_immune = true;
-	Invoke([this, speed]() -> void {this->RemoveFreeze(speed); }, freeze_time);
+	Invoke([this, speed, state_name]() -> void {this->RemoveFreeze(speed, state_name); }, freeze_time);
 }
 
-void PlayerController::RemoveFreeze(float speed)
+void PlayerController::RemoveFreeze(float speed, std::string state_name)
 {
-	//ResumeParticle();
-	animator->SetCurrentStateSpeed(speed);
+	ResumeParticle();
+	animator->SetStateSpeed(state_name.c_str(), speed);
 	
 	is_immune = false;
 }
 
 void PlayerController::PauseParticle()
 {
-	for (auto it = particles.begin(); it != particles.end(); ++it)
-	{
-		if (std::strcmp((*it)->GetName(),attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
-		{
-			(*it)->GetComponent<ParticleSystem>()->Pause();
+	if (!attacks->GetCurrentAttack())
+		return;
 
-			return;
-		}
-	}
-}
-
-void PlayerController::ResumeParticle()
-{
 	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
 		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 		{
-			(*it)->GetComponent<ParticleSystem>()->Play();
+			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
+			if (p_system)
+				p_system->Pause();
+
+			return;
+		}
+	}
+
+}
+
+void PlayerController::ResumeParticle()
+{
+	if (!attacks->GetCurrentAttack())
+		return;
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
+			if (p_system)
+				p_system->Play();
 
 			return;
 		}
@@ -799,7 +825,60 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 		particles.erase(particle_name);
 	}*/
 }
+void PlayerController::ChangeColorParticle()
+{
+	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
+	bool color_changed = false;
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	{
+		color_changed = true;
+		my_color.x = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+	{
+		color_changed = true;
+		my_color.z = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.5)
+			my_color.x += 0.5f;
+		else
+			my_color.x = 1.0f;
+		my_color.y += 0.5f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.3f)
+			my_color.x += 0.7f;
+		else
+			my_color.x = 1.0f;
+		my_color.y = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+	{
+		color_changed = true;
+		my_color.y = 1.0f;
+	}
 
+	if (!color_changed)
+		my_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+			{
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+			}
+		}
+	}
+
+}
 void PlayerController::CheckEnemyCircle()
 {
 	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
@@ -815,7 +894,7 @@ void PlayerController::CheckEnemyCircle()
 
 			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
 
-			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
 			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
@@ -847,6 +926,10 @@ void PlayerController::IncreaseStat(std::string stat, float value)
 	if (stat_it != player_data.stats.end())
 	{
 		player_data.stats[stat].IncreaseStat(value);
+		if (stat == "Health" && HUD)
+		{
+			HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
+		}
 	}
 }
 
@@ -957,12 +1040,20 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 	}
 }
 
-void PlayerController::OnEnemyKill()
+void PlayerController::OnEnemyKill(uint enemy_type)
 {
 	LOG("ENEMY KILL");
+	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
+	{
+		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));
+	}
+
 	player_data.total_kills++;
-	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
+	player_data.type_kills[enemy_type]++;
 	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+
+	//UI
+	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 

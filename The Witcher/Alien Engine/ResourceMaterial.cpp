@@ -37,6 +37,32 @@ ResourceMaterial::ResourceMaterial() : Resource()
 		LOG_ENGINE("There was an error. Could not find the shadow shader");
 }
 
+ResourceMaterial::ResourceMaterial(ResourceMaterial* material)
+{
+	type = ResourceType::RESOURCE_MATERIAL;
+
+	for (uint i = 0; i < (uint)TextureType::MAX; ++i)
+	{
+			textures[i].first = material[i].textures->first;
+			textures[i].second = material[i].textures->second;
+			if (textures[i].second)
+				textures[i].second->IncreaseReferences();
+	}
+
+	simple_depth_shader = material->simple_depth_shader;
+	if (simple_depth_shader != nullptr)
+		simple_depth_shader->IncreaseReferences();
+	else
+		LOG_ENGINE("There was an error. Could not find the seimple depht shader");
+
+	used_shader = material->used_shader;
+	if (used_shader != nullptr)
+		used_shader->IncreaseReferences();
+	else
+		LOG_ENGINE("There was an error. Could not find the shadow shader");
+
+}
+
 ResourceMaterial::~ResourceMaterial()
 {
 	for (uint texType = 0; texType < (uint)TextureType::MAX; ++texType)
@@ -264,8 +290,8 @@ void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 	shaderInputs.standardShaderProperties.smoothness = (float)file->GetNumber("Smoothness");
 	shaderInputs.standardShaderProperties.metalness = (float)file->GetNumber("Metalness");
 	renderMode = (int)file->GetNumber("RenderMode");
-
-	SetShader((ResourceShader*)App->resources->GetResourceWithID(std::stoull(file->GetString("ShaderID"))));
+	const char* shader_id = file->GetString("ShaderID");
+	SetShader((ResourceShader*)App->resources->GetResourceWithID(std::stoull(shader_id)));
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
 		textures[iter].first = std::stoull(file->GetString(std::to_string(iter).data()));
 		textures[iter].second = App->resources->GetTextureByID(textures[iter].first);
@@ -313,6 +339,7 @@ void ResourceMaterial::ApplyMaterial()
 	// Update uniforms
 	shaderInputs.standardShaderProperties.diffuse_color = color;
 	shaderInputs.particleShaderProperties.color = color;
+	shaderInputs.trailShaderProperties.color = color;
 	shaderInputs.shieldFresnelShaderProperties.color = color;
 	shaderInputs.shieldShaderProperties.color = float3(color.x, color.y, color.z);
 
@@ -565,6 +592,17 @@ void ResourceMaterial::ShaderInputsSegment()
 		ImGui::ColorEdit3("Albedo",color.ptr(), ImGuiColorEditFlags_Float);
 		break; }
 
+	case SHADER_TEMPLATE::TRAIL: {
+		ImGui::Text("Texture:");
+		ImGui::Spacing();
+
+		InputTexture(TextureType::DIFFUSE);
+
+		ImGui::SameLine(120, 15);
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
+		ImGui::ColorEdit3("Albedo", color.ptr(), ImGuiColorEditFlags_Float);
+		break; }
+
 	case SHADER_TEMPLATE::WATER: {//difusse
 		//ImGui::ColorEdit3("Albedo", shaderInputs.standardShaderProperties.diffuse_color.ptr(), ImGuiColorEditFlags_Float);
 
@@ -617,6 +655,33 @@ void ResourceMaterial::ShaderInputsSegment()
 		ImGui::InputInt("##numhits", &shaderInputs.shieldFresnelShaderProperties.numHits);*/
 
 		break; }
+	case SHADER_TEMPLATE::DISSOLVE:
+	{
+		ImGui::SliderFloat("Burn", &shaderInputs.dissolveFresnelShaderProperties.burn, 0, 1);
+		// Diffuse 
+		ImGui::Text("Diffuse:");
+		InputTexture(TextureType::DIFFUSE);
+		ImGui::SameLine();
+		ImGui::ColorEdit4("Albedo", color.ptr(), ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaBar /*|ImGuiColorEditFlags_NoInputs | */);
+
+		// Specular 
+		ImGui::Text("Specular:");
+		InputTexture(TextureType::SPECULAR);
+		ImGui::SameLine();
+		float posX = ImGui::GetCursorPosX();
+		ImGui::SliderFloat("Metalness", &shaderInputs.standardShaderProperties.metalness, 0.0f, 1.f);
+		ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(posX, -15));
+		if (ImGui::Button("Reset Metalness")) shaderInputs.standardShaderProperties.metalness = DEFAULT_METALNESS;
+		ImGui::SetCursorPosX(posX);
+		ImGui::SliderFloat("Smoothness", &shaderInputs.standardShaderProperties.smoothness, 16.f, 128.f);
+		ImGui::SetCursorPosX(posX);
+		if (ImGui::Button("Reset Smoothness"))  shaderInputs.standardShaderProperties.smoothness = DEFAULT_SMOOTHNESS;
+
+		// Normal Map
+		ImGui::Text("Normal Map:");
+		InputTexture(TextureType::NORMALS);
+		break;
+	}
 
 	default:
 		LOG_ENGINE("We currently don't support editing this type of uniform...");
@@ -653,6 +718,12 @@ void ResourceMaterial::InputTexture(TextureType texType)
 
 	ImGui::SameLine();
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+
+	if (textures[(uint)texType].second != nullptr)
+		ImGui::Text("%i", textures[(uint)texType].second->references);
+
+	ImGui::SameLine();
+
 	ImGui::PushID((int)texType);
 	if (ImGui::RadioButton("###", false))
 	{

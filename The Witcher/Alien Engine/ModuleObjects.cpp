@@ -34,6 +34,7 @@
 #include "ModuleAudio.h"
 #include "ComponentParticleSystem.h"
 #include "ComponentTrail.h"
+#include "Trail.h"
 #include "ReturnZ.h"
 #include "Time.h"
 #include "Prefab.h"
@@ -414,12 +415,25 @@ update_status ModuleObjects::PostUpdate(float dt)
 				else
 				{
 					ComponentParticleSystem* partSystem = (*it).second->GetComponent<ComponentParticleSystem>();
-					if (partSystem == nullptr)
+					if (partSystem != nullptr)
+					{
+
+						ResourceMaterial* mat = partSystem->GetSystem()->material;
+						if (mat != nullptr)
+							wanted_shader = mat->used_shader;
+					}
+
+					ComponentTrail* trail = (*it).second->GetComponent<ComponentTrail>();
+					if (trail != nullptr)
+					{
+						ResourceMaterial* mat = trail->GetTrail()->material;
+						if (mat != nullptr)
+							wanted_shader = mat->used_shader;
+					}
+
+					if (partSystem == nullptr && trail == nullptr)
 						continue;
 
-					ResourceMaterial* mat = partSystem->GetSystem()->material;
-					if (mat != nullptr)
-						wanted_shader = mat->used_shader;
 				}
 
 				if (wanted_shader != current_used_shader)
@@ -439,7 +453,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
 			
-			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+			ComponentCamera* mainCamera = App->renderer3D->actual_game_camera;
 
 			std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 			for (; it_ui_world != ui_world.end(); ++it_ui_world) {
@@ -607,7 +621,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
-		ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+		ComponentCamera* mainCamera = App->renderer3D->actual_game_camera;
 
 		std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 		for (; it_ui_world != ui_world.end(); ++it_ui_world) {

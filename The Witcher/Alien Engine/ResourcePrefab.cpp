@@ -9,6 +9,7 @@
 #include "ModuleResources.h"
 #include "ModuleUI.h"
 #include "ComponentAnimator.h"
+#include "ComponentUI.h"
 #include "ModuleCamera3D.h"
 #include "ComponentUI.h"
 #include "Time.h"
@@ -332,6 +333,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 			Prefab::InitScripts(obj);
 		}
 
+		obj->SetPrefab(ID);
+
 		// Navigation
 		auto ui = obj->GetComponentsInChildrenRecursive<ComponentUI>();
 		auto uiParent = obj->GetComponents<ComponentUI>();
@@ -343,7 +346,10 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
 
-		obj->SetPrefab(ID);
+		for each (ComponentUI * uiElement in ui) {
+			uiElement->ReSetIDNavigation();
+		}
+
 		obj->transform->SetLocalPosition(pos);
 		if (set_selected) {
 			App->objects->SetNewSelectedObject(obj, false);
@@ -359,7 +365,7 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		ComponentUI* ui_aux = obj->GetComponent<ComponentUI>();
 		if (ui_aux != nullptr) {
 			GameObject* p = obj->parent;
-
+				
 			bool changed = true;
 			while (changed) {
 				if (p != nullptr) {
@@ -376,6 +382,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 				}
 			}
 		}
+
+
 		// TODO: check this
 		/*ComponentCharacterController* character_controller = (ComponentCharacterController*)(obj)->GetComponent(ComponentType::CHARACTER_CONTROLLER);
 		if (character_controller)

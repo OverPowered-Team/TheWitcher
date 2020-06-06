@@ -64,6 +64,7 @@ struct ParticleInfo
 	float4 lightColor = float4::zero;
 
 	float maxLifeTime = 5.f;
+	float changedStartTime = 2.f;
 	float changedTime = 5.f;
 
 	bool globalTransform = true;
@@ -87,6 +88,11 @@ struct ParticleInfo
 	float lengthScale = 1.0f;
 	float speedScale = 0.0f;
 	float velocityScale = 0.0f;
+
+	//Random
+	float2 randomAngleZ = float2::zero();
+	float2 randomAngleY = float2::zero();
+	float2 randomAngleX = float2::zero();
 };
 
 struct ParticleMutableInfo
@@ -150,6 +156,7 @@ private:
 	
 	ParticleSystem* owner = nullptr;
 	ResourceMaterial* p_material = nullptr;
+	ComponentLightPoint* p_light = nullptr;
 
 	ParticleInfo particleInfo;
 	ParticleMutableInfo startInfo;
@@ -163,6 +170,7 @@ private:
 
 	float rateToLerp = 0.f;
 	float t = 0.0f;
+	float currentLerpTime = 0.f;
 	//float sheetWidth, sheetHeight = 0.f;
 
 };

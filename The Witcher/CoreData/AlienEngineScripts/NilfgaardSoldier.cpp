@@ -214,19 +214,11 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");
-		if (stats["Health"].GetValue() == 0.0F) {
+		if (stats["Health"].GetValue() <= 0.0F) {
 			SetState("Hit");
 			if (!IsRangeEnemy())
 				RemoveBattleCircle();
-		}
-		else if (is_attacking)
-		{
-			ChangeAttackEnemy();
-		}
-		else if(!is_dead)
-			SetState("Idle");
-		else
-		{
+
 			if (!was_dizzy)
 				was_dizzy = true;
 			else
@@ -235,7 +227,12 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 				GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 			}
 		}
-
+		else if (is_attacking)
+		{
+			ChangeAttackEnemy();		
+		}
+		else if (!is_dead)
+			SetState("Idle");
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{

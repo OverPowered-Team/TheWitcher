@@ -26,7 +26,6 @@ enum class TextureType {
 	DIFFUSE_ROUGHNESS,
 	AMBIENT_OCCLUSION,
 	METALNESS,
-
 	MAX
 };
 
@@ -55,6 +54,12 @@ struct ShaderInputs
 		//float3 end_color = float3(1.f, 1.f, 1.f);
 	} particleShaderProperties;
 
+	struct TrailShaderProperties {
+		float4 color = float4(1.f, 1.f, 1.0f, 1.0f);
+	
+	} trailShaderProperties;
+
+
 
 	struct ShieldShaderProperties {
 		float3 color = float3(1.f, 1.f, 1.f);
@@ -73,6 +78,10 @@ struct ShaderInputs
 
 	} shieldFresnelShaderProperties;
 
+	struct DissolveShaderProperties {
+		float burn = 0.5f;
+	} dissolveFresnelShaderProperties;
+
 };
 
 class ResourceShader; 
@@ -84,6 +93,8 @@ class ResourceMaterial : public Resource {
 public:
 
 	ResourceMaterial();
+	ResourceMaterial(ResourceMaterial* material);
+
 	virtual ~ResourceMaterial();
 
 	bool LoadMemory() override;

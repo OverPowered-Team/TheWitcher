@@ -9,14 +9,18 @@
 #include "ComponentCamera.h"
 #include "ModuleObjects.h"
 #include "Viewport.h"
+#include "RandomHelper.h"
 #include "mmgr/mmgr.h"
 #include "ModuleResources.h"
+#include "ComponentLightPoint.h"
+
 Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo endInfo) : owner(owner), particleInfo(info), startInfo(info), endInfo(endInfo)
 {
 	owner->sourceFactor = GL_SRC_ALPHA;
 	owner->destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
 	currentFrame = owner->currentFrame;
 	
+	// Material Particle
 	if (owner->material != nullptr) 
 	{
 		p_material = new ResourceMaterial();
@@ -24,18 +28,47 @@ Particle::Particle(ParticleSystem* owner, ParticleInfo info, ParticleMutableInfo
 		p_material->SetTexture(owner->material->GetTexture(TextureType::DIFFUSE));
 		p_material->color = owner->material->color;
 		p_material->shaderInputs = owner->material->shaderInputs;
-		/*p_material->shaderInputs.particleShaderProperties.color = owner->material->shaderInputs.particleShaderProperties.color;
-		p_material->shaderInputs.particleShaderProperties.start_color = owner->material->shaderInputs.particleShaderProperties.color;
-		p_material->shaderInputs.particleShaderProperties.end_color = owner->material->shaderInputs.particleShaderProperties.end_color;*/
+	}
 
-		/*ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(p_material->texturesID[int(TextureType::DIFFUSE)]);
 
-		if (tex != nullptr)
+	// Light Particle
+	if (owner->point_light != nullptr && owner->point_light->light_props.casting_particles)
+	{
+		if (owner->totalLights < owner->lightProperties.max_lights)
 		{
-			sheetWidth = tex->width;
-			sheetHeight = tex->height;
-		}*/
+			//Random distribution
+			if (owner->lightProperties.random_distribution)
+			{
+				int rand = Random::GetRandomIntBetweenTwo(0, 2);
+				
+				if (rand == 1)
+				{
+					p_light = new ComponentLightPoint(owner->point_light->game_object_attached);
+					p_light->SetProperties(owner->point_light->light_props);
+					owner->totalLights++;
+				}
 
+			}
+			else
+			{
+				p_light = new ComponentLightPoint(owner->point_light->game_object_attached);
+				p_light->SetProperties(owner->point_light->light_props);
+				owner->totalLights++;
+			}
+
+			//Range affects intensity
+			if (owner->lightProperties.size_range && p_light != nullptr)
+			{
+				float size = owner->emmitter.GetRadius();
+
+				if (size <= 0) // Radius is setted as 0
+					size = 0.01f;
+
+				float factor = particleInfo.size3D.x / size;
+				p_light->light_props.intensity *= factor;
+			}
+
+		}
 	}
 
 
@@ -46,6 +79,13 @@ Particle::~Particle()
 {
 	if (owner->material != nullptr)
 		delete p_material;
+
+	if (p_light != nullptr)
+	{
+		delete p_light;
+		p_light = nullptr;
+		owner->totalLights--;
+	}
 
 	currentFrame = 0;
 }
@@ -113,6 +153,12 @@ void Particle::Update(float dt)
 	//Update Speed Scale
 	particleInfo.velocityScale = particleInfo.speedScale * particleInfo.speed;
 	
+
+	//Update Lights
+	if(p_light != nullptr)
+		p_light->SetPosition(particleInfo.position);
+
+
 	//----------- Animation (Deprecated) ---------------- //
 
 	/*if (particleInfo.animation != nullptr)
@@ -154,9 +200,10 @@ void Particle::Update(float dt)
 void Particle::PostUpdate(float dt)
 {
 	if (particleInfo.changeOverLifeTime) {
+		currentLerpTime += dt;
 
-		InterpolateValues(dt);
-		
+		if(currentLerpTime >= particleInfo.changedStartTime)
+			InterpolateValues(dt);
 	}
 }
 
@@ -308,7 +355,7 @@ void Particle::Orientate(ComponentCamera* camera)
 		break;
 
 	case BillboardType::MESH:
-		particleInfo.rotation = Quat::identity();
+		particleInfo.rotation = owner->emmitter.GetWorldRotation();
 		break;
 
 	case BillboardType::NONE:
@@ -319,9 +366,9 @@ void Particle::Orientate(ComponentCamera* camera)
 		break;
 	}
 }
-
 void Particle::Rotate()
 {
+
 	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateX(math::DegToRad(particleInfo.angle3D.x)));
 	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateY(math::DegToRad(particleInfo.angle3D.y)));
 	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateZ(math::DegToRad(particleInfo.angle3D.z)));

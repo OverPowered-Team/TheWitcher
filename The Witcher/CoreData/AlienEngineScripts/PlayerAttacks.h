@@ -19,6 +19,7 @@ enum class Attack_Tags {
 	T_Ice,
 	T_Earth,
 	T_Lightning,
+	T_Poison,
 	T_Chaining,
 	T_None
 };
@@ -47,7 +48,7 @@ public:
 		std::string allow_combo_p_name = "";
 		std::string prefab_to_spawn = "";
 		std::string audio_name = "";
-
+		std::string hit_particle_name = "";
 		std::map<std::string, Stat> stats;
 		std::vector<Attack_Tags> tags;
 		std::vector<AttackCollider> colliders;
