@@ -23,11 +23,8 @@ void DrownedRange::UpdateEnemy()
 	case DrownedState::IDLE:
 		if (distance < stats["AttackRange"].GetValue() && distance > stats["HideDistance"].GetValue())
 		{
-			animator->SetFloat("speed", 0.0F);
-			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+			SetState("GetOff");
 			animator->PlayState("GetOff");
-			state = DrownedState::GETOFF;
-			is_hide = false;
 			if (m_controller && !is_combat)
 			{
 				is_combat = true;
@@ -43,17 +40,38 @@ void DrownedRange::UpdateEnemy()
 		}
 		break;
 
+	case DrownedState::IDLE_OUT:
+		if (distance < stats["AttackRange"].GetValue() && distance > stats["HideDistance"].GetValue())
+		{
+			SetState("Attack");
+			animator->PlayState("Attack");
+		}
+		break;
+
 	case DrownedState::ATTACK:
 	{
 		RotatePlayer();
 	}
 		break;
 
+	case DrownedState::HIDE:
+	{
+		if (Time::GetGameTime() - current_hide_time > max_hide_time)
+		{
+			SetState("Idle");
+			is_hide = true;
+		}
+	}
+	break;
+
 	case DrownedState::HIT:
 	{
-		
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
 	}
 		break;
+
 	case DrownedState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
@@ -93,7 +111,12 @@ void DrownedRange::OnAnimationEnd(const char* name)
 		{
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
-			is_hide = true;
+			animator->SetBool("hide", true);
+		}
+		else
+		{
+			SetState("IdleOut");
+			animator->SetBool("hide", false);
 		}
 		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
@@ -125,9 +148,5 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	else if (strcmp(name, "GetOff") == 0)
 	{
 		SetState("Attack");
-	}
-	else if (strcmp(name, "Hide") == 0)
-	{
-		SetState("Idle");
 	}
 }

@@ -138,7 +138,7 @@ void Enemy::UpdateEnemy()
 		}
 	}
 
-	if(type != EnemyType::DROWNED && type != EnemyType::BLOCKER_OBSTACLE)
+	if(type != EnemyType::BLOCKER_OBSTACLE)
 		character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
 
 	if(type != EnemyType::BLOCKER_OBSTACLE)

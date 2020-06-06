@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "DrownedAnimController",
-        "NumStates": 7,
-        "NumTransitions": 7,
+        "NumStates": 8,
+        "NumTransitions": 9,
         "States": [
             {
                 "Name": "Idle",
@@ -12,7 +12,7 @@
             {
                 "Name": "Hide",
                 "Speed": 1,
-                "Clip": "15252659645406112804"
+                "Clip": "5021806171556024367"
             },
             {
                 "Name": "GetOff",
@@ -38,6 +38,11 @@
                 "Name": "Attack",
                 "Speed": 1,
                 "Clip": "5753173194275656717"
+            },
+            {
+                "Name": "IdleUp",
+                "Speed": 1,
+                "Clip": "5173602485571971200"
             }
         ],
         "Transitions": [
@@ -87,15 +92,6 @@
                 ]
             },
             {
-                "Source": "Attack",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
-            },
-            {
                 "Source": "Hide",
                 "Target": "Idle",
                 "Blend": 0.25,
@@ -121,6 +117,51 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Attack",
+                "Target": "IdleUp",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
+            },
+            {
+                "Source": "Attack",
+                "Target": "Hide",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 2
+                    }
+                ]
+            },
+            {
+                "Source": "IdleUp",
+                "Target": "Hide",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 2
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -132,6 +173,10 @@
             },
             {
                 "Name": "grounded",
+                "Value": false
+            },
+            {
+                "Name": "hide",
                 "Value": false
             }
         ],
