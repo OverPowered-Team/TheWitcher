@@ -60,7 +60,7 @@ private:
 
 	void DebugDrawEmmitter();
 	// Get an initial position and an initial velocity given the emmiter type
-	void GetInitialValues(float3& position, float3& velocity, float speed, bool localTransform);
+	void GetInitialValues(float3& position, float3& velocity, Quat& rotation, float speed, bool localTransform);
 
 public: 
 
