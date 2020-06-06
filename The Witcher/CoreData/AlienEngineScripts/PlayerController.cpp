@@ -16,7 +16,7 @@
 
 #include "Bonfire.h"
 #include "Scores_Data.h"
-
+#include "UI_DamageCount.h"
 #include "InGame_UI.h"
 #include "DashCollider.h"
 
@@ -969,6 +969,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				knock_speed.y = 0;
 
 				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
+
 				return;
 			}
 		}

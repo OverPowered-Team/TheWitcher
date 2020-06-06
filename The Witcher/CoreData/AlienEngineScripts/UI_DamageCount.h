@@ -27,6 +27,8 @@ public:
 
 	void AddDamageCount(float damage, PlayerController* player);
 
+	void PlayerHasBeenHit(PlayerController* player);
+
 public:
 
 	Prefab text;

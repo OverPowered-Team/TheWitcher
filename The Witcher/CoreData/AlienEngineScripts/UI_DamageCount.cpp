@@ -114,6 +114,35 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 }
 
+void UI_DamageCount::PlayerHasBeenHit(PlayerController* player)
+{
+	ComponentText* text = nullptr;
+	std::vector<DamageNum*>* vector_to_handle = nullptr;
+	std::vector<DamageNum*>* vector_to_transition = nullptr;
+
+	if (player->controller_index == 1)
+	{
+		text = damagecount_player1;
+		vector_to_handle = &player1_damagenums;
+		vector_to_transition = &transition_player1_damagenums;
+	}
+	else
+	{
+		text = damagecount_player2;
+		vector_to_handle = &player2_damagenums;
+		vector_to_transition = &transition_player2_damagenums;
+	}
+
+	auto iter = (*vector_to_handle).begin();
+	for (; iter != (*vector_to_handle).end(); ++iter)
+	{
+		(*iter)->current_timer = internal_timer;
+		(*vector_to_transition).push_back((*iter));
+		(*vector_to_handle).erase(iter);
+		--iter;
+	}
+}
+
 void UI_DamageCount::Start()
 {
 	damagecount_player1 = game_object->GetChild("DamageCount_Player1")->GetComponent<ComponentText>();
@@ -292,7 +321,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 							(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, -(*(iter - 1))->go->transform->GetLocalPosition().y - 175.f, 0));
 						}
 						(*iter)->starting_y_position = (*iter)->go->transform->GetLocalPosition().y;
-						
+
 					}
 				}
 			}
