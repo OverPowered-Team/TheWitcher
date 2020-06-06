@@ -42,24 +42,31 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	AttackEffect* effect = new AttackEffect();
 	effect->SetAttackIdentifier(attack_name);
 	effect->on_hit_effect = effect_to_apply;
+	effect->name = name;
+
 
 	switch (relic_effect)
 	{
 	case Relic_Effect::FIRE:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Fire";
 		break;
 	case Relic_Effect::ICE:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Ice";
 		break;
 	case Relic_Effect::EARTH:
 		effect->OnHit = &ApplyEffectOnHit;
 		effect->AddMultiplicativeModifier(valor, "Attack_Damage");
+		effect->element = "Earth";
 		break;
 	case Relic_Effect::LIGHTNING:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Lightning";
 		break;
 	case Relic_Effect::POISON:
 		effect->OnHit = &ApplyEffectOnHit;
+		effect->element = "Poison";
 		break;
 	}
 
@@ -239,6 +246,8 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		{
 			EffectData* _effect = new EffectData();
 			_effect->name = type_array->GetString("dash_effect.name");
+			_effect->vfx_on_apply = type_array->GetString("dash_effect.vfx_on_apply");
+			_effect->vfx_position = type_array->GetNumber("dash_effect.vfx_position");
 			_effect->time = type_array->GetNumber("dash_effect.time");
 			_effect->ticks_time = type_array->GetNumber("dash_effect.ticks_time");
 
@@ -289,7 +298,9 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 			{
 				if (dynamic_cast<DashEffect*>(*it) != nullptr && relic_type == Relic_Type::DASH)
 				{
+					delete(relic);
 					relic = new AttackRelic();
+					relic->relic_effect = relic_effect;
 					SetRelic("ATTACK");
 				}
 			}

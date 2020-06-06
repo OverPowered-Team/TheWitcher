@@ -58,6 +58,10 @@ void PlayerController::Start()
 	state = new IdleState();
 	state->OnEnter(this);
 
+	layers.push_back("Ground");
+	layers.push_back("Default");
+	layers.push_back("Player");
+
 	// Dash
 	dashData.current_acel_multi = dashData.accel_multi; 
 }
@@ -109,29 +113,35 @@ void PlayerController::CheckGround()
 	direction = GetDirectionVector();
 
 	RaycastHit hit;
-
-	float ground_distance = 0.2F;
+	is_grounded = false;
+	float ground_distance = 0.3F;
 	float offset = transform->GetGlobalScale().y * 0.5f;
+
+	//capsulecast
+	float4x4 cast_transform = transform->GetGlobalMatrix();
+	cast_transform.Translate(float3(0, offset, 0));
 	
+	//raycast
 	float3 center_position = transform->GetGlobalPosition();
 	center_position.y += offset;
-	
-	is_grounded = false;
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask("Ground")))
+
+	Physics::SetQueryHitTriggers(false);
+	Physics::SetQueryInitialOverlaping(false);
+
+	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
-			float angle = RadToDeg(transform->up.AngleBetweenNorm(hit.normal));
 			Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
 			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
-			if (angle > 45)
-				direction = -direction;
-
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
+
+			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+			if (angle > 45 && direction.y > 0)
+				is_grounded = false;
 		}
-		/*if (direction_vector.y > 0) //temporal?
-			direction_vector.y = 0;*/
 	}
 }
 
@@ -496,7 +506,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 void PlayerController::AbsorbHit()
 {
-	for (auto it = effects.begin(); it != effects.end();)
+	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
 		{
@@ -813,7 +823,6 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 		particles.erase(particle_name);
 	}*/
 }
-
 void PlayerController::CheckEnemyCircle()
 {
 	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
@@ -829,7 +838,7 @@ void PlayerController::CheckEnemyCircle()
 
 			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
 
-			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
 			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);

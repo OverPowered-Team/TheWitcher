@@ -93,6 +93,8 @@ class ResourceMaterial : public Resource {
 public:
 
 	ResourceMaterial();
+	ResourceMaterial(ResourceMaterial* material);
+
 	virtual ~ResourceMaterial();
 
 	bool LoadMemory() override;
