@@ -64,6 +64,7 @@ struct ParticleInfo
 	float4 lightColor = float4::zero;
 
 	float maxLifeTime = 5.f;
+	float changedStartTime = 2.f;
 	float changedTime = 5.f;
 
 	bool globalTransform = true;
@@ -169,6 +170,7 @@ private:
 
 	float rateToLerp = 0.f;
 	float t = 0.0f;
+	float currentLerpTime = 0.f;
 	//float sheetWidth, sheetHeight = 0.f;
 
 };

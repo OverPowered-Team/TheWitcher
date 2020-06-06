@@ -325,29 +325,27 @@ void ComponentAnimatedImage::LoadComponent(JSONArraypack* to_load)
 	current_frame = 0.0f;
 	last_frame = 0;
 
-	try {
-		if (to_load->GetBoolean("HasAnimatedImages")) {
-			JSONArraypack* imagesVector = to_load->GetArray("AnimatedImages");
-			for (int i = 0; i < imagesVector->GetArraySize(); ++i) {
-				u64 textureID = std::stoull(imagesVector->GetString(std::to_string(i).data()));
-				if (textureID != 0) {
-					ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureID);
-					if (tex != nullptr) {
-						images.push_back(nullptr);
-						images.at(i) = SetTextureArray(tex, images.at(i));
-						last_frame++;
-					}
-				}
-				else
-				{
+	if (to_load->GetBoolean("HasAnimatedImages")) {
+		JSONArraypack* imagesVector = to_load->GetArray("AnimatedImages");
+		for (int i = 0; i < imagesVector->GetArraySize(); ++i) {
+			u64 textureID = std::stoull(imagesVector->GetString(std::to_string(i).data()));
+			if (textureID != 0) {
+				ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(textureID);
+				if (tex != nullptr) {
 					images.push_back(nullptr);
+					images.at(i) = SetTextureArray(tex, images.at(i));
 					last_frame++;
 				}
-				imagesVector->GetAnotherNode();
 			}
+			else
+			{
+				images.push_back(nullptr);
+				last_frame++;
+			}
+			imagesVector->GetAnotherNode();
 		}
 	}
-	catch (...) {}
+	
 
 	GameObject* p = game_object_attached->parent;
 	bool changed = true;

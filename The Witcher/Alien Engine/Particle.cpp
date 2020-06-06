@@ -200,9 +200,10 @@ void Particle::Update(float dt)
 void Particle::PostUpdate(float dt)
 {
 	if (particleInfo.changeOverLifeTime) {
+		currentLerpTime += dt;
 
-		InterpolateValues(dt);
-		
+		if(currentLerpTime >= particleInfo.changedStartTime)
+			InterpolateValues(dt);
 	}
 }
 
@@ -365,9 +366,9 @@ void Particle::Orientate(ComponentCamera* camera)
 		break;
 	}
 }
-
 void Particle::Rotate()
 {
+
 	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateX(math::DegToRad(particleInfo.angle3D.x)));
 	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateY(math::DegToRad(particleInfo.angle3D.y)));
 	particleInfo.rotation = particleInfo.rotation.Mul(Quat::RotateZ(math::DegToRad(particleInfo.angle3D.z)));
