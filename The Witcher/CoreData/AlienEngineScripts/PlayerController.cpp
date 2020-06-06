@@ -352,6 +352,8 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
+		ChangeColorParticle();
+
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
@@ -822,6 +824,60 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 		GameManager::instance->particle_pool->ReleaseInstance(particle_name, particles[particle_name]);
 		particles.erase(particle_name);
 	}*/
+}
+void PlayerController::ChangeColorParticle()
+{
+	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
+	bool color_changed = false;
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	{
+		color_changed = true;
+		my_color.x = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+	{
+		color_changed = true;
+		my_color.z = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.5)
+			my_color.x += 0.5f;
+		else
+			my_color.x = 1.0f;
+		my_color.y += 0.5f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.3f)
+			my_color.x += 0.7f;
+		else
+			my_color.x = 1.0f;
+		my_color.y = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+	{
+		color_changed = true;
+		my_color.y = 1.0f;
+	}
+
+	if (!color_changed)
+		my_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+			{
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+			}
+		}
+	}
+
 }
 void PlayerController::CheckEnemyCircle()
 {
