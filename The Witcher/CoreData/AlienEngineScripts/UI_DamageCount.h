@@ -33,7 +33,8 @@ public:
 
 public:
 
-	Prefab text;
+	Prefab text_left;
+	Prefab text_right;
 
 private:
 
@@ -104,7 +105,8 @@ ALIEN_FACTORY UI_DamageCount* CreateUI_DamageCount() {
 	UI_DamageCount* alien = new UI_DamageCount();
 	// To show in inspector here
 
-	SHOW_IN_INSPECTOR_AS_PREFAB(alien->text);
+	SHOW_IN_INSPECTOR_AS_PREFAB(alien->text_left);
+	SHOW_IN_INSPECTOR_AS_PREFAB(alien->text_right);
 
 	return alien;
 } 
