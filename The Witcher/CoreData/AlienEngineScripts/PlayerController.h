@@ -118,6 +118,8 @@ public:
 
 	void ReleaseParticle(std::string particle_name);
 
+	void ChangeColorParticle();
+
 	//Battle Circles
 	void CheckEnemyCircle();
 	// Terrain - particles
