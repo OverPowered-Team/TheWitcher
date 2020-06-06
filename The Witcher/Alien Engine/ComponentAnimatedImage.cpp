@@ -324,6 +324,7 @@ void ComponentAnimatedImage::LoadComponent(JSONArraypack* to_load)
 	current_color = to_load->GetColor("ColorCurrent");
 	current_frame = 0.0f;
 	last_frame = 0;
+
 	try {
 		if (to_load->GetBoolean("HasAnimatedImages")) {
 			JSONArraypack* imagesVector = to_load->GetArray("AnimatedImages");
@@ -346,7 +347,7 @@ void ComponentAnimatedImage::LoadComponent(JSONArraypack* to_load)
 			}
 		}
 	}
-	catch (...) {}
+	catch(...){}
 	
 
 	GameObject* p = game_object_attached->parent;

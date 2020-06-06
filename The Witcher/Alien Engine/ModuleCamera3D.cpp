@@ -135,6 +135,11 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 
 		}
+		else if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
+		{
+			final_yaw = current_yaw;
+			final_pitch = current_pitch;
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		{
@@ -234,11 +239,14 @@ void ModuleCamera3D::Rotation(float dt)
 	final_yaw += mouse_motion_x * rotation_speed;
 	final_pitch += mouse_motion_y * rotation_speed;
 
-	current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
-	current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
+	if (current_pitch != final_pitch && current_yaw != final_yaw)
+	{
+		current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
+		current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
 
-	Rotate(current_yaw, current_pitch);
-
+		Rotate(current_yaw, current_pitch);
+	}
+	
 	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 	SDL_SetCursor(cursor);
 
