@@ -23,6 +23,7 @@ public:
 	
 	void Start();
 	void Update();
+	void Reset();
 
 	void OnTriggerEnter(ComponentCollider* collider);
 };
