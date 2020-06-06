@@ -400,7 +400,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 					(*vector_to_transition).push_back((*iter_));
 					(*vector_to_handle).erase((iter_ + 1).base());
 				}
-				iter = (*vector_to_handle).begin();
+				iter = ((*vector_to_handle).begin() - 1);
 			}
 		}
 	}
