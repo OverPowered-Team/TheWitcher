@@ -17,7 +17,7 @@
             {
                 "Name": "GetOff",
                 "Speed": 1,
-                "Clip": "15252659645406112804"
+                "Clip": "8940657788854547229"
             },
             {
                 "Name": "Death",
@@ -105,7 +105,7 @@
                 "BoolConditions": []
             },
             {
-                "Source": "GetOff",
+                "Source": "Hit",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
@@ -114,8 +114,8 @@
                 "BoolConditions": []
             },
             {
-                "Source": "Hit",
-                "Target": "Idle",
+                "Source": "GetOff",
+                "Target": "Attack",
                 "Blend": 0.25,
                 "End": true,
                 "IntConditions": [],
