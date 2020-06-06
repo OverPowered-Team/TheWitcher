@@ -11,30 +11,41 @@ Training_Zone::~Training_Zone()
 
 void Training_Zone::Start()
 {
-	rb = GetComponent<ComponentRigidBody>();
-	
-	switch (oscilation_direction)
-	{
-	case OSCILATION_DIRECTION::X:
-	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
-		break;
-	}
-	case OSCILATION_DIRECTION::Y:
-	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
-		break;
-	}
-	case OSCILATION_DIRECTION::Z:
-	{
-		max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
-		break;
-	}
-	}
+
 }
 
 void Training_Zone::Update()
 {
+	if (is_first_frame)
+	{
+		is_first_frame = false;
+
+		rb = GetComponent<ComponentRigidBody>();
+
+		switch (oscilation_direction)
+		{
+		case OSCILATION_DIRECTION::X:
+		{
+			max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().x);
+			break;
+		}
+		case OSCILATION_DIRECTION::Y:
+		{
+			max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().y);
+			break;
+		}
+		case OSCILATION_DIRECTION::Z:
+		{
+			max_oscilation_pos = Maths::Abs(transform->GetLocalRotation().ToEulerXYZ().z);
+			break;
+		}
+		}
+
+		current_oscilating_time = Time::GetGameTime();
+		internal_timer = Time::GetGameTime();
+		return;
+	}
+
 	if (!Time::IsGamePaused())
 	{
 		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
@@ -48,15 +59,6 @@ void Training_Zone::Update()
 	else
 	{
 		time_paused = Time::GetGameTime() - internal_timer;
-		return;
-	}
-
-	if (is_first_frame)
-	{
-		is_first_frame = false;
-
-		current_oscilating_time = Time::GetGameTime();
-		internal_timer = Time::GetGameTime();
 		return;
 	}
 
