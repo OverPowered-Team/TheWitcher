@@ -15,11 +15,6 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 {
 	DamageNum* damage_num = new DamageNum();
 	
-	if (player->attacks->GetCurrentAttack()->IsLast())
-	{
-		damage_num->is_last = true;
-	}
-
 	if (player->controller_index == 1)
 	{
 		if (player1_damagenums.empty())
@@ -94,7 +89,32 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 			damagecount_player2->SetAlpha(1.0f);
 		}
 	}
-		
+	
+	if (player->attacks->GetCurrentAttack()->IsLast())
+	{
+		damage_num->is_last = true;
+		damage_num->combo_text = damage_num->go->GetChild("Combo")->GetComponent<ComponentText>();
+		damage_num->combo_text->SetAlpha(1);
+
+		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+		{
+			damage_num->relic_image= damage_num->go->GetChild("Fire")->GetComponent<ComponentImage>();
+		}
+		else if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+		{
+			damage_num->relic_image = damage_num->go->GetChild("Ice")->GetComponent<ComponentImage>();
+		}
+		else if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+		{
+			damage_num->relic_image = damage_num->go->GetChild("Poison")->GetComponent<ComponentImage>();
+		}
+
+		if (damage_num->relic_image)
+		{
+			damage_num->relic_image->current_color.a = 1;
+		}
+	}
+
 	damage_num->damage = damage;
 	damage_num->go->transform->SetLocalScale(float3(0.75f, 0.75f, 1));
 	damage_num->text = damage_num->go->GetComponent<ComponentText>();
@@ -396,6 +416,15 @@ void UI_DamageCount::DamageCount_Handling(int index)
 
 			(*iter)->go->transform->SetLocalPosition(float3((*iter)->go->transform->GetLocalPosition().x, lerp, 0));
 			(*iter)->text->SetAlpha(alpha);
+
+			if ((*iter)->is_last)
+			{
+				(*iter)->combo_text->current_color.a = alpha;
+				if ((*iter)->relic_image)
+				{
+					(*iter)->relic_image->current_color.a = alpha;
+				}
+			}
 
 			if (t >= 1)
 			{

@@ -4,16 +4,22 @@
 #include "Macros/AlienScripts.h"
 
 class PlayerController;
+enum class Attack_Tags;
 
 class DamageNum
 {
 public:
 	GameObject* go = nullptr;
 	ComponentText* text = nullptr;
+
 	int damage = 0.0f;
 	float current_timer = 0.0f;
 	float starting_y_position = 0.0f;
 	bool is_last = false;
+
+	// Image for Last Git
+	ComponentText* combo_text = nullptr;
+	ComponentImage* relic_image = nullptr;
 };
 
 class ALIEN_ENGINE_API UI_DamageCount : public Alien {
