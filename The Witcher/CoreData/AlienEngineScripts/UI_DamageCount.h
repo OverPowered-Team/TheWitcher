@@ -29,6 +29,8 @@ public:
 
 	void PlayerHasBeenHit(PlayerController* player);
 
+	void AddRemainingComboPoints();
+
 public:
 
 	Prefab text;

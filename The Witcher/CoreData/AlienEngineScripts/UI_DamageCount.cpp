@@ -153,6 +153,12 @@ void UI_DamageCount::PlayerHasBeenHit(PlayerController* player)
 	}
 }
 
+void UI_DamageCount::AddRemainingComboPoints()
+{
+	Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
+	Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
+}
+
 void UI_DamageCount::Start()
 {
 	damagecount_player1 = game_object->GetChild("Parent_DamageCount_Player1")->GetChild("DamageCount_Player1")->GetComponent<ComponentText>();

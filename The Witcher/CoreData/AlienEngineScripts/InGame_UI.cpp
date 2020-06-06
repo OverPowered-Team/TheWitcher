@@ -5,6 +5,7 @@
 #include "PlayerManager.h"
 #include "UltiBar.h"
 #include "Scores_Data.h"
+#include "UI_DamageCount.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -116,6 +117,7 @@ void InGame_UI::Update()
 					Scores_Data::dead = true;
 					Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 					Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+					GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
 					Scores_Data::last_scene = SceneManager::GetCurrentScene();
 					SceneManager::LoadScene("NewWin_Menu");
 				}
