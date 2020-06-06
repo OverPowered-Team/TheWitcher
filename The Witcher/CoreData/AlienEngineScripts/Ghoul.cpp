@@ -26,6 +26,7 @@ void Ghoul::StartEnemy()
     state = GhoulState::IDLE;
     decapitation_particle = "decapitation_particle_ghoul";
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
+    range_collider = game_object->GetChild("EnemyRangeAttack")->GetComponent<ComponentBoxCollider>();
     Enemy::StartEnemy();
 }
 
