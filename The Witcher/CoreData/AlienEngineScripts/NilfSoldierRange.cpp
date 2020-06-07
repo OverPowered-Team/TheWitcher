@@ -59,13 +59,10 @@ void NilfSoldierRange::UpdateEnemy()
 	break;
 	case NilfgaardSoldierState::AUXILIAR:
 	{
-		current_flee_distance = transform->GetGlobalPosition().LengthSq();
-		LOG("Last flee distance: %f", last_flee_distance);
-		LOG("Current flee distance: %f", current_flee_distance);
+		current_flee_distance = transform->GetGlobalPosition().Length();
 		if (math::Abs(last_flee_distance - current_flee_distance) < flee_min_distance)
 		{
 			Action();
-			LOG("Soy un malote");
 		}
 		Flee();
 	}

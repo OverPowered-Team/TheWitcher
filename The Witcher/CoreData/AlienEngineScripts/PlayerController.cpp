@@ -888,7 +888,7 @@ void PlayerController::CheckEnemyCircle()
 		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
-			float avoid_distance = avoid_direction.LengthSq();
+			float avoid_distance = avoid_direction.Length();
 			if (avoid_distance > battleCircle)
 				continue;
 
@@ -896,7 +896,7 @@ void PlayerController::CheckEnemyCircle()
 
 			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
-			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
+			if (!enemy->is_battle_circle && (enemy->type == EnemyType::NILFGAARD_SOLDIER || enemy->type == EnemyType::GHOUL) && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
 		}
 	}

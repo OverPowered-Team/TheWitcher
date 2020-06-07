@@ -225,21 +225,19 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
+	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
-	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	if (avoid_vector.LengthSq() > 0)
-		velocity += avoid_vector;
-	else
-		velocity += velocity_vec;
+	velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 
-	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	if (velocity.Length() > stats["Agility"].GetValue())
 	{
 		velocity = velocity.Normalized()* stats["Agility"].GetValue();
 	}
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
-	animator->SetFloat("speed", velocity.LengthSq());
+	animator->SetFloat("speed", velocity.Length());
 
 	float angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
@@ -250,27 +248,24 @@ void Enemy::Move(float3 direction)
 
 void Enemy::Guard()
 {
+	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
-	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	if (avoid_vector.LengthSq() > 0)
-		velocity += avoid_vector;
-	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance )
-		velocity += velocity_vec;
-	else if (stats["AttackRange"].GetValue() > distance)
-		velocity -= velocity_vec;
+	if (player_controllers[current_player]->battleCircle < distance)
+		velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 	else
 		velocity = float3::zero();
 
-	animator->SetFloat("speed", velocity.LengthSq());
+	animator->SetFloat("speed", velocity.Length());
 
-	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	if (velocity.Length() > stats["Agility"].GetValue())
 		velocity = velocity.Normalized() * stats["Agility"].GetValue();
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 
 	float angle;
-	if(velocity.LengthSq() == 0.0f)
+	if(velocity.Length() == 0.0f)
 		angle = atan2f(velocity_vec.z, velocity_vec.x);
 	else
 		angle = atan2f(velocity.z, velocity.x);

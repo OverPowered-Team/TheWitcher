@@ -232,8 +232,11 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			ChangeAttackEnemy();		
 		}
-		else if (!is_dead)
+		else if (!is_dead) 
+		{
 			SetState("Idle");
+		}
+
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
