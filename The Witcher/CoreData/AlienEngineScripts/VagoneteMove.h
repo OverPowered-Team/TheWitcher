@@ -76,6 +76,7 @@ public:
 	Wagonnete_UI* HUD = nullptr;
 
 	ComponentCurve* curve = nullptr;
+	ComponentCurve* next_curve = nullptr;
 	ComponentRigidBody* rigid_body = nullptr;
 
 	float current_speed = 0.0F;
