@@ -131,6 +131,24 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 				0);
 		}
 
+		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+		{
+			damage_num->relic_images.push_back(damage_num->go->GetChild("Earth")->GetComponent<ComponentImage>());
+			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
+				0);
+		}
+
+		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+		{
+			damage_num->relic_images.push_back(damage_num->go->GetChild("Lighting")->GetComponent<ComponentImage>());
+			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
+				0);
+		}
+
 		auto iter = damage_num->relic_images.begin();
 		for (; iter != damage_num->relic_images.end(); ++iter)
 		{
