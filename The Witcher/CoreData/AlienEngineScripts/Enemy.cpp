@@ -79,10 +79,10 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	if (player_controllers[0]->state->type == StateType::DEAD)
@@ -138,7 +138,7 @@ void Enemy::UpdateEnemy()
 		}
 	}
 
-	if(type != EnemyType::DROWNED && type != EnemyType::BLOCKER_OBSTACLE)
+	if(type != EnemyType::BLOCKER_OBSTACLE)
 		character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
 
 	if(type != EnemyType::BLOCKER_OBSTACLE)
@@ -225,21 +225,19 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
+	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
-	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	if (avoid_vector.LengthSq() > 0)
-		velocity += avoid_vector;
-	else
-		velocity += velocity_vec;
+	velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 
-	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	if (velocity.Length() > stats["Agility"].GetValue())
 	{
 		velocity = velocity.Normalized()* stats["Agility"].GetValue();
 	}
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
-	animator->SetFloat("speed", velocity.LengthSq());
+	animator->SetFloat("speed", velocity.Length());
 
 	float angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
@@ -250,27 +248,24 @@ void Enemy::Move(float3 direction)
 
 void Enemy::Guard()
 {
+	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
-	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	if (avoid_vector.LengthSq() > 0)
-		velocity += avoid_vector;
-	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance )
-		velocity += velocity_vec;
-	else if (stats["AttackRange"].GetValue() > distance)
-		velocity -= velocity_vec;
+	if (player_controllers[current_player]->battleCircle < distance)
+		velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 	else
 		velocity = float3::zero();
 
-	animator->SetFloat("speed", velocity.LengthSq());
+	animator->SetFloat("speed", velocity.Length());
 
-	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	if (velocity.Length() > stats["Agility"].GetValue())
 		velocity = velocity.Normalized() * stats["Agility"].GetValue();
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 
 	float angle;
-	if(velocity.LengthSq() == 0.0f)
+	if(velocity.Length() == 0.0f)
 		angle = atan2f(velocity_vec.z, velocity_vec.x);
 	else
 		angle = atan2f(velocity.z, velocity.x);
@@ -337,6 +332,13 @@ void Enemy::CanGetInterrupted()
 	can_get_interrupted = true;
 }
 
+void Enemy::RotatePlayer()
+{
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");
@@ -347,22 +349,22 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
 
-	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+	//if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
-		if (!is_hit_inmune)
+		/*if (!is_hit_inmune)
 		{
 			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
 			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 		}
-	}
+	}*/
 
-	if ((stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue()))
+	/*if ((stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue()))
 	{
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 		can_get_interrupted = false;
-	}
+	}*/
 
 	//float3 direction = (particle_spawn_positions[1]->transform->GetGlobalPosition() - last_player_hit->transform->GetGlobalPosition()).Normalized();
 	//------------

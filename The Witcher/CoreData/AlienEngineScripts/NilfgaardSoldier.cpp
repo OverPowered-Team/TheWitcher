@@ -203,7 +203,8 @@ void NilfgaardSoldier::SetState(const char* state_str)
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		//stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		//animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 		can_get_interrupted = true;
 		ReleaseParticle("EnemyAttackParticle");
 		if (distance < stats["VisionRange"].GetValue())
@@ -231,8 +232,11 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			ChangeAttackEnemy();		
 		}
-		else if (!is_dead)
+		else if (!is_dead) 
+		{
 			SetState("Idle");
+		}
+
 	}
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{

@@ -239,7 +239,7 @@ void ParticleSystem::InstantiateParticles(int particles)
 {
 	for (uint i = 0; i < particles; ++i)
 	{
-		emmitter.GetInitialValues(particleInfo.position, particleInfo.velocity, particleInfo.speed, particleInfo.globalTransform);
+		emmitter.GetInitialValues(particleInfo.position, particleInfo.velocity, particleInfo.rotation, particleInfo.speed, particleInfo.globalTransform);
 		CreateParticle(particleInfo, endInfo);
 	}
 }

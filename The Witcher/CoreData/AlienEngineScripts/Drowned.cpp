@@ -126,6 +126,13 @@ void Drowned::SetState(const char* state_str)
 		velocity = float3::zero();
 		animator->SetFloat("speed", 0.0F);
 	}
+	else if (state_str == "IdleOut")
+	{
+		state = DrownedState::IDLE_OUT;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+	}
 	else if (state_str == "Move")
 	{
 		state = DrownedState::MOVE;
@@ -143,6 +150,8 @@ void Drowned::SetState(const char* state_str)
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		velocity = float3::zero();
 		animator->SetFloat("speed", 0.0F);
+		is_hide = false;
+		animator->SetBool("hide", false);
 	}
 	else if (state_str == "Hide")
 		state = DrownedState::HIDE;

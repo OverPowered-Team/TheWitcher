@@ -23,11 +23,8 @@ void DrownedRange::UpdateEnemy()
 	case DrownedState::IDLE:
 		if (distance < stats["AttackRange"].GetValue() && distance > stats["HideDistance"].GetValue())
 		{
-			animator->SetFloat("speed", 0.0F);
-			character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+			SetState("GetOff");
 			animator->PlayState("GetOff");
-			state = DrownedState::GETOFF;
-			is_hide = false;
 			if (m_controller && !is_combat)
 			{
 				is_combat = true;
@@ -43,51 +40,38 @@ void DrownedRange::UpdateEnemy()
 		}
 		break;
 
-	case DrownedState::GETOFF:
-		if (movement < 1)
+	case DrownedState::IDLE_OUT:
+		if (distance < stats["AttackRange"].GetValue() && distance > stats["HideDistance"].GetValue())
 		{
-			character_ctrl->Move(float3::unitY() * 0.01);
-			movement += 0.01;
-		}
-		else
-		{
-			movement = 0;
-			state = DrownedState::ATTACK;
+			SetState("Attack");
 			animator->PlayState("Attack");
 		}
 		break;
 
 	case DrownedState::ATTACK:
 	{
-		float angle = atan2f(direction.z, direction.x);
-		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-		transform->SetGlobalRotation(rot);
-		if (set_attack)
-		{
-			animator->PlayState("Attack");
-			set_attack = false;
-		}
+		RotatePlayer();
 	}
 		break;
 
 	case DrownedState::HIDE:
-		if (movement < 1)
-		{
-			character_ctrl->Move(-float3::unitY() * 0.01);
-			movement += 0.01;
-		}
+	{
 		if (Time::GetGameTime() - current_hide_time > max_hide_time)
 		{
-			movement = 0;
-			animator->PlayState("Hide");
-			state = DrownedState::IDLE;
+			SetState("Idle");
+			is_hide = true;
 		}
-		break;
+	}
+	break;
+
 	case DrownedState::HIT:
 	{
-		
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
 	}
 		break;
+
 	case DrownedState::DYING:
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
@@ -127,21 +111,22 @@ void DrownedRange::OnAnimationEnd(const char* name)
 		{
 			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
-			is_hide = true;
+			animator->SetBool("hide", true);
+		}
+		else
+		{
+			SetState("IdleOut");
+			animator->SetBool("hide", false);
 		}
 		can_get_interrupted = true;
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		set_attack = true;
-		movement = 0;
+		//stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		//animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");
 		if (!is_dead)
 		{
 			state = DrownedState::ATTACK;
-			set_attack = true;
-			movement = 0;
 		}
 		else
 		{
@@ -159,5 +144,9 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	{
 		state = DrownedState::DYING;
 		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+	}
+	else if (strcmp(name, "GetOff") == 0)
+	{
+		SetState("Attack");
 	}
 }

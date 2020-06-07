@@ -352,6 +352,8 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
+		ChangeColorParticle();
+
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
@@ -823,6 +825,60 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 		particles.erase(particle_name);
 	}*/
 }
+void PlayerController::ChangeColorParticle()
+{
+	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
+	bool color_changed = false;
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	{
+		color_changed = true;
+		my_color.x = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+	{
+		color_changed = true;
+		my_color.z = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.5)
+			my_color.x += 0.5f;
+		else
+			my_color.x = 1.0f;
+		my_color.y += 0.5f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.3f)
+			my_color.x += 0.7f;
+		else
+			my_color.x = 1.0f;
+		my_color.y = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+	{
+		color_changed = true;
+		my_color.y = 1.0f;
+	}
+
+	if (!color_changed)
+		my_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+			{
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+			}
+		}
+	}
+
+}
 void PlayerController::CheckEnemyCircle()
 {
 	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
@@ -832,7 +888,7 @@ void PlayerController::CheckEnemyCircle()
 		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
-			float avoid_distance = avoid_direction.LengthSq();
+			float avoid_distance = avoid_direction.Length();
 			if (avoid_distance > battleCircle)
 				continue;
 
@@ -840,7 +896,7 @@ void PlayerController::CheckEnemyCircle()
 
 			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
-			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
+			if (!enemy->is_battle_circle && (enemy->type == EnemyType::NILFGAARD_SOLDIER || enemy->type == EnemyType::GHOUL) && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
 		}
 	}
