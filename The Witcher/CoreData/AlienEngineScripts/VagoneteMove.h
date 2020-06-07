@@ -34,6 +34,9 @@ public:
 	float currentInclination = 0.0F;
 	int inclinationZone = 1;
 
+	float player_currentYInclination = 0.0F;
+	float player_currentInclination = 0.0F;
+
 	struct {
 		SDL_Scancode inclinationLeft = SDL_SCANCODE_UNKNOWN;
 		SDL_Scancode inclinationRight = SDL_SCANCODE_UNKNOWN;

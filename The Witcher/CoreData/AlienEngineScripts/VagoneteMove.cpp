@@ -318,6 +318,30 @@ void VagoneteInputs::Inclination()
 		LOG("TWO INCLINATION");
 	}
 	else {
+		if (inclinationZone != 0) {
+			player_currentInclination += speedInclination * Time::GetDT() * inclinationZone;
+		}
+		else {
+			if (player_currentInclination < 0) {
+				player_currentInclination += speedInclination * Time::GetDT();
+				if (player_currentInclination > 0) {
+					player_currentInclination = 0;
+				}
+			}
+			else if (player_currentInclination > 0) {
+				player_currentInclination -= speedInclination * Time::GetDT();
+				if (player_currentInclination < 0) {
+					player_currentInclination = 0;
+				}
+			}
+		}
+		player_currentYInclination = tan(player_currentInclination * Maths::Deg2Rad()) * 0.7F;
+		if (player_currentInclination != 0) {
+			globalInclinationY += player_currentYInclination;
+			globalInclination += player_currentInclination;
+			player_currentInclination = Maths::Clamp(player_currentInclination, -inclination4player, inclination4player);
+			player->transform->SetGlobalRotation(player->transform->GetLocalRotation() * Quat::RotateX(player_currentInclination * Maths::Deg2Rad()));
+		}
 		LOG("ONE INCLINATION");
 		//player->transform->SetLocalRotation(player->transform->GetLocalRotation() * Quat::RotateZ(0.3f));
 	}
