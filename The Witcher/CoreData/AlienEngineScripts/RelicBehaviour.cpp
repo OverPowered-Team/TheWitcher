@@ -42,7 +42,7 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	AttackEffect* effect = new AttackEffect();
 	effect->SetAttackIdentifier(attack_name);
 	effect->on_hit_effect = effect_to_apply;
-	effect->name = name;
+	effect->name = effect_to_apply->name;
 
 
 	switch (relic_effect)
@@ -88,7 +88,7 @@ void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 {
 	DashEffect* effect = new DashEffect();
 	effect->on_dash_effect = effect_to_apply;
-	effect->name = name;
+	effect->name = effect_to_apply->name;
 
 	switch (relic_effect)
 	{

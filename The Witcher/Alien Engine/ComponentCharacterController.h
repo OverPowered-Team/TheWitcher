@@ -80,6 +80,7 @@ public:
 	// Auto resize from the bottom (moving position pivot automatly)
 	void Resize(const float new_height);
 	void SetSlopeLimit(const float slopeLimit);
+	float GetSlopeLimit() const;
 	void SetStepOffset(const float stepOffset);
 	void SetContactOffset(const float contactOffset);
 

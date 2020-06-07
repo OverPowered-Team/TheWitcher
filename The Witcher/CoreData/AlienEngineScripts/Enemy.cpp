@@ -79,10 +79,10 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	if (player_controllers[0]->state->type == StateType::DEAD)
@@ -138,7 +138,7 @@ void Enemy::UpdateEnemy()
 		}
 	}
 
-	if(type != EnemyType::DROWNED && type != EnemyType::BLOCKER_OBSTACLE)
+	if(type != EnemyType::BLOCKER_OBSTACLE)
 		character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
 
 	if(type != EnemyType::BLOCKER_OBSTACLE)
@@ -335,6 +335,13 @@ void Enemy::Decapitate(PlayerController* player)
 void Enemy::CanGetInterrupted()
 {
 	can_get_interrupted = true;
+}
+
+void Enemy::RotatePlayer()
+{
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
 }
 
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)

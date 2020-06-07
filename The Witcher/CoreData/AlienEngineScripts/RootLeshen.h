@@ -16,6 +16,7 @@ public:
 
 	RootLeshen();
 	virtual ~RootLeshen();
+	void Reset();
 	
 
 	float speed = 0.08f;
@@ -28,7 +29,12 @@ public:
 	float root_time_distance_factor = 0.08f;
 	float base_total_root_time = 2.0f;
 	float3 direction;
+
+	ComponentRigidBody* rbody = nullptr;
+
 	int target = 0;
+
+	bool active = false;
 
 	Leshen* leshen = nullptr;
 
