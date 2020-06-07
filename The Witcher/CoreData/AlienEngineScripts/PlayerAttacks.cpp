@@ -28,7 +28,7 @@ Attack_Tags GetTag(std::string str)
 	return Attack_Tags::T_None;
 }
 
-static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon} };
+static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon}, {"Weapon2",Collider_Type::C_Weapon2} };
 
 Collider_Type GetColliderType(std::string str)
 {
@@ -52,7 +52,14 @@ void PlayerAttacks::Start()
 
 	colliders = game_object->GetChild("Attacks_Collider")->GetComponents<ComponentCollider>();
 	if (weapon_obj)
+	{
 		colliders.push_back(weapon_obj->GetComponent<ComponentCollider>());
+	}
+	if (weapon2_obj)
+	{
+		colliders.push_back(weapon2_obj->GetComponent<ComponentCollider>());
+	}
+		
 
 	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 	{
@@ -353,6 +360,16 @@ void PlayerAttacks::ActivateCollider()
 			box_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
 			box_collider->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
 			box_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+
+			//YENN EXCEPTION
+			if (player_controller->player_data.type == PlayerController::PlayerType::YENNEFER)
+			{
+				if (current_attack->info.colliders[current_attack->current_collider].type == Collider_Type::C_Weapon)
+					weapon_obj->SetEnable(true);
+				else if(current_attack->info.colliders[current_attack->current_collider].type == Collider_Type::C_Weapon2)
+					weapon2_obj->SetEnable(true);
+			}
+
 		}
 			break;
 		}
