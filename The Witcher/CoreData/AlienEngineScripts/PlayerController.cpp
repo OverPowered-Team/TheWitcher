@@ -656,6 +656,7 @@ bool PlayerController::CheckBoundaries()
 					LOG("LEAVING BUDDY BEHIND");
 					if (contained) {
 						if (cam->state == CameraMovement::CameraState::FREE 
+							|| cam->state == CameraMovement::CameraState::CENTERED
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_STATIC
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
