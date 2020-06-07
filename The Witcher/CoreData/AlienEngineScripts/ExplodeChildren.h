@@ -20,7 +20,7 @@ public:
 	void DeleteMyself();
 
 	std::map<std::string, ComponentParticleSystem*> particles;
-
+	bool has_broke = false;
 private:
 	float time_to_disappear = 5.f;
 	float force = 15.f;
