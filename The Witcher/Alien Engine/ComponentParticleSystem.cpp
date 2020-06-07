@@ -406,10 +406,10 @@ bool ComponentParticleSystem::DrawInspector()
 						ImGui::Text("Start 3D Rotation: ");
 						ImGui::DragFloat2("X", (float*)&particleSystem->particleInfo.randomAngleX, 0.1f, 0.0f, 360.0f);
 						particleSystem->particleInfo.angle3D.x = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleX);
-
+						
 						ImGui::DragFloat2("Y", (float*)&particleSystem->particleInfo.randomAngleY, 0.1f, 0.0f, 360.0f);
 						particleSystem->particleInfo.angle3D.y = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleY);
-					
+						
 						ImGui::DragFloat2("Z", (float*)&particleSystem->particleInfo.randomAngleZ, 0.1f, 0.0f, 360.0f);
 						particleSystem->particleInfo.angle3D.z = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleZ); 
 					}
@@ -497,31 +497,31 @@ bool ComponentParticleSystem::DrawInspector()
 					ImGui::Spacing();
 					ImGui::Spacing();
 					ImGui::Text("Speed "); ImGui::SameLine(200, 15);
-					ImGui::DragFloat("##Speed", &particleSystem->endInfo.speed, 0.2f);
+					ImGui::DragFloat("##SpeedFinal", &particleSystem->endInfo.speed, 0.2f);
 
 					ImGui::Spacing();
 					ImGui::Spacing();
 
 					ImGui::Text("Color "); ImGui::SameLine(200, 15);
-					ImGui::ColorPicker4("##Color", (float*)&particleSystem->endInfo.color,ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+					ImGui::ColorPicker4("##ColorFinal", (float*)&particleSystem->endInfo.color,ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
 
 					ImGui::Spacing();
 					if (particleSystem->particleInfo.size3DStart)
 					{
 						ImGui::Text("3D Size "); ImGui::SameLine(200, 15);
-						ImGui::DragFloat3("##size3D", (float*)&particleSystem->endInfo.size3D, 0.1f, 0.0f, FLT_MAX);
+						ImGui::DragFloat3("##size3DFinal", (float*)&particleSystem->endInfo.size3D, 0.1f, 0.0f, FLT_MAX);
 					}
 					else
 					{
 						ImGui::Text("Size "); ImGui::SameLine(200, 15);
-						if (ImGui::DragFloat("##Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX)) {
+						if (ImGui::DragFloat("##SizeFinal", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX)) {
 							particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
 						}
 
 					}
 					
 					ImGui::Text("Force "); ImGui::SameLine(200, 15);
-					ImGui::DragFloat3("##Force", (float*)&particleSystem->endInfo.force);
+					ImGui::DragFloat3("##ForceFinal", (float*)&particleSystem->endInfo.force);
 
 					ImVec2 size = ImGui::GetItemRectSize();
 					ImGui::Text(""); ImGui::SameLine(200, 15);

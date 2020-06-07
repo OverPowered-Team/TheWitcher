@@ -40,6 +40,10 @@ private:
 
 private:
 
+	void Init();
+
+private:
+
 	ComponentRigidBody* rb = nullptr;
 
 	float max_oscilation_pos = 0.0f;
@@ -48,7 +52,8 @@ private:
 	float internal_timer = 0.0f;
 	float time_paused = 0.0f;
 
-	bool is_first_frame = true;
+	bool has_started = false;
+
 };
 
 ALIEN_FACTORY Training_Zone* CreateTraining_Zone() {

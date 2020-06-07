@@ -1,4 +1,6 @@
 #include "GameManager.h"
+
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "Leshen.h"
@@ -12,12 +14,35 @@ RootLeshen::~RootLeshen()
 {
 }
 
-void RootLeshen::Start()
+void RootLeshen::Reset()
 {
-	root_time = 0.0f;
+	root_speed = 0.005f;
+	rooted_effect_direction = { 0.0f, 1.0f, 0.0f };
 	life_time = 0.0f;
+	root_time = 0.0f;
+	total_life_time = 5.0f;
+	total_root_time = 0.0f;
+	root_time_distance_factor = 0.08f;
+	base_total_root_time = 2.0f;
 
 	state = ROOTSTATE::SEEK;
+	game_object->GetComponent<ComponentAnimator>()->PlayState("Idle");
+	game_object->GetComponent<ComponentCollider>()->SetEnable(false);
+}
+
+void RootLeshen::Start()
+{
+	root_speed = 0.005f;
+	rooted_effect_direction = { 0.0f, 1.0f, 0.0f };
+	life_time = 0.0f;
+	root_time = 0.0f;
+	total_life_time = 5.0f;
+	total_root_time = 0.0f;
+	root_time_distance_factor = 0.08f;
+	base_total_root_time = 2.0f;
+
+	state = ROOTSTATE::SEEK;
+	game_object->GetComponent<ComponentAnimator>()->PlayState("Idle");
 }
 
 void RootLeshen::Update()
@@ -30,11 +55,13 @@ void RootLeshen::Update()
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() + 180) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
 
-		if (life_time <= total_life_time)
+		if (life_time <= total_life_time) {
 			life_time += Time::GetDT();
+		}
 		else {
-			GameObject::Destroy(game_object);
+			GameManager::instance->particle_pool->ReleaseInstance("Leshen_roots_attack", game_object);
 			leshen->current_action->state = Leshen::ActionState::ENDED;
+			Reset();
 		}
 	}
 	else if (state == ROOTSTATE::ROOT) {
@@ -42,7 +69,8 @@ void RootLeshen::Update()
 		if (root_time <= total_root_time)
 			root_time += Time::GetDT();
 		else {
-			GameObject::Destroy(game_object);
+			GameManager::instance->particle_pool->ReleaseInstance("Leshen_roots_attack", game_object);
+			Reset();
 		}
 	}
 }

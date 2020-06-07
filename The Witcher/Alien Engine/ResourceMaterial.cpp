@@ -718,6 +718,12 @@ void ResourceMaterial::InputTexture(TextureType texType)
 
 	ImGui::SameLine();
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+
+	if (textures[(uint)texType].second != nullptr)
+		ImGui::Text("%i", textures[(uint)texType].second->references);
+
+	ImGui::SameLine();
+
 	ImGui::PushID((int)texType);
 	if (ImGui::RadioButton("###", false))
 	{

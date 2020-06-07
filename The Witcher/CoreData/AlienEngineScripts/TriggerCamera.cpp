@@ -30,13 +30,11 @@ void TriggerCamera::StartTransition(const TransitionInfo& transition_info)
 		case TransitionInfo::ToTransitionType::STATIC:
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_STATIC;
 			cam_script->trg_offset = transition_info.to_move->transform->GetGlobalPosition();
-			Tween::TweenMoveTo(camera, cam_script->trg_offset, transition_info.transition_time);
 			break;
 		case TransitionInfo::ToTransitionType::AXIS:
 			cam_script->state = CameraMovement::CameraState::MOVING_TO_AXIS;
 			cam_script->axis = (CameraMovement::CameraAxis)transition_info.axis_type;
-			cam_script->trg_offset = transition_info.to_move->transform->GetGlobalPosition();
-			Tween::TweenMoveTo(camera, cam_script->trg_offset, transition_info.transition_time);
+			cam_script->trg_offset = transition_info.to_move->transform->GetGlobalPosition();		
 			break;
 		default:
 			break;
@@ -45,7 +43,8 @@ void TriggerCamera::StartTransition(const TransitionInfo& transition_info)
 		cam_script->hor_angle = transition_info.hor_angle;
 		cam_script->vert_angle = transition_info.vert_angle;
 		cam_script->distance = transition_info.distance;
-
+		cam_script->is_cinematic = transition_info.is_cinematic;
+		cam_script->transition_time = transition_info.transition_time;
 		//cam_script->start_transition_pos = camera->transform->GetGlobalPosition();
 		LOG("Started transition");
 	}
@@ -67,15 +66,15 @@ void TriggerCamera::OnDrawGizmos()
 	switch (prev_camera.type)
 	{
 	case TransitionInfo::ToTransitionType::DYNAMIC: {
-		TransitionInfo transition = TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time);
+		TransitionInfo transition = TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.is_cinematic);
 		VisualizeCameraTransition(transition, Color::Red());
 		break;
 	}
 	case TransitionInfo::ToTransitionType::STATIC:
-		VisualizeCameraTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time), Color::Green());
+		VisualizeCameraTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time, prev_camera.is_cinematic), Color::Green());
 		break;
 	case TransitionInfo::ToTransitionType::AXIS:
-		VisualizeCameraTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time, prev_camera.axis_type), Color::Green());
+		VisualizeCameraTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time, prev_camera.axis_type, prev_camera.is_cinematic), Color::Green());
 		break;
 		/*case TransitionInfo::ToTransitionType::AXIS:
 			VisualizeCameraTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.axis_type), Color::Green());
@@ -85,15 +84,15 @@ void TriggerCamera::OnDrawGizmos()
 	switch (next_camera.type)
 	{
 	case TransitionInfo::ToTransitionType::DYNAMIC: {
-		TransitionInfo transition = TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time);
+		TransitionInfo transition = TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.is_cinematic);
 		VisualizeCameraTransition(transition, Color::Green());
 		break;
 	}
 	case TransitionInfo::ToTransitionType::STATIC:
-		VisualizeCameraTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time), Color::Green());
+		VisualizeCameraTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time, next_camera.is_cinematic), Color::Green());
 		break;
 	case TransitionInfo::ToTransitionType::AXIS:
-		VisualizeCameraTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time, next_camera.axis_type), Color::Green());
+		VisualizeCameraTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time, next_camera.axis_type, next_camera.is_cinematic), Color::Green());
 		break;
 	}
 }
@@ -181,13 +180,13 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 			switch (next_camera.type)
 			{
 			case TransitionInfo::ToTransitionType::DYNAMIC:
-				StartTransition(TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time));
+				StartTransition(TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.is_cinematic));
 				break;
 			case TransitionInfo::ToTransitionType::STATIC:
-				StartTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time));
+				StartTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time, next_camera.is_cinematic));
 				break;
 			case TransitionInfo::ToTransitionType::AXIS:
-				StartTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time, next_camera.axis_type));
+				StartTransition(TransitionInfo(next_camera.to_move, next_camera.transition_time, next_camera.axis_type, next_camera.is_cinematic));
 				break;
 			/*case TransitionInfo::ToTransitionType::AXIS:
 				StartTransition(TransitionInfo(next_camera.distance, next_camera.hor_angle, next_camera.vert_angle, next_camera.transition_time, next_camera.axis_type));
@@ -201,13 +200,13 @@ void TriggerCamera::RegisterMovement(int player_num, int collider_position)
 			switch (prev_camera.type)
 			{
 			case TransitionInfo::ToTransitionType::DYNAMIC:
-				StartTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time));
+				StartTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.is_cinematic));
 				break;
 			case TransitionInfo::ToTransitionType::STATIC:
-				StartTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time));
+				StartTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time, prev_camera.is_cinematic));
 				break;
 			case TransitionInfo::ToTransitionType::AXIS:
-				StartTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time, prev_camera.axis_type));
+				StartTransition(TransitionInfo(prev_camera.to_move, prev_camera.transition_time, prev_camera.axis_type, prev_camera.is_cinematic));
 				break;
 			/*case TransitionInfo::ToTransitionType::AXIS:
 				StartTransition(TransitionInfo(prev_camera.distance, prev_camera.hor_angle, prev_camera.vert_angle, prev_camera.transition_time, prev_camera.axis_type));

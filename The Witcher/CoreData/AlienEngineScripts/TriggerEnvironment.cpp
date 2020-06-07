@@ -46,7 +46,6 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 		{
 			p1 = c->game_object_attached;
 			player_counter++;
-			LOG("ENTER p1");
 		}
 		else if (p2 == nullptr)
 		{
@@ -54,13 +53,11 @@ void TriggerEnvironment::OnTriggerEnter(ComponentCollider* collider)
 			{
 				p2 = c->game_object_attached;
 				player_counter++;
-				LOG("ENTER p2");
 			}
 		}
 		if (emitter != nullptr && player_counter == players.size()) {
 			emitter->SetState("Env_Lvl1", GetZoneByEnum(zone).c_str());
 			PlayInstant();
-			LOG("ENTER");
 		}
 	}
 }
@@ -73,13 +70,11 @@ void TriggerEnvironment::OnTriggerExit(ComponentCollider* collider)
 		{
 			p1 = nullptr;
 			player_counter--;
-			LOG("EXIT p1");
 		}
 		else if (c->game_object_attached == p2)
 		{
 			p2 = nullptr;
 			player_counter--;
-			LOG("EXIT p2");
 		}
 	}
 }
@@ -315,5 +310,4 @@ void TriggerEnvironment::LookForPlayers()
 		if (std::find(players.begin(), players.end(), *i) == players.end())
 			players.push_back(*i);
 	}
-	LOG("I HAVE THIS PLAYERS %i", players.size());
 }

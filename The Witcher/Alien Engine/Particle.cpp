@@ -355,7 +355,7 @@ void Particle::Orientate(ComponentCamera* camera)
 		break;
 
 	case BillboardType::MESH:
-		particleInfo.rotation = Quat::identity();
+		particleInfo.rotation = owner->emmitter.GetWorldRotation();
 		break;
 
 	case BillboardType::NONE:
