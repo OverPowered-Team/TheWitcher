@@ -104,6 +104,9 @@ private:
 	float	start_shake_time1 = 0.0f;
 	float	start_shake_time2 = 0.0f;
 
+	int		shake_goal1 = 100;
+	int		shake_goal2 = 100;
+
 	// --------------------------
 };
 

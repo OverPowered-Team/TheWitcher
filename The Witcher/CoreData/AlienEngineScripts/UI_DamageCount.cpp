@@ -185,22 +185,12 @@ void UI_DamageCount::PlayerHasBeenHit(PlayerController* player)
 		text = damagecount_player1;
 		vector_to_handle = &player1_damagenums;
 		vector_to_transition = &transition_player1_damagenums;
-		if (!(*vector_to_handle).empty())
-		{
-			is_shaking1 = true;
-			start_shake_time1 = internal_timer;
-		}
 	}
 	else
 	{
 		text = damagecount_player2;
 		vector_to_handle = &player2_damagenums;
 		vector_to_transition = &transition_player2_damagenums;
-		if (!(*vector_to_handle).empty())
-		{
-			is_shaking2 = true;
-			start_shake_time2 = internal_timer;
-		}
 	}
 
 	auto iter = (*vector_to_handle).begin();
@@ -295,6 +285,7 @@ void UI_DamageCount::Update()
 
 			if (t >= 1)
 			{
+				shake_goal1 = 100;
 				damagecount_player1->SetAlpha(0);
 				Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
 				damagecount_player1->SetText("0");
@@ -318,6 +309,7 @@ void UI_DamageCount::Update()
 
 			if (t >= 1)
 			{
+				shake_goal2 = 100;
 				damagecount_player2->SetAlpha(0);
 				Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
 				damagecount_player2->SetText("0");
@@ -480,11 +472,32 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				(*iter)->go = nullptr;
 				(*vector_to_transition).erase(iter);
 
+				if (index == 1)
+				{
+					if (shake_goal1 <= stoi(text->GetText()))
+					{
+						shake_goal1 += 50;
+						is_shaking1 = true;
+						start_shake_time1 = internal_timer;
+					}
+				}
+				else
+				{
+					if (shake_goal2 <= stoi(text->GetText()))
+					{
+						shake_goal2 += 50;
+						is_shaking2 = true;
+						start_shake_time2 = internal_timer;
+					}
+				}
+
+
 				if ((*vector_to_transition).size() == 0)
 				{
 					if (index == 1)
 					{
 						is_scaling1 = true;
+						
 						damage_count1_time = internal_timer;
 						scaling_time1 = internal_timer;
 					}
