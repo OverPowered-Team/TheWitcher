@@ -96,22 +96,45 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 		damage_num->combo_text = damage_num->go->GetChild("Combo")->GetComponent<ComponentText>();
 		damage_num->combo_text->SetAlpha(1);
 
-		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+		int sign = 0;
+
+		if (player->controller_index == 1)
 		{
-			damage_num->relic_image= damage_num->go->GetChild("Fire")->GetComponent<ComponentImage>();
+			sign = 1;
 		}
-		else if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+		else
 		{
-			damage_num->relic_image = damage_num->go->GetChild("Ice")->GetComponent<ComponentImage>();
-		}
-		else if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
-		{
-			damage_num->relic_image = damage_num->go->GetChild("Poison")->GetComponent<ComponentImage>();
+			sign = -1;
 		}
 
-		if (damage_num->relic_image)
+		// Checking for relics 
+		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
 		{
-			damage_num->relic_image->current_color.a = 1;
+			damage_num->relic_images.push_back(damage_num->go->GetChild("Fire")->GetComponent<ComponentImage>());
+		}
+
+		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+		{
+			damage_num->relic_images.push_back(damage_num->go->GetChild("Ice")->GetComponent<ComponentImage>());
+			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
+				0);
+		}
+
+		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+		{
+			damage_num->relic_images.push_back(damage_num->go->GetChild("Poison")->GetComponent<ComponentImage>());
+			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
+				0);
+		}
+
+		auto iter = damage_num->relic_images.begin();
+		for (; iter != damage_num->relic_images.end(); ++iter)
+		{
+			(*iter)->current_color.a = 1;
 		}
 	}
 
@@ -420,9 +443,13 @@ void UI_DamageCount::DamageCount_Handling(int index)
 			if ((*iter)->is_last)
 			{
 				(*iter)->combo_text->current_color.a = alpha;
-				if ((*iter)->relic_image)
+				if (!(*iter)->relic_images.empty())
 				{
-					(*iter)->relic_image->current_color.a = alpha;
+					auto image = (*iter)->relic_images.begin();
+					for (; image != (*iter)->relic_images.end(); ++image)
+					{
+						(*image)->current_color.a = alpha;
+					}
 				}
 			}
 

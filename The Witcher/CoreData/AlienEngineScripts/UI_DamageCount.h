@@ -19,7 +19,7 @@ public:
 
 	// Image for Last Git
 	ComponentText* combo_text = nullptr;
-	ComponentImage* relic_image = nullptr;
+	std::vector<ComponentImage*> relic_images;
 };
 
 class ALIEN_ENGINE_API UI_DamageCount : public Alien {
