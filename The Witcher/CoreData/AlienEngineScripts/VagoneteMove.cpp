@@ -28,8 +28,12 @@ void VagoneteMove::Start()
 {
 	curve = GameObject::FindWithName("Curve")->GetComponent<ComponentCurve>();
 	rigid_body = GetComponent<ComponentRigidBody>();
+
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::GERALT));
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::YENNEFER));
+	players[0]->other_player = players[1];
+	players[1]->other_player = players[0];
+
 	max_life = vagonete_life;
 	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
 }
@@ -151,7 +155,7 @@ void VagoneteMove::DecreaseLife()
 		HUD->UpdateLifebar(vagonete_life, max_life);
 
 		if (vagonete_life <= 0) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+			SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
 		}
 	}
 }
