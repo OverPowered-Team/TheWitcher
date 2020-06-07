@@ -14,6 +14,7 @@ DummyEnemy::~DummyEnemy()
 
 void DummyEnemy::Start()
 {
+	impactSound = GetComponent<ComponentAudioEmitter>();
 }
 
 void DummyEnemy::Update()
@@ -45,6 +46,9 @@ void DummyEnemy::OnTriggerEnter(ComponentCollider* col)
 	{
 		wiggle = true;
 		wiggleDuration = 0;
+		if (impactSound)
+			impactSound->StartSound();
+
 		if (player == nullptr)
 		{
 			player = col->game_object_attached->GetComponent<AttackTrigger>()->player;

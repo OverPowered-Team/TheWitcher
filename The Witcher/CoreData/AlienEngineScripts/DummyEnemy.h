@@ -17,6 +17,7 @@ public:
 	Prefab button_y;
 	float maxAngle = 180;
 
+	ComponentAudioEmitter* impactSound = nullptr;
 	void Start();
 	void Update();
 
