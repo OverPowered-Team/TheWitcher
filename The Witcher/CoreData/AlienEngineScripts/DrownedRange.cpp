@@ -119,8 +119,8 @@ void DrownedRange::OnAnimationEnd(const char* name)
 			animator->SetBool("hide", false);
 		}
 		can_get_interrupted = true;
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		//stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		//animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");

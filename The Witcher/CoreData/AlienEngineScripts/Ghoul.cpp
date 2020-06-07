@@ -223,7 +223,8 @@ void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
-        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        //stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        //animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
             SetState("Move");
