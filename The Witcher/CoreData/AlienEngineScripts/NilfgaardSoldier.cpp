@@ -135,7 +135,7 @@ void NilfgaardSoldier::Stun(float time)
 	if (state != NilfgaardSoldierState::STUNNED && state != NilfgaardSoldierState::DEAD && state != NilfgaardSoldierState::DYING)
 	{
 		state = NilfgaardSoldierState::STUNNED;
-		animator->PlayState("Dizzy");
+		animator->SetBool("stunned", true);
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
 		audio_emitter->StartSound("Play_Dizzy_Enemy");
@@ -205,8 +205,10 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
 		//stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		//animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		can_get_interrupted = true;
+		if(nilf_type != NilfgaardType::SWORD_SHIELD)
+			can_get_interrupted = true;
 		ReleaseParticle("EnemyAttackParticle");
+
 		if (distance < stats["VisionRange"].GetValue())
 			SetState("Move");
 		else
@@ -215,6 +217,10 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");
+
+		if (nilf_type == NilfgaardType::SWORD_SHIELD)
+			return;
+
 		if (stats["Health"].GetValue() <= 0.0F) {
 			SetState("Hit");
 			if (!IsRangeEnemy())
@@ -238,11 +244,18 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		}
 
 	}
-	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
+	else if ((strcmp(name, "Dizzy") == 0))
 	{
-		state = NilfgaardSoldierState::DYING;
-		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
-		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+		if (stats["Health"].GetValue() <= 0) 
+		{
+			state = NilfgaardSoldierState::DYING;
+			//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+			GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+		}
+		else
+		{
+			can_get_interrupted = false;
+		}
 	}
 }
 

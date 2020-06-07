@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "SoldierAnimController",
-        "NumStates": 9,
-        "NumTransitions": 12,
+        "NumStates": 10,
+        "NumTransitions": 13,
         "States": [
             {
                 "Name": "Idle",
@@ -48,6 +48,11 @@
                 "Name": "Block",
                 "Speed": 1,
                 "Clip": "5774308581466997684"
+            },
+            {
+                "Name": "Stun",
+                "Speed": 1,
+                "Clip": "2455510877679121111"
             }
         ],
         "Transitions": [
@@ -162,6 +167,11 @@
                     },
                     {
                         "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    },
+                    {
+                        "Type": "bool",
                         "CompText": "True",
                         "ParameterIndex": 0
                     }
@@ -179,6 +189,11 @@
                         "Type": "bool",
                         "CompText": "True",
                         "ParameterIndex": 1
+                    },
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
                     }
                 ]
             },
@@ -243,6 +258,21 @@
                         "ParameterIndex": 0
                     }
                 ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Stun",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 2
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -259,6 +289,10 @@
             },
             {
                 "Name": "grounded",
+                "Value": false
+            },
+            {
+                "Name": "stunned",
                 "Value": false
             }
         ],

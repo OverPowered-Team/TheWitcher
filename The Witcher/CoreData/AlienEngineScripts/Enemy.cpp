@@ -350,7 +350,7 @@ void Enemy::Decapitate(PlayerController* player)
 
 void Enemy::CanGetInterrupted()
 {
-	can_get_interrupted = true;
+	//can_get_interrupted = true;
 }
 
 void Enemy::RotatePlayer()
@@ -366,13 +366,16 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-	LOG("estoy en getdamage %f", stats["Health"].GetValue());
+
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
 
 	//if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+	if (can_get_interrupted)
+	{
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
+	}
 		/*if (!is_hit_inmune)
 		{
 			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
@@ -502,9 +505,9 @@ void Enemy::HitFreeze(float freeze_time)
 
 void Enemy::SpawnAttackParticle()
 {
-	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetGlobalPosition());
+	/*SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetGlobalPosition());
 	HitFreeze(0.05);
-	can_get_interrupted = false;
+	can_get_interrupted = false;*/
 	// Sonidito de clinck de iluminacion espada maestra
 }
 

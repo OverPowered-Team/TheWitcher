@@ -14,6 +14,12 @@ NilfSoldierShield::~NilfSoldierShield()
 {
 }
 
+void NilfSoldierShield::StartEnemy()
+{
+	can_get_interrupted = false;
+	NilfgaardSoldier::StartEnemy();
+}
+
 void NilfSoldierShield::UpdateEnemy()
 {
 	Enemy::UpdateEnemy();
@@ -51,7 +57,9 @@ void NilfSoldierShield::UpdateEnemy()
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
-			state = NilfgaardSoldierState::IDLE;
+			SetState("Idle");
+			animator->PlayState("Idle");
+			animator->SetBool("stunned", false);
 		}
 		break;
 
@@ -120,7 +128,7 @@ void NilfSoldierShield::Block()
 	{
 		ReleaseParticle("ClinckEmitter");
 
-		state = NilfgaardSoldierState::HIT;
+		Stun(5.0f);
 		animator->PlayState("Hit");
 		has_been_attacked = false;
 		break_shield_attack = 0;
@@ -146,12 +154,43 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 	{
 		has_been_attacked = true;
 		current_time = Time::GetGameTime();
-		break_shield_attack++;
+		if(player->attacks->GetCurrentAttack()->IsLast() || player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Spell))
+			break_shield_attack += 2;
+		else 
+			break_shield_attack++;
+
 		//SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
 		PlaySFX("Block");
 	}
 	else
-		damage = Enemy::GetDamaged(dmg, player, knock_back);
+	{
+		float aux_health = stats["Health"].GetValue();
+		stats["Health"].DecreaseStat(dmg);
 
+		last_player_hit = player;
+		velocity = knock_back; 
+
+		SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(), false, float3(0.0f, 0.0f, -20.0f));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+		if (stats["Health"].GetValue() <= 0.0F) {
+
+			animator->SetBool("dead", true);
+			is_dead = true;
+			OnDeathHit();
+
+			if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
+			{
+				SetState("Dying");
+				PlaySFX("Death");
+
+				Decapitate(player);
+			}
+		}
+
+		HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+
+		damage = aux_health - stats["Health"].GetValue();
+	}
 	return damage;
 }

@@ -72,6 +72,8 @@ void NilfSoldierRange::UpdateEnemy()
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
 			state = NilfgaardSoldierState::IDLE;
+			animator->PlayState("Idle");
+			animator->SetBool("stunned", false);
 		}
 		break;
 
