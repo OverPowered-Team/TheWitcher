@@ -141,6 +141,8 @@ void CiriFightController::FinishPhaseFour()
 	Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 	Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 	GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
+	Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
+	Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 	Destroy(game_object);
 }
@@ -244,6 +246,8 @@ void CiriFightController::UpdatePlatform()
 				}
 				else if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
+					if (material_platform)
+						material_platform->material->color = { 1,1,1,1 };
 					material_platform = (*it)->GetComponent<ComponentMaterial>();
 				}
 			}
@@ -278,7 +282,7 @@ void CiriFightController::UpdatePlatform()
 
 	if (circle)
 	{
-		circle->transform->SetLocalPosition(circle->transform->GetLocalPosition().x, circle->transform->GetLocalPosition().y - rescale_platform_value, circle->transform->GetLocalPosition().z);
+		circle->transform->SetLocalPosition(circle->transform->GetLocalPosition().x, circle->transform->GetLocalPosition().y - (rescale_platform_value * 2), circle->transform->GetLocalPosition().z);
 
 		if (changing_platform)
 		{
@@ -293,7 +297,7 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::TransportPlayer()
 {
-	// tp y daño
+	// tp y daï¿½o
 	for (uint i = 0; i < GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players.size(); ++i)
 	{
 		if (platform->transform->GetGlobalPosition().y > GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->transform->GetGlobalPosition().y - 3)

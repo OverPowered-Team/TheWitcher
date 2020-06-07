@@ -15,15 +15,15 @@ struct TransitionInfo
 	TransitionInfo()
 	{};
 
-	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time)
-		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), type(ToTransitionType::DYNAMIC)
+	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, bool is_cinematic, GameObject* cutscene)
+		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), is_cinematic(is_cinematic), cutscene(cutscene), type(ToTransitionType::DYNAMIC)
 	{};
 
-	TransitionInfo(GameObject* to_move, float transition_time)
-		: to_move(to_move), transition_time(transition_time), type(ToTransitionType::STATIC)
+	TransitionInfo(GameObject* to_move, float transition_time, bool is_cinematic, GameObject* cutscene)
+		: to_move(to_move), transition_time(transition_time), is_cinematic(is_cinematic), cutscene(cutscene), type(ToTransitionType::STATIC)
 	{}
-	TransitionInfo(GameObject* to_move, float transition_time, ToAxisType type)
-		: to_move(to_move), transition_time(transition_time), axis_type(type), type(ToTransitionType::AXIS)
+	TransitionInfo(GameObject* to_move, float transition_time, ToAxisType type, bool is_cinematic, GameObject* cutscene)
+		: to_move(to_move), transition_time(transition_time), axis_type(type), is_cinematic(is_cinematic), cutscene(cutscene), type(ToTransitionType::AXIS)
 	{};
 
 	float distance = 0.f;
@@ -33,7 +33,8 @@ struct TransitionInfo
 	GameObject* to_move = nullptr;
 
 	float transition_time = 2.f;
-
+	bool  is_cinematic = false;
+	GameObject* cutscene = nullptr;
 	TransitionInfo::ToTransitionType type = TransitionInfo::ToTransitionType::DYNAMIC;
 	TransitionInfo::ToAxisType axis_type = TransitionInfo::ToAxisType::NONE;
 };
@@ -46,7 +47,7 @@ public:
 	TriggerCamera();
 	virtual ~TriggerCamera();
 	void Start() override;
-	void StartTransition(const TransitionInfo& transition_info);
+	void StartTransition(TransitionInfo& transition_info);
 	
 	void RegisterMovement(int playerNum, int collider_position);
 	bool PlayerMovedForward(int player_num);
@@ -78,6 +79,9 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->prev_camera.to_move);
 	SHOW_TEXT("If Axis");
 	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->prev_camera.axis_type);
+	SHOW_TEXT("If Cinematic");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->prev_camera.is_cinematic);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->prev_camera.cutscene);
 	SHOW_SEPARATOR();
 
 	SHOW_TEXT("Next camera");//The camera that will transition to when all players have moved forward
@@ -91,6 +95,9 @@ ALIEN_FACTORY TriggerCamera* CreateTriggerCamera() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->next_camera.to_move);
 	SHOW_TEXT("If Axis");
 	SHOW_IN_INSPECTOR_AS_ENUM(TransitionInfo::ToAxisType, alien->next_camera.axis_type);
+	SHOW_TEXT("If Cinematic");
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->next_camera.is_cinematic);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->next_camera.cutscene);
 	SHOW_SEPARATOR();
 
 	return alien;

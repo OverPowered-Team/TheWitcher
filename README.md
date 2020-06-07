@@ -199,13 +199,9 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
 
   - F3 + 4: Level 2 - Wagonnetes
   
-  - F3 + 5: Level 2 - Deepnest
+  - F3 + 5: Level 2 - Boss
   
-  - F3 + 6: Level 2 - Mahakam
-
-  - F3+W: NewWin_Menu
-
-  - F3+D: EndGame_Menu
+  - F3 + 6: NewWin_Menu
 
 ### Player controls:
 

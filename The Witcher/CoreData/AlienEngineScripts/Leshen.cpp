@@ -56,6 +56,8 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
 		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
+		Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
+		Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
 	}
 
@@ -130,13 +132,15 @@ void Leshen::LaunchAction()
 void Leshen::LaunchRootAction()
 {
 	if (player_controllers[0]->state->type != StateType::DEAD) {
-		root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_1 = GameManager::instance->particle_pool->GetInstance("Leshen_roots_attack", this->transform->GetGlobalPosition());
+		root_1->GetComponent<ComponentCollider>()->SetEnable(true);
 		root_1->GetComponent<RootLeshen>()->leshen = this;
 		root_1->GetComponent<RootLeshen>()->target = 0;
 	}
 
 	if (player_controllers[1]->state->type != StateType::DEAD) {
-		root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_2 = GameManager::instance->particle_pool->GetInstance("Leshen_roots_attack", this->transform->GetGlobalPosition());
+		root_2->GetComponent<ComponentCollider>()->SetEnable(true);
 		root_2->GetComponent<RootLeshen>()->leshen = this;
 		root_2->GetComponent<RootLeshen>()->target = 1;
 	}
@@ -149,7 +153,8 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z));
+	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z), float3::zero(), GameManager::instance->game_object->parent, true);
+	crows->GetComponent<ComponentCollider>()->SetEnable(true);
 	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;

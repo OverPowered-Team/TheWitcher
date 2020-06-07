@@ -660,7 +660,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
 							|| cam->state == CameraMovement::CameraState::AXIS
-							|| p->state->type == StateType::JUMPING)
+							|| p->state->type == StateType::JUMPING
+							|| cam->state == CameraMovement::CameraState::CINEMATIC)
 							return true;
 
 						cam->prev_state = cam->state;

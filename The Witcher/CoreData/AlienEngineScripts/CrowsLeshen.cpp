@@ -25,6 +25,7 @@ void CrowsLeshen::Start()
 
 	max_track_distance = 4.0f;
 	tracking = true;
+
 }
 
 void CrowsLeshen::Update()
@@ -54,12 +55,32 @@ void CrowsLeshen::Update()
 	}
 
 	transform->AddPosition(transform->forward * speed);
+	
 
-	if (life_time <= total_life_time)
+	if (life_time <= total_life_time) {
 		life_time += Time::GetDT();
+	}
 	else {
 		GameManager::instance->particle_pool->ReleaseInstance("Crow", game_object);
+		Reset();
 	}
+}
+
+void CrowsLeshen::Reset()
+{
+	speed = 0.2f;
+	life_time = 0.0f;
+	total_life_time = 3.0f;
+	direction = { 1, 0, 1 };
+	target = 0;
+	setted_direction = false;
+	leshen = nullptr;
+
+	max_track_distance = 4.0f;
+	tracking = true;
+
+	transform->SetGlobalPosition(float3::zero());
+	game_object->GetComponent<ComponentCollider>()->SetEnable(false);
 }
 
 void CrowsLeshen::OnTriggerEnter(ComponentCollider* collider)
@@ -68,7 +89,8 @@ void CrowsLeshen::OnTriggerEnter(ComponentCollider* collider)
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl && !player_ctrl->is_immune) {
 			player_ctrl->ReceiveDamage(10.0f);
-			Destroy(game_object);
+			GameManager::instance->particle_pool->ReleaseInstance("Crow", game_object);
+			Reset();
 		}
 	}
 }
