@@ -195,7 +195,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 88.662330627441406,
+                        "HoritzontalFov": 91.492843627929688,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -239,7 +239,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "5603267029984128240",
-                        "ListenerID": "1208152442"
+                        "ListenerID": "3904534684"
                     },
                     {
                         "Type": 29,
@@ -290,17 +290,31 @@
                             {
                                 "VarType": 7,
                                 "Name": "is_cinematic",
-                                "bool": 1
+                                "bool": 0
                             },
                             {
                                 "VarType": 9,
                                 "Name": "cutscene_game_object",
-                                "gameobject": "4858780716299368179"
+                                "gameobject": "0"
                             },
                             {
                                 "VarType": 7,
                                 "Name": "search_players",
                                 "bool": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "limiter1",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "limiter2",
+                                "gameobject": "0"
                             }
                         ]
                     },
@@ -390,7 +404,7 @@
                 "ParentID": "799656051639142213",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -435,7 +449,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -563,7 +577,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -691,7 +705,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -819,7 +833,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
                 "PrefabLocked": false,
@@ -855,7 +869,7 @@
                 "ParentID": "799656051639142213",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -1018,12 +1032,12 @@
                             {
                                 "VarType": 7,
                                 "Name": "next_camera.is_cinematic",
-                                "bool": 0
+                                "bool": 1
                             },
                             {
                                 "VarType": 9,
                                 "Name": "next_camera.cutscene",
-                                "gameobject": "0"
+                                "gameobject": "4858780716299368179"
                             },
                             {
                                 "VarType": 12,
@@ -1041,7 +1055,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1117,7 +1131,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1193,7 +1207,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1351,6 +1365,7 @@
                         "PlayOnAwake": false
                     },
                     {
+                        "Enabled": true,
                         "Type": 13,
                         "SlopeLimit": 45,
                         "StepOffset": 0.30000001192092896,
@@ -4631,6 +4646,7 @@
                         "Enabled": true
                     },
                     {
+                        "Enabled": true,
                         "Type": 13,
                         "SlopeLimit": 45,
                         "StepOffset": 0.30000001192092896,
