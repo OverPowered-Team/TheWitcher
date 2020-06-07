@@ -382,14 +382,17 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
 	float2 temp_pl = float2(last_player_hit->transform->GetGlobalPosition().x, last_player_hit->transform->GetGlobalPosition().z);
 	float angle = acos(math::Dot(temp_e, temp_pl) / (temp_e.LengthSq() * temp_pl.LengthSq())); //sino provar Length	
-	LOG("%f", angle);
+	LOG("%f", angle);//radians
+	float anglez = math::RadToDeg(angle);
+	LOG("%f", anglez);//degree
 	float3 rotated_particle = float3(
-		temp_e.x * cos(angle) - temp_pl.y * sin(angle),
+		temp_e.x * cos(anglez) - temp_pl.y * sin(anglez),
 		0.0f,
-		temp_e.x * sin(angle) + temp_pl.y * cos(angle));
+		temp_e.x * sin(anglez) + temp_pl.y * cos(anglez));
+	LOG("X %f, Z %f", rotated_particle.x, rotated_particle.z);
 
 	
-	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, float3(0.0f,0.0f,-20.0f));
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, rotated_particle);
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() <= 0.0F) {
@@ -517,6 +520,10 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, flo
 	{
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
+			if (!rotation.IsZero())
+			{
+				(*it)->transform->SetGlobalRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
+			}
 			(*it)->SetEnable(false);
 			(*it)->SetEnable(true);
 			return;
