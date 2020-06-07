@@ -17,6 +17,7 @@ public:
 	enum(DrownedState,
 		NONE = -1,
 		IDLE,
+		IDLE_OUT,
 		MOVE,
 		ATTACK,
 		GETOFF,
