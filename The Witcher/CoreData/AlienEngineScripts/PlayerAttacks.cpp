@@ -484,7 +484,8 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 void PlayerAttacks::AllowCombo()
 {
 	can_execute_input = true;
-	player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());
+	if(current_attack)
+		player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());
 }
 
 bool PlayerAttacks::CanBeInterrupted()
@@ -547,8 +548,8 @@ void PlayerAttacks::AttackShake()
 	if (current_attack->info.shake == 1)
 	{
 		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
-		if (GameManager::instance->rumbler_manager)
-			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);
+		/*if (GameManager::instance->rumbler_manager)
+			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LAST_ATTACK, player_controller->controller_index);*/
 	}
 }
 
@@ -636,9 +637,9 @@ void PlayerAttacks::CreateAttacks()
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
 			info.shake = attack_combo->GetNumber("cam_shake");
 			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
+			info.hit_particle_name = attack_combo->GetString("enemy_hit_particle");
 			info.snap_detection_range = attack_combo->GetNumber("snap_detection_range");
 			info.min_distance_to_target = attack_combo->GetNumber("min_distance_to_target");
-
 			Attack* attack = new Attack(info);
 			attacks.push_back(attack);
 

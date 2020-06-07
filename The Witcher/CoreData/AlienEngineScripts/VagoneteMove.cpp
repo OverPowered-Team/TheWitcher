@@ -27,8 +27,12 @@ void VagoneteMove::Start()
 {
 	curve = GameObject::FindWithName("Curve")->GetComponent<ComponentCurve>();
 	rigid_body = GetComponent<ComponentRigidBody>();
+
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::GERALT));
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::YENNEFER));
+	players[0]->other_player = players[1];
+	players[1]->other_player = players[0];
+
 	max_life = vagonete_life;
 	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
 }
@@ -53,41 +57,40 @@ void VagoneteMove::Update()
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
 	}
 
-	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_G))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3))
 	{
-		godmode = !godmode;
-		HUD->godmode->SetEnable(godmode);
-	}
+		if (Input::GetKeyDown(SDL_SCANCODE_G))
+		{
+			godmode = !godmode;
+			HUD->godmode->SetEnable(godmode);
+		}
 
-	if (Input::GetKeyDown(SDL_SCANCODE_0))
-	{
-		SceneManager::LoadScene("Main_Menu");
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_1))
-	{
-		SceneManager::LoadScene("Lvl_1_Tutorial");
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_2))
-	{
-		SceneManager::LoadScene("Lvl_1");
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_3))
-	{
-		SceneManager::LoadScene("Wagonnetes");
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_4))
-	{
-		SceneManager::LoadScene("boss_test");
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_W))
-	{
-		SceneManager::LoadScene("NewWin_Menu");
-	}
-	if (Input::GetKeyDown(SDL_SCANCODE_D))
-	{
-		SceneManager::LoadScene("EndGame_Menu");
-	}
+		if (Input::GetKeyDown(SDL_SCANCODE_0))
+		{
+			SceneManager::LoadScene("Main_Menu");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_1))
+		{
+			SceneManager::LoadScene("Lvl_1_Tutorial");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_2))
+		{
+			SceneManager::LoadScene("Lvl_1");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_3))
+		{
+			SceneManager::LoadScene("Wagonnetes");
+		}
 
+		if (Input::GetKeyDown(SDL_SCANCODE_4))
+		{
+			SceneManager::LoadScene("boss_test");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_W))
+		{
+			SceneManager::LoadScene("NewWin_Menu");
+		}
+	}
 }
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
@@ -148,32 +151,13 @@ void VagoneteMove::DecreaseLife()
 		HUD->UpdateLifebar(vagonete_life, max_life);
 
 		if (vagonete_life <= 0) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+			SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
 		}
 	}
 }
 
 void VagoneteMove::FollowCurve()
 {
-	/*
-	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
-	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
-
-	//Pitch (slope)
-	float3 railVector = (currentPos - nextPos).Normalized();
-	Quat rot = Quat::LookAt(float3::unitX(), railVector, float3::unitY(), float3::unitY());
-
-	//Inclination (normals + players)
-	float3 inclinationVector = curve->curve.NormalAtDistance(actual_pos).Normalized();
-	Quat inclinationRot = Quat::RotateFromTo(float3::unitY(), inclinationVector);
-	inclinationRot.Inverse();
-	rot = rot * inclinationRot;
-
-	rigid_body->SetRotation(rot * VagoneteInputs::playerRotation);
-	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
-	actual_pos += speed * Time::GetDT();
-	*/
-
 	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
 	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
 
@@ -183,21 +167,6 @@ void VagoneteMove::FollowCurve()
 	float3x3 rot = float3x3(vector, normal, Y);
 	rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
 	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
-
-	/*float3 next_pos = curve->curve.ValueAtDistance(actual_pos);
-	float3 diff_pos = (curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5) - next_pos).Normalized();
-	float3 jajauqeloco = transform->up.Cross(-diff_pos);
-	float3 HEIL = transform->right;
-
-	rigid_body->SetRotation(
-		  Quat::RotateFromTo(transform->up, curve->curve.NormalAtDistance(actual_pos)) 
-		* Quat::RotateFromTo(-transform->right.Normalized(), diff_pos.Normalized())
-		* rigid_body->GetRotation()
-	);
-
-
-
-	rigid_body->SetPosition(next_pos);*/
 
 	actual_pos += speed * Time::GetDT();
 }
@@ -213,7 +182,6 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationLeft = SDL_SCANCODE_A;
 		keyboardInput.inclinationRight = SDL_SCANCODE_D;
 		keyboardInput.cover = SDL_SCANCODE_S;
-		keyboardInput.jump = SDL_SCANCODE_W;
 		player = GameObject::FindWithName("Geralt_Prefab"); // TODO: Change this to only find in children of GameObject
 		break; }
 	case PlayerController::PlayerType::YENNEFER: {
@@ -221,7 +189,6 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationLeft = SDL_SCANCODE_LEFT;
 		keyboardInput.inclinationRight = SDL_SCANCODE_RIGHT;
 		keyboardInput.cover = SDL_SCANCODE_DOWN;
-		keyboardInput.jump = SDL_SCANCODE_UP;
 		player = GameObject::FindWithName("Yenn_Ready");
 		break; }
 	default: {
@@ -243,7 +210,6 @@ void VagoneteInputs::UpdateInputs()
 	case VagoneteInputs::State::IDLE: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
-		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump) || Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_A);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex,Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::COVER) {
@@ -256,11 +222,8 @@ void VagoneteInputs::UpdateInputs()
 			if (rightInclinationInput || leftInclinationInput) {
 				inclinationZone = (rightInclinationInput) ? -1 : 1;
 				state = State::INCLINATION;
-				globalState = State::INCLINATION;
-			}
-			else if (jumpInput) {
-				state = State::JUMP;
-				globalState = State::JUMP;
+				if (other_player->state == State::INCLINATION)
+					globalState = State::INCLINATION;
 			}
 			else if (coverInput) {
 				state = State::COVER;
@@ -269,9 +232,6 @@ void VagoneteInputs::UpdateInputs()
 				state = State::IDLE;
 			}
 		}
-
-		break; }
-	case VagoneteInputs::State::JUMPING: {
 
 		break; }
 	case VagoneteInputs::State::INCLINATION: {
@@ -319,12 +279,6 @@ void VagoneteInputs::DoAction()
 {
 	switch (state)
 	{
-	case VagoneteInputs::State::JUMP: {
-		state = State::IDLE;
-		break; }
-	case VagoneteInputs::State::JUMPING: {
-		state = State::IDLE;
-		break; }
 	case VagoneteInputs::State::INCLINATION: {
 		Inclination();
 		break; }
@@ -336,28 +290,35 @@ void VagoneteInputs::DoAction()
 
 void VagoneteInputs::Inclination()
 {
-	if (inclinationZone != 0) {
-		currentInclination += speedInclination * Time::GetDT() * inclinationZone;
+	if (globalState == State::INCLINATION) {
+		if (inclinationZone != 0) {
+			currentInclination += speedInclination * Time::GetDT() * inclinationZone;
+		}
+		else {
+			if (currentInclination < 0) {
+				currentInclination += speedInclination * Time::GetDT();
+				if (currentInclination > 0) {
+					currentInclination = 0;
+				}
+			}
+			else if (currentInclination > 0) {
+				currentInclination -= speedInclination * Time::GetDT();
+				if (currentInclination < 0) {
+					currentInclination = 0;
+				}
+			}
+		}
+		currentYInclination = tan(currentInclination * Maths::Deg2Rad()) * 0.7F;
+		if (currentInclination != 0) {
+			globalInclinationY += currentYInclination;
+			globalInclination += currentInclination;
+			currentInclination = Maths::Clamp(currentInclination, -inclination4player, inclination4player);
+			playerRotation = playerRotation * Quat::RotateX(currentInclination * Maths::Deg2Rad());
+		}
+		LOG("TWO INCLINATION");
 	}
 	else {
-		if (currentInclination < 0) {
-			currentInclination += speedInclination * Time::GetDT();
-			if (currentInclination > 0) {
-				currentInclination = 0;
-			}
-		}
-		else if (currentInclination > 0) {
-			currentInclination -= speedInclination * Time::GetDT();
-			if (currentInclination < 0) {
-				currentInclination = 0;
-			}
-		}
-	}
-	currentYInclination = tan(currentInclination * Maths::Deg2Rad()) * 0.7F;
-	if (currentInclination != 0) {
-		globalInclinationY += currentYInclination;
-		globalInclination += currentInclination;
-		currentInclination = Maths::Clamp(currentInclination, -inclination4player, inclination4player);
-		playerRotation = playerRotation * Quat::RotateX(currentInclination * Maths::Deg2Rad());
+		LOG("ONE INCLINATION");
+		//player->transform->SetLocalRotation(player->transform->GetLocalRotation() * Quat::RotateZ(0.3f));
 	}
 }

@@ -27,7 +27,18 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	controller = App->physx->CreateCharacterController(desc);
 
 	moveDirection = controller_offset = float3::zero();
+	
+	LinkShapesToComponent();
 
+	SetCollisionLayer("Default");
+
+	physics->AddController(this);
+	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
+
+}
+
+void ComponentCharacterController::LinkShapesToComponent()
+{
 	// links hidden kinematic actor shapes with user data
 	// contacts callback method currently needs user data on shape ptr
 	Uint32 ns = controller->getActor()->getNbShapes();
@@ -37,17 +48,15 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 		all_shapes[i].userData = this;
 
 	controller->setUserData(this);
-	SetCollisionLayer("Default");
-
-	physics->AddController(this);
-	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
-
 }
 
 ComponentCharacterController::~ComponentCharacterController()
 {
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
-	controller->release();
+	
+	if(controller)
+		controller->release();
+	
 	delete report;
 }
 
@@ -57,6 +66,8 @@ void ComponentCharacterController::SetContactOffset(const float contactOffset)
 {
 	float max = FLT_MAX, min = 0.0001f;
 	desc.contactOffset = Clamp(contactOffset, min, max);
+
+	if (!enabled || controller == nullptr) return;
 
 	switch (desc.getType())
 	{
@@ -75,6 +86,8 @@ void ComponentCharacterController::SetStepOffset(const float stepOffset)
 {
 	float max = FLT_MAX, min = 0.0f;
 	desc.stepOffset = Clamp(stepOffset, min, max);
+
+	if (!enabled || controller == nullptr) return;
 
 	switch (desc.getType())
 	{
@@ -95,6 +108,8 @@ void ComponentCharacterController::SetSlopeLimit(const float slopeLimit)
 	float _slopeLimit = Clamp(slopeLimit, min, max);
 	desc.slopeLimit = cosf(DegToRad(_slopeLimit));
 
+	if (!enabled || controller == nullptr) return;
+
 	switch (desc.getType())
 	{
 	case PxControllerShapeType::eCAPSULE:
@@ -112,6 +127,8 @@ void ComponentCharacterController::SetCharacterHeight(const float height)
 {
 	float max = FLOAT_INF, min = 0.0f; // 0 means sphere
 	desc.height = Clamp(height, min, max);
+
+	if (!enabled || controller == nullptr) return;
 
 	switch (desc.getType())
 	{
@@ -131,6 +148,8 @@ void ComponentCharacterController::SetCharacterRadius(const float radius)
 	float max = FLOAT_INF, min = 0.1f;
 	desc.radius = Clamp(radius, min, max);
 
+	if (!enabled || controller == nullptr) return;
+
 	switch (desc.getType())
 	{
 	case PxControllerShapeType::eCAPSULE:
@@ -148,12 +167,16 @@ void ComponentCharacterController::SetCharacterRadius(const float radius)
 void ComponentCharacterController::SetCharacterOffset(float3 offset)
 {
 	controller_offset = offset;
+
+	if (!enabled || controller == nullptr) return;
+
 	controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
 }
 // -------------------------------------------------------------
 
 void ComponentCharacterController::SaveComponent(JSONArraypack* to_save)
 {
+	to_save->SetBoolean("Enabled", enabled);
 	to_save->SetNumber("Type", (int)type);
 
 	to_save->SetNumber("SlopeLimit", RadToDeg(acosf(desc.slopeLimit)));
@@ -173,6 +196,7 @@ void ComponentCharacterController::SaveComponent(JSONArraypack* to_save)
 
 void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 {
+	enabled = to_load->GetBoolean("Enabled");
 	SetSlopeLimit(to_load->GetNumber("SlopeLimit"));
 	SetStepOffset(to_load->GetNumber("StepOffset"));
 	SetContactOffset(to_load->GetNumber("SkinWidth"));
@@ -186,11 +210,43 @@ void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 	force_move = to_load->GetBoolean("ForceMove");
 
 	SetCollisionLayer(to_load->GetString("CollisionLayer", "Default"));
+
+	if (enabled == false)
+	{
+		OnDisable();
+	}
+}
+
+void ComponentCharacterController::UpdateParameters()
+{
+	SetSlopeLimit(desc.slopeLimit);
+	SetStepOffset(desc.stepOffset);
+	SetContactOffset(desc.contactOffset);
+	SetCharacterOffset(controller_offset);
+	SetCharacterRadius(desc.radius);
+	SetCharacterHeight(desc.height);
+	SetCollisionLayer(layer_name);
 }
 
 bool ComponentCharacterController::DrawInspector()
 {
+	static bool check;
+	check = enabled;
+
 	ImGui::PushID(this);
+
+	if (ImGui::Checkbox("##CmpActive", &check)) {
+		enabled = check;
+		if (!enabled) {
+			OnDisable();
+		}
+		else {
+			OnEnable();
+
+		}
+	}
+
+	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy))
 	{
@@ -229,6 +285,8 @@ bool ComponentCharacterController::DrawInspector()
 void ComponentCharacterController::Update()
 {
 	//collider->Update();
+
+	if (!enabled || controller == nullptr) return;
 
 	if (Time::IsPlaying())
 	{
@@ -277,6 +335,7 @@ void ComponentCharacterController::Update()
 
 PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 {
+	if (!enabled) return collisionFlags;
 
 	// set velocity on current position before move
 	velocity = controller->getPosition();
@@ -301,6 +360,8 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	layer_num = index;
 	layer_name = layer;
 
+	if (!enabled || controller == nullptr) return;
+
 	PxShape* all_shapes;
 	Uint32 ns = controller->getActor()->getNbShapes();
 	controller->getActor()->getShapes(&all_shapes, ns);
@@ -314,6 +375,8 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 
 void ComponentCharacterController::DrawScene()
 {
+	if (!enabled || controller == nullptr) return;
+
 	if (game_object_attached->IsSelected() && App->physx->debug_physics == false)
 	{
 		switch (desc.getType())
@@ -394,6 +457,11 @@ void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit
 bool ComponentCharacterController::SetPosition(float3 position) const
 {
 	return controller->setPosition(F3_TO_PXVEC3EXT(position));
+}
+
+bool ComponentCharacterController::SetFootPosition(float3 position) const
+{
+	return controller->setFootPosition(F3_TO_PXVEC3EXT(position));
 }
 
 float3 ComponentCharacterController::GetPosition() const

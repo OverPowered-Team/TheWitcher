@@ -43,6 +43,8 @@ bool ModuleCamera3D::Start()
 	max_distance = 10;
 
 	focus_short = App->shortcut_manager->AddShortCut("Focus", SDL_SCANCODE_F, std::bind(&ModuleCamera3D::Focus, App->camera));
+	camera_zoom_speed = 2000.f;
+
 	return ret;
 }
 // -----------------------------------------------------------------
@@ -85,7 +87,8 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		if (is_scene_hovered)
 		{
-			Zoom();
+			Zoom(dt);
+
 			if ((App->objects->GetSelectedObjects().empty() || (!ImGuizmo::IsUsing() && !ImGuizmo::IsOver())) && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
 				CreateRay();
@@ -98,25 +101,25 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN)
 		{
-			std::list<GameObject*> selected = App->objects->GetSelectedObjects();
+		//	std::list<GameObject*> selected = App->objects->GetSelectedObjects();
 
-			if (selected.size() > 0)
-			{
-				float4x4 trans = float4x4::zero();
-				for (auto item = selected.begin(); item != selected.end(); ++item)
-				{
-					if (*item != nullptr)
-					{
-						trans += (*item)->transform->GetGlobalMatrix();
-					}
-				}
-				trans /= selected.size();
-				reference = trans.TranslatePart();
-			}
-			else
-			{
-				reference = fake_camera->frustum.pos + (fake_camera->frustum.front) * (fake_camera->frustum.pos - reference).Length();
-			}
+		//	if (selected.size() > 0)
+		//	{
+		//		float4x4 trans = float4x4::zero();
+		//		for (auto item = selected.begin(); item != selected.end(); ++item)
+		//		{
+		//			if (*item != nullptr)
+		//			{
+		//				trans += (*item)->transform->GetGlobalMatrix();
+		//			}
+		//		}
+		//		trans /= selected.size();
+		//		reference = trans.TranslatePart();
+		//	}
+		//	else
+		//	{
+			reference = fake_camera->frustum.pos + (fake_camera->frustum.front) * (fake_camera->frustum.pos - reference).Length();
+		//	}
 		}
 
 		if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && is_scene_hovered)
@@ -207,7 +210,7 @@ void ModuleCamera3D::Movement(float dt)
 	}
 }
 
-void ModuleCamera3D::Zoom()
+void ModuleCamera3D::Zoom(float dt)
 {
 	float3 zoom(float3::zero());
 
@@ -220,7 +223,7 @@ void ModuleCamera3D::Zoom()
 		zoom -= frustum->front;
 	}
 
-	frustum->Translate(zoom * zoom_speed);
+	frustum->Translate(zoom * zoom_speed * dt);
 }
 
 void ModuleCamera3D::Rotation(float dt)
@@ -273,6 +276,8 @@ void ModuleCamera3D::Focus()
 
 		point_to_look = fake_camera->frustum.pos - (vector_distance - (offset * vector_distance.Normalized()));
 		start_lerp = true;
+		camera_zoom_speed = bounding_box.Diagonal().Length() * 1000;
+	
 	}
 }
 
@@ -464,11 +469,15 @@ bool ModuleCamera3D::SortByDistance(const std::pair<float, GameObject*> pair1, c
 
 void ModuleCamera3D::PanelConfigOption()
 {
-	if (fake_camera)
-	{
+	ImGui::InputFloat("Camera Speed", &App->camera->camera_speed, 1, 5, 2);
+	ImGui::InputFloat("Camera Zoom Speed", &App->camera->camera_zoom_speed, 1, 5, 2);
+	ImGui::InputFloat("Camera Rotation Speed", &App->camera->camera_rotation_speed, 1, 5, 2);
+	ImGui::InputFloat("Camera Orbit Speed", &App->camera->camera_orbit_speed, 1, 5, 2);
 
-		ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
-	}
+
+	ImGui::SliderFloat("Far Plane", &fake_camera->frustum.farPlaneDistance, 100, 100000);
+
+	
 }
 
 void ModuleCamera3D::Rotate(float yaw, float pitch)

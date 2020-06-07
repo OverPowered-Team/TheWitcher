@@ -150,6 +150,7 @@ private:
 	
 	ParticleSystem* owner = nullptr;
 	ResourceMaterial* p_material = nullptr;
+	ComponentLightPoint* p_light = nullptr;
 
 	ParticleInfo particleInfo;
 	ParticleMutableInfo startInfo;

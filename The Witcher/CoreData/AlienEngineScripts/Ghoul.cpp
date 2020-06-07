@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "PlayerManager.h"
 #include "ParticlePool.h"
 #include "Ghoul.h"
 #include "MusicController.h"
@@ -105,6 +106,11 @@ bool Ghoul::IsDead()
 {
     return (state == GhoulState::DEAD ? true : false);
 }
+bool Ghoul::IsDying()
+{
+    return (state == GhoulState::DYING ? true : false);
+}
+
 
 void Ghoul::SetState(const char* state_str)
 {
@@ -238,7 +244,23 @@ void Ghoul::OnAnimationEnd(const char* name)
     {
         ReleaseParticle("hit_particle");
 
-        SetState("Idle");
+        if(!is_dead)
+            SetState("Idle");
+        else
+        {
+            if (!was_dizzy)
+                was_dizzy = true;
+            else
+            {
+                state = GhoulState::DYING;
+                GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+            }
+        }
+    }
+    else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
+    {
+        state = GhoulState::DYING;
+        GameManager::instance->player_manager->IncreaseUltimateCharge(10);
     }
 }
 
@@ -402,7 +424,7 @@ void Ghoul::Dying() // TODO: in other enemies
 	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 	animator->PlayState("Death");
 	audio_emitter->StartSound("GhoulDeath");
-	last_player_hit->OnEnemyKill();
+	last_player_hit->OnEnemyKill((uint)type);
 	state = GhoulState::DEAD;
 	if (m_controller && is_combat)
 	{

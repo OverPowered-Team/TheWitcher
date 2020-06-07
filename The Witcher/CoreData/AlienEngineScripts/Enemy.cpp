@@ -62,7 +62,9 @@ void Enemy::StartEnemy()
 
 	SetStats(json_str.data());
 
-	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition(); 
+	start_pos = game_object->GetComponent<ComponentTransform>()->GetGlobalPosition();
+
+	is_hit_inmune = GameManager::instance->enemy_manager->is_hit_inmune;
 
 	/*if (game_object->GetChild("Particles"))
 	{
@@ -153,9 +155,10 @@ void Enemy::UpdateEnemy()
 				//Temporal solution
 				if (it_stats->first == "Health")
 				{
-					if (stats["Health"].GetValue() == 0)
+					if (stats["Health"].GetValue() <= 0)
 					{
 						SetState("Dying");
+						PlaySFX("Death");
 					}
 				}
 			}
@@ -346,23 +349,27 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
-		stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		if (!is_hit_inmune)
+		{
+			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
+			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		}
 	}
 
-	if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	if ((stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue()))
 	{
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
 		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 		can_get_interrupted = false;
 	}
-
-	SpawnParticle("hit_particle", particle_spawn_positions[1]->transform->GetGlobalPosition());
+	
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition());
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
-	if (stats["Health"].GetValue() == 0.0F) {
+	if (stats["Health"].GetValue() <= 0.0F) {
 
 		animator->SetBool("dead", true);
+		is_dead = true;
 		OnDeathHit();
 
 		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
@@ -558,6 +565,9 @@ void Enemy::RemoveBattleCircle()
 
 void Enemy::AddBattleCircle(PlayerController* player_controller)
 {
+	if (is_dead)
+		return;
+
 	is_battle_circle = true;
 	player_controller->enemy_battle_circle.push_back(this);
 
@@ -575,14 +585,22 @@ void Enemy::AddAttacking(PlayerController* player_controller)
 {
 	player_controller->current_attacking_enemies++;
 	is_attacking = true;
-	SetState("Move");
+	if(!is_dead)
+		SetState("Move");
 }
 
 void Enemy::RemoveAttacking(PlayerController* player_controller)
 {
 	player_controllers[current_player]->current_attacking_enemies--;
 	is_attacking = false;
-	if(!IsDead())
+	if(!is_dead)
 		SetState("Guard");
+}
+
+void Enemy::SpawnHealthOrb()
+{
+	int rand_num = Random::GetRandomIntBetweenTwo(0,1);
+	if(rand_num == 0)
+		GameObject::Instantiate(life_orb, transform->GetGlobalPosition() + float3::unitY() * 0.5);
 }
 	

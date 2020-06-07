@@ -23,14 +23,16 @@ void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Enemy") == 0)
 	{
 		Enemy* enemy = collider->game_object_attached->GetComponent<Enemy>();
-		if(enemy && !enemy->IsDead() && player->attacks->GetCurrentAttack()->CanHit(enemy) && !enemy->is_immune)
+		if(enemy && !enemy->IsDead() && !enemy->is_immune)
 		{
-			LOG("BANG BANG");
-			float damage = player->attacks->GetCurrentDMG();
-			float3 knock = enemy->can_get_interrupted ? player->attacks->GetKnockBack(enemy->transform) : float3::zero();
+			if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->CanHit(enemy))
+			{
+				float damage = player->attacks->GetCurrentDMG();
+				float3 knock = enemy->can_get_interrupted ? player->attacks->GetKnockBack(enemy->transform) : float3::zero();
 
-			float damage_dealt = enemy->GetDamaged(damage, player, knock);
-			player->OnHit(enemy, damage_dealt);
+				float damage_dealt = enemy->GetDamaged(damage, player, knock);
+				player->OnHit(enemy, damage_dealt);
+			}
 		}
 	}
 	//Here we will be able to get the audio material and play the sound of the surface we hit

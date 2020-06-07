@@ -74,13 +74,17 @@ private:
 	int funcTypeSource = 6;
 	int funcTypeDest = 7;
 	int transformSelected = 0; // 0 Global - 1 Local
-
+	int castLightSelected = 0; // 0 Emitter - 1 Particles - 2 Both
 
 	// Pointers
 	ParticleSystem* particleSystem = nullptr;
 	//ResourceTexture* texture = nullptr;
 	//ResourceTexture* selected_texture = nullptr;
 
+	float3 c_ambient = float3::zero();
+	float3 c_diffuse = float3::zero();
+	float intensity = 0;
+	float new_intensity = 0;
 
 	// Logic
 	//bool change_texture_menu = false;
@@ -88,6 +92,7 @@ private:
 
 	bool enable_render = false;
 	bool enable_anim = false;
+	bool enable_light = false;
 	float animSpeed = 0.1f;
 	int texRows = 1;
 	int texColumns = 1;

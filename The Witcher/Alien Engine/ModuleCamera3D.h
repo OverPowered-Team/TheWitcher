@@ -22,7 +22,7 @@ public:
 
 	
 	void Focus();
-	void Zoom();
+	void Zoom(float dt);
 
 	void CreateRay();
 

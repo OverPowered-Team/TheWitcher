@@ -174,8 +174,6 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 	
 	if(clones_dead < 6)
 		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
-
-	LOG("CURRENT PHASE %i", phase);
 }
 
 

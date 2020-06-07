@@ -16,6 +16,8 @@ EffectsFactory::EffectsFactory()
 			effects->GetAnotherNode();
 		}
 	}
+	else
+		LOG("Error loading Effects.json");
 
 	JSONfilepack::FreeJSON(json);
 }
