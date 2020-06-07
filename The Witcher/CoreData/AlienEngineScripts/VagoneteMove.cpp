@@ -80,7 +80,7 @@ void VagoneteMove::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
-SceneManager::LoadScene("Wagonnetes");
+			SceneManager::LoadScene("Wagonnetes");
 		}
 
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
@@ -101,21 +101,20 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		if (direction != nullptr) {
 			if (VagoneteInputs::globalInclination == 0) {
 				if (direction->default_right) {
-					curve = direction->curve_right->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_right->GetComponent<ComponentCurve>();
 				}
 				else {
-					curve = direction->curve_left->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_left->GetComponent<ComponentCurve>();
 				}
 			}
 			else {
 				if (VagoneteInputs::globalInclination > 0) {
-					curve = direction->curve_left->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_left->GetComponent<ComponentCurve>();
 				}
 				else {
-					curve = direction->curve_right->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_right->GetComponent<ComponentCurve>();
 				}
 			}
-			actual_pos = 0.0F;
 		}
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
@@ -186,6 +185,12 @@ void VagoneteMove::FollowCurve()
 	}
 	else {
 		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
+	}
+
+	if (actual_pos >= 1.0F && next_curve != nullptr) {
+		actual_pos = 0.0F;
+		curve = next_curve;
+		next_curve = nullptr;
 	}
 }
 
