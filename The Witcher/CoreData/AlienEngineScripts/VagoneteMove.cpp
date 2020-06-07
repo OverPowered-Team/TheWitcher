@@ -120,7 +120,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
 		for (auto item = players.begin(); item != players.end(); ++item) {
-			if ((*item)->state != VagoneteInputs::State::COVER) 
+			if ((*item)->state != VagoneteInputs::State::COVER)
 			{
 				DecreaseLife();
 			}
@@ -210,7 +210,7 @@ void VagoneteInputs::UpdateInputs()
 	case VagoneteInputs::State::IDLE: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
-		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex,Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
+		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::COVER) {
 			if (!coverInput) {
@@ -222,8 +222,7 @@ void VagoneteInputs::UpdateInputs()
 			if (rightInclinationInput || leftInclinationInput) {
 				inclinationZone = (rightInclinationInput) ? -1 : 1;
 				state = State::INCLINATION;
-				if (other_player->state == State::INCLINATION)
-					globalState = State::INCLINATION;
+				globalState = State::INCLINATION;
 			}
 			else if (coverInput) {
 				state = State::COVER;
@@ -290,35 +289,28 @@ void VagoneteInputs::DoAction()
 
 void VagoneteInputs::Inclination()
 {
-	if (globalState == State::INCLINATION) {
-		if (inclinationZone != 0) {
-			currentInclination += speedInclination * Time::GetDT() * inclinationZone;
-		}
-		else {
-			if (currentInclination < 0) {
-				currentInclination += speedInclination * Time::GetDT();
-				if (currentInclination > 0) {
-					currentInclination = 0;
-				}
-			}
-			else if (currentInclination > 0) {
-				currentInclination -= speedInclination * Time::GetDT();
-				if (currentInclination < 0) {
-					currentInclination = 0;
-				}
-			}
-		}
-		currentYInclination = tan(currentInclination * Maths::Deg2Rad()) * 0.7F;
-		if (currentInclination != 0) {
-			globalInclinationY += currentYInclination;
-			globalInclination += currentInclination;
-			currentInclination = Maths::Clamp(currentInclination, -inclination4player, inclination4player);
-			playerRotation = playerRotation * Quat::RotateX(currentInclination * Maths::Deg2Rad());
-		}
-		LOG("TWO INCLINATION");
+	if (inclinationZone != 0) {
+		currentInclination += speedInclination * Time::GetDT() * inclinationZone;
 	}
 	else {
-		LOG("ONE INCLINATION");
-		//player->transform->SetLocalRotation(player->transform->GetLocalRotation() * Quat::RotateZ(0.3f));
+		if (currentInclination < 0) {
+			currentInclination += speedInclination * Time::GetDT();
+			if (currentInclination > 0) {
+				currentInclination = 0;
+			}
+		}
+		else if (currentInclination > 0) {
+			currentInclination -= speedInclination * Time::GetDT();
+			if (currentInclination < 0) {
+				currentInclination = 0;
+			}
+		}
+	}
+	currentYInclination = tan(currentInclination * Maths::Deg2Rad()) * 0.7F;
+	if (currentInclination != 0) {
+		globalInclinationY += currentYInclination;
+		globalInclination += currentInclination;
+		currentInclination = Maths::Clamp(currentInclination, -inclination4player, inclination4player);
+		playerRotation = playerRotation * Quat::RotateX(currentInclination * Maths::Deg2Rad());
 	}
 }
