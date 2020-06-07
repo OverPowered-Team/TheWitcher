@@ -47,8 +47,8 @@ void TriggerCamera::StartTransition(TransitionInfo& transition_info)
 		cam_script->transition_time = transition_info.transition_time;
 		cam_script->cutscene_game_object = transition_info.cutscene;
 
-		if (transition_info.is_cinematic) //Cutscenes only need to play themselves the first time
-			transition_info.is_cinematic = false;
+		if (next_camera.is_cinematic) //Cutscenes only need to play themselves the first time, I know this is bad, forgive me for my sins
+			next_camera.is_cinematic = false;
 
 		LOG("Started transition");
 	}
