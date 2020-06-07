@@ -75,7 +75,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 		}
 
 		damage_num->go = GameObject::Instantiate(text_right, 
-			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x - 25,
+			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x+100,
 			damage_num->starting_y_position,
 			0), false, GameObject::FindWithName("List_DmgNums2"));
 
