@@ -229,7 +229,17 @@ void Enemy::Move(float3 direction)
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
 	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
+	// Option 1 : Works only one steering at the time. Avoid zone has to be small
+	if (avoid_vector.Length() > 0)
+		velocity += avoid_vector;
+	else
+		velocity += velocity_vec;
+
+	// Option 2: Add of the two steering
+	//velocity += avoid_vector + velocity_vec;
+
+	// Option 3: Add of two steering with weights
+	//velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 
 	if (velocity.Length() > stats["Agility"].GetValue())
 	{
@@ -252,9 +262,20 @@ void Enemy::Guard()
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
 	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	if (player_controllers[current_player]->battleCircle < distance)
+	// Option 1: Combiantion of behaviours
+	/*if (player_controllers[current_player]->battleCircle < distance)
 		velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 	else
+		velocity = float3::zero();*/
+
+	// Option 2: Different behaviours
+	if (avoid_vector.LengthSq() > 0)
+		velocity += avoid_vector;
+	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance)
+		velocity += velocity_vec;
+	else if (stats["AttackRange"].GetValue() > distance)
+		velocity -= velocity_vec;
+	else 
 		velocity = float3::zero();
 
 	animator->SetFloat("speed", velocity.Length());
