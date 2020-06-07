@@ -11,10 +11,11 @@ public:
 	DummyEnemy();
 	virtual ~DummyEnemy();
 	void OnTriggerEnter(ComponentCollider* col) override;
+	//void OnCollisionEnter(const Collision& collision) override;
 
 	Prefab button_x;
 	Prefab button_y;
-	float maxAngle = 45;
+	float maxAngle = 180;
 
 	void Start();
 	void Update();
@@ -31,6 +32,9 @@ private:
 	std::vector<GameObject*> current_buttons;
 
 	void DestroyCombo();
+
+	float wiggleDuration = 0;
+	float maxWiggleTime = 0.5;
 
 };
 
