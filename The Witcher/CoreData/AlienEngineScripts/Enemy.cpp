@@ -7,6 +7,7 @@
 #include "PlayerAttacks.h"
 #include "Effect.h"
 #include "SteeringAvoid.h"
+#include "UI_DamageCount.h"
 
 void Enemy::Awake()
 {
@@ -79,10 +80,10 @@ void Enemy::StartEnemy()
 
 void Enemy::UpdateEnemy()
 {
-	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_1 = player_controllers[0]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_1 = player_controllers[0]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
-	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().DistanceSq(game_object->transform->GetGlobalPosition());
+	float distance_2 = player_controllers[1]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition());
 	float3 direction_2 = player_controllers[1]->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 
 	if (player_controllers[0]->state->type == StateType::DEAD)
@@ -138,7 +139,7 @@ void Enemy::UpdateEnemy()
 		}
 	}
 
-	if(type != EnemyType::DROWNED && type != EnemyType::BLOCKER_OBSTACLE)
+	if(type != EnemyType::BLOCKER_OBSTACLE)
 		character_ctrl->Move(float3::unitY() * gravity * Time::GetDT());
 
 	if(type != EnemyType::BLOCKER_OBSTACLE)
@@ -337,9 +338,21 @@ void Enemy::CanGetInterrupted()
 	can_get_interrupted = true;
 }
 
+void Enemy::RotatePlayer()
+{
+	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");
+
+	if (GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>())
+	{
+		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddDamageCount(dmg, player);
+	}
 
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
@@ -369,14 +382,17 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
 	float2 temp_pl = float2(last_player_hit->transform->GetGlobalPosition().x, last_player_hit->transform->GetGlobalPosition().z);
 	float angle = acos(math::Dot(temp_e, temp_pl) / (temp_e.LengthSq() * temp_pl.LengthSq())); //sino provar Length	
-	LOG("%f", angle);
+	LOG("%f", angle);//radians
+	float anglez = math::RadToDeg(angle);
+	LOG("%f", anglez);//degree
 	float3 rotated_particle = float3(
-		temp_e.x * cos(angle) - temp_pl.y * sin(angle),
+		temp_e.x * cos(anglez) - temp_pl.y * sin(anglez),
 		0.0f,
-		temp_e.x * sin(angle) + temp_pl.y * cos(angle));
+		temp_e.x * sin(anglez) + temp_pl.y * cos(anglez));
+	LOG("X %f, Z %f", rotated_particle.x, rotated_particle.z);
 
 	
-	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, float3(0.0f,0.0f,-20.0f));
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, rotated_particle);
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() <= 0.0F) {
@@ -504,6 +520,10 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, flo
 	{
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
+			if (!rotation.IsZero())
+			{
+				(*it)->transform->SetGlobalRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
+			}
 			(*it)->SetEnable(false);
 			(*it)->SetEnable(true);
 			return;

@@ -7,6 +7,7 @@
 #include "RumblerManager.h"
 #include "CameraMovement.h"
 #include "ParticlePool.h"
+#include "UI_DamageCount.h"
 
 CiriFightController::CiriFightController() : Alien()
 {
@@ -141,6 +142,7 @@ void CiriFightController::FinishPhaseFour()
 	Scores_Data::last_scene = SceneManager::GetCurrentScene();
 	Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
 	Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+	GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
 	Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
 	Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
@@ -297,7 +299,7 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::TransportPlayer()
 {
-	// tp y daño
+	// tp y daï¿½o
 	for (uint i = 0; i < GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players.size(); ++i)
 	{
 		if (platform->transform->GetGlobalPosition().y > GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->transform->GetGlobalPosition().y - 3)
