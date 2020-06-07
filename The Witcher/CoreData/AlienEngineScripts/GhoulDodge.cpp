@@ -42,6 +42,12 @@ void GhoulDodge::UpdateEnemy()
 
     case GhoulState::JUMP:
         JumpImpulse();
+
+        if (distance < stats["AttackRange"].GetValue())
+            animator->SetBool("attack", true);
+        else
+            animator->SetBool("attack", false);
+
         break;
 
     case GhoulState::STUNNED:
@@ -57,7 +63,14 @@ void GhoulDodge::UpdateEnemy()
             state = GhoulState::DODGE;
             animator->PlayState("Dodge");
         }
+
+        if (distance < stats["AttackRange"].GetValue())
+            animator->SetBool("attack", true);
+        else
+            animator->SetBool("attack", false);
+
         break;
+
     case GhoulState::DODGE:
         Dodge();
         break;
@@ -91,6 +104,7 @@ void GhoulDodge::OnAnimationEnd(const char* name)
             SetState("Idle");
 
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
+        animator->SetBool("attack", false);
     }
     else if (strcmp(name, "Jump") == 0 || strcmp(name, "Dodge") == 0)
     {

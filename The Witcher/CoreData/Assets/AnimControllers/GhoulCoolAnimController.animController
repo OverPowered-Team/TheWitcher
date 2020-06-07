@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "GhoulCoolAnimController",
         "NumStates": 8,
-        "NumTransitions": 12,
+        "NumTransitions": 13,
         "States": [
             {
                 "Name": "Idle",
@@ -92,7 +92,13 @@
                         "CompValue": 0.0099999997764825821
                     }
                 ],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
             },
             {
                 "Source": "Jump",
@@ -108,7 +114,13 @@
                         "CompValue": 0.0099999997764825821
                     }
                 ],
-                "BoolConditions": []
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
             },
             {
                 "Source": "Slash",
@@ -238,6 +250,21 @@
                     }
                 ],
                 "BoolConditions": []
+            },
+            {
+                "Source": "Jump",
+                "Target": "Slash",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 2
+                    }
+                ]
             }
         ],
         "IntParameters": [],
@@ -254,6 +281,10 @@
             },
             {
                 "Name": "grounded",
+                "Value": false
+            },
+            {
+                "Name": "attack",
                 "Value": false
             }
         ],

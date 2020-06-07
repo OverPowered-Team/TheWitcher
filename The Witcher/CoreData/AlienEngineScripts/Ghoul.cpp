@@ -226,14 +226,10 @@ void Ghoul::OnAnimationEnd(const char* name)
         stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
-        {
             SetState("Move");
-        }
         else
-        {
             SetState("Idle");
-        }
-        CheckDistance();
+        animator->SetBool("attack", false);
     }
     else if (strcmp(name, "Jump") == 0)
     {
@@ -262,6 +258,7 @@ void Ghoul::OnAnimationEnd(const char* name)
                 GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
+        animator->SetBool("attack", false);
     }
     else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
     {

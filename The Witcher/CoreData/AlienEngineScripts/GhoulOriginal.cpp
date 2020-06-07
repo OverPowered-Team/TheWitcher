@@ -38,8 +38,21 @@ void GhoulOriginal::UpdateEnemy()
     }
         break;
 
+    case GhoulState::ATTACK:
+    {
+        if (distance < stats["AttackRange"].GetValue())
+            animator->SetBool("attack", true);
+        else
+            animator->SetBool("attack", false);
+    }
+        break;
+
     case GhoulState::JUMP:
         JumpImpulse();
+        if (distance < stats["AttackRange"].GetValue())
+            animator->SetBool("attack", true);
+        else
+            animator->SetBool("attack", false);
         break;
 
     case GhoulState::STUNNED:
