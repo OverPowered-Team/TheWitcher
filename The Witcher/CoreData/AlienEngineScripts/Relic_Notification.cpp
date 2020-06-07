@@ -98,8 +98,6 @@ void Relic_Notification::ShowRelic(Notification* notification)
 		}
 		++s;
 	}
-	LOG("Combo:");
-	LOG(notification->attack.c_str());
 	active = notification;
 	notifications.pop();
 	time = Time::GetTimeSinceStart();

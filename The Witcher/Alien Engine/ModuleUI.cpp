@@ -646,6 +646,18 @@ void ModuleUI::MainMenuBar()
 
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Effects"))
+		{
+			if (ImGui::MenuItem("Particle System"))
+			{
+				App->objects->CreateEffect(ComponentType::PARTICLES);
+			}
+			if (ImGui::MenuItem("Trail"))
+			{
+				App->objects->CreateEffect(ComponentType::TRAIL);
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("UI"))
 		{
 			if (ImGui::MenuItem("Image"))

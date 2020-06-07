@@ -1,6 +1,7 @@
 #include "VagoneteMove.h"
 #include "VagoneteDirection.h"
 #include "Wagonnete_UI.h"
+#include "WagoneteAddVelocity.h"
 #include "VagoneteObstacle.h"
 
 Quat VagoneteInputs::playerRotation = Quat::identity();
@@ -79,7 +80,7 @@ void VagoneteMove::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
-			SceneManager::LoadScene("Wagonnetes");
+SceneManager::LoadScene("Wagonnetes");
 		}
 
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
@@ -115,7 +116,6 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 				}
 			}
 			actual_pos = 0.0F;
-			speed = 10.f; // CHANGED :( We R sorry direction->velocity;
 		}
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
@@ -128,6 +128,10 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 	}
 	else if (strcmp("VagoneteDie", col->game_object_attached->GetTag()) == 0) {
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+	}
+	else if (strcmp("VagoneteVelocity", col->game_object_attached->GetTag()) == 0) {
+		WagoneteAddVelocity* vel = col->game_object_attached->GetComponent<WagoneteAddVelocity>();
+		SetVelocity(vel->max_velocity, vel->acceleration);
 	}
 	else if (strcmp("VagoneteObstacle", col->game_object_attached->GetTag()) == 0) {
 		if (col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
@@ -156,10 +160,16 @@ void VagoneteMove::DecreaseLife()
 	}
 }
 
+void VagoneteMove::SetVelocity(float max_velocity, float acceleration)
+{
+	this->acceleration = (max_velocity < this->max_velocity) ? -acceleration : acceleration;
+	this->max_velocity = max_velocity;
+}
+
 void VagoneteMove::FollowCurve()
 {
 	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
-	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
+	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT() * 5);
 
 	float3 vector = (currentPos - nextPos).Normalized();
 	float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
@@ -168,7 +178,15 @@ void VagoneteMove::FollowCurve()
 	rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
 	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
 
-	actual_pos += speed * Time::GetDT();
+	actual_pos += current_speed * Time::GetDT();
+
+	current_speed += acceleration * Time::GetDT();
+	if (acceleration > 0) {
+		current_speed = Maths::Clamp(current_speed, 0.0F, max_velocity);
+	}
+	else {
+		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
+	}
 }
 
 VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
@@ -210,7 +228,7 @@ void VagoneteInputs::UpdateInputs()
 	case VagoneteInputs::State::IDLE: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
-		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
+		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex,Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::COVER) {
 			if (!coverInput) {

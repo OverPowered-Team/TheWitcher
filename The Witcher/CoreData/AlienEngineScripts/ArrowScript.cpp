@@ -24,13 +24,10 @@ void ArrowScript::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
-		if (player_ctrl && !player_ctrl->is_immune)
+		if (player_ctrl && !player_ctrl->is_immune && !player_ctrl->godmode)
 		{
+			player_ctrl->ReceiveDamage(damage);
 			GameObject::Destroy(game_object);
-			if (!player_ctrl->godmode)
-			{
-				player_ctrl->ReceiveDamage(damage);
-			}
 		}
 		else
 			LOG("There's no Player Controller in GO in ArrowScript!");
