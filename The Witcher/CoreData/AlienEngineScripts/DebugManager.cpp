@@ -42,19 +42,19 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
-			SceneManager::LoadScene("Wagonnetes");
+			SceneManager::LoadScene("Mahakam_1");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
 		{
+			SceneManager::LoadScene("Wagonnetes");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_5))
+		{
 			SceneManager::LoadScene("boss_test");
 		}
-		if (Input::GetKeyDown(SDL_SCANCODE_W))
+		if (Input::GetKeyDown(SDL_SCANCODE_6))
 		{
 			SceneManager::LoadScene("NewWin_Menu");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_D))
-		{
-			SceneManager::LoadScene("EndGame_Menu");
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_F))
 		{

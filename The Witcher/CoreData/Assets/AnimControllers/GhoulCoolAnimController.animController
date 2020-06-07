@@ -1,0 +1,360 @@
+{
+    "Controller": {
+        "Name": "GhoulCoolAnimController",
+        "NumStates": 8,
+        "NumTransitions": 13,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "13326675624803200883"
+            },
+            {
+                "Name": "Walk",
+                "Speed": 1,
+                "Clip": "10504541768289213319"
+            },
+            {
+                "Name": "Jump",
+                "Speed": 2,
+                "Clip": "4553196690288991447"
+            },
+            {
+                "Name": "Slash",
+                "Speed": 1,
+                "Clip": "13297924093326472572"
+            },
+            {
+                "Name": "Death",
+                "Speed": 1,
+                "Clip": "9444355365097930102"
+            },
+            {
+                "Name": "Dizzy",
+                "Speed": 1,
+                "Clip": "5344097931937034604"
+            },
+            {
+                "Name": "Hit",
+                "Speed": 1,
+                "Clip": "15700505528773980406"
+            },
+            {
+                "Name": "Dodge",
+                "Speed": 1,
+                "Clip": "11649184176354562492"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Idle",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Walk",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Jump",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
+            },
+            {
+                "Source": "Jump",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 2
+                    }
+                ]
+            },
+            {
+                "Source": "Slash",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Slash",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Hit",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Hit",
+                "Target": "Dizzy",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    },
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Death",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dizzy",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "False",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Dodge",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Lesser",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Dodge",
+                "Target": "Walk",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [
+                    {
+                        "Type": "float",
+                        "CompText": "Greater",
+                        "ParameterIndex": 0,
+                        "CompValue": 0.0099999997764825821
+                    }
+                ],
+                "BoolConditions": []
+            },
+            {
+                "Source": "Jump",
+                "Target": "Slash",
+                "Blend": 0.25,
+                "End": true,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 2
+                    }
+                ]
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [
+            {
+                "Name": "speed",
+                "Value": 0
+            }
+        ],
+        "BoolParameters": [
+            {
+                "Name": "dead",
+                "Value": false
+            },
+            {
+                "Name": "grounded",
+                "Value": false
+            },
+            {
+                "Name": "attack",
+                "Value": false
+            }
+        ],
+        "Events": [
+            {
+                "Event_Id": "Enemy::SpawnHealthOrb",
+                "Animation_Id": "9444355365097930102",
+                "Frame": 71,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::SpawnAttackParticle",
+                "Animation_Id": "13297924093326472572",
+                "Frame": 23,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateCollider",
+                "Animation_Id": "13297924093326472572",
+                "Frame": 27,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateCollider",
+                "Animation_Id": "13297924093326472572",
+                "Frame": 29,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Enemy::CanGetInterrupted",
+                "Animation_Id": "13297924093326472572",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::CanJump",
+                "Animation_Id": "9121721253133313444",
+                "Frame": 17,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::CanNotJump",
+                "Animation_Id": "9121721253133313444",
+                "Frame": 46,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::CanJump",
+                "Animation_Id": "4553196690288991447",
+                "Frame": 13,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::CanNotJump",
+                "Animation_Id": "4553196690288991447",
+                "Frame": 47,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::ActivateRangeCollider",
+                "Animation_Id": "4553196690288991447",
+                "Frame": 51,
+                "Type": 2
+            },
+            {
+                "Event_Id": "Ghoul::DeactivateRangeCollider",
+                "Animation_Id": "4553196690288991447",
+                "Frame": 55,
+                "Type": 2
+            }
+        ]
+    }
+}

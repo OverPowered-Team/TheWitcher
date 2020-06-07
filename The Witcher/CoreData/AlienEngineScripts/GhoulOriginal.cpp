@@ -15,14 +15,10 @@ void GhoulOriginal::UpdateEnemy()
 {
     Enemy::UpdateEnemy();
 
-	float angle = atan2f(direction.z, direction.x);
-	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
-	transform->SetGlobalRotation(rot);
-
     switch (state)
     {
 	case GhoulState::AWAKE: 
-		DoAwake(); 
+		DoAwake();
 		break; 
 
     case GhoulState::IDLE:
@@ -42,8 +38,21 @@ void GhoulOriginal::UpdateEnemy()
     }
         break;
 
+    case GhoulState::ATTACK:
+    {
+        if (distance < stats["AttackRange"].GetValue())
+            animator->SetBool("attack", true);
+        else
+            animator->SetBool("attack", false);
+    }
+        break;
+
     case GhoulState::JUMP:
         JumpImpulse();
+        if (distance < stats["AttackRange"].GetValue())
+            animator->SetBool("attack", true);
+        else
+            animator->SetBool("attack", false);
         break;
 
     case GhoulState::STUNNED:

@@ -238,11 +238,14 @@ void Scale_Win::Scale()
 
 void Scale_Win::HandleSceneLoad()
 {
+	Scores_Data::player1_damage = 0;
+	Scores_Data::player2_damage = 0;
 	if (Scores_Data::dead)
 	{
 		Scores_Data::dead = false;
 		Scores_Data::player1_kills = 0;
 		Scores_Data::player2_kills = 0;
+
 		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
 	}
 	else
