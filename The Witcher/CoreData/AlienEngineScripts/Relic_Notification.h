@@ -30,7 +30,9 @@ public:
 	void StopRelic();
 
 public:
+
 	float time_to_show = 5.0f;
+	Prefab combo_marker;
 
 private:
 	float time = 0.0f;
@@ -39,6 +41,7 @@ private:
 	GameObject* geralt_portrait = nullptr;
 	GameObject* yennefer_portrait = nullptr;
 	GameObject* combo = nullptr;
+	GameObject* marker = nullptr;
 	ComponentText* relic_title = nullptr;
 	ComponentText* description = nullptr;
 
@@ -53,6 +56,7 @@ ALIEN_FACTORY Relic_Notification* CreateRelic_Notification() {
 	// To show in inspector here
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->time_to_show);
+	SHOW_IN_INSPECTOR_AS_PREFAB(alien->combo_marker);
 
 	return alien;
 } 
