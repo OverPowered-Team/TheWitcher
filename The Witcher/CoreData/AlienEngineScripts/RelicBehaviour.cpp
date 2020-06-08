@@ -42,8 +42,8 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	AttackEffect* effect = new AttackEffect();
 	effect->SetAttackIdentifier(attack_name);
 	effect->on_hit_effect = effect_to_apply;
+	effect_to_apply->name += "_" + std::to_string(_player->relics.size());
 	effect->name = effect_to_apply->name;
-
 
 	switch (relic_effect)
 	{
