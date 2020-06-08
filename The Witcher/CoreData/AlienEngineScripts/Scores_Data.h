@@ -20,5 +20,7 @@ struct Scores_Data
 	static std::vector<Relic*> player2_relics;
 	static int total_player1_points;
 	static int total_player2_points;
+	static int coin_points_1;//Victor's idea
+	static int coin_points_2; //Victor's idea
 };
 

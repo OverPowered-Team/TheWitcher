@@ -10,6 +10,7 @@ ExplodeChildren::~ExplodeChildren()
 
 void ExplodeChildren::Start()
 {
+	has_broke = true;
 	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
 	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
 		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
