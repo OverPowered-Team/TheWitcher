@@ -31,7 +31,7 @@ ALIEN_FACTORY DialogueTriggerSimple* CreateDialogueTriggerSimple() {
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->specificEntity);
 	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->Geralt);
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->diaLogueIndex);
-	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->volume);
+	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(alien->volume, 0.f, 1.f);
 
 	return alien;
 }
