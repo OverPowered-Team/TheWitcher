@@ -108,7 +108,7 @@ void NilfSoldierShield::Action()
 
 void NilfSoldierShield::Block()
 {
-	RotatePlayer();
+	RotateToPlayerSmooth(0.9f);
 	float b_time = (has_been_attacked) ? block_attack_time : block_time;
 	if (Time::GetGameTime() - current_time > b_time)
 	{

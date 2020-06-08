@@ -360,6 +360,13 @@ void Enemy::RotatePlayer()
 	transform->SetGlobalRotation(rot);
 }
 
+void Enemy::RotateToPlayerSmooth(float perc)
+{
+	float angle = atan2f(direction.z, direction.x) * perc;
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+}
+
 float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
 	SetState("Hit");
