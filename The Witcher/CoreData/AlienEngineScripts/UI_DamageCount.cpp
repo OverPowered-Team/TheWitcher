@@ -413,7 +413,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 			// New DamageNum Effect
 			if ((*iter)->current_timer + 0.25f >= internal_timer)
 			{
-				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
+				float t = (internal_timer - (*iter)->current_timer) / 0.1f;
 				float lerp = Maths::Lerp(2.0f, 0.5f, t);
 
 				(*iter)->go->transform->SetLocalScale(lerp, lerp, 1);

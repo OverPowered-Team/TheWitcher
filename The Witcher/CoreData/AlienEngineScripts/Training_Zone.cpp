@@ -135,6 +135,9 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 		case TYPE::ANY:
 			break;
 		}
+
+		col->game_object_attached->GetComponent<PlayerController>()->ChangeCollisionLayer("NoOscillator", 0.5f);
+
 	}
 }
 

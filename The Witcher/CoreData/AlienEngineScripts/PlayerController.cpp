@@ -111,6 +111,12 @@ void PlayerController::Update()
 	CheckEnemyCircle();
 
 	CheckGround();
+
+	if (layer_changed && collision_timer < Time::GetTimeSinceStart())
+	{
+		controller->SetCollisionLayer("Player");
+		layer_changed = false;
+	}
 }
 
 void PlayerController::CheckGround()
@@ -163,6 +169,13 @@ void PlayerController::ToggleDashMultiplier()
 		}
 	}
 		
+}
+
+void PlayerController::ChangeCollisionLayer(std::string layer, float time)
+{
+	controller->SetCollisionLayer(layer);
+	collision_timer = Time::GetTimeSinceStart() + time;
+	layer_changed = true;
 }
 
 void PlayerController::UpdateInput()
