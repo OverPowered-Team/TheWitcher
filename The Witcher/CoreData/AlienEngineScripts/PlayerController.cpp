@@ -13,7 +13,7 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-
+#include "../../ComponentTrail.h"
 #include "Bonfire.h"
 #include "Scores_Data.h"
 #include "UI_DamageCount.h"
@@ -40,7 +40,7 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-
+	
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
@@ -64,6 +64,11 @@ void PlayerController::Start()
 
 	// Dash
 	dashData.current_acel_multi = dashData.accel_multi; 
+	dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	if (dashData.dash_trail != nullptr) //todo no ser tant guarro
+	{
+		dashData.dash_trail->Stop();
+	}
 }
 
 void PlayerController::Update()
@@ -745,6 +750,12 @@ void PlayerController::PauseParticle()
 			if (p_system)
 				p_system->Pause();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+			
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Pause();
+			
+
 			return;
 		}
 	}
@@ -763,6 +774,11 @@ void PlayerController::ResumeParticle()
 			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
 			if (p_system)
 				p_system->Play();
+
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Play();
 
 			return;
 		}
