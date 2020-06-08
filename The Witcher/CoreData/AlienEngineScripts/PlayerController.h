@@ -131,6 +131,9 @@ public:
 	// Dash wonders
 	void ToggleDashMultiplier(); 
 
+	// Colliders Change Oscillators
+	void ChangeCollisionLayer(std::string layer, float time);
+
 private:
 	void LoadStats();
 	void InitKeyboardControls();
@@ -227,6 +230,9 @@ private:
 	CameraShake* shake = nullptr;
 	float last_regen_tick = 0.0f;
 	std::vector<const char*> layers;
+
+	float collision_timer = 0.0f;
+	bool layer_changed = false;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {
