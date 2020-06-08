@@ -23,7 +23,7 @@ public:
 	bool has_broke = false;
 private:
 	float time_to_disappear = 5.f;
-	float force = 15.f;
+	float force = 5.f;
 
 };
 
