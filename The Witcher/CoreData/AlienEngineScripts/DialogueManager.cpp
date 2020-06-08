@@ -14,7 +14,8 @@ DialogueManager::~DialogueManager()
 void DialogueManager::Start()
 {
 	audioEmitter = GetComponent<ComponentAudioEmitter>();
-	//text = textObj->GetComponent<ComponentText>(); // TODO: when UI works
+	text = textObj->GetComponent<ComponentText>(); 
+	text->SetAlpha(1.0f);
 
 	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
 	LoadJSONDialogues();
@@ -61,7 +62,7 @@ void DialogueManager::Update()
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
 		{
 			playing = false;
-		//	text->SetEnable(false); // TODO: when UI works
+			text->SetEnable(false); 
 			currentDialogue.Reset();
 			audioEmitter->ChangeVolume(0.5f);
 		}
@@ -127,11 +128,10 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 	currentDialogue.subtitlesTime = newDialogue.subtitlesTime;
 
 	// Set Subtitles 
-	/*if (text->IsEnabled() == false)
+	if (text->IsEnabled() == false)
 		text->SetEnable(true);
 	//text->Reset(); 
-	text->SetText(newDialogue.subtitlesText.c_str());*/ // TODO: when UI works
-
+	text->SetText(newDialogue.subtitlesText.c_str());
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
