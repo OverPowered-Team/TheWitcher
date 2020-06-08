@@ -97,6 +97,21 @@ void Relic_Notification::ShowRelic(Notification* notification)
 			H_combo_images[i]->SetEnable(false); 
 		}
 		++s;
+
+		if (s == notification->attack.size())
+		{
+			GameObject* parent = nullptr;
+			if (H_combo_images[i]->IsEnabled())
+			{
+				parent = H_combo_images[i];
+			}
+			else
+			{
+				parent = L_combo_images[i];
+			}
+
+			marker = GameObject::Instantiate(combo_marker, float3(0, parent->transform->GetLocalPosition().y - 0.125f, 0), false, parent);
+		}
 	}
 	active = notification;
 	notifications.pop();
@@ -111,6 +126,13 @@ void Relic_Notification::StopRelic()
 		L_combo_images[i]->SetEnable(false);
 		H_combo_images[i]->SetEnable(false);
 	}
+
+	if (marker)
+	{
+		GameObject::Destroy(marker);
+		marker = nullptr;
+	}
+
 	delete active;
 	active = nullptr;
 }

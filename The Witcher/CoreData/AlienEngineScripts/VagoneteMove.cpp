@@ -28,8 +28,12 @@ void VagoneteMove::Start()
 {
 	curve = GameObject::FindWithName("Curve")->GetComponent<ComponentCurve>();
 	rigid_body = GetComponent<ComponentRigidBody>();
+
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::GERALT));
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::YENNEFER));
+	players[0]->other_player = players[1];
+	players[1]->other_player = players[0];
+
 	max_life = vagonete_life;
 	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
 }
@@ -76,7 +80,7 @@ void VagoneteMove::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
-SceneManager::LoadScene("Wagonnetes");
+			SceneManager::LoadScene("Wagonnetes");
 		}
 
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
@@ -97,21 +101,20 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		if (direction != nullptr) {
 			if (VagoneteInputs::globalInclination == 0) {
 				if (direction->default_right) {
-					curve = direction->curve_right->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_right->GetComponent<ComponentCurve>();
 				}
 				else {
-					curve = direction->curve_left->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_left->GetComponent<ComponentCurve>();
 				}
 			}
 			else {
 				if (VagoneteInputs::globalInclination > 0) {
-					curve = direction->curve_left->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_left->GetComponent<ComponentCurve>();
 				}
 				else {
-					curve = direction->curve_right->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_right->GetComponent<ComponentCurve>();
 				}
 			}
-			actual_pos = 0.0F;
 		}
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
@@ -151,7 +154,7 @@ void VagoneteMove::DecreaseLife()
 		HUD->UpdateLifebar(vagonete_life, max_life);
 
 		if (vagonete_life <= 0) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+			SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
 		}
 	}
 }
@@ -182,6 +185,12 @@ void VagoneteMove::FollowCurve()
 	}
 	else {
 		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
+	}
+
+	if (actual_pos >= 1.0F && next_curve != nullptr) {
+		actual_pos = 0.0F;
+		curve = next_curve;
+		next_curve = nullptr;
 	}
 }
 

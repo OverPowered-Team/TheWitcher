@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "Pickup.h"
+#include "Scores_Data.h"
 
 Pickup::Pickup() : Alien()
 {
@@ -27,7 +28,25 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player && player->state->type != StateType::DEAD)
 		{
-			player->IncreaseStat(stat_to_change, value);
+			switch (picky) //This was made by the mastermind of Víctor, not mine Att: Ivan
+			{
+			case PickUps::HEALTH_ORB:
+			{
+				player->IncreaseStat(stat_to_change, value);
+				break;
+			}
+			case PickUps::COIN:
+			{
+				if (player->controller_index == 1)
+				{
+					Scores_Data::coin_points_1 += value;
+				}
+				else {
+					Scores_Data::coin_points_2 += value;
+				}
+				break;
+			}
+			}
 			GameObject::Destroy(this->game_object);
 		}
 	}

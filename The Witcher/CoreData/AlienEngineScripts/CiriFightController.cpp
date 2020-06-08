@@ -6,6 +6,7 @@
 #include "Scores_Data.h"
 #include "RumblerManager.h"
 #include "CameraMovement.h"
+#include "ParticlePool.h"
 #include "UI_DamageCount.h"
 
 CiriFightController::CiriFightController() : Alien()
@@ -53,6 +54,7 @@ void CiriFightController::Update()
 	if ((game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition()) < 5 || game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition()) < 5) && !fight_started) {
 		fight_started = true;
 		phase_change = true;
+		GameManager::instance->particle_pool->GetInstance("ciri_torbellino", transform->GetGlobalPosition());
 	}
 	if (fight_started) {
 		switch (phase)
