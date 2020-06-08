@@ -126,6 +126,7 @@
                         "PlayOnAwake": false
                     },
                     {
+                        "Enabled": true,
                         "Type": 13,
                         "SlopeLimit": 45,
                         "StepOffset": 0.30000001192092896,
@@ -3406,6 +3407,7 @@
                         "Enabled": true
                     },
                     {
+                        "Enabled": true,
                         "Type": 13,
                         "SlopeLimit": 45,
                         "StepOffset": 0.30000001192092896,
@@ -6295,12 +6297,12 @@
                             {
                                 "VarType": 8,
                                 "Name": "drowned_range",
-                                "prefab": "193070603921628412"
+                                "prefab": "0"
                             },
                             {
                                 "VarType": 8,
                                 "Name": "drowned_grab",
-                                "prefab": "193070603921628412"
+                                "prefab": "0"
                             }
                         ]
                     },
@@ -6522,7 +6524,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "3373862385267707031",
-                        "ListenerID": "3064014616"
+                        "ListenerID": "4154233281"
                     },
                     {
                         "Type": 29,
@@ -6572,8 +6574,32 @@
                             },
                             {
                                 "VarType": 7,
+                                "Name": "is_cinematic",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "cutscene_game_object",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 7,
                                 "Name": "search_players",
                                 "bool": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "limiter1",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "limiter2",
+                                "gameobject": "0"
                             }
                         ]
                     },
@@ -6690,7 +6716,7 @@
                         "Type": 2,
                         "ID": "16200535772410506367",
                         "HasMaterial": true,
-                        "MaterialID": "0",
+                        "MaterialID": "2200282736752320402",
                         "Enabled": true
                     },
                     {
@@ -6726,7 +6752,7 @@
                 "ParentID": "8403351855723895942",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -6801,7 +6827,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "15729264113513005302",
+                        "ID": "13155554458708098054",
                         "ResourceID": "11984226902206808430",
                         "DataName": "DialogueTriggerSimple",
                         "HasInspector": true,
@@ -6824,12 +6850,128 @@
                             {
                                 "VarType": 0,
                                 "Name": "diaLogueIndex",
-                                "int": 0
+                                "int": 3
                             },
                             {
                                 "VarType": 3,
                                 "Name": "volume",
-                                "float": 0.5
+                                "float": 0.51499998569488525
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "DIalogue Trigger (1)",
+                "FamilyNumber": 1,
+                "ID": "7883544794805599854",
+                "ParentID": "8403351855723895942",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            8.3037614822387695,
+                            0.57839024066925049,
+                            6.0740222930908203
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6667008525611241314"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "3234537619525439396",
+                        "HasMesh": true,
+                        "IsPrimitive": true,
+                        "PrimType": 0,
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "12328466176549057352",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "18397414258514858309",
+                        "ResourceID": "11984226902206808430",
+                        "DataName": "DialogueTriggerSimple",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 7,
+                                "Name": "once",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "specificEntity",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "Geralt",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "diaLogueIndex",
+                                "int": 4
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "volume",
+                                "float": 0.74199998378753662
                             }
                         ]
                     }
