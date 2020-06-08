@@ -34,6 +34,7 @@ void Tutorial_HUD_Triggers::OnTriggerEnter(ComponentCollider* col)
 		{
 			players_triggered_dash.push_back(col->game_object_attached->GetComponent<PlayerController>());
 			game_object->parent->parent->GetChild("HUD")->GetComponent<Tutorial_HUD>()->ShowTriggerDash(true);
+			break;
 		}
 		case TRIGGER_TYPE::MAGIC:
 		{

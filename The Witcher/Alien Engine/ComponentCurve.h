@@ -41,7 +41,7 @@ private:
 	float3 CubicCurve(const float3& a, const float3& b, const float3& c, const float3& d, float t);
 
 public:
-
+	float length = 0.f;
 	int detail = 50;
 
 private:
@@ -50,8 +50,6 @@ private:
 	std::vector<float3> control_points_normals;
 
 	float3 position = float3::zero();
-
-	float length = 0.f;
 };
 
 class __declspec(dllexport) ComponentCurve : public Component {
