@@ -55,7 +55,8 @@ public:
 		float min_speed = 2.0f; 
 		float start_speed = 0.f; 
 		float current_acel_multi = 0.f; 
-		bool disappear_on_dash = true; 
+		bool disappear_on_dash = true;
+		ComponentTrail* dash_trail;
 	};
 
 public:
