@@ -215,7 +215,7 @@ void Tutorial_HUD::HandleTriggerMagic()
 			}
 			text_magic->SetAlpha(1);
 
-			current_state_dash = Current_Showing::SHOWING;
+			current_state_magic = Current_Showing::SHOWING;
 		}
 
 		break;
@@ -247,7 +247,7 @@ void Tutorial_HUD::HandleTriggerMagic()
 			text_magic->SetAlpha(0);
 
 
-			current_state_dash = Current_Showing::ANY;
+			current_state_magic = Current_Showing::ANY;
 		}
 
 		break;
