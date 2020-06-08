@@ -16,7 +16,6 @@ public:
 	void Update();
 
 	void OnTriggerEnter(ComponentCollider* collider);
-
 };
 
 ALIEN_FACTORY CiriNado* CreateCiriNado() {

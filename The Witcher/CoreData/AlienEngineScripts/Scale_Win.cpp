@@ -30,8 +30,8 @@ void Scale_Win::Start()
 	// Texts
 	score_text_1 = GameObject::FindWithName("Score_Player_1")->GetComponent<ComponentText>();
 	score_text_2 = GameObject::FindWithName("Score_Player_2")->GetComponent<ComponentText>();
-	score_text_1->SetText("0");
-	score_text_2->SetText("0");
+	score_text_1->SetText(std::to_string(Scores_Data::player1_damage).c_str());
+	score_text_2->SetText(std::to_string(Scores_Data::player2_damage).c_str());
 
 	// Win/Lose
 	if (!Scores_Data::dead)
@@ -240,17 +240,21 @@ void Scale_Win::HandleSceneLoad()
 {
 	Scores_Data::player1_damage = 0;
 	Scores_Data::player2_damage = 0;
+	Scores_Data::player1_kills = 0;
+	Scores_Data::player2_kills = 0;
+
 	if (Scores_Data::dead)
 	{
 		Scores_Data::dead = false;
-		Scores_Data::player1_kills = 0;
-		Scores_Data::player2_kills = 0;
-
 		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
 	}
 	else
 	{
 		Scores_Data::last_checkpoint_position = float3::inf();
+
+		Scores_Data::total_player1_points += stoi(score_text_1->GetText());
+		Scores_Data::total_player2_points += stoi(score_text_2->GetText());
+
 		if (Scores_Data::won_level1)
 		{
 			if (Scores_Data::won_level2)

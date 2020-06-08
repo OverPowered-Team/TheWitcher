@@ -12,3 +12,5 @@ std::string Scores_Data::last_scene;
 float3 Scores_Data::last_checkpoint_position = float3::inf();
 int Scores_Data::player1_damage = 0;
 int Scores_Data::player2_damage = 0;
+int Scores_Data::total_player1_points = 0;
+int Scores_Data::total_player2_points = 0;

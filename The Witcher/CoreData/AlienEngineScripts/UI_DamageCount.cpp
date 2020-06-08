@@ -157,7 +157,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 
 	damage_num->damage = damage;
-	damage_num->go->transform->SetLocalScale(float3(0.75f, 0.75f, 1));
+	damage_num->go->transform->SetLocalScale(float3(2.0f, 2, 1));
 	damage_num->text = damage_num->go->GetComponent<ComponentText>();
 	damage_num->text->SetText(std::to_string((int)damage).c_str());
 	damage_num->text->SetColor(float3(1, 1, 1));
@@ -414,7 +414,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 			if ((*iter)->current_timer + 0.25f >= internal_timer)
 			{
 				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
-				float lerp = Maths::Lerp(0.75f, 0.5f, t);
+				float lerp = Maths::Lerp(2.0f, 0.5f, t);
 
 				(*iter)->go->transform->SetLocalScale(lerp, lerp, 1);
 
