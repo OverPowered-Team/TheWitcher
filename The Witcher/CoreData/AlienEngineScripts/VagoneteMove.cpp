@@ -40,54 +40,52 @@ void VagoneteMove::Start()
 
 void VagoneteMove::Update()
 {
-	if (Input::GetKeyDown(SDL_SCANCODE_1) || Input::GetKeyRepeat(SDL_SCANCODE_2)) {
-		VagoneteInputs::playerRotation = Quat::identity();
-		VagoneteInputs::globalInclination = 0;
-		VagoneteInputs::globalInclinationY = 0;
+	VagoneteInputs::playerRotation = Quat::identity();
+	VagoneteInputs::globalInclination = 0;
+	VagoneteInputs::globalInclinationY = 0;
 
-		for (auto item = players.begin(); item != players.end(); ++item) {
-			(*item)->Update();
-		}
+	for (auto item = players.begin(); item != players.end(); ++item) {
+		(*item)->Update();
+	}
 
-		FollowCurve();
+	FollowCurve();
 
-		if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_5)) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene());
-		}
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_5)) {
+		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+	}
 
-		if (Input::GetKeyRepeat(SDL_SCANCODE_F3))
+	if (Input::GetKeyRepeat(SDL_SCANCODE_F3))
+	{
+		if (Input::GetKeyDown(SDL_SCANCODE_G))
 		{
-			if (Input::GetKeyDown(SDL_SCANCODE_G))
-			{
-				godmode = !godmode;
-				HUD->godmode->SetEnable(godmode);
-			}
+			godmode = !godmode;
+			HUD->godmode->SetEnable(godmode);
+		}
 
-			if (Input::GetKeyDown(SDL_SCANCODE_0))
-			{
-				SceneManager::LoadScene("Main_Menu");
-			}
-			if (Input::GetKeyDown(SDL_SCANCODE_1))
-			{
-				SceneManager::LoadScene("Lvl_1_Tutorial");
-			}
-			if (Input::GetKeyDown(SDL_SCANCODE_2))
-			{
-				SceneManager::LoadScene("Lvl_1");
-			}
-			if (Input::GetKeyDown(SDL_SCANCODE_3))
-			{
-				SceneManager::LoadScene("Wagonnetes");
-			}
+		if (Input::GetKeyDown(SDL_SCANCODE_0))
+		{
+			SceneManager::LoadScene("Main_Menu");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_1))
+		{
+			SceneManager::LoadScene("Lvl_1_Tutorial");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_2))
+		{
+			SceneManager::LoadScene("Lvl_1");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_3))
+		{
+			SceneManager::LoadScene("Wagonnetes");
+		}
 
-			if (Input::GetKeyDown(SDL_SCANCODE_4))
-			{
-				SceneManager::LoadScene("boss_test");
-			}
-			if (Input::GetKeyDown(SDL_SCANCODE_W))
-			{
-				SceneManager::LoadScene("NewWin_Menu");
-			}
+		if (Input::GetKeyDown(SDL_SCANCODE_4))
+		{
+			SceneManager::LoadScene("boss_test");
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_W))
+		{
+			SceneManager::LoadScene("NewWin_Menu");
 		}
 	}
 }
@@ -185,13 +183,9 @@ void VagoneteMove::FollowCurve()
 	else {
 		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
 	}
-	LOG("CURVE LENGHT: %f", curve->curve.length);
-	if (actual_pos >= curve->curve.length && next_curve != nullptr) {
-		currentPos = curve->curve.ValueAtDistance(curve->curve.length);
-		LOG("POS X: %f POS Y: %f POS Z: %f", currentPos.x, currentPos.y, currentPos.z);
-		actual_pos = 0.0F;
-		float3 currentPos2 = next_curve->curve.ValueAtDistance(actual_pos);
-		LOG("NEXT POS X: %f NEXT POS Y: %f NEXT POS Z: %f", currentPos2.x, currentPos2.y, currentPos2.z);
+
+	if (actual_pos > curve->curve.length && next_curve != nullptr) {
+		actual_pos = current_speed * Time::GetDT();
 		curve = next_curve;
 		next_curve = nullptr;
 	}
