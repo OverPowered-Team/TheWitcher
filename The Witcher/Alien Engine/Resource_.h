@@ -25,7 +25,7 @@ enum class ResourceType {
 };
 
 
-class Resource {
+class __declspec(dllexport) Resource {
 
 public:
 

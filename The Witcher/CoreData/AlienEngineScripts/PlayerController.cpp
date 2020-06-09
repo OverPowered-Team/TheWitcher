@@ -63,12 +63,12 @@ void PlayerController::Start()
 	layers.push_back("Player");
 
 	// Dash
-	dashData.current_acel_multi = dashData.accel_multi; 
-	dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
-	if (dashData.dash_trail != nullptr) //todo no ser tant guarro
-	{
-		dashData.dash_trail->Stop();
-	}
+	//dashData.current_acel_multi = dashData.accel_multi; 
+	//dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	//if (dashData.dash_trail != nullptr) //todo no ser tant guarro
+	//{
+	//	dashData.dash_trail->Stop();
+	//}
 }
 
 void PlayerController::Update()

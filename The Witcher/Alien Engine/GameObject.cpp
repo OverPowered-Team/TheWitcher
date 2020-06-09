@@ -738,8 +738,7 @@ GameObject* GameObject::Instantiate(const Prefab& prefab, const float3& position
 	if (prefab.prefabID != 0) {
 		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resources->GetResourceWithID(prefab.prefabID);
 		if (r_prefab != nullptr && App->StringCmp(prefab.prefab_name.data(), r_prefab->GetName())) {
-			r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
-			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
+			return r_prefab->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
 		}
 		else {
 			return nullptr;
@@ -753,8 +752,7 @@ GameObject* GameObject::Instantiate(const char* prefab, const float3& position, 
 	OPTICK_EVENT();
 	for (auto item = App->resources->resources.begin(); item != App->resources->resources.end(); ++item) {
 		if ((*item)->GetType() == ResourceType::RESOURCE_PREFAB && strcmp(prefab, (*item)->GetName()) == 0) {
-			dynamic_cast<ResourcePrefab*>(*item)->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
-			return (parent == nullptr) ? App->objects->GetRoot(true)->children.back() : parent->children.back();
+			return dynamic_cast<ResourcePrefab*>(*item)->ConvertToGameObjects((parent == nullptr) ? App->objects->GetRoot(true) : parent, -1, position, check_child, false);
 		}
 	}
 	return nullptr;
