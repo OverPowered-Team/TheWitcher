@@ -662,7 +662,7 @@ bool ComponentButton::DrawInspector()
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-					ImGui::Button(((*item) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+					ImGui::Button(((*item) == nullptr || App->resources->GetResourceWithID((*item)->GetID()) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 					if (ImGui::IsItemClicked() && (*item) != nullptr) {
 						App->ui->panel_project->SelectFile((*item)->GetAssetsPath(), App->resources->assets);
@@ -755,7 +755,7 @@ bool ComponentButton::DrawInspector()
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-					ImGui::Button(((*item) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+					ImGui::Button(((*item) == nullptr || App->resources->GetResourceWithID((*item)->GetID()) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 					if (ImGui::IsItemClicked() && (*item) != nullptr) {
 						App->ui->panel_project->SelectFile((*item)->GetAssetsPath(), App->resources->assets);
@@ -848,7 +848,7 @@ bool ComponentButton::DrawInspector()
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-					ImGui::Button(((*item) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+					ImGui::Button(((*item) == nullptr || App->resources->GetResourceWithID((*item)->GetID()) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 					if (ImGui::IsItemClicked() && (*item) != nullptr) {
 						App->ui->panel_project->SelectFile((*item)->GetAssetsPath(), App->resources->assets);
@@ -941,7 +941,7 @@ bool ComponentButton::DrawInspector()
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-					ImGui::Button(((*item) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+					ImGui::Button(((*item) == nullptr || App->resources->GetResourceWithID((*item)->GetID()) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 					if (ImGui::IsItemClicked() && (*item) != nullptr) {
 						App->ui->panel_project->SelectFile((*item)->GetAssetsPath(), App->resources->assets);
@@ -1035,7 +1035,7 @@ bool ComponentButton::DrawInspector()
 					ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 					ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-					ImGui::Button(((*item) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+					ImGui::Button(((*item) == nullptr || App->resources->GetResourceWithID((*item)->GetID()) == nullptr) ? "NULL" : std::string((*item)->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 					if (ImGui::IsItemClicked() && (*item) != nullptr) {
 						App->ui->panel_project->SelectFile((*item)->GetAssetsPath(), App->resources->assets);

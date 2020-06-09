@@ -83,6 +83,7 @@ public:
 	void SetUniform1f(const std::string& name, const float& value);
 
 	void SetUniform3i(const std::string& name, const int& v0, const int& v1, const int& v2);
+	void SetUniform3f(const std::string& name, const float& v0, const float& v1, const float& v2);
 
 	void SetUniformFloat3(const std::string& name, const float3& vec3);
 

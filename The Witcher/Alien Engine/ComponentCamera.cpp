@@ -253,28 +253,114 @@ bool ComponentCamera::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-		
-		ImGui::Checkbox("Active Fog", &activeFog);
-		if (activeFog)
-		{
-			ImGui::DragFloat("Density", &fogDensity, 0.001f, 0.0f, 10.f);
-			ImGui::DragFloat("Gradient", &fogGradient, 0.02f, 0.0f, 10.f);
-		}
-
-		ImGui::Spacing();
-		if (ImGui::Button("Apply Fog to Editor Camera"))
-		{
-			App->renderer3D->scene_fake_camera->activeFog = activeFog; 
-			App->renderer3D->scene_fake_camera->fogDensity = fogDensity;
-			App->renderer3D->scene_fake_camera->fogGradient = fogGradient;
-			App->renderer3D->scene_fake_camera->camera_color_background = camera_color_background;
-		}
+	
 
 		if (ImGui::Button("Reset Editor Camera"))
 		{
 			App->renderer3D->scene_fake_camera->Reset();
 		}
 
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		if (ImGui::TreeNodeEx("Post Processing", ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			ImGui::Spacing();
+
+			ImGui::Checkbox("HDR", &hdr);
+
+			if (!hdr)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+			ImGui::DragFloat("Exposure", &exposure, 0.01f, 0.0f, 10.f);
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::DragFloat("Gamma", &gamma, 0.01f, 0.0f, 10.f);
+
+			if (!hdr)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			ImGui::Checkbox("Active Fog", &activeFog);
+
+			if (!activeFog)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+			ImGui::DragFloat("Density", &fogDensity, 0.001f, 0.0f, 10.f);
+			ImGui::DragFloat("Gradient", &fogGradient, 0.02f, 0.0f, 10.f);
+
+
+			if (!activeFog)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();	
+
+			if (ImGui::Button("Apply HDR to Editor Camera"))
+			{
+				/*App->renderer3D->scene_fake_camera->activeFog = activeFog;
+				App->renderer3D->scene_fake_camera->fogDensity = fogDensity;
+				App->renderer3D->scene_fake_camera->fogGradient = fogGradient;
+				App->renderer3D->scene_fake_camera->camera_color_background = camera_color_background;*/
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Apply Fog to Editor Camera"))
+			{
+				App->renderer3D->scene_fake_camera->activeFog = activeFog;
+				App->renderer3D->scene_fake_camera->fogDensity = fogDensity;
+				App->renderer3D->scene_fake_camera->fogGradient = fogGradient;
+				App->renderer3D->scene_fake_camera->camera_color_background = camera_color_background;
+			}
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			if (ImGui::Button("Import Editor Camera HDR Preferences"))
+			{
+				this->hdr = App->renderer3D->scene_fake_camera->hdr;
+				this->exposure = App->renderer3D->scene_fake_camera->exposure;
+				this->gamma = App->renderer3D->scene_fake_camera->gamma;
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Import Editor Camera FOG Preferences"))
+			{
+				this->activeFog = App->renderer3D->scene_fake_camera->activeFog;
+				this->fogDensity = App->renderer3D->scene_fake_camera->fogDensity;
+				this->fogGradient = App->renderer3D->scene_fake_camera->fogGradient;
+				this->camera_color_background = App->renderer3D->scene_fake_camera->camera_color_background;
+			}
+
+			ImGui::TreePop();
+		}
+
+		
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
@@ -719,6 +805,9 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Fog", activeFog);
 	to_save->SetNumber("Density", fogDensity);
 	to_save->SetNumber("Gradient", fogGradient);
+	to_save->SetBoolean("HDR", hdr);
+	to_save->SetNumber("Exposure", exposure);
+	to_save->SetNumber("Gamma", gamma);
 
 	/* Save skybox (Library File) */
 	std::string path = cubemap->path_pos[0];
@@ -759,6 +848,9 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	fogDensity = (float)to_load->GetNumber("Density");
 	fogGradient = (float)to_load->GetNumber("Gradient");
 
+	hdr = to_load->GetBoolean("HDR", false);
+	exposure = (float)to_load->GetNumber("Exposure", 1.0f);
+	gamma = (float)to_load->GetNumber("Gamma", 0.0f);
 
 	ResourceTexture* tex_pos = nullptr;
 	std::string path_pos;
