@@ -10,6 +10,9 @@ CiriAura::~CiriAura()
 
 void CiriAura::UpdateEnemy()
 {
+	if (im_dead_fuck)
+		return;
+
 	switch (state)
 	{
 	case CiriAura::AuraState::NONE:
@@ -67,8 +70,10 @@ void CiriAura::Disappear()
 		color.w -= fadeMaterialSpeed * Time::GetDT();
 		if (color.w <= 0.f)
 		{
+			im_dead_fuck = true;
 			LOG("Ciri Aura has fully DISAPPEARED!");
-			GameObject::Destroy(game_object->parent);
+			game_object->parent->SetEnable(false); // situaciones desesperadas requieren medidas desesperadas
+			return;
 		}
 		
 		material->material->color = color;

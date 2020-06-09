@@ -28,6 +28,7 @@ private:
 private:
 	AuraState state = AuraState::NONE;
 	float current_mov_distance = 0.f;
+	bool im_dead_fuck = false;
 
 public:
 	float fadeMaterialSpeed = 0.5f; 
