@@ -121,8 +121,16 @@ public:
 	Skybox* skybox = nullptr;
 	Cubemap* cubemap = nullptr;
 	ResourceShader* skybox_shader = nullptr;
+	
+	// === FOG === 
 
 	bool activeFog = false;
 	float fogDensity = 0.035;
 	float fogGradient = 1.35;
+
+	// === HDR === 
+
+	bool hdr = false; 
+	float gamma = 0.0f;
+	float exposure = 1.0f;
 };

@@ -5,7 +5,11 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleObjects.h"
 #include "imgui/imgui.h"
+#include "ModuleCamera3D.h"
+#include "Viewport.h"
+#include "ModuleObjects.h"
 #include "gpudetect/DeviceId.h"
 
 #include "mmgr/mmgr.h"
@@ -23,6 +27,7 @@ PanelConfig::~PanelConfig()
 void PanelConfig::PanelLogic()
 {
 	ImGui::Begin("Configuration", &enabled, ImGuiWindowFlags_NoCollapse);
+
 	if (ImGui::IsWindowHovered())
 		App->camera->is_scene_hovered = false;
 	if (ImGui::CollapsingHeader("Application"))
@@ -278,6 +283,26 @@ void PanelConfig::PanelLogic()
 
 		ImGui::Spacing();
 	}
+
+	if (ImGui::CollapsingHeader("UI"))
+	{
+		ImGui::Text("GamePad Input");
+		ImGui::SameLine();
+		ImGui::Checkbox("##GamePadInput", &App->objects->inputUiGamePad);
+		ImGui::SameLine();
+		ImGui::TextDisabled("(?)");
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted("by enabling this you will use the gamepad for the UI input, otherwise you will use the mouse");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+		ImGui::Spacing();
+	}
+
+
 	ImGui::Spacing();
 	if (ImGui::Button("Save Configuration", { 150,30 })) {
 		App->SaveCustomConfig();
