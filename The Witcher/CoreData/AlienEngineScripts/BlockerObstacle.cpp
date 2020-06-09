@@ -44,20 +44,54 @@ void BlockerObstacle::StartEnemy()
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
 
 	roots = game_object->GetChild("Roots")->GetChildren();
-	material = GetComponent<ComponentMaterial>();
-	resource_mat = new ResourceMaterial(material->GetMaterial());
+
+	// Root Material
+	// 3rd Roots
+	//material_3rd = roots[2]->GetChild(0)->GetComponent<ComponentMaterial>();
+	//resource_mat_org = (ResourceMaterial*)material_3rd->GetMaterial();
+	//resource_mat_3rd = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
+	//material_3rd->SetMaterial(resource_mat_3rd);
+	//material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+
+	//// 2nd Roots
+	//material_2nd = roots[1]->GetChild(0)->GetComponent<ComponentMaterial>();
+	//resource_mat_2nd = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
+	//material_2nd->SetMaterial(resource_mat_2nd);
+	//material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+
+	//// 1st Roots
+	//material_1st = roots[0]->GetChild(0)->GetComponent<ComponentMaterial>();
+	//resource_mat_1st = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
+	//material_1st->SetMaterial(resource_mat_1st);
+	//material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 }
 
 void BlockerObstacle::UpdateEnemy()
 {
 	Enemy::UpdateEnemy();
-	//LOG("MY LIFE: %f", stats["Health"].GetValue());
+
 	switch (state)
 	{
 	case ObstacleState::IDLE: 
 	{
 		if (distance < stats["VisionRange"].GetValue() && !has_started)
 			LookForMyChildren();
+
+		/*if (root_3rd)
+		{
+			material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
+
+			if (material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+				root_3rd = false;
+		}
+		else if (root_2nd)
+		{
+			material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
+
+			if (material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+				root_2nd = false;
+
+		}*/
 	}
 	break;
 	case ObstacleState::DYING:
@@ -70,6 +104,14 @@ void BlockerObstacle::UpdateEnemy()
 	}
 	break;
 	case ObstacleState::DEAD:
+		/*if (root_1st)
+		{
+		material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
+
+		if (material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+			root_1st = false;
+
+		}*/
 		break;
 	default:
 		LOG("There's no state");
@@ -80,6 +122,19 @@ void BlockerObstacle::UpdateEnemy()
 void BlockerObstacle::CleanUpEnemy()
 {
 	children_enemies.clear();
+
+	/*material_1st->SetMaterial(resource_mat_org);
+	material_2nd->SetMaterial(resource_mat_org);
+	material_3rd->SetMaterial(resource_mat_org);
+
+	delete resource_mat_3rd;
+	resource_mat_3rd = nullptr;
+
+	delete resource_mat_2nd;
+	resource_mat_2nd = nullptr;
+
+	delete resource_mat_1st;
+	resource_mat_1st = nullptr;*/
 }
 
 float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 knockback)
@@ -88,8 +143,11 @@ float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 kn
 	stats["Health"].DecreaseStat(dmg);
 	CheckRootHealth();
 
-	if(stats["Health"].GetValue() <= 0.f)
+	if (stats["Health"].GetValue() <= 0.f)
+	{
 		state = ObstacleState::DYING;
+		root_1st = true;
+	}
 
 	last_player_hit = player;
 	return aux_health - stats["Health"].GetValue();
@@ -164,9 +222,9 @@ void BlockerObstacle::CheckRootHealth()
 	LOG("Two: %f", two_third_life);
 	LOG("One: %f", one_third_life);
 
-	if (current_health <= two_third_life && current_health > one_third_life && roots[2]->IsEnabled())
-		roots[2]->SetEnable(false);
+	if (current_health <= two_third_life && current_health > one_third_life&& roots[2]->IsEnabled())
+		root_3rd = true;
 	else if (current_health <= one_third_life && roots[1]->IsEnabled())
-		roots[1]->SetEnable(false);
+		root_2nd = true;
 
 }

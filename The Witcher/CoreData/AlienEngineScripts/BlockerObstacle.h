@@ -6,6 +6,7 @@
 
 class EnemyManager;
 class Enemy;
+
 class ALIEN_ENGINE_API BlockerObstacle : public Enemy {
 
 public:
@@ -36,8 +37,14 @@ public:
 	//float health = 0.f;
 	//float minimum_health = 0.f;
 	ObstacleState state = ObstacleState::NONE;
-	ComponentMaterial* material = nullptr;
-	ResourceMaterial* resource_mat = nullptr;
+	/*ComponentMaterial* material_3rd = nullptr;
+	ComponentMaterial* material_2nd = nullptr;
+	ComponentMaterial* material_1st = nullptr;
+	ResourceMaterial* resource_mat_org = nullptr;
+	ResourceMaterial* resource_mat_3rd = nullptr;
+	ResourceMaterial* resource_mat_2nd = nullptr;
+	ResourceMaterial* resource_mat_1st = nullptr;*/
+	float burnSpeed = 0.5f;
 
 private:
 	std::vector<Enemy*>children_enemies;
@@ -46,6 +53,9 @@ private:
 	EnemyManager* manager = nullptr;
 	bool has_started = false;
 	float enemy_die_damage = 0.0f;
+	bool root_3rd = false;
+	bool root_2nd = false;
+	bool root_1st = false;
 
 	ComponentCollider* boxCollider = nullptr;
 	std::vector<GameObject*> roots;
@@ -55,6 +65,7 @@ ALIEN_FACTORY BlockerObstacle* CreateBlockerObstacle() {
 	BlockerObstacle* alien = new BlockerObstacle();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(BlockerObstacle::ObstacleState, alien->state);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->burnSpeed);
 	//SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->health);
 	//SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(alien->minimum_health);
 
