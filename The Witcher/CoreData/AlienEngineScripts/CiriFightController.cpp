@@ -113,6 +113,7 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
+	ThrowEnvironmentRocks();
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -126,6 +127,7 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
+	ThrowEnvironmentRocks();
 	if (!first_wall_door)
 		UpdatePlatform();
 	TransportPlayer();
@@ -186,7 +188,7 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 
 void CiriFightController::MoveWall()
 {
-	time_platform += rescale_platform_value;
+	time_platform += rescale_platform_value * Time::GetDT() * 60;
 	if (wall != nullptr)
 	{
 		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
@@ -296,6 +298,40 @@ void CiriFightController::UpdatePlatform()
 			ScaleWall();
 		}
 	}
+}
+
+void CiriFightController::ThrowEnvironmentRocks()
+{
+	int throw_time = (int)time_platform;
+	if (throw_time % 10 == 0 && !rock_throwed)
+	{
+		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
+		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 15);
+		float random_index = (float)Random::GetRandomIntBetweenTwo(1, 100) / 100;
+		int random_negative = Random::GetRandomIntBetweenTwo(1, 4);
+		float3 position = { random_x + random_index, 17, random_z + random_index };
+		switch (random_negative)
+		{
+		case 1:
+			break;
+		case 2:
+			position = { -(random_x + random_index), 17, random_z + random_index };
+			break;
+		case 3:
+			position = { random_x + random_index, 17, -(random_z + random_index) };
+			break;
+		case 4:
+			position = { -(random_x + random_index), 17, -(random_z + random_index) };
+			break;
+		default:
+			break;
+		}
+		GameObject::Instantiate(game_object->GetComponent<CiriOriginal>()->rock, position);
+		rock_throwed = true;
+	}
+	else if (throw_time % 10 != 0 && rock_throwed)
+		rock_throwed = false;
+	
 }
 
 void CiriFightController::TransportPlayer()

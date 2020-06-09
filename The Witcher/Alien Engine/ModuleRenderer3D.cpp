@@ -15,6 +15,7 @@
 #include "Viewport.h"
 #include "mmgr/mmgr.h"
 #include "Optick/include/optick.h"
+#include "imgui/imgui_internal.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -118,8 +119,11 @@ bool ModuleRenderer3D::Init()
 
 bool ModuleRenderer3D::Start()
 {
+	GenerateScreenQuadVAO();
+
 	return true;
 }
+
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
@@ -145,6 +149,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG_ENGINE("Destroying 3D Renderer");
+
+	DestroyScreenQuadVAO();
 
 	SDL_GL_DeleteContext(context);
 
@@ -255,6 +261,39 @@ void ModuleRenderer3D::EndDebugDraw()
 	glColor4fv(&App->renderer3D->last_color[0]);
 	glLineWidth(1.f);
 
+}
+
+void ModuleRenderer3D::GenerateScreenQuadVAO()
+{
+	float quadVertices[] = {
+		// positions        // texture Coords
+		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+	};
+
+	// Generate buffers
+	glGenVertexArrays(1, &screen_quad_VAO);
+	glGenBuffers(1, &screen_quad_VBO);
+
+	// Fill them
+	glBindVertexArray(screen_quad_VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, screen_quad_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void ModuleRenderer3D::DestroyScreenQuadVAO()
+{
+	glDeleteVertexArrays(1, &screen_quad_VAO);
+	glDeleteBuffers(1, &screen_quad_VBO);
 }
 
 void ModuleRenderer3D::RenderCircleAroundZ(const float& x, const float& y, const float& z, const float& radius, const float& line_width, const int& segments)
@@ -454,11 +493,61 @@ void ModuleRenderer3D::DebugDrawMesh(const float4x4& transform, float* vertices,
 void ModuleRenderer3D::PanelConfigOption()
 {
 	ImGui::ColorEdit3("Background Color", &scene_fake_camera->camera_color_background, ImGuiColorEditFlags_Float);
-	ImGui::Checkbox("Camera Fog", &scene_fake_camera->activeFog);
-	if (scene_fake_camera->activeFog)
+	if (ImGui::TreeNodeEx("Post Processing", ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::DragFloat("Fog Density", &scene_fake_camera->fogDensity, 0.001f, 0.0f, 10.f);
-		ImGui::DragFloat("Fog Gradient", &scene_fake_camera->fogGradient, 0.02f, 0.0f, 10.f);
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::Spacing();
+
+		ImGui::Checkbox("HDR", &scene_fake_camera->hdr);
+
+		if (!scene_fake_camera->hdr)
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+
+		ImGui::DragFloat("Exposure", &scene_fake_camera->exposure, 0.01f, 0.0f, 10.f);
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::DragFloat("Gamma", &scene_fake_camera->gamma, 0.01f, 0.0f, 10.f);
+
+		if (!scene_fake_camera->hdr)
+		{
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::Checkbox("Active Fog", &scene_fake_camera->activeFog);
+
+		if (!scene_fake_camera->activeFog)
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+
+		ImGui::DragFloat("Density", &scene_fake_camera->fogDensity, 0.001f, 0.0f, 10.f);
+		ImGui::DragFloat("Gradient", &scene_fake_camera->fogGradient, 0.02f, 0.0f, 10.f);
+
+
+		if (!scene_fake_camera->activeFog)
+		{
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::TreePop();
 	}
 	if (ImGui::Button("Reset Camera Properties"))
 		scene_fake_camera->Reset();

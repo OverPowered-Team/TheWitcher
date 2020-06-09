@@ -400,9 +400,10 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		0.0f,
 		temp_e.x * sin(anglez) + temp_pl.y * cos(anglez));
 	LOG("X %f, Z %f", rotated_particle.x, rotated_particle.z);
+	math::Quat player_quat =last_player_hit->transform->GetGlobalRotation();
+	float3 particle_rotation = last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_dir;
 
-	
-	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, rotated_particle);
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(),false, particle_rotation,nullptr,player_quat);
 	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 
 	if (stats["Health"].GetValue() <= 0.0F) {
@@ -518,7 +519,7 @@ void Enemy::StopHitFreeze(float speed, std::string name)
 	animator->SetStateSpeed(name.c_str(), speed);
 }
 
-void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent)
+void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, float3 rotation, GameObject* parent,math::Quat quat_rot)
 {
 	if (particle_name == "")
 	{
@@ -530,21 +531,28 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, flo
 	{
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
-			if (!rotation.IsZero())
-			{
-				(*it)->transform->SetGlobalRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
-			}
+			
+				//quat_rot.y = -quat_rot.y; 
+			if(!quat_rot.Equals(math::Quat::identity()))
+				(*it)->transform->SetGlobalRotation(quat_rot *quat_rot.RotateX(DEGTORAD * (rotation.x))* quat_rot.RotateY(DEGTORAD*(rotation.y))* quat_rot.RotateZ(DEGTORAD * (rotation.z)));
+			
 			(*it)->SetEnable(false);
 			(*it)->SetEnable(true);
-			return;
+			return; 
 		}
 	}
 
 	parent = parent != nullptr ? parent : this->game_object;
 	rotation = rotation.IsZero() ? parent->transform->GetGlobalRotation().ToEulerXYZ() : rotation;
 	GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, rotation, parent, local);
+
+	
 	if (new_particle == nullptr)
 		return;
+	else {
+		if (!quat_rot.Equals(math::Quat::identity()))
+			new_particle->transform->SetGlobalRotation(quat_rot * quat_rot.RotateX(DEGTORAD * (rotation.x)) * quat_rot.RotateY(DEGTORAD * (rotation.y)) * quat_rot.RotateZ(DEGTORAD * (rotation.z)));
+	}
 
 	particles.push_back(new_particle);
 }
