@@ -42,6 +42,7 @@ private:
 	GameObject* yennefer_portrait = nullptr;
 	GameObject* combo = nullptr;
 	GameObject* marker = nullptr;
+	GameObject* RB = nullptr;
 	ComponentText* relic_title = nullptr;
 	ComponentText* description = nullptr;
 
