@@ -377,28 +377,12 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
 
-	//if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
 	if (can_get_interrupted)
 	{
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
 	}
-		/*if (!is_hit_inmune)
-		{
-			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		}
-	}*/
 
-	/*if ((stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue()))
-	{
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		can_get_interrupted = false;
-	}*/
-
-	//float3 direction = (particle_spawn_positions[1]->transform->GetGlobalPosition() - last_player_hit->transform->GetGlobalPosition()).Normalized();
-	//------------
 	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
 	float2 temp_pl = float2(last_player_hit->transform->GetGlobalPosition().x, last_player_hit->transform->GetGlobalPosition().z);
 	float angle = acos(math::Dot(temp_e, temp_pl) / (temp_e.LengthSq() * temp_pl.LengthSq())); //sino provar Length	

@@ -44,6 +44,8 @@ void BlockerObstacle::StartEnemy()
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
 
 	roots = game_object->GetChild("Roots")->GetChildren();
+	material = GetComponent<ComponentMaterial>();
+	resource_mat = new ResourceMaterial(material->GetMaterial());
 }
 
 void BlockerObstacle::UpdateEnemy()

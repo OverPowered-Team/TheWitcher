@@ -36,6 +36,9 @@ public:
 	//float health = 0.f;
 	//float minimum_health = 0.f;
 	ObstacleState state = ObstacleState::NONE;
+	ComponentMaterial* material = nullptr;
+	ResourceMaterial* resource_mat = nullptr;
+
 private:
 	std::vector<Enemy*>children_enemies;
 	int beginning_enemies = 0.f;
