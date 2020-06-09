@@ -250,11 +250,11 @@
     {
       "name": "HHH",
       "button": "HHH",
-      "particle_name": "",
+      "particle_name": "Yenn_Shotgun",
       "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
+        "pos_x": 0,
+        "pos_y": 0.6,
+        "pos_z": 0.6
       },
       "colliders": [
         {
@@ -395,21 +395,19 @@
     {
       "name": "HL",
       "button": "HL",
-      "particle_name": "y_torbellino",
+      "particle_name": "Yenn_AOEPull",
       "particle_pos": {
         "pos_x": 0,
         "pos_y": 0.5,
-        "pos_z": 1
+        "pos_z": 0
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Sphere",
           "pos_x": 0,
-          "pos_y": 0.75,
+          "pos_y": 0.5,
           "pos_z": 0,
-          "width": 5,
-          "height": 1.7,
-          "depth": 5,
+          "radius": 2.8,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -418,12 +416,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": -1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 1.2
+        },
+        {
+          "name": "KnockBack",
+          "value": 10
         }
       ],
       "activation_frame": 25,
@@ -441,21 +443,19 @@
     {
       "name": "HLH",
       "button": "HLH",
-      "particle_name": "y_torbellino",
+      "particle_name": "Yenn_AOEBlast",
       "particle_pos": {
         "pos_x": 0,
         "pos_y": 0.5,
-        "pos_z": 1
+        "pos_z": 0
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Sphere",
           "pos_x": 0,
-          "pos_y": 0.75,
+          "pos_y": 0.5,
           "pos_z": 0,
-          "width": 5,
-          "height": 1.7,
-          "depth": 5,
+          "radius": 2.8,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -464,12 +464,16 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 1.2
+        },
+        {
+          "name": "KnockBack",
+          "value": 4
         }
       ],
       "activation_frame": 25,
