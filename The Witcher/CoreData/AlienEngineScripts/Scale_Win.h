@@ -36,6 +36,12 @@ public:
 	int current_points2 = 0;
 
 private:
+
+	std::vector<int> ConvertKillsMapToVector(const std::map<uint, uint>& kills_map);
+
+	void SpawnHeads(const std::vector<int>& kills, const std::vector<float2>& spawn_points);
+
+private:
 	// Plates
 	GameObject* left_scale = nullptr;
 	GameObject* right_scale = nullptr;

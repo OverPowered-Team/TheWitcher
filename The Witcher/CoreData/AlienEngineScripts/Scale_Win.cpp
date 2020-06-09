@@ -64,41 +64,9 @@ void Scale_Win::Update()
 		spawn_points.emplace_back(float2(0.f, -2.f));
 
 		// Head Spawns
-		if (Scores_Data::player1_kills > 0)
-		{
-			for (int i = 1; i <= Scores_Data::player1_kills; ++i)
-			{
-				float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
-				int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
+		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player1_kills), spawn_points);
+		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player2_kills), spawn_points);
 
-				Invoke([this, spawn_points, random_spawn]() -> void
-					{
-						spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
-							spawner_l->transform->GetGlobalPosition().y,
-							spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
-					}
-					,
-						random_time * i);
-			}
-		}
-
-		if (Scores_Data::player2_kills > 0)
-		{
-			for (int i = 1; i <= Scores_Data::player2_kills; ++i)
-			{
-				float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
-				int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
-
-				Invoke([this, spawn_points, random_spawn]() -> void
-					{
-						spawner_r->Spawn(TO_SPAWN::HEAD, float3(spawner_r->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
-							spawner_r->transform->GetGlobalPosition().y,
-							spawner_r->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y));
-					}
-					,
-						random_time * i);
-			}
-		}
 		spawned_invoke = true;
 	}
 
@@ -116,6 +84,27 @@ void Scale_Win::Update()
 	}
 
 	first_frame = false;
+}
+
+void Scale_Win::SpawnHeads(const std::vector<int>& kills, const std::vector<float2>& spawn_points)
+{
+	if (kills.size() > 0)
+	{
+		for (int i = 0; i < kills.size(); ++i)
+		{
+			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
+			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
+
+			Invoke([this, spawn_points, random_spawn, i]() -> void
+				{
+					spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
+						spawner_l->transform->GetGlobalPosition().y,
+						spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y), i);
+				}
+				,
+					random_time * i);
+		}
+	}
 }
 
 void Scale_Win::CalculateInclination()
@@ -240,8 +229,8 @@ void Scale_Win::HandleSceneLoad()
 {
 	Scores_Data::player1_damage = 0;
 	Scores_Data::player2_damage = 0;
-	Scores_Data::player1_kills = 0;
-	Scores_Data::player2_kills = 0;
+	Scores_Data::player1_kills.clear();
+	Scores_Data::player2_kills.clear();
 
 	if (Scores_Data::dead)
 	{
@@ -269,5 +258,24 @@ void Scale_Win::HandleSceneLoad()
 			}
 		}
 	}
+}
+
+std::vector<int> Scale_Win::ConvertKillsMapToVector(const std::map<uint, uint>& kills_map)
+{
+	std::vector<int> vector;
+
+	auto iter = kills_map.begin();
+	for (; iter != kills_map.end(); ++iter)
+	{
+		if ((*iter).first != 4 && (*iter).first != 5)
+		{
+			for (int i = 0; i < (*iter).second; ++i)
+			{
+				vector.push_back((*iter).first);
+			}
+		}
+	}
+
+	return vector;
 }
 
