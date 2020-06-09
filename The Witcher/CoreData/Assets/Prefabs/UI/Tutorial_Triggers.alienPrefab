@@ -4,50 +4,12 @@
             {
                 "Name": "Tutorial_Triggers",
                 "FamilyNumber": 1,
-                "ID": "14868034225182194539",
-                "ParentID": "1948635938477186665",
+                "ID": "6500292935358151157",
+                "ParentID": "13662032347109013547",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
                 "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "8939950892595054216",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            65.094940185546875,
-                            16.875011444091797,
-                            48.40936279296875
-                        ],
-                        "Rotation": [
-                            -6.1010807408772016e-14,
-                            -5.3338314380813316e-21,
-                            8.742436818920396e-08,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "1145483144801851801"
-                    }
-                ]
-            },
-            {
-                "Name": "HUD",
-                "FamilyNumber": 2,
-                "ID": "2029825326442697579",
-                "ParentID": "14868034225182194539",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -62,9 +24,9 @@
                             0
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
+                            6.1010807408772016e-14,
+                            4.0389678347315804e-28,
+                            -7.1054273576010019e-15,
                             1
                         ],
                         "Scale": [
@@ -73,7 +35,45 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18200823608469606199"
+                        "ID": "12001024633385842759"
+                    }
+                ]
+            },
+            {
+                "Name": "HUD",
+                "FamilyNumber": 2,
+                "ID": "5707451501080284704",
+                "ParentID": "6500292935358151157",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            1.52587890625e-05,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            3.6125474410293784e-42,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11420444269900389754"
                     },
                     {
                         "Enabled": true,
@@ -83,7 +83,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "6836494238427451868",
+                        "ID": "5373958191199267449",
                         "ResourceID": "18212556226428107215",
                         "DataName": "Tutorial_HUD",
                         "HasInspector": false
@@ -93,8 +93,8 @@
             {
                 "Name": "Attack",
                 "FamilyNumber": 3,
-                "ID": "9160141449822610793",
-                "ParentID": "2029825326442697579",
+                "ID": "2123445497687789631",
+                "ParentID": "5707451501080284704",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -124,15 +124,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14804990078405750595"
+                        "ID": "9474783333720954679"
                     }
                 ]
             },
             {
                 "Name": "Text",
                 "FamilyNumber": 4,
-                "ID": "2498370125756928089",
-                "ParentID": "9160141449822610793",
+                "ID": "16964846053902822607",
+                "ParentID": "2123445497687789631",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -162,11 +162,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "6095751420227257103"
+                        "ID": "17446288562586048294"
                     },
                     {
                         "Type": 30,
-                        "ID": "9654539977088632135",
+                        "ID": "686693337182529350",
                         "Text": "Press     or     to attack",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -186,8 +186,8 @@
             {
                 "Name": "AttackY",
                 "FamilyNumber": 4,
-                "ID": "15030449614716733675",
-                "ParentID": "9160141449822610793",
+                "ID": "13300042051775444394",
+                "ParentID": "2123445497687789631",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -201,14 +201,14 @@
                     {
                         "Type": 0,
                         "Position": [
-                            5,
+                            4.978302001953125,
                             1.5,
                             0
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
                             1
                         ],
                         "Scale": [
@@ -217,7 +217,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "917252044048711198"
+                        "ID": "647075395804660385"
                     },
                     {
                         "Width": 1.2799999713897705,
@@ -238,8 +238,8 @@
             {
                 "Name": "AttackX",
                 "FamilyNumber": 4,
-                "ID": "2887392314783355085",
-                "ParentID": "9160141449822610793",
+                "ID": "8047328558583355438",
+                "ParentID": "2123445497687789631",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -253,14 +253,14 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -8,
+                            -8.0000228881835938,
                             1.5,
                             0
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
                             1
                         ],
                         "Scale": [
@@ -269,7 +269,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10006435695641046453"
+                        "ID": "5356082659923438840"
                     },
                     {
                         "Width": 1.2799999713897705,
@@ -290,8 +290,8 @@
             {
                 "Name": "Dash",
                 "FamilyNumber": 3,
-                "ID": "17540169240912730939",
-                "ParentID": "2029825326442697579",
+                "ID": "13761982381284528344",
+                "ParentID": "5707451501080284704",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -321,15 +321,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18435755910398771562"
+                        "ID": "18282066538633255182"
                     }
                 ]
             },
             {
                 "Name": "RB",
                 "FamilyNumber": 4,
-                "ID": "2672597436000361800",
-                "ParentID": "17540169240912730939",
+                "ID": "5009221468268371321",
+                "ParentID": "13761982381284528344",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -344,13 +344,13 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            1.400078296661377,
-                            0
+                            1.4000778198242188,
+                            1.6182367945649645e-14
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
                             1
                         ],
                         "Scale": [
@@ -359,7 +359,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "5314319631041686780"
+                        "ID": "14114198472524180423"
                     },
                     {
                         "Width": 2.3499999046325684,
@@ -380,8 +380,8 @@
             {
                 "Name": "Text",
                 "FamilyNumber": 4,
-                "ID": "3095522573086876088",
-                "ParentID": "17540169240912730939",
+                "ID": "17000931447427416182",
+                "ParentID": "13761982381284528344",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -411,11 +411,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8969863044218538007"
+                        "ID": "17254482338670745377"
                     },
                     {
                         "Type": 30,
-                        "ID": "4691906816559991053",
+                        "ID": "17370258015332566446",
                         "Text": "Press     to Dash",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -433,10 +433,363 @@
                 ]
             },
             {
+                "Name": "Magic",
+                "FamilyNumber": 3,
+                "ID": "17692280233964008689",
+                "ParentID": "5707451501080284704",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -4.5938296569514314e-14,
+                            -36.267379760742188,
+                            -3.9446007224497315e-13
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7831074655606780118"
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 4,
+                "ID": "13726646065444858495",
+                "ParentID": "17692280233964008689",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -39.546485900878906,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.019999999552965164,
+                            0.019999999552965164,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16769573961039386842"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "5152708709790586058",
+                        "Text": "Press       +         to use magic",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.94117647409439087,
+                            0.94116705656051636,
+                            0.94116705656051636,
+                            1
+                        ],
+                        "Width": 4480,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "LT",
+                "FamilyNumber": 4,
+                "ID": "11405686968846240418",
+                "ParentID": "17692280233964008689",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -18.18939208984375,
+                            1.9876708984375,
+                            -1.159402435169099e-14
+                        ],
+                        "Rotation": [
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
+                            1
+                        ],
+                        "Scale": [
+                            7,
+                            7,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8769378274177609790"
+                    },
+                    {
+                        "Width": 1.2000000476837158,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "14083890404124360857",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "X",
+                "FamilyNumber": 4,
+                "ID": "9627181615660798062",
+                "ParentID": "17692280233964008689",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.330078125,
+                            1.5,
+                            0
+                        ],
+                        "Rotation": [
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
+                            1
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5385912470277715805"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "1039326515147094226",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "B",
+                "FamilyNumber": 4,
+                "ID": "12351821964545011018",
+                "ParentID": "17692280233964008689",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            10.333503723144531,
+                            1.5,
+                            0
+                        ],
+                        "Rotation": [
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
+                            1
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15360573923319894957"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "17422111338110508770",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Y",
+                "FamilyNumber": 4,
+                "ID": "6475928443561303843",
+                "ParentID": "17692280233964008689",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            5.3300018310546875,
+                            6.5,
+                            5.4210108624275222e-18
+                        ],
+                        "Rotation": [
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
+                            1
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10141327223169470096"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "8994133557069102572",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "A",
+                "FamilyNumber": 4,
+                "ID": "342878785705350499",
+                "ParentID": "17692280233964008689",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            5.3157882690429688,
+                            -3.5,
+                            4.5831394235307243e-15
+                        ],
+                        "Rotation": [
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
+                            1
+                        ],
+                        "Scale": [
+                            4,
+                            4,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14326346653328506891"
+                    },
+                    {
+                        "Width": 1.2799999713897705,
+                        "Height": 1.2799999713897705,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "3910731978571418384",
+                        "Color": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
                 "Name": "Triggers",
                 "FamilyNumber": 2,
-                "ID": "16301583647292448719",
-                "ParentID": "14868034225182194539",
+                "ID": "10588540381669186830",
+                "ParentID": "6500292935358151157",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -466,15 +819,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7390532670715135877"
+                        "ID": "5720855709310905065"
                     }
                 ]
             },
             {
                 "Name": "AttackTrigger",
                 "FamilyNumber": 3,
-                "ID": "6752478227594386421",
-                "ParentID": "16301583647292448719",
+                "ID": "3595458403995159045",
+                "ParentID": "10588540381669186830",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -488,14 +841,14 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -448.43991088867188,
-                            -9.0085659027099609,
-                            -200.15036010742188
+                            -437.91720581054688,
+                            -16.018178939819336,
+                            -216.9097900390625
                         ],
                         "Rotation": [
-                            3.5394154274115408e-10,
-                            0.00404784781858325,
-                            -8.74236576464682e-08,
+                            3.5408456722230142e-10,
+                            0.0040496471337974072,
+                            -8.744196122734138e-08,
                             0.99999189376831055
                         ],
                         "Scale": [
@@ -504,7 +857,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3241969257882608337"
+                        "ID": "3919397313705027289"
                     },
                     {
                         "Enabled": true,
@@ -525,14 +878,14 @@
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
                         "Size": [
-                            7,
-                            3.7000000476837158,
-                            7.8000001907348633
+                            9.5,
+                            2.5999999046325684,
+                            2.2999999523162842
                         ]
                     },
                     {
                         "Type": 29,
-                        "ID": "4124474451972702104",
+                        "ID": "13288362804486785025",
                         "ResourceID": "8685167801877944695",
                         "DataName": "Tutorial_HUD_Triggers",
                         "HasInspector": true,
@@ -549,8 +902,8 @@
             {
                 "Name": "DashTrigger",
                 "FamilyNumber": 3,
-                "ID": "14467333885213573156",
-                "ParentID": "16301583647292448719",
+                "ID": "6476939131154034542",
+                "ParentID": "10588540381669186830",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -564,14 +917,14 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -455.58511352539063,
-                            -7.5274486541748047,
+                            -448.510986328125,
+                            -8.2816495895385742,
                             -178.49703979492188
                         ],
                         "Rotation": [
-                            3.5398403652742161e-10,
-                            0.0040483339689671993,
-                            -8.74236576464682e-08,
+                            3.5401845344118499e-10,
+                            0.0040488019585609436,
+                            -8.7428716710746812e-08,
                             0.99999189376831055
                         ],
                         "Scale": [
@@ -580,7 +933,7 @@
                             7.0596556663513184
                         ],
                         "ScaleNegative": false,
-                        "ID": "15215451530449965018"
+                        "ID": "10653697151991437831"
                     },
                     {
                         "Enabled": true,
@@ -608,7 +961,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "6548500173007876702",
+                        "ID": "6030619138048662033",
                         "ResourceID": "8685167801877944695",
                         "DataName": "Tutorial_HUD_Triggers",
                         "HasInspector": true,
@@ -625,8 +978,8 @@
             {
                 "Name": "AttackTrigger (1)",
                 "FamilyNumber": 3,
-                "ID": "8065341226296603545",
-                "ParentID": "16301583647292448719",
+                "ID": "2011557433718993694",
+                "ParentID": "10588540381669186830",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -640,23 +993,23 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -438.53121948242188,
-                            -15.637956619262695,
-                            -216.88380432128906
+                            -447.8179931640625,
+                            -9.3306570053100586,
+                            -200.25857543945313
                         ],
                         "Rotation": [
-                            3.5393035724418098e-10,
-                            0.0040477192960679531,
-                            -8.7423650541040843e-08,
-                            0.99999183416366577
+                            3.5410099852306587e-10,
+                            0.0040498538874089718,
+                            -8.744406443383923e-08,
+                            0.99999189376831055
                         ],
                         "Scale": [
-                            2.0545153617858887,
-                            0.54995739459991455,
-                            0.41042912006378174
+                            1,
+                            1,
+                            1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15595939466601812727"
+                        "ID": "11395762782137926666"
                     },
                     {
                         "Enabled": true,
@@ -677,14 +1030,14 @@
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
                         "Size": [
-                            7,
+                            8,
                             3.7000000476837158,
                             7.8000001907348633
                         ]
                     },
                     {
                         "Type": 29,
-                        "ID": "510050557956354272",
+                        "ID": "4160066793135237982",
                         "ResourceID": "8685167801877944695",
                         "DataName": "Tutorial_HUD_Triggers",
                         "HasInspector": true,
@@ -693,6 +1046,82 @@
                                 "VarType": 14,
                                 "Name": "trigger_type",
                                 "enumInt": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "MagicTrigger",
+                "FamilyNumber": 3,
+                "ID": "5925448494348194350",
+                "ParentID": "10588540381669186830",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8939950892595054216",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            -6.1010807408772016e-14,
+                            -4.0389678347315804e-28,
+                            7.1054273576010019e-15,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10223243761057792549"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "14118176849234585683",
+                        "ResourceID": "8685167801877944695",
+                        "DataName": "Tutorial_HUD_Triggers",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "trigger_type",
+                                "enumInt": 2
                             }
                         ]
                     }

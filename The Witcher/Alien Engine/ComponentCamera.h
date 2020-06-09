@@ -121,8 +121,7 @@ public:
 	Skybox* skybox = nullptr;
 	Cubemap* cubemap = nullptr;
 	ResourceShader* skybox_shader = nullptr;
-	uint skybox_texture_id = 0u;
-	
+
 	bool activeFog = false;
 	float fogDensity = 0.035;
 	float fogGradient = 1.35;

@@ -80,7 +80,7 @@ void ParticleEmmitter::DebugDrawEmmitter()
 	}
 }
 
-void ParticleEmmitter::GetInitialValues(float3& position, float3& velocity, float speed, bool globalTransform)
+void ParticleEmmitter::GetInitialValues(float3& position, float3& velocity, Quat& rotation, float speed, bool globalTransform)
 {
 	math::LCG lcg; 	// Maybe here we could use some pcg ol' tricks of yours
 
@@ -132,7 +132,7 @@ void ParticleEmmitter::GetInitialValues(float3& position, float3& velocity, floa
 
 		// Add that vector to the emmitter position 
 		position = emmitterCenterPosition + relativeRandomPosition;
-
+		//rotation = GetWorldRotation();
 		velocity = GetWorldRotation().WorldZ() * speed;
 	}
 	break;

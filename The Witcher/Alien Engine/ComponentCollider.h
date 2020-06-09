@@ -36,6 +36,7 @@ class __declspec(dllexport) ComponentCollider : public ComponentBasePhysic
 	friend class ComponentRigidBody;
 	friend class ComponentPhysics;
 
+	friend class QueryFilterCallback;
 	friend class SimulationEventCallback;
 	friend class GameObject;
 	friend class MyDispatcher;

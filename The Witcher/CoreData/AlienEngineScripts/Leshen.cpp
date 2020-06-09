@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "ParticlePool.h"
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
@@ -8,6 +9,7 @@
 #include "Leshen.h"
 #include "Scores_Data.h"
 #include "Boss_Lifebar.h"
+#include "UI_DamageCount.h"
 
 void Leshen::StartEnemy()
 {
@@ -27,6 +29,8 @@ void Leshen::StartEnemy()
 	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
+
+	initial_position = transform->GetGlobalPosition();
 }
 
 void Leshen::UpdateEnemy()
@@ -49,8 +53,11 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		animator->PlayState("Death");
 		Scores_Data::won_level1 = true;
 		Scores_Data::last_scene = SceneManager::GetCurrentScene();
-		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
-		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.type_kills;
+		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.type_kills;
+		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
+		Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
+		Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
 	}
 
@@ -125,13 +132,15 @@ void Leshen::LaunchAction()
 void Leshen::LaunchRootAction()
 {
 	if (player_controllers[0]->state->type != StateType::DEAD) {
-		root_1 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_1 = GameManager::instance->particle_pool->GetInstance("Leshen_roots_attack", this->transform->GetGlobalPosition());
+		root_1->GetComponent<ComponentCollider>()->SetEnable(true);
 		root_1->GetComponent<RootLeshen>()->leshen = this;
 		root_1->GetComponent<RootLeshen>()->target = 0;
 	}
 
 	if (player_controllers[1]->state->type != StateType::DEAD) {
-		root_2 = GameObject::Instantiate(root_prefab, this->transform->GetGlobalPosition());
+		root_2 = GameManager::instance->particle_pool->GetInstance("Leshen_roots_attack", this->transform->GetGlobalPosition());
+		root_2->GetComponent<ComponentCollider>()->SetEnable(true);
 		root_2->GetComponent<RootLeshen>()->leshen = this;
 		root_2->GetComponent<RootLeshen>()->target = 1;
 	}
@@ -144,7 +153,8 @@ void Leshen::LaunchMeleeAction()
 
 void Leshen::LaunchCrowsAction()
 {
-	crows = GameObject::Instantiate(crow_prefab, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 2, transform->GetGlobalPosition().z), true);
+	crows = GameManager::instance->particle_pool->GetInstance("Crow", float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 0.8f, transform->GetGlobalPosition().z), float3::zero(), GameManager::instance->game_object->parent, true);
+	crows->GetComponent<ComponentCollider>()->SetEnable(true);
 	if (player_rooted[0] && player_controllers[0]->state->type != StateType::DEAD) {
 		crows->GetComponent<CrowsLeshen>()->target = 0;
 		crows_target = 0;
@@ -154,7 +164,7 @@ void Leshen::LaunchCrowsAction()
 		crows_target = 1;
 	}
 	else if(player_controllers[0]->state->type != StateType::DEAD && player_controllers[1]->state->type != StateType::DEAD){
-		crows->GetComponent<CrowsLeshen>()->target = rand() % 1;
+		crows->GetComponent<CrowsLeshen>()->target = Random::GetRandomIntBetweenTwo(0, 1);
 		crows_target = crows->GetComponent<CrowsLeshen>()->target;
 	}
 	else if (player_controllers[0]->state->type != StateType::DEAD) {
@@ -237,8 +247,12 @@ Leshen::ActionState Leshen::UpdateCloudAction()
 {
 	LOG("UPDATING CLOUD ACTION");
 
+	float distance_to_initial = initial_position.Distance(transform->GetGlobalPosition());
+
 	if (times_switched < total_switch_times) {
 		if (direction_time <= switch_direction_time) {
+			if (distance_to_initial > cloud_max_distance)
+				direction = -direction;
 			character_ctrl->Move(direction * speed * Time::GetDT());
 			direction_time += Time::GetDT();
 		}

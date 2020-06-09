@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="ArrowScript.h" />
     <ClInclude Include="AttackTrigger.h" />
+    <ClInclude Include="BarrelDrop.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BlockerObstacle.h" />
     <ClInclude Include="Bonfire.h" />
@@ -192,13 +193,17 @@
     <ClInclude Include="CiriAura.h" />
     <ClInclude Include="CiriAuraTrigger.h" />
     <ClInclude Include="CiriFightController.h" />
+    <ClInclude Include="CiriNado.h" />
     <ClInclude Include="CiriOriginal.h" />
     <ClInclude Include="CloudLeshen.h" />
     <ClInclude Include="Credits.h" />
     <ClInclude Include="CrowsLeshen.h" />
+    <ClInclude Include="CutsceneCamera.h" />
+    <ClInclude Include="CutsceneShot.h" />
     <ClInclude Include="DashCollider.h" />
     <ClInclude Include="DrownedGrab.h" />
     <ClInclude Include="Dummie.h" />
+    <ClInclude Include="DummyEnemy.h" />
     <ClInclude Include="EffectsFactory.h" />
     <ClInclude Include="Drowned.h" />
     <ClInclude Include="DrownedRange.h" />
@@ -276,6 +281,7 @@
     <ClInclude Include="Tutorial_HUD_Triggers.h" />
     <ClInclude Include="Tutorial_Intro.h" />
     <ClInclude Include="UI_Char_Frame.h" />
+    <ClInclude Include="UI_DamageCount.h" />
     <ClInclude Include="UI_EndMenu.h" />
     <ClInclude Include="UI_Ultibar_Particle.h" />
     <ClInclude Include="UltiBar.h" />
@@ -287,11 +293,13 @@
     <ClInclude Include="VagoneteDirection.h" />
     <ClInclude Include="VagoneteMove.h" />
     <ClInclude Include="VagoneteObstacle.h" />
+    <ClInclude Include="WagoneteAddVelocity.h" />
     <ClInclude Include="Wagonnete_UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrowScript.cpp" />
     <ClCompile Include="AttackTrigger.cpp" />
+    <ClCompile Include="BarrelDrop.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BlockerObstacle.cpp" />
     <ClCompile Include="Bonfire.cpp" />
@@ -307,13 +315,17 @@
     <ClCompile Include="CiriAura.cpp" />
     <ClCompile Include="CiriAuraTrigger.cpp" />
     <ClCompile Include="CiriFightController.cpp" />
+    <ClCompile Include="CiriNado.cpp" />
     <ClCompile Include="CiriOriginal.cpp" />
     <ClCompile Include="CloudLeshen.cpp" />
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="CrowsLeshen.cpp" />
+    <ClCompile Include="CutsceneCamera.cpp" />
+    <ClCompile Include="CutsceneShot.cpp" />
     <ClCompile Include="DashCollider.cpp" />
     <ClCompile Include="DrownedGrab.cpp" />
     <ClCompile Include="Dummie.cpp" />
+    <ClCompile Include="DummyEnemy.cpp" />
     <ClCompile Include="EffectsFactory.cpp" />
     <ClCompile Include="Drowned.cpp" />
     <ClCompile Include="DrownedRange.cpp" />
@@ -390,6 +402,7 @@
     <ClCompile Include="Tutorial_HUD_Triggers.cpp" />
     <ClCompile Include="Tutorial_Intro.cpp" />
     <ClCompile Include="UI_Char_Frame.cpp" />
+    <ClCompile Include="UI_DamageCount.cpp" />
     <ClCompile Include="UI_EndMenu.cpp" />
     <ClCompile Include="UI_Ultibar_Particle.cpp" />
     <ClCompile Include="UltiBar.cpp" />
@@ -401,6 +414,7 @@
     <ClCompile Include="VagoneteDirection.cpp" />
     <ClCompile Include="VagoneteMove.cpp" />
     <ClCompile Include="VagoneteObstacle.cpp" />
+    <ClCompile Include="WagoneteAddVelocity.cpp" />
     <ClCompile Include="Wagonnete_UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

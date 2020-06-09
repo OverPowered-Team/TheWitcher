@@ -28,6 +28,8 @@ void UI_Ultibar_Particle::Update()
 		lerp = Maths::Lerp(original_scale * (1.f + 1.f / 3.f), original_scale, t);
 	}
 
+	game_object->transform->SetLocalScale(float3(lerp, lerp, 1));
+
 	if (t >= 1)
 	{
 		sign = -sign;

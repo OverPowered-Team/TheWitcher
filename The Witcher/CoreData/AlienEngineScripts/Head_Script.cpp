@@ -3,11 +3,15 @@
 
 Head_Script::Head_Script() : Alien()
 {
-	script_scale = GameObject::FindWithName("Scale")->GetComponent<Scale_Win>();
 }
 
 Head_Script::~Head_Script()
 {
+}
+
+void Head_Script::Start()
+{
+	script_scale = GameObject::FindWithName("Scale")->GetComponent<Scale_Win>();
 }
 
 void Head_Script::OnTriggerEnter(ComponentCollider* collider)

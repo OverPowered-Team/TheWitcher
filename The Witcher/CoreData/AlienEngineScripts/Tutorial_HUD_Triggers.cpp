@@ -34,9 +34,14 @@ void Tutorial_HUD_Triggers::OnTriggerEnter(ComponentCollider* col)
 		{
 			players_triggered_dash.push_back(col->game_object_attached->GetComponent<PlayerController>());
 			game_object->parent->parent->GetChild("HUD")->GetComponent<Tutorial_HUD>()->ShowTriggerDash(true);
-		}
-		case TRIGGER_TYPE::ROCKS:
 			break;
+		}
+		case TRIGGER_TYPE::MAGIC:
+		{
+			players_triggered_magic.push_back(col->game_object_attached->GetComponent<PlayerController>());
+			game_object->parent->parent->GetChild("HUD")->GetComponent<Tutorial_HUD>()->ShowTriggerMagic(true);
+			break;
+		}
 		case TRIGGER_TYPE::ANY:
 			break;
 		}
@@ -67,8 +72,15 @@ void Tutorial_HUD_Triggers::OnTriggerExit(ComponentCollider* col)
 			}
 			break;
 		}
-		case TRIGGER_TYPE::ROCKS:
+		case TRIGGER_TYPE::MAGIC:
+		{
+			players_triggered_magic.remove(col->game_object_attached->GetComponent<PlayerController>());
+			if (players_triggered_magic.empty())
+			{
+				game_object->parent->parent->GetChild("HUD")->GetComponent<Tutorial_HUD>()->ShowTriggerMagic(false);
+			}
 			break;
+		}
 		case TRIGGER_TYPE::ANY:
 			break;
 		}

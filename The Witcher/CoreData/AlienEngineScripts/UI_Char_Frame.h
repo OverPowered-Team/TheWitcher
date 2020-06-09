@@ -68,6 +68,14 @@ private:
 	float chaos_time = 0.0f;
 	bool changing_chaos = false;
 
+	// Shake
+	bool portrait_shaking = false;
+	float shake_off_set = 100.0f;
+	float shake_post_off_set = 0.0f;
+	float original_portrait_x = 0.0f;
+	float original_portrait_y = 0.0f;
+	float start_shake_time = 0.0f;
+
 	// Kill Count
 	bool is_showing_kill_count = false;
 	float killcount_lerp_time = 0.0f;

@@ -453,7 +453,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 			UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
 			
-			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+			ComponentCamera* mainCamera = App->renderer3D->actual_game_camera;
 
 			std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 			for (; it_ui_world != ui_world.end(); ++it_ui_world) {
@@ -621,7 +621,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
-		ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+		ComponentCamera* mainCamera = App->renderer3D->actual_game_camera;
 
 		std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 		for (; it_ui_world != ui_world.end(); ++it_ui_world) {

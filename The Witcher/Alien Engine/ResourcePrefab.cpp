@@ -333,6 +333,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 			Prefab::InitScripts(obj);
 		}
 
+		obj->SetPrefab(ID);
+
 		// Navigation
 		auto ui = obj->GetComponentsInChildrenRecursive<ComponentUI>();
 		auto uiParent = obj->GetComponents<ComponentUI>();
@@ -344,7 +346,10 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
 
-		obj->SetPrefab(ID);
+		for each (ComponentUI * uiElement in ui) {
+			uiElement->ReSetIDNavigation();
+		}
+
 		obj->transform->SetLocalPosition(pos);
 		if (set_selected) {
 			App->objects->SetNewSelectedObject(obj, false);

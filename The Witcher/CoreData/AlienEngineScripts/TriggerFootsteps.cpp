@@ -40,14 +40,14 @@ void TriggerFootsteps::OnTriggerExit(ComponentCollider* collider)
 	//ComponentAudioEmitter* emitter = (ComponentAudioEmitter*)collider->game_object_attached->GetComponent(ComponentType::A_EMITTER);
 	//emitter->SetSwitchState("Material", "Quiet");
 
-	math::float4 white(1.f, 1.f, 1.f, 1.f);
+	/*math::float4 white(1.f, 1.f, 1.f, 1.f);
 	math::float4 white_less_alpha = white;
 	white_less_alpha.w = 0.03f; 
 
 	// Set player particle color back to default
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 		collider->game_object_attached->GetComponent<PlayerController>()->OnTerrainEnter(
-			white, white_less_alpha);
+			white, white_less_alpha);*/
 }
 
 std::string TriggerFootsteps::GetNameByEnum(GroundMaterial mat)

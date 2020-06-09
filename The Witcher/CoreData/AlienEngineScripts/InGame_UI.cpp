@@ -5,6 +5,7 @@
 #include "PlayerManager.h"
 #include "UltiBar.h"
 #include "Scores_Data.h"
+#include "UI_DamageCount.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -114,8 +115,11 @@ void InGame_UI::Update()
 				else
 				{
 					Scores_Data::dead = true;
-					Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
-					Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+					Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.type_kills;
+					Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.type_kills;
+					GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
+					Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
+					Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 					Scores_Data::last_scene = SceneManager::GetCurrentScene();
 					SceneManager::LoadScene("NewWin_Menu");
 				}
@@ -132,7 +136,7 @@ void InGame_UI::Update()
 			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
 			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
-			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 1);
+			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0);
 
 			if (lerp >= 1)
 			{
@@ -207,7 +211,16 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	particle->origin_position = float3(0, 43.f, 0);
+	float random = Random::GetRandomIntBetweenTwo(1, 2);
+	if (random == 1)
+	{
+		particle->origin_position = float3(-25.f, 43.f, 0);
+	}
+	else
+	{
+		particle->origin_position = float3(25.f, 43.f, 0);
+	}
+
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
 	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
 	particle->time_passed = Time::GetGameTime();

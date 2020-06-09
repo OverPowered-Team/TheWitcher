@@ -31,6 +31,8 @@ public:
 	float times_switched = 0;
 	float total_switch_times = 5;
 	float speed = 3.0f;
+	float cloud_max_distance = 5;
+	float3 initial_position;
 
 	int crows_target = 0;
 

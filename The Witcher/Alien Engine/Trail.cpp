@@ -104,8 +104,8 @@ Trail::~Trail()
 	glDeleteVertexArrays(1, &vao);
 
 	glDeleteBuffers(1, &id_vertex);
-	glDeleteBuffers(1, &id_index);
 	glDeleteBuffers(1, &id_uv);
+	glDeleteBuffers(1, &id_index);
 
 
 	if (material != nullptr) {
