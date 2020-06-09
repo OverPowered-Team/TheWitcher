@@ -351,21 +351,19 @@
     {
       "name": "LHL",
       "button": "LHL",
-      "particle_name": "Yenn_Pull",
+      "particle_name": "Yenn_GravityBall",
       "particle_pos": {
         "pos_x": 0.0,
-        "pos_y": 0.57,
-        "pos_z": 6.6
+        "pos_y": 0.8,
+        "pos_z": 1.2
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Sphere",
           "pos_x": 0,
-          "pos_y": 0.400,
-          "pos_z": 3.0000,
-          "width": 2.000,
-          "height": 1.000,
-          "depth": 5.200,
+          "pos_y": 0.8,
+          "pos_z": 1.2,
+          "radius": 0.9,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -374,16 +372,12 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": -1
+        "z": 0
       },
       "stats": [
         {
           "name": "Damage",
           "value": 1.6
-        },
-        {
-          "name": "KnockBack",
-          "value": 30
         }
       ],
       "activation_frame": 25,
