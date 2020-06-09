@@ -59,9 +59,9 @@ void Scale_Win::Update()
 		std::vector<float2> spawn_points;
 
 		spawn_points.reserve(3);
-		spawn_points.emplace_back(float2(-2.f, 1.5f));
-		spawn_points.emplace_back(float2(2.f, 1.5f));
-		spawn_points.emplace_back(float2(0.f, -2.f));
+		spawn_points.emplace_back(-2.f, 1.5f);
+		spawn_points.emplace_back(2.f, 1.5f);
+		spawn_points.emplace_back(0.f, -2.f);
 
 		// Head Spawns
 		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player1_kills), spawn_points, 1);
