@@ -113,6 +113,7 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
+	ThrowEnvironmentRocks();
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -126,6 +127,7 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
+	ThrowEnvironmentRocks();
 	if (!first_wall_door)
 		UpdatePlatform();
 	TransportPlayer();
@@ -186,7 +188,7 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 
 void CiriFightController::MoveWall()
 {
-	time_platform += rescale_platform_value;
+	time_platform += rescale_platform_value * Time::GetDT() * 60;
 	if (wall != nullptr)
 	{
 		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
@@ -296,6 +298,20 @@ void CiriFightController::UpdatePlatform()
 			ScaleWall();
 		}
 	}
+}
+
+void CiriFightController::ThrowEnvironmentRocks()
+{
+	int throw_time = (int)time_platform;
+	if (throw_time % 5 == 0)
+	{
+		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 17);
+		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 17);
+		float random_index = (float)Random::GetRandomIntBetweenTwo(1, 100) / 100;
+		float3 position = { random_x + random_index, 17, random_z + random_index };
+		GameManager::instance->particle_pool->GetInstance("rock", position);
+	}
+	
 }
 
 void CiriFightController::TransportPlayer()

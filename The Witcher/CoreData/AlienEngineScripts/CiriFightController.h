@@ -68,6 +68,7 @@ public:
 	void MoveWall();
 	void ScaleWall();
 	void UpdatePlatform();
+	void ThrowEnvironmentRocks();
 	void TransportPlayer();
 
 };
