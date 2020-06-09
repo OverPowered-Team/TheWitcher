@@ -19,8 +19,17 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	if(GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
-		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
+	if (GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+	{
+		std::string type;
+		AttackEffect* at = dynamic_cast<AttackEffect*>(effects.back());
+		if (at)
+		{
+			type = at->element;
+		}
+
+		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack, type);
+	}
 }
 
 // AttackRelic

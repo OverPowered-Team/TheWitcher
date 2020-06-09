@@ -50,13 +50,14 @@ void Relic_Notification::Update()
 	}
 }
 
-void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo)
+void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo, const std::string& element)
 {
 	Notification* new_relic = new Notification();
 	new_relic->type = player->player_data.type;
 	new_relic->attack = attack_combo;
 	new_relic->relic_name = relic_name.c_str();
 	new_relic->description = description.c_str();
+	new_relic->attack_type = element;
 	notifications.push(new_relic);
 }
 
@@ -75,9 +76,51 @@ void Relic_Notification::ShowRelic(Notification* notification)
 		yennefer_portrait->SetEnable(true);
 	}
 
+	//effect->element = "Fire";
+	//break;
+	//case Relic_Effect::ICE:
+	//	effect->OnHit = &ApplyEffectOnHit;
+	//	effect->element = "Ice";
+	//	break;
+	//case Relic_Effect::EARTH:
+	//	effect->OnHit = &ApplyEffectOnHit;
+	//	effect->AddMultiplicativeModifier(valor, "Attack_Damage");
+	//	effect->element = "Earth";
+	//	break;
+	//case Relic_Effect::LIGHTNING:
+	//	effect->OnHit = &ApplyEffectOnHit;
+	//	effect->element = "Lightning";
+	//	break;
+	//case Relic_Effect::POISON:
+	//	effect->OnHit = &ApplyEffectOnHit;
+	//	effect->element = "Poison";
+
 	relic_title->SetText(notification->relic_name);
 	description->SetText(notification->description);
-	
+	if (notification->attack_type.size() != 0)
+	{
+		if (strcmp(notification->attack_type.c_str(), "Fire") == 0)
+		{
+
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Ice") == 0)
+		{
+
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Earth") == 0)
+		{
+
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Lightning") == 0)
+		{
+
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Poison") == 0)
+		{
+
+		}
+	}
+
 	if (!notification->attack.empty())
 	{
 		uint i = 0;
