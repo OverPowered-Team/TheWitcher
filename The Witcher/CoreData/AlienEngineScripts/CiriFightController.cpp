@@ -54,7 +54,7 @@ void CiriFightController::Update()
 	if ((game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition()) < 5 || game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition()) < 5) && !fight_started) {
 		fight_started = true;
 		phase_change = true;
-		GameManager::instance->particle_pool->GetInstance("ciri_torbellino", transform->GetGlobalPosition());
+		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
 	}
 	if (fight_started) {
 		switch (phase)
@@ -84,7 +84,7 @@ void CiriFightController::UpdatePhaseZero()
 {
 	if (phase_0_timer <= phase_0_time) {
 		phase_0_timer += Time::GetDT();
-		this->GetComponent<ComponentCharacterController>()->Move(float3(0, 0.05f, 0));
+		this->GetComponent<ComponentCharacterController>()->Move(float3(0, 0.02f, 0));
 	}
 	else {
 		FinishPhaseZero();
@@ -134,6 +134,7 @@ void CiriFightController::UpdatePhaseThree()
 void CiriFightController::FinishPhaseThree()
 {
 	phase = 4;
+	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -153,7 +154,7 @@ void CiriFightController::UpdatePhaseFour()
 {
 	if (phase_4_timer <= phase_4_time) {
 		phase_4_timer += Time::GetDT();
-		this->GetComponent<ComponentCharacterController>()->Move(float3(0, -0.05f, 0));
+		this->GetComponent<ComponentCharacterController>()->Move(float3(0, -0.02f, 0));
 	}
 	else {
 		if (!died) {
