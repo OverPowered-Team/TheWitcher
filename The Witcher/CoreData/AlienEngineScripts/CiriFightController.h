@@ -44,6 +44,9 @@ public:
 	float3 position_respawn = { 0, 0, 0 };
 	bool first_wall_door = true;
 
+	// Rocks
+	bool rock_throwed = false;
+
 public:
 
 	CiriFightController();

@@ -303,14 +303,34 @@ void CiriFightController::UpdatePlatform()
 void CiriFightController::ThrowEnvironmentRocks()
 {
 	int throw_time = (int)time_platform;
-	if (throw_time % 5 == 0)
+	if (throw_time % 10 == 0 && !rock_throwed)
 	{
-		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 17);
-		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 17);
+		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
+		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 15);
 		float random_index = (float)Random::GetRandomIntBetweenTwo(1, 100) / 100;
+		int random_negative = Random::GetRandomIntBetweenTwo(1, 4);
 		float3 position = { random_x + random_index, 17, random_z + random_index };
-		GameManager::instance->particle_pool->GetInstance("rock", position);
+		switch (random_negative)
+		{
+		case 1:
+			break;
+		case 2:
+			position = { -(random_x + random_index), 17, random_z + random_index };
+			break;
+		case 3:
+			position = { random_x + random_index, 17, -(random_z + random_index) };
+			break;
+		case 4:
+			position = { -(random_x + random_index), 17, -(random_z + random_index) };
+			break;
+		default:
+			break;
+		}
+		GameObject::Instantiate(game_object->GetComponent<CiriOriginal>()->rock, position);
+		rock_throwed = true;
 	}
+	else if (throw_time % 10 != 0 && rock_throwed)
+		rock_throwed = false;
 	
 }
 
