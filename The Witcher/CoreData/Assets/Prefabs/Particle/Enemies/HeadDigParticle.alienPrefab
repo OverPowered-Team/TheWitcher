@@ -1,33 +1,34 @@
 {
+    "Name": "HeadDigParticle",
     "Prefab": {
         "GameObjects": [
             {
-                "Name": "DigParticle",
+                "Name": "HeadDigParticle",
                 "FamilyNumber": 1,
-                "ID": "12892040098408972059",
+                "ID": "13223973579833620092",
                 "ParentID": "15093234233693103333",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "14998872477236240395",
+                "PrefabID": "9084818145108121484",
                 "Components": [
                     {
                         "Type": 0,
                         "Position": [
                             0,
-                            0.39667153358459473,
+                            1.4163565635681152,
                             0
                         ],
                         "Rotation": [
-                            -0.7071068286895752,
                             0,
                             0,
-                            0.70710670948028564
+                            0,
+                            1
                         ],
                         "Scale": [
                             1,
@@ -35,16 +36,16 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10388896834970372730"
+                        "ID": "6341102814217611404"
                     },
                     {
                         "Type": 15,
-                        "ID": "10917798001474027445",
+                        "ID": "3431869986023718586",
                         "Billboard": 4,
                         "Start": {
                             "Position": [
                                 0,
-                                0.39667153358459473,
+                                1.4163565635681152,
                                 0
                             ],
                             "Rotation": [
@@ -55,16 +56,16 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.71900725364685059,
-                                1.8540530204772949,
-                                -0.2133449912071228
+                                0.83828240633010864,
+                                -0.40493756532669067,
+                                0.36511418223381042
                             ],
                             "Force": [
                                 0,
-                                -4,
+                                -10,
                                 0
                             ],
-                            "Speed": 2,
+                            "Speed": 1,
                             "Color": [
                                 0.16825395822525024,
                                 0.1191755011677742,
@@ -72,11 +73,11 @@
                                 1
                             ],
                             "SizeStart3D": false,
-                            "Size": 0.25,
+                            "Size": 0.10000000149011612,
                             "Size3D": [
-                                0.25,
-                                0.25,
-                                0.25
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
                             ],
                             "LightColor": [
                                 0,
@@ -84,7 +85,7 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 5,
+                            "MaxLifeTime": 1,
                             "AxisRotationStart": false,
                             "Angle3D": [
                                 0,
@@ -108,23 +109,23 @@
                                 0
                             ],
                             "ChangeOverLifeTime": true,
-                            "RotateOverLifeTime": true
+                            "RotateOverLifeTime": false
                         },
                         "End": {
                             "StartTime": 0,
                             "FinalTime": 1,
-                            "Speed": 3,
+                            "Speed": 1,
                             "Color": [
-                                0.38095235824584961,
-                                0.28704690933227539,
-                                0.090702936053276062,
+                                0.5433962345123291,
+                                0.42265346646308899,
+                                0.1701958179473877,
                                 1
                             ],
-                            "Size": 0.25,
+                            "Size": 0.10000000149011612,
                             "Size3D": [
-                                0.25,
-                                0.25,
-                                0.25
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
                             ],
                             "LightColor": [
                                 0,
@@ -134,40 +135,40 @@
                             ],
                             "Force": [
                                 0,
-                                -8,
+                                -10,
                                 0
                             ],
                             "AxisRotation": false,
                             "AngularVelocity": [
                                 0,
                                 0,
-                                70.699996948242188
+                                0
                             ],
                             "AngularAcceleration": [
                                 0,
                                 0,
-                                27.299999237060547
+                                0
                             ]
                         },
                         "Emmitter": {
-                            "Shape": 3,
+                            "Shape": 0,
                             "Zone": 0,
                             "Distance": 0.80000001192092896,
-                            "Radius": 0.40000000596046448,
-                            "OutRadius": 0.40000000596046448,
+                            "Radius": 0.10000000149011612,
+                            "OutRadius": 0.20000000298023224,
                             "CubeSize": [
-                                0.5,
-                                0.5,
-                                0.10000000149011612
+                                0.25,
+                                0.25,
+                                0.05000000074505806
                             ],
                             "MaxLife": 3,
-                            "CurrentLife": 3.0159988403320313,
-                            "SpawnRate": 29.999998092651367,
+                            "CurrentLife": 1.82599937915802,
+                            "SpawnRate": 40,
                             "Delay": 0,
-                            "Loop": false,
+                            "Loop": true,
                             "Position": [
                                 0,
-                                0.39667153358459473,
+                                1.4163565635681152,
                                 0
                             ],
                             "RelativePosition": [
@@ -176,9 +177,9 @@
                                 0
                             ],
                             "Rotation": [
-                                -90.000007629394531,
+                                -0,
                                 0,
-                                0
+                                -0
                             ],
                             "RelativeRotation": [
                                 -0,
@@ -192,13 +193,7 @@
                             ]
                         },
                         "Bursts": {
-                            "Size": 2
-                        },
-                        "Burst": {
-                            "TimeBurst-0": 0.30000001192092896,
-                            "PartsInstanciate-0": 3,
-                            "TimeBurst-1": 0.60000002384185791,
-                            "PartsInstanciate-1": 3
+                            "Size": 0
                         },
                         "Blending": {
                             "Source": 6,
@@ -236,6 +231,5 @@
                 ]
             }
         ]
-    },
-    "Name": "DigParticle"
+    }
 }
