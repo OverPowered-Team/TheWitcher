@@ -13,10 +13,10 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-
+#include "../../ComponentTrail.h"
 #include "Bonfire.h"
 #include "Scores_Data.h"
-
+#include "UI_DamageCount.h"
 #include "InGame_UI.h"
 #include "DashCollider.h"
 
@@ -40,7 +40,7 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-
+	
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
@@ -64,6 +64,11 @@ void PlayerController::Start()
 
 	// Dash
 	dashData.current_acel_multi = dashData.accel_multi; 
+	dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	if (dashData.dash_trail != nullptr) //todo no ser tant guarro
+	{
+		dashData.dash_trail->Stop();
+	}
 }
 
 void PlayerController::Update()
@@ -106,6 +111,12 @@ void PlayerController::Update()
 	CheckEnemyCircle();
 
 	CheckGround();
+
+	if (layer_changed && collision_timer < Time::GetTimeSinceStart())
+	{
+		controller->SetCollisionLayer("Player");
+		layer_changed = false;
+	}
 }
 
 void PlayerController::CheckGround()
@@ -158,6 +169,13 @@ void PlayerController::ToggleDashMultiplier()
 		}
 	}
 		
+}
+
+void PlayerController::ChangeCollisionLayer(std::string layer, float time)
+{
+	controller->SetCollisionLayer(layer);
+	collision_timer = Time::GetTimeSinceStart() + time;
+	layer_changed = true;
 }
 
 void PlayerController::UpdateInput()
@@ -660,7 +678,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
 							|| cam->state == CameraMovement::CameraState::AXIS
-							|| p->state->type == StateType::JUMPING)
+							|| p->state->type == StateType::JUMPING
+							|| cam->state == CameraMovement::CameraState::CINEMATIC)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -744,6 +763,12 @@ void PlayerController::PauseParticle()
 			if (p_system)
 				p_system->Pause();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+			
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Pause();
+			
+
 			return;
 		}
 	}
@@ -762,6 +787,11 @@ void PlayerController::ResumeParticle()
 			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
 			if (p_system)
 				p_system->Play();
+
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Play();
 
 			return;
 		}
@@ -1034,6 +1064,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				knock_speed.y = 0;
 
 				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, enemy->is_mini);
+				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
+				
 				return;
 			}
 		}

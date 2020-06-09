@@ -68,6 +68,36 @@ void Tutorial_HUD::ShowTriggerDash(bool show)
 	}
 }
 
+void Tutorial_HUD::ShowTriggerMagic(bool show)
+{
+	if (show && (current_state_magic == Current_Showing::ANY || current_state_magic == Current_Showing::FADING_OUT))
+	{
+		if (current_state_magic == Current_Showing::FADING_OUT)
+		{
+			magic_time = magic_time - (Time::GetTimeSinceStart() - magic_time);
+		}
+		else
+		{
+			magic_time = Time::GetTimeSinceStart();
+		}
+
+		current_state_magic = Current_Showing::FADING_IN;
+	}
+	else if (!show && (current_state_magic == Current_Showing::FADING_IN || current_state_magic == Current_Showing::SHOWING))
+	{
+		if (current_state_magic == Current_Showing::FADING_IN)
+		{
+			magic_time = magic_time - (Time::GetTimeSinceStart() - magic_time);
+		}
+		else
+		{
+			magic_time = Time::GetTimeSinceStart();
+		}
+
+		current_state_magic = Current_Showing::FADING_OUT;
+	}
+}
+
 void Tutorial_HUD::Start()
 {
 	// Attack
@@ -83,9 +113,153 @@ void Tutorial_HUD::Start()
 	text_dash = game_object->GetChild("Dash")->GetChild("Text")->GetComponent<ComponentText>();
 	RB->SetBackgroundColor(1, 1, 1, 0);
 	text_dash->SetAlpha(0);
+
+	// Magic
+	magic_images.push_back(game_object->GetChild("Magic")->GetChild("X")->GetComponent<ComponentImage>());
+	magic_images.push_back(game_object->GetChild("Magic")->GetChild("Y")->GetComponent<ComponentImage>());
+	magic_images.push_back(game_object->GetChild("Magic")->GetChild("A")->GetComponent<ComponentImage>());
+	magic_images.push_back(game_object->GetChild("Magic")->GetChild("B")->GetComponent<ComponentImage>());
+	magic_images.push_back(game_object->GetChild("Magic")->GetChild("LT")->GetComponent<ComponentImage>());
+	text_magic = game_object->GetChild("Magic")->GetChild("Text")->GetComponent<ComponentText>();
+	text_magic->SetAlpha(0);
+
+	auto iter = magic_images.begin();
+	for (; iter != magic_images.end(); ++iter)
+	{
+		(*iter)->SetBackgroundColor(1, 1, 1, 0);
+	}
 }
 
 void Tutorial_HUD::Update()
+{
+	HandleTriggerAttack();
+
+	HandleTriggerDash();
+
+	HandleTriggerMagic();
+}
+
+void Tutorial_HUD::HandleTriggerDash()
+{
+	switch (current_state_dash)
+	{
+	case Current_Showing::FADING_IN:
+	{
+		float t = (Time::GetTimeSinceStart() - dash_time) / 0.5f;
+		float lerp = Maths::Lerp(0.0f, 1.0f, t);
+
+		RB->SetBackgroundColor(1, 1, 1, lerp);
+		text_dash->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			RB->SetBackgroundColor(1, 1, 1, 1);
+			text_dash->SetAlpha(1);
+
+			current_state_dash = Current_Showing::SHOWING;
+		}
+
+		break;
+	}
+	case Current_Showing::SHOWING:
+	{
+		break;
+	}
+	case Current_Showing::FADING_OUT:
+	{
+		float t = (Time::GetTimeSinceStart() - dash_time) / 0.5f;
+		float lerp = Maths::Lerp(1.0f, 0.0f, t);
+
+		RB->SetBackgroundColor(1, 1, 1, lerp);
+		text_dash->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			RB->SetBackgroundColor(1, 1, 1, 0);
+			text_dash->SetAlpha(0);
+
+			current_state_dash = Current_Showing::ANY;
+		}
+
+		break;
+	}
+	case Current_Showing::ANY:
+	{
+		break;
+	}
+	}
+}
+
+void Tutorial_HUD::HandleTriggerMagic()
+{
+	switch (current_state_magic)
+	{
+	case Current_Showing::FADING_IN:
+	{
+		float t = (Time::GetTimeSinceStart() - magic_time) / 0.5f;
+		float lerp = Maths::Lerp(0.0f, 1.0f, t);
+
+		auto iter = magic_images.begin();
+		for (; iter != magic_images.end(); ++iter)
+		{
+			(*iter)->SetBackgroundColor(1, 1, 1, lerp);
+		}
+		text_magic->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			auto iter = magic_images.begin();
+			for (; iter != magic_images.end(); ++iter)
+			{
+				(*iter)->SetBackgroundColor(1, 1, 1, 1);
+			}
+			text_magic->SetAlpha(1);
+
+			current_state_magic = Current_Showing::SHOWING;
+		}
+
+		break;
+	}
+	case Current_Showing::SHOWING:
+	{
+		break;
+	}
+	case Current_Showing::FADING_OUT:
+	{
+		float t = (Time::GetTimeSinceStart() - magic_time) / 0.5f;
+		float lerp = Maths::Lerp(1.0f, 0.0f, t);
+
+		auto iter = magic_images.begin();
+		for (; iter != magic_images.end(); ++iter)
+		{
+			(*iter)->SetBackgroundColor(1, 1, 1, lerp);
+		}
+		text_magic->SetAlpha(lerp);
+
+
+		if (t >= 1)
+		{
+			auto iter = magic_images.begin();
+			for (; iter != magic_images.end(); ++iter)
+			{
+				(*iter)->SetBackgroundColor(1, 1, 1, 0);
+			}
+			text_magic->SetAlpha(0);
+
+
+			current_state_magic = Current_Showing::ANY;
+		}
+
+		break;
+	}
+	case Current_Showing::ANY:
+	{
+		break;
+	}
+	}
+}
+
+void Tutorial_HUD::HandleTriggerAttack()
 {
 	switch (current_state_attack)
 	{
@@ -129,54 +303,6 @@ void Tutorial_HUD::Update()
 			text_attack->SetAlpha(0);
 
 			current_state_attack = Current_Showing::ANY;
-		}
-
-		break;
-	}
-	case Current_Showing::ANY:
-	{
-		break;
-	}
-	}
-
-	switch (current_state_dash)
-	{
-	case Current_Showing::FADING_IN:
-	{
-		float t = (Time::GetTimeSinceStart() - dash_time) / 0.5f;
-		float lerp = Maths::Lerp(0.0f, 1.0f, t);
-
-		RB->SetBackgroundColor(1, 1, 1, lerp);
-		text_dash->SetAlpha(lerp);
-
-		if (t >= 1)
-		{
-			RB->SetBackgroundColor(1, 1, 1, 1);
-			text_dash->SetAlpha(1);
-
-			current_state_dash = Current_Showing::SHOWING;
-		}
-
-		break;
-	}
-	case Current_Showing::SHOWING:
-	{
-		break;
-	}
-	case Current_Showing::FADING_OUT:
-	{
-		float t = (Time::GetTimeSinceStart() - dash_time) / 0.5f;
-		float lerp = Maths::Lerp(1.0f, 0.0f, t);
-
-		RB->SetBackgroundColor(1, 1, 1, lerp);
-		text_dash->SetAlpha(lerp);
-
-		if (t >= 1)
-		{
-			RB->SetBackgroundColor(1, 1, 1, 0);
-			text_dash->SetAlpha(0);
-
-			current_state_dash = Current_Showing::ANY;
 		}
 
 		break;

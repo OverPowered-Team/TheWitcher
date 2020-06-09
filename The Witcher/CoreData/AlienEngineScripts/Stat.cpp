@@ -69,6 +69,11 @@ void Stat::CalculateStat()
 void Stat::ModifyCurrentStat(Effect* _effect)
 {
     current_value += _effect->GetAdditiveAmount(name);
+
+    if (current_value < 0)
+        current_value = 0;
+    else if (current_value > max_value)
+        current_value = max_value;
 }
 
 void Stat::SetBaseStat(float _value)

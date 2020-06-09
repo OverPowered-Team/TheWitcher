@@ -13,9 +13,9 @@ public:
 	float scream_cd_timer = 0.0f;
 	bool can_mini_scream = true;
 	float phase_0_timer = 0.0f;
-	float phase_0_time = 2.0f;
+	float phase_0_time = 5.0f;
 	float phase_4_timer = 0.0f;
-	float phase_4_time = 2.0f;
+	float phase_4_time = 5.0f;
 	bool phase_change = false;
 	float clone_dead_damage = 12.50f;
 	bool died = false;
@@ -29,6 +29,7 @@ public:
 	// Platform
 	GameObject* platform = nullptr;
 	GameObject* circle = nullptr;
+	GameObject* tornado = nullptr;
 	ComponentMaterial* material_platform = nullptr;
 	int count_circle = 58;
 	bool changing_platform = false;

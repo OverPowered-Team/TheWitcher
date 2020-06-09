@@ -51,7 +51,7 @@ void CutsceneCamera::PrepareCutscene()
 		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = false;
 	}
 	else {
-		state = CutsceneState::MOVING;
+		state = CutsceneState::MOVING;//Yes I know, this is hardcoded but lets be honest, we will not do the 1 player mode
 		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = true;
 		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = true;
 	}
@@ -67,12 +67,15 @@ void CutsceneCamera::ExecuteCutscene()
 		{
 			shots_counter++;
 			PrepareCutscene();
+			LOG("COUNTING %i", shots_counter);
+			return;
 		}
-		if (Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_time >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
+		if (shots[shots_counter]->element.it_shake && Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_time >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
 		{
 			cam_shaking->Shake(shots[shots_counter]->element.info_shake.strength, shots[shots_counter]->element.info_shake.traumaDecay, shots[shots_counter]->element.info_shake.off_set, shots[shots_counter]->element.info_shake.maxyaw, shots[shots_counter]->element.info_shake.maxpitch, shots[shots_counter]->element.info_shake.maxroll);
 			shots[shots_counter]->element.info_shake.has_shaked = true;
-		}
+			LOG("IM SHAKING");
+		}		
 		break;
 	}
 	case CutsceneState::MOVING:
@@ -84,8 +87,10 @@ void CutsceneCamera::ExecuteCutscene()
 			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
 			current_move_time = 0.f;
 			shots[shots_counter]->element.stay_timer = Time::GetGameTime();
-			shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
+			if(shots[shots_counter]->element.it_shake)
+				shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
 			state = CutsceneState::IDLE;
+			LOG("IM VIBING");
 		}
 		else
 		{
