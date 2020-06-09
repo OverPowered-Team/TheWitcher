@@ -105,11 +105,11 @@ void Scale_Win::SpawnHeads(const std::vector<int>& kills, const std::vector<floa
 			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
 			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
 
-			Invoke([this, spawn_points, random_spawn, i, spawner]() -> void
+			Invoke([this, spawn_points, random_spawn, i, spawner, kills]() -> void
 				{
 					spawner->Spawn(TO_SPAWN::HEAD, float3(spawner->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
 						spawner->transform->GetGlobalPosition().y,
-						spawner->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y), i);
+						spawner->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y), kills[i]);
 				}
 				,
 					random_time * i);
@@ -277,7 +277,7 @@ std::vector<int> Scale_Win::ConvertKillsMapToVector(const std::map<uint, uint>& 
 	auto iter = kills_map.begin();
 	for (; iter != kills_map.end(); ++iter)
 	{
-		if ((*iter).first != 4 && (*iter).first != 5)
+		if ((*iter).first != 4)
 		{
 			for (int i = 0; i < (*iter).second; ++i)
 			{
