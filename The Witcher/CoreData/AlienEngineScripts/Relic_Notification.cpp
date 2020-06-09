@@ -101,9 +101,10 @@ void Relic_Notification::ShowRelic(Notification* notification)
 			}
 			++s;
 
-			if (s == notification->attack.size())
+			if (s >= notification->attack.size())
 			{
 				GameObject* parent = nullptr;
+
 				if (H_combo_images[i]->IsEnabled())
 				{
 					parent = H_combo_images[i];
