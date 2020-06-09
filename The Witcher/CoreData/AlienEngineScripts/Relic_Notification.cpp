@@ -21,8 +21,9 @@ void Relic_Notification::Start()
 		relic_title = relic_notification->GetChild("Relic_Name")->GetComponent<ComponentText>();
 		description = relic_notification->GetChild("Relic_Description")->GetComponent<ComponentText>();
 		combo = relic_notification->GetChild("Combo_Container");
+		RB = combo->GetChild("RB");
+		RB->SetEnable(false);
 	}
-	
 
 	L_combo_images.resize(5);
 	H_combo_images.resize(5);
@@ -77,42 +78,51 @@ void Relic_Notification::ShowRelic(Notification* notification)
 	relic_title->SetText(notification->relic_name);
 	description->SetText(notification->description);
 	
-	uint i = 0;
-	uint s = 0;
-	for (notification->attack.size() > 3 ? i = 0 : i = 1; s < notification->attack.size(); ++i)
+	if (!notification->attack.empty())
 	{
-		if (notification->attack[s] == 'L')
+		uint i = 0;
+		uint s = 0;
+		for (notification->attack.size() > 3 ? i = 0 : i = 1; s < notification->attack.size(); ++i)
 		{
-			L_combo_images[i]->SetEnable(true);
-			H_combo_images[i]->SetEnable(false);
-		}
-		else if (notification->attack[s] == 'H')
-		{
-			L_combo_images[i]->SetEnable(false);
-			H_combo_images[i]->SetEnable(true);
-		}
-		else if (notification->attack[s] == ' ')
-		{
-			L_combo_images[i]->SetEnable(false);
-			H_combo_images[i]->SetEnable(false); 
-		}
-		++s;
-
-		if (s == notification->attack.size())
-		{
-			GameObject* parent = nullptr;
-			if (H_combo_images[i]->IsEnabled())
+			if (notification->attack[s] == 'L')
 			{
-				parent = H_combo_images[i];
+				L_combo_images[i]->SetEnable(true);
+				H_combo_images[i]->SetEnable(false);
 			}
-			else
+			else if (notification->attack[s] == 'H')
 			{
-				parent = L_combo_images[i];
+				L_combo_images[i]->SetEnable(false);
+				H_combo_images[i]->SetEnable(true);
 			}
+			else if (notification->attack[s] == ' ')
+			{
+				L_combo_images[i]->SetEnable(false);
+				H_combo_images[i]->SetEnable(false);
+			}
+			++s;
 
-			marker = GameObject::Instantiate(combo_marker, float3(0, parent->transform->GetLocalPosition().y - 0.125f, 0), false, parent);
+			if (s >= notification->attack.size())
+			{
+				GameObject* parent = nullptr;
+
+				if (H_combo_images[i]->IsEnabled())
+				{
+					parent = H_combo_images[i];
+				}
+				else
+				{
+					parent = L_combo_images[i];
+				}
+
+				marker = GameObject::Instantiate(combo_marker, float3(0, parent->transform->GetLocalPosition().y - 0.125f, 0), false, parent);
+			}
 		}
 	}
+	else
+	{
+		RB->SetEnable(true);
+	}
+
 	active = notification;
 	notifications.pop();
 	time = Time::GetTimeSinceStart();
@@ -125,6 +135,11 @@ void Relic_Notification::StopRelic()
 	{
 		L_combo_images[i]->SetEnable(false);
 		H_combo_images[i]->SetEnable(false);
+	}
+
+	if (RB->IsEnabled())
+	{
+		RB->SetEnable(false);
 	}
 
 	if (marker)
