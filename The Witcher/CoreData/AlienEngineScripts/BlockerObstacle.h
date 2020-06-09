@@ -37,14 +37,14 @@ public:
 	//float health = 0.f;
 	//float minimum_health = 0.f;
 	ObstacleState state = ObstacleState::NONE;
-	/*ComponentMaterial* material_3rd = nullptr;
+	ComponentMaterial* material_3rd = nullptr;
 	ComponentMaterial* material_2nd = nullptr;
 	ComponentMaterial* material_1st = nullptr;
-	ResourceMaterial* resource_mat_org = nullptr;
+	float burnSpeed = 0.5f;
+	/*ResourceMaterial* resource_mat_org = nullptr;
 	ResourceMaterial* resource_mat_3rd = nullptr;
 	ResourceMaterial* resource_mat_2nd = nullptr;
 	ResourceMaterial* resource_mat_1st = nullptr;*/
-	float burnSpeed = 0.5f;
 
 private:
 	std::vector<Enemy*>children_enemies;

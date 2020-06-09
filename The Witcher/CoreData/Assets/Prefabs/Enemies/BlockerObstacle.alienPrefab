@@ -4,7 +4,7 @@
             {
                 "Name": "BlockerObstacle",
                 "FamilyNumber": 1,
-                "ID": "26305778866563709",
+                "ID": "11274047023031222184",
                 "ParentID": "15093234233693103333",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -19,9 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            8.4061861038208008,
+                            37.817615509033203,
                             7.0332574844360352,
-                            13.149506568908691
+                            20.969354629516602
                         ],
                         "Rotation": [
                             0,
@@ -35,10 +35,10 @@
                             1.7875096797943115
                         ],
                         "ScaleNegative": false,
-                        "ID": "4280330489504825755"
+                        "ID": "15434895860906617552"
                     },
                     {
-                        "ID": "4092491781796105836",
+                        "ID": "8277844715346318991",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -64,7 +64,7 @@
                         "Bouncing": 0.5,
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
-                        "CollisionLayer": "Enemy",
+                        "CollisionLayer": "Default",
                         "Size": [
                             8.3999996185302734,
                             8,
@@ -86,7 +86,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "10056987507403174663",
+                        "ID": "9747031360543561455",
                         "ResourceID": "4581215173429975826",
                         "DataName": "BlockerObstacle",
                         "HasInspector": true,
@@ -95,6 +95,11 @@
                                 "VarType": 14,
                                 "Name": "state",
                                 "enumInt": -1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "burnSpeed",
+                                "float": 0.25
                             }
                         ]
                     }
@@ -103,8 +108,8 @@
             {
                 "Name": "EnemyAttack",
                 "FamilyNumber": 2,
-                "ID": "3992823438692751351",
-                "ParentID": "26305778866563709",
+                "ID": "14321001459384934267",
+                "ParentID": "11274047023031222184",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -134,7 +139,7 @@
                             1.0193040370941162
                         ],
                         "ScaleNegative": false,
-                        "ID": "2912732961362850080"
+                        "ID": "17047605547508491581"
                     },
                     {
                         "Enabled": true,
@@ -165,8 +170,8 @@
             {
                 "Name": "ChildEnemies",
                 "FamilyNumber": 2,
-                "ID": "7365693425423397309",
-                "ParentID": "26305778866563709",
+                "ID": "16597527942479999271",
+                "ParentID": "11274047023031222184",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -196,15 +201,15 @@
                             0.55943751335144043
                         ],
                         "ScaleNegative": false,
-                        "ID": "12385617820994440798"
+                        "ID": "8345591746959316330"
                     }
                 ]
             },
             {
                 "Name": "Particle_Positions",
                 "FamilyNumber": 2,
-                "ID": "733107809399321659",
-                "ParentID": "26305778866563709",
+                "ID": "3859679507599844753",
+                "ParentID": "11274047023031222184",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -234,15 +239,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1049363408511883589"
+                        "ID": "15930546200767752787"
                     }
                 ]
             },
             {
                 "Name": "Feet_Position",
                 "FamilyNumber": 3,
-                "ID": "13983644592884234536",
-                "ParentID": "733107809399321659",
+                "ID": "9377242418687583718",
+                "ParentID": "3859679507599844753",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -272,15 +277,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14733277870339163913"
+                        "ID": "12209375149013727303"
                     }
                 ]
             },
             {
                 "Name": "Attack_Position",
                 "FamilyNumber": 3,
-                "ID": "4377663358938793592",
-                "ParentID": "733107809399321659",
+                "ID": "3104493907576975496",
+                "ParentID": "3859679507599844753",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -310,15 +315,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17293955944664938919"
+                        "ID": "267379307837644761"
                     }
                 ]
             },
             {
                 "Name": "Head_Position",
                 "FamilyNumber": 3,
-                "ID": "3599031279751942544",
-                "ParentID": "733107809399321659",
+                "ID": "7114261141440538307",
+                "ParentID": "3859679507599844753",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -348,15 +353,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11725779512727004897"
+                        "ID": "13343485036810017300"
                     }
                 ]
             },
             {
                 "Name": "Body_Position",
                 "FamilyNumber": 3,
-                "ID": "3342163872841671565",
-                "ParentID": "733107809399321659",
+                "ID": "12400387650586826251",
+                "ParentID": "3859679507599844753",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -386,15 +391,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15190649133848079274"
+                        "ID": "351670476675568756"
                     }
                 ]
             },
             {
                 "Name": "Roots",
                 "FamilyNumber": 2,
-                "ID": "12041503603460751562",
-                "ParentID": "26305778866563709",
+                "ID": "13306899200457117171",
+                "ParentID": "11274047023031222184",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -424,15 +429,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "14120361049609457776"
+                        "ID": "885909754239749004"
                     }
                 ]
             },
             {
                 "Name": "1st",
                 "FamilyNumber": 3,
-                "ID": "1822210168268487614",
-                "ParentID": "12041503603460751562",
+                "ID": "13647543253746373138",
+                "ParentID": "13306899200457117171",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -462,15 +467,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1165886118941478701"
+                        "ID": "9097988804594869172"
                     }
                 ]
             },
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "8719111478748918938",
-                "ParentID": "1822210168268487614",
+                "ID": "8167037231498152295",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -500,7 +505,7 @@
                             1.4135998487472534
                         ],
                         "ScaleNegative": false,
-                        "ID": "833608363142763781"
+                        "ID": "621323593049476967"
                     },
                     {
                         "Type": 1,
@@ -510,7 +515,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10343334834297187987",
+                        "ID": "16132631642511530572",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -518,7 +523,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "5684976147497585710",
+                        "ID": "6754965900677270675",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -528,8 +533,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "5228471246249399078",
-                "ParentID": "1822210168268487614",
+                "ID": "14751631551164622143",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -559,7 +564,7 @@
                             1.2100000381469727
                         ],
                         "ScaleNegative": false,
-                        "ID": "13165527266268230473"
+                        "ID": "1009908884553767223"
                     },
                     {
                         "Type": 1,
@@ -569,7 +574,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "13958248206752746300",
+                        "ID": "17663310289562987182",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -577,7 +582,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "9793819725834848621",
+                        "ID": "9464498679408459839",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -587,8 +592,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "13289003365790438812",
-                "ParentID": "1822210168268487614",
+                "ID": "12149144869421967145",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -618,7 +623,7 @@
                             1.429999828338623
                         ],
                         "ScaleNegative": false,
-                        "ID": "8696197351001900651"
+                        "ID": "10742196963028140419"
                     },
                     {
                         "Type": 1,
@@ -628,7 +633,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "16954692526904512351",
+                        "ID": "15791279182905919789",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9909576028802894709",
@@ -636,7 +641,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "7861157707847626482",
+                        "ID": "14056800554947324854",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -646,8 +651,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "10481603716378792332",
-                "ParentID": "1822210168268487614",
+                "ID": "3722114994256512675",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -677,7 +682,7 @@
                             1.3300001621246338
                         ],
                         "ScaleNegative": false,
-                        "ID": "15688021566411306700"
+                        "ID": "5198243873846178713"
                     },
                     {
                         "Type": 1,
@@ -687,7 +692,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "1549683632861433414",
+                        "ID": "6760826478096057657",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9909576028802894709",
@@ -695,7 +700,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "7485759752906087792",
+                        "ID": "17501062726698142003",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -705,8 +710,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "13603342412475228105",
-                "ParentID": "1822210168268487614",
+                "ID": "10525155747082339433",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -736,7 +741,7 @@
                             1.4799998998641968
                         ],
                         "ScaleNegative": false,
-                        "ID": "17301007359144084994"
+                        "ID": "17648681036401849539"
                     },
                     {
                         "Type": 1,
@@ -746,7 +751,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11432299303997741092",
+                        "ID": "7896955542492253609",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9909576028802894709",
@@ -754,7 +759,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "9799460775358811319",
+                        "ID": "12876934250028619202",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -764,8 +769,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "5144189168243345270",
-                "ParentID": "1822210168268487614",
+                "ID": "1213876858692273825",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -795,7 +800,7 @@
                             1.2999997138977051
                         ],
                         "ScaleNegative": false,
-                        "ID": "10990436187104822288"
+                        "ID": "4520960916207005684"
                     },
                     {
                         "Type": 1,
@@ -805,7 +810,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11853367058430816631",
+                        "ID": "2581168454656721497",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -813,7 +818,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6896972217984819807",
+                        "ID": "1190261581803884109",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -823,8 +828,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "2776115920899257001",
-                "ParentID": "1822210168268487614",
+                "ID": "5222633513379578719",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -854,7 +859,7 @@
                             1.5585806369781494
                         ],
                         "ScaleNegative": false,
-                        "ID": "8490248463199157522"
+                        "ID": "2065204399560089799"
                     },
                     {
                         "Type": 1,
@@ -864,7 +869,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "6235718844831266196",
+                        "ID": "4626335276769390800",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -872,7 +877,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "11356934861288173321",
+                        "ID": "7790666125279084990",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -882,8 +887,8 @@
             {
                 "Name": "Root ",
                 "FamilyNumber": 4,
-                "ID": "6021320231981831598",
-                "ParentID": "1822210168268487614",
+                "ID": "371694655760907187",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -913,7 +918,7 @@
                             1.1499999761581421
                         ],
                         "ScaleNegative": false,
-                        "ID": "4231982844667336513"
+                        "ID": "17778478247303109816"
                     },
                     {
                         "Type": 1,
@@ -923,7 +928,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "9483343570035365136",
+                        "ID": "5801206359138332469",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -931,7 +936,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "3459613294487009058",
+                        "ID": "4197833062656858057",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -941,8 +946,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "3157231857371496516",
-                "ParentID": "1822210168268487614",
+                "ID": "7829735987890342382",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -972,7 +977,7 @@
                             0.99999994039535522
                         ],
                         "ScaleNegative": false,
-                        "ID": "9479164637817380485"
+                        "ID": "10045676768594483976"
                     },
                     {
                         "Type": 1,
@@ -982,7 +987,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2621486145239690716",
+                        "ID": "541937684350904089",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9909576028802894709",
@@ -990,7 +995,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "13525908798594927261",
+                        "ID": "16207858711964272384",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -1000,8 +1005,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "18129161177386841153",
-                "ParentID": "1822210168268487614",
+                "ID": "5948647893144970348",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1031,7 +1036,7 @@
                             1.2734529972076416
                         ],
                         "ScaleNegative": false,
-                        "ID": "10470431833601328037"
+                        "ID": "24664032886100658"
                     },
                     {
                         "Type": 1,
@@ -1041,7 +1046,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2869834396613830530",
+                        "ID": "6441972242279978421",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -1049,7 +1054,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "3384555447100824023",
+                        "ID": "16191930554594194071",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -1059,8 +1064,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "8734393417760581791",
-                "ParentID": "1822210168268487614",
+                "ID": "2741276699107584712",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1090,7 +1095,7 @@
                             1.3300001621246338
                         ],
                         "ScaleNegative": false,
-                        "ID": "16449457586044925238"
+                        "ID": "3715686007293415985"
                     },
                     {
                         "Type": 1,
@@ -1100,7 +1105,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "9311667178730435227",
+                        "ID": "6874227288003597367",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9909576028802894709",
@@ -1108,7 +1113,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14593237633510659866",
+                        "ID": "4988172489222786061",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -1118,8 +1123,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "12594007288321293532",
-                "ParentID": "1822210168268487614",
+                "ID": "3069942632830484471",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1149,7 +1154,7 @@
                             0.9663199782371521
                         ],
                         "ScaleNegative": false,
-                        "ID": "16946294111093634061"
+                        "ID": "7738146077429548355"
                     },
                     {
                         "Type": 1,
@@ -1159,7 +1164,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "1607749478346504462",
+                        "ID": "6176386957145878659",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1167,7 +1172,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "17009069066566187532",
+                        "ID": "522919550636238285",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -1177,8 +1182,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "16631312364254133505",
-                "ParentID": "1822210168268487614",
+                "ID": "9725707442053424552",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1208,7 +1213,7 @@
                             1.5408782958984375
                         ],
                         "ScaleNegative": false,
-                        "ID": "8878434630042170338"
+                        "ID": "12907816444953322231"
                     },
                     {
                         "Type": 1,
@@ -1218,7 +1223,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10759142122977152944",
+                        "ID": "18342377349678608145",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -1226,7 +1231,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "4603312939605265208",
+                        "ID": "9598115686791975608",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -1236,8 +1241,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "9752534764289074746",
-                "ParentID": "1822210168268487614",
+                "ID": "3455477198226537000",
+                "ParentID": "13647543253746373138",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1267,7 +1272,7 @@
                             0.98654401302337646
                         ],
                         "ScaleNegative": false,
-                        "ID": "9882259365573072210"
+                        "ID": "12267861748253618534"
                     },
                     {
                         "Type": 1,
@@ -1277,7 +1282,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "987253971112500079",
+                        "ID": "1820458387290603832",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -1285,7 +1290,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "17503227052470711543",
+                        "ID": "17498246009410680595",
                         "HasMaterial": true,
                         "MaterialID": "304071475055539668",
                         "Enabled": true
@@ -1295,8 +1300,8 @@
             {
                 "Name": "2nd",
                 "FamilyNumber": 3,
-                "ID": "15820967151276415116",
-                "ParentID": "12041503603460751562",
+                "ID": "121236097458930999",
+                "ParentID": "13306899200457117171",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1326,15 +1331,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "1238424208431875579"
+                        "ID": "906148248760927847"
                     }
                 ]
             },
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "8282489993385211653",
-                "ParentID": "15820967151276415116",
+                "ID": "15559982724511960850",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1364,7 +1369,7 @@
                             0.49000000953674316
                         ],
                         "ScaleNegative": false,
-                        "ID": "16904697489532834723"
+                        "ID": "18188658545592768000"
                     },
                     {
                         "Type": 1,
@@ -1374,7 +1379,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "7797827970025667459",
+                        "ID": "8833676813487776822",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -1382,9 +1387,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15617791626807142531",
+                        "ID": "13741974128152389647",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1392,8 +1397,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "1039496663549498769",
-                "ParentID": "15820967151276415116",
+                "ID": "6148071572024281754",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1423,7 +1428,7 @@
                             0.86802715063095093
                         ],
                         "ScaleNegative": false,
-                        "ID": "5440180139063266683"
+                        "ID": "5781498296518978513"
                     },
                     {
                         "Type": 1,
@@ -1433,7 +1438,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11901508404196753675",
+                        "ID": "1215956761387615234",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -1441,9 +1446,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14339553842679280504",
+                        "ID": "14938809714893980822",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1451,8 +1456,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "1800760150311405414",
-                "ParentID": "15820967151276415116",
+                "ID": "15735456422512573107",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1482,7 +1487,7 @@
                             0.68000006675720215
                         ],
                         "ScaleNegative": false,
-                        "ID": "14777654653651307374"
+                        "ID": "6138427037186284526"
                     },
                     {
                         "Type": 1,
@@ -1492,7 +1497,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "4244327043259759650",
+                        "ID": "12590205466073338120",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1500,9 +1505,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "16387407883546058309",
+                        "ID": "9144272256935475901",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1510,8 +1515,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "1439814507778154397",
-                "ParentID": "15820967151276415116",
+                "ID": "8695510149231012317",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1541,7 +1546,7 @@
                             0.67000001668930054
                         ],
                         "ScaleNegative": false,
-                        "ID": "10467075372163510109"
+                        "ID": "879832739252536916"
                     },
                     {
                         "Type": 1,
@@ -1551,7 +1556,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3079530138976183739",
+                        "ID": "16959207313367071781",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1559,9 +1564,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "17271649972008064150",
+                        "ID": "11238888794222665679",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1569,8 +1574,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "11827430004201095275",
-                "ParentID": "15820967151276415116",
+                "ID": "920712925218435082",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1600,7 +1605,7 @@
                             0.77219992876052856
                         ],
                         "ScaleNegative": false,
-                        "ID": "12294461060561241556"
+                        "ID": "1079085702410002"
                     },
                     {
                         "Type": 1,
@@ -1610,7 +1615,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2623638791946463446",
+                        "ID": "16565334152671748807",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1618,9 +1623,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14320042441998161054",
+                        "ID": "273485918055334717",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1628,8 +1633,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "1604144759331832142",
-                "ParentID": "15820967151276415116",
+                "ID": "5463735074193088954",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1659,7 +1664,7 @@
                             0.99925714731216431
                         ],
                         "ScaleNegative": false,
-                        "ID": "13409532332875050377"
+                        "ID": "6221173548991470484"
                     },
                     {
                         "Type": 1,
@@ -1669,7 +1674,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10974154506729572869",
+                        "ID": "1900728500952136851",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1677,9 +1682,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "4734469958171945245",
+                        "ID": "10875615890954752840",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1687,8 +1692,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "6800649827913069269",
-                "ParentID": "15820967151276415116",
+                "ID": "8297575344652440281",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1718,7 +1723,7 @@
                             0.9005240797996521
                         ],
                         "ScaleNegative": false,
-                        "ID": "16399727064952251813"
+                        "ID": "5655311773959287337"
                     },
                     {
                         "Type": 1,
@@ -1728,7 +1733,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3203013656577310328",
+                        "ID": "5824825724494046027",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1736,9 +1741,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "2348637386235785868",
+                        "ID": "7560548945104417720",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1746,8 +1751,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "13016872506853941320",
-                "ParentID": "15820967151276415116",
+                "ID": "9681849288040953849",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1777,7 +1782,7 @@
                             0.66219997406005859
                         ],
                         "ScaleNegative": false,
-                        "ID": "9711551495686776632"
+                        "ID": "6650975168987625667"
                     },
                     {
                         "Type": 1,
@@ -1787,7 +1792,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "16686258149078019604",
+                        "ID": "9800012397185480977",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1795,9 +1800,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "16145302310603908964",
+                        "ID": "9319830268297226469",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1805,8 +1810,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "18214574172656897480",
-                "ParentID": "15820967151276415116",
+                "ID": "10180647802987034217",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1836,7 +1841,7 @@
                             0.56000000238418579
                         ],
                         "ScaleNegative": false,
-                        "ID": "17776105278796782488"
+                        "ID": "10753378445675156413"
                     },
                     {
                         "Type": 1,
@@ -1846,7 +1851,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3881845863388995471",
+                        "ID": "15713827316655283993",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1854,9 +1859,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15070898996490251704",
+                        "ID": "8708798370472386138",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1864,8 +1869,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "12040239922375716570",
-                "ParentID": "15820967151276415116",
+                "ID": "2039299710849554918",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1895,7 +1900,7 @@
                             0.66299992799758911
                         ],
                         "ScaleNegative": false,
-                        "ID": "9062446399758398800"
+                        "ID": "17848606144907570277"
                     },
                     {
                         "Type": 1,
@@ -1905,7 +1910,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "9010481632713597881",
+                        "ID": "16779989573904200337",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1913,9 +1918,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14247955594467051816",
+                        "ID": "16989005943590980989",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1923,8 +1928,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "5075669583621828108",
-                "ParentID": "15820967151276415116",
+                "ID": "16013008199219887551",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -1954,7 +1959,7 @@
                             0.56759989261627197
                         ],
                         "ScaleNegative": false,
-                        "ID": "14640801575934940727"
+                        "ID": "3874871954710535381"
                     },
                     {
                         "Type": 1,
@@ -1964,7 +1969,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "14335218517983727214",
+                        "ID": "15432377788144599566",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -1972,9 +1977,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15793443780571125945",
+                        "ID": "12411202893652279784",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -1982,8 +1987,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "12797725301317761977",
-                "ParentID": "15820967151276415116",
+                "ID": "7453848454967211186",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2013,7 +2018,7 @@
                             0.92299991846084595
                         ],
                         "ScaleNegative": false,
-                        "ID": "15051563058552038922"
+                        "ID": "15582551357404873106"
                     },
                     {
                         "Type": 1,
@@ -2023,7 +2028,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "8103069034662261558",
+                        "ID": "12171633390278702991",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2031,9 +2036,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1433333024141780144",
+                        "ID": "10725200381174560996",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -2041,8 +2046,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "17589940738437137396",
-                "ParentID": "15820967151276415116",
+                "ID": "4009802431758376075",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2072,7 +2077,7 @@
                             0.66299992799758911
                         ],
                         "ScaleNegative": false,
-                        "ID": "5280949737500073384"
+                        "ID": "12465911630095969273"
                     },
                     {
                         "Type": 1,
@@ -2082,7 +2087,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "15109599571934370958",
+                        "ID": "14014495655150126369",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2090,9 +2095,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "7301084708104523341",
+                        "ID": "15337605539123275982",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -2100,8 +2105,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "4596326583358596176",
-                "ParentID": "15820967151276415116",
+                "ID": "18003669142159637023",
+                "ParentID": "121236097458930999",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2131,7 +2136,7 @@
                             0.66916048526763916
                         ],
                         "ScaleNegative": false,
-                        "ID": "4568457674209914523"
+                        "ID": "2463483032616628625"
                     },
                     {
                         "Type": 1,
@@ -2141,7 +2146,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11712166124865454930",
+                        "ID": "1475165353374499290",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -2149,9 +2154,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "7870571145163460810",
+                        "ID": "11526925413491659159",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "17286953302517528736",
                         "Enabled": true
                     }
                 ]
@@ -2159,8 +2164,8 @@
             {
                 "Name": "3rd",
                 "FamilyNumber": 3,
-                "ID": "17553077057851998336",
-                "ParentID": "12041503603460751562",
+                "ID": "17634119405660493208",
+                "ParentID": "13306899200457117171",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2190,15 +2195,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11659615109692792683"
+                        "ID": "4402982168034651277"
                     }
                 ]
             },
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "11358262981310451026",
-                "ParentID": "17553077057851998336",
+                "ID": "11731160484469504641",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2228,7 +2233,7 @@
                             0.65472298860549927
                         ],
                         "ScaleNegative": false,
-                        "ID": "17387910019381703861"
+                        "ID": "15085465648039064012"
                     },
                     {
                         "Type": 1,
@@ -2238,7 +2243,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "16088009455428931408",
+                        "ID": "3262535960739559190",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -2246,9 +2251,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15087960167695208002",
+                        "ID": "7050722842033339868",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2256,8 +2261,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "6000683478162943396",
-                "ParentID": "17553077057851998336",
+                "ID": "15974979689748093500",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2287,7 +2292,7 @@
                             0.5641523003578186
                         ],
                         "ScaleNegative": false,
-                        "ID": "9263423852178658029"
+                        "ID": "13926553411417664870"
                     },
                     {
                         "Type": 1,
@@ -2297,7 +2302,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "12526186811352644833",
+                        "ID": "12717928503173640153",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2305,9 +2310,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6641894428077007324",
+                        "ID": "15675048871138839500",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2315,8 +2320,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "7974237537209094201",
-                "ParentID": "17553077057851998336",
+                "ID": "13670919300562446063",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2346,7 +2351,7 @@
                             0.38999998569488525
                         ],
                         "ScaleNegative": false,
-                        "ID": "11954223611284426058"
+                        "ID": "7246836084151527261"
                     },
                     {
                         "Type": 1,
@@ -2356,7 +2361,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "15975214219914181489",
+                        "ID": "15093966636052781185",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2364,9 +2369,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "10425870701042895006",
+                        "ID": "614071380483283007",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2374,8 +2379,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "5607326353340965570",
-                "ParentID": "17553077057851998336",
+                "ID": "3611345350528425954",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2405,7 +2410,7 @@
                             0.38943594694137573
                         ],
                         "ScaleNegative": false,
-                        "ID": "9199315904336191143"
+                        "ID": "6536541811977050935"
                     },
                     {
                         "Type": 1,
@@ -2415,7 +2420,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11781105456540712727",
+                        "ID": "2267006054269205070",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2423,9 +2428,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14531363864056920653",
+                        "ID": "4285194419694119512",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2433,8 +2438,8 @@
             {
                 "Name": "Root ",
                 "FamilyNumber": 4,
-                "ID": "14033519949825163649",
-                "ParentID": "17553077057851998336",
+                "ID": "5270101285241257437",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2464,7 +2469,7 @@
                             0.67202997207641602
                         ],
                         "ScaleNegative": false,
-                        "ID": "9633286439220652129"
+                        "ID": "7778728971166719047"
                     },
                     {
                         "Type": 1,
@@ -2474,7 +2479,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "18212674251730645662",
+                        "ID": "17404505455005077727",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "5440485390173265448",
@@ -2482,9 +2487,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "15331338074114985400",
+                        "ID": "5866745090952512170",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2492,8 +2497,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "14838312054169007125",
-                "ParentID": "17553077057851998336",
+                "ID": "11935698300075504002",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2523,7 +2528,7 @@
                             0.45241418480873108
                         ],
                         "ScaleNegative": false,
-                        "ID": "16774568812021226595"
+                        "ID": "12038983601267021310"
                     },
                     {
                         "Type": 1,
@@ -2533,7 +2538,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "5218684738546532091",
+                        "ID": "12347505447193372763",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2541,9 +2546,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "12405766618266985254",
+                        "ID": "10933614683790396634",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2551,8 +2556,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "13636129617622845897",
-                "ParentID": "17553077057851998336",
+                "ID": "12039098012374460746",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2582,7 +2587,7 @@
                             0.31350001692771912
                         ],
                         "ScaleNegative": false,
-                        "ID": "4430572144797575103"
+                        "ID": "17721541842513692455"
                     },
                     {
                         "Type": 1,
@@ -2592,7 +2597,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2026563795760586997",
+                        "ID": "3855761240241734969",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2600,9 +2605,9 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "5138407446299152271",
+                        "ID": "5988224612773654449",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
@@ -2610,8 +2615,8 @@
             {
                 "Name": "Root",
                 "FamilyNumber": 4,
-                "ID": "4273207227120039940",
-                "ParentID": "17553077057851998336",
+                "ID": "3118971752287840663",
+                "ParentID": "17634119405660493208",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -2641,7 +2646,7 @@
                             0.51679998636245728
                         ],
                         "ScaleNegative": false,
-                        "ID": "14573016695038499345"
+                        "ID": "7184255184376155015"
                     },
                     {
                         "Type": 1,
@@ -2651,7 +2656,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "13086995254450120152",
+                        "ID": "8147831466058280519",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13011344088814201984",
@@ -2659,14 +2664,13 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "12924939370873837991",
+                        "ID": "4636464841954993176",
                         "HasMaterial": true,
-                        "MaterialID": "304071475055539668",
+                        "MaterialID": "3589969427919737267",
                         "Enabled": true
                     }
                 ]
             }
         ]
-    },
-    "Name": "BlockerObstacle"
+    }
 }

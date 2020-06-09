@@ -47,23 +47,23 @@ void BlockerObstacle::StartEnemy()
 
 	// Root Material
 	// 3rd Roots
-	//material_3rd = roots[2]->GetChild(0)->GetComponent<ComponentMaterial>();
+	material_3rd = roots[2]->GetChild(0)->GetComponent<ComponentMaterial>();
 	//resource_mat_org = (ResourceMaterial*)material_3rd->GetMaterial();
 	//resource_mat_3rd = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
 	//material_3rd->SetMaterial(resource_mat_3rd);
-	//material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 
 	//// 2nd Roots
-	//material_2nd = roots[1]->GetChild(0)->GetComponent<ComponentMaterial>();
+	material_2nd = roots[1]->GetChild(0)->GetComponent<ComponentMaterial>();
 	//resource_mat_2nd = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
 	//material_2nd->SetMaterial(resource_mat_2nd);
-	//material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 
 	//// 1st Roots
-	//material_1st = roots[0]->GetChild(0)->GetComponent<ComponentMaterial>();
+	material_1st = roots[0]->GetChild(0)->GetComponent<ComponentMaterial>();
 	//resource_mat_1st = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
 	//material_1st->SetMaterial(resource_mat_1st);
-	//material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 }
 
 void BlockerObstacle::UpdateEnemy()
@@ -77,21 +77,27 @@ void BlockerObstacle::UpdateEnemy()
 		if (distance < stats["VisionRange"].GetValue() && !has_started)
 			LookForMyChildren();
 
-		/*if (root_3rd)
+		if (root_3rd)
 		{
 			material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
 
 			if (material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+			{
+				roots[2]->SetEnable(false);
 				root_3rd = false;
+			}
 		}
 		else if (root_2nd)
 		{
 			material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
 
 			if (material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+			{
+				roots[1]->SetEnable(false);
 				root_2nd = false;
+			}
 
-		}*/
+		}
 	}
 	break;
 	case ObstacleState::DYING:
@@ -104,14 +110,14 @@ void BlockerObstacle::UpdateEnemy()
 	}
 	break;
 	case ObstacleState::DEAD:
-		/*if (root_1st)
+		if (root_1st)
 		{
-		material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
+			material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
 
-		if (material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
-			root_1st = false;
+			if (material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+				root_1st = false;
 
-		}*/
+		}
 		break;
 	default:
 		LOG("There's no state");
@@ -123,18 +129,9 @@ void BlockerObstacle::CleanUpEnemy()
 {
 	children_enemies.clear();
 
-	/*material_1st->SetMaterial(resource_mat_org);
-	material_2nd->SetMaterial(resource_mat_org);
-	material_3rd->SetMaterial(resource_mat_org);
-
-	delete resource_mat_3rd;
-	resource_mat_3rd = nullptr;
-
-	delete resource_mat_2nd;
-	resource_mat_2nd = nullptr;
-
-	delete resource_mat_1st;
-	resource_mat_1st = nullptr;*/
+	material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 }
 
 float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 knockback)
