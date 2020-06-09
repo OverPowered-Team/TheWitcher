@@ -64,8 +64,8 @@ void Scale_Win::Update()
 		spawn_points.emplace_back(float2(0.f, -2.f));
 
 		// Head Spawns
-		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player1_kills), spawn_points);
-		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player2_kills), spawn_points);
+		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player1_kills), spawn_points, 1);
+		SpawnHeads(ConvertKillsMapToVector(Scores_Data::player2_kills), spawn_points, 2);
 
 		spawned_invoke = true;
 	}
@@ -86,20 +86,30 @@ void Scale_Win::Update()
 	first_frame = false;
 }
 
-void Scale_Win::SpawnHeads(const std::vector<int>& kills, const std::vector<float2>& spawn_points)
+void Scale_Win::SpawnHeads(const std::vector<int>& kills, const std::vector<float2>& spawn_points, int player)
 {
 	if (kills.size() > 0)
 	{
+		Spawner* spawner = nullptr;
+		if (player == 1)
+		{
+			spawner = spawner_l;
+		}
+		else
+		{
+			spawner = spawner_r;
+		}
+
 		for (int i = 0; i < kills.size(); ++i)
 		{
 			float random_time = Random::GetRandomFloatBetweenTwo(0.35f, 0.6f);
 			int random_spawn = Random::GetRandomIntBetweenTwo(1, 3);
 
-			Invoke([this, spawn_points, random_spawn, i]() -> void
+			Invoke([this, spawn_points, random_spawn, i, spawner]() -> void
 				{
-					spawner_l->Spawn(TO_SPAWN::HEAD, float3(spawner_l->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
-						spawner_l->transform->GetGlobalPosition().y,
-						spawner_l->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y), i);
+					spawner->Spawn(TO_SPAWN::HEAD, float3(spawner->transform->GetGlobalPosition().x + spawn_points[random_spawn - 1].x,
+						spawner->transform->GetGlobalPosition().y,
+						spawner->transform->GetGlobalPosition().z + spawn_points[random_spawn - 1].y), i);
 				}
 				,
 					random_time * i);

@@ -40,10 +40,6 @@ void Spawner::Spawn(TO_SPAWN type, float3 position, int head_type)
 	}
 	case 5:
 	{
-		return;
-	}
-	case 6:
-	{
 		head = drowned_head;
 		break;
 	}
