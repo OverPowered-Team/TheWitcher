@@ -129,6 +129,13 @@ GameObject::~GameObject()
 
 GameObject* GameObject::GetChild(const char* child_name)
 {
+	if (this == nullptr)
+	{
+		LOG_ENGINE("GameObject is null can't get child");
+		return nullptr;
+
+	}
+
 	auto item = children.begin();
 	for (; item != children.end(); ++item) {
 		if (*item != nullptr && App->StringCmp((*item)->name, child_name)) {
@@ -140,6 +147,12 @@ GameObject* GameObject::GetChild(const char* child_name)
 
 GameObject* GameObject::GetChild(const int& index)
 {
+	if (this == nullptr)
+	{
+		LOG_ENGINE("GameObject is null can't get child");
+		return nullptr;
+	}
+
 	if (index < children.size() && children[index] != nullptr) {
 		return children[index];
 	}
@@ -148,6 +161,12 @@ GameObject* GameObject::GetChild(const int& index)
 
 GameObject* GameObject::GetChildRecursive(const char* child_name)
 {
+	if (this == nullptr)
+	{
+		LOG_ENGINE("GameObject is null can't get child");
+		return nullptr;
+	}
+
 	GameObject* ret = nullptr;
 	auto item = children.begin();
 	for (; item != children.end(); ++item) {
