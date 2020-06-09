@@ -274,9 +274,11 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0 && !(*i)->game_object_attached->GetComponent<Enemy>()->IsDead())
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
-			enemies_in_range.push_back((*i)->game_object_attached);
+			Enemy* enemy = (*i)->game_object_attached->GetComponent<Enemy>();
+			if(enemy && !enemy->IsDead())
+				enemies_in_range.push_back((*i)->game_object_attached);
 		}
 	}
 
