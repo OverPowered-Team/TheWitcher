@@ -64,6 +64,10 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 			enemy = GameObject::Instantiate(ghoul_dodge, position, false, parent)->GetComponent<Enemy>();
 			LOG("GHOUL_DODGE");
 			break;
+		case Ghoul::GhoulType::MINI:
+			enemy = GameObject::Instantiate(ghoul_mini, position, false, parent)->GetComponent<Enemy>();
+			LOG("GHOUL_MINI");
+			break;
 		}
 		break; }
 	case EnemyType::NILFGAARD_SOLDIER: {
@@ -92,10 +96,6 @@ Enemy* EnemyManager::CreateEnemy(EnemyType type, const float3& position, ExtraEn
 		case Drowned::DrownedType::RANGE: {
 			enemy = GameObject::Instantiate(drowned_range, position, false, parent)->GetComponent<Enemy>();
 			LOG("Drowned Range");
-			break; }
-		case Drowned::DrownedType::GRAB: {
-			enemy = GameObject::Instantiate(drowned_grab, position, false, parent)->GetComponent<Enemy>();
-			LOG("Drowned Grab");
 			break; }
 		default: {
 			LOG("Drowned type wrong")

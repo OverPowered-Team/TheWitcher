@@ -333,7 +333,8 @@ void Enemy::Decapitate(PlayerController* player)
 
 	if (decapitated_head)
 	{
-		game_object->GetChild("Head")->SetEnable(false); //disable old head
+		// If not working, check prefab
+		game_object->GetChild("Mesh")->GetChild("Head")->SetEnable(false); //disable old head
 		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
