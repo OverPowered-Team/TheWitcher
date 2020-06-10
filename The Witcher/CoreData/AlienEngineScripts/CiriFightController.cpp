@@ -140,6 +140,7 @@ void CiriFightController::FinishPhaseThree()
 {
 	phase = 4;
 	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
+	DestroyRocks();
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -351,11 +352,22 @@ void CiriFightController::TransportPlayer()
 
 void CiriFightController::SpawnRocks()
 {
+	rocks.clear();
+
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock, float3::zero(), true, rock_positions[i]));
 	}
+
+	rocks_available = 5;
+
+	game_object->GetChild("Rock_Positions")->transform->SetGlobalPosition(game_object->GetChild("Rocks_respawn")->transform->GetGlobalPosition());
 }
 
 void CiriFightController::DestroyRocks()
 {
+	for (int i = 0; i < 5; ++i) {
+		Destroy(rocks[i]);
+	}
+
+	rocks.clear();
 }
