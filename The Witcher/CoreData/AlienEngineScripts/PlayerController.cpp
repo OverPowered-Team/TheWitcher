@@ -214,7 +214,7 @@ void PlayerController::UpdateInput()
 
 
 	// DEBUG
-	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::YENNEFER))
 		ReceiveDamage(10, float3::zero(), false); 
 }
 

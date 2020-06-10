@@ -59,6 +59,7 @@ private:
 	float new_scale = 0.0f;
 	bool green_reducing = false;
 
+	bool first_frame = true;
 };
 
 ALIEN_FACTORY MiniGame_Revive* CreateMiniGame_Revive() {
