@@ -11,6 +11,7 @@ class RelicManager;
 class RumblerManager;
 class EffectsFactory;
 class ParticlePool;
+class Scores_Data;
 
 class ALIEN_ENGINE_API GameManager : public Alien {
 
@@ -32,6 +33,8 @@ public:
 	void Awake();
 	void Start();
 	void Update();
+
+	void PrepareDataNextScene(bool dead);
 };
 GameManager* GameManager::instance = 0;
 
