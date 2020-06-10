@@ -15,16 +15,39 @@ RockThrow::~RockThrow()
 
 void RockThrow::Start()
 {
+	state = RockState::INIT;
 }
 
 void RockThrow::Update()
 {
-	if (timer < lifetime) {
-		timer += Time::GetDT();
-		game_object->transform->AddRotation({ 0.0f, 2.0f, 10.0f });
-	}
-	else {
-		Destroy(game_object);
+
+	switch (state)
+	{
+	case RockThrow::RockState::NONE:
+		break;
+	case RockThrow::RockState::INIT:
+		if (init_timer <= init_time) {
+			init_timer += Time::GetDT();
+			game_object->transform->AddPosition({ 0.0f, init_velocity, 0.0f });
+			game_object->transform->AddRotation(self_rotation);
+		}
+		else {
+			ChangeState(RockState::THROWING);
+		}
+		break;
+	case RockThrow::RockState::THROWING:
+		break;
+	case RockThrow::RockState::THROW:
+		if (throw_timer < throw_lifetime) {
+			throw_timer += Time::GetDT();
+			game_object->transform->AddRotation(throw_rotation);
+		}
+		else {
+			Destroy(game_object);
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -37,7 +60,7 @@ void RockThrow::ReleaseExplosionParticle()
 
 void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (!collided) {
+	if (!collided && state == RockState::THROW) {
 		std::vector<ComponentCollider*> hitted;
 		hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 5);
 		for (auto it = hitted.begin(); it != hitted.end(); ++it) {
@@ -72,4 +95,22 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 		collided = true;
 	}
 
+}
+
+void RockThrow::ChangeState(RockState state_)
+{
+	switch (state)
+	{
+	case RockThrow::RockState::NONE:
+		break;
+	case RockThrow::RockState::INIT:
+		break;
+	case RockThrow::RockState::THROWING:
+		break;
+	case RockThrow::RockState::THROW:
+		throw_timer = 0.0f;
+		break;
+	default:
+		break;
+	}
 }

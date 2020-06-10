@@ -22,6 +22,7 @@ CiriFightController::~CiriFightController()
 void CiriFightController::Start()
 {
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
+	rock_positions = game_object->GetChild("Rock_Positions")->GetChildren();
 
 	if (platform)
 		material_platform = (*platform->GetChildren().begin())->GetComponent<ComponentMaterial>();
@@ -55,6 +56,7 @@ void CiriFightController::Update()
 		fight_started = true;
 		phase_change = true;
 		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
+		SpawnRocks();
 	}
 	if (fight_started) {
 		switch (phase)
@@ -311,4 +313,15 @@ void CiriFightController::TransportPlayer()
 			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->ReceiveDamage(200);
 		}
 	}
+}
+
+void CiriFightController::SpawnRocks()
+{
+	for (int i = 0; i < 5; ++i) {
+		rocks.push_back(GameObject::Instantiate(rock, float3::zero(), true, rock_positions[i]));
+	}
+}
+
+void CiriFightController::DestroyRocks()
+{
 }

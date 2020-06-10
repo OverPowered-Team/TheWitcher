@@ -25,6 +25,9 @@ public:
 	int phase = 0;
 
 	std::vector<GameObject*> clone_positions;
+	std::vector<GameObject*> rock_positions;
+	std::vector<GameObject*> rocks;
+	Prefab rock;
 
 	// Platform
 	GameObject* platform = nullptr;
@@ -70,6 +73,9 @@ public:
 	void UpdatePlatform();
 	void TransportPlayer();
 
+	void SpawnRocks();
+	void DestroyRocks();
+
 };
 
 ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
@@ -79,6 +85,7 @@ ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->platform);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->wall);
+	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->rock);
 
 	return cirifightcontroller;
 } 
