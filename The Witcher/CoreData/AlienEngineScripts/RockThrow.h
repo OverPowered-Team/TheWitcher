@@ -10,7 +10,8 @@ public:
 		NONE = -1,
 		INIT,
 		IDLE,
-		THROW
+		THROW,
+		FALL
 		);
 
 	float throw_lifetime = 10.0f;
@@ -25,7 +26,7 @@ public:
 
 	float3 self_rotation = { 0.0f, 5.0f, 2.0f };
 	float3 throw_direction;
-	float throw_speed = 5.0f;
+	float throw_speed = 2.0f;
 
 	int target = 0;
 

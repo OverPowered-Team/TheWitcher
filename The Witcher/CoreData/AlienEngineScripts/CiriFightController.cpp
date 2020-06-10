@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
+#include "RockThrow.h"
 #include "CiriFightController.h"
 #include "Scores_Data.h"
 #include "RumblerManager.h"
@@ -179,7 +180,7 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 		FinishPhaseThree();
 	
 	if(clones_dead < 6)
-		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[Random::GetRandomIntBetweenTwo(0, 2)]->transform->GetGlobalPosition());
 }
 
 
@@ -323,7 +324,9 @@ void CiriFightController::ThrowEnvironmentRocks()
 		default:
 			break;
 		}
-		GameObject::Instantiate(rock, position);
+		GameObject* rocky = GameObject::Instantiate(rock, position);
+		if (rocky->GetComponent<RockThrow>())
+			rocky->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::FALL);
 		rock_throwed = true;
 	}
 	else if (throw_time % 10 != 0 && rock_throwed)

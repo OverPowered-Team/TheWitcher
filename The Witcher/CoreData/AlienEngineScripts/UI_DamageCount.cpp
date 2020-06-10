@@ -2,6 +2,7 @@
 #include "PlayerController.h"
 #include "Scores_Data.h"
 #include "PlayerAttacks.h"
+#include "UI_Char_Frame.h"
 
 UI_DamageCount::UI_DamageCount() : Alien()
 {
@@ -289,6 +290,7 @@ void UI_DamageCount::Update()
 				damagecount_player1->SetAlpha(0);
 				Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
 				damagecount_player1->SetText("0");
+				game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(false);
 			}
 		}
 	}
@@ -313,6 +315,7 @@ void UI_DamageCount::Update()
 				damagecount_player2->SetAlpha(0);
 				Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
 				damagecount_player2->SetText("0");
+				game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(false);
 			}
 		}
 	}
@@ -476,6 +479,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal1 <= stoi(text->GetText()))
 					{
+						game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal1 += 50;
 						is_shaking1 = true;
 						start_shake_time1 = internal_timer;
@@ -485,6 +489,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal2 <= stoi(text->GetText()))
 					{
+						game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal2 += 50;
 						is_shaking2 = true;
 						start_shake_time2 = internal_timer;
