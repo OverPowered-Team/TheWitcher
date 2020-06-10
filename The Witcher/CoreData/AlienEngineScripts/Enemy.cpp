@@ -20,6 +20,16 @@ void Enemy::Awake()
 	particle_spawn_positions.push_back(game_object->GetChildRecursive("Body_Position"));
 	particle_spawn_positions.push_back(game_object->GetChildRecursive("Feet_Position"));
 	particle_spawn_positions.push_back(game_object->GetChildRecursive("Attack_Position"));
+
+	hitMaterial.color = float4(1, 1, 1, 1);
+
+	GameObject* mesh = game_object->GetChild("Mesh");
+	if (mesh)
+	{
+		meshes = mesh->GetChildren();
+		LOG("Got Meshes");
+	}
+
 }
 
 void Enemy::StartEnemy()
@@ -191,7 +201,27 @@ void Enemy::UpdateEnemy()
 		}
 		++it;
 	}
-
+	if (inHit)
+	{
+		whiteTime += Time::GetDT();
+		if (whiteTime > 0.2)
+		{
+			for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+			{
+				if ((*iter))
+				{
+					ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+					if (material)
+					{
+						if(defaultMaterial)
+							material->material = defaultMaterial;
+					}
+				}
+			}
+			whiteTime = 0;
+			inHit = false;
+		}
+	}
 }
 
 void Enemy::CleanUpEnemy()
@@ -226,6 +256,7 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
+	
 	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
 	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
@@ -246,7 +277,7 @@ void Enemy::Move(float3 direction)
 	{
 		velocity = velocity.Normalized()* stats["Agility"].GetValue();
 	}
-
+	LOG("%f", velocity.Length());
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", velocity.Length());
 
@@ -422,7 +453,23 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	}
 
 	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		if ((*iter))
+		{
+			ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+			if (defaultMaterial == nullptr)
+			{
+				defaultMaterial = (ResourceMaterial*) material->GetMaterial();
+			}
 
+			if (material)
+			{
+				material->material = &hitMaterial;
+			}
+		}
+		inHit = true;
+	}
 	return aux_health - stats["Health"].GetValue();
 }
 
