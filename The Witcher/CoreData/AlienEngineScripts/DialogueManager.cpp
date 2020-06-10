@@ -13,15 +13,15 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
-	audioEmitter = GetComponent<ComponentAudioEmitter>();
-	text = subtitlesUI->GetChild("Subtitles Text")->GetComponent<ComponentText>();
-	text->SetAlpha(1.0f);
-	image = subtitlesUI->GetChild("Subtitles Background")->GetComponent<ComponentImage>();
-	start_bg_alpha = image->current_color.a;
-	image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
+	//audioEmitter = GetComponent<ComponentAudioEmitter>();
+	//text = subtitlesUI->GetChild("Subtitles Text")->GetComponent<ComponentText>();
+	//text->SetAlpha(1.0f);
+	//image = subtitlesUI->GetChild("Subtitles Background")->GetComponent<ComponentImage>();
+	//start_bg_alpha = image->current_color.a;
+	//image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
 
-	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
-	LoadJSONDialogues();
+	//audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
+	//LoadJSONDialogues();
 }
 
 void DialogueManager::LoadJSONDialogues()
@@ -59,7 +59,7 @@ void DialogueManager::LoadJSONDialogues()
 
 void DialogueManager::Update()
 {
-	if (playing)
+	/*if (playing)
 	{
 		LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
@@ -73,7 +73,7 @@ void DialogueManager::Update()
 	}
 	else {
 	audioEmitter->SetState("GameVolumes", "None");
-	}
+	}*/
 
 }
 
