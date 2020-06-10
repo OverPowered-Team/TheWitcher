@@ -26,7 +26,7 @@ public:
 
 	float3 self_rotation = { 0.0f, 5.0f, 2.0f };
 	float3 throw_direction;
-	float throw_speed = 2.0f;
+	float throw_speed = 4.0f;
 
 	int target = 0;
 
