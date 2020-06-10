@@ -351,9 +351,15 @@ void CiriFightController::TransportPlayer()
 
 void CiriFightController::SpawnRocks()
 {
+	rocks.clear();
+
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock, float3::zero(), true, rock_positions[i]));
 	}
+
+	rocks_available = 5;
+
+	game_object->GetChild("Rock_Positions")->transform->SetGlobalPosition(game_object->GetChild("Rocks_respawn")->transform->GetGlobalPosition());
 }
 
 void CiriFightController::DestroyRocks()
