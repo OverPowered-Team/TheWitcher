@@ -43,7 +43,7 @@ void BlockerObstacle::StartEnemy()
 	boxCollider = GetComponent<ComponentBoxCollider>();
 	audio_emitter = GetComponent<ComponentAudioEmitter>();
 
-	roots = game_object->GetChild("Roots")->GetChildren();
+	roots = game_object->GetChild("Mesh")->GetChild("Roots")->GetChildren();
 
 	// Root Material
 	// 3rd Roots
