@@ -58,9 +58,24 @@ void UI_Char_Frame::Start()
 
 void UI_Char_Frame::Update()
 {
+	if (!Time::IsGamePaused())
+	{
+		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
+
+		if (time_paused != 0.0f)
+		{
+			time_paused = 0.0f;
+		}
+	}
+	else
+	{
+		time_paused = Time::GetGameTime() - internal_timer;
+		return;
+	}
+
 	if (changing_life)
 	{
-		float t = (Time::GetGameTime() - time) * (1 / change_time);
+		float t = (internal_timer - time) * (1 / change_time);
 		lifebar->SetBarValue(Maths::Lerp(now_life, life_change / max_life, t));
 
 		if (player_hit)
@@ -85,7 +100,7 @@ void UI_Char_Frame::Update()
 
 	if (changing_chaos)
 	{
-		float t = (Time::GetGameTime() - chaos_time) * (1 / change_time);
+		float t = (internal_timer - chaos_time) * (1 / change_time);
 		mana_bar->SetBarValue(Maths::Lerp(actual_chaos, chaos_change / max_chaos, t));
 
 		if (t >= 1)
@@ -101,7 +116,7 @@ void UI_Char_Frame::Update()
 
 	if (kill_count->IsEnabled())
 	{
-		float t = (Time::GetGameTime() - killcount_lerp_time) / killcount_time_to_lerp;
+		float t = (internal_timer - killcount_lerp_time) / killcount_time_to_lerp;
 		float lerp = 0.0f;
 
 		switch (kc_state)
@@ -134,13 +149,13 @@ void UI_Char_Frame::Update()
 			case KILL_COUNT_STATE::FADING_IN:
 			{
 				kc_state = KILL_COUNT_STATE::SHOWING;
-				killcount_lerp_time = Time::GetGameTime() + 1.5f;
+				killcount_lerp_time = internal_timer + 1.5f;
 				break;
 			}
 			case KILL_COUNT_STATE::SHOWING:
 			{
 				kc_state = KILL_COUNT_STATE::FADING_OUT;
-				killcount_lerp_time = Time::GetGameTime();
+				killcount_lerp_time = internal_timer;
 				break;
 			}
 			case KILL_COUNT_STATE::FADING_OUT:
@@ -155,7 +170,7 @@ void UI_Char_Frame::Update()
 
 	if (is_fire_changing)
 	{
-		float t = (Time::GetGameTime() - fire_fade_time) / 0.25f;
+		float t = (internal_timer - fire_fade_time) / 0.25f;
 		float lerp = Maths::Lerp(current_fire_alpha, goal_alpha_fire, t);
 
 		fire->current_color.a = lerp;
@@ -187,7 +202,7 @@ void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 		if (life_percentate <= 0.35f)
 		{
 			low_life = true;
-			low_life_glow_time = Time::GetGameTime();
+			low_life_glow_time = internal_timer;
 		}
 		else
 		{
@@ -201,7 +216,7 @@ void UI_Char_Frame::LifeChange(float actual_life, float max_life)
 		}
 
 		changing_life = true;
-		time = Time::GetGameTime();
+		time = internal_timer;
 	}
 }
 
@@ -215,7 +230,7 @@ void UI_Char_Frame::ManaChange(float mana_change, float max_mana)
 		max_chaos = max_mana;
 
 		changing_chaos = true;
-		chaos_time = Time::GetGameTime();
+		chaos_time = internal_timer;
 	}
 }
 
@@ -237,23 +252,23 @@ void UI_Char_Frame::StartFadeKillCount(int new_kill_count)
 	{
 	case KILL_COUNT_STATE::FADING_IN:
 	{
-		if (((Time::GetGameTime() - killcount_lerp_time) / killcount_time_to_lerp) >= 1.f)
+		if (((internal_timer - killcount_lerp_time) / killcount_time_to_lerp) >= 1.f)
 		{
 			kill_count_number->SetAlpha(0);
 			kill_count_number_X->SetAlpha(0);
-			killcount_lerp_time = Time::GetGameTime();
+			killcount_lerp_time = internal_timer;
 		}
 		break;
 	}
 	case KILL_COUNT_STATE::SHOWING:
 	{
-		killcount_lerp_time = Time::GetGameTime() + 1.5f;
+		killcount_lerp_time = internal_timer + 1.5f;
 		break;
 	}
 	case KILL_COUNT_STATE::FADING_OUT:
 	{
 		kc_state = KILL_COUNT_STATE::FADING_IN;
-		killcount_lerp_time = Time::GetGameTime() - kill_count_number->current_color.a * killcount_time_to_lerp;
+		killcount_lerp_time = internal_timer - kill_count_number->current_color.a * killcount_time_to_lerp;
 		break;
 	}
 	}
@@ -272,7 +287,7 @@ void UI_Char_Frame::PlayerOnFire(bool is_on_fire)
 		current_fire_alpha = fire->current_color.a;
 
 		is_fire_changing = true;
-		fire_fade_time = Time::GetGameTime();
+		fire_fade_time = internal_timer;
 	}
 }
 
@@ -309,7 +324,7 @@ void UI_Char_Frame::LowLifeGlow()
 {
 	float color = 0.0f;
 	float blood_color = 0.0f;
-	float t = (Time::GetGameTime() - low_life_glow_time);
+	float t = (internal_timer - low_life_glow_time);
 
 	if (low_life_sign < 0)
 	{
@@ -327,6 +342,6 @@ void UI_Char_Frame::LowLifeGlow()
 	if (t >= 1)
 	{
 		low_life_sign = -low_life_sign;
-		low_life_glow_time = Time::GetGameTime();
+		low_life_glow_time = internal_timer;
 	}
 }

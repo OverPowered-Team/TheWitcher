@@ -50,6 +50,10 @@ void RockThrow::Update()
 			Destroy(game_object);
 		}
 		break;
+	case RockThrow::RockState::FALL:
+		game_object->transform->AddRotation(throw_rotation);
+		transform->AddPosition(throw_direction);
+		break;
 	default:
 		break;
 	}
@@ -64,7 +68,7 @@ void RockThrow::ReleaseExplosionParticle()
 
 void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (!collided && state == RockState::THROW) {
+	if (!collided && (state == RockState::THROW || state == RockState::FALL)) {
 		std::vector<ComponentCollider*> hitted;
 		hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 5);
 		for (auto it = hitted.begin(); it != hitted.end(); ++it) {
@@ -108,10 +112,10 @@ void RockThrow::ChangeState(RockState state_)
 	case RockThrow::RockState::NONE:
 		break;
 	case RockThrow::RockState::INIT:
-		state = RockState::INIT;
+		state = state_;
 		break;
 	case RockThrow::RockState::IDLE:
-		state = RockState::IDLE;
+		state = state_;
 		break;
 	case RockThrow::RockState::THROW:
 		throw_timer = 0.0f;
@@ -119,6 +123,10 @@ void RockThrow::ChangeState(RockState state_)
 		game_object->SetNewParent(game_object->parent->parent->parent);
 		LOG("Entro change state rock");
 		state = RockState::THROW;
+		break;
+	case RockThrow::RockState::FALL:
+		throw_direction = float3(0.0f,-0.2f,0.0f);
+		state = state_;
 		break;
 	default:
 		break;
