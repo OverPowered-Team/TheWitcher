@@ -401,7 +401,7 @@ void PlayerAttacks::CastSpell()
 {
 	if (current_attack)
 	{
-		LOG("Casting Spell %s", current_attack->info.name.c_str());
+		LOG("Casting Spell %s with %f cost", current_attack->info.name.c_str(), current_attack->info.stats["Cost"].GetValue());
 		player_controller->PlayAttackParticle();
 		player_controller->audio->StartSound(current_attack->info.audio_name.c_str());
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());

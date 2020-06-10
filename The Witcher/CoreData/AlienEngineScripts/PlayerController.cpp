@@ -720,7 +720,6 @@ void PlayerController::HitFreeze(float freeze_time)
 	float speed = animator->GetCurrentStateSpeed();
 	std::string state_name = animator->GetCurrentStateName();
 
-	LOG("FREEZING %s",state_name.c_str());
 	animator->SetStateSpeed(state_name.c_str(), 0);
 	PauseParticle();
 	is_immune = true;
@@ -1100,7 +1099,6 @@ void PlayerController::StopImmune()
 
 void PlayerController::OnEnemyKill(uint enemy_type)
 {
-	LOG("ENEMY KILL");
 	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
 	{
 		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));

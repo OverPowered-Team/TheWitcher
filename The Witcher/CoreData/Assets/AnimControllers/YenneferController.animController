@@ -2,7 +2,7 @@
     "Controller": {
         "Name": "YenneferController",
         "NumStates": 22,
-        "NumTransitions": 40,
+        "NumTransitions": 39,
         "States": [
             {
                 "Name": "L",
@@ -26,7 +26,7 @@
             },
             {
                 "Name": "Run",
-                "Speed": 1.1087015867233276,
+                "Speed": 0.26274514198303223,
                 "Clip": "5762945003790009951"
             },
             {
@@ -607,22 +607,13 @@
                 "IntConditions": [],
                 "FloatConditions": [],
                 "BoolConditions": []
-            },
-            {
-                "Source": "Chain",
-                "Target": "HH",
-                "Blend": 0.25,
-                "End": false,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": []
             }
         ],
         "IntParameters": [],
         "FloatParameters": [
             {
                 "Name": "speed",
-                "Value": 0
+                "Value": 0.11321014165878296
             }
         ],
         "BoolParameters": [
@@ -1371,33 +1362,9 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerController::PlayAttackParticle",
-                "Animation_Id": "16569956316059201057",
-                "Frame": 20,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "16569956316059201057",
-                "Frame": 21,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::DeactivateCollider",
-                "Animation_Id": "16569956316059201057",
-                "Frame": 41,
-                "Type": 2
-            },
-            {
                 "Event_Id": "PlayerAttacks::UpdateCollider",
                 "Animation_Id": "16569956316059201057",
                 "Frame": 28,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::UpdateCollider",
-                "Animation_Id": "16569956316059201057",
-                "Frame": 34,
                 "Type": 2
             },
             {
@@ -1410,12 +1377,6 @@
                 "Event_Id": "PlayerAttacks::CastSpell",
                 "Animation_Id": "5122780513439753696",
                 "Frame": 21,
-                "Type": 2
-            },
-            {
-                "Event_Id": "PlayerAttacks::ActivateCollider",
-                "Animation_Id": "5122780513439753696",
-                "Frame": 22,
                 "Type": 2
             },
             {
@@ -1722,6 +1683,30 @@
                 "Event_Id": "PlayerController::SpawnDashParticle",
                 "Animation_Id": "1230265905668174494",
                 "Frame": 18,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::CastSpell",
+                "Animation_Id": "16569956316059201057",
+                "Frame": 20,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::DeactivateCollider",
+                "Animation_Id": "16569956316059201057",
+                "Frame": 34,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AllowCombo",
+                "Animation_Id": "16569956316059201057",
+                "Frame": 36,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::ActivateCollider",
+                "Animation_Id": "16569956316059201057",
+                "Frame": 31,
                 "Type": 2
             }
         ]
