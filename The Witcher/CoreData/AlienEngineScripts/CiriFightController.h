@@ -51,6 +51,7 @@ public:
 
 	// Rocks
 	bool rock_throwed = false;
+	std::vector<GameObject*> rocks_throwed;
 
 public:
 

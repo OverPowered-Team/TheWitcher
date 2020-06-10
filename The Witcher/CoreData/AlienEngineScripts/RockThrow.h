@@ -10,7 +10,8 @@ public:
 		NONE = -1,
 		INIT,
 		IDLE,
-		THROW
+		THROW,
+		FALL
 		);
 
 	float throw_lifetime = 10.0f;
