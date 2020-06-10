@@ -115,19 +115,19 @@ void Relic_Notification::ShowRelic(Notification* notification)
 		{
 			relic_images[0]->SetEnable(true);
 		}
-		else if (strcmp(notification->attack_type.c_str(), "Ice") == 0)
+		else if (strcmp(notification->attack_type.c_str(), "Poison") == 0)
 		{
 			relic_images[1]->SetEnable(true);
 		}
-		else if (strcmp(notification->attack_type.c_str(), "Earth") == 0)
+		else if (strcmp(notification->attack_type.c_str(), "Ice") == 0)
 		{
 			relic_images[2]->SetEnable(true);
 		}
-		else if (strcmp(notification->attack_type.c_str(), "Lightning") == 0)
+		else if (strcmp(notification->attack_type.c_str(), "Earth") == 0)
 		{
 			relic_images[3]->SetEnable(true);
 		}
-		else if (strcmp(notification->attack_type.c_str(), "Poison") == 0)
+		else if (strcmp(notification->attack_type.c_str(), "Lighting") == 0)
 		{
 			relic_images[4]->SetEnable(true);
 		}
