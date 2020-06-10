@@ -87,44 +87,51 @@ void MiniGame_Revive::Update()
 
 void MiniGame_Revive::Minigame()
 {
-	float position_x = Maths::Lerp(-1.0f * sign, 1.0f * sign, (Time::GetGameTime() - time) / lerp_time);
-
-	moving_part->transform->SetLocalPosition(float3(position_x, 0, 0));
-
-	if ((Input::GetKeyDown(SDL_SCANCODE_SPACE) || Input::GetControllerButtonDown(player_reviving->controller_index, Input::CONTROLLER_BUTTON_A)) && !effects_change)
+	if (!first_frame)
 	{
-		Effects();
+		float position_x = Maths::Lerp(-1.0f * sign, 1.0f * sign, (Time::GetGameTime() - time) / lerp_time);
 
-		float points = 0.0f;
+		moving_part->transform->SetLocalPosition(float3(position_x, 0, 0));
 
-		if ((good_part->transform->GetLocalScale().x) >= Maths::Abs(position_x))
+		if ((Input::GetKeyDown(SDL_SCANCODE_SPACE) || Input::GetControllerButtonDown(player_reviving->controller_index, Input::CONTROLLER_BUTTON_B)) && !effects_change)
 		{
-			++correct_inputs;
-			points = 1.f / input_times;
-			previous_scale = good_part->transform->GetLocalScale().x;
-			new_scale = original_scale_green - ((original_scale_green - desired_scale_green) / (input_times - 1)) * correct_inputs;
-			green_reducing = true;
+			Effects();
+
+			float points = 0.0f;
+
+			if ((good_part->transform->GetLocalScale().x) >= Maths::Abs(position_x))
+			{
+				++correct_inputs;
+				points = 1.f / input_times;
+				previous_scale = good_part->transform->GetLocalScale().x;
+				new_scale = original_scale_green - ((original_scale_green - desired_scale_green) / (input_times - 1)) * correct_inputs;
+				green_reducing = true;
+			}
+			else
+			{
+				points = (1 - Maths::Abs(position_x)) / input_times;
+				green_reducing = false;
+			}
+
+			++actual_inputs;
+			revive_percentatge += points;
 		}
-		else
+
+		if (effects_change && (color_time + 0.1f < Time::GetGameTime()))
 		{
-			points = (1 - Maths::Abs(position_x)) / input_times;
-			green_reducing = false;
+			moving_part->GetComponent<ComponentImage>()->SetBackgroundColor(1, 1, 1, 1);
+			effects_change = false;
 		}
 
-		++actual_inputs;
-		revive_percentatge += points;
+		if (lerp_time + time < Time::GetGameTime())
+		{
+			sign = -sign;
+			time = Time::GetGameTime();
+		}
 	}
-
-	if (effects_change && (color_time + 0.1f < Time::GetGameTime()))
+	else
 	{
-		moving_part->GetComponent<ComponentImage>()->SetBackgroundColor(1, 1, 1, 1);
-		effects_change = false;
-	}
-
-	if (lerp_time + time < Time::GetGameTime())
-	{
-		sign = -sign;
-		time = Time::GetGameTime();
+		first_frame = false;
 	}
 }
 
