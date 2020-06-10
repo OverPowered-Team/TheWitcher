@@ -52,6 +52,10 @@ private:
 	float new_bar_value = 0.0f;
 	float previous_bar_value = 0.0f;
 	float bar_charging_time = 0.0f;
+
+	// Internal Timer
+	float internal_timer = 0.0f;
+	float time_paused = 0.0f;
 };
 
 ALIEN_FACTORY UltiBar* CreateUltiBar() {
