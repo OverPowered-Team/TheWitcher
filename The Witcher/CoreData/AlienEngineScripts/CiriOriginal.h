@@ -9,7 +9,6 @@ class CiriFightController;
 class ALIEN_ENGINE_API CiriOriginal : public Boss {
 public:
 	CiriFightController* fight_controller = nullptr;
-	Prefab rock;
 	float rock_force = 0.6f;
 	float scream_range = 20.0f;
 	float scream_force = 7.0f;
@@ -45,7 +44,6 @@ ALIEN_FACTORY CiriOriginal* CreateCiriOriginal() {
 	CiriOriginal* cirioriginal = new CiriOriginal();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(Boss::BossState, cirioriginal->state);
-	SHOW_IN_INSPECTOR_AS_PREFAB(cirioriginal->rock);
 	SHOW_VOID_FUNCTION(CiriOriginal::Scream, cirioriginal);
 
 	return cirioriginal;

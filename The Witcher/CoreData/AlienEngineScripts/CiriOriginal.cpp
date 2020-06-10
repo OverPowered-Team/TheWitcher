@@ -53,10 +53,10 @@ void CiriOriginal::SetActionProbabilities()
 	if (fight_controller->phase_change) {
 		actions.find("Scream")->second->probability = 100.0f;
 	}
-	else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
-		action_cooldown = 10.0f;
-		actions.find("RockThrow")->second->probability = 100.0f;
-	}
+	//else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
+	//	action_cooldown = 10.0f;
+	//	actions.find("RockThrow")->second->probability = 100.0f;
+	//}
 	else {
 		action_cooldown = 1.0f;
 		actions.find("AFK")->second->probability = 100.0f;
@@ -125,12 +125,6 @@ void CiriOriginal::LaunchRockAction()
 	else {
 		target = Random::GetRandomIntBetweenTwo(0, 1);
 	}
-	float3 throw_direction = (player_controllers[target]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
-	float distance_force_factor = 0.0f;
-	distance_force_factor = transform->GetGlobalPosition().Distance(player_controllers[target]->transform->GetGlobalPosition()) * rock_force;
-	GameObject* rock_ = GameObject::Instantiate(rock, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 5.0f, transform->GetGlobalPosition().z));
-	throw_direction.y = 0;
-	rock_->GetComponent<ComponentRigidBody>()->AddForce(throw_direction * distance_force_factor);
 }
 
 void CiriOriginal::LaunchScreamAction()
