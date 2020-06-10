@@ -49,10 +49,10 @@ void Ghoul::SetStats(const char* json)
             else
                 break;
 
-        stats["Health"] = Stat("Health", stat_weapon->GetNumber("MinHealth"), stat_weapon->GetNumber("Health"), stat_weapon->GetNumber("MaxHealth"));
-        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("MinAgility"), stat_weapon->GetNumber("Agility"), stat_weapon->GetNumber("MaxAgility"));
-        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("MinDamage"), stat_weapon->GetNumber("Damage"), stat_weapon->GetNumber("MaxDamage"));
-        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("MinAttackSpeed"), stat_weapon->GetNumber("AttackSpeed"), stat_weapon->GetNumber("MaxAttackSpeed"));
+        stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
         stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
@@ -203,27 +203,12 @@ void Ghoul::CheckDistance()
     }
 }
 
-void Ghoul::OnTriggerEnter(ComponentCollider* collider)
-{
-    if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != GhoulState::DEAD) {
-        PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-        if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-        {
-            float dmg_received = player->attacks->GetCurrentDMG();
-            float3 knock = player->attacks->GetKnockBack(this->transform);
-
-            player->OnHit(this, GetDamaged(dmg_received, player, knock));
-
-            HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-        }
-    }
-}
-
 void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
-        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        //stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        //animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
             SetState("Move");

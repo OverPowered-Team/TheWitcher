@@ -61,6 +61,7 @@ public:
 	virtual void CanGetInterrupted();
 
 	virtual void RotatePlayer();
+	virtual void RotateToPlayerSmooth(float perc = 0.9f);
 
 	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero());
@@ -90,7 +91,7 @@ public:
 	float increase_hit_animation = 1.0f;
 	float gravity = -20.0f;
 	bool is_immune = false;
-
+	bool is_mini = false;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;

@@ -108,14 +108,15 @@ public:
 	void OnEnemyKill(uint enemy_type);
 	void OnTriggerEnter(ComponentCollider* col);
 
-	void StartImmune() { is_immune = true; };
-	void StopImmune() { is_immune = false; };
+	void StartImmune();
+	void StopImmune();
 
 	void HitFreeze(float freeze_time);
 	void RemoveFreeze(float speed, std::string state_name);
 	void PauseParticle();
 	void ResumeParticle();
 	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = true, float3 rotation = float3::zero(), GameObject* parent = nullptr);
+	void SpawnDashParticle();
 
 	void ReleaseParticle(std::string particle_name);
 
@@ -123,13 +124,11 @@ public:
 
 	//Battle Circles
 	void CheckEnemyCircle();
+
 	// Terrain - particles
 	void OnTerrainEnter(float4 initial_color, float4 final_color); 
 
 	void IncreaseStat(std::string stat, float value);
-
-	// Dash wonders
-	void ToggleDashMultiplier(); 
 
 	// Colliders Change Oscillators
 	void ChangeCollisionLayer(std::string layer, float time);
@@ -247,9 +246,9 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	SHOW_VOID_FUNCTION(PlayerController::PlayAttackParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::PlayAllowParticle, player);
+	SHOW_VOID_FUNCTION(PlayerController::SpawnDashParticle, player);
 	SHOW_VOID_FUNCTION(PlayerController::StartImmune, player);
 	SHOW_VOID_FUNCTION(PlayerController::StopImmune, player);
-	SHOW_VOID_FUNCTION(PlayerController::ToggleDashMultiplier, player);
 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->delay_footsteps, 0.01f, 1.f);
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->dash_collider);

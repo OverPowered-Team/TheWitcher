@@ -10,6 +10,7 @@ public:
 	NilfSoldierShield();
 	virtual ~NilfSoldierShield();
 	
+	void StartEnemy() override;
 	void UpdateEnemy() override;
 	void Action() override;
 	void Block();
@@ -20,7 +21,7 @@ public:
 public:
 	float block_time = 2.0f;
 	float block_attack_time = 3.0f;
-	int max_break_shield_attack = 5;
+	int max_break_shield_attack = 7;
 
 private:
 	float current_time = 0.0f;

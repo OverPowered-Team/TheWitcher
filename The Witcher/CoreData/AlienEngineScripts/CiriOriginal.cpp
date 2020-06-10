@@ -127,7 +127,10 @@ void CiriOriginal::LaunchRockAction()
 		target = Random::GetRandomIntBetweenTwo(0, 1);
 	}
 
+	LOG("Rock to throw %i", game_object->GetComponent<CiriFightController>()->rocks_available - 1);
+	LOG("Rocks available %i", game_object->GetComponent<CiriFightController>()->rocks.size());
 	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::THROW);
+	LOG("Rock paso hehe");
 	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->target = target;
 	game_object->GetComponent<CiriFightController>()->rocks_available--;
 }

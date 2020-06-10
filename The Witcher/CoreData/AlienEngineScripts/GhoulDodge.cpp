@@ -94,7 +94,6 @@ void GhoulDodge::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
-        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["AttackRange"].GetValue())
             SetState("Attack");
@@ -103,6 +102,8 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         else
             SetState("Idle");
 
+        /*stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());*/
+        //animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
         animator->SetBool("attack", false);
     }

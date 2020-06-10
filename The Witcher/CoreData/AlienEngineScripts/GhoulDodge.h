@@ -26,7 +26,6 @@ ALIEN_FACTORY GhoulDodge* CreateGhoulDodge() {
 	GhoulDodge* ghoul = new GhoulDodge();
 	// To show in inspector here
 
-
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulType, ghoul->ghoul_type);
 	SHOW_IN_INSPECTOR_AS_ENUM(Ghoul::GhoulState, ghoul->state);
 	SHOW_IN_INSPECTOR_AS_PREFAB(ghoul->head_prefab);

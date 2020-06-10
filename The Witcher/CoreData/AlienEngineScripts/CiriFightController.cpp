@@ -179,7 +179,7 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 		FinishPhaseThree();
 	
 	if(clones_dead < 6)
-		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[Random::GetRandomIntBetweenTwo(0, 2)]->transform->GetGlobalPosition());
 }
 
 
