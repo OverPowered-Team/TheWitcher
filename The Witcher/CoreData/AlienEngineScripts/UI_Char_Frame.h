@@ -97,6 +97,10 @@ private:
 
 	ComponentBar* lifebar = nullptr;
 	ComponentBar* mana_bar = nullptr;
+
+	// Internal Timer
+	float internal_timer = 0.0f;
+	float time_paused = 0.0f;
 };
 
 ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {

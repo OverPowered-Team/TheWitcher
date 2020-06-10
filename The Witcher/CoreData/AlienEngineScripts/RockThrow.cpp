@@ -44,6 +44,7 @@ void RockThrow::Update()
 			throw_timer += Time::GetDT();
 			game_object->transform->AddRotation(throw_rotation);
 			transform->AddPosition(throw_direction * throw_speed);
+			LOG("Entro throw state rock");
 		}
 		else {
 			Destroy(game_object);
@@ -119,8 +120,9 @@ void RockThrow::ChangeState(RockState state_)
 	case RockThrow::RockState::THROW:
 		throw_timer = 0.0f;
 		throw_direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-		game_object->SetNewParent(nullptr);
-		state = state_;
+		game_object->SetNewParent(game_object->parent->parent->parent);
+		LOG("Entro change state rock");
+		state = RockState::THROW;
 		break;
 	case RockThrow::RockState::FALL:
 		throw_timer = 0.0f;
