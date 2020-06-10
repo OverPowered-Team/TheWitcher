@@ -27,6 +27,10 @@ void Relic::OnPickUp(PlayerController* player, std::string attack)
 		{
 			type = at->element;
 		}
+		else
+		{
+			type = dynamic_cast<DashEffect*>(effects.back())->element;
+		}
 
 		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack, type);
 	}
