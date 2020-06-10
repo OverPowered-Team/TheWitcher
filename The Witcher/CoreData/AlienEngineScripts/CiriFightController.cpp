@@ -140,6 +140,7 @@ void CiriFightController::FinishPhaseThree()
 {
 	phase = 4;
 	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
+	DestroyRocks();
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -364,4 +365,9 @@ void CiriFightController::SpawnRocks()
 
 void CiriFightController::DestroyRocks()
 {
+	for (int i = 0; i < 5; ++i) {
+		Destroy(rocks[i]);
+	}
+
+	rocks.clear();
 }
