@@ -39,7 +39,7 @@ private:
 
 	std::vector<int> ConvertKillsMapToVector(const std::map<uint, uint>& kills_map);
 
-	void SpawnHeads(const std::vector<int>& kills, const std::vector<float2>& spawn_points);
+	void SpawnHeads(const std::vector<int>& kills, const std::vector<float2>& spawn_points, int player);
 
 private:
 	// Plates

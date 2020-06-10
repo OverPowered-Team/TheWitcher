@@ -32,7 +32,7 @@ bool ModuleTween::UpdateInternal()
 		//trans->SetGlobalScale(float3(current_scale.x, current_scale.y, current_scale.z));
 		break;
 	case TweenAction::ROTATE:
-		//trans->SetGlobalRotation(Quat(current_value.x, current_value.y, current_value.z, current_value.w));
+		trans->SetGlobalRotation(Quat(current_value.x, current_value.y, current_value.z, current_value.w));
 		break;
 	case TweenAction::COLOR:
 		material = trans->game_object_attached->GetComponent<ComponentMaterial>();

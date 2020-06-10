@@ -63,7 +63,7 @@ bool ComponentCheckbox::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((texture == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((texture == nullptr || App->resources->GetResourceWithID(texture->GetID()) == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && texture != nullptr) {
 			App->ui->panel_project->SelectFile(texture->GetAssetsPath(), App->resources->assets);
@@ -112,7 +112,7 @@ bool ComponentCheckbox::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((crossTexture == nullptr) ? "NULL" : std::string(crossTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((crossTexture == nullptr || App->resources->GetResourceWithID(crossTexture->GetID()) == nullptr) ? "NULL" : std::string(crossTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && crossTexture != nullptr) {
 			App->ui->panel_project->SelectFile(crossTexture->GetAssetsPath(), App->resources->assets);
@@ -170,7 +170,7 @@ bool ComponentCheckbox::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((tickTexture == nullptr) ? "NULL" : std::string(tickTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((tickTexture == nullptr || App->resources->GetResourceWithID(tickTexture->GetID()) == nullptr) ? "NULL" : std::string(tickTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && tickTexture != nullptr) {
 			App->ui->panel_project->SelectFile(tickTexture->GetAssetsPath(), App->resources->assets);
@@ -1018,6 +1018,9 @@ bool ComponentCheckbox::OnClick()
 		current_color = clicked_color;
 		checkbox_current_color = checkbox_clicked_color;
 
+		if(!App->objects->inputUiGamePad)
+			clicked = !clicked;
+
 		CallListeners(&listenersOnClick);
 	}
 	return true;
@@ -1038,11 +1041,16 @@ bool ComponentCheckbox::OnRelease()
 {
 	if (active)
 	{ 
-		clicked = !clicked;
-		current_color = hover_color;
-		checkbox_current_color = checkbox_hover_color;
+		if (App->objects->inputUiGamePad)
+		{
+			clicked = !clicked;
+			current_color = hover_color;
+			checkbox_current_color = checkbox_hover_color;
+		}
+
 		CallListeners(&listenersOnRelease);
 	}
+	
 	return true;
 }
 

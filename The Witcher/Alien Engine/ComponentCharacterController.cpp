@@ -475,7 +475,7 @@ float3 ComponentCharacterController::GetFootPosition() const
 
 float ComponentCharacterController::GetSlopeLimit() const
 {
-	return (float)desc.slopeLimit;
+	return RadToDeg(acosf((float)desc.slopeLimit));
 }
 
 //* -------------------------- User hit callbacks

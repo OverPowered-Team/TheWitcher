@@ -1,0 +1,128 @@
+{
+    "Name": "BreakableFence",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "BreakableFence",
+                "FamilyNumber": 1,
+                "ID": "3819239315607866885",
+                "ParentID": "1884297798119506781",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "17688750871359924841",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6634288701876522996"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "10473978625242971439",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "281920166162972555",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "12075520893345483116",
+                        "HasMaterial": true,
+                        "MaterialID": "0",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "1730195913345489717",
+                        "ResourceID": "6638633781827320816",
+                        "DataName": "BreakableObject",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "object_broken",
+                                "prefab": "13394784323265476977"
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "hits_to_broke",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "force",
+                                "float": 15
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_despawn",
+                                "float": 5
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
