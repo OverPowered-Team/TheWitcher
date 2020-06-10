@@ -156,21 +156,6 @@ void PlayerController::CheckGround()
 	}
 }
 
-void PlayerController::ToggleDashMultiplier()
-{   
-	if (player_data.type == PlayerController::PlayerType::YENNEFER)
-	{
-		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi;
-
-		if (dashData.disappear_on_dash)
-		{
-			auto meshes = game_object->GetChild("Meshes");
-			meshes->SetEnable(!meshes->IsEnabled());
-		}
-	}
-		
-}
-
 void PlayerController::ChangeCollisionLayer(std::string layer, float time)
 {
 	controller->SetCollisionLayer(layer);
@@ -808,6 +793,14 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
 			(*it)->SetEnable(false);
+
+			parent = parent != nullptr ? parent : this->game_object;
+			(*it)->SetNewParent(parent);
+			if (local)
+				(*it)->transform->SetLocalPosition(pos);
+			else
+				(*it)->transform->SetGlobalPosition(pos);
+
 			(*it)->SetEnable(true);
 			
 			return;
@@ -831,6 +824,19 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
 		particles.insert(std::pair(particle_name, new_particle));
 	}*/
+}
+
+void PlayerController::SpawnDashParticle()
+{
+	if (player_data.type == PlayerType::YENNEFER)
+	{
+		float3 pos = particle_spawn_positions[1]->transform->GetGlobalPosition();
+		if(!is_immune)
+			pos += transform->forward * 0.8f;
+
+		SpawnParticle("Yenn_Portal", pos, false, float3::zero(), GameManager::instance->game_object);
+	}
+		
 }
 
 void PlayerController::ReleaseParticle(std::string particle_name)
@@ -1069,6 +1075,26 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				return;
 			}
 		}
+	}
+}
+
+void PlayerController::StartImmune()
+{
+	is_immune = true;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		meshes->SetEnable(false);
+	}
+}
+
+void PlayerController::StopImmune()
+{
+	is_immune = false;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		meshes->SetEnable(true);
 	}
 }
 
