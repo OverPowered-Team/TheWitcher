@@ -24,6 +24,8 @@ public:
 
 	int phase = 0;
 
+	int rocks_available = 5;
+
 	std::vector<GameObject*> clone_positions;
 	std::vector<GameObject*> rock_positions;
 	std::vector<GameObject*> rocks;

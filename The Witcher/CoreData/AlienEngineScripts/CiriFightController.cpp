@@ -323,7 +323,7 @@ void CiriFightController::ThrowEnvironmentRocks()
 		default:
 			break;
 		}
-		GameObject::Instantiate(game_object->GetComponent<CiriOriginal>()->rock, position);
+		GameObject::Instantiate(rock, position);
 		rock_throwed = true;
 	}
 	else if (throw_time % 10 != 0 && rock_throwed)

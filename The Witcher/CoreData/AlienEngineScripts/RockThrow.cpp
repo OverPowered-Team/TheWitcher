@@ -1,6 +1,7 @@
 #include "RockThrow.h"
 #include "PlayerController.h"
 #include "GameManager.h"
+#include "PlayerManager.h"
 #include "ParticlePool.h"
 #include "Enemy.h"
 #include "Boss.h"
@@ -32,15 +33,17 @@ void RockThrow::Update()
 			game_object->transform->AddRotation(self_rotation);
 		}
 		else {
-			ChangeState(RockState::THROWING);
+			ChangeState(RockState::IDLE);
 		}
 		break;
-	case RockThrow::RockState::THROWING:
+	case RockThrow::RockState::IDLE:
+		game_object->transform->AddRotation(self_rotation);
 		break;
 	case RockThrow::RockState::THROW:
 		if (throw_timer < throw_lifetime) {
 			throw_timer += Time::GetDT();
 			game_object->transform->AddRotation(throw_rotation);
+			transform->AddPosition(throw_direction * throw_speed);
 		}
 		else {
 			Destroy(game_object);
@@ -104,11 +107,16 @@ void RockThrow::ChangeState(RockState state_)
 	case RockThrow::RockState::NONE:
 		break;
 	case RockThrow::RockState::INIT:
+		state = RockState::INIT;
 		break;
-	case RockThrow::RockState::THROWING:
+	case RockThrow::RockState::IDLE:
+		state = RockState::IDLE;
 		break;
 	case RockThrow::RockState::THROW:
 		throw_timer = 0.0f;
+		throw_direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+		game_object->SetNewParent(nullptr);
+		state = RockState::THROW;
 		break;
 	default:
 		break;

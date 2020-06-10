@@ -4,6 +4,7 @@
 #include "PlayerController.h"
 #include "CiriFightController.h"
 #include "CiriOriginal.h"
+#include "RockThrow.h"
 #include "Boss_Lifebar.h"
 
 
@@ -53,10 +54,10 @@ void CiriOriginal::SetActionProbabilities()
 	if (fight_controller->phase_change) {
 		actions.find("Scream")->second->probability = 100.0f;
 	}
-	//else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
-	//	action_cooldown = 10.0f;
-	//	actions.find("RockThrow")->second->probability = 100.0f;
-	//}
+	else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
+		action_cooldown = 10.0f;
+		actions.find("RockThrow")->second->probability = 100.0f;
+	}
 	else {
 		action_cooldown = 1.0f;
 		actions.find("AFK")->second->probability = 100.0f;
@@ -125,6 +126,10 @@ void CiriOriginal::LaunchRockAction()
 	else {
 		target = Random::GetRandomIntBetweenTwo(0, 1);
 	}
+
+	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::THROW);
+	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->target = target;
+	game_object->GetComponent<CiriFightController>()->rocks_available--;
 }
 
 void CiriOriginal::LaunchScreamAction()
