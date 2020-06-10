@@ -103,15 +103,19 @@ void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 	{
 	case Relic_Effect::FIRE:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Fire";
 		break;
 	case Relic_Effect::ICE:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Ice";
 		break;
 	case Relic_Effect::EARTH:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Earth";
 		break;
 	case Relic_Effect::POISON:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Poison";
 		break;
 	}
 
