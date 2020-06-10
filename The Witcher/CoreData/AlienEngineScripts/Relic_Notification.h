@@ -12,6 +12,7 @@ public:
 	PlayerController::PlayerType type;
 	const char* relic_name = nullptr;
 	const char* description = nullptr;
+	std::string attack_type;
 	std::string attack;
 };
 
@@ -25,7 +26,7 @@ public:
 	void Start();
 	void Update();
 
-	void TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo);
+	void TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo, const std::string& element );
 	void ShowRelic(Notification* notification);
 	void StopRelic();
 
@@ -45,6 +46,8 @@ private:
 	GameObject* RB = nullptr;
 	ComponentText* relic_title = nullptr;
 	ComponentText* description = nullptr;
+
+	std::vector<GameObject*> relic_images;
 
 	Notification* active = nullptr;
 	std::queue<Notification*> notifications;

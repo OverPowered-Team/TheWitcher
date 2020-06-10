@@ -326,7 +326,8 @@ void RollingState::OnEnter(PlayerController* player)
 
 	else if (player->player_data.type == PlayerController::PlayerType::GERALT)
 	{
-		player->dashData.dash_trail->Start();
+		if(player->dashData.dash_trail!= nullptr)
+			player->dashData.dash_trail->Start();
 	}
 		
 }
@@ -356,7 +357,8 @@ void RollingState::OnExit(PlayerController* player)
 	}
 	else if (player->player_data.type == PlayerController::PlayerType::GERALT)
 	{
-		player->dashData.dash_trail->Stop();	
+		if (player->dashData.dash_trail != nullptr)
+			player->dashData.dash_trail->Stop();	
 	}
 		
 }
