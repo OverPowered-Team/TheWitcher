@@ -24,6 +24,8 @@ public:
 
 	int phase = 0;
 
+	int rocks_available = 5;
+
 	std::vector<GameObject*> clone_positions;
 	std::vector<GameObject*> rock_positions;
 	std::vector<GameObject*> rocks;
@@ -48,7 +50,9 @@ public:
 	bool first_wall_door = true;
 
 	// Rocks
+	int throw_time = 0;
 	bool rock_throwed = false;
+	std::vector<GameObject*> rocks_throwed;
 
 public:
 

@@ -25,7 +25,8 @@ public:
 	enum(GhoulType,
 		NONE = -1,
 		ORIGINAL,
-		DODGE);
+		DODGE,
+		MINI);
 
 	enum(AwakeBehaviour, 
 		DEFAULT,
@@ -52,8 +53,6 @@ public:
 	void Action();
 
 	void CheckDistance();
-
-	void OnTriggerEnter(ComponentCollider* collider) override;
 
 	void OnAnimationEnd(const char* name) override;
 

@@ -1,6 +1,7 @@
 #include "RockThrow.h"
 #include "PlayerController.h"
 #include "GameManager.h"
+#include "PlayerManager.h"
 #include "ParticlePool.h"
 #include "Enemy.h"
 #include "Boss.h"
@@ -32,19 +33,26 @@ void RockThrow::Update()
 			game_object->transform->AddRotation(self_rotation);
 		}
 		else {
-			ChangeState(RockState::THROWING);
+			ChangeState(RockState::IDLE);
 		}
 		break;
-	case RockThrow::RockState::THROWING:
+	case RockThrow::RockState::IDLE:
+		game_object->transform->AddRotation(self_rotation);
 		break;
 	case RockThrow::RockState::THROW:
 		if (throw_timer < throw_lifetime) {
 			throw_timer += Time::GetDT();
 			game_object->transform->AddRotation(throw_rotation);
+			transform->AddPosition(throw_direction * throw_speed);
+			LOG("Entro throw state rock");
 		}
 		else {
 			Destroy(game_object);
 		}
+		break;
+	case RockThrow::RockState::FALL:
+		game_object->transform->AddRotation(throw_rotation);
+		transform->AddPosition(throw_direction);
 		break;
 	default:
 		break;
@@ -60,7 +68,7 @@ void RockThrow::ReleaseExplosionParticle()
 
 void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (!collided && state == RockState::THROW) {
+	if (!collided && (state == RockState::THROW || state == RockState::FALL)) {
 		std::vector<ComponentCollider*> hitted;
 		hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 5);
 		for (auto it = hitted.begin(); it != hitted.end(); ++it) {
@@ -99,16 +107,26 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 
 void RockThrow::ChangeState(RockState state_)
 {
-	switch (state)
+	switch (state_)
 	{
 	case RockThrow::RockState::NONE:
 		break;
 	case RockThrow::RockState::INIT:
+		state = state_;
 		break;
-	case RockThrow::RockState::THROWING:
+	case RockThrow::RockState::IDLE:
+		state = state_;
 		break;
 	case RockThrow::RockState::THROW:
 		throw_timer = 0.0f;
+		throw_direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
+		game_object->SetNewParent(game_object->parent->parent->parent);
+		LOG("Entro change state rock");
+		state = RockState::THROW;
+		break;
+	case RockThrow::RockState::FALL:
+		throw_direction = float3(0.0f,-0.2f,0.0f);
+		state = state_;
 		break;
 	default:
 		break;

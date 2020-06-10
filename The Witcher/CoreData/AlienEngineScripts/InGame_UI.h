@@ -79,6 +79,10 @@ private:
 	// Charging ultibar particles
 	std::vector<UI_Particles*> particles;
 	UltiBar* ulti_bar = nullptr;
+
+	// Timer
+	float internal_timer = 0.0f;
+	float time_paused = 0.0f;
 };
 
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {

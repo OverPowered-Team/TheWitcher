@@ -9,8 +9,9 @@ public:
 	enum(RockState,
 		NONE = -1,
 		INIT,
-		THROWING,
-		THROW
+		IDLE,
+		THROW,
+		FALL
 		);
 
 	float throw_lifetime = 10.0f;
@@ -19,11 +20,15 @@ public:
 
 	float init_time = 5.0f;
 	float init_timer = 0.0f;
-	float init_velocity = 0.02f;
+	float init_velocity = 0.01f;
 
 	bool throwable = false;
 
-	float3 self_rotation = { 0.0f, 10.0f, 2.0f };
+	float3 self_rotation = { 0.0f, 5.0f, 2.0f };
+	float3 throw_direction;
+	float throw_speed = 4.0f;
+
+	int target = 0;
 
 	RockState state = RockState::NONE;
 
