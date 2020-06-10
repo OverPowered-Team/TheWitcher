@@ -412,7 +412,6 @@ void ComponentCharacterController::DrawScene()
 
 }
 
-
 void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
 {
 }
@@ -472,6 +471,11 @@ float3 ComponentCharacterController::GetPosition() const
 float3 ComponentCharacterController::GetFootPosition() const
 {
 	return  PXVEC3EXT_TO_F3(controller->getFootPosition());
+}
+
+float ComponentCharacterController::GetSlopeLimit() const
+{
+	return RadToDeg(acosf((float)desc.slopeLimit));
 }
 
 //* -------------------------- User hit callbacks

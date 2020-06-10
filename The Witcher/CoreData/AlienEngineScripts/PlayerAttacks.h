@@ -19,6 +19,7 @@ enum class Attack_Tags {
 	T_Ice,
 	T_Earth,
 	T_Lightning,
+	T_Poison,
 	T_Chaining,
 	T_None
 };
@@ -56,7 +57,7 @@ public:
 		std::string next_heavy = "";
 		float3 particle_pos;
 		float3 knock_direction;
-
+		float3 hit_particle_dir;
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
 		float max_distance_traveled = 0.0f;

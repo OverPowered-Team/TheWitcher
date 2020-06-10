@@ -1,8 +1,8 @@
 {
     "Controller": {
         "Name": "GeraltController",
-        "NumStates": 30,
-        "NumTransitions": 55,
+        "NumStates": 22,
+        "NumTransitions": 39,
         "States": [
             {
                 "Name": "Idle",
@@ -55,16 +55,6 @@
                 "Clip": "7425335695216091952"
             },
             {
-                "Name": "LLLL",
-                "Speed": 3,
-                "Clip": "4430193827850051714"
-            },
-            {
-                "Name": "LLLLL",
-                "Speed": 1.7999999523162842,
-                "Clip": "15648905613134895705"
-            },
-            {
                 "Name": "Roll",
                 "Speed": 2,
                 "Clip": "3247834789952261777"
@@ -81,28 +71,8 @@
             },
             {
                 "Name": "HHH",
-                "Speed": 2,
-                "Clip": "12746780046092219424"
-            },
-            {
-                "Name": "HHHH",
-                "Speed": 2,
-                "Clip": "16861371117791152562"
-            },
-            {
-                "Name": "HHHHH",
-                "Speed": 2,
-                "Clip": "2185954702925284050"
-            },
-            {
-                "Name": "LLLH",
-                "Speed": 2,
-                "Clip": "10818579584989298296"
-            },
-            {
-                "Name": "LLLHH",
-                "Speed": 2,
-                "Clip": "18236356071610215831"
+                "Speed": 1.7999999523162842,
+                "Clip": "15648905613134895705"
             },
             {
                 "Name": "LH",
@@ -120,24 +90,14 @@
                 "Clip": "16098445893649691647"
             },
             {
-                "Name": "HLL",
+                "Name": "HLH",
                 "Speed": 2,
                 "Clip": "12560278428043101702"
-            },
-            {
-                "Name": "LLH",
-                "Speed": 1,
-                "Clip": "10877060356217975184"
             },
             {
                 "Name": "Igni",
                 "Speed": 1,
                 "Clip": "12180050432665512495"
-            },
-            {
-                "Name": "LLHL",
-                "Speed": 1.5,
-                "Clip": "15936633746915131167"
             },
             {
                 "Name": "Aard",
@@ -386,66 +346,6 @@
                 ]
             },
             {
-                "Source": "LLLL",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLL",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLLL",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLLL",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
                 "Source": "Roll",
                 "Target": "Idle",
                 "Blend": 0.10000000149011612,
@@ -545,126 +445,6 @@
                 ]
             },
             {
-                "Source": "HHHH",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "HHHH",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "HHHHH",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "HHHHH",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLH",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLH",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLHH",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLLHH",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
                 "Source": "LH",
                 "Target": "Idle",
                 "Blend": 0.25,
@@ -755,7 +535,7 @@
                 ]
             },
             {
-                "Source": "HLL",
+                "Source": "HLH",
                 "Target": "Idle",
                 "Blend": 0.25,
                 "End": true,
@@ -770,67 +550,7 @@
                 ]
             },
             {
-                "Source": "HLL",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLH",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLH",
-                "Target": "Run",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "True",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLHL",
-                "Target": "Idle",
-                "Blend": 0.25,
-                "End": true,
-                "IntConditions": [],
-                "FloatConditions": [],
-                "BoolConditions": [
-                    {
-                        "Type": "bool",
-                        "CompText": "False",
-                        "ParameterIndex": 1
-                    }
-                ]
-            },
-            {
-                "Source": "LLHL",
+                "Source": "HLH",
                 "Target": "Run",
                 "Blend": 0.25,
                 "End": true,
@@ -1379,12 +1099,6 @@
                 "Type": 2
             },
             {
-                "Event_Id": "PlayerAttacks::AllowCombo",
-                "Animation_Id": "7425335695216091952",
-                "Frame": 25,
-                "Type": 2
-            },
-            {
                 "Event_Id": "PlayerController::StartImmune",
                 "Animation_Id": "3247834789952261777",
                 "Frame": 10,
@@ -1808,6 +1522,12 @@
                 "Event_Id": "PlayerAttacks::UpdateCollider",
                 "Animation_Id": "8559991752706635001",
                 "Frame": 51,
+                "Type": 2
+            },
+            {
+                "Event_Id": "PlayerAttacks::AttackShake",
+                "Animation_Id": "7425335695216091952",
+                "Frame": 16,
                 "Type": 2
             }
         ]

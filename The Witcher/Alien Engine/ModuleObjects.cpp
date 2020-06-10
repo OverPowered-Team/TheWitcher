@@ -245,7 +245,7 @@ update_status ModuleObjects::Update(float dt)
 		}
 		functions_to_call.clear();
 	}
-	UpdateGamePadInput();
+	UpdateUIInput();
 	ScriptsUpdate();
 
 	return UPDATE_CONTINUE;
@@ -450,10 +450,27 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 			current_used_shader->Unbind();
 
-			UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
+			viewport->EndViewport();
 
-			
-			ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+			// Once we rendered the scene
+
+			// ------------------ We apply PostProcessing only to that------------------
+
+			// Draw Plane with postprocessing on MSAA PostProc FBO
+			viewport->ApplyPostProcessing();
+
+
+			// ------------------ Then we draw UI on top of the post processing FBO ------------------
+
+			glBindFramebuffer(GL_FRAMEBUFFER, viewport->GetPostProcFBO());
+			glViewport(0, 0, viewport->GetSize().x, viewport->GetSize().y);
+
+			// Enable Depth Test for UI In-World
+			glEnable(GL_DEPTH_TEST);
+
+			UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
+				
+			ComponentCamera* mainCamera = App->renderer3D->actual_game_camera;
 
 			std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 			for (; it_ui_world != ui_world.end(); ++it_ui_world) {
@@ -481,15 +498,21 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 			
+			
 
 			if (printing_scene)
 				OnDrawGizmos();
 			if (isGameCamera) {
 				OnPostRender(viewport->GetCamera());
 			}
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glDisable(GL_DEPTH_TEST);
+
 		}
 
-		viewport->EndViewport();
+		// And finally draw all into the final PostProcFBO's Texture
+		viewport->FinalPass();
+		//viewport->EndViewport();
 	}
 
 #else
@@ -619,9 +642,26 @@ update_status ModuleObjects::PostUpdate(float dt)
 
 		current_used_shader->Unbind();
 
+		game_viewport->EndViewport();
+
+		// Once we rendered the scene
+
+		// ------------------ We apply PostProcessing only to that------------------
+
+		// Draw Plane with postprocessing on MSAA PostProc FBO
+		game_viewport->ApplyPostProcessing();
+
+		// ------------------ Then we draw UI on the post processing FBO ------------------
+
+		glBindFramebuffer(GL_FRAMEBUFFER, game_viewport->GetPostProcFBO());
+		glViewport(0, 0, game_viewport->GetSize().x, game_viewport->GetSize().y);
+		
+		// Default Depth Settings ----------------------------
+		glEnable(GL_DEPTH_TEST);
+
 		UIOrdering(&to_draw_ui, &ui_2d, &ui_world);
 
-		ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
+		ComponentCamera* mainCamera = App->renderer3D->actual_game_camera;
 
 		std::vector<std::pair<float, GameObject*>>::iterator it_ui_world = ui_world.begin();
 		for (; it_ui_world != ui_world.end(); ++it_ui_world) {
@@ -649,18 +689,21 @@ update_status ModuleObjects::PostUpdate(float dt)
 			}
 		}
 		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
 
 		OnPostRender(game_viewport->GetCamera());
 
 	}
 
-	game_viewport->EndViewport();
+	game_viewport->FinalPass();
+	//game_viewport->EndViewport();
 
 	GLuint readFboId = 0;
 	glGenFramebuffers(1, &readFboId);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, game_viewport->GetTexture(), 0);
+		GL_TEXTURE_2D, game_viewport->GetPostProcTexture(), 0);
 	glBlitFramebuffer(0, 0, App->window->width, App->window->height,
 		0, 0, App->window->width, App->window->height,
 		GL_COLOR_BUFFER_BIT, GL_LINEAR);
@@ -2149,6 +2192,13 @@ void ModuleObjects::DeleteReturns()
 			return_actions.pop();
 		}
 	}
+}
+
+void ModuleObjects::UpdateUIInput()
+{
+
+	if (inputUiGamePad)
+		UpdateGamePadInput();
 }
 
 void ModuleObjects::UpdateGamePadInput()

@@ -89,7 +89,7 @@ bool ComponentBar::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((texture == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((texture == nullptr || App->resources->GetResourceWithID(texture->GetID()) == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && texture != nullptr) {
 			App->ui->panel_project->SelectFile(texture->GetAssetsPath(), App->resources->assets);
@@ -138,7 +138,7 @@ bool ComponentBar::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((barTexture == nullptr) ? "NULL" : std::string(barTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((barTexture == nullptr || App->resources->GetResourceWithID(barTexture->GetID()) == nullptr) ? "NULL" : std::string(barTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && barTexture != nullptr) {
 			App->ui->panel_project->SelectFile(barTexture->GetAssetsPath(), App->resources->assets);
@@ -404,6 +404,7 @@ void ComponentBar::DrawTexture(bool isGame, ResourceTexture* tex)
 
 	if (!canvas->isWorld)
 	{
+		game_object_attached->transform->SetGlobalRotation({ 0.0f,0.0f,0.0f,0.0f });
 		glPushMatrix();
 		glMultMatrixf(matrix.Transposed().ptr());
 	}

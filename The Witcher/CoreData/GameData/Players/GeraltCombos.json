@@ -25,7 +25,7 @@
       ],
       "knock_back": {
         "x": 0,
-        "y": 0,
+        "y": 90,
         "z": 0
       },
       "stats": [
@@ -44,7 +44,12 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "g_L_hit",
+      "hit_particle_dir": {
+        "dir_x": 0,
+        "dir_y": 90,
+        "dir_z": 0
+      }
     },
     {
       "name": "LH",
@@ -94,7 +99,12 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "hit_particle"
+      "enemy_hit_particle": "g_LH_hit",
+      "hit_particle_dir": {
+        "dir_x": -90,
+        "dir_y": 0,
+        "dir_z": 0
+      }
 
     },
 
@@ -142,7 +152,12 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "hit_particle"
+      "enemy_hit_particle": "g_LL_hit",
+      "hit_particle_dir": {
+        "dir_x": 0,
+        "dir_y": -90,
+        "dir_z": 0
+      }
     },
 
     {
@@ -187,13 +202,18 @@
       "movement_strength": 2.4,
       "max_distance_traveled": 2.5,
       "min_distance_to_target": 1.2,
-      "next_attack_light": "LLLL",
+      "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.16,
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "g_LLL_hit",
+      "hit_particle_dir": {
+        "dir_x": -36.611,
+        "dir_y": -75.119,
+        "dir_z": 37.552
+      }
     },
     {
       "name": "LHL",
@@ -401,107 +421,12 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "LLLL",
-      "button": "LLLL",
-      "particle_name": "LLLL_slash_particle",
-      "particle_pos": {
-        "pos_x": -0.420,
-        "pos_y": 0.572,
-        "pos_z": 0.297
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 0,
-          "pos_y": -0.15,
-          "pos_z": 160.9,
-          "width": 134.514,
-          "height": 193.656,
-          "depth": 317.335,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0.7,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 0.9
-        },
-        {
-          "name": "KnockBack",
-          "value": 5
-        }
-      ],
-      "activation_frame": 31,
-      "max_distance_traveled": 2.5,
-      "movement_strength": 3,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "LLLLL",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.18,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "LLLLL",
-      "button": "LLLLL",
-      "particle_name": "LLLLL_slash_particle",
-      "particle_pos": {
-        "pos_x": 0.069,
-        "pos_y": 0.572,
-        "pos_z": 0.212
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 0,
-          "pos_y": -0.15,
-          "pos_z": 191.15,
-          "width": 174.114,
-          "height": 230.656,
-          "depth": 372.935,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.3
-        },
-        {
-          "name": "KnockBack",
-          "value": 17
-        }
-      ],
-      "activation_frame": 17,
-      "max_distance_traveled": 2.0,
-      "movement_strength": 0.01,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "End",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.21,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "g_LHL_hit",
+      "hit_particle_dir": {
+        "dir_x": -90,
+        "dir_y": 20,
+        "dir_z": 0
+      }
     },
     {
       "name": "H",
@@ -547,7 +472,12 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "g_H_hit",
+      "hit_particle_dir": {
+        "dir_x": 25.635,
+        "dir_y": -2.704,
+        "dir_z": 169.560
+      }
 
     },
     {
@@ -588,17 +518,22 @@
       "max_distance_traveled": 2.0,
       "movement_strength": 0.6,
       "min_distance_to_target": 1.2,
-      "next_attack_light": "HLL",
-      "next_attack_heavy": "End",
+      "next_attack_light": "End",
+      "next_attack_heavy": "HLH",
       "freeze_time": 0.15,
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "blood_enemy_hit_test",
+      "hit_particle_dir": {
+        "dir_x": 0,
+        "dir_y": 0,
+        "dir_z": 0
+      }
     },
     {
-      "name": "HLL",
-      "button": "HLL",
+      "name": "HLH",
+      "button": "HLH",
       "particle_name": "HLL_slash_particle",
       "particle_pos": {
         "pos_x": -0.420,
@@ -643,7 +578,12 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "blood_enemy_hit_test",
+      "hit_particle_dir": {
+        "dir_x": 0,
+        "dir_y": 0,
+        "dir_z": 0
+      }
     },
     {
       "name": "HH",
@@ -694,118 +634,31 @@
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "g_HH_hit",
+      "hit_particle_dir": {
+        "dir_x": -90,
+        "dir_y": -23.309,
+        "dir_z": 0
+      }
     },
     {
       "name": "HHH",
       "button": "HHH",
-      "particle_name": "HHH_slash_particle",
+      "particle_name": "LLLLL_slash_particle",
       "particle_pos": {
-        "pos_x": 0.045,
-        "pos_y": 0.591,
-        "pos_z": 0.253
+        "pos_x": 0.069,
+        "pos_y": 0.572,
+        "pos_z": 0.212
       },
       "colliders": [
         {
           "type": "Weapon",
           "pos_x": 0,
-          "pos_y": -4.75,
-          "pos_z": 139.5,
-          "width": 98.314,
-          "height": 193.656,
-          "depth": 308.335,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.0
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 2.0,
-      "movement_strength": 1.2,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "End",
-      "next_attack_heavy": "HHHH",
-      "freeze_time": 0.16,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "HHHH",
-      "button": "HHHH",
-      "particle_name": "HHHH_slash_particle",
-      "particle_pos": {
-        "pos_x": 0.213,
-        "pos_y": 0.320,
-        "pos_z": 0
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 0,
-          "pos_y": -4.75,
-          "pos_z": 139.5,
-          "width": 98.314,
-          "height": 193.656,
-          "depth": 320.435,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.2
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 2.0,
-      "movement_strength": 0.6,
-      "min_distance_to_target": 1.2,
-      "next_attack_light": "End",
-      "next_attack_heavy": "HHHHH",
-      "freeze_time": 0.18,
-      "cam_shake": 1,
-      "allow_particle": "allow_combo_expanse",
-      "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "HHHHH",
-      "button": "HHHHH",
-      "particle_name": "HHHHH_slash_particle",
-      "particle_pos": {
-        "pos_x": -0.143,
-        "pos_y": 0.0,
-        "pos_z": 0.0
-      },
-      "colliders": [
-        {
-          "type": "Weapon",
-          "pos_x": 0,
-          "pos_y": -4.75,
-          "pos_z": 139.5,
-          "width": 98.314,
-          "height": 193.656,
-          "depth": 370.435,
+          "pos_y": -0.15,
+          "pos_z": 191.15,
+          "width": 174.114,
+          "height": 230.656,
+          "depth": 372.935,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -819,25 +672,29 @@
       "stats": [
         {
           "name": "Damage",
-          "value": 1.4
+          "value": 1.3
         },
         {
           "name": "KnockBack",
-          "value": 15
+          "value": 17
         }
-
       ],
-      "activation_frame": 25,
+      "activation_frame": 17,
       "max_distance_traveled": 2.0,
-      "movement_strength": 0.6,
+      "movement_strength": 0.01,
       "min_distance_to_target": 1.2,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
-      "freeze_time": 0.21,
+      "freeze_time": 0.16,
       "cam_shake": 1,
       "allow_particle": "allow_combo_expanse",
       "snap_detection_range": 4,
-      "enemy_hit_particle": "blood_enemy_hit_test"
+      "enemy_hit_particle": "g_HHH_hit",
+      "hit_particle_dir": {
+        "dir_x": 0,
+        "dir_y": 0,
+        "dir_z": 0
+      }
     }
   ],
   "Spells": [

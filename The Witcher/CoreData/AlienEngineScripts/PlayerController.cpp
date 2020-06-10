@@ -13,10 +13,10 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-
+#include "../../ComponentTrail.h"
 #include "Bonfire.h"
 #include "Scores_Data.h"
-
+#include "UI_DamageCount.h"
 #include "InGame_UI.h"
 #include "DashCollider.h"
 
@@ -40,7 +40,7 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-
+	
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
@@ -58,8 +58,17 @@ void PlayerController::Start()
 	state = new IdleState();
 	state->OnEnter(this);
 
+	layers.push_back("Ground");
+	layers.push_back("Default");
+	layers.push_back("Player");
+
 	// Dash
-	dashData.current_acel_multi = dashData.accel_multi; 
+	//dashData.current_acel_multi = dashData.accel_multi; 
+	//dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	//if (dashData.dash_trail != nullptr) //todo no ser tant guarro
+	//{
+	//	dashData.dash_trail->Stop();
+	//}
 }
 
 void PlayerController::Update()
@@ -102,6 +111,12 @@ void PlayerController::Update()
 	CheckEnemyCircle();
 
 	CheckGround();
+
+	if (layer_changed && collision_timer < Time::GetTimeSinceStart())
+	{
+		controller->SetCollisionLayer("Player");
+		layer_changed = false;
+	}
 }
 
 void PlayerController::CheckGround()
@@ -109,15 +124,23 @@ void PlayerController::CheckGround()
 	direction = GetDirectionVector();
 
 	RaycastHit hit;
-
-	float ground_distance = 0.2F;
+	is_grounded = false;
+	float ground_distance = 0.3F;
 	float offset = transform->GetGlobalScale().y * 0.5f;
+
+	//capsulecast
+	float4x4 cast_transform = transform->GetGlobalMatrix();
+	cast_transform.Translate(float3(0, offset, 0));
 	
+	//raycast
 	float3 center_position = transform->GetGlobalPosition();
 	center_position.y += offset;
-	
-	is_grounded = false;
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask("Ground")))
+
+	Physics::SetQueryHitTriggers(false);
+	Physics::SetQueryInitialOverlaping(false);
+
+	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
@@ -125,9 +148,11 @@ void PlayerController::CheckGround()
 			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
+
+			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+			if (angle > 45 && direction.y > 0)
+				is_grounded = false;
 		}
-		/*if (direction_vector.y > 0) //temporal?
-			direction_vector.y = 0;*/
 	}
 }
 
@@ -144,6 +169,13 @@ void PlayerController::ToggleDashMultiplier()
 		}
 	}
 		
+}
+
+void PlayerController::ChangeCollisionLayer(std::string layer, float time)
+{
+	controller->SetCollisionLayer(layer);
+	collision_timer = Time::GetTimeSinceStart() + time;
+	layer_changed = true;
 }
 
 void PlayerController::UpdateInput()
@@ -338,6 +370,8 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
+		ChangeColorParticle();
+
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
@@ -449,19 +483,17 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		}
 
 		attacks->CancelAttack();
-		//if (knock) {
-			if (player_data.stats["Health"].GetValue() == 0)
-			{
-				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-				Die();
-			}
-			else
-			{
-				animator->PlayState("Hit");
-				player_data.velocity = knock_speed;
-				SetState(StateType::HIT);
-			}
-		//}
+		if (player_data.stats["Health"].GetValue() == 0)
+		{
+			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+			Die();
+		}
+		else
+		{
+			animator->PlayState("Hit");
+			player_data.velocity = knock_speed;
+			SetState(StateType::HIT);
+		}
 
 		if (GameManager::instance->rumbler_manager)
 			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
@@ -494,7 +526,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 void PlayerController::AbsorbHit()
 {
-	for (auto it = effects.begin(); it != effects.end();)
+	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
 		{
@@ -575,8 +607,6 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		return it;
 	}
 
-	it = effects.erase(it);
-
 	if (tmp_effect->spawned_particle != nullptr)
 	{
 		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
@@ -595,7 +625,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-
+	it = effects.erase(it);
 
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
@@ -648,7 +678,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
 							|| cam->state == CameraMovement::CameraState::AXIS
-							|| p->state->type == StateType::JUMPING)
+							|| p->state->type == StateType::JUMPING
+							|| cam->state == CameraMovement::CameraState::CINEMATIC)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -732,6 +763,12 @@ void PlayerController::PauseParticle()
 			if (p_system)
 				p_system->Pause();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+			
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Pause();
+			
+
 			return;
 		}
 	}
@@ -750,6 +787,11 @@ void PlayerController::ResumeParticle()
 			ComponentParticleSystem* p_system = (*it)->GetComponent<ComponentParticleSystem>();
 			if (p_system)
 				p_system->Play();
+
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Play();
 
 			return;
 		}
@@ -813,7 +855,60 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 		particles.erase(particle_name);
 	}*/
 }
+void PlayerController::ChangeColorParticle()
+{
+	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
+	bool color_changed = false;
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	{
+		color_changed = true;
+		my_color.x = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+	{
+		color_changed = true;
+		my_color.z = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.5)
+			my_color.x += 0.5f;
+		else
+			my_color.x = 1.0f;
+		my_color.y += 0.5f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.3f)
+			my_color.x += 0.7f;
+		else
+			my_color.x = 1.0f;
+		my_color.y = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+	{
+		color_changed = true;
+		my_color.y = 1.0f;
+	}
 
+	if (!color_changed)
+		my_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	for (auto it = particles.begin(); it != particles.end(); ++it)
+	{
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		{
+			for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+			{
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+			}
+		}
+	}
+
+}
 void PlayerController::CheckEnemyCircle()
 {
 	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
@@ -829,7 +924,7 @@ void PlayerController::CheckEnemyCircle()
 
 			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
 
-			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
 			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
@@ -969,6 +1064,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				knock_speed.y = 0;
 
 				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
+
 				return;
 			}
 		}

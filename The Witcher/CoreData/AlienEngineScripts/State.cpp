@@ -323,6 +323,12 @@ void RollingState::OnEnter(PlayerController* player)
 		if (found_dash == false)
 			player->SpawnParticle("Y_Dash_Particle_Emitter", float3(0.f, 0.15f, 0.f));
 	}
+
+	else if (player->player_data.type == PlayerController::PlayerType::GERALT)
+	{
+		if(player->dashData.dash_trail!= nullptr)
+			player->dashData.dash_trail->Start();
+	}
 		
 }
 
@@ -348,6 +354,11 @@ void RollingState::OnExit(PlayerController* player)
 			}
 		}
 
+	}
+	else if (player->player_data.type == PlayerController::PlayerType::GERALT)
+	{
+		if (player->dashData.dash_trail != nullptr)
+			player->dashData.dash_trail->Stop();	
 	}
 		
 }

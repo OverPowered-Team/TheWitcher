@@ -64,18 +64,7 @@ ComponentCamera::ComponentCamera(GameObject* attach): Component(attach)
 
 	/* Create skybox */
 	cubemap = new Cubemap();
-	skybox = new Skybox();
-
-	for (int i = 0; i < 6; i++)
-	{
-		cubemap->skybox_textures[i] = App->resources->default_skybox_textures[i];
-	}
-	for (int i = 0; i < 6; i++)
-	{
-		cubemap->path_pos[i] = "Default";
-	}
-	skybox_texture_id = skybox->GenereteCubeMapFromTextures(cubemap->skybox_textures);
-	skybox->SetBuffers();
+	skybox = new Skybox(cubemap);
 
 	skybox_shader = App->resources->skybox_shader;
 	if (skybox_shader != nullptr)
@@ -135,8 +124,6 @@ ComponentCamera::~ComponentCamera()
 #ifndef GAME_VERSION
 	delete mesh_camera;
 #endif
-
-	glDeleteTextures(1, &skybox_texture_id);
 
 	RELEASE(skybox);
 	RELEASE(cubemap);
@@ -266,28 +253,114 @@ bool ComponentCamera::DrawInspector()
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
-		
-		ImGui::Checkbox("Active Fog", &activeFog);
-		if (activeFog)
-		{
-			ImGui::DragFloat("Density", &fogDensity, 0.001f, 0.0f, 10.f);
-			ImGui::DragFloat("Gradient", &fogGradient, 0.02f, 0.0f, 10.f);
-		}
-
-		ImGui::Spacing();
-		if (ImGui::Button("Apply Fog to Editor Camera"))
-		{
-			App->renderer3D->scene_fake_camera->activeFog = activeFog; 
-			App->renderer3D->scene_fake_camera->fogDensity = fogDensity;
-			App->renderer3D->scene_fake_camera->fogGradient = fogGradient;
-			App->renderer3D->scene_fake_camera->camera_color_background = camera_color_background;
-		}
+	
 
 		if (ImGui::Button("Reset Editor Camera"))
 		{
 			App->renderer3D->scene_fake_camera->Reset();
 		}
 
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		if (ImGui::TreeNodeEx("Post Processing", ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			ImGui::Spacing();
+
+			ImGui::Checkbox("HDR", &hdr);
+
+			if (!hdr)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+			ImGui::DragFloat("Exposure", &exposure, 0.01f, 0.0f, 10.f);
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::DragFloat("Gamma", &gamma, 0.01f, 0.0f, 10.f);
+
+			if (!hdr)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			ImGui::Checkbox("Active Fog", &activeFog);
+
+			if (!activeFog)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+			ImGui::DragFloat("Density", &fogDensity, 0.001f, 0.0f, 10.f);
+			ImGui::DragFloat("Gradient", &fogGradient, 0.02f, 0.0f, 10.f);
+
+
+			if (!activeFog)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();	
+
+			if (ImGui::Button("Apply HDR to Editor Camera"))
+			{
+				/*App->renderer3D->scene_fake_camera->activeFog = activeFog;
+				App->renderer3D->scene_fake_camera->fogDensity = fogDensity;
+				App->renderer3D->scene_fake_camera->fogGradient = fogGradient;
+				App->renderer3D->scene_fake_camera->camera_color_background = camera_color_background;*/
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Apply Fog to Editor Camera"))
+			{
+				App->renderer3D->scene_fake_camera->activeFog = activeFog;
+				App->renderer3D->scene_fake_camera->fogDensity = fogDensity;
+				App->renderer3D->scene_fake_camera->fogGradient = fogGradient;
+				App->renderer3D->scene_fake_camera->camera_color_background = camera_color_background;
+			}
+
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
+			if (ImGui::Button("Import Editor Camera HDR Preferences"))
+			{
+				this->hdr = App->renderer3D->scene_fake_camera->hdr;
+				this->exposure = App->renderer3D->scene_fake_camera->exposure;
+				this->gamma = App->renderer3D->scene_fake_camera->gamma;
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Import Editor Camera FOG Preferences"))
+			{
+				this->activeFog = App->renderer3D->scene_fake_camera->activeFog;
+				this->fogDensity = App->renderer3D->scene_fake_camera->fogDensity;
+				this->fogGradient = App->renderer3D->scene_fake_camera->fogGradient;
+				this->camera_color_background = App->renderer3D->scene_fake_camera->camera_color_background;
+			}
+
+			ImGui::TreePop();
+		}
+
+		
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
@@ -342,7 +415,7 @@ bool ComponentCamera::DrawInspector()
 								texture_dropped->IncreaseReferences();
 								cubemap->skybox_textures[i] = texture_dropped;
 								cubemap->path_pos[i].assign(texture_dropped->GetLibraryPath());
-								skybox->ChangeTextureByType((Cubemap::SKYBOX_POS)i, skybox_texture_id, texture_dropped->id, texture_dropped->width, texture_dropped->height);
+								skybox->ChangeTextureByType((Cubemap::SKYBOX_POS)i, texture_dropped->id, texture_dropped->width, texture_dropped->height);
 								texture_dropped->DecreaseReferences();
 							}
 						}
@@ -401,7 +474,7 @@ void ComponentCamera::Reset()
 	{
 		cubemap->skybox_textures[i] = App->resources->default_skybox_textures[i];
 		cubemap->path_pos[i] = "Default";
-		skybox->ChangeTextureByType(Cubemap::SKYBOX_POS(i), skybox_texture_id, cubemap->skybox_textures[i]->id, cubemap->skybox_textures[i]->width, cubemap->skybox_textures[i]->height);
+		skybox->ChangeTextureByType(Cubemap::SKYBOX_POS(i), cubemap->skybox_textures[i]->id, cubemap->skybox_textures[i]->width, cubemap->skybox_textures[i]->height);
 	}
 	// This can only be used once
 	//skybox_texture_id = skybox->GenereteCubeMapFromTextures(cubemap->skybox_textures);
@@ -607,7 +680,7 @@ void ComponentCamera::DrawSkybox()
 	
 		glBindVertexArray(skybox->vao);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox_texture_id);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->skybox_texture);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS);
@@ -732,6 +805,9 @@ void ComponentCamera::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Fog", activeFog);
 	to_save->SetNumber("Density", fogDensity);
 	to_save->SetNumber("Gradient", fogGradient);
+	to_save->SetBoolean("HDR", hdr);
+	to_save->SetNumber("Exposure", exposure);
+	to_save->SetNumber("Gamma", gamma);
 
 	/* Save skybox (Library File) */
 	std::string path = cubemap->path_pos[0];
@@ -772,6 +848,9 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	fogDensity = (float)to_load->GetNumber("Density");
 	fogGradient = (float)to_load->GetNumber("Gradient");
 
+	hdr = to_load->GetBoolean("HDR", false);
+	exposure = (float)to_load->GetNumber("Exposure", 1.0f);
+	gamma = (float)to_load->GetNumber("Gamma", 0.0f);
 
 	ResourceTexture* tex_pos = nullptr;
 	std::string path_pos;
@@ -784,7 +863,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	{
 		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::POSITIVE_X] = tex_pos;
-		skybox->ChangePositiveX(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		skybox->ChangePositiveX(tex_pos->id, tex_pos->width, tex_pos->height);
 		tex_pos->DecreaseReferences();
 	}
 	tex_pos = nullptr;
@@ -797,7 +876,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	{
 		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::NEGATIVE_X] = tex_pos;
-		skybox->ChangeNegativeX(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		skybox->ChangeNegativeX(tex_pos->id, tex_pos->width, tex_pos->height);
 		tex_pos->DecreaseReferences();
 
 	}
@@ -811,7 +890,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	{
 		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::POSITIVE_Y] = tex_pos;
-		skybox->ChangePositiveY(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		skybox->ChangePositiveY(tex_pos->id, tex_pos->width, tex_pos->height);
 		tex_pos->DecreaseReferences();
 	}
 
@@ -823,7 +902,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	{
 		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::NEGATIVE_Y] = tex_pos;
-		skybox->ChangeNegativeY(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		skybox->ChangeNegativeY(tex_pos->id, tex_pos->width, tex_pos->height);
 		tex_pos->DecreaseReferences();
 	}
 
@@ -835,7 +914,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	{
 		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::POSITIVE_Z] = tex_pos;
-		skybox->ChangePositiveZ(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		skybox->ChangePositiveZ(tex_pos->id, tex_pos->width, tex_pos->height);
 		tex_pos->DecreaseReferences();
 	}
 
@@ -847,7 +926,7 @@ void ComponentCamera::LoadComponent(JSONArraypack* to_load)
 	{
 		tex_pos->IncreaseReferences();
 		cubemap->skybox_textures[Cubemap::NEGATIVE_Z] = tex_pos;
-		skybox->ChangeNegativeZ(skybox_texture_id, tex_pos->id, tex_pos->width, tex_pos->height);
+		skybox->ChangeNegativeZ(tex_pos->id, tex_pos->width, tex_pos->height);
 		tex_pos->DecreaseReferences();
 	}
 

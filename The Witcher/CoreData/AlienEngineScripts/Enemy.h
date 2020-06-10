@@ -60,6 +60,8 @@ public:
 
 	virtual void CanGetInterrupted();
 
+	virtual void RotatePlayer();
+
 	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero());
 	void AddEffect(Effect* new_effect);
@@ -68,7 +70,7 @@ public:
 	void HitFreeze(float freeze_time);
 	void SpawnAttackParticle();
 	void StopHitFreeze(float speed, std::string name);
-	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = false, float3 rotation = float3::zero(), GameObject* parent = nullptr);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = false, float3 rotation = float3::zero(), GameObject* parent = nullptr, math::Quat quat_rot =math::Quat::identity());
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
 	void ChangeAttackEnemy(bool deleting = false);

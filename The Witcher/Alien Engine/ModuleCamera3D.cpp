@@ -11,6 +11,7 @@
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "Viewport.h"
+#include "Physics.h"
 #include "ComponentCurve.h"
 #include "ShortCutManager.h"
 #include "mmgr/mmgr.h"
@@ -134,6 +135,11 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 
 		}
+		else if (!ImGuizmo::IsUsing() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
+		{
+			final_yaw = current_yaw;
+			final_pitch = current_pitch;
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		{
@@ -233,11 +239,14 @@ void ModuleCamera3D::Rotation(float dt)
 	final_yaw += mouse_motion_x * rotation_speed;
 	final_pitch += mouse_motion_y * rotation_speed;
 
-	current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
-	current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
+	if (current_pitch != final_pitch && current_yaw != final_yaw)
+	{
+		current_yaw = math::Lerp(current_yaw, final_yaw, lerp_rot_speed * dt);
+		current_pitch = math::Lerp(current_pitch, final_pitch, lerp_rot_speed * dt);
 
-	Rotate(current_yaw, current_pitch);
-
+		Rotate(current_yaw, current_pitch);
+	}
+	
 	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 	SDL_SetCursor(cursor);
 
@@ -319,10 +328,26 @@ void ModuleCamera3D::CreateRay()
 	}
 
 	// Add Physic Raycast ------------------------
-	RaycastHit physic_hit;
-	bool collider_found = App->physx->Raycast(ray.a, ray.Dir(), 1000, physic_hit, -1);
-	if (collider_found)
-		hits_triangle.push_back({ physic_hit.distance ,physic_hit.collider->game_object_attached });
+
+	bool collider_found = false;
+
+	if (App->physx->mouse_pick_colliders)
+	{
+		RaycastHit physic_hit;
+		bool last_overlap_init = App->physx->query_initial_overlap;
+		bool last_pick_triggers = App->physx->query_hit_triggers;
+		Physics::SetQueryInitialOverlaping(false);
+		Physics::SetQueryHitTriggers(App->physx->mouse_pick_triggers);
+
+		if (Physics::Raycast(ray.a, ray.Dir(), 1000.f, physic_hit)) {
+			collider_found = true;
+			hits_triangle.push_back({ physic_hit.distance ,physic_hit.collider->game_object_attached });
+		}
+			
+		Physics::SetQueryInitialOverlaping(last_overlap_init);
+		Physics::SetQueryHitTriggers(last_pick_triggers);
+	}
+
 
 	// Sort by distance ---------------------
 	std::sort(hits_triangle.begin(), hits_triangle.end(), ModuleCamera3D::SortByDistance);
@@ -432,7 +457,7 @@ bool ModuleCamera3D::TestTrianglesIntersections(GameObject* object, const LineSe
 	float distance = 0.f;
 	local_ray.Transform(object->transform->global_transformation.Inverted());
 
-	if (mesh != nullptr && mesh->mesh != nullptr) {
+	if (mesh != nullptr && mesh->mesh != nullptr && mesh->enabled) {
 		ComponentTransform* transform = (ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM);
 
 		for (uint i = 0; i < mesh->mesh->num_index; i += 3) {

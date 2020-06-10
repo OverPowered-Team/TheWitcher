@@ -409,6 +409,15 @@ void ResourceShader::SetUniform3i(const std::string& name, const int& v0, const 
 		glUniform3i(GetUniformLocation(name), v0, v1, v2);
 }
 
+void ResourceShader::SetUniform3f(const std::string& name, const float& v0, const float& v1, const float& v2)
+{
+	OPTICK_EVENT();
+
+	int location = GetUniformLocation(name);
+	if (location != -1)
+		glUniform3f(GetUniformLocation(name), v0, v1, v2);
+}
+
 void ResourceShader::SetUniformFloat3(const std::string& name, const float3& vec)
 {
 	OPTICK_EVENT();
@@ -542,6 +551,10 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 					sprintf_s(clightspaceMB, clightSpaceMatrixBaked.c_str(), i * 3 + it);
 					SetUniformMat4f(clightspaceMB, (*iter)->light->projMatrix * (*iter)->light->viewMatrix[it]);
 				}
+
+				std::string cintensity = std::string(cname).append(".shadowIntensity");
+				SetUniform1f(cintensity, (*iter)->shadowIntensity
+				);
 			}
 			else
 				SetUniform1i(cshadow, 0);
@@ -584,6 +597,10 @@ void ResourceShader::SetPointLights(const std::string& name, const std::list<Poi
 
 			std::string variablesLocation = std::string(cname).append(".pointLightProperties");
 			SetUniformFloat3v(variablesLocation, variablesVec3, 4);
+
+			std::string caffectShadow = std::string(cname).append(".affectShadows");
+			SetUniform1i(caffectShadow, (*iter)->affect_shadows);
+
 
 			++i;
 		}

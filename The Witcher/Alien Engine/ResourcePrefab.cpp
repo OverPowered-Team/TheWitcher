@@ -161,8 +161,9 @@ bool ResourcePrefab::ReadBaseInfo(const char* assets_file_path)
 			name = pack->GetString("Name");
 		}
 		catch (...) {
+			name = App->file_system->GetBaseFileName(path.data());
 			pack->StartSave();
-			pack->SetString("Name", App->file_system->GetBaseFileName(path.data()).data());
+			pack->SetString("Name", name.data());
 			pack->FinishSave();
 			remove(GetLibraryPath());
 			App->file_system->Copy(GetAssetsPath(), GetLibraryPath());
@@ -219,6 +220,7 @@ void ResourcePrefab::Save(GameObject* prefab_root)
 	if (prefab_value != nullptr && prefab_object != nullptr) {
 		JSONfilepack* prefab = new JSONfilepack(path.data(), prefab_object, prefab_value);
 		prefab->StartSave();
+		prefab->SetString("Name", name.data());
 		JSONArraypack* game_objects = prefab->InitNewArray("Prefab.GameObjects");
 
 		game_objects->SetAnotherNode();
@@ -333,6 +335,8 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 			Prefab::InitScripts(obj);
 		}
 
+		obj->SetPrefab(ID);
+
 		// Navigation
 		auto ui = obj->GetComponentsInChildrenRecursive<ComponentUI>();
 		auto uiParent = obj->GetComponents<ComponentUI>();
@@ -344,7 +348,10 @@ GameObject* ResourcePrefab::ConvertToGameObjects(GameObject* parent, int list_nu
 		App->objects->ReAttachUIScriptEvents();
 		obj->ResetIDs();
 
-		obj->SetPrefab(ID);
+		for each (ComponentUI * uiElement in ui) {
+			uiElement->ReSetIDNavigation();
+		}
+
 		obj->transform->SetLocalPosition(pos);
 		if (set_selected) {
 			App->objects->SetNewSelectedObject(obj, false);

@@ -239,7 +239,7 @@ void ParticleSystem::InstantiateParticles(int particles)
 {
 	for (uint i = 0; i < particles; ++i)
 	{
-		emmitter.GetInitialValues(particleInfo.position, particleInfo.velocity, particleInfo.speed, particleInfo.globalTransform);
+		emmitter.GetInitialValues(particleInfo.position, particleInfo.velocity, particleInfo.rotation, particleInfo.speed, particleInfo.globalTransform);
 		CreateParticle(particleInfo, endInfo);
 	}
 }
@@ -263,6 +263,7 @@ void ParticleSystem::DrawParticles()
 	}
 	
 	RenderLight();
+	
 
 }
 
@@ -553,6 +554,7 @@ void ParticleSystem::RemoveLight()
 	light->DecreaseReferences();
 	light = nullptr;
 
+	delete point_light;
 	point_light = nullptr;
 }
 

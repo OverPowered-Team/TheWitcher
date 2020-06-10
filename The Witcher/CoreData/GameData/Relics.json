@@ -8,7 +8,7 @@
         "name": "fire_runestone",
         "vfx_on_apply": "p_fire_runestone",
 		    "vfx_position": 0,
-        "time": 0.5,
+        "time": 1.0,
         "ticks_time": 1.0,
         "flat_modifiers": [
           {
@@ -48,7 +48,7 @@
         "name": "earth_runestone",
         "vfx_on_apply": "p_earth_runestone",
 		    "vfx_position": 0,
-        "time": 0.0,
+        "time": 1.0,
         "ticks_time": 0.0
       }
     },
@@ -72,7 +72,7 @@
         "name": "poison_runestone",
         "vfx_on_apply": "p_poison_runestone",
         "vfx_position": 0,
-        "time": 0.0,
+        "time": 1.0,
         "ticks_time": 0.0,
         "flat_modifiers": [
           {
@@ -86,7 +86,7 @@
   "DASH": [
     {
       "effect": 1,
-      "name": "Fire Oil",
+      "name": "Fire Runestone",
       "description": "Dodge leaves a burning trail",
       "dash_effect": {
         "name": "fire_oil",
@@ -104,10 +104,12 @@
     },
     {
       "effect": 2,
-      "name": "Ice Oil",
+      "name": "Ice Runestone",
       "description": "Dodge leaves a icy trail",
       "dash_effect": {
         "name": "ice_oil",
+        "vfx_on_apply": "p_ice_runestone",
+        "vfx_position": 0,
         "time": 3.0,
         "ticks_time": 0.0,
         "multiplicative_modifiers": [
@@ -124,13 +126,13 @@
     },
     {
       "effect": 3,
-      "name": "Earth Oil",
+      "name": "Earth Runestone",
       "description": "Dodge leaves a rock traps",
       "dash_effect": {
         "name": "earth_oil",
         "vfx_on_apply": "p_earth_runestone",
         "vfx_position": 0,
-        "time": 0.0,
+        "time": 3.0,
         "ticks_time": 0.0,
         "flat_modifiers": [
           {
@@ -142,7 +144,7 @@
     },
     {
       "effect": 5,
-      "name": "Poison Oil",
+      "name": "Poison Runestone",
       "description": "Dodge leaves a poisonous trail",
       "dash_effect": {
         "name": "poison_oil",

@@ -117,8 +117,14 @@ void ComponentUI::Update()
 				break; }
 			}
 
-			if (canvas!=nullptr && canvas->game_object_attached->enabled && canvas->allow_navigation)
-				UILogicGamePad();
+			if (canvas != nullptr && canvas->game_object_attached->enabled && canvas->allow_navigation)
+			{
+				if (App->objects->inputUiGamePad)
+					UILogicGamePad();
+				else
+					UILogicMouse();
+			}
+				
 		}
 
 	}
@@ -199,6 +205,7 @@ void ComponentUI::Draw(bool isGame)
 
 	if (!canvas->isWorld)
 	{
+		game_object_attached->transform->SetGlobalRotation({ 0.0f,0.0f,0.0f,0.0f });
 		glPushMatrix();
 		glMultMatrixf(matrix.Transposed().ptr());
 	}

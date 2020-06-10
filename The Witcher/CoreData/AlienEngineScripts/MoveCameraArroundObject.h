@@ -15,6 +15,7 @@ public:
 	float3 start_curve = float3::zero();
 	float3 end_front = float3::zero();
 	float3 end_curve = float3::zero();
+	float3 front_end = float3::zero();
 
 	float speed = 0;
 	float current_pos = 0; 
@@ -23,7 +24,7 @@ public:
 	bool ended_intro = false;
 	float transition_duration = 0;
 	float current_time_transition = 0;
-
+	bool entered_go_back = true;
 	MoveCameraArroundObject();
 	virtual ~MoveCameraArroundObject();
 	

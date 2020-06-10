@@ -37,6 +37,32 @@ ResourceMaterial::ResourceMaterial() : Resource()
 		LOG_ENGINE("There was an error. Could not find the shadow shader");
 }
 
+ResourceMaterial::ResourceMaterial(ResourceMaterial* material)
+{
+	type = ResourceType::RESOURCE_MATERIAL;
+
+	for (uint i = 0; i < (uint)TextureType::MAX; ++i)
+	{
+			textures[i].first = material[i].textures->first;
+			textures[i].second = material[i].textures->second;
+			if (textures[i].second)
+				textures[i].second->IncreaseReferences();
+	}
+
+	simple_depth_shader = material->simple_depth_shader;
+	if (simple_depth_shader != nullptr)
+		simple_depth_shader->IncreaseReferences();
+	else
+		LOG_ENGINE("There was an error. Could not find the seimple depht shader");
+
+	used_shader = material->used_shader;
+	if (used_shader != nullptr)
+		used_shader->IncreaseReferences();
+	else
+		LOG_ENGINE("There was an error. Could not find the shadow shader");
+
+}
+
 ResourceMaterial::~ResourceMaterial()
 {
 	for (uint texType = 0; texType < (uint)TextureType::MAX; ++texType)
@@ -692,6 +718,12 @@ void ResourceMaterial::InputTexture(TextureType texType)
 
 	ImGui::SameLine();
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+
+	if (textures[(uint)texType].second != nullptr)
+		ImGui::Text("%i", textures[(uint)texType].second->references);
+
+	ImGui::SameLine();
+
 	ImGui::PushID((int)texType);
 	if (ImGui::RadioButton("###", false))
 	{

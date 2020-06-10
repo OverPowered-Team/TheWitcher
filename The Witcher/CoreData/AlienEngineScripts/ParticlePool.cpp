@@ -28,6 +28,7 @@ GameObject* ParticlePool::GetInstance(std::string particle_type, float3 pos, flo
         instance->transform->SetGlobalRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
 
         instance->SetEnable(true);
+        LOG("HELLO ME HAGO ENABLE");
 
         return instance;
     }

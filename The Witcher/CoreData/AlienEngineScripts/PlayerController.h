@@ -55,7 +55,8 @@ public:
 		float min_speed = 2.0f; 
 		float start_speed = 0.f; 
 		float current_acel_multi = 0.f; 
-		bool disappear_on_dash = true; 
+		bool disappear_on_dash = true;
+		ComponentTrail* dash_trail;
 	};
 
 public:
@@ -118,6 +119,8 @@ public:
 
 	void ReleaseParticle(std::string particle_name);
 
+	void ChangeColorParticle();
+
 	//Battle Circles
 	void CheckEnemyCircle();
 	// Terrain - particles
@@ -127,6 +130,9 @@ public:
 
 	// Dash wonders
 	void ToggleDashMultiplier(); 
+
+	// Colliders Change Oscillators
+	void ChangeCollisionLayer(std::string layer, float time);
 
 private:
 	void LoadStats();
@@ -223,6 +229,10 @@ private:
 
 	CameraShake* shake = nullptr;
 	float last_regen_tick = 0.0f;
+	std::vector<const char*> layers;
+
+	float collision_timer = 0.0f;
+	bool layer_changed = false;
 };
 
 ALIEN_FACTORY PlayerController* CreatePlayerController() {

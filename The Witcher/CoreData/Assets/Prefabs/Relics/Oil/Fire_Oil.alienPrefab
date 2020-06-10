@@ -4,7 +4,7 @@
             {
                 "Name": "Fire_Oil",
                 "FamilyNumber": 1,
-                "ID": "15021587722433412659",
+                "ID": "12122130370208259448",
                 "ParentID": "14046935774256790219",
                 "Enabled": true,
                 "ParentEnabled": true,
@@ -19,9 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -3.3015682697296143,
-                            0.90364253520965576,
-                            12.110710144042969
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
                             0,
@@ -30,12 +30,12 @@
                             1
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            1.5,
+                            1.5,
+                            1.5
                         ],
                         "ScaleNegative": false,
-                        "ID": "6607063254931208095"
+                        "ID": "11656777210665953618"
                     },
                     {
                         "Type": 1,
@@ -45,7 +45,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "11209387032029318900",
+                        "ID": "16177861020022767911",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9526335529349955647",
@@ -53,7 +53,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "16877534192750810881",
+                        "ID": "12171563663205050075",
                         "HasMaterial": true,
                         "MaterialID": "9359663929398460155",
                         "Enabled": true
@@ -83,7 +83,7 @@
                         ]
                     },
                     {
-                        "ID": "2168410060449646486",
+                        "ID": "14186039886474278742",
                         "Type": 16,
                         "Enabled": true,
                         "Volume": 1,
@@ -94,7 +94,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "16805949451057164159",
+                        "ID": "14071389628869780144",
                         "ResourceID": "14777702257696053657",
                         "DataName": "RelicBehaviour",
                         "HasInspector": true,
@@ -116,8 +116,8 @@
             {
                 "Name": "p_fire",
                 "FamilyNumber": 2,
-                "ID": "2198663535704683593",
-                "ParentID": "15021587722433412659",
+                "ID": "11357970500985046679",
+                "ParentID": "12122130370208259448",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -147,17 +147,17 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13355780870945214700"
+                        "ID": "17850668338729346629"
                     },
                     {
                         "Type": 15,
-                        "ID": "9047681800547682762",
+                        "ID": "11385731951191339167",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -3.3015682697296143,
-                                0.90364253520965576,
-                                12.110710144042969
+                                0,
+                                0,
+                                0
                             ],
                             "Rotation": [
                                 0,
@@ -169,7 +169,7 @@
                             "Velocity": [
                                 0,
                                 1,
-                                0
+                                -1.1920930376163597e-07
                             ],
                             "Force": [
                                 0,
@@ -203,10 +203,27 @@
                                 0,
                                 180
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                180,
+                                180,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 2,
                             "Speed": 1,
                             "Color": [
@@ -256,14 +273,14 @@
                                 10
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 0.20000003278255463,
+                            "CurrentLife": 0.27000004053115845,
                             "SpawnRate": 1,
                             "Delay": 0,
                             "Loop": true,
                             "Position": [
-                                -3.3015682697296143,
-                                0.90364253520965576,
-                                12.110710144042969
+                                0,
+                                0,
+                                0
                             ],
                             "RelativePosition": [
                                 0,
@@ -304,7 +321,305 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Name": "p_glow_relic",
+                "FamilyNumber": 2,
+                "ID": "9702424229397419452",
+                "ParentID": "12122130370208259448",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7899605918415560363",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16457774743182087954"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "16819032600808562958",
+                        "Billboard": 0,
+                        "Start": {
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                0.18608313798904419,
+                                -0.066037900745868683,
+                                -0.031812917441129684
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 0.20000000298023224,
+                            "Color": [
+                                1,
+                                0.99999958276748657,
+                                0.99998998641967773,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 0.029999999329447746,
+                            "Size3D": [
+                                0.029999999329447746,
+                                0.029999999329447746,
+                                0.029999999329447746
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 3,
+                            "AxisRotationStart": false,
+                            "Angle3D": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Random": false,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": false,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "StartTime": 0,
+                            "FinalTime": 1,
+                            "Speed": 1,
+                            "Color": [
+                                0.88075882196426392,
+                                0.83158516883850098,
+                                0.016708163544535637,
+                                1
+                            ],
+                            "Size": 0.05000000074505806,
+                            "Size3D": [
+                                0.05000000074505806,
+                                0.05000000074505806,
+                                0.05000000074505806
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                -10,
+                                0
+                            ],
+                            "AxisRotation": false,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 0,
+                            "Zone": 0,
+                            "Distance": 2,
+                            "Radius": 1,
+                            "OutRadius": 1,
+                            "CubeSize": [
+                                10,
+                                5,
+                                10
+                            ],
+                            "MaxLife": 1,
+                            "CurrentLife": 0.27000004053115845,
+                            "SpawnRate": 100,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                -90.000007629394531,
+                                0,
+                                0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "4067749186061296870",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 1,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Name": "Point light",
+                "FamilyNumber": 2,
+                "ID": "17818153869214860462",
+                "ParentID": "12122130370208259448",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "7899605918415560363",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.66666668653488159,
+                            0.66666668653488159,
+                            0.66666668653488159
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15118567109812408581"
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "399160010681040687",
+                        "PrintIcon": true,
+                        "Intensity": 5,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Ambient": [
+                            0.71078431606292725,
+                            0,
+                            0
+                        ],
+                        "Diffuse": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Specular": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "Constant": 0.10000000149011612,
+                        "Linear": 0.0099999997764825821,
+                        "Quadratic": 50
                     }
                 ]
             }

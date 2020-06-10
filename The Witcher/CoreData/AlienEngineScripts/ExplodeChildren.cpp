@@ -10,10 +10,14 @@ ExplodeChildren::~ExplodeChildren()
 
 void ExplodeChildren::Start()
 {
-	std::vector<ComponentParticleSystem*> particle_gos = game_object->GetChild("Particles")->GetComponentsInChildren<ComponentParticleSystem>();
-	for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
-		particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
-		(*it)->OnStop();
+	has_broke = true;
+	GameObject* objparticles = game_object->GetChild("Particles");
+	if (objparticles != nullptr) {
+		std::vector<ComponentParticleSystem*> particle_gos = objparticles->GetComponentsInChildren<ComponentParticleSystem>();
+		for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+			particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+			(*it)->OnStop();
+		}
 	}
 }
 
@@ -26,8 +30,10 @@ void ExplodeChildren::Explode()
 
 	Invoke(std::bind(&ExplodeChildren::Fall, this), time_to_disappear);
 
-	particles["explosion"]->Restart();
-	particles["smoke"]->Restart();
+	if (particles.find("explosion") != particles.end())
+		particles["explosion"]->Restart();
+	if (particles.find("smoke") != particles.end())
+		particles["smoke"]->Restart();
 }
 
 void ExplodeChildren::SetVars(float force, float time_despawn)

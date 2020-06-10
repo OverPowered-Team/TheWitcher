@@ -36,6 +36,7 @@
 #include "..\..\..\Alien Engine\ComponentImage.h"
 #include "..\..\..\Alien Engine\ComponentBar.h"
 #include "..\..\..\Alien Engine\ComponentConvexHullCollider.h"
+#include "..\..\..\Alien Engine\ComponentTrail.h"
 /*-----------------COMPONENTS-------------------*/
 
 /*-----------------MATH-------------------*/

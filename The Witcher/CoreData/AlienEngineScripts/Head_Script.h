@@ -12,6 +12,7 @@ public:
 	Head_Script();
 	virtual ~Head_Script();
 
+	void Start();
 	void OnTriggerEnter(ComponentCollider* collider);
 
 	int points = 0;

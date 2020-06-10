@@ -14,7 +14,11 @@ DialogueManager::~DialogueManager()
 void DialogueManager::Start()
 {
 	audioEmitter = GetComponent<ComponentAudioEmitter>();
-	text = GameObject::FindWithName("SubtitlesText")->GetComponent<ComponentText>();
+	text = subtitlesUI->GetChild("Subtitles Text")->GetComponent<ComponentText>();
+	text->SetAlpha(1.0f);
+	image = subtitlesUI->GetChild("Subtitles Background")->GetComponent<ComponentImage>();
+	start_bg_alpha = image->current_color.a;
+	image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
 
 	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
 	LoadJSONDialogues();
@@ -42,7 +46,7 @@ void DialogueManager::LoadJSONDialogues()
 			std::string subtitles = dialogues->GetString("subtitles");
 			float time = dialogues->GetNumber("time");
 
-			dialogueData.push_back(std::make_tuple(eventName, subtitles, time));
+			dialogueData.push_back(std::make_tuple(eventName, subtitles, time)); // TODO: a dialogue
 
 		} while (dialogues->GetAnotherNode());
 	}
@@ -61,7 +65,8 @@ void DialogueManager::Update()
 		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
 		{
 			playing = false;
-			text->SetEnable(false);
+			text->SetEnable(false); 
+			image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
 			currentDialogue.Reset();
 			audioEmitter->ChangeVolume(0.5f);
 		}
@@ -129,9 +134,9 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 	// Set Subtitles 
 	if (text->IsEnabled() == false)
 		text->SetEnable(true);
-	//text->Reset(); 
-	text->SetText(newDialogue.subtitlesText.c_str());
+	image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, start_bg_alpha);
 
+	text->SetText(newDialogue.subtitlesText.c_str());
 
 	// Play new
 	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
