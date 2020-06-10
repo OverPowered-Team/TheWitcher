@@ -549,10 +549,10 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, flo
 	
 	if (new_particle == nullptr)
 		return;
-	else {
-		if (!quat_rot.Equals(math::Quat::identity()))
-			new_particle->transform->SetGlobalRotation(quat_rot * quat_rot.RotateX(DEGTORAD * (rotation.x)) * quat_rot.RotateY(DEGTORAD * (rotation.y)) * quat_rot.RotateZ(DEGTORAD * (rotation.z)));
-	}
+	
+	if (!quat_rot.Equals(math::Quat::identity()))
+		new_particle->transform->SetGlobalRotation(quat_rot * quat_rot.RotateX(DEGTORAD * (rotation.x)) * quat_rot.RotateY(DEGTORAD * (rotation.y)) * quat_rot.RotateZ(DEGTORAD * (rotation.z)));
+
 
 	particles.push_back(new_particle);
 }

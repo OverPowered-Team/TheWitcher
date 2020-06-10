@@ -33,6 +33,7 @@ void UI_Char_Frame::Start()
 		portrait = geralt_img->GetComponent<ComponentImage>();
 		original_portrait_x = geralt_img->transform->GetLocalPosition().x;
 		original_portrait_y = geralt_img->transform->GetLocalPosition().y;
+		
 
 		if (!geralt_img->IsEnabled())
 		{
@@ -51,6 +52,8 @@ void UI_Char_Frame::Start()
 	kill_count_number = kill_count->GetComponent<ComponentText>();
 	kill_count_number_X = kill_count->GetChild("x")->GetComponent<ComponentText>();
 	kill_count->SetEnable(false);
+	fire = game_object->GetChild("Fire")->GetComponent<ComponentAnimatedImage>();
+	fire->game_object_attached->SetEnable(false);
 }
 
 void UI_Char_Frame::Update()
@@ -149,6 +152,25 @@ void UI_Char_Frame::Update()
 			}
 		}
 	}
+
+	if (is_fire_changing)
+	{
+		float t = (Time::GetGameTime() - fire_fade_time) / 0.25f;
+		float lerp = Maths::Lerp(current_fire_alpha, goal_alpha_fire, t);
+
+		fire->current_color.a = lerp;
+
+		if (t >= 1)
+		{
+			fire->current_color.a = goal_alpha_fire;
+			is_fire_changing = false;
+			
+			if (fire->current_color.a == 0)
+			{
+				fire->game_object_attached->SetEnable(false);
+			}
+		}
+	}
 }
 
 // Bar Changes
@@ -234,6 +256,23 @@ void UI_Char_Frame::StartFadeKillCount(int new_kill_count)
 		killcount_lerp_time = Time::GetGameTime() - kill_count_number->current_color.a * killcount_time_to_lerp;
 		break;
 	}
+	}
+}
+
+void UI_Char_Frame::PlayerOnFire(bool is_on_fire)
+{
+	if (!fire->game_object_attached->IsEnabled())
+	{
+		fire->game_object_attached->SetEnable(true);
+	}
+
+	if (is_on_fire != fire->current_color.a)
+	{
+		goal_alpha_fire = is_on_fire;
+		current_fire_alpha = fire->current_color.a;
+
+		is_fire_changing = true;
+		fire_fade_time = Time::GetGameTime();
 	}
 }
 

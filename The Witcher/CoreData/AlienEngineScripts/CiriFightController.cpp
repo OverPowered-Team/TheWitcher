@@ -22,6 +22,7 @@ CiriFightController::~CiriFightController()
 void CiriFightController::Start()
 {
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
+	rock_positions = game_object->GetChild("Rock_Positions")->GetChildren();
 
 	if (platform)
 		material_platform = (*platform->GetChildren().begin())->GetComponent<ComponentMaterial>();
@@ -55,6 +56,7 @@ void CiriFightController::Update()
 		fight_started = true;
 		phase_change = true;
 		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
+		SpawnRocks();
 	}
 	if (fight_started) {
 		switch (phase)
@@ -142,12 +144,7 @@ void CiriFightController::FinishPhaseThree()
 void CiriFightController::FinishPhaseFour()
 {
 	Scores_Data::won_level2 = true;
-	Scores_Data::last_scene = SceneManager::GetCurrentScene();
-	Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.type_kills;
-	Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.type_kills;
-	GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
-	Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
-	Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
+	GameManager::instance->PrepareDataNextScene(false);
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 	Destroy(game_object);
 }
@@ -326,7 +323,7 @@ void CiriFightController::ThrowEnvironmentRocks()
 		default:
 			break;
 		}
-		GameObject::Instantiate(game_object->GetComponent<CiriOriginal>()->rock, position);
+		GameObject::Instantiate(rock, position);
 		rock_throwed = true;
 	}
 	else if (throw_time % 10 != 0 && rock_throwed)
@@ -347,4 +344,15 @@ void CiriFightController::TransportPlayer()
 			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->ReceiveDamage(200);
 		}
 	}
+}
+
+void CiriFightController::SpawnRocks()
+{
+	for (int i = 0; i < 5; ++i) {
+		rocks.push_back(GameObject::Instantiate(rock, float3::zero(), true, rock_positions[i]));
+	}
+}
+
+void CiriFightController::DestroyRocks()
+{
 }
