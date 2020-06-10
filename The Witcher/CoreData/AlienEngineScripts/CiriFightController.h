@@ -50,6 +50,7 @@ public:
 	bool first_wall_door = true;
 
 	// Rocks
+	int throw_time = 0;
 	bool rock_throwed = false;
 	std::vector<GameObject*> rocks_throwed;
 

@@ -52,7 +52,7 @@ void RockThrow::Update()
 		break;
 	case RockThrow::RockState::FALL:
 		game_object->transform->AddRotation(throw_rotation);
-		transform->AddPosition(throw_direction * throw_speed);
+		transform->AddPosition(throw_direction);
 		break;
 	default:
 		break;
@@ -125,8 +125,7 @@ void RockThrow::ChangeState(RockState state_)
 		state = RockState::THROW;
 		break;
 	case RockThrow::RockState::FALL:
-		throw_timer = 0.0f;
-		throw_direction = float3(0.0f,0.2f,0.0f);
+		throw_direction = float3(0.0f,-0.2f,0.0f);
 		state = state_;
 		break;
 	default:
