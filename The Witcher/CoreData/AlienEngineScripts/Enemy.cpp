@@ -27,6 +27,21 @@ void Enemy::Awake()
 	if (mesh)
 	{
 		meshes = mesh->GetChildren();
+		for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+		{
+			if ((*iter) && (*iter)->HasChildren())
+			{
+				std::vector<GameObject*> childs = (*iter)->GetChildren();
+				for (auto iter2 = childs.begin(); iter2 != meshes.end(); iter2++)
+				{
+					if ((*iter2))
+					{
+						meshes.push_back((*iter2));
+					}
+				}	
+				meshes.erase(iter);
+			}
+		}
 		LOG("Got Meshes");
 	}
 
@@ -204,7 +219,7 @@ void Enemy::UpdateEnemy()
 	if (inHit)
 	{
 		whiteTime += Time::GetDT();
-		if (whiteTime > 0.2)
+		if (whiteTime > 0.1)
 		{
 			for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
 			{
@@ -364,7 +379,8 @@ void Enemy::Decapitate(PlayerController* player)
 
 	if (decapitated_head)
 	{
-		game_object->GetChild("Head")->SetEnable(false); //disable old head
+		// If not working, check prefab
+		game_object->GetChild("Mesh")->GetChild("Head")->SetEnable(false); //disable old head
 		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();

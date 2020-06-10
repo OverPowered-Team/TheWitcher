@@ -37,9 +37,9 @@ public:
 
 	Prefab ghoul_original;
 	Prefab ghoul_dodge;
+	Prefab ghoul_mini;
 
 	Prefab drowned_range;
-	Prefab drowned_grab;
 
 	Prefab ciri_clone;
 
@@ -60,9 +60,9 @@ ALIEN_FACTORY EnemyManager* CreateEnemyManager() {
 
 	SHOW_IN_INSPECTOR_AS_PREFAB(manager->ghoul_original);
 	SHOW_IN_INSPECTOR_AS_PREFAB(manager->ghoul_dodge);
+	SHOW_IN_INSPECTOR_AS_PREFAB(manager->ghoul_mini);
 
 	SHOW_IN_INSPECTOR_AS_PREFAB(manager->drowned_range);
-	SHOW_IN_INSPECTOR_AS_PREFAB(manager->drowned_grab);
 
 	return manager;
 } 
