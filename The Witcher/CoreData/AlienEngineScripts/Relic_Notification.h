@@ -47,6 +47,8 @@ private:
 	ComponentText* relic_title = nullptr;
 	ComponentText* description = nullptr;
 
+	std::vector<GameObject*> relic_images;
+
 	Notification* active = nullptr;
 	std::queue<Notification*> notifications;
 	std::vector<GameObject*> L_combo_images;

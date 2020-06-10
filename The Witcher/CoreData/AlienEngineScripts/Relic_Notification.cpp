@@ -35,6 +35,18 @@ void Relic_Notification::Start()
 		L_combo_images[i]->SetEnable(false);
 		H_combo_images[i]->SetEnable(false);
 	}
+
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Fire"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Poison"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Ice"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Earth"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Lighting"));
+
+	auto iter = relic_images.begin();
+	for (; iter != relic_images.end(); ++iter)
+	{
+		(*iter)->SetEnable(false);
+	}
 }
 
 void Relic_Notification::Update()
@@ -101,23 +113,23 @@ void Relic_Notification::ShowRelic(Notification* notification)
 	{
 		if (strcmp(notification->attack_type.c_str(), "Fire") == 0)
 		{
-
-		}
-		else if (strcmp(notification->attack_type.c_str(), "Ice") == 0)
-		{
-
-		}
-		else if (strcmp(notification->attack_type.c_str(), "Earth") == 0)
-		{
-
-		}
-		else if (strcmp(notification->attack_type.c_str(), "Lightning") == 0)
-		{
-
+			relic_images[0]->SetEnable(true);
 		}
 		else if (strcmp(notification->attack_type.c_str(), "Poison") == 0)
 		{
-
+			relic_images[1]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Ice") == 0)
+		{
+			relic_images[2]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Earth") == 0)
+		{
+			relic_images[3]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Lighting") == 0)
+		{
+			relic_images[4]->SetEnable(true);
 		}
 	}
 
@@ -183,6 +195,12 @@ void Relic_Notification::StopRelic()
 	if (RB->IsEnabled())
 	{
 		RB->SetEnable(false);
+	}
+
+	auto iter = relic_images.begin();
+	for (; iter != relic_images.end(); ++iter)
+	{
+		(*iter)->SetEnable(false);
 	}
 
 	if (marker)
