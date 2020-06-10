@@ -17,6 +17,12 @@ public:
 		MULTISAMPLING_FBO,
 		MULTISAMPLING_COLOR_RBO,
 		MULTISAMPLING_DEPTH_RBO,
+		POST_PROC_FBO,
+		POST_PROC_TEXTURE,
+		POST_PROC_MULTISAMPLING_FBO,
+		POST_PROC_MULTISAMPLING_COLOR,
+		POST_PROC_MULTISAMPLING_DEPTH,
+		MAX
 	};
 
 	FBO();
@@ -34,6 +40,11 @@ public:
 	void DeleteFBO();
 
 	uint GetFBOTexture();
+
+	uint GetPostProcTexture(); 
+
+	uint GetPostProcFinalFBO();
+	uint GetPostProcMSAAFBO();
 
 	uint GetFBO();
 
@@ -54,7 +65,7 @@ public:
 private:
 
 	bool z_buffer_mode = true;
-	uint ID[8];
+	uint ID[BufferType::MAX];
 	uint msaa = 4;
 	float2 position;
 
@@ -63,7 +74,6 @@ private:
 
 
 class ComponentCamera;
-class FBO;
 
 class Viewport
 {
@@ -81,6 +91,10 @@ public:
 
 	void EndViewport();
 
+	void ApplyPostProcessing();
+
+	void FinalPass();
+
 	void SetPos(float2 position);
 
 	void SetSize(float width, float height);
@@ -91,8 +105,18 @@ public:
 
 	uint GetFBO();
 
+	// PostProc FBO with MSAA, depth buffer
+	uint GetPostProcFBO();
+
+	// Final fbo with only a colored mesh, that is what the player sees
+	uint GetPostProcFinalFBO();
+
 	uint GetTexture();
 
+	uint GetPostProcTexture(); 
+
+	void BlitFboToFbo(uint from, uint to, bool color = true, bool depth = false, bool stencil = false);
+	
 	bool ScreenPointToViewport(float2& screen_point);
 
 	bool CanRender();

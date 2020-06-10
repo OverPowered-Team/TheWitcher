@@ -1,15 +1,14 @@
 {
-    "Name": "DummyEnemy",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "DummyEnemy",
                 "FamilyNumber": 1,
-                "ID": "10189542100817966845",
-                "ParentID": "11057856866783222399",
+                "ID": "7599831536087606462",
+                "ParentID": "6616064934755043752",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -20,9 +19,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -433.0032958984375,
+                            -16.735080718994141,
+                            -218.53050231933594
                         ],
                         "Rotation": [
                             0,
@@ -31,24 +30,119 @@
                             1
                         ],
                         "Scale": [
-                            1,
-                            1,
-                            1
+                            0.54000002145767212,
+                            0.54000002145767212,
+                            0.54000002145767212
                         ],
                         "ScaleNegative": false,
-                        "ID": "3354888489368951737"
+                        "ID": "1021355578031719236"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            1.0499999523162842,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            1,
+                            2.2999999523162842,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 0,
+                        "Mass": 3.369999885559082,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": true,
+                        "FreezePosY": true,
+                        "FreezePosZ": true,
+                        "FreezeRotX": true,
+                        "FreezeRotY": true,
+                        "FreezeRotZ": true
+                    },
+                    {
+                        "Enabled": false,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0.85000002384185791,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Ground",
+                        "Size": [
+                            1,
+                            2.2000000476837158,
+                            1
+                        ]
+                    },
+                    {
+                        "ID": "17535249537123728810",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "3698921875",
+                        "Event": "1007768684",
+                        "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17583011030285590865",
+                        "ResourceID": "14834376215112853254",
+                        "DataName": "DummyEnemy",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 8,
+                                "Name": "button_x",
+                                "prefab": "11332376520660187980"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "button_y",
+                                "prefab": "4876915567326021503"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxAngle",
+                                "float": 45
+                            }
+                        ]
                     }
                 ]
             },
             {
                 "Name": "Dummie_LP",
                 "FamilyNumber": 2,
-                "ID": "10138738505869555001",
-                "ParentID": "10189542100817966845",
+                "ID": "15757784314045539746",
+                "ParentID": "7599831536087606462",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -74,19 +168,19 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "71210604784107396"
+                        "ID": "13963236763050673029"
                     }
                 ]
             },
             {
                 "Name": "Cylinder009",
                 "FamilyNumber": 3,
-                "ID": "9938464398501801886",
-                "ParentID": "10138738505869555001",
+                "ID": "13340077184043861676",
+                "ParentID": "15757784314045539746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -112,7 +206,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11868474941871951903"
+                        "ID": "10494618029290880059"
                     },
                     {
                         "Type": 1,
@@ -122,7 +216,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "18394128750139743295",
+                        "ID": "2594939068714767431",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "11999709868568272242",
@@ -130,7 +224,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "10419590614027923890",
+                        "ID": "5628803796082698758",
                         "HasMaterial": true,
                         "MaterialID": "10152634236207425506",
                         "Enabled": true
@@ -140,12 +234,12 @@
             {
                 "Name": "Cylinder008",
                 "FamilyNumber": 3,
-                "ID": "14231121841188064565",
-                "ParentID": "10138738505869555001",
+                "ID": "9162835297575447851",
+                "ParentID": "15757784314045539746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -171,7 +265,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9253155540515002191"
+                        "ID": "6261268138387445383"
                     },
                     {
                         "Type": 1,
@@ -181,7 +275,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3866016326129924637",
+                        "ID": "18010185077343958622",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "16107440606073318642",
@@ -189,7 +283,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "9582748267564806356",
+                        "ID": "163909934962272753",
                         "HasMaterial": true,
                         "MaterialID": "10152634236207425506",
                         "Enabled": true
@@ -199,12 +293,12 @@
             {
                 "Name": "Dummie",
                 "FamilyNumber": 3,
-                "ID": "11002216385741163841",
-                "ParentID": "10138738505869555001",
+                "ID": "1786834839023950692",
+                "ParentID": "15757784314045539746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -214,12 +308,12 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0.019733255729079247,
-                            -0.13123568892478943,
-                            0
+                            0.01971435546875,
+                            -0.13128662109375,
+                            -0.000152587890625
                         ],
                         "Rotation": [
-                            0,
+                            7.4505805969238281e-08,
                             0,
                             0,
                             1
@@ -230,7 +324,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18147580902570137915"
+                        "ID": "2773178743469117866"
                     },
                     {
                         "Type": 1,
@@ -240,7 +334,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "12174053105933666284",
+                        "ID": "10057128508505261309",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "16962614708316324095",
@@ -248,7 +342,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "10947144037533628415",
+                        "ID": "15039170521858130965",
                         "HasMaterial": true,
                         "MaterialID": "10152634236207425506",
                         "Enabled": true
@@ -258,12 +352,12 @@
             {
                 "Name": "Cylinder010",
                 "FamilyNumber": 3,
-                "ID": "17569083154230090461",
-                "ParentID": "10138738505869555001",
+                "ID": "6440431201278994678",
+                "ParentID": "15757784314045539746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -289,7 +383,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3344159813299349360"
+                        "ID": "1693830757418156371"
                     },
                     {
                         "Type": 1,
@@ -299,7 +393,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "6993094243169486686",
+                        "ID": "8913895958281755144",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "4645640262200841592",
@@ -307,7 +401,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "5971088417053247623",
+                        "ID": "14625399408804591769",
                         "HasMaterial": true,
                         "MaterialID": "10152634236207425506",
                         "Enabled": true
@@ -317,12 +411,12 @@
             {
                 "Name": "Cylinder005",
                 "FamilyNumber": 3,
-                "ID": "5634561374789246043",
-                "ParentID": "10138738505869555001",
+                "ID": "2954516634208841760",
+                "ParentID": "15757784314045539746",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -348,7 +442,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9314564192928679405"
+                        "ID": "1385322941690000292"
                     },
                     {
                         "Type": 1,
@@ -358,7 +452,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "180852291800148727",
+                        "ID": "14006046674097698434",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "13786853376411789203",
@@ -366,13 +460,58 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1088376992726098867",
+                        "ID": "13390009821279217152",
                         "HasMaterial": true,
                         "MaterialID": "10152634236207425506",
                         "Enabled": true
                     }
                 ]
+            },
+            {
+                "Name": "Combo_UI",
+                "FamilyNumber": 2,
+                "ID": "11714543599552018492",
+                "ParentID": "7599831536087606462",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8783417915353973124",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            2.3940544128417969,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15252854561620274686"
+                    },
+                    {
+                        "Enabled": true,
+                        "isWorld": true,
+                        "Type": 19,
+                        "BBType": 1
+                    }
+                ]
             }
         ]
-    }
+    },
+    "Name": "DummyEnemy"
 }

@@ -42,8 +42,8 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	AttackEffect* effect = new AttackEffect();
 	effect->SetAttackIdentifier(attack_name);
 	effect->on_hit_effect = effect_to_apply;
+	effect_to_apply->name += "_" + std::to_string(_player->relics.size());
 	effect->name = effect_to_apply->name;
-
 
 	switch (relic_effect)
 	{
@@ -155,20 +155,20 @@ void RelicBehaviour::Update()
 {
 	transform->AddRotation({ 0, -2, 0 });
 
-	if (count_position >= 1.0)
+	if (count_position >= 0.5)
 		going_down = true;
 	else if(count_position <= 0.0)
 		going_down = false;
 
 	if (!going_down && !picked)
 	{
-		count_position += 0.01f;
-		transform->AddPosition({ 0, 0.01, 0 });
+		count_position += 0.005f;
+		transform->AddPosition({ 0, 0.005, 0 });
 	}
 	else if(!picked)
 	{
-		count_position -= 0.01f;
-		transform->AddPosition({ 0, -0.01, 0 });
+		count_position -= 0.005f;
+		transform->AddPosition({ 0, -0.005, 0 });
 	}
 
 	if (picked)

@@ -38,7 +38,7 @@ void Training_Zone::Update()
 
 	float acceleration_factor = 0.0f;
 
-	if ((cycle_time * 0.5f) >= (internal_timer - current_oscilating_time))
+	if ((cycle_time * 0.5f) > (internal_timer - current_oscilating_time))
 	{
 		acceleration_factor = (internal_timer - current_oscilating_time) / (cycle_time * 0.5f * 0.5f);
 	}
@@ -135,6 +135,9 @@ void Training_Zone::OnTriggerEnter(ComponentCollider* col)
 		case TYPE::ANY:
 			break;
 		}
+
+		col->game_object_attached->GetComponent<PlayerController>()->ChangeCollisionLayer("NoOscillator", 0.5f);
+
 	}
 }
 

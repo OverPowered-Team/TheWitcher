@@ -16,6 +16,9 @@ public:
 	float time_credits_last = 40.0f;
 	float last_position = 400.0f;
 	float time = 0.0f;
+
+	ComponentText* points1 = nullptr;
+	ComponentText* points2 = nullptr;
 };
 
 ALIEN_FACTORY Credits* CreateCredits() {

@@ -6,6 +6,7 @@
 class EventManager;
 class ComponentAudioEmitter;
 class ComponentText;
+class ComponentImage;
 
 struct AudioData
 {
@@ -83,13 +84,17 @@ private:
 
 	ComponentAudioEmitter* audioEmitter = nullptr;
 	ComponentText* text = nullptr;
+	ComponentImage* image = nullptr;
 
 
 	// to read from JSON
 	std::vector <std::tuple<std::string, std::string, float>> dialogueData; // event name, subtitles and subtitle time 
 
+private: 
+	float start_bg_alpha = 0.0f;
+
 public: 
-	GameObject* textObj = nullptr;
+	GameObject* subtitlesUI = nullptr;
 
 };
 
@@ -98,6 +103,6 @@ ALIEN_FACTORY DialogueManager* CreateDialogueManager() {
 	// To show in inspector here
 
 
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->textObj);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->subtitlesUI);
 	return alien;
 }

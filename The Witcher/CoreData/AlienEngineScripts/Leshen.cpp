@@ -9,6 +9,7 @@
 #include "Leshen.h"
 #include "Scores_Data.h"
 #include "Boss_Lifebar.h"
+#include "UI_DamageCount.h"
 
 void Leshen::StartEnemy()
 {
@@ -52,8 +53,9 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		animator->PlayState("Death");
 		Scores_Data::won_level1 = true;
 		Scores_Data::last_scene = SceneManager::GetCurrentScene();
-		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
-		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
+		Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.type_kills;
+		Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.type_kills;
+		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
 		Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
 		Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);

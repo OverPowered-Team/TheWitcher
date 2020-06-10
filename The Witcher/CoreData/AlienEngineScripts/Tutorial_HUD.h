@@ -22,31 +22,44 @@ public:
 
 	void ShowTriggerAttack(bool show);
 	void ShowTriggerDash(bool show);
+	void ShowTriggerMagic(bool show);
 
 private:
 	
 	void Start();
 	void Update();
 
+	void HandleTriggerDash();
+	void HandleTriggerMagic();
+	void HandleTriggerAttack();
+
 private:
 
 	// States
 	Current_Showing current_state_attack = Current_Showing::ANY;
 	Current_Showing current_state_dash = Current_Showing::ANY;
+	Current_Showing current_state_magic = Current_Showing::ANY;
 
-	// Components
+	// Components Attack
 	ComponentImage*		X			= nullptr;
 	ComponentImage*		Y			= nullptr;
 	ComponentText*		text_attack	= nullptr;
 
+	// Components Dash
 	ComponentImage*		RB			= nullptr;
 	ComponentText*		text_dash	= nullptr;
+
+	// Components Magic
+	std::vector<ComponentImage*> magic_images;
+	ComponentText* text_magic = nullptr;
 
 	// Effects
 	bool show_attack	= false;
 	bool show_dash		= false;
+	bool show_magic		= false;
 	float attack_time	= 0.0f;
 	float dash_time		= 0.0f;
+	float magic_time	= 0.0f;
 
 };
 

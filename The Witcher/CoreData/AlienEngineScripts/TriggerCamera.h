@@ -15,15 +15,15 @@ struct TransitionInfo
 	TransitionInfo()
 	{};
 
-	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, bool is_cinematic)
-		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), is_cinematic(is_cinematic), type(ToTransitionType::DYNAMIC)
+	TransitionInfo(float distance, float hor_angle, float vert_angle, float transition_time, bool is_cinematic, GameObject* cutscene)
+		: distance(distance), hor_angle(hor_angle), vert_angle(vert_angle), transition_time(transition_time), is_cinematic(is_cinematic), cutscene(cutscene), type(ToTransitionType::DYNAMIC)
 	{};
 
-	TransitionInfo(GameObject* to_move, float transition_time, bool is_cinematic)
-		: to_move(to_move), transition_time(transition_time), is_cinematic(is_cinematic), type(ToTransitionType::STATIC)
+	TransitionInfo(GameObject* to_move, float transition_time, bool is_cinematic, GameObject* cutscene)
+		: to_move(to_move), transition_time(transition_time), is_cinematic(is_cinematic), cutscene(cutscene), type(ToTransitionType::STATIC)
 	{}
-	TransitionInfo(GameObject* to_move, float transition_time, ToAxisType type, bool is_cinematic)
-		: to_move(to_move), transition_time(transition_time), axis_type(type), is_cinematic(is_cinematic), type(ToTransitionType::AXIS)
+	TransitionInfo(GameObject* to_move, float transition_time, ToAxisType type, bool is_cinematic, GameObject* cutscene)
+		: to_move(to_move), transition_time(transition_time), axis_type(type), is_cinematic(is_cinematic), cutscene(cutscene), type(ToTransitionType::AXIS)
 	{};
 
 	float distance = 0.f;
@@ -47,7 +47,7 @@ public:
 	TriggerCamera();
 	virtual ~TriggerCamera();
 	void Start() override;
-	void StartTransition(const TransitionInfo& transition_info);
+	void StartTransition(TransitionInfo& transition_info);
 	
 	void RegisterMovement(int playerNum, int collider_position);
 	bool PlayerMovedForward(int player_num);

@@ -612,6 +612,9 @@ void PlayerAttacks::CreateAttacks()
 				attack_combo->GetNumber("particle_pos.pos_y"),
 				attack_combo->GetNumber("particle_pos.pos_z"));
 
+			info.hit_particle_dir = float3(attack_combo->GetNumber("hit_particle_dir.dir_x"),
+				attack_combo->GetNumber("hit_particle_dir.dir_y"), attack_combo->GetNumber("hit_particle_dir.dir_z"));
+
 			JSONArraypack* colliders_array = attack_combo->GetArray("colliders");
 			if(colliders_array)
 			{

@@ -109,7 +109,7 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	if (strcmp(name, "Attack") == 0) {
 		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
 		{
-			state = DrownedState::HIDE;
+			SetState("Hide");
 			current_hide_time = Time::GetGameTime();
 			animator->SetBool("hide", true);
 		}
@@ -148,5 +148,12 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	else if (strcmp(name, "GetOff") == 0)
 	{
 		SetState("Attack");
+		ReleaseParticle("DigParticle");
+		ReleaseParticle("HeadDigParticle");
+	}
+	else if (strcmp(name, "Hide") == 0)
+	{
+		ReleaseParticle("DigParticle");
+		ReleaseParticle("HeadDigParticle");
 	}
 }

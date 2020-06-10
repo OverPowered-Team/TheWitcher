@@ -72,6 +72,8 @@ void NilfSoldierRange::UpdateEnemy()
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
 			state = NilfgaardSoldierState::IDLE;
+			animator->PlayState("Idle");
+			animator->SetBool("stunned", false);
 		}
 		break;
 
@@ -168,6 +170,16 @@ void NilfSoldierRange::ShootAttack()
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
 	audio_emitter->StartSound("SoldierShoot");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
-	arrow_rb->SetRotation(RotateProjectile());
-	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
+	float angle = 10.f * Maths::Deg2Rad();
+
+	int rand = Random::GetRandomIntBetweenTwo(0, 2);
+	if (rand != 0) {
+		Quat dir = Quat::RotateAxisAngle(float3::unitY(), (rand == 1) ? angle : -angle);
+		arrow_rb->SetRotation(RotateProjectile() * dir);
+		arrow_rb->AddForce(dir * direction.Mul(20), ForceMode::IMPULSE);
+	}
+	else {
+		arrow_rb->SetRotation(RotateProjectile());
+		arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
+	}
 }
