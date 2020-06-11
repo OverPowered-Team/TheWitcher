@@ -139,6 +139,18 @@ void CutsceneCamera::ExecuteCurve()
 {
 	if (!shots[shots_counter]->element.curve_info.ended_intro && shots[shots_counter]->element.curve_info.curve && shots[shots_counter]->element.curve_info.cam)
 	{
+		if (shots[shots_counter]->element.first_frame && shots[shots_counter]->element.curve_info.cam)
+		{
+				shots[shots_counter]->element.curve_info.start_curve = shots[shots_counter]->element.curve_info.curve->curve.ValueAt(0);
+				shots[shots_counter]->element.curve_info.end_curve = shots[shots_counter]->element.curve_info.curve->curve.ValueAt(1);
+				shots[shots_counter]->element.curve_info.start_front = shots[shots_counter]->element.curve_info.cam->frustum.front;
+
+				shots[shots_counter]->element.curve_info.end_front = shots[shots_counter]->element.curve_info.target->transform->GetGlobalPosition() - shots[shots_counter]->element.curve_info.start_curve;
+				shots[shots_counter]->element.curve_info.start_pos = shots[shots_counter]->element.curve_info.cam->game_object_attached->transform->GetGlobalPosition();
+				shots[shots_counter]->element.first_frame = false;
+			
+		}
+
 		float3 currentPos = shots[shots_counter]->element.curve_info.target->transform->GetGlobalPosition();
 		float3 front_vector = shots[shots_counter]->element.curve_info.cam->frustum.front;
 
@@ -155,31 +167,37 @@ void CutsceneCamera::ExecuteCurve()
 			float percentatge_lerp = shots[shots_counter]->element.curve_info.current_time_transition / shots[shots_counter]->element.curve_info.transition_duration;
 			currentPos = math::Lerp(shots[shots_counter]->element.curve_info.start_pos, shots[shots_counter]->element.curve_info.start_curve, percentatge_lerp);
 			front_vector = math::Lerp(shots[shots_counter]->element.curve_info.start_front, shots[shots_counter]->element.curve_info.end_front, percentatge_lerp);
-			//front_vector = target->transform->GetGlobalPosition() - currentPos;
 			front_vector.Normalize();
+			shots[shots_counter]->element.curve_info.cam->frustum.up = float3::unitY();
 		}
+
+
 		else if (shots[shots_counter]->element.curve_info.go_back)
 		{
 			shots[shots_counter]->element.curve_info.current_time_transition += Time::GetDT();
 			if (shots[shots_counter]->element.curve_info.entered_go_back)
 			{
-				shots[shots_counter]->element.curve_info.front_end = shots[shots_counter]->element.curve_info.cam->frustum.front;
 				shots[shots_counter]->element.curve_info.entered_go_back = false;
+				shots[shots_counter]->element.curve_info.go_back = false;
+				shots[shots_counter]->element.curve_info.ended_intro = true;
+				shots[shots_counter]->element.curve_info.front_end = shots[shots_counter]->element.curve_info.cam->frustum.front;
+				
 			}
 			if (shots[shots_counter]->element.curve_info.current_time_transition >= shots[shots_counter]->element.curve_info.transition_duration)
 			{
 				shots[shots_counter]->element.curve_info.current_time_transition = shots[shots_counter]->element.curve_info.transition_duration;
-				shots[shots_counter]->element.curve_info.go_back = false;
-				shots[shots_counter]->element.curve_info.ended_intro = true;
+			
 			}
 
 
 			float percentatge_lerp = shots[shots_counter]->element.curve_info.current_time_transition / shots[shots_counter]->element.curve_info.transition_duration;
 			currentPos = math::Lerp(shots[shots_counter]->element.curve_info.end_curve, shots[shots_counter]->element.curve_info.start_pos, percentatge_lerp);
-			front_vector = math::Lerp(shots[shots_counter]->element.curve_info.front_end, shots[shots_counter]->element.curve_info.start_front, percentatge_lerp);
-			front_vector.Normalize();
-			LOG("%f", percentatge_lerp);
+			//front_vector = math::Lerp(shots[shots_counter]->element.curve_info.front_end, shots[shots_counter]->element.curve_info.start_front, percentatge_lerp);
+			//front_vector = shots[shots_counter]->element.curve_info.target->transform->GetGlobalPosition() - currentPos;
+			//front_vector.Normalize();
 		}
+
+
 		else
 		{
 
@@ -187,34 +205,34 @@ void CutsceneCamera::ExecuteCurve()
 			shots[shots_counter]->element.curve_info.current_pos += shots[shots_counter]->element.curve_info.speed * Time::GetDT();
 			if (shots[shots_counter]->element.curve_info.current_pos > 1)
 			{
-				shots[shots_counter]->element.curve_info.go_back = true;
-				shots[shots_counter]->element.curve_info.current_time_transition = 0;
+				//shots[shots_counter]->element.curve_info.go_back = true;
+				
+				state = CutsceneState::IDLE;
+				LOG("IM VIBING");
 
 			}
 			front_vector = shots[shots_counter]->element.curve_info.target->transform->GetGlobalPosition() - currentPos;
 			front_vector.Normalize();
-
+			shots[shots_counter]->element.curve_info.cam->frustum.up = float3::unitY();
 
 		}
+
+
 		shots[shots_counter]->element.curve_info.cam->frustum.front = front_vector;
 		camera->transform->SetGlobalPosition(currentPos);
-
-		shots[shots_counter]->element.curve_info.cam->frustum.up = float3::unitY();
-
 	}
 	else {
+		shots[shots_counter]->element.curve_info.current_time_transition = 0;
+		
+
 		shots[shots_counter]->element.stay_timer = Time::GetGameTime();
 		if (shots[shots_counter]->element.it_shake)
 			shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
-		state = CutsceneState::IDLE;
-		LOG("IM VIBING");
 	}
 }
 
 void CutsceneCamera::BuildCurve(CutsceneShot* shot)
 {
-	shot->element.curve_info.start_pos = game_object->transform->GetGlobalPosition();
-
 	if (shot->element.curve_info.path)
 	{
 		shot->element.curve_info.curve = shot->element.curve_info.path->GetComponent<ComponentCurve>();
@@ -222,14 +240,6 @@ void CutsceneCamera::BuildCurve(CutsceneShot* shot)
 		{
 			LOG("Curve found!");
 			shot->element.curve_info.cam = camera->GetComponent<ComponentCamera>();
-			if (shot->element.curve_info.cam)
-			{
-				shot->element.curve_info.start_curve = shot->element.curve_info.curve->curve.ValueAt(0);
-				shot->element.curve_info.end_curve = shot->element.curve_info.curve->curve.ValueAt(1);
-				shot->element.curve_info.start_front = shot->element.curve_info.cam->frustum.front;
-				shot->element.curve_info.end_front = shot->element.curve_info.target->transform->GetGlobalPosition() - shot->element.curve_info.start_curve;
-			}
-
 		}
 
 	}
