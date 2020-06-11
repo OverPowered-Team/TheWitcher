@@ -185,6 +185,22 @@ void ResourceTexture::DisplayTextureOnInspector()
 		ImGui::Combo("Texture filter", &wrap_type, "Nearest\0Arroundir\0NearestMipMapNearest\0LinearMipMapNearest\0NearestMipMapLinear\0LinearMipMapLinear\0");*/
 		ImGui::Text("References : %i", references);
 	}
+
+}
+	
+void ResourceTexture::IncreaseReferences()
+{
+	if (ignore_next_increase) {
+		ignore_next_increase = false;
+	}
+	else {
+		if (references == 0) {
+			LoadMemory();
+		}
+		if (App->objects->enable_instancies) {
+			++references;
+		}
+	}
 }
 
 

@@ -84,7 +84,6 @@ void Ghoul::JumpImpulse()
 {
     if (can_jump)
     {
-        float3 jump_direction = direction * jump_speed;
         character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
     }
 }
@@ -104,6 +103,10 @@ void Ghoul::Stun(float time)
 bool Ghoul::IsDead()
 {
     return (state == GhoulState::DEAD ? true : false);
+}
+bool Ghoul::IsHit()
+{
+    return (state == GhoulState::HIT ? true: false);
 }
 bool Ghoul::IsDying()
 {
@@ -154,12 +157,21 @@ void Ghoul::SetState(const char* state_str)
         LOG("Incorrect state name: %s", state_str);
 }
 
+bool Ghoul::IsRangeEnemy()
+{
+    if (ghoul_type == GhoulType::MINI)
+        return false;
+    else
+        return true;
+}
+
 void Ghoul::Action()
 {
     // Check if inside range or just entered
     if (distance < stats["AttackRange"].GetValue())
     {
         animator->PlayState("Slash");
+        RotatePlayer();
         animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
         state = GhoulState::ATTACK;
     }
@@ -172,6 +184,7 @@ void Ghoul::Action()
         RotatePlayer();
         animator->PlayState("Jump");
         jump_speed = (distance + 1) / 1.13f * animator->GetCurrentStateSpeed();
+        jump_direction = direction.Normalized() * jump_speed;
         state = GhoulState::JUMP;
     }
 
@@ -226,9 +239,18 @@ void Ghoul::OnAnimationEnd(const char* name)
             SetState("Idle");
 
         can_jump = false;
-        ReleaseParticle("AreaAttackSlash");
-        ReleaseParticle("AreaAttackSphere");
-        ReleaseParticle("AreaAttackRock");
+        if (ghoul_type != GhoulType::MINI)
+        {
+            ReleaseParticle("AreaAttackSlash");
+            ReleaseParticle("AreaAttackSphere");
+            ReleaseParticle("AreaAttackRock");
+        }
+        else
+        {
+            ReleaseParticle("AreaAttackSlashMini");
+            ReleaseParticle("AreaAttackSphereMini");
+            ReleaseParticle("AreaAttackRockMini");
+        }
     }
     else if (strcmp(name, "Hit") == 0)
     {
@@ -266,9 +288,18 @@ void Ghoul::OnDrawGizmosSelected()
 void Ghoul::ActivateRangeCollider()
 {
     range_collider->SetEnable(true);
-    SpawnParticle("AreaAttackSlash", particle_spawn_positions[2]->transform->GetGlobalPosition());
-    SpawnParticle("AreaAttackSphere", particle_spawn_positions[2]->transform->GetGlobalPosition());
-    SpawnParticle("AreaAttackRock", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    if (ghoul_type != GhoulType::MINI) 
+    {
+        SpawnParticle("AreaAttackSlash", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackSphere", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackRock", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    }
+    else
+    {
+        SpawnParticle("AreaAttackSlashMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackSphereMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackRockMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    }
 }
 
 void Ghoul::DeactivateRangeCollider()
