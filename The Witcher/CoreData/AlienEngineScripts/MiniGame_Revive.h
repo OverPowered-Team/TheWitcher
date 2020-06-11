@@ -37,11 +37,16 @@ public:
 	PlayerController* player_reviving = nullptr;
 
 private:
+
+	void HeartPumPum();
+
+private:
 	GameObject* moving_part = nullptr;
 	GameObject* minigame = nullptr;
 	GameObject* start_X = nullptr;
 	GameObject* game_A = nullptr;
 	GameObject* good_part = nullptr;
+	GameObject* heart = nullptr;
 
 	int sign = 1;
 	int actual_inputs = 0;
@@ -51,6 +56,9 @@ private:
 
 	float position_goal = 2.0f;
 	float original_moving_position = 0.0f;
+
+	bool heart_pumpum = false;
+	float heart_time = 0.0f;
 
 	// Green Part reduction
 	int correct_inputs = 0;

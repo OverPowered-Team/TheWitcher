@@ -20,6 +20,7 @@ void MiniGame_Revive::Start()
 	game_A = game_object->GetChild("Minigame")->GetChild("Y");
 	start_X->SetEnable(true);
 	minigame->SetEnable(false);
+	heart = game_object->GetChild("Minigame")->GetChild("Heart");
 
 	original_moving_position = moving_part->transform->GetLocalPosition().x;
 	new_scale = good_part->transform->GetLocalScale().x * 0.5f;
@@ -94,6 +95,17 @@ void MiniGame_Revive::Minigame()
 		float position_x = Maths::Lerp(original_moving_position * sign, original_moving_position * -sign, (Time::GetGameTime() - time) / lerp_time);
 
 		moving_part->transform->SetLocalPosition(float3(position_x, 0, 0.1));
+
+		if (!heart_pumpum && Maths::Abs(position_x) <= 0.5f)
+		{
+			heart_pumpum = true;
+			heart_time = Time::GetGameTime();
+		}
+
+		if (heart_pumpum)
+		{
+			HeartPumPum();
+		}
 
 		if ((Input::GetKeyDown(SDL_SCANCODE_SPACE) || Input::GetControllerButtonDown(player_reviving->controller_index, Input::CONTROLLER_BUTTON_B)) && !effects_change)
 		{
@@ -208,4 +220,18 @@ void MiniGame_Revive::RestartMinigame()
 	this->player_reviving = nullptr;
 
 	revive_state = States::PREGAME;
+}
+
+void MiniGame_Revive::HeartPumPum()
+{
+	float t = (Time::GetGameTime() - heart_time) / 0.1f;
+	float lerp = Maths::Lerp(1.0f, 1.5f, t);
+
+	heart->transform->SetLocalScale(lerp, lerp, 1);
+
+	if (t >= 1)
+	{
+		heart->transform->SetLocalScale(1, 1, 1);
+		heart_pumpum = false;
+	}
 }
