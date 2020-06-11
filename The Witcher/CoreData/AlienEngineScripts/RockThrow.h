@@ -6,10 +6,8 @@
 class ALIEN_ENGINE_API RockThrow : public Alien {
 
 public:
-	enum(RockState,
+	enum(RockType,
 		NONE = -1,
-		INIT,
-		IDLE,
 		THROW,
 		FALL
 		);
@@ -18,19 +16,15 @@ public:
 	float throw_timer = 0.0f;
 	float3 throw_rotation = { 0.0f, 2.0f, 10.0f };
 
-	float init_time = 5.0f;
-	float init_timer = 0.0f;
-	float init_velocity = 0.01f;
-
 	bool throwable = false;
 
 	float3 self_rotation = { 0.0f, 5.0f, 2.0f };
 	float3 throw_direction;
-	float throw_speed = 4.0f;
+	float throw_speed = 10.0f;
 
 	int target = 0;
 
-	RockState state = RockState::NONE;
+	RockType type = RockType::NONE;
 
 	RockThrow();
 	virtual ~RockThrow();
@@ -39,7 +33,6 @@ public:
 	void Update();
 	void ReleaseExplosionParticle();
 	void OnTriggerEnter(ComponentCollider* collider);
-	void ChangeState(RockState state_);
 
 	GameObject* particle_instance = nullptr;
 
