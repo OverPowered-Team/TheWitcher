@@ -339,10 +339,26 @@ update_status ModuleObjects::PostUpdate(float dt)
 			//predraw	
 			CalculateShadows(dynamic_to_draw, viewport, static_to_draw, frustum_camera);
 
-			glViewport(0, 0, current_viewport->GetSize().x, current_viewport->GetSize().y);
 			glBindFramebuffer(GL_FRAMEBUFFER, current_viewport->GetFBO());
-									
+			glViewport(0, 0, current_viewport->GetSize().x, current_viewport->GetSize().y);
+				
+			// Disable to draw on bloom texture, otherwise skybox & debug draws are bloomed
+			glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
 			viewport->GetCamera()->DrawSkybox(); 
+
+			// Debug Draws 
+			if (printing_scene)
+			{
+				for (std::map<Component*, std::function<void()>>::iterator it = debug_draw_list.begin(); it != debug_draw_list.end(); ++it)
+				{
+					(*it).second();
+				}
+			}
+
+			// Enable to draw on bloom texture
+			uint bloom_attach[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+			glDrawBuffers(2, bloom_attach);
 
 			// Draw Solid Meshes 
 			ResourceShader* current_used_shader = App->resources->default_shader;
@@ -380,17 +396,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 
-			// Draw Debugging Options
-
-			if (printing_scene)
-			{
-				for (std::map<Component*, std::function<void()>>::iterator it = debug_draw_list.begin(); it != debug_draw_list.end(); ++it)
-				{
-					(*it).second();
-				}
-			}
-
-			
 			// Then draw transparents meshes
 			
 			glEnable(GL_BLEND);
@@ -459,12 +464,10 @@ update_status ModuleObjects::PostUpdate(float dt)
 			// Draw Plane with postprocessing on MSAA PostProc FBO
 			viewport->ApplyPostProcessing();
 
-
 			// ------------------ Then we draw UI on top of the post processing FBO ------------------
 
 			glBindFramebuffer(GL_FRAMEBUFFER, viewport->GetPostProcFBO());
 			glViewport(0, 0, viewport->GetSize().x, viewport->GetSize().y);
-
 			// Enable Depth Test for UI In-World
 			glEnable(GL_DEPTH_TEST);
 
@@ -498,18 +501,16 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 			
-			
-
 			if (printing_scene)
 				OnDrawGizmos();
 			if (isGameCamera) {
 				OnPostRender(viewport->GetCamera());
 			}
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			glDisable(GL_DEPTH_TEST);
 
 		}
 
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
 		// And finally draw all into the final PostProcFBO's Texture
 		viewport->FinalPass();
 		//viewport->EndViewport();
@@ -560,7 +561,14 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glViewport(0, 0, game_viewport->GetSize().x, game_viewport->GetSize().y);
 		glBindFramebuffer(GL_FRAMEBUFFER, game_viewport->GetFBO());
 
+		// Disable to draw on bloom texture, otherwise skybox draws are bloomed
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
 		game_viewport->GetCamera()->DrawSkybox();
+
+		// Enable to draw on bloom texture
+		uint bloom_attach[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+		glDrawBuffers(2, bloom_attach);
 
 		// Draw Solid Meshes 
 		ResourceShader* current_used_shader = App->resources->default_shader;

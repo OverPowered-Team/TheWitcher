@@ -24,13 +24,39 @@ void Ciri::StartEnemy()
 
 	fight_controller = GameObject::FindWithName("Ciri")->GetComponent<CiriFightController>();
 
+	meshes_materials = meshes->GetComponentsInChildrenRecursive<ComponentMaterial>();
+
+	dissolve_mat = new ResourceMaterial((ResourceMaterial*)meshes_materials[0]->material);
+	dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn = 0;
+
+	for (int i = 0; i < meshes_materials.size(); ++i) {
+		meshes_materials[i]->material = dissolve_mat;
+	}
+
 	state = Boss::BossState::NONE;
 	animator->PlayState("Spawn");
+	appearing = true;
 }
 
 void Ciri::UpdateEnemy()
 {
 	Boss::UpdateEnemy();
+
+	if (dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn < 1 && appearing) {
+		dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn += 0.01;
+		LOG("appearing");
+	}
+	else {
+		appearing = false;
+	}
+
+	if (dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn > 0 && disappearing) {
+		dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn -= 0.01;
+		LOG("disappearing");
+	}
+	else {
+		disappearing = false;
+	}
 }
 
 void Ciri::CleanUpEnemy()
@@ -45,6 +71,7 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (stats["Health"].GetValue() <= 0.f) {
 		fight_controller->OnCloneDead(this->game_object);
 		animator->PlayState("Death");
+		disappearing = true;
 		state = Boss::BossState::DYING;
 	}
 	else {
