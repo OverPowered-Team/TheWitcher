@@ -53,7 +53,6 @@ void CiriOriginal::SetActionProbabilities()
 	Boss::SetActionProbabilities();
 
 	if (fight_controller->phase_change) {
-		action_cooldown = 10.0f;
 		actions.find("Scream")->second->probability = 100.0f;
 	}
 	else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
