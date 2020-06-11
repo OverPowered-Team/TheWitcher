@@ -226,9 +226,18 @@ void Ghoul::OnAnimationEnd(const char* name)
             SetState("Idle");
 
         can_jump = false;
-        ReleaseParticle("AreaAttackSlash");
-        ReleaseParticle("AreaAttackSphere");
-        ReleaseParticle("AreaAttackRock");
+        if (ghoul_type != GhoulType::MINI)
+        {
+            ReleaseParticle("AreaAttackSlash");
+            ReleaseParticle("AreaAttackSphere");
+            ReleaseParticle("AreaAttackRock");
+        }
+        else
+        {
+            ReleaseParticle("AreaAttackSlashMini");
+            ReleaseParticle("AreaAttackSphereMini");
+            ReleaseParticle("AreaAttackRockMini");
+        }
     }
     else if (strcmp(name, "Hit") == 0)
     {
@@ -266,9 +275,18 @@ void Ghoul::OnDrawGizmosSelected()
 void Ghoul::ActivateRangeCollider()
 {
     range_collider->SetEnable(true);
-    SpawnParticle("AreaAttackSlash", particle_spawn_positions[2]->transform->GetGlobalPosition());
-    SpawnParticle("AreaAttackSphere", particle_spawn_positions[2]->transform->GetGlobalPosition());
-    SpawnParticle("AreaAttackRock", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    if (ghoul_type != GhoulType::MINI) 
+    {
+        SpawnParticle("AreaAttackSlash", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackSphere", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackRock", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    }
+    else
+    {
+        SpawnParticle("AreaAttackSlashMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackSphereMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackRockMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    }
 }
 
 void Ghoul::DeactivateRangeCollider()
