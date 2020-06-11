@@ -47,13 +47,13 @@ void CutsceneCamera::PrepareCutscene()
 	{
 		cam_movement->state = cam_movement->prev_state;
 		cam_movement->is_cinematic = false;
-		cam_movement->players[0]->GetComponent<PlayerController>()->mov_input = false;
-		cam_movement->players[1]->GetComponent<PlayerController>()->mov_input = false;
+		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = false;
+		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = false;
 	}
 	else {
 		state = CutsceneState::MOVING;//Yes I know, this is hardcoded but lets be honest, we will not do the 1 player mode
-		cam_movement->players[0]->GetComponent<PlayerController>()->mov_input = true;
-		cam_movement->players[1]->GetComponent<PlayerController>()->mov_input = true;
+		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = true;
+		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = true;
 	}
 }
 
