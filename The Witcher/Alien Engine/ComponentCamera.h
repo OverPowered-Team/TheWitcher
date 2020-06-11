@@ -133,4 +133,11 @@ public:
 	bool hdr = false; 
 	float gamma = 0.0f;
 	float exposure = 1.0f;
+
+	// === BLOOM === 
+
+	bool bloom = true; 
+	float threshold = 1.0f; 
+	int blur_iters = 10;
+
 };

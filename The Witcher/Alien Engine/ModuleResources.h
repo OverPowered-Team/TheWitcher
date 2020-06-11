@@ -140,6 +140,7 @@ public:
 	ResourceShader* shield_fresnel_shader = nullptr;
 	ResourceShader* shield_shader = nullptr;
 	ResourceShader* hdr_shader = nullptr; 
+	ResourceShader* blur_shader = nullptr; 
 	ResourceTexture* alpha_noise_texture = nullptr;
 	ResourceShader* trail_shader = nullptr;
 
