@@ -155,8 +155,8 @@ void GhoulDodge::OnAnimationEnd(const char* name)
                 GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
-        else if (is_attacking)
-            ChangeAttackEnemy();
+        /*else if (is_attacking)
+            ChangeAttackEnemy();*/
         else if (!is_dead)
             SetState("Idle");
 
