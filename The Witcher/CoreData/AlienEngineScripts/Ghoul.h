@@ -91,6 +91,7 @@ public:
 	float wander_rest_time = 1.f;
 	bool wander_rest = true; 
 	bool can_jump = false;
+	float3 jump_direction;
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
 	AwakeBehaviour awake_behaviour = AwakeBehaviour::DEFAULT;

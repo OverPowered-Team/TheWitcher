@@ -84,7 +84,6 @@ void Ghoul::JumpImpulse()
 {
     if (can_jump)
     {
-        float3 jump_direction = direction * jump_speed;
         character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
     }
 }
@@ -172,6 +171,7 @@ void Ghoul::Action()
         RotatePlayer();
         animator->PlayState("Jump");
         jump_speed = (distance + 1) / 1.13f * animator->GetCurrentStateSpeed();
+        jump_direction = direction.Normalized() * jump_speed;
         state = GhoulState::JUMP;
     }
 
