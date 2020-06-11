@@ -58,7 +58,7 @@ void GhoulDodge::UpdateEnemy()
         break;
 
     case GhoulState::ATTACK:
-        if (player_controllers[current_player]->state->type == StateType::ATTACKING && rand_num == 0)
+        if (CheckIfDodge())
         {
             state = GhoulState::DODGE;
             animator->PlayState("Dodge");
@@ -86,8 +86,28 @@ void GhoulDodge::UpdateEnemy()
 
 void GhoulDodge::Dodge()
 {
-    float3 jump_direction = -direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
+    float3 jump_direction = -direction.Normalized() * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
     character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
+}
+
+bool GhoulDodge::CheckIfDodge()
+{
+    bool ret = false;
+
+    if (rand_num == 0)
+    {
+        int other_player = (current_player == 0) ? 1 : 0;
+        if (player_controllers[current_player]->state->type == StateType::ATTACKING)
+        {
+            ret = true;
+        }
+        else if (player_controllers[other_player]->state->type == StateType::ATTACKING && player_controllers[other_player]->transform->GetGlobalPosition().Distance(game_object->transform->GetGlobalPosition()) < 2.0f)
+        {
+            ret = true;
+        }
+    }
+
+    return ret;
 }
 
 void GhoulDodge::OnAnimationEnd(const char* name)
@@ -95,9 +115,7 @@ void GhoulDodge::OnAnimationEnd(const char* name)
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
         ReleaseParticle("EnemyAttackParticle");
-        if (distance < stats["AttackRange"].GetValue())
-            SetState("Attack");
-        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+        if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
             SetState("Move");
         else
             SetState("Idle");

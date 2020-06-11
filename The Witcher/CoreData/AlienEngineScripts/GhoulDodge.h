@@ -15,6 +15,8 @@ public:
 
 	void Dodge();
 
+	bool CheckIfDodge();
+
 	void OnAnimationEnd(const char* name) override;
 
 public: 
