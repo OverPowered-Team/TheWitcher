@@ -153,6 +153,14 @@ void Ghoul::SetState(const char* state_str)
         LOG("Incorrect state name: %s", state_str);
 }
 
+bool Ghoul::IsRangeEnemy()
+{
+    if (ghoul_type == GhoulType::MINI)
+        return false;
+    else
+        return true;
+}
+
 void Ghoul::Action()
 {
     // Check if inside range or just entered

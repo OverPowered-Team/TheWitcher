@@ -240,7 +240,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		}
 		else if (!is_dead) 
 		{
-			SetState("Idle");
+			SetState("Guard");
 		}
 
 	}
