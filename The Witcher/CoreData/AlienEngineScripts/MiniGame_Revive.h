@@ -36,10 +36,6 @@ public:
 	PlayerController* player_dead = nullptr;
 	PlayerController* player_reviving = nullptr;
 
-	// Green Part Reduction
-	float original_scale_green = 0.250f;
-	float desired_scale_green = 0.05f;
-
 private:
 	GameObject* moving_part = nullptr;
 	GameObject* minigame = nullptr;
@@ -52,6 +48,9 @@ private:
 	float color_time = 0.0f;
 	float time = 0.0f;
 	bool effects_change = false;
+
+	float position_goal = 2.0f;
+	float original_moving_position = 0.0f;
 
 	// Green Part reduction
 	int correct_inputs = 0;
@@ -68,8 +67,6 @@ ALIEN_FACTORY MiniGame_Revive* CreateMiniGame_Revive() {
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->lerp_time);
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->input_times);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->original_scale_green);
-	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->desired_scale_green);
 
 	return alien;
 } 

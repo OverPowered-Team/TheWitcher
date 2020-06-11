@@ -35,6 +35,7 @@ public:
 	GameObject* platform = nullptr;
 	GameObject* circle = nullptr;
 	GameObject* tornado = nullptr;
+	GameObject* rocks_respawn = nullptr;
 	ComponentMaterial* material_platform = nullptr;
 	int count_circle = 58;
 	bool changing_platform = false;

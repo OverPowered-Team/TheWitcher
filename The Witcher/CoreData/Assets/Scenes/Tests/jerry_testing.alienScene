@@ -69,7 +69,8 @@
                             1
                         ],
                         "CastShadows": true,
-                        "SizeBakedShadow": 153
+                        "SizeBakedShadow": 153,
+                        "sadowIntensity": 0
                     }
                 ]
             },
@@ -162,7 +163,7 @@
                 "ParentID": "13613718141154934126",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -279,6 +280,11 @@
                                 "float": 2
                             },
                             {
+                                "VarType": 0,
+                                "Name": "max_attacking_enemies",
+                                "int": 3
+                            },
+                            {
                                 "VarType": 11,
                                 "Name": "Dash animation cool data"
                             },
@@ -330,6 +336,11 @@
                                 "VarType": 9,
                                 "Name": "weapon_obj",
                                 "gameobject": "15753350572023227918"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "weapon2_obj",
+                                "gameobject": "0"
                             }
                         ]
                     }
@@ -343,7 +354,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -381,7 +392,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -437,7 +448,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -487,7 +498,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -531,7 +542,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -575,7 +586,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -619,7 +630,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -663,7 +674,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -713,7 +724,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -757,7 +768,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -801,7 +812,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -845,7 +856,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -889,7 +900,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -963,7 +974,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1049,7 +1060,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1141,7 +1152,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1215,7 +1226,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1277,7 +1288,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1339,7 +1350,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1395,7 +1406,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1439,7 +1450,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1483,7 +1494,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1527,7 +1538,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1571,7 +1582,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1615,7 +1626,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1659,7 +1670,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1727,7 +1738,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1795,7 +1806,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1857,7 +1868,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1913,7 +1924,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1957,7 +1968,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2001,7 +2012,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2045,7 +2056,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2089,7 +2100,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2133,7 +2144,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2177,7 +2188,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2274,7 +2285,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2354,7 +2365,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2428,7 +2439,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2472,7 +2483,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2568,7 +2579,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2606,7 +2617,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2664,7 +2675,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2722,7 +2733,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2780,7 +2791,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2838,7 +2849,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2896,7 +2907,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -2954,7 +2965,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3012,7 +3023,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3070,7 +3081,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3128,7 +3139,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3186,7 +3197,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3244,7 +3255,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3302,7 +3313,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3340,7 +3351,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3378,7 +3389,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3416,7 +3427,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3454,7 +3465,7 @@
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": true,
+                "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -3604,6 +3615,11 @@
                                 "VarType": 9,
                                 "Name": "weapon_obj",
                                 "gameobject": "0"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "weapon2_obj",
+                                "gameobject": "0"
                             }
                         ]
                     },
@@ -3658,6 +3674,11 @@
                                 "VarType": 3,
                                 "Name": "battleCircle",
                                 "float": 2
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "max_attacking_enemies",
+                                "int": 3
                             },
                             {
                                 "VarType": 11,
@@ -6344,248 +6365,6 @@
                         ],
                         "ScaleNegative": false,
                         "ID": "15290962534186781106"
-                    }
-                ]
-            },
-            {
-                "Name": "Main Camera",
-                "FamilyNumber": 1,
-                "ID": "3923177636432603820",
-                "ParentID": "13613718141154934126",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "10246434848619202221",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            16.133691787719727,
-                            17.120683670043945
-                        ],
-                        "Rotation": [
-                            0.26289856433868408,
-                            0.72414398193359375,
-                            -0.36340692639350891,
-                            0.52386569976806641
-                        ],
-                        "Scale": [
-                            1.0000001192092896,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "2570874472865014595"
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 6,
-                        "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 94.834671020507813,
-                        "BackCol": [
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            1
-                        ],
-                        "FarPlane": 200,
-                        "NearPlane": 0.10000000149011612,
-                        "isFovHori": 0,
-                        "ID": "16791639911612564705",
-                        "IsGameCamera": false,
-                        "IsSelectedCamera": false,
-                        "PrintIcon": true,
-                        "IconColor": [
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            0.85000002384185791,
-                            1
-                        ],
-                        "Fog": false,
-                        "Density": 0.035000000149011612,
-                        "Gradient": 1.3500000238418579,
-                        "Skybox_PositiveX": "Library\/Textures\/17871350930873594524.dds",
-                        "Skybox_NegativeX": "Library\/Textures\/14059935274421270400.dds",
-                        "Skybox_PositiveY": "Library\/Textures\/5118434943308934301.dds",
-                        "Skybox_NegativeY": "Library\/Textures\/14265519993990640998.dds",
-                        "Skybox_PositiveZ": "Library\/Textures\/3680900417465944678.dds",
-                        "Skybox_NegativeZ": "Library\/Textures\/16155666848095087743.dds"
-                    },
-                    {
-                        "ID": "17201313673247023158",
-                        "Type": 16,
-                        "Enabled": true,
-                        "Volume": 0.46399998664855957,
-                        "Mute": false,
-                        "Bank": "3991942870",
-                        "Event": "4145153789",
-                        "PlayOnAwake": false
-                    },
-                    {
-                        "Type": 17,
-                        "Enabled": true,
-                        "ID": "17478564238004137137",
-                        "ListenerID": "1326563780"
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "16165463246483667854",
-                        "ResourceID": "10408381955680660573",
-                        "DataName": "CameraMovement",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 11,
-                                "Name": "First parameters"
-                            },
-                            {
-                                "VarType": 14,
-                                "Name": "state",
-                                "enumInt": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "distance",
-                                "float": 10
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "hor_angle",
-                                "float": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "vert_angle",
-                                "float": 35
-                            },
-                            {
-                                "VarType": 14,
-                                "Name": "axis",
-                                "enumInt": 0
-                            },
-                            {
-                                "VarType": 7,
-                                "Name": "smooth_camera",
-                                "bool": 1
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "smooth_cam_vel",
-                                "float": 5
-                            },
-                            {
-                                "VarType": 7,
-                                "Name": "is_cinematic",
-                                "bool": 0
-                            },
-                            {
-                                "VarType": 9,
-                                "Name": "cutscene_game_object",
-                                "gameobject": "0"
-                            },
-                            {
-                                "VarType": 7,
-                                "Name": "search_players",
-                                "bool": 0
-                            },
-                            {
-                                "VarType": 12,
-                                "Name": ""
-                            },
-                            {
-                                "VarType": 9,
-                                "Name": "limiter1",
-                                "gameobject": "0"
-                            },
-                            {
-                                "VarType": 9,
-                                "Name": "limiter2",
-                                "gameobject": "0"
-                            }
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "9635045851571741061",
-                        "ResourceID": "8894711529836489338",
-                        "DataName": "CameraShake",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "traumaDecayDef",
-                                "float": 0.89999997615814209
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "maxYaw",
-                                "float": 1
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "maxPitch",
-                                "float": 1
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "maxRoll",
-                                "float": 1
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "off_set",
-                                "float": 5
-                            }
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "2522751005283207325",
-                        "ResourceID": "16057303148137039602",
-                        "DataName": "CameraUltiMode",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "zoom_out_fov",
-                                "float": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "speed",
-                                "float": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "staying_time",
-                                "float": 0
-                            }
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "10066338600349891462",
-                        "ResourceID": "3479373960671141251",
-                        "DataName": "MusicController",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "minimum_volume",
-                                "float": 0
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "time_start_decrease",
-                                "float": 1
-                            }
-                        ]
                     }
                 ]
             },
@@ -10122,12 +9901,12 @@
                             },
                             {
                                 "VarType": 8,
-                                "Name": "drowned_range",
+                                "Name": "ghoul_mini",
                                 "prefab": "0"
                             },
                             {
                                 "VarType": 8,
-                                "Name": "drowned_grab",
+                                "Name": "drowned_range",
                                 "prefab": "0"
                             }
                         ]
@@ -10329,6 +10108,9 @@
                         "Fog": false,
                         "Density": 0.035000000149011612,
                         "Gradient": 1.3500000238418579,
+                        "HDR": false,
+                        "Exposure": 0,
+                        "Gamma": 0,
                         "Skybox_PositiveX": "Library\/Textures\/17871350930873594524.dds",
                         "Skybox_NegativeX": "Library\/Textures\/14059935274421270400.dds",
                         "Skybox_PositiveY": "Library\/Textures\/5118434943308934301.dds",
@@ -10350,7 +10132,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "1140921247031811765",
-                        "ListenerID": "2168998124"
+                        "ListenerID": "4252227517"
                     },
                     {
                         "Type": 29,
@@ -10381,7 +10163,7 @@
                             {
                                 "VarType": 3,
                                 "Name": "vert_angle",
-                                "float": 35
+                                "float": 16
                             },
                             {
                                 "VarType": 14,
@@ -10710,7 +10492,7 @@
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "9137109515629880195",
+                        "TextureID": "0",
                         "Color": [
                             1,
                             0.99998998641967773,
@@ -10914,7 +10696,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6687533368332559316",
+                        "ID": "18114834396529222931",
                         "Text": "Geralt",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -11021,7 +10803,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6514696830139752853",
+                        "ID": "8035420853866482250",
                         "Text": "Yennefer",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -11076,7 +10858,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1804669220589949637",
+                        "ID": "15763357298001536801",
                         "Text": "Leaderboard",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -11135,7 +10917,7 @@
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "5534395715674132295",
+                        "TextureID": "0",
                         "Color": [
                             1,
                             0.99998998641967773,
@@ -11187,7 +10969,7 @@
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "5534395715674132295",
+                        "TextureID": "0",
                         "Color": [
                             1,
                             0.99998998641967773,
@@ -11447,7 +11229,7 @@
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "16788098577107836098",
+                        "TextureID": "0",
                         "Color": [
                             1,
                             0.99998998641967773,
@@ -11499,7 +11281,7 @@
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "16788098577107836098",
+                        "TextureID": "0",
                         "Color": [
                             1,
                             0.99998998641967773,
@@ -11599,7 +11381,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "2039566486879406766",
+                        "ID": "6594420890260913124",
                         "Text": "Back",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -11692,7 +11474,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1083191259069544829",
+                        "ID": "16860650192949404315",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -11799,7 +11581,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12438711336881557684",
+                        "ID": "5068936244877278405",
                         "Text": "Geralt",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -11958,7 +11740,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18151562243413419505",
+                        "ID": "18063244476362096497",
                         "Text": "Yennefer",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12065,7 +11847,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "318503783501122289",
+                        "ID": "17132908397987168926",
                         "Text": "Dodge",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12120,7 +11902,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "10162219562058097352",
+                        "ID": "15832389305407304107",
                         "Text": "Light Attack",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12175,7 +11957,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "295619061134588183",
+                        "ID": "6552279999525095180",
                         "Text": "Heavy Attack",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12230,7 +12012,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9939580148420238215",
+                        "ID": "13190942985415488762",
                         "Text": "Interact",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12285,7 +12067,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "10131059984057197090",
+                        "ID": "17148099352455952429",
                         "Text": "Jump",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12340,7 +12122,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12900291752243617071",
+                        "ID": "11243109496747908284",
                         "Text": "Movement",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12395,7 +12177,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13593629767785439319",
+                        "ID": "13102859002161423033",
                         "Text": "Ultimate",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12684,7 +12466,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13148045124870194586",
+                        "ID": "7832427211840102153",
                         "Text": "Select",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -12791,7 +12573,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18127727212674978979",
+                        "ID": "10880544440405090012",
                         "Text": "Resume",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -13048,7 +12830,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13800054804777543935",
+                        "ID": "18232481289685509548",
                         "Text": "Resume",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -13253,7 +13035,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6052936603160082324",
+                        "ID": "9904587989921879559",
                         "Text": "Leaderboard",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -13458,7 +13240,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12330429321053629309",
+                        "ID": "9218503587517427900",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -13651,7 +13433,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12378768218340033669",
+                        "ID": "5760698742043909854",
                         "Text": "Settings",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -13856,7 +13638,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "7472643692747180803",
+                        "ID": "10442811550218706883",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -14061,7 +13843,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "2211772867337990892",
+                        "ID": "17320795413256340659",
                         "Text": "Main Menu",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -14266,7 +14048,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "14572742623679058909",
+                        "ID": "5547074990480109671",
                         "Text": "Exit Game",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -14652,8 +14434,8 @@
                         "ID": "17064514017586302032"
                     },
                     {
-                        "X": 854.81658935546875,
-                        "Y": -477.93331909179688,
+                        "X": 732.5989990234375,
+                        "Y": -441.45553588867188,
                         "Width": 3.9800000190734863,
                         "Height": 0.40000000596046448,
                         "Enabled": true,
@@ -14722,8 +14504,8 @@
                         "ID": "4419807090444678454"
                     },
                     {
-                        "X": 801.625,
-                        "Y": -521.4466552734375,
+                        "X": 687.01251220703125,
+                        "Y": -481.64779663085938,
                         "Width": 5.3299999237060547,
                         "Height": 0.63999998569488525,
                         "Enabled": true,
@@ -14793,7 +14575,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1252545281851932860",
+                        "ID": "15796397328663280591",
                         "Text": "00",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -14848,7 +14630,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9099195004271503181",
+                        "ID": "4234438097050403562",
                         "Text": "x",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -15106,8 +14888,8 @@
                         "ID": "17711256257508841442"
                     },
                     {
-                        "X": 12.98549747467041,
-                        "Y": -520.5906982421875,
+                        "X": 11.128893852233887,
+                        "Y": -480.85714721679688,
                         "Width": 19.489999771118164,
                         "Height": 1.0399999618530273,
                         "Enabled": true,
@@ -15342,8 +15124,8 @@
                         "ID": "4838099602623332873"
                     },
                     {
-                        "X": -782.71875,
-                        "Y": -521.4466552734375,
+                        "X": -670.80938720703125,
+                        "Y": -481.64779663085938,
                         "Width": 5.3299999237060547,
                         "Height": 0.63999998569488525,
                         "Enabled": true,
@@ -15412,8 +15194,8 @@
                         "ID": "14600814023832362840"
                     },
                     {
-                        "X": -831.875,
-                        "Y": -477.93331909179688,
+                        "X": -712.9375,
+                        "Y": -441.45553588867188,
                         "Width": 3.9800000190734863,
                         "Height": 0.40000000596046448,
                         "Enabled": true,
@@ -15483,7 +15265,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6415125764018563624",
+                        "ID": "17724395741726866521",
                         "Text": "00",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -15538,7 +15320,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9600057143206469131",
+                        "ID": "15062402843422212496",
                         "Text": "x",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -15844,7 +15626,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1807775406615391530",
+                        "ID": "16693119252341928569",
                         "Text": "Poison Runestone",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -15899,7 +15681,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "16591344211619377203",
+                        "ID": "7847405706252441893",
                         "Text": "Description",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -16640,7 +16422,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "2204215222291740707",
+                        "ID": "1924822578768329213",
                         "Text": "Checkpoint Saved!",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -16861,7 +16643,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "8320948914014377962",
+                        "ID": "9645683636100538204",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -16954,7 +16736,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13067699375225610177",
+                        "ID": "16123338121136324369",
                         "Text": "0",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -17061,7 +16843,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "2052679222149370708",
+                        "ID": "11899557143512580505",
                         "Text": "YOU DIED",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
