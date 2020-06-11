@@ -21,6 +21,9 @@ public:
 
 	void DisplayTextureOnInspector();
 
+	void IncreaseReferences() override;
+
+
 public:
 
 	bool is_custom = true;
@@ -32,4 +35,7 @@ public:
 
 	int wrap_type = 0;
 	int texture_filter = 0;
+
+	bool ignore_next_increase = false;
+
 };

@@ -659,20 +659,18 @@ bool ModuleImporter::LoadTextureToResource(const char *path, ResourceTexture *te
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		ilBindImage(0);
-
-		LOG_ENGINE("Texture successfully loaded: %s", path);
 	}
 	else
 	{
-		ILenum Error;
-		while ((Error = ilGetError()) != IL_NO_ERROR)
-		{
-			const char* txt = iluErrorString(Error);
-			LOG_ENGINE("%d: %s", Error, txt);
-		}
+		//ILenum Error;
+		//while ((Error = ilGetError()) != IL_NO_ERROR)
+		//{
+		//	const char* txt = iluErrorString(Error);
+		//	LOG_ENGINE("%d: %s", Error, txt);
+		//}
 
-		LOG_ENGINE("Error while loading image in %s", path);
-		LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
+		////LOG_ENGINE("Error while loading image in %s", path);
+		////LOG_ENGINE("Error: %s", ilGetString(ilGetError()));
 		ret = false;
 	}
 
