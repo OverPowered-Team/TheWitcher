@@ -47,13 +47,13 @@ void CutsceneCamera::PrepareCutscene()
 	{
 		cam_movement->state = cam_movement->prev_state;
 		cam_movement->is_cinematic = false;
-		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = false;
-		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = false;
+		cam_movement->players[0]->GetComponent<PlayerController>()->mov_input = false;
+		cam_movement->players[1]->GetComponent<PlayerController>()->mov_input = false;
 	}
 	else {
 		state = CutsceneState::MOVING;//Yes I know, this is hardcoded but lets be honest, we will not do the 1 player mode
-		cam_movement->players[0]->GetComponent<PlayerController>()->input_blocked = true;
-		cam_movement->players[1]->GetComponent<PlayerController>()->input_blocked = true;
+		cam_movement->players[0]->GetComponent<PlayerController>()->mov_input = true;
+		cam_movement->players[1]->GetComponent<PlayerController>()->mov_input = true;
 	}
 }
 
@@ -80,7 +80,7 @@ void CutsceneCamera::ExecuteCutscene()
 	}
 	case CutsceneState::MOVING:
 	{
-		float min_dist = 0.1f;
+		float min_dist = 0.2f;
 		current_move_time += Time::GetDT();
 		
 		if ((shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
