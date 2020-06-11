@@ -5,6 +5,7 @@
 
 class PlayerController;
 class UltiBar;
+class DialogueManager;
 
 enum(CP_STATE,
 	FADE_IN,

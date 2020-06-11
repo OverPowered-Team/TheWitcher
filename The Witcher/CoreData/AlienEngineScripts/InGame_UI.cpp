@@ -6,6 +6,7 @@
 #include "UltiBar.h"
 #include "Scores_Data.h"
 #include "UI_DamageCount.h"
+#include "DialogueManager.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -213,6 +214,7 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
+	game_object->GetComponent<DialogueManager>()->Pause(to_open);
 }
 
 void InGame_UI::YouDied()
