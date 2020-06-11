@@ -126,7 +126,7 @@ void DrownedRange::OnAnimationEnd(const char* name)
 		ReleaseParticle("hit_particle");
 		if (!is_dead)
 		{
-			state = DrownedState::ATTACK;
+			SetState("Hide");
 		}
 		else
 		{
@@ -155,5 +155,6 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	{
 		ReleaseParticle("DigParticle");
 		ReleaseParticle("HeadDigParticle");
+		is_hiding = false;
 	}
 }
