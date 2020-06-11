@@ -272,6 +272,8 @@ bool ComponentCamera::DrawInspector()
 
 			ImGui::Spacing();
 
+			// ------------------------------ HDR ------------------------------------
+
 			ImGui::Checkbox("HDR", &hdr);
 
 			if (!hdr)
@@ -285,16 +287,41 @@ bool ComponentCamera::DrawInspector()
 			ImGui::Spacing();
 			ImGui::DragFloat("Gamma", &gamma, 0.01f, 0.0f, 10.f);
 
+			ImGui::Spacing();
+			ImGui::Spacing();
+
+			// ------------------------------ BLOOM ------------------------------------
+
+			ImGui::Checkbox("Bloom", &bloom);
+
+			if (!bloom)
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+			}
+
+			ImGui::DragFloat("Bloom Threshold", &threshold, 0.05f, 0.0f, 10.f);
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::DragInt("Blur Intensity", &blur_iters, 1.f, 0.0f, 100.f);
+
+			if (!bloom)
+			{
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+
 			if (!hdr)
 			{
 				ImGui::PopItemFlag();
 				ImGui::PopStyleVar();
 			}
 
-
 			ImGui::Spacing();
 			ImGui::Separator();
 			ImGui::Spacing();
+
+			// ------------------------------ FOG ------------------------------------
 
 			ImGui::Checkbox("Active Fog", &activeFog);
 

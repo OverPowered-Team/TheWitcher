@@ -179,7 +179,29 @@ bool ParticleSystem::Update(float dt)
 		}
 	}
 	
-	// ------------------------------------------
+	// ------------------- Update Animation -----------------------
+	if (particleInfo.animated)
+	{
+		animationTime += dt;
+
+		if (animationTime > particleInfo.animSpeed)
+		{
+			if (currentFrame > particleInfo.currentAnimation.endFrame-1) {
+
+				if (emmitter.GetLoop())
+				{
+					currentFrame = particleInfo.currentAnimation.startFrame;
+				}
+				else
+					currentFrame = particleInfo.currentAnimation.endFrame;
+
+			}
+
+		currentFrame++;
+		animationTime = 0.f;
+		}
+	}
+
 
 	// --------------- Update Particles -----------------
 	for (uint i = 0; i < particles.size(); ++i)
@@ -189,6 +211,9 @@ bool ParticleSystem::Update(float dt)
 
 	if (point_light != nullptr)
 		point_light->Update();
+
+
+
 
 	return true;
 }
@@ -542,8 +567,9 @@ void ParticleSystem::SetLight(ResourcePrefab* prefab, GameObject* go)
 	{
 		point_light = new ComponentLightPoint(go);
 		point_light->SetProperties(point->light_props);
+		point_light->light_props.enabled = lightProperties.emitting;
 	}
-
+	
 	obj->Destroy(obj);
 	point = nullptr;
 	prefab_parent = nullptr;
@@ -556,6 +582,16 @@ void ParticleSystem::RemoveLight()
 
 	delete point_light;
 	point_light = nullptr;
+}
+
+void ParticleSystem::StartLight()
+{
+	lightProperties.emitting = true;
+}
+
+void ParticleSystem::StopLight()
+{
+	lightProperties.emitting = false;
 }
 
 void ParticleSystem::SetMesh(ResourceMesh* m)
@@ -763,8 +799,11 @@ void ParticleSystem::CalculateParticleUV(int rows, int columns, float speed, int
 	if (!particleInfo.frames.empty())
 	{
 		particleInfo.frames.clear();
-		currentFrame = 0;
+		//currentFrame = 0;
 	}
+
+	if (endFrame == 0 || endFrame == -1)
+		return;
 
 	ResourceTexture* tex = material->GetTexture(TextureType::DIFFUSE);
 	//ResourceTexture* tex = (ResourceTexture*)App->resources->GetResourceWithID(material->texturesID[(int)TextureType::DIFFUSE]);
@@ -823,7 +862,7 @@ void ParticleSystem::ResetParticleUV()
 
 	particleInfo.animated = false;
 	particleInfo.frames.clear();
-	currentFrame = 0;
+	//currentFrame = 0;
 	sheetWidth = 0;
 	sheetHeight = 0;
 
@@ -873,5 +912,5 @@ void ParticleSystem::SetAnimation(int anim, int start, int end)
 void ParticleSystem::PlayAnimation(int anim)
 {
 	particleInfo.currentAnimation = particleInfo.animations[anim];
-	currentFrame = particleInfo.currentAnimation.startFrame;
+	//currentFrame = particleInfo.currentAnimation.startFrame;
 }

@@ -79,7 +79,7 @@ void PlayerController::Update()
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
-	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
+	State* new_state = state->HandleInput(this);
 	if (new_state != nullptr)
 		SwapState(new_state);
 
