@@ -49,6 +49,8 @@ void RockThrow::Update()
 	default:
 		break;
 	}
+
+	game_object->GetComponent<ComponentRigidBody>()->SetPosition(transform->GetGlobalPosition());
 }
 
 void RockThrow::ReleaseExplosionParticle()
@@ -84,12 +86,9 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 			}
 
 		}
-		game_object->GetComponent<ComponentMesh>()->SetEnable(false);
-		game_object->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 
 		if (!particle_instance) {
 			particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object, true);
-			Invoke(std::bind(&RockThrow::ReleaseExplosionParticle, this), 2.0f);
 		}
 
 		collided = true;

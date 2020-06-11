@@ -92,34 +92,17 @@ void CutsceneCamera::ExecuteCutscene()
 			ExecuteCurve();
 		}
 		else {
-			float min_dist = 0.2f;
-			current_move_time += Time::GetDT();
-
-			if (/*(Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed >= 1.f ||*/ (shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
-				
-			}
-			if((Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed < 1.f)
-			{ //Move postion
-				if (shots[shots_counter]->element.first_frame)
-				{
-					if (!shots[shots_counter]->element.it_focus)
-						shots[shots_counter]->element.first_frame = false;
-					shots[shots_counter]->element.first_pos = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition();
-					t_speed = Time::GetGameTime();
-				}
-				float3 current_pos = float3::Lerp(shots[shots_counter]->element.first_pos, shots[shots_counter]->transform->GetGlobalPosition(), (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
-				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(current_pos);
-			}
-			else
+			if (shots[shots_counter]->element.first_frame)
 			{
-				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
-				t_speed = 0.f;
-				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
-				if (shots[shots_counter]->element.it_shake)
-					shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
-				state = CutsceneState::IDLE;
-				LOG("IM VIrgiN");
+				if (!shots[shots_counter]->element.it_focus)
+					shots[shots_counter]->element.first_frame = false;
+				shots[shots_counter]->element.first_pos = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition();
+				t_speed = Time::GetGameTime();
+				LOG("ENTRE");
 			}
+			LOG("t_speed = %.f", t_speed);
+			float3 current_pos = float3::Lerp(shots[shots_counter]->element.first_pos, shots[shots_counter]->transform->GetGlobalPosition(), (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
+			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(current_pos);
 
 			if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus) { //Move rotation
 				if (shots[shots_counter]->element.first_frame)
@@ -131,10 +114,20 @@ void CutsceneCamera::ExecuteCutscene()
 				}
 				Quat current_rot = Quat::Slerp(shots[shots_counter]->element.first_rot, shots[shots_counter]->element.final_rot, (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
 				camera->transform->SetGlobalRotation(current_rot);
-				if ((Time::GetGameTime() - t_speed) / 2.f >= 1.f) {
-					float3 direction = (shots[shots_counter]->element.g_o_focus->transform->GetGlobalPosition() - camera->transform->GetGlobalPosition()).Normalized();
+
+			}
+			LOG("PORCENTAJE: %f", (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
+			LOG("RESTITA: %f", (Time::GetGameTime() - t_speed));
+			if ((Time::GetGameTime() - t_speed) >= shots[shots_counter]->element.transition_speed) {
+				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
+				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
+				if (shots[shots_counter]->element.it_shake)
+					shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
+				state = CutsceneState::IDLE;
+				LOG("IM VIBING");
+				if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus)
 					camera->transform->SetGlobalRotation(shots[shots_counter]->element.final_rot);
-				}
+				break;
 			}
 		}
 		break;
