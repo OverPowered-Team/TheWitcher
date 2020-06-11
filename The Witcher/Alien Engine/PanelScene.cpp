@@ -56,7 +56,14 @@ void PanelScene::PanelLogic()
 	current_viewport_size = ImGui::GetContentRegionAvail();
 	posX = ImGui::GetWindowPos().x + ImGui::GetCursorPosX();
 	posY = ImGui::GetWindowPos().y + ImGui::GetCursorPosY();
-	ImGui::Image((ImTextureID)App->camera->scene_viewport->GetPostProcTexture(), ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+
+	if (App->renderer3D->render_bloom) {
+		ImGui::Image((ImTextureID)App->camera->scene_viewport->GetBlurredTexture(), ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	}
+	else {
+		ImGui::Image((ImTextureID)App->camera->scene_viewport->GetPostProcTexture(), ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+	}
+
 	width = current_viewport_size.x;
 	height = current_viewport_size.y;
 	App->camera->is_scene_hovered = ImGui::IsItemHovered();

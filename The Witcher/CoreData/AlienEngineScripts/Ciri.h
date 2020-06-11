@@ -22,9 +22,11 @@ public:
 	bool gap_closer = false;
 	float gap_closer_speed = 4.0f;
 	float gap_closer_decay = 0.08f;
+	bool appearing = false;
+	bool disappearing = false;
 
 	CiriFightController* fight_controller = nullptr;
-
+	
 	
 public:
 
@@ -51,6 +53,9 @@ public:
 	ActionState UpdateDashAction();
 	ActionState UpdateComboAction();
 	ActionState UpdateMiniScreamAction();
+
+	ResourceMaterial dissolve_mat;
+	std::vector<ComponentMaterial*> meshes_materials;
 
 	void CheckForGapCloser();
 
