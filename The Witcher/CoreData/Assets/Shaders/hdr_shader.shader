@@ -20,7 +20,9 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D hdrBuffer;
+uniform sampler2D bloomBlur; 
 
+uniform bool bloom;
 uniform bool hdr;
 uniform float exposure;
 uniform float gamma;
@@ -28,29 +30,29 @@ uniform float gamma;
 void main()
 {             
     vec3 hdrColor = texture(hdrBuffer, TexCoords).rgb;
+    vec3 bloomColor = texture(bloomBlur, TexCoords).rgb;
+    vec3 result = hdrColor;
 
     if(hdr)
     {
-        // reinhard
-        vec3 result = hdrColor / (hdrColor + vec3(1.0));
+        if(bloom)
+            result = hdrColor + bloomColor;
 
-        // exposure
-        result = vec3(1.0) - exp(-hdrColor * exposure);
+        // Tone mapping with exposure
+        result = vec3(1.0) - exp(-result * exposure);
 
-        // also gamma correct while we're at it     
+        // Gamma correct while we're at it     
         if(gamma != 0)
             result = pow(result, vec3(1.0 / gamma));
          
-
         // Final
         FragColor = vec4(result, 1.0);
     }
     else
     {
-        vec3 result = hdrColor; 
         if(gamma != 0)
              result = pow(result, vec3(1.0 / gamma));
              
-        FragColor = vec4(hdrColor, 1.0);
+        FragColor = vec4(result, 1.0);
     }
 }

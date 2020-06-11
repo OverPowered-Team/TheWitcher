@@ -13,9 +13,11 @@ public:
 		DEPTH_TEAXTURE,
 		NORMAL_FBO,
 		NORMAL_TEXTURE,
+		BLOOM_TEXTURE,
 		NORMAL_DEPTH_RBO,
 		MULTISAMPLING_FBO,
-		MULTISAMPLING_COLOR_RBO,
+		MULTISAMPLING_COLOR_RBO1,
+		MULTISAMPLING_COLOR_RBO2,
 		MULTISAMPLING_DEPTH_RBO,
 		POST_PROC_FBO,
 		POST_PROC_TEXTURE,
@@ -41,6 +43,8 @@ public:
 
 	uint GetFBOTexture();
 
+	uint GetSecondTextureAttachment(); 
+
 	uint GetPostProcTexture(); 
 
 	uint GetPostProcFinalFBO();
@@ -61,6 +65,11 @@ public:
 	{
 		return msaa;
 	}
+
+public: 
+
+	uint pingPongFBO[2] = { 0, 0 };
+	uint pingPongTex[2] = { 0, 0 };
 
 private:
 
@@ -93,6 +102,8 @@ public:
 
 	void ApplyPostProcessing();
 
+	void BlurImage();
+
 	void FinalPass();
 
 	void SetPos(float2 position);
@@ -112,6 +123,8 @@ public:
 	uint GetPostProcFinalFBO();
 
 	uint GetTexture();
+
+	uint GetBlurredTexture();
 
 	uint GetPostProcTexture(); 
 

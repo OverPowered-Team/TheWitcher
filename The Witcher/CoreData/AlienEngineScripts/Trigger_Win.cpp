@@ -28,12 +28,17 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 
 		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
 		{
-			SceneManager::LoadScene("boss_test");
+			SceneManager::LoadScene("boss_test", FadeToBlackType::FADE);
 		}
-
-		GameManager::instance->PrepareDataNextScene(false);
-
-		Scores_Data::won_level2 = true;
-		SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		else if (strcmp(current_scene.c_str(), "Mahakam_1") == 0)
+		{
+			GameManager::instance->PrepareDataNextScene(false);
+			SceneManager::LoadScene("Wagonnetes", FadeToBlackType::FADE);
+		}	
+		else 
+		{
+			Scores_Data::won_level2 = true;
+			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
+		}
 	}
 }

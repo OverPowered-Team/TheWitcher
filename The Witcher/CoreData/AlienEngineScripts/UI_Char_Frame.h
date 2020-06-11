@@ -26,6 +26,8 @@ public:
 
 	void PlayerOnFire(bool is_on_fire);
 
+	void UpdateTimes(float time_paused);
+
 public:
 
 	enum(CHARACTER,
@@ -100,7 +102,6 @@ private:
 
 	// Internal Timer
 	float internal_timer = 0.0f;
-	float time_paused = 0.0f;
 };
 
 ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {
