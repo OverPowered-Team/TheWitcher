@@ -16,7 +16,7 @@ void SadTutorial::Start()
 
 void SadTutorial::Update()
 {
-	if (Time::GetGameTime() - timer_explosion >= 8)
+	if (Time::GetGameTime() - timer_explosion >= time_to_explode)
 	{
 		emitter->StartSound("Play_Explosion");//Explosion sound insert here
 		//Animation explosion here
