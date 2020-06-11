@@ -58,7 +58,7 @@ void Subtitle::Start()
 
 	skip = GameObject::FindWithName("Text");
 	skip->SetEnable(false);
-	SceneManager::LoadSceneAsync("Lvl_1");
+	SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
 }
 
 void Subtitle::Update()
@@ -94,7 +94,6 @@ void Subtitle::Update()
 		if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1, Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
 		{
 			change_scene = true;
-			LOG("ENTERED");
 			if (audio)
 				audio->Mute(true);
 			if (song)

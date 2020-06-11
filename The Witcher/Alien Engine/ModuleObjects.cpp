@@ -1831,9 +1831,17 @@ GameObject* ModuleObjects::GetRoot(bool ignore_prefab)
 			return base_game_object->children.back();
 	}
 	else {
-		for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
-			if ((*item)->ID == scene_active) {
-				return *item;
+		if (base_game_object->children.empty()) {
+			return base_game_object;
+		}
+		else if (base_game_object->children.size() == 1) {
+			return base_game_object->children.back();
+		}
+		else {
+			for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
+				if ((*item)->ID == scene_active) {
+					return *item;
+				}
 			}
 		}
 		return nullptr;
