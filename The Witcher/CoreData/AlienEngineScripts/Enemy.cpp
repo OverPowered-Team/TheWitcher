@@ -26,22 +26,21 @@ void Enemy::Awake()
 	GameObject* mesh = game_object->GetChild("Mesh");
 	if (mesh)
 	{
-		meshes = mesh->GetChildren();
-		for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
-		{
-			if ((*iter) && (*iter)->HasChildren())
-			{
-				std::vector<GameObject*> childs = (*iter)->GetChildren();
-				for (auto iter2 = childs.begin(); iter2 != meshes.end(); iter2++)
-				{
-					if ((*iter2))
-					{
-						meshes.push_back((*iter2));
-					}
-				}	
-				meshes.erase(iter);
-			}
-		}
+		meshes = mesh->GetComponentsInChildrenRecursive<ComponentMaterial>();
+		//for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+		//{
+		//	if ((*iter) && (*iter)->HasChildren())
+		//	{
+		//		std::vector<GameObject*> childs = (*iter)->GetChildren();
+		//		for (auto iter2 = childs.begin(); iter2 != meshes.end(); iter2++)
+		//		{
+		//			if ((*iter2))
+		//			{
+		//				meshes.push_back((*iter2));
+		//			}
+		//		}	
+		//	}
+		//}
 		LOG("Got Meshes");
 	}
 
@@ -225,12 +224,12 @@ void Enemy::UpdateEnemy()
 			{
 				if ((*iter))
 				{
-					ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+					/*ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
 					if (material)
-					{
+					{*/
 						if(defaultMaterial)
-							material->material = defaultMaterial;
-					}
+							(*iter)->material = defaultMaterial;
+					/*}*/
 				}
 			}
 			whiteTime = 0;
@@ -473,15 +472,15 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	{
 		if ((*iter))
 		{
-			ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+			//ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
 			if (defaultMaterial == nullptr)
 			{
-				defaultMaterial = (ResourceMaterial*) material->GetMaterial();
+				defaultMaterial = (ResourceMaterial*)(*iter)->GetMaterial();
 			}
 
-			if (material)
+			if ((*iter))
 			{
-				material->material = &hitMaterial;
+				(*iter)->material = &hitMaterial;
 			}
 		}
 		inHit = true;
@@ -718,7 +717,7 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 
 void Enemy::SpawnHealthOrb()
 {
-	int rand_num = Random::GetRandomIntBetweenTwo(0,1);
+	int rand_num = Random::GetRandomIntBetweenTwo(0,2);
 	if(rand_num == 0)
 		GameObject::Instantiate(life_orb, transform->GetGlobalPosition() + float3::unitY() * 0.5);
 }

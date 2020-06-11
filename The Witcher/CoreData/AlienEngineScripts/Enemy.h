@@ -119,7 +119,7 @@ public:
 	ResourceMaterial* defaultMaterial = nullptr;
 	bool inHit = false;
 	float whiteTime = 0;
-	std::vector<GameObject*> meshes;
+	std::vector<ComponentMaterial*> meshes;
 	
 
 protected:
