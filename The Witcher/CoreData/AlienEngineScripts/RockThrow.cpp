@@ -16,11 +16,6 @@ RockThrow::~RockThrow()
 
 void RockThrow::Start()
 {
-	if(type == RockType::THROW)
-		throw_direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-	else {
-		throw_direction = { 0, -1, 0 };
-	}
 }
 
 void RockThrow::Update()
@@ -29,7 +24,7 @@ void RockThrow::Update()
 		if (type == RockType::THROW)
 			throw_direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 		else {
-			throw_direction = { 0, -1, 0 };
+			throw_direction = { 0, -4, 0 };
 		}
 		throwable = true;
 	}
@@ -44,7 +39,7 @@ void RockThrow::Update()
 		break;
 	case RockThrow::RockType::FALL:
 		game_object->transform->AddRotation(throw_rotation);
-		transform->AddPosition(throw_direction * Time::GetDT());
+		transform->AddPosition(throw_direction * throw_speed * Time::GetDT());
 		break;
 	default:
 		break;

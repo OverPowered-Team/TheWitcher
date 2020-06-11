@@ -118,7 +118,7 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
-	//ThrowEnvironmentRocks();
+	ThrowEnvironmentRocks();
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -132,7 +132,7 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
-	//ThrowEnvironmentRocks();
+	ThrowEnvironmentRocks();
 	if (!first_wall_door)
 		UpdatePlatform();
 	TransportPlayer();
@@ -341,14 +341,27 @@ void CiriFightController::ThrowEnvironmentRocks()
 void CiriFightController::TransportPlayer()
 {
 	// tp y da�o
-	for (uint i = 0; i < GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players.size(); ++i)
+	for (uint i = 0; i < GameManager::instance->player_manager->players.size(); ++i)
 	{
-		if (platform->transform->GetGlobalPosition().y > GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->transform->GetGlobalPosition().y - 3)
+		if (platform->transform->GetGlobalPosition().y > GameManager::instance->player_manager->players[i]->transform->GetGlobalPosition().y - 3)
 		{
-			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[0]->transform->SetGlobalPosition(platform->transform->GetGlobalPosition() + float3(0, 5, 0));
-			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[1]->transform->SetGlobalPosition(platform->transform->GetGlobalPosition() + float3(0, 5, 0));
+			LOG("Entro en la mierda: posicion de plataforma en y = %f     , posicion del muerto en y = %f", platform->transform->GetGlobalPosition().y, GameManager::instance->player_manager->players[i]->transform->GetGlobalPosition().y)
+			if (GameManager::instance->player_manager->players[i]->controller_index == 1)
+			{
+				GameManager::instance->player_manager->players[0]->transform->SetGlobalPosition(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[0]->GetComponent<ComponentCharacterController>()->SetPosition(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[0]->state->type = StateType::IDLE;
+			}
+			else
+			{
+				GameManager::instance->player_manager->players[1]->transform->SetGlobalPosition(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[1]->GetComponent<ComponentCharacterController>()->SetPosition(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[1]->state->type = StateType::IDLE;
+			}
+				
+
 			GameObject::FindWithName("Main Camera")->transform->SetGlobalPosition(GameObject::FindWithName("Main Camera")->GetComponent<CameraMovement>()->CalculateMidPoint() + GameObject::FindWithName("Main Camera")->GetComponent<CameraMovement>()->trg_offset);
-			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->ReceiveDamage(200);
+			GameManager::instance->player_manager->players[i]->ReceiveDamage(200);
 		}
 	}
 }
