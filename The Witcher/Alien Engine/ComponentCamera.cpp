@@ -677,6 +677,66 @@ float ComponentCamera::GetFogGradient() const
 	return fogGradient;
 }
 
+void ComponentCamera::EnableHDR()
+{
+	hdr = true;
+}
+
+void ComponentCamera::DisableHDR()
+{
+	hdr = false;
+}
+
+void ComponentCamera::SetHDRExposure(const float& exposure)
+{
+	this->exposure = exposure;
+}
+
+void ComponentCamera::SetHDRGamma(const float& gamma)
+{
+	this->gamma = gamma;
+}
+
+float ComponentCamera::GetHDRExposure() const
+{
+	return exposure;
+}
+
+float ComponentCamera::GetHDRGamma() const
+{
+	return gamma;
+}
+
+void ComponentCamera::EnableBloom()
+{
+	bloom = true;
+}
+
+void ComponentCamera::DisableBloom()
+{
+	bloom = false;
+}
+
+void ComponentCamera::SetBloomThreshold(const float& threshold)
+{
+	this->threshold = threshold;
+}
+
+void ComponentCamera::SetBloomIntensity(const float& intensity)
+{
+	this->blur_iters = intensity;
+}
+
+float ComponentCamera::GetBloomThreshold() const
+{
+	return threshold;
+}
+
+float ComponentCamera::GetBloomIntensity() const
+{
+	return blur_iters;
+}
+
 void ComponentCamera::SetBackgroundColor(const float3& color)
 {
 	camera_color_background = { color.x, color.y, color.z };

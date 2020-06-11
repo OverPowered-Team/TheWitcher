@@ -30,6 +30,7 @@ public:
 	std::vector<GameObject*> rock_positions;
 	std::vector<GameObject*> rocks;
 	Prefab rock;
+	Prefab rock_orbit;
 
 	// Platform
 	GameObject* platform = nullptr;
@@ -95,6 +96,7 @@ ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->platform);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->wall);
 	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->rock);
+	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->rock_orbit);
 
 	return cirifightcontroller;
 } 

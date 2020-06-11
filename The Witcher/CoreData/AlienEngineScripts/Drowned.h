@@ -49,5 +49,6 @@ public:
 	DrownedType drowned_type = DrownedType::NONE;
 	MusicController* m_controller = nullptr;
 	bool is_hide = true;
+	bool is_hiding = false;
 };
 

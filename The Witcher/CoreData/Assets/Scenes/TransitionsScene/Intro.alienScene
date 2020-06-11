@@ -1,6 +1,17 @@
 {
     "Scene": {
         "Name": "Intro",
+        "Textures": [
+            {
+                "TextureID": "9492367232523054128"
+            },
+            {
+                "TextureID": "4460295208109499405"
+            },
+            {
+                "TextureID": "1307287875735877059"
+            }
+        ],
         "GameObjects": [
             {
                 "Name": "Main Camera",
@@ -41,7 +52,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "17200776803129528046",
-                        "ListenerID": "2475126655"
+                        "ListenerID": "2172330300"
                     },
                     {
                         "Enabled": true,
@@ -70,6 +81,9 @@
                         "Fog": true,
                         "Density": 0.035000000149011612,
                         "Gradient": 1.3500000238418579,
+                        "HDR": true,
+                        "Exposure": 0,
+                        "Gamma": 0,
                         "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
                         "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
                         "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
@@ -146,7 +160,8 @@
                             1
                         ],
                         "CastShadows": true,
-                        "SizeBakedShadow": 0
+                        "SizeBakedShadow": 0,
+                        "sadowIntensity": 0
                     }
                 ]
             },
@@ -230,7 +245,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "8151496171600425161",
+                        "ID": "727882426426120985",
                         "Text": "",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -281,7 +296,7 @@
                 "FamilyNumber": 2,
                 "ID": "12012775329694049473",
                 "ParentID": "14974939172428492046",
-                "Enabled": true,
+                "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -313,7 +328,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9560713995948737636",
+                        "ID": "415189243205297858",
                         "Text": "start to skip",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -374,7 +389,7 @@
                 "ParentID": "10653490041881489166",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -565,7 +580,7 @@
                 "ParentID": "14974939172428492046",
                 "Enabled": false,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -599,7 +614,7 @@
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
-                        "TextureID": "2765066298579762240",
+                        "TextureID": "0",
                         "Color": [
                             0.80000001192092896,
                             0.80000001192092896,

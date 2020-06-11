@@ -21,11 +21,6 @@ void PlayerManager::Start()
 
 	in_game_ui = GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetComponent<InGame_UI>();
 	ultibar = GameObject::FindWithName("Ulti_Bar")->GetComponent<UltiBar>();
-
-	if (Scores_Data::player1_relics.size() > 0)
-		players[0]->relics = Scores_Data::player1_relics;
-	if (Scores_Data::player2_relics.size() > 0)
-		players[1]->relics = Scores_Data::player1_relics;
 }
 
 void PlayerManager::Update()

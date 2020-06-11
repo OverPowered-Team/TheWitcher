@@ -276,16 +276,16 @@ void Enemy::Move(float3 direction)
 	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
 	// Option 1 : Works only one steering at the time. Avoid zone has to be small
-	if (avoid_vector.Length() > 0)
+	/*if (avoid_vector.Length() > 0)
 		velocity += avoid_vector;
 	else
-		velocity += velocity_vec;
+		velocity += velocity_vec;*/
 
 	// Option 2: Add of the two steering
 	//velocity += avoid_vector + velocity_vec;
 
 	// Option 3: Add of two steering with weights
-	//velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
+	velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
 
 	if (velocity.Length() > stats["Agility"].GetValue())
 	{
@@ -661,7 +661,7 @@ void Enemy::ChangeAttackEnemy(bool deleting)
 	std::vector<Enemy*> enemy_vec = player_controllers[current_player]->enemy_battle_circle;
 	for (int i = 0; i < enemy_vec.size(); ++i)
 	{
-		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
+		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies && !enemy_vec[i]->IsDying() && !enemy_vec[i]->IsDead())
 		{
 			enemy_vec[i]->AddAttacking(player_controllers[current_player]);
 

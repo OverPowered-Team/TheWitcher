@@ -87,6 +87,19 @@ void DialogueManager::Update()
 
 }
 
+void DialogueManager::Pause(bool pause)
+{
+
+	/*playing = !playing;
+	
+	if (pause) // TODO --> IVAN PLS do the RESUME, I IMPLLORE you. I'll kidnap 1000 children before I let the dialogues die
+		audioEmitter->PauseByEventName(currentDialogue.audioData.eventName.c_str());
+	else
+		*/
+
+
+}
+
 bool DialogueManager::InputNewDialogue(Dialogue& dialogue, float volume)
 {
 	// TODO: We don't have a way of knowing the sound's duration, so we won't take into account the priority
