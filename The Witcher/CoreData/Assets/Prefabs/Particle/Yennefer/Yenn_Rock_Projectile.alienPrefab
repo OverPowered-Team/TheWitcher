@@ -1,14 +1,15 @@
 {
+    "Name": "Yenn_Rock_Projectile",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "Yennefer_Rock",
                 "FamilyNumber": 1,
-                "ID": "2319727481307898828",
-                "ParentID": "0",
+                "ID": "653850843527172438",
+                "ParentID": "14823242940331849949",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -35,7 +36,7 @@
                             0.458579421043396
                         ],
                         "ScaleNegative": false,
-                        "ID": "790104096105061364"
+                        "ID": "15337525354027687789"
                     },
                     {
                         "Type": 1,
@@ -45,7 +46,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10624303914994125896",
+                        "ID": "16690760032783443694",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -53,7 +54,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "14285208611315794459",
+                        "ID": "6218090166253429395",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -84,7 +85,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "3060775297402604449",
+                        "ID": "15636817103823067704",
                         "ResourceID": "1500231456347285610",
                         "DataName": "PlayerProjectile",
                         "HasInspector": true,
@@ -116,12 +117,12 @@
             {
                 "Name": "Particle_trail",
                 "FamilyNumber": 2,
-                "ID": "11892326313683709757",
-                "ParentID": "2319727481307898828",
+                "ID": "9798907301323329455",
+                "ParentID": "653850843527172438",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
-                "ParentSelected": false,
+                "Selected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -147,11 +148,11 @@
                             2.1806473731994629
                         ],
                         "ScaleNegative": false,
-                        "ID": "10547969636371916840"
+                        "ID": "14370108537932369630"
                     },
                     {
                         "Type": 15,
-                        "ID": "2278931061204405258",
+                        "ID": "797604327405075268",
                         "Billboard": 1,
                         "Start": {
                             "Position": [
@@ -167,8 +168,8 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.17123976349830627,
-                                -0.10332931578159332,
+                                0.071617148816585541,
+                                0.18673773109912872,
                                 0
                             ],
                             "Force": [
@@ -178,9 +179,9 @@
                             ],
                             "Speed": 0.20000000298023224,
                             "Color": [
-                                0.25581395626068115,
-                                0.84424006938934326,
-                                1,
+                                0.33423179388046265,
+                                0.24141453206539154,
+                                0.082882285118103027,
                                 1
                             ],
                             "SizeStart3D": false,
@@ -203,16 +204,33 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 0.5,
                             "Speed": 5,
                             "Color": [
-                                0.88833516836166382,
-                                0.062015533447265625,
-                                1,
+                                0.90835577249526978,
+                                0.68945091962814331,
+                                0.38439851999282837,
                                 0.67500001192092896
                             ],
                             "Size": 0.10000000149011612,
@@ -256,7 +274,7 @@
                                 10
                             ],
                             "MaxLife": 0.20000000298023224,
-                            "CurrentLife": 0,
+                            "CurrentLife": 0.13100001215934753,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": true,
@@ -310,19 +328,29 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": true,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             },
             {
                 "Name": "Particle_rings",
                 "FamilyNumber": 2,
-                "ID": "14659511907766614884",
-                "ParentID": "2319727481307898828",
+                "ID": "7935686650297532745",
+                "ParentID": "653850843527172438",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -348,11 +376,11 @@
                             2.1806473731994629
                         ],
                         "ScaleNegative": false,
-                        "ID": "16911704808719665478"
+                        "ID": "14411091868952012087"
                     },
                     {
                         "Type": 15,
-                        "ID": "3657686582360168946",
+                        "ID": "689085675419738030",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
@@ -368,9 +396,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.86414003372192383,
-                                0.28569906949996948,
-                                -1.7809094190597534
+                                -1.0033513307571411,
+                                -0.85440206527709961,
+                                1.5044212341308594
                             ],
                             "Force": [
                                 0,
@@ -379,9 +407,9 @@
                             ],
                             "Speed": 2,
                             "Color": [
-                                0.25581395626068115,
-                                0.84424006938934326,
-                                1,
+                                0.33423179388046265,
+                                0.24141453206539154,
+                                0.082882285118103027,
                                 1
                             ],
                             "SizeStart3D": false,
@@ -404,16 +432,33 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 1.5,
                             "Speed": 2,
                             "Color": [
-                                0.7906956672668457,
-                                0,
-                                1,
+                                0.9218328595161438,
+                                0.66334646940231323,
+                                0.30313640832901001,
                                 0.73000001907348633
                             ],
                             "Size": 0,
@@ -457,7 +502,7 @@
                                 10
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 8.9980001449584961,
+                            "CurrentLife": 4.4029979705810547,
                             "SpawnRate": 50,
                             "Delay": 0,
                             "Loop": true,
@@ -505,11 +550,20 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": true,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "Yenn_Rock_Projectile"
+    }
 }
