@@ -40,6 +40,7 @@ bool ModuleRenderer3D::Init()
 	bool ret = true;
 
 	//Create context
+	back_context = SDL_GL_CreateContext(App->window->window); // first create secondary context, sdl_createcontext makes current too
 	context = SDL_GL_CreateContext(App->window->window);
 	if (context == NULL)
 	{
@@ -153,6 +154,7 @@ bool ModuleRenderer3D::CleanUp()
 	DestroyScreenQuadVAO();
 
 	SDL_GL_DeleteContext(context);
+	SDL_GL_DeleteContext(back_context);
 
 	return true;
 }
