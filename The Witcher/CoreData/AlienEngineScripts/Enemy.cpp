@@ -381,6 +381,16 @@ void Enemy::Decapitate(PlayerController* player)
 		// If not working, check prefab
 		game_object->GetChild("Mesh")->GetChild("Head")->SetEnable(false); //disable old head
 		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
+		
+		vector<GameObject*> iss = decapitated_head->GetChildren();
+		for (auto it = iss.begin(); it != iss.end(); it++)
+		{
+			if (strcmp((*it)->GetName(),"blood_head_particle" )==0)
+			{
+				(*it)->SetEnable(true);
+			}
+		}
+		
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 		head_rb->SetRotation(particle_spawn_positions[0]->transform->GetGlobalRotation());

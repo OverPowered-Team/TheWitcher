@@ -60,6 +60,8 @@ void CiriFightController::Update()
 		phase_change = true;
 		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
 		SpawnRocks();
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
 	}
 	if (fight_started) {
 		switch (phase)
@@ -99,8 +101,6 @@ void CiriFightController::UpdatePhaseZero()
 void CiriFightController::FinishPhaseZero()
 {
 	phase++;
-	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
-	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
 	this->GetComponent<ComponentCharacterController>()->Move(float3::zero());
 }
 
