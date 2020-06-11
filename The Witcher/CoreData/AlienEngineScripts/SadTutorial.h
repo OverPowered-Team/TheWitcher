@@ -15,8 +15,11 @@ public:
 
 public:
 	float timer_explosion = 0.f;
+	float timer_pre_explosion = 0.f;
 	float time_to_explode = 8.f;
 	bool has_exploded = false;
+	bool has_post_exploded = false;
+	bool has_pre_exploded = false;
 	ComponentAudioEmitter* emitter = nullptr;
 	ComponentParticleSystem* particle_emmitter = nullptr;
 	GameObject* go_particle = nullptr;
