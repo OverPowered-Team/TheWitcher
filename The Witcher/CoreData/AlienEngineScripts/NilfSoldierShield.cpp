@@ -61,7 +61,10 @@ void NilfSoldierShield::UpdateEnemy()
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
-			SetState("Idle");
+			if(is_attacking)
+				SetState("Idle");
+			else
+				SetState("Guard");
 			animator->PlayState("Idle");
 			animator->SetBool("stunned", false);
 		}
@@ -100,6 +103,7 @@ void NilfSoldierShield::Action()
 	}
 	else
 	{
+		is_blocked = false;
 		animator->PlayState("Attack");
 		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::ATTACK;
@@ -138,6 +142,8 @@ void NilfSoldierShield::Block()
 		has_been_attacked = false;
 		break_shield_attack = 0;
 		is_blocked = false;
+
+		ChangeAttackEnemy();
 	}
 }
 
