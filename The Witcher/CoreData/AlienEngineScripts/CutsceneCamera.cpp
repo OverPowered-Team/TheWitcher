@@ -95,16 +95,10 @@ void CutsceneCamera::ExecuteCutscene()
 			float min_dist = 0.2f;
 			current_move_time += Time::GetDT();
 
-			if (Time::GetGameTime() - t_speed >= shots[shots_counter]->element.transition_speed || (shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
-				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
-				current_move_time = 0.f;
-				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
-				if (shots[shots_counter]->element.it_shake)
-					shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
-				state = CutsceneState::IDLE;
-				LOG("IM VIBING");
+			if (/*(Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed >= 1.f ||*/ (shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
+				
 			}
-			else
+			if((Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed < 1.f)
 			{ //Move postion
 				if (shots[shots_counter]->element.first_frame)
 				{
@@ -115,6 +109,16 @@ void CutsceneCamera::ExecuteCutscene()
 				}
 				float3 current_pos = float3::Lerp(shots[shots_counter]->element.first_pos, shots[shots_counter]->transform->GetGlobalPosition(), (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
 				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(current_pos);
+			}
+			else
+			{
+				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
+				t_speed = 0.f;
+				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
+				if (shots[shots_counter]->element.it_shake)
+					shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
+				state = CutsceneState::IDLE;
+				LOG("IM VIrgiN");
 			}
 
 			if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus) { //Move rotation
