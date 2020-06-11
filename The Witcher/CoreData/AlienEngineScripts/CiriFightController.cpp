@@ -265,6 +265,8 @@ void CiriFightController::UpdatePlatform()
 			{
 				if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
+					GameObject::FindWithName("Rock_particles1")->transform->SetEnable(false);
+					GameObject::FindWithName("Rock_particles2")->transform->SetEnable(true);
 					circle->GetComponent<ComponentMaterial>()->material->color = { 1,1,1,1 };
 					circle->SetEnable(false);
 					circle = (*it);
@@ -294,6 +296,8 @@ void CiriFightController::UpdatePlatform()
 		{
 			if (material_platform)
 				material_platform->material->color = { 1,1,1,1 };
+			GameObject::FindWithName("Rock_particles2")->transform->SetEnable(false);
+			GameObject::FindWithName("Rock_particles3")->transform->SetEnable(true);
 			circle->SetEnable(false);
 			circle = nullptr;
 			ScaleWall();
