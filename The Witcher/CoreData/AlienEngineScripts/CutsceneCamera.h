@@ -25,6 +25,8 @@ public:
 	void BuildCutscene();
 	void PrepareCutscene();
 	void ExecuteCutscene();
+	void ExecuteCurve();
+	void BuildCurve(CutsceneShot* shot);
 	static bool OrderCutscenes(CutsceneShot* i, CutsceneShot* j);
 public:
 	vector<CutsceneShot*> shots;

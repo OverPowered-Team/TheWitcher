@@ -164,6 +164,7 @@ protected:
 	void SelectAttack(AttackType attack);
 	void SnapToTarget();
 	bool FindSnapTarget();
+	void ReLoadRelics();
 	float3 GetMovementVector();
 
 

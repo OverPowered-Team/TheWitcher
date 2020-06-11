@@ -16,6 +16,14 @@ void DialogueTriggerSimple::OnTriggerEnter(ComponentCollider* collider)
 	if ((strcmp(collider->game_object_attached->GetTag(), "Player") != 0))
 		return;
 
+	if ((strcmp(collider->game_object_attached->GetName(), "Vagonete_with_panas") == 0)) // yeheah of course
+	{
+		GameManager::instance->event_manager->ReceiveDialogueEvent(diaLogueIndex, volume);
+		if (once)
+			game_object->ToDelete();
+		return; 
+	}
+
 	PlayerController* pl = collider->game_object_attached->GetComponent<PlayerController>();
 	bool isGeralt = pl->player_data.type == PlayerController::PlayerType::GERALT; 
 

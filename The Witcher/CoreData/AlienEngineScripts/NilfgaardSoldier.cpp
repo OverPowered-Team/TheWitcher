@@ -151,6 +151,11 @@ bool NilfgaardSoldier::IsDying()
 	return (state == NilfgaardSoldierState::DYING ? true : false);
 }
 
+bool NilfgaardSoldier::IsHit()
+{
+	return (state == NilfgaardSoldierState::HIT ? true : false);
+}
+
 void NilfgaardSoldier::SetState(const char* state_str)
 {
 	if (state_str == "Idle")
@@ -240,7 +245,7 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		}
 		else if (!is_dead) 
 		{
-			SetState("Idle");
+			SetState("Guard");
 		}
 
 	}
