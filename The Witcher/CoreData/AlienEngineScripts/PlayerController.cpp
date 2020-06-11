@@ -1011,6 +1011,7 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
+				dash_coll->player_dashing = this;
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
