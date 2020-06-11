@@ -1,4 +1,5 @@
 {
+    "Name": "Poison_Oil",
     "Prefab": {
         "GameObjects": [
             {
@@ -273,7 +274,7 @@
                                 10
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 0.59999996423721313,
+                            "CurrentLife": 0.016000000759959221,
                             "SpawnRate": 1,
                             "Delay": 0,
                             "Loop": true,
@@ -324,6 +325,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -388,9 +390,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.18160727620124817,
-                                0.069184809923171997,
-                                -0.047246795147657394
+                                0.051628705114126205,
+                                -0.18383072316646576,
+                                0.059504132717847824
                             ],
                             "Force": [
                                 0,
@@ -494,7 +496,7 @@
                                 10
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 0.59999996423721313,
+                            "CurrentLife": 0.016000000759959221,
                             "SpawnRate": 100,
                             "Delay": 0,
                             "Loop": true,
@@ -545,7 +547,8 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
-                            "Casting": 1,
+                            "Emitting": false,
+                            "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
                             "Alpha": false,
@@ -619,11 +622,11 @@
                         ],
                         "Constant": 0.10000000149011612,
                         "Linear": 0.0099999997764825821,
-                        "Quadratic": 50
+                        "Quadratic": 50,
+                        "InteractWithShadows": true
                     }
                 ]
             }
         ]
-    },
-    "Name": "Poison_Oil"
+    }
 }

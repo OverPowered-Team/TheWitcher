@@ -179,7 +179,7 @@ void Enemy::UpdateEnemy()
 				it_stats->second.ModifyCurrentStat((*it));
 				
 				//Temporal solution
-				if (it_stats->first == "Health" && !IsDead())
+				if (it_stats->first == "Health" && !IsDead() && !IsDying())
 				{
 					if (stats["Health"].GetValue() <= 0)
 					{

@@ -26,7 +26,7 @@ public:
 	bool disappearing = false;
 
 	CiriFightController* fight_controller = nullptr;
-
+	
 	
 public:
 
@@ -54,7 +54,7 @@ public:
 	ActionState UpdateComboAction();
 	ActionState UpdateMiniScreamAction();
 
-	ResourceMaterial* dissolve_mat = nullptr;
+	ResourceMaterial dissolve_mat;
 	std::vector<ComponentMaterial*> meshes_materials;
 
 	void CheckForGapCloser();

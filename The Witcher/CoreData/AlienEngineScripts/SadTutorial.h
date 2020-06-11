@@ -18,6 +18,8 @@ public:
 	float time_to_explode = 8.f;
 	bool has_exploded = false;
 	ComponentAudioEmitter* emitter = nullptr;
+	ComponentParticleSystem* particle_emmitter = nullptr;
+	GameObject* go_particle = nullptr;
 };
 
 ALIEN_FACTORY SadTutorial* CreateSadTutorial() {
