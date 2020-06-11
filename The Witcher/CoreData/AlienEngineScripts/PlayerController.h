@@ -255,6 +255,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->battleCircle);
+	SHOW_IN_INSPECTOR_AS_INPUT_INT(player->max_attacking_enemies);
 	SHOW_TEXT("Dash animation cool data"); 
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 3.f, 5.f);
 	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 2.f, 3.f);

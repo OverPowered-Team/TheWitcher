@@ -1,11 +1,12 @@
 {
+    "Name": "hit_particle",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "hit_particle",
                 "FamilyNumber": 1,
-                "ID": "14453631214346087532",
-                "ParentID": "12147686444579634007",
+                "ID": "3947112934611131099",
+                "ParentID": "620220625201035254",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -20,7 +21,7 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            2.8780386447906494,
+                            0,
                             0
                         ],
                         "Rotation": [
@@ -35,16 +36,16 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "739697725481412299"
+                        "ID": "15583367949270230554"
                     },
                     {
                         "Type": 15,
-                        "ID": "13425685836965911355",
+                        "ID": "4443879997215771720",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
                                 0,
-                                2.8780386447906494,
+                                0,
                                 0
                             ],
                             "Rotation": [
@@ -55,9 +56,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                2.4053678512573242,
-                                -0.56892526149749756,
-                                1.7001557350158691
+                                1.5252792835235596,
+                                2.1615068912506104,
+                                1.4147119522094727
                             ],
                             "Force": [
                                 0,
@@ -91,10 +92,27 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 0.30000001192092896,
                             "Speed": 3,
                             "Color": [
@@ -144,13 +162,13 @@
                                 10
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 0.50099998712539673,
+                            "CurrentLife": 0.51299995183944702,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
                                 0,
-                                2.8780386447906494,
+                                0,
                                 0
                             ],
                             "RelativePosition": [
@@ -196,11 +214,19 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "hit_particle"
+    }
 }

@@ -473,7 +473,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 			Die();
 		}
-		else if(!knock)
+		else if(knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
@@ -1068,7 +1068,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
 				knock_speed.y = 0;
 
-				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, enemy->is_mini);
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, !enemy->is_mini);
 				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
 				
 				return;

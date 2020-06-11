@@ -115,6 +115,13 @@ public:
 	Prefab head_prefab;
 	Prefab life_orb;
 
+	ResourceMaterial hitMaterial;
+	ResourceMaterial* defaultMaterial = nullptr;
+	bool inHit = false;
+	float whiteTime = 0;
+	std::vector<ComponentMaterial*> meshes;
+	
+
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
@@ -126,4 +133,5 @@ protected:
 	int current_player = 0;
 	bool is_dead = false;
 	bool was_dizzy = false;
+	
 };
