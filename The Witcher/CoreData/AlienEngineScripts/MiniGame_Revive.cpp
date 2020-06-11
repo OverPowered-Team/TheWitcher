@@ -18,9 +18,11 @@ void MiniGame_Revive::Start()
 	good_part = game_object->GetChild("Minigame")->GetChild("Good_Part");
 	start_X = game_object->GetChild("Start_X");
 	game_A = game_object->GetChild("Minigame")->GetChild("Y");
-	good_part->transform->SetLocalScale(original_scale_green, good_part->transform->GetLocalScale().y, good_part->transform->GetLocalScale().z);
 	start_X->SetEnable(true);
 	minigame->SetEnable(false);
+
+	original_moving_position = moving_part->transform->GetLocalPosition().x;
+	new_scale = good_part->transform->GetLocalScale().x * 0.5f;
 
 	revive_state = States::PREGAME;
 }
@@ -89,7 +91,7 @@ void MiniGame_Revive::Minigame()
 {
 	if (!first_frame)
 	{
-		float position_x = Maths::Lerp(-1.0f * sign, 1.0f * sign, (Time::GetGameTime() - time) / lerp_time);
+		float position_x = Maths::Lerp(original_moving_position * sign, original_moving_position * -sign, (Time::GetGameTime() - time) / lerp_time);
 
 		moving_part->transform->SetLocalPosition(float3(position_x, 0, 0));
 
@@ -99,17 +101,18 @@ void MiniGame_Revive::Minigame()
 
 			float points = 0.0f;
 
-			if ((good_part->transform->GetLocalScale().x) >= Maths::Abs(position_x))
+			if (position_goal >= Maths::Abs(position_x))
 			{
 				++correct_inputs;
+				position_goal *= 0.5f;
 				points = 1.f / input_times;
 				previous_scale = good_part->transform->GetLocalScale().x;
-				new_scale = original_scale_green - ((original_scale_green - desired_scale_green) / (input_times - 1)) * correct_inputs;
+				new_scale = previous_scale * 0.5f;
 				green_reducing = true;
 			}
 			else
 			{
-				points = (1 - Maths::Abs(position_x)) / input_times;
+				points = (1 - Maths::Abs(position_x / original_moving_position)) / input_times;
 				green_reducing = false;
 			}
 
@@ -152,9 +155,8 @@ void MiniGame_Revive::LerpsOnInput()
 		float lerp = ((Time::GetGameTime() - color_time) * 20);
 
 		// Button Lerp
-		float scale_x = Maths::Lerp(0.5f, 0.75f, lerp);
-		float scale_y = Maths::Lerp(3.167f, 4.75f, lerp);
-		game_A->transform->SetLocalScale(scale_x, scale_y, 1);
+		float scale = Maths::Lerp(4.0f, 6.0f, lerp);
+		game_A->transform->SetLocalScale(scale, scale, 1);
 
 	}
 	else if (color_time + 0.05f <= Time::GetGameTime())
@@ -162,9 +164,8 @@ void MiniGame_Revive::LerpsOnInput()
 		float lerp = (((Time::GetGameTime() - color_time) - 0.05f) * 20);
 
 		// Button Lerp
-		float scale_x = Maths::Lerp(0.75, 0.5f, lerp);
-		float scale_y = Maths::Lerp(4.75f, 3.167f, lerp);
-		game_A->transform->SetLocalScale(scale_x, scale_y, 1);
+		float scale = Maths::Lerp(6.0f, 4.0f, lerp);
+		game_A->transform->SetLocalScale(scale, scale, 1);
 	}
 
 	if (green_reducing)
@@ -195,7 +196,6 @@ void MiniGame_Revive::RestartMinigame()
 	start_X->SetEnable(true);
 	minigame->SetEnable(false);
 
-	good_part->transform->SetLocalScale(original_scale_green, good_part->transform->GetLocalScale().y, good_part->transform->GetLocalScale().z);
 	revive_percentatge = 0.0f;
 	time = 0.0f;
 	color_time = 0.0f;
