@@ -64,8 +64,8 @@ void ProgressiveFog::Update()
 
 void ProgressiveFog::OnDrawGizmosSelected()
 {
-	Gizmos::DrawWireSphere(centerPoint, innerRadius * 0.5f, Color::Red());
-	Gizmos::DrawWireSphere(centerPoint, outterRadius * 0.5f, Color::Blue());
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), innerRadius * 0.5f, Color::Red());
+	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), outterRadius * 0.5f, Color::Blue());
 }
 
 void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
