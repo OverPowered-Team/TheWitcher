@@ -121,11 +121,11 @@ public:
 	float whiteTime = 0;
 	std::vector<ComponentMaterial*> meshes;
 	
+	PlayerController* last_player_hit;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
-	PlayerController* last_player_hit;
 	GameObject* decapitated_head = nullptr;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
