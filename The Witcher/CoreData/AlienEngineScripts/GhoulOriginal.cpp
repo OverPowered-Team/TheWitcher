@@ -30,6 +30,10 @@ void GhoulOriginal::UpdateEnemy()
         Move(direction);
         break;
 
+    //case GhoulState::GUARD:
+    //    Guard();
+    //    break;
+
     case GhoulState::HIT:
     {
         velocity += velocity * knock_slow * Time::GetDT();

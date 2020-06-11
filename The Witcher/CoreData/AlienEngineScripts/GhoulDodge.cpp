@@ -134,6 +134,10 @@ void GhoulDodge::OnAnimationEnd(const char* name)
         else
             SetState("Idle");
 
+        ReleaseParticle("AreaAttackSlash");
+        ReleaseParticle("AreaAttackSphere");
+        ReleaseParticle("AreaAttackRock");
+
         can_jump = false;
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
@@ -141,9 +145,7 @@ void GhoulDodge::OnAnimationEnd(const char* name)
     {
         ReleaseParticle("hit_particle");
 
-        if (!is_dead)
-            SetState("Idle");
-        else
+        if (stats["Health"].GetValue() <= 0.0F)
         {
             if (!was_dizzy)
                 was_dizzy = true;
@@ -153,6 +155,11 @@ void GhoulDodge::OnAnimationEnd(const char* name)
                 GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
+        else if (is_attacking)
+            ChangeAttackEnemy();
+        else if (!is_dead)
+            SetState("Idle");
+
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
     }
     else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
