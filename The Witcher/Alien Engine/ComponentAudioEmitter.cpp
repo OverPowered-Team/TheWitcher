@@ -255,8 +255,3 @@ void ComponentAudioEmitter::OnDisable()
 {
 	audio_name = "";
 }
-
-void ComponentAudioEmitter::PauseByEventName(const char* event_name)
-{
-	source->PauseEventByName(event_name);
-}
