@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
+#include "ParticlePool.h"
 #include "CiriFightController.h"
 #include "CiriOriginal.h"
 #include "RockThrow.h"
@@ -52,6 +53,7 @@ void CiriOriginal::SetActionProbabilities()
 	Boss::SetActionProbabilities();
 
 	if (fight_controller->phase_change) {
+		action_cooldown = 10.0f;
 		actions.find("Scream")->second->probability = 100.0f;
 	}
 	else if (fight_controller->phase == 2 || fight_controller->phase == 3) {
@@ -127,9 +129,19 @@ void CiriOriginal::LaunchRockAction()
 		target = Random::GetRandomIntBetweenTwo(0, 1);
 	}
 
+	LOG("Rock to throw %i", game_object->GetComponent<CiriFightController>()->rocks_available - 1);
+	LOG("Rocks available %i", game_object->GetComponent<CiriFightController>()->rocks.size());
 	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::THROW);
+	LOG("Rock paso hehe");
 	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->target = target;
 	game_object->GetComponent<CiriFightController>()->rocks_available--;
+
+	//GameManager::instance->particle_pool->GetInstance("Rock_Aura", float3::zero(), float3::zero(), game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1], true);
+	
+
+	if(game_object->GetComponent<CiriFightController>()->rocks_available == 0){
+		game_object->GetComponent<CiriFightController>()->SpawnRocks();
+	}
 }
 
 void CiriOriginal::LaunchScreamAction()

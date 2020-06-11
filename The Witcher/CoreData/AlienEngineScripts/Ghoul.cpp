@@ -226,6 +226,9 @@ void Ghoul::OnAnimationEnd(const char* name)
             SetState("Idle");
 
         can_jump = false;
+        ReleaseParticle("AreaAttackSlash");
+        ReleaseParticle("AreaAttackSphere");
+        ReleaseParticle("AreaAttackRock");
     }
     else if (strcmp(name, "Hit") == 0)
     {
@@ -263,6 +266,9 @@ void Ghoul::OnDrawGizmosSelected()
 void Ghoul::ActivateRangeCollider()
 {
     range_collider->SetEnable(true);
+    SpawnParticle("AreaAttackSlash", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    SpawnParticle("AreaAttackSphere", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    SpawnParticle("AreaAttackRock", particle_spawn_positions[2]->transform->GetGlobalPosition());
 }
 
 void Ghoul::DeactivateRangeCollider()
