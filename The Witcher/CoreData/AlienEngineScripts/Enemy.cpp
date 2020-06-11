@@ -653,10 +653,17 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 		SetState("Guard");
 }
 
+void Enemy::OnControllerColliderHit(const ControllerColliderHit& hit)
+{
+	if (IsHit() && hit.collider->GetCollisionLayer() == "Player")
+	{
+		velocity = float3::zero();
+	}
+}
+
 void Enemy::SpawnHealthOrb()
 {
 	int rand_num = Random::GetRandomIntBetweenTwo(0,1);
 	if(rand_num == 0)
 		GameObject::Instantiate(life_orb, transform->GetGlobalPosition() + float3::unitY() * 0.5);
 }
-	

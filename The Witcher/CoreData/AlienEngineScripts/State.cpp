@@ -285,8 +285,8 @@ void RollingState::OnEnter(PlayerController* player)
 
 	if (player->player_data.type == PlayerController::PlayerType::GERALT)
 	{
-		if (player->dashData.dash_trail != nullptr)
-			player->dashData.dash_trail->Start();
+		if (player->dash_trail != nullptr)
+			player->dash_trail->Start();
 	}
 }
 
@@ -294,8 +294,8 @@ void RollingState::OnExit(PlayerController* player)
 {
 	if (player->player_data.type == PlayerController::PlayerType::GERALT)
 	{
-		if (player->dashData.dash_trail != nullptr)
-			player->dashData.dash_trail->Stop();
+		if (player->dash_trail != nullptr)
+			player->dash_trail->Stop();
 	}
 	else if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 		player->ReleaseParticle("Yenn_Portal");
