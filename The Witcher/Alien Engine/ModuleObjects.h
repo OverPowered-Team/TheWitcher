@@ -15,6 +15,7 @@
 #include <stack>
 #include <functional>
 #include <map>
+#include "SDL/include/SDL_thread.h"
 #include <string>
 
 class ReturnZ;
@@ -168,6 +169,8 @@ public:
 	// scenes
 	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
 	void LoadScene(const char * name, bool change_scene = true);
+	void LoadSceneAsync(const char* name);
+	void ChangeToAsyncScene();
 	void OpenCoScene(const char* name);
 	void CreateEmptyScene();
 
@@ -216,10 +219,11 @@ public:
 	bool inPrefabCreation = false;
 	bool inHotReload = false;
 	u64 scene_active = 0;
-
+	std::string toLoad;
+	SDL_atomic_t dataIsReady;
 	//Focus
 	u64 selected_ui = -1;
-
+	bool changeToAsync = false;
 	std::vector<ResourceScene*> current_scenes;
 
 	Viewport* current_viewport = nullptr;
