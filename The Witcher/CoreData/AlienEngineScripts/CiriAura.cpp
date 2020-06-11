@@ -96,8 +96,6 @@ void CiriAura::Move()
 		}
 	}
 
-	LOG("Ciri Aura moves with direction: (%f,%f,%f)", velocity_vec.x, velocity_vec.y, velocity_vec.z);
-
 	auto pos = game_object->transform->GetGlobalPosition();
 	transform->SetGlobalPosition(pos + velocity_vec);
 

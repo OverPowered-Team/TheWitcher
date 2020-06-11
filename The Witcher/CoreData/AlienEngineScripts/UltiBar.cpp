@@ -30,20 +30,7 @@ void UltiBar::Start()
 
 void UltiBar::Update()
 {
-	if (!Time::IsGamePaused())
-	{
-		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
-
-		if (time_paused != 0.0f)
-		{
-			time_paused = 0.0f;
-		}
-	}
-	else
-	{
-		time_paused = Time::GetGameTime() - internal_timer;
-		return;
-	}
+	internal_timer += Time::GetDT();
 
 	// Bar Charges With Lerp
 	if (bar_charging)
@@ -159,4 +146,12 @@ void UltiBar::ControlsLerp()
 			controls->SetEnable(false);
 		}
 	}
+}
+
+void UltiBar::UpdateTimes(float time_paused)
+{
+	internal_timer += time_paused;
+	actual_time += time_paused;
+	glow_time += time_paused;
+	bar_charging_time += time_paused;
 }
