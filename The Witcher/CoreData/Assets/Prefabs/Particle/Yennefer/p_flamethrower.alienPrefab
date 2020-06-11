@@ -1,11 +1,12 @@
 {
+    "Name": "p_flamethrower",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "p_flamethrower",
                 "FamilyNumber": 1,
-                "ID": "6417038579926835890",
-                "ParentID": "15225447123514407060",
+                "ID": "14869222754170346683",
+                "ParentID": "14823242940331849949",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -20,7 +21,7 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            2.8061032295227051,
+                            0,
                             0
                         ],
                         "Rotation": [
@@ -35,16 +36,16 @@
                             0.0060000000521540642
                         ],
                         "ScaleNegative": false,
-                        "ID": "8016166619817371020"
+                        "ID": "9497869108676002673"
                     },
                     {
                         "Type": 15,
-                        "ID": "7546545302981727406",
+                        "ID": "4233564260588868968",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
                                 0,
-                                2.8061032295227051,
+                                0,
                                 0
                             ],
                             "Rotation": [
@@ -55,9 +56,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.11558057367801666,
-                                0.1474837064743042,
-                                6.9974918365478516
+                                0.33072766661643982,
+                                -0.58850181102752686,
+                                6.9673733711242676
                             ],
                             "Force": [
                                 0,
@@ -91,10 +92,27 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 0.5,
                             "Speed": 7,
                             "Color": [
@@ -144,13 +162,13 @@
                                 2
                             ],
                             "MaxLife": 0.5,
-                            "CurrentLife": 0.51099991798400879,
+                            "CurrentLife": 0.51199996471405029,
                             "SpawnRate": 300,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
                                 0,
-                                2.8061032295227051,
+                                0,
                                 0
                             ],
                             "RelativePosition": [
@@ -192,11 +210,20 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": true,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "p_flamethrower"
+    }
 }

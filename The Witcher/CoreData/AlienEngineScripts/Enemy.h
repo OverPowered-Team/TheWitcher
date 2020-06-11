@@ -52,6 +52,7 @@ public:
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
 	virtual bool IsDying() { LOG("Calling virtual function of IsDying()"); return false; }
+	virtual bool IsHit() { LOG("Calling virtual function of IsDying()"); return false; }
 	virtual bool IsRangeEnemy() { LOG("Calling virtual function of IsDead!"); return false; }
 	virtual void Decapitate(PlayerController* player);
 
@@ -79,6 +80,7 @@ public:
 	void AddBattleCircle(PlayerController* player_controller);
 	void AddAttacking(PlayerController* player_controller);
 	void RemoveAttacking(PlayerController* player_controller);
+	void OnControllerColliderHit(const ControllerColliderHit& hit) override;
 
 	void SpawnHealthOrb();
 
