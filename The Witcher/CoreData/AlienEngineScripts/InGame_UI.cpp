@@ -54,6 +54,11 @@ void InGame_UI::Update()
 				(*i)->time_passed += time_paused;
 			}
 
+			in_game->GetChild("Character2")->GetComponent<UI_Char_Frame>()->UpdateTimes(time_paused);
+			in_game->GetChild("Character1")->GetComponent<UI_Char_Frame>()->UpdateTimes(time_paused);
+			in_game->GetChild("Ulti_Bar")->GetComponent<UltiBar>()->UpdateTimes(time_paused);
+			in_game->GetComponent<UI_DamageCount>()->UpdateTimes(time_paused);
+
 			time_paused = 0.0f;
 		}
 	}
