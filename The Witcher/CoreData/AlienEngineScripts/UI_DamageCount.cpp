@@ -2,6 +2,7 @@
 #include "PlayerController.h"
 #include "Scores_Data.h"
 #include "PlayerAttacks.h"
+#include "UI_Char_Frame.h"
 
 UI_DamageCount::UI_DamageCount() : Alien()
 {
@@ -157,7 +158,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	}
 
 	damage_num->damage = damage;
-	damage_num->go->transform->SetLocalScale(float3(0.75f, 0.75f, 1));
+	damage_num->go->transform->SetLocalScale(float3(2.0f, 2, 1));
 	damage_num->text = damage_num->go->GetComponent<ComponentText>();
 	damage_num->text->SetText(std::to_string((int)damage).c_str());
 	damage_num->text->SetColor(float3(1, 1, 1));
@@ -289,6 +290,7 @@ void UI_DamageCount::Update()
 				damagecount_player1->SetAlpha(0);
 				Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
 				damagecount_player1->SetText("0");
+				game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(false);
 			}
 		}
 	}
@@ -313,6 +315,7 @@ void UI_DamageCount::Update()
 				damagecount_player2->SetAlpha(0);
 				Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
 				damagecount_player2->SetText("0");
+				game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(false);
 			}
 		}
 	}
@@ -413,8 +416,8 @@ void UI_DamageCount::DamageCount_Handling(int index)
 			// New DamageNum Effect
 			if ((*iter)->current_timer + 0.25f >= internal_timer)
 			{
-				float t = (internal_timer - (*iter)->current_timer) / 0.25f;
-				float lerp = Maths::Lerp(0.75f, 0.5f, t);
+				float t = (internal_timer - (*iter)->current_timer) / 0.1f;
+				float lerp = Maths::Lerp(2.0f, 0.5f, t);
 
 				(*iter)->go->transform->SetLocalScale(lerp, lerp, 1);
 
@@ -476,6 +479,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal1 <= stoi(text->GetText()))
 					{
+						game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal1 += 50;
 						is_shaking1 = true;
 						start_shake_time1 = internal_timer;
@@ -485,6 +489,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal2 <= stoi(text->GetText()))
 					{
+						game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal2 += 50;
 						is_shaking2 = true;
 						start_shake_time2 = internal_timer;

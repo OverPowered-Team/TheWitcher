@@ -20,6 +20,7 @@ struct __declspec(dllexport) PointLightProperties
 	float linear = 0.1f;
 	float quadratic = 0.02f;
 	bool casting_particles = false;
+	bool affect_shadows = false;
 	Component* light = nullptr;
 
 	bool isEnabled() const

@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
+#include "RockThrow.h"
 #include "CiriFightController.h"
 #include "Scores_Data.h"
 #include "RumblerManager.h"
@@ -22,6 +23,7 @@ CiriFightController::~CiriFightController()
 void CiriFightController::Start()
 {
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
+	rock_positions = game_object->GetChild("Rock_Positions")->GetChildren();
 
 	if (platform)
 		material_platform = (*platform->GetChildren().begin())->GetComponent<ComponentMaterial>();
@@ -54,7 +56,8 @@ void CiriFightController::Update()
 	if ((game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition()) < 5 || game_object->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition()) < 5) && !fight_started) {
 		fight_started = true;
 		phase_change = true;
-		GameManager::instance->particle_pool->GetInstance("ciri_torbellino", transform->GetGlobalPosition());
+		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
+		SpawnRocks();
 	}
 	if (fight_started) {
 		switch (phase)
@@ -84,7 +87,7 @@ void CiriFightController::UpdatePhaseZero()
 {
 	if (phase_0_timer <= phase_0_time) {
 		phase_0_timer += Time::GetDT();
-		this->GetComponent<ComponentCharacterController>()->Move(float3(0, 0.05f, 0));
+		this->GetComponent<ComponentCharacterController>()->Move(float3(0, 0.02f, 0));
 	}
 	else {
 		FinishPhaseZero();
@@ -113,6 +116,7 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
+	ThrowEnvironmentRocks();
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -126,6 +130,7 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
+	ThrowEnvironmentRocks();
 	if (!first_wall_door)
 		UpdatePlatform();
 	TransportPlayer();
@@ -134,17 +139,14 @@ void CiriFightController::UpdatePhaseThree()
 void CiriFightController::FinishPhaseThree()
 {
 	phase = 4;
+	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
+	DestroyRocks();
 }
 
 void CiriFightController::FinishPhaseFour()
 {
 	Scores_Data::won_level2 = true;
-	Scores_Data::last_scene = SceneManager::GetCurrentScene();
-	Scores_Data::player1_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
-	Scores_Data::player2_kills += GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-	GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
-	Scores_Data::player1_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->relics;
-	Scores_Data::player2_relics = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->relics;
+	GameManager::instance->PrepareDataNextScene(false);
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 	Destroy(game_object);
 }
@@ -153,7 +155,7 @@ void CiriFightController::UpdatePhaseFour()
 {
 	if (phase_4_timer <= phase_4_time) {
 		phase_4_timer += Time::GetDT();
-		this->GetComponent<ComponentCharacterController>()->Move(float3(0, -0.05f, 0));
+		this->GetComponent<ComponentCharacterController>()->Move(float3(0, -0.02f, 0));
 	}
 	else {
 		if (!died) {
@@ -179,13 +181,13 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 		FinishPhaseThree();
 	
 	if(clones_dead < 6)
-		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[Random::GetRandomIntBetweenTwo(0, 2)]->transform->GetGlobalPosition());
 }
 
 
 void CiriFightController::MoveWall()
 {
-	time_platform += rescale_platform_value;
+	time_platform += rescale_platform_value * Time::GetDT() * 60;
 	if (wall != nullptr)
 	{
 		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
@@ -297,6 +299,42 @@ void CiriFightController::UpdatePlatform()
 	}
 }
 
+void CiriFightController::ThrowEnvironmentRocks()
+{
+	throw_time = (int)time_platform;
+	if (throw_time % 10 == 0 && !rock_throwed)
+	{
+		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
+		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 15);
+		float random_index = (float)Random::GetRandomIntBetweenTwo(1, 100) / 100;
+		int random_negative = Random::GetRandomIntBetweenTwo(1, 4);
+		float3 position = { random_x + random_index, 17, random_z + random_index };
+		switch (random_negative)
+		{
+		case 1:
+			break;
+		case 2:
+			position = { -(random_x + random_index), 17, random_z + random_index };
+			break;
+		case 3:
+			position = { random_x + random_index, 17, -(random_z + random_index) };
+			break;
+		case 4:
+			position = { -(random_x + random_index), 17, -(random_z + random_index) };
+			break;
+		default:
+			break;
+		}
+		GameObject* rocky = GameObject::Instantiate(rock, position);
+		if (rocky->GetComponent<RockThrow>())
+			rocky->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::FALL);
+		rock_throwed = true;
+	}
+	else if (throw_time % 10 != 0 && rock_throwed)
+		rock_throwed = false;
+	
+}
+
 void CiriFightController::TransportPlayer()
 {
 	// tp y da�o
@@ -310,4 +348,26 @@ void CiriFightController::TransportPlayer()
 			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->ReceiveDamage(200);
 		}
 	}
+}
+
+void CiriFightController::SpawnRocks()
+{
+	rocks.clear();
+
+	for (int i = 0; i < 5; ++i) {
+		rocks.push_back(GameObject::Instantiate(rock, float3::zero(), true, rock_positions[i]));
+	}
+
+	rocks_available = 5;
+
+	game_object->GetChild("Rock_Positions")->transform->SetGlobalPosition(game_object->GetChild("Rocks_respawn")->transform->GetGlobalPosition());
+}
+
+void CiriFightController::DestroyRocks()
+{
+	for (int i = 0; i < 5; ++i) {
+		Destroy(rocks[i]);
+	}
+
+	rocks.clear();
 }

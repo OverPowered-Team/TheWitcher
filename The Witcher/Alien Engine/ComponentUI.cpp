@@ -117,8 +117,14 @@ void ComponentUI::Update()
 				break; }
 			}
 
-			if (canvas!=nullptr && canvas->game_object_attached->enabled && canvas->allow_navigation)
-				UILogicGamePad();
+			if (canvas != nullptr && canvas->game_object_attached->enabled && canvas->allow_navigation)
+			{
+				if (App->objects->inputUiGamePad)
+					UILogicGamePad();
+				else
+					UILogicMouse();
+			}
+				
 		}
 
 	}

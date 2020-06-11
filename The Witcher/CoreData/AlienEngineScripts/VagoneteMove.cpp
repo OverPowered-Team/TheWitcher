@@ -50,10 +50,6 @@ void VagoneteMove::Update()
 
 	FollowCurve();
 
-	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
-		actual_pos = 0;
-	}
-
 	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_5)) {
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
 	}
@@ -116,6 +112,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 				}
 			}
 		}
+		LOG("BIFURCATION TRIGGER HIT");
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
 		for (auto item = players.begin(); item != players.end(); ++item) {
@@ -166,7 +163,7 @@ void VagoneteMove::SetVelocity(float max_velocity, float acceleration)
 }
 
 void VagoneteMove::FollowCurve()
-{
+{	
 	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
 	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT() * 5);
 
@@ -187,8 +184,8 @@ void VagoneteMove::FollowCurve()
 		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
 	}
 
-	if (actual_pos >= 1.0F && next_curve != nullptr) {
-		actual_pos = 0.0F;
+	if (actual_pos > curve->curve.length && next_curve != nullptr) {
+		actual_pos = current_speed * Time::GetDT();
 		curve = next_curve;
 		next_curve = nullptr;
 	}

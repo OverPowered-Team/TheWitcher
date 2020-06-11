@@ -1,11 +1,12 @@
 {
+    "Name": "HLL_particle",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "HLL_particle",
                 "FamilyNumber": 1,
-                "ID": "15445629604897031930",
-                "ParentID": "7407069555159635506",
+                "ID": "18181341731238464338",
+                "ParentID": "620220625201035254",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": true,
@@ -35,11 +36,11 @@
                             9.9999551773071289
                         ],
                         "ScaleNegative": false,
-                        "ID": "12266478521450016963"
+                        "ID": "2382937385266592323"
                     },
                     {
                         "Type": 15,
-                        "ID": "7111648053338651068",
+                        "ID": "12148045420523389135",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
@@ -56,7 +57,7 @@
                             "Global": true,
                             "Velocity": [
                                 0,
-                                0,
+                                -0,
                                 -0
                             ],
                             "Force": [
@@ -89,12 +90,29 @@
                             "Angle3D": [
                                 0,
                                 0,
-                                160
+                                0
+                            ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
                             ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 0.34999999403953552,
                             "Speed": 0,
                             "Color": [
@@ -196,11 +214,19 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "HLL_particle"
+    }
 }

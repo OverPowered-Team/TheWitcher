@@ -27,7 +27,8 @@ enum class Attack_Tags {
 enum class Collider_Type {
 	C_Box,
 	C_Sphere,
-	C_Weapon
+	C_Weapon,
+	C_Weapon2
 };
 
 class Attack {
@@ -57,7 +58,7 @@ public:
 		std::string next_heavy = "";
 		float3 particle_pos;
 		float3 knock_direction;
-
+		float3 hit_particle_dir;
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
 		float max_distance_traveled = 0.0f;
@@ -148,6 +149,8 @@ public:
 
 public:
 	GameObject* weapon_obj;
+	GameObject* weapon2_obj;
+
 	float max_snap_angle = 0.0f;
 	float snap_angle_value = 0.0f;
 	float snap_distance_value = 0.0f;
@@ -195,6 +198,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon_obj);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon2_obj);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::UpdateCollider, player_attacks);

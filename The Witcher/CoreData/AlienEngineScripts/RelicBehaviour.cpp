@@ -19,8 +19,21 @@ Relic::~Relic()
 void Relic::OnPickUp(PlayerController* player, std::string attack)
 {
 	player->PickUpRelic(this);
-	if(GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
-		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack);
+	if (GameObject::FindWithName("InGame") && GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>())
+	{
+		std::string type;
+		AttackEffect* at = dynamic_cast<AttackEffect*>(effects.back());
+		if (at)
+		{
+			type = at->element;
+		}
+		else
+		{
+			type = dynamic_cast<DashEffect*>(effects.back())->element;
+		}
+
+		GameObject::FindWithName("InGame")->GetComponent<Relic_Notification>()->TriggerRelic(player, this->name, this->description, attack, type);
+	}
 }
 
 // AttackRelic
@@ -42,8 +55,8 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	AttackEffect* effect = new AttackEffect();
 	effect->SetAttackIdentifier(attack_name);
 	effect->on_hit_effect = effect_to_apply;
+	effect_to_apply->name += "_" + std::to_string(_player->relics.size());
 	effect->name = effect_to_apply->name;
-
 
 	switch (relic_effect)
 	{
@@ -94,15 +107,19 @@ void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 	{
 	case Relic_Effect::FIRE:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Fire";
 		break;
 	case Relic_Effect::ICE:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Ice";
 		break;
 	case Relic_Effect::EARTH:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Earth";
 		break;
 	case Relic_Effect::POISON:
 		effect->OnDash = &ApplyEffectOnDash;
+		effect->element = "Poison";
 		break;
 	}
 

@@ -1,11 +1,12 @@
 {
+    "Name": "LLH_particle",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "LLH_particle",
                 "FamilyNumber": 1,
-                "ID": "4418706430979059584",
-                "ParentID": "15225447123514407060",
+                "ID": "17653166460702799553",
+                "ParentID": "620220625201035254",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": true,
@@ -35,11 +36,11 @@
                             14.227355003356934
                         ],
                         "ScaleNegative": false,
-                        "ID": "11712683992946096020"
+                        "ID": "12627164260121523059"
                     },
                     {
                         "Type": 15,
-                        "ID": "5781624625801593007",
+                        "ID": "171620530820557476",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
@@ -55,9 +56,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                1.3786126375198364,
-                                1.2274978160858154,
-                                4.646791934967041
+                                0.94446396827697754,
+                                2.3778769969940186,
+                                4.2957754135131836
                             ],
                             "Force": [
                                 0,
@@ -91,10 +92,27 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 2,
                             "Speed": 5,
                             "Color": [
@@ -144,7 +162,7 @@
                                 10
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 1.0139998197555542,
+                            "CurrentLife": 0.8330000638961792,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -196,11 +214,19 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "LLH_particle"
+    }
 }

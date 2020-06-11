@@ -13,7 +13,7 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-
+#include "../../ComponentTrail.h"
 #include "Bonfire.h"
 #include "Scores_Data.h"
 #include "UI_DamageCount.h"
@@ -40,7 +40,7 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-
+	
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
@@ -63,7 +63,12 @@ void PlayerController::Start()
 	layers.push_back("Player");
 
 	// Dash
-	dashData.current_acel_multi = dashData.accel_multi; 
+	//dashData.current_acel_multi = dashData.accel_multi; 
+	//dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	//if (dashData.dash_trail != nullptr) //todo no ser tant guarro
+	//{
+	//	dashData.dash_trail->Stop();
+	//}
 }
 
 void PlayerController::Update()
@@ -106,6 +111,12 @@ void PlayerController::Update()
 	CheckEnemyCircle();
 
 	CheckGround();
+
+	if (layer_changed && collision_timer < Time::GetTimeSinceStart())
+	{
+		controller->SetCollisionLayer("Player");
+		layer_changed = false;
+	}
 }
 
 void PlayerController::CheckGround()
@@ -145,19 +156,11 @@ void PlayerController::CheckGround()
 	}
 }
 
-void PlayerController::ToggleDashMultiplier()
-{   
-	if (player_data.type == PlayerController::PlayerType::YENNEFER)
-	{
-		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi;
-
-		if (dashData.disappear_on_dash)
-		{
-			auto meshes = game_object->GetChild("Meshes");
-			meshes->SetEnable(!meshes->IsEnabled());
-		}
-	}
-		
+void PlayerController::ChangeCollisionLayer(std::string layer, float time)
+{
+	controller->SetCollisionLayer(layer);
+	collision_timer = Time::GetTimeSinceStart() + time;
+	layer_changed = true;
 }
 
 void PlayerController::UpdateInput()
@@ -196,7 +199,7 @@ void PlayerController::UpdateInput()
 
 
 	// DEBUG
-	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::YENNEFER))
 		ReceiveDamage(10, float3::zero(), false); 
 }
 
@@ -470,7 +473,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 			Die();
 		}
-		else
+		else if(knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
@@ -717,7 +720,6 @@ void PlayerController::HitFreeze(float freeze_time)
 	float speed = animator->GetCurrentStateSpeed();
 	std::string state_name = animator->GetCurrentStateName();
 
-	LOG("FREEZING %s",state_name.c_str());
 	animator->SetStateSpeed(state_name.c_str(), 0);
 	PauseParticle();
 	is_immune = true;
@@ -745,6 +747,12 @@ void PlayerController::PauseParticle()
 			if (p_system)
 				p_system->Pause();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+			
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Pause();
+			
+
 			return;
 		}
 	}
@@ -764,6 +772,11 @@ void PlayerController::ResumeParticle()
 			if (p_system)
 				p_system->Play();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Play();
+
 			return;
 		}
 	}
@@ -779,6 +792,14 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
 			(*it)->SetEnable(false);
+
+			parent = parent != nullptr ? parent : this->game_object;
+			(*it)->SetNewParent(parent);
+			if (local)
+				(*it)->transform->SetLocalPosition(pos);
+			else
+				(*it)->transform->SetGlobalPosition(pos);
+
 			(*it)->SetEnable(true);
 			
 			return;
@@ -802,6 +823,19 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
 		particles.insert(std::pair(particle_name, new_particle));
 	}*/
+}
+
+void PlayerController::SpawnDashParticle()
+{
+	if (player_data.type == PlayerType::YENNEFER)
+	{
+		float3 pos = particle_spawn_positions[1]->transform->GetGlobalPosition();
+		if(!is_immune)
+			pos += transform->forward * 0.8f;
+
+		SpawnParticle("Yenn_Portal", pos, false, float3::zero(), GameManager::instance->game_object);
+	}
+		
 }
 
 void PlayerController::ReleaseParticle(std::string particle_name)
@@ -889,7 +923,7 @@ void PlayerController::CheckEnemyCircle()
 		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
-			float avoid_distance = avoid_direction.LengthSq();
+			float avoid_distance = avoid_direction.Length();
 			if (avoid_distance > battleCircle)
 				continue;
 
@@ -897,7 +931,7 @@ void PlayerController::CheckEnemyCircle()
 
 			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
-			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
+			if (!enemy->is_battle_circle && (enemy->type == EnemyType::NILFGAARD_SOLDIER || enemy->type == EnemyType::GHOUL) && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
 		}
 	}
@@ -1034,18 +1068,37 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
 				knock_speed.y = 0;
 
-				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, !enemy->is_mini);
 				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
-
+				
 				return;
 			}
 		}
 	}
 }
 
+void PlayerController::StartImmune()
+{
+	is_immune = true;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		meshes->SetEnable(false);
+	}
+}
+
+void PlayerController::StopImmune()
+{
+	is_immune = false;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		meshes->SetEnable(true);
+	}
+}
+
 void PlayerController::OnEnemyKill(uint enemy_type)
 {
-	LOG("ENEMY KILL");
 	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
 	{
 		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));

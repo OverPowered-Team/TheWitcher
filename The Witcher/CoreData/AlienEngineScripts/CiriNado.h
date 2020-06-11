@@ -10,13 +10,12 @@ public:
 	CiriNado();
 	virtual ~CiriNado();
 	float3 knock_back;
-	float knock_force = 2.0f;
+	float knock_force = 8.0f;
 	
 	void Start();
 	void Update();
 
 	void OnTriggerEnter(ComponentCollider* collider);
-
 };
 
 ALIEN_FACTORY CiriNado* CreateCiriNado() {

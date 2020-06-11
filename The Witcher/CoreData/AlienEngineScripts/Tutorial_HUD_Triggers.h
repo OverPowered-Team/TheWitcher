@@ -9,7 +9,7 @@ class PlayerController;
 enum(TRIGGER_TYPE,
 	ATTACK,
 	DASH,
-	ROCKS,
+	MAGIC,
 
 	ANY = -1,
 	);
@@ -37,6 +37,7 @@ private:
 	bool first_time = false;
 	std::list<PlayerController*> players_triggered_attack;
 	std::list<PlayerController*> players_triggered_dash;
+	std::list<PlayerController*> players_triggered_magic;
 
 };
 
