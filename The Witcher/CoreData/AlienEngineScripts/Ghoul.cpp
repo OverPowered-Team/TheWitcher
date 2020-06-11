@@ -159,6 +159,7 @@ void Ghoul::Action()
     if (distance < stats["AttackRange"].GetValue())
     {
         animator->PlayState("Slash");
+        RotatePlayer();
         animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
         state = GhoulState::ATTACK;
     }
