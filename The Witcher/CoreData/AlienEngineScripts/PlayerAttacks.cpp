@@ -6,6 +6,7 @@
 #include "CameraShake.h"
 #include "RumblerManager.h"
 #include "ParticlePool.h"
+#include "Scores_Data.h"
 
 #include "UI_Char_Frame.h"
 
@@ -69,6 +70,8 @@ void PlayerAttacks::Start()
 	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
 	CreateAttacks();
+
+	ReLoadRelics();
 }
 
 void PlayerAttacks::StartAttack(AttackType attack)
@@ -308,6 +311,24 @@ bool PlayerAttacks::FindSnapTarget()
 	}
 
 	return false;
+}
+
+void PlayerAttacks::ReLoadRelics()
+{
+	if (player_controller->controller_index == 1 && Scores_Data::player1_relics.size() > 0)
+	{
+		for (auto it = Scores_Data::player1_relics.begin(); it != Scores_Data::player1_relics.end(); it++)
+		{
+			player_controller->PickUpRelic((*it));
+		}
+	}
+	else if (player_controller->controller_index == 2 && Scores_Data::player2_relics.size() > 0)
+	{
+		for (auto it = Scores_Data::player2_relics.begin(); it != Scores_Data::player2_relics.end(); it++)
+		{
+			player_controller->PickUpRelic((*it));
+		}
+	}
 }
 
 void PlayerAttacks::ReceiveInput(AttackType attack, int spell_index)
