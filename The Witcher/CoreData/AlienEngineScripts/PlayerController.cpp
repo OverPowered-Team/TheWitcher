@@ -424,7 +424,6 @@ void PlayerController::Revive(float minigame_value)
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
-	is_immune = false;
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
@@ -433,8 +432,6 @@ void PlayerController::Revive(float minigame_value)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
 		GameManager::instance->event_manager->OnPlayerRevive(this);
-
-	SetState(StateType::IDLE);
 }
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
@@ -1083,6 +1080,7 @@ void PlayerController::StartImmune()
 	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
 	{
 		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("DashLayer");
 		meshes->SetEnable(false);
 	}
 }
@@ -1093,6 +1091,7 @@ void PlayerController::StopImmune()
 	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
 	{
 		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("Player");
 		meshes->SetEnable(true);
 	}
 }
