@@ -385,6 +385,12 @@ void DeadState::OnExit(PlayerController* player)
 
 State* GroundState::HandleInput(PlayerController* player)
 {
+	if (player->input_blocked)
+	{
+		return nullptr;
+	}
+		
+
 	if (!player->is_grounded)
 	{
 		player->Fall();

@@ -244,6 +244,7 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(player->revive_world_ui);
 
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->battleCircle);
+	SHOW_IN_INSPECTOR_AS_INPUT_INT(player->max_attacking_enemies);
 
 	return player;
 }

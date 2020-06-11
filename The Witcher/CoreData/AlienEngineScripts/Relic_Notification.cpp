@@ -35,6 +35,18 @@ void Relic_Notification::Start()
 		L_combo_images[i]->SetEnable(false);
 		H_combo_images[i]->SetEnable(false);
 	}
+
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Fire"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Poison"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Ice"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Earth"));
+	relic_images.push_back(relic_notification->GetChild("Relics")->GetChild("Lighting"));
+
+	auto iter = relic_images.begin();
+	for (; iter != relic_images.end(); ++iter)
+	{
+		(*iter)->SetEnable(false);
+	}
 }
 
 void Relic_Notification::Update()
@@ -50,13 +62,14 @@ void Relic_Notification::Update()
 	}
 }
 
-void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo)
+void Relic_Notification::TriggerRelic(PlayerController* player, const std::string& relic_name, const std::string& description, const std::string& attack_combo, const std::string& element)
 {
 	Notification* new_relic = new Notification();
 	new_relic->type = player->player_data.type;
 	new_relic->attack = attack_combo;
 	new_relic->relic_name = relic_name.c_str();
 	new_relic->description = description.c_str();
+	new_relic->attack_type = element;
 	notifications.push(new_relic);
 }
 
@@ -77,7 +90,30 @@ void Relic_Notification::ShowRelic(Notification* notification)
 
 	relic_title->SetText(notification->relic_name);
 	description->SetText(notification->description);
-	
+	if (notification->attack_type.size() != 0)
+	{
+		if (strcmp(notification->attack_type.c_str(), "Fire") == 0)
+		{
+			relic_images[0]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Poison") == 0)
+		{
+			relic_images[1]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Ice") == 0)
+		{
+			relic_images[2]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Earth") == 0)
+		{
+			relic_images[3]->SetEnable(true);
+		}
+		else if (strcmp(notification->attack_type.c_str(), "Lightning") == 0)
+		{
+			relic_images[4]->SetEnable(true);
+		}
+	}
+
 	if (!notification->attack.empty())
 	{
 		uint i = 0;
@@ -140,6 +176,12 @@ void Relic_Notification::StopRelic()
 	if (RB->IsEnabled())
 	{
 		RB->SetEnable(false);
+	}
+
+	auto iter = relic_images.begin();
+	for (; iter != relic_images.end(); ++iter)
+	{
+		(*iter)->SetEnable(false);
 	}
 
 	if (marker)

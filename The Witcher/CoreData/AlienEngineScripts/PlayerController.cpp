@@ -79,7 +79,7 @@ void PlayerController::Update()
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
-	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
+	State* new_state = state->HandleInput(this);
 	if (new_state != nullptr)
 		SwapState(new_state);
 
@@ -199,7 +199,7 @@ void PlayerController::UpdateInput()
 
 
 	// DEBUG
-	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::YENNEFER))
 		ReceiveDamage(10, float3::zero(), false); 
 }
 
@@ -470,7 +470,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 			Die();
 		}
-		else if(!knock)
+		else if(knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
@@ -1008,6 +1008,7 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
+				dash_coll->player_dashing = this;
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
@@ -1065,7 +1066,7 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
 				knock_speed.y = 0;
 
-				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, enemy->is_mini);
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, !enemy->is_mini);
 				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
 				
 				return;

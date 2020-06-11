@@ -117,10 +117,17 @@ public:
 	Prefab head_prefab;
 	Prefab life_orb;
 
+	ResourceMaterial hitMaterial;
+	ResourceMaterial* defaultMaterial = nullptr;
+	bool inHit = false;
+	float whiteTime = 0;
+	std::vector<ComponentMaterial*> meshes;
+	
+	PlayerController* last_player_hit;
+
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
-	PlayerController* last_player_hit;
 	GameObject* decapitated_head = nullptr;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
@@ -128,4 +135,5 @@ protected:
 	int current_player = 0;
 	bool is_dead = false;
 	bool was_dizzy = false;
+	
 };

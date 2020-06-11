@@ -9,6 +9,7 @@ class PlayerController;
 class Effect;
 class EventManager;
 class RelicNotification;
+class AttackEffect;
 
 enum (Relic_Type,
 	ATTACK,

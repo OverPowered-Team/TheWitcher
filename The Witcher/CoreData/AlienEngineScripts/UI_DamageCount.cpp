@@ -2,6 +2,7 @@
 #include "PlayerController.h"
 #include "Scores_Data.h"
 #include "PlayerAttacks.h"
+#include "UI_Char_Frame.h"
 
 UI_DamageCount::UI_DamageCount() : Alien()
 {
@@ -209,6 +210,36 @@ void UI_DamageCount::AddRemainingComboPoints()
 	Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
 }
 
+void UI_DamageCount::UpdateTimes(float time_paused)
+{
+	internal_timer += time_paused;
+	fadein_timer1 += time_paused;
+	fadein_timer2 += time_paused;
+	damage_count1_time += time_paused;
+	damage_count2_time += time_paused;
+	scaling_time1 += time_paused;
+	scaling_time2 += time_paused;
+	start_shake_time1 += time_paused;
+	start_shake_time2 += time_paused;
+
+	for (auto i = player1_damagenums.begin(); i != player1_damagenums.end(); ++i)
+	{
+		(*i)->current_timer += time_paused;
+	}
+	for (auto i = player2_damagenums.begin(); i != player2_damagenums.end(); ++i)
+	{
+		(*i)->current_timer += time_paused;
+	}
+	for (auto i = transition_player1_damagenums.begin(); i != transition_player1_damagenums.end(); ++i)
+	{
+		(*i)->current_timer += time_paused;
+	}
+	for (auto i = transition_player2_damagenums.begin(); i != transition_player2_damagenums.end(); ++i)
+	{
+		(*i)->current_timer += time_paused;
+	}
+}
+
 void UI_DamageCount::Start()
 {
 	damagecount_player1 = game_object->GetChild("Parent_DamageCount_Player1")->GetChild("DamageCount_Player1")->GetComponent<ComponentText>();
@@ -227,20 +258,8 @@ void UI_DamageCount::Start()
 
 void UI_DamageCount::Update()
 {
-	if (!Time::IsGamePaused())
-	{
-		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
 
-		if (time_paused != 0.0f)
-		{
-			time_paused = 0.0f;
-		}
-	}
-	else
-	{
-		time_paused = Time::GetGameTime() - internal_timer;
-		return;
-	}
+	internal_timer += Time::GetDT();
 
 	if (is_fading_in1)
 	{
@@ -289,6 +308,7 @@ void UI_DamageCount::Update()
 				damagecount_player1->SetAlpha(0);
 				Scores_Data::player1_damage += stoi(damagecount_player1->GetText());
 				damagecount_player1->SetText("0");
+				game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(false);
 			}
 		}
 	}
@@ -313,6 +333,7 @@ void UI_DamageCount::Update()
 				damagecount_player2->SetAlpha(0);
 				Scores_Data::player2_damage += stoi(damagecount_player2->GetText());
 				damagecount_player2->SetText("0");
+				game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(false);
 			}
 		}
 	}
@@ -476,6 +497,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal1 <= stoi(text->GetText()))
 					{
+						game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal1 += 50;
 						is_shaking1 = true;
 						start_shake_time1 = internal_timer;
@@ -485,6 +507,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal2 <= stoi(text->GetText()))
 					{
+						game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal2 += 50;
 						is_shaking2 = true;
 						start_shake_time2 = internal_timer;
