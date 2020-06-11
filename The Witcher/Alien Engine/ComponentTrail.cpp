@@ -28,19 +28,19 @@ ComponentTrail::~ComponentTrail()
 
 void ComponentTrail::PreUpdate()
 {
-	if (trail->isPlaying())
+	//if (trail->isPlaying())
 		trail->PreUpdate(Time::GetCurrentDT());
 }
 
 void ComponentTrail::Update()
 {
-	if(trail->isPlaying())
+	//if(trail->isPlaying())
 		trail->Update(Time::GetCurrentDT());
 }
 
 void ComponentTrail::PostUpdate()
 {
-	if (trail->isPlaying())
+	//if (trail->isPlaying())
 		trail->PostUpdate(Time::GetCurrentDT());
 }
 

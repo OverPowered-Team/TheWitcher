@@ -104,6 +104,10 @@ bool Ghoul::IsDead()
 {
     return (state == GhoulState::DEAD ? true : false);
 }
+bool Ghoul::IsHit()
+{
+    return (state == GhoulState::HIT ? true: false);
+}
 bool Ghoul::IsDying()
 {
     return (state == GhoulState::DYING ? true : false);

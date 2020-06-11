@@ -79,6 +79,11 @@ bool Drowned::IsDying()
 	return (state == DrownedState::DYING ? true : false);
 }
 
+bool Drowned::IsHit()
+{
+	return (state == DrownedState::HIT ? true : false);
+}
+
 bool Drowned::IsState(const char* state_str)
 {
 	if (state_str == "Idle")

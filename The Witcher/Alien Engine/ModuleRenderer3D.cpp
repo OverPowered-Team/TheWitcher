@@ -501,6 +501,8 @@ void ModuleRenderer3D::PanelConfigOption()
 
 		ImGui::Spacing();
 
+		// ------------------------------ HDR ------------------------------------
+
 		ImGui::Checkbox("HDR", &scene_fake_camera->hdr);
 
 		if (!scene_fake_camera->hdr)
@@ -514,16 +516,41 @@ void ModuleRenderer3D::PanelConfigOption()
 		ImGui::Spacing();
 		ImGui::DragFloat("Gamma", &scene_fake_camera->gamma, 0.01f, 0.0f, 10.f);
 
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		// ------------------------------ BLOOM ------------------------------------
+
+		ImGui::Checkbox("Bloom", &scene_fake_camera->bloom);
+
+		if (!scene_fake_camera->bloom)
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+
+		ImGui::DragFloat("Bloom Threshold", &scene_fake_camera->threshold, 0.05f, 0.0f, 10.f);
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::DragInt("Blur Intensity", &scene_fake_camera->blur_iters, 1.f, 0.0f, 100.f);
+
+		if (!scene_fake_camera->bloom)
+		{
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+
 		if (!scene_fake_camera->hdr)
 		{
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}
 
-
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+
+		// ------------------------------ FOG ------------------------------------
 
 		ImGui::Checkbox("Active Fog", &scene_fake_camera->activeFog);
 

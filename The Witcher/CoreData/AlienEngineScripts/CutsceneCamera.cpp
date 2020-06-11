@@ -80,7 +80,7 @@ void CutsceneCamera::ExecuteCutscene()
 	}
 	case CutsceneState::MOVING:
 	{
-		float min_dist = 0.1f;
+		float min_dist = 0.2f;
 		current_move_time += Time::GetDT();
 		
 		if ((shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {

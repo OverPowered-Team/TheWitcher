@@ -179,7 +179,7 @@ void Enemy::UpdateEnemy()
 				it_stats->second.ModifyCurrentStat((*it));
 				
 				//Temporal solution
-				if (it_stats->first == "Health" && !IsDead())
+				if (it_stats->first == "Health" && !IsDead() && !IsDying())
 				{
 					if (stats["Health"].GetValue() <= 0)
 					{
@@ -715,10 +715,17 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 		SetState("Guard");
 }
 
+void Enemy::OnControllerColliderHit(const ControllerColliderHit& hit)
+{
+	if (IsHit() && hit.collider->GetCollisionLayer() == "Player")
+	{
+		velocity = float3::zero();
+	}
+}
+
 void Enemy::SpawnHealthOrb()
 {
 	int rand_num = Random::GetRandomIntBetweenTwo(0,2);
 	if(rand_num == 0)
 		GameObject::Instantiate(life_orb, transform->GetGlobalPosition() + float3::unitY() * 0.5);
 }
-	

@@ -9,7 +9,7 @@
                 "ParentID": "14905238618353440972",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -58,10 +58,10 @@
                 "FamilyNumber": 2,
                 "ID": "8712164100434747967",
                 "ParentID": "15373362017287916381",
-                "Enabled": false,
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -82,24 +82,723 @@
                             1
                         ],
                         "Scale": [
-                            50,
+                            59.5,
                             35,
                             1
                         ],
                         "ScaleNegative": false,
                         "ID": "14591186121872544839"
+                    }
+                ]
+            },
+            {
+                "Name": "MusicSlider",
+                "FamilyNumber": 3,
+                "ID": "7302872832492184451",
+                "ParentID": "8712164100434747967",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            -0.32376003265380859
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.35934463143348694,
+                            0.067586712539196014,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11288517884279382696"
                     },
                     {
+                        "X": 341,
+                        "Y": 205,
                         "Width": 10,
                         "Height": 10,
                         "Enabled": true,
                         "Type": 30,
-                        "UIType": 20,
+                        "UIType": 24,
                         "TextureID": "0",
+                        "sliderTexture": "0",
                         "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "sliderScaleX": 0.20000000298023224,
+                        "sliderScaleY": 0.89999997615814209,
+                        "sliderX": 0,
+                        "sliderY": 0,
+                        "factor": 0.5,
+                        "ColorCurrent": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "ColorIdle": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "ColorHover": [
                             1,
-                            0.99998998641967773,
-                            0.99998998641967773,
+                            1,
+                            1,
+                            1
+                        ],
+                        "ColorClicked": [
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            1
+                        ],
+                        "ColorPressed": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "ColorDisabled": [
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            1
+                        ],
+                        "SliderColorCurrent": [
+                            1,
+                            0,
+                            0,
+                            1
+                        ],
+                        "SliderColorIdle": [
+                            1,
+                            0,
+                            0,
+                            1
+                        ],
+                        "SliderColorHover": [
+                            1,
+                            0,
+                            0,
+                            1
+                        ],
+                        "SliderColorClicked": [
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            1
+                        ],
+                        "SliderColorPressed": [
+                            1,
+                            0,
+                            0,
+                            1
+                        ],
+                        "SliderColorDisabled": [
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            1
+                        ],
+                        "SelectOnUp": "15290583486676582516",
+                        "SelectOnDown": "6188968390290358837",
+                        "SelectOnRight": "18446744073709551615",
+                        "SelectOnLeft": "18446744073709551615",
+                        "ClickEvent": "CLICK",
+                        "MoveEvent": "ENTER"
+                    },
+                    {
+                        "ID": "11871333921758565167",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 4,
+                "ID": "14216867175824737494",
+                "ParentID": "7302872832492184451",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.3040081262588501,
+                            2.1136868000030518,
+                            0.62376004457473755
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.00087142764823511243,
+                            0.0078764427453279495,
+                            0.018632000312209129
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15049945839473824525"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "16587749236037235215",
+                        "Text": "Music",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 200,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "SettingsText",
+                "FamilyNumber": 3,
+                "ID": "9819731587949078423",
+                "ParentID": "8712164100434747967",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.33613446354866028,
+                            0.75120002031326294,
+                            0.58679986000061035
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.00038151256740093231,
+                            0.00064857135294005275,
+                            0.022699996829032898
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5249331853122505950"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "14783121238486406515",
+                        "Text": "SETTINGS",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 200,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "FullScreenText",
+                "FamilyNumber": 3,
+                "ID": "13024910243596303277",
+                "ParentID": "8712164100434747967",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.35294118523597717,
+                            -0.3571428656578064,
+                            0.31999999284744263
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.00030756302294321358,
+                            0.00052285712445154786,
+                            0.018299998715519905
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16137277247853659134"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "15168593381522130940",
+                        "Text": "Full Screen",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 725,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "CheckboxFS",
+                "FamilyNumber": 3,
+                "ID": "6188968390290358837",
+                "ParentID": "8712164100434747967",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0.31932774186134338,
+                            -0.31428572535514832,
+                            -0.20000000298023224
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.042016807943582535,
+                            0.071428574621677399,
+                            2
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10370131196003793424"
+                    },
+                    {
+                        "X": 421.98748779296875,
+                        "Y": 255.11111450195313,
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "clicked": false,
+                        "Type": 30,
+                        "UIType": 23,
+                        "TextureID": "0",
+                        "crossTexture": "0",
+                        "tickTexture": "0",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "crossScaleX": 0.5,
+                        "crossScaleY": 0.5,
+                        "tickScaleX": 0.5,
+                        "tickScaleY": 0.5,
+                        "ColorCurrent": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "ColorIdle": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "ColorHover": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "ColorClicked": [
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            1
+                        ],
+                        "ColorPressed": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "ColorDisabled": [
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            1
+                        ],
+                        "CheckboxColorCurrent": [
+                            0,
+                            0.0597076416015625,
+                            1,
+                            1
+                        ],
+                        "CheckboxColorIdle": [
+                            0,
+                            0.0597076416015625,
+                            1,
+                            1
+                        ],
+                        "CheckboxColorHover": [
+                            0,
+                            0.19643211364746094,
+                            0.75,
+                            1
+                        ],
+                        "CheckboxColorClicked": [
+                            0,
+                            0.014250312931835651,
+                            0.24019604921340942,
+                            1
+                        ],
+                        "CheckboxColorPressed": [
+                            0.0087125999853014946,
+                            0,
+                            0.27450978755950928,
+                            1
+                        ],
+                        "CheckboxColorDisabled": [
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            1
+                        ],
+                        "SelectOnUp": "7302872832492184451",
+                        "SelectOnDown": "15290583486676582516",
+                        "SelectOnRight": "18446744073709551615",
+                        "SelectOnLeft": "18446744073709551615",
+                        "ClickEvent": "CLICK",
+                        "MoveEvent": "ENTER",
+                        "HasListenersOnClick": false,
+                        "HasListenersOnHover": false,
+                        "HasListenersOnClickRepeat": false,
+                        "HasListenersOnRelease": false,
+                        "HasListenersOnExit": false,
+                        "HasListenersOnEnter": false
+                    },
+                    {
+                        "ID": "7211318063044887646",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "BackButton",
+                "FamilyNumber": 3,
+                "ID": "15290583486676582516",
+                "ParentID": "8712164100434747967",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            -0.81428569555282593,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.1260504275560379,
+                            0.22857142984867096,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "717392186045666775"
+                    },
+                    {
+                        "Width": 3.8399999141693115,
+                        "Height": 0.76999998092651367,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 21,
+                        "ColorCurrent": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "ColorIdle": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "ColorHover": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "ColorClicked": [
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            0.69999998807907104,
+                            1
+                        ],
+                        "ColorPressed": [
+                            0.75,
+                            0.75,
+                            0.75,
+                            1
+                        ],
+                        "ColorDisabled": [
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            1
+                        ],
+                        "ClickEvent": "CLICK",
+                        "MoveEvent": "ENTER",
+                        "LoopIdle": true,
+                        "AnimSpeedIdle": 1,
+                        "LoopHover": true,
+                        "AnimSpeedHover": 1,
+                        "LoopClicked": true,
+                        "AnimSpeedClicked": 1,
+                        "LoopPressed": true,
+                        "AnimSpeedPressed": 1,
+                        "LoopDisabled": true,
+                        "AnimSpeedDisabled": 1,
+                        "HasAnimatedIdleImages": true,
+                        "AnimatedIdleImages": [
+                            {
+                                "0": "6162255848128817459"
+                            }
+                        ],
+                        "HasAnimatedHoverImages": true,
+                        "AnimatedHoverImages": [
+                            {
+                                "0": "17443299320024069927"
+                            }
+                        ],
+                        "HasAnimatedClickedImages": true,
+                        "AnimatedClickedImages": [
+                            {
+                                "0": "2776676638611866067"
+                            }
+                        ],
+                        "HasAnimatedPressedImages": true,
+                        "AnimatedPressedImages": [
+                            {
+                                "0": "2776676638611866067"
+                            }
+                        ],
+                        "HasAnimatedDisabledImages": false,
+                        "HasListenersOnClick": false,
+                        "HasListenersOnHover": false,
+                        "HasListenersOnClickRepeat": false,
+                        "HasListenersOnRelease": false,
+                        "HasListenersOnExit": false,
+                        "HasListenersOnEnter": false,
+                        "SelectOnUp": "6188968390290358837",
+                        "SelectOnDown": "7302872832492184451",
+                        "SelectOnRight": "18446744073709551615",
+                        "SelectOnLeft": "18446744073709551615"
+                    },
+                    {
+                        "ID": "9212086802671032280",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": true
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 4,
+                "ID": "1759620230653995292",
+                "ParentID": "15290583486676582516",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.53864210844039917,
+                            -0.19038653373718262,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.0017404000973328948,
+                            0.0017403997480869293,
+                            0.0017403997480869293
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9623707305772483928"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "17663474823118890048",
+                        "Text": "Back",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 200,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "PanelSettings",
+                "FamilyNumber": 3,
+                "ID": "2237278423272337443",
+                "ParentID": "8712164100434747967",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "8578085959935488020",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.33774212002754211,
+                            2.161757230758667,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12131840641107476226"
+                    },
+                    {
+                        "Width": 2.9300000667572021,
+                        "Height": 1.1200000047683716,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "3612494472370835236",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
                             1
                         ]
                     }
@@ -113,7 +812,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -165,7 +864,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -217,7 +916,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -269,7 +968,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -279,7 +978,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -3.3499999046325684,
+                            -3.3500001430511475,
                             2,
                             0
                         ],
@@ -321,7 +1020,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -351,7 +1050,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1238305216670437800",
+                        "ID": "1069392261654859893",
                         "Text": "Geralt",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -376,7 +1075,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -386,7 +1085,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            3.3499999046325684,
+                            3.3500001430511475,
                             2,
                             0
                         ],
@@ -397,8 +1096,8 @@
                             1
                         ],
                         "Scale": [
-                            0.89999997615814209,
-                            0.89999997615814209,
+                            0.90000003576278687,
+                            0.90000003576278687,
                             1
                         ],
                         "ScaleNegative": false,
@@ -428,7 +1127,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -458,7 +1157,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9248416059314857309",
+                        "ID": "343370629617358661",
                         "Text": "Yennefer",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -483,7 +1182,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -513,7 +1212,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "1986801054194192458",
+                        "ID": "14843969674110774800",
                         "Text": "Leaderboard",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -538,7 +1237,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -590,7 +1289,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -642,7 +1341,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -694,7 +1393,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -746,7 +1445,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -757,7 +1456,7 @@
                         "Type": 0,
                         "Position": [
                             -3.8234810829162598,
-                            -1.9700000286102295,
+                            -1.970000147819519,
                             0
                         ],
                         "Rotation": [
@@ -798,7 +1497,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -850,7 +1549,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -860,7 +1559,7 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -3.815000057220459,
+                            -3.8150002956390381,
                             -2.82975172996521,
                             0
                         ],
@@ -902,7 +1601,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -954,7 +1653,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1006,7 +1705,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1036,7 +1735,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17575588832671401850",
+                        "ID": "1283440745701037101",
                         "Text": "Back",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1061,7 +1760,7 @@
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1099,7 +1798,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1129,7 +1828,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12724791754828292581",
+                        "ID": "14139413213478631155",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1154,7 +1853,7 @@
                 "Enabled": false,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1206,7 +1905,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1236,7 +1935,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17750668246313947831",
+                        "ID": "17395916722711697565",
                         "Text": "Geralt",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1261,7 +1960,7 @@
                 "Enabled": false,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1313,7 +2012,7 @@
                 "Enabled": false,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1365,7 +2064,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1395,7 +2094,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "14134264034310208204",
+                        "ID": "17571099757501225659",
                         "Text": "Yennefer",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1420,7 +2119,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1472,7 +2171,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1502,7 +2201,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17463309920672978282",
+                        "ID": "12547710050397951011",
                         "Text": "Dodge",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1527,7 +2226,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1557,7 +2256,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5172711982294856971",
+                        "ID": "7742734057076290957",
                         "Text": "Light Attack",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1582,7 +2281,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1612,7 +2311,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6225087004469949483",
+                        "ID": "11441898874603313806",
                         "Text": "Heavy Attack",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1637,7 +2336,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1667,7 +2366,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "4468340254273865922",
+                        "ID": "16996793570396277829",
                         "Text": "Interact",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1692,7 +2391,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1722,7 +2421,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "3296184753498785914",
+                        "ID": "11445797354388679260",
                         "Text": "Jump",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1747,7 +2446,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1777,7 +2476,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6449392577052866733",
+                        "ID": "2359140686093557582",
                         "Text": "Movement",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1802,7 +2501,7 @@
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
-                "ParentSelected": false,
+                "ParentSelected": true,
                 "IsStatic": false,
                 "IsPrefab": true,
                 "PrefabLocked": false,
@@ -1832,7 +2531,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "7637553424495959453",
+                        "ID": "12848469717449705854",
                         "Text": "Ultimate",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2066,9 +2765,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                0.03351256251335144,
-                                1.1072076559066772,
-                                1.1680738925933838
+                                -0.91681158542633057,
+                                1.3341732025146484,
+                                -0.13521772623062134
                             ],
                             "Rotation": [
                                 0,
@@ -2184,7 +2883,7 @@
                                 2
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 4.6399979591369629,
+                            "CurrentLife": 6.9429998397827148,
                             "SpawnRate": 2,
                             "Delay": 2,
                             "Loop": true,
@@ -2235,6 +2934,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -2384,7 +3084,7 @@
                 "FamilyNumber": 1,
                 "ID": "7288614509739767776",
                 "ParentID": "14905238618353440972",
-                "Enabled": true,
+                "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": false,
@@ -2429,7 +3129,7 @@
                 "ID": "12675728198845725533",
                 "ParentID": "7288614509739767776",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -2467,7 +3167,7 @@
                 "ID": "13692053663680648314",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -2587,10 +3287,10 @@
                         ],
                         "HasListenersOnExit": false,
                         "HasListenersOnEnter": false,
-                        "SelectOnUp": "18187286197713343936",
-                        "SelectOnDown": "15196408194824721157",
-                        "SelectOnRight": "15196408194824721157",
-                        "SelectOnLeft": "7003469266778207770"
+                        "SelectOnUp": "2541866954712208386",
+                        "SelectOnDown": "14542799824223291143",
+                        "SelectOnRight": "14542799824223291143",
+                        "SelectOnLeft": "2541866954712208386"
                     },
                     {
                         "ID": "401422953269194108",
@@ -2617,7 +3317,7 @@
                 "ID": "15962099957746186148",
                 "ParentID": "13692053663680648314",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -2649,7 +3349,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "978457024800007996",
+                        "ID": "1213333901670618111",
                         "Text": "Play",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2672,7 +3372,7 @@
                 "ID": "14542799824223291143",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -2792,10 +3492,10 @@
                         ],
                         "HasListenersOnExit": false,
                         "HasListenersOnEnter": false,
-                        "SelectOnUp": "15196408194824721157",
-                        "SelectOnDown": "9013457526306287949",
-                        "SelectOnRight": "9013457526306287949",
-                        "SelectOnLeft": "7003469266778207770"
+                        "SelectOnUp": "13692053663680648314",
+                        "SelectOnDown": "16072090823059956730",
+                        "SelectOnRight": "16072090823059956730",
+                        "SelectOnLeft": "2541866954712208386"
                     },
                     {
                         "ID": "12276462603811084055",
@@ -2822,7 +3522,7 @@
                 "ID": "14931275818231749300",
                 "ParentID": "14542799824223291143",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -2854,7 +3554,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "18310988597251063444",
+                        "ID": "13997925178886569009",
                         "Text": "Controls",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -2877,7 +3577,7 @@
                 "ID": "16072090823059956730",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -2997,10 +3697,10 @@
                         ],
                         "HasListenersOnExit": false,
                         "HasListenersOnEnter": false,
-                        "SelectOnUp": "3983177253096546977",
-                        "SelectOnDown": "18187286197713343936",
-                        "SelectOnRight": "18187286197713343936",
-                        "SelectOnLeft": "7003469266778207770"
+                        "SelectOnUp": "14542799824223291143",
+                        "SelectOnDown": "9569756486502312634",
+                        "SelectOnRight": "9569756486502312634",
+                        "SelectOnLeft": "2541866954712208386"
                     },
                     {
                         "ID": "4623958099101027736",
@@ -3027,7 +3727,7 @@
                 "ID": "6887308578265430616",
                 "ParentID": "16072090823059956730",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3059,7 +3759,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13550553697921849885",
+                        "ID": "10082441601494730093",
                         "Text": "Credits",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -3082,7 +3782,7 @@
                 "ID": "9569756486502312634",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3202,10 +3902,10 @@
                         ],
                         "HasListenersOnExit": false,
                         "HasListenersOnEnter": false,
-                        "SelectOnUp": "9013457526306287949",
-                        "SelectOnDown": "7003469266778207770",
-                        "SelectOnRight": "7003469266778207770",
-                        "SelectOnLeft": "7003469266778207770"
+                        "SelectOnUp": "16072090823059956730",
+                        "SelectOnDown": "2541866954712208386",
+                        "SelectOnRight": "2541866954712208386",
+                        "SelectOnLeft": "2541866954712208386"
                     },
                     {
                         "ID": "17964584303229260187",
@@ -3232,7 +3932,7 @@
                 "ID": "15978607861756608183",
                 "ParentID": "9569756486502312634",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3264,7 +3964,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "17183334904062464815",
+                        "ID": "16695868960626076114",
                         "Text": "Exit",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -3287,7 +3987,7 @@
                 "ID": "12947429247703767325",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3339,7 +4039,7 @@
                 "ID": "7226589799055648335",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3377,7 +4077,7 @@
                 "ID": "17157178954588250498",
                 "ParentID": "7226589799055648335",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3409,7 +4109,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "15131266290120473874",
+                        "ID": "15358238264511299587",
                         "Text": "Select",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -3432,7 +4132,7 @@
                 "ID": "1740394895350639763",
                 "ParentID": "7226589799055648335",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3484,7 +4184,7 @@
                 "ID": "2541866954712208386",
                 "ParentID": "12675728198845725533",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3604,10 +4304,10 @@
                         ],
                         "HasListenersOnExit": false,
                         "HasListenersOnEnter": false,
-                        "SelectOnUp": "18187286197713343936",
-                        "SelectOnDown": "6476502857267602462",
-                        "SelectOnRight": "18187286197713343936",
-                        "SelectOnLeft": "6476502857267602462"
+                        "SelectOnUp": "9569756486502312634",
+                        "SelectOnDown": "13692053663680648314",
+                        "SelectOnRight": "9569756486502312634",
+                        "SelectOnLeft": "13692053663680648314"
                     },
                     {
                         "ID": "7631060579261499960",
@@ -3634,7 +4334,7 @@
                 "ID": "17961268602550079334",
                 "ParentID": "7288614509739767776",
                 "Enabled": true,
-                "ParentEnabled": true,
+                "ParentEnabled": false,
                 "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
@@ -3690,7 +4390,7 @@
                 "ParentID": "14905238618353440972",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -3734,7 +4434,7 @@
                         "isFovHori": 0,
                         "ID": "12927733493592186730",
                         "IsGameCamera": true,
-                        "IsSelectedCamera": true,
+                        "IsSelectedCamera": false,
                         "PrintIcon": true,
                         "IconColor": [
                             0.85000002384185791,
@@ -3759,7 +4459,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "74441725949719987",
-                        "ListenerID": "3789337595"
+                        "ListenerID": "2847589036"
                     }
                 ]
             },
@@ -5945,9 +6645,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.55225807428359985,
-                                -0.87421989440917969,
-                                1.711943507194519
+                                -0.3105904757976532,
+                                1.7797369956970215,
+                                -0.85794514417648315
                             ],
                             "Force": [
                                 0,
@@ -6051,7 +6751,7 @@
                                 0
                             ],
                             "MaxLife": 5,
-                            "CurrentLife": 4.5599989891052246,
+                            "CurrentLife": 1.6750001907348633,
                             "SpawnRate": 10,
                             "Delay": 0,
                             "Loop": true,
@@ -6102,6 +6802,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -6165,9 +6866,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -4.4789938926696777,
-                                -2.0894660949707031,
-                                0.75680142641067505
+                                -4.0424375534057617,
+                                -1.5352592468261719,
+                                -2.5103144645690918
                             ],
                             "Force": [
                                 0,
@@ -6271,7 +6972,7 @@
                                 0
                             ],
                             "MaxLife": 2,
-                            "CurrentLife": 2.0159997940063477,
+                            "CurrentLife": 6.4270000457763672,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -6326,6 +7027,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -6389,9 +7091,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.53512555360794067,
-                                3.6396338939666748,
-                                3.3862531185150146
+                                0.16834819316864014,
+                                -2.9421248435974121,
+                                4.0392522811889648
                             ],
                             "Force": [
                                 0,
@@ -6495,7 +7197,7 @@
                                 10
                             ],
                             "MaxLife": 0.30000001192092896,
-                            "CurrentLife": 1.7640000581741333,
+                            "CurrentLife": 6.4270000457763672,
                             "SpawnRate": 1999.9998779296875,
                             "Delay": 0,
                             "Loop": false,
@@ -6546,6 +7248,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -7631,9 +8334,9 @@
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                -3.9858462810516357,
-                                5.8202652931213379,
-                                -8.5234279632568359
+                                -3.9924874305725098,
+                                5.8303933143615723,
+                                -8.5726985931396484
                             ],
                             "Rotation": [
                                 0,
@@ -7749,7 +8452,7 @@
                                 0.10000000149011612
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 4.6399979591369629,
+                            "CurrentLife": 6.9429998397827148,
                             "SpawnRate": 5,
                             "Delay": 1,
                             "Loop": true,
@@ -7800,6 +8503,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,

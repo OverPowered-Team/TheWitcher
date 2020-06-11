@@ -64,11 +64,11 @@ void PlayerController::Start()
 
 	// Dash
 	//dashData.current_acel_multi = dashData.accel_multi; 
-	//dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
-	//if (dashData.dash_trail != nullptr) //todo no ser tant guarro
-	//{
-	//	dashData.dash_trail->Stop();
-	//}
+	dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	if (dash_trail != nullptr) //todo no ser tant guarro
+	{
+		dash_trail->Stop();
+	}
 }
 
 void PlayerController::Update()
@@ -79,7 +79,7 @@ void PlayerController::Update()
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
-	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
+	State* new_state = state->HandleInput(this);
 	if (new_state != nullptr)
 		SwapState(new_state);
 
@@ -424,7 +424,6 @@ void PlayerController::Revive(float minigame_value)
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
-	is_immune = false;
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
@@ -433,8 +432,6 @@ void PlayerController::Revive(float minigame_value)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
 		GameManager::instance->event_manager->OnPlayerRevive(this);
-
-	SetState(StateType::IDLE);
 }
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
@@ -1011,6 +1008,7 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
+				dash_coll->player_dashing = this;
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
@@ -1083,6 +1081,7 @@ void PlayerController::StartImmune()
 	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
 	{
 		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("DashLayer");
 		meshes->SetEnable(false);
 	}
 }
@@ -1093,6 +1092,7 @@ void PlayerController::StopImmune()
 	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
 	{
 		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("Player");
 		meshes->SetEnable(true);
 	}
 }

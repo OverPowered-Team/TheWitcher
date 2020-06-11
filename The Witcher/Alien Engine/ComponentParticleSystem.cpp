@@ -18,6 +18,7 @@
 #include "Optick/include/optick.h"
 #include "ComponentMaterial.h"
 #include "mmgr/mmgr.h"
+#include "ComponentLightPoint.h"
 
 ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component(parent)
 {
@@ -1018,7 +1019,15 @@ bool ComponentParticleSystem::DrawInspector()
 				}
 
 				ImGui::Spacing();
-				
+				static bool light = false;
+				ImGui::Text("Emitting "); ImGui::SameLine(210, 15);
+				ImGui::Checkbox("##lemitting", &particleSystem->lightProperties.emitting);
+
+				if (particleSystem->point_light != nullptr)
+					particleSystem->point_light->light_props.enabled = particleSystem->lightProperties.emitting;
+					
+				ImGui::Spacing();
+
 				ImGui::Text("Random Distribution "); ImGui::SameLine(210, 15);
 				ImGui::Checkbox("##lrandom", &particleSystem->lightProperties.random_distribution);
 				ImGui::Spacing();
@@ -1089,7 +1098,9 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::TreePop();
 			}
 			
-			
+			/*if (particleSystem->point_light != nullptr)
+				particleSystem->point_light->light_props.enabled = particleSystem->lightProperties.emitting;*/
+
 			static bool enable_blend = false;
 
 			ImGui::Checkbox("##pptActiveBlend", &enable_blend);
@@ -1534,6 +1545,7 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	{
 		to_save->SetString("PrefabLightID", std::to_string(particleSystem->light->GetID()).data());
 	}
+	to_save->SetBoolean("Light.Emitting", particleSystem->lightProperties.emitting);
 	to_save->SetNumber("Light.Casting", castLightSelected);
 	to_save->SetBoolean("Light.Random", particleSystem->lightProperties.random_distribution);
 	to_save->SetBoolean("Light.ColorParticle", particleSystem->lightProperties.particle_color);
@@ -1826,6 +1838,7 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 
 		if (to_load->GetBoolean("HasLight")) {
 			enable_light = true;
+			particleSystem->lightProperties.emitting = to_load->GetBoolean("Light.Emitting");
 			u64 ID = std::stoull(to_load->GetString("PrefabLightID"));
 
 			if (ID != 0) {
@@ -1842,25 +1855,26 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 			//particleSystem->lightProperties.casting_particles = to_load->GetBoolean("Light.Casting");
 			castLightSelected = to_load->GetNumber("Light.Casting");
 
+			if (particleSystem->lightProperties.emitting)
+			{
+				if (castLightSelected == 0) {
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = false; particleSystem
+						->point_light->light_props.enabled = true;
+				}
 
-			if (castLightSelected == 0) {
-				if (particleSystem->point_light != nullptr) particleSystem
-					->point_light->light_props.casting_particles = false; particleSystem
-					->point_light->light_props.enabled = true;
+				if (castLightSelected == 1) {
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = true; particleSystem
+						->point_light->light_props.enabled = false;
+				}
+
+				if (castLightSelected == 2) {
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = true; particleSystem
+						->point_light->light_props.enabled = true;
+				}
 			}
-
-			if (castLightSelected == 1) {
-				if (particleSystem->point_light != nullptr) particleSystem
-					->point_light->light_props.casting_particles = true; particleSystem
-					->point_light->light_props.enabled = false;
-			}
-
-			if (castLightSelected == 2) {
-				if (particleSystem->point_light != nullptr) particleSystem
-					->point_light->light_props.casting_particles = true; particleSystem
-					->point_light->light_props.enabled = true;
-			}
-
 			particleSystem->lightProperties.random_distribution = to_load->GetBoolean("Light.Random");
 			particleSystem->lightProperties.particle_color = to_load->GetBoolean("Light.ColorParticle");
 

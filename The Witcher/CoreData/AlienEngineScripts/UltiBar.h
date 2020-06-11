@@ -17,6 +17,8 @@ public:
 
 	void ControlsLerp();
 
+	void UpdateTimes(float time_paused);
+
 	// GameObjects
 	GameObject* ultibar = nullptr;
 	ComponentBar* normal_ulti = nullptr;
@@ -55,7 +57,6 @@ private:
 
 	// Internal Timer
 	float internal_timer = 0.0f;
-	float time_paused = 0.0f;
 };
 
 ALIEN_FACTORY UltiBar* CreateUltiBar() {

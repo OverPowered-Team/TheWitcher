@@ -146,6 +146,7 @@ void ComponentLightPoint::Clone(Component* clone)
 	ComponentLightPoint* light = (ComponentLightPoint*)clone;
 	light->renderer_id = renderer_id;
 	light->print_icon = print_icon;
+	light->light_props = light_props;
 }
 
 void ComponentLightPoint::Reset()
@@ -238,5 +239,7 @@ void ComponentLightPoint::SetProperties(PointLightProperties props)
 	light_props.linear = props.linear;
 	light_props.quadratic = props.quadratic;
 	light_props.casting_particles = props.casting_particles;
+
+	light_props.enabled = props.enabled;
 
 }

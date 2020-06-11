@@ -58,20 +58,7 @@ void UI_Char_Frame::Start()
 
 void UI_Char_Frame::Update()
 {
-	if (!Time::IsGamePaused())
-	{
-		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
-
-		if (time_paused != 0.0f)
-		{
-			time_paused = 0.0f;
-		}
-	}
-	else
-	{
-		time_paused = Time::GetGameTime() - internal_timer;
-		return;
-	}
+	internal_timer += Time::GetDT();
 
 	if (changing_life)
 	{
@@ -289,6 +276,17 @@ void UI_Char_Frame::PlayerOnFire(bool is_on_fire)
 		is_fire_changing = true;
 		fire_fade_time = internal_timer;
 	}
+}
+
+void UI_Char_Frame::UpdateTimes(float time_paused)
+{
+	internal_timer += time_paused;
+	killcount_lerp_time += time_paused;
+	low_life_glow_time += time_paused;
+	killcount_lerp_time += time_paused;
+	fire_fade_time += time_paused;
+	time += time_paused;
+	chaos_time += time_paused;
 }
 
 // Effects
