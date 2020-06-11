@@ -240,7 +240,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		SetUniform1i("dudv_map", 3);
 		SetUniform1f("move_factor", Time::GetTimeSinceStart() * 0.075f);
 		SetUniformFloat3("camera_position", App->renderer3D->actual_game_camera->GetCameraPosition());
-		ApplyLightsUniforms();
+		//ApplyLightsUniforms();
 		break; }
 
 	case SHADER_TEMPLATE::SHIELD: {
@@ -265,7 +265,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		glBindTexture(GL_TEXTURE_2D, App->resources->alpha_noise_texture->id);
 		SetUniform1i("alpha_noise", 3);
 		SetUniform1f("burn", inputs.dissolveFresnelShaderProperties.burn);
-		ApplyLightsUniforms();
+		//ApplyLightsUniforms();
 		break; }
 
 	case SHADER_TEMPLATE::OCEAN_SHADER: {

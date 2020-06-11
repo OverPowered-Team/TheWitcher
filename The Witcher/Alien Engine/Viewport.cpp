@@ -10,6 +10,8 @@
 #include "ModuleCamera3D.h"
 #include "glew/include/glew.h"
 
+#include "Optick/include/optick.h"
+
 // FBO ========================================================================
 
 FBO::FBO()
@@ -29,6 +31,8 @@ FBO::~FBO()
 
 void FBO::BeginFBO(const Color& color)
 {
+	OPTICK_EVENT();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, ID[MULTISAMPLING_FBO]);
 	glClearColor(color.r, color.g, color.b, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -40,6 +44,8 @@ void FBO::BeginFBO(const Color& color)
 
 void FBO::EndFBO()
 {
+	OPTICK_EVENT();
+
 	// Blit Frame buffer -------------------------------------------------------
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, ID[MULTISAMPLING_FBO]);
@@ -78,6 +84,8 @@ void FBO::EndFBO()
 
 void FBO::UpdateFBO(float width, float height)
 {
+	OPTICK_EVENT();
+
 	this->width = width;
 	this->height = height;
 	bool fboUsed = true;
@@ -366,6 +374,8 @@ ComponentCamera* Viewport::GetCamera()
 
 void Viewport::BeginViewport()
 {
+	//OPTICK_EVENT(); <- this breaks all (?)
+
 	if (to_update)
 	{
 		fbo->UpdateFBO(width, height);
@@ -408,6 +418,8 @@ void Viewport::BeginViewport()
 
 void Viewport::EndViewport()
 {
+	OPTICK_EVENT();
+
 	// Disables --------------------------------------------
 	glDisable(GL_LIGHTING);
 	glDisable(GL_POLYGON_SMOOTH);
@@ -421,6 +433,7 @@ void Viewport::EndViewport()
 void Viewport::ApplyPostProcessing()
 {
 	// --------------------- Blur Bright Pixels Image (2nd Attachment) --------------------------------------
+	OPTICK_EVENT();
 
 	BlurImage();
 
@@ -474,6 +487,8 @@ void Viewport::ApplyPostProcessing()
 
 void Viewport::BlurImage()
 {
+	OPTICK_EVENT();
+
 	bool first_iteration = true; 
 	bool horizontal = true; 
 	App->resources->blur_shader->Bind(); 
@@ -504,6 +519,7 @@ void Viewport::BlurImage()
 
 void Viewport::FinalPass()
 {
+	OPTICK_EVENT();
 	// Copy only color from PostProcMSAA FBO to the final PostProc texture
 	BlitFboToFbo(GetPostProcFBO(), GetPostProcFinalFBO());
 
@@ -572,6 +588,8 @@ uint Viewport::GetPostProcTexture()
 
 void Viewport::BlitFboToFbo(uint from, uint to, bool color, bool depth, bool stencil)
 {
+	OPTICK_EVENT();
+
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, from);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, to);
 
