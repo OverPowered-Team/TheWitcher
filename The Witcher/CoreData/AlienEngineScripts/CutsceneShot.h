@@ -24,6 +24,10 @@ struct CutsceneElement {
 	ShakeInfo info_shake;
 	bool it_focus = false;
 	GameObject* g_o_focus = nullptr;
+	bool first_frame = true;
+	Quat first_rot;
+	Quat final_rot;
+	float3  first_pos;
 };
 
 class ALIEN_ENGINE_API CutsceneShot : public Alien {
