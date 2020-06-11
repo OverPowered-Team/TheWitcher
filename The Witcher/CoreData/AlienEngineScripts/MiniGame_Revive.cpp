@@ -93,7 +93,7 @@ void MiniGame_Revive::Minigame()
 	{
 		float position_x = Maths::Lerp(original_moving_position * sign, original_moving_position * -sign, (Time::GetGameTime() - time) / lerp_time);
 
-		moving_part->transform->SetLocalPosition(float3(position_x, 0, 0));
+		moving_part->transform->SetLocalPosition(float3(position_x, 0, 0.1));
 
 		if ((Input::GetKeyDown(SDL_SCANCODE_SPACE) || Input::GetControllerButtonDown(player_reviving->controller_index, Input::CONTROLLER_BUTTON_B)) && !effects_change)
 		{
