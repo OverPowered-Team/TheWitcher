@@ -26,11 +26,15 @@ void Ciri::StartEnemy()
 
 	meshes_materials = meshes->GetComponentsInChildrenRecursive<ComponentMaterial>();
 
-	dissolve_mat = new ResourceMaterial((ResourceMaterial*)meshes_materials[0]->material);
-	dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn = 0;
+	dissolve_mat.color = meshes_materials[0]->material->color;
+	dissolve_mat.used_shader = meshes_materials[0]->material->used_shader;
+	dissolve_mat.simple_depth_shader = meshes_materials[0]->material->simple_depth_shader;
+	dissolve_mat.renderMode = meshes_materials[0]->material->renderMode;
+	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 0;
 
-	for (int i = 0; i < meshes_materials.size(); ++i) {
-		meshes_materials[i]->material = dissolve_mat;
+	for (int i = 0; i < meshes_materials.size(); ++i) 
+	{
+		meshes_materials[i]->material = &dissolve_mat;
 	}
 
 	state = Boss::BossState::NONE;
@@ -42,16 +46,16 @@ void Ciri::UpdateEnemy()
 {
 	Boss::UpdateEnemy();
 
-	if (dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn < 1 && appearing) {
-		dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn += 0.01;
-		LOG("appearing");
+	
+	if (dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn < 1 && appearing) {
+		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn += 0.1 * Time::GetDT();
 	}
 	else {
 		appearing = false;
 	}
 
-	if (dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn > 0 && disappearing) {
-		dissolve_mat->shaderInputs.dissolveFresnelShaderProperties.burn -= 0.01;
+	if (dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn > 0 && disappearing) {
+		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn -= 0.2 * Time::GetDT();
 		LOG("disappearing");
 	}
 	else {
