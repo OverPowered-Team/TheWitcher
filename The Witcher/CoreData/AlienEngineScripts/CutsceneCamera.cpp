@@ -95,7 +95,7 @@ void CutsceneCamera::ExecuteCutscene()
 			float min_dist = 0.2f;
 			current_move_time += Time::GetDT();
 
-			if ((shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
+			if (Time::GetGameTime() - t_speed >= shots[shots_counter]->element.transition_speed || (shots[shots_counter]->transform->GetGlobalPosition() - Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition()).Length() < min_dist) {
 				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
 				current_move_time = 0.f;
 				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
