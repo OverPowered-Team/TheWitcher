@@ -75,6 +75,33 @@ bool CiriOriginal::IsOnAction()
 	return current_action != nullptr;
 }
 
+void CiriOriginal::CreateThrowableRock()
+{
+	int target = 0;
+
+	if (player_controllers[0]->state->type == StateType::DEAD) {
+		target = 1;
+	}
+	else if (player_controllers[1]->state->type == StateType::DEAD) {
+		target = 0;
+	}
+	else {
+		target = Random::GetRandomIntBetweenTwo(0, 1);
+	}
+
+	GameObject* rock_to_throw = GameObject::Instantiate(game_object->GetComponent<CiriFightController>()->rock, game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->transform->GetGlobalPosition());
+	rock_to_throw->GetComponent<RockThrow>()->target = target;
+	rock_to_throw->GetComponent<RockThrow>()->type = RockThrow::RockType::THROW;
+	game_object->GetComponent<CiriFightController>()->rocks_available--;
+
+	//GameManager::instance->particle_pool->GetInstance("Rock_Aura", float3::zero(), float3::zero(), game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1], true);
+
+
+	if (game_object->GetComponent<CiriFightController>()->rocks_available == 0) {
+		game_object->GetComponent<CiriFightController>()->SpawnRocks();
+	}
+}
+
 void CiriOriginal::LaunchAction()
 {
 	Boss::LaunchAction();
@@ -116,31 +143,7 @@ void CiriOriginal::Scream()
 
 void CiriOriginal::LaunchRockAction()
 {
-	int target = 0;
-
-	if (player_controllers[0]->state->type == StateType::DEAD) {
-		target = 1;
-	}
-	else if (player_controllers[1]->state->type == StateType::DEAD) {
-		target = 0;
-	}
-	else {
-		target = Random::GetRandomIntBetweenTwo(0, 1);
-	}
-
-	LOG("Rock to throw %i", game_object->GetComponent<CiriFightController>()->rocks_available - 1);
-	LOG("Rocks available %i", game_object->GetComponent<CiriFightController>()->rocks.size());
-	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::THROW);
-	LOG("Rock paso hehe");
-	game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->GetComponent<RockThrow>()->target = target;
-	game_object->GetComponent<CiriFightController>()->rocks_available--;
-
-	//GameManager::instance->particle_pool->GetInstance("Rock_Aura", float3::zero(), float3::zero(), game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1], true);
-	
-
-	if(game_object->GetComponent<CiriFightController>()->rocks_available == 0){
-		game_object->GetComponent<CiriFightController>()->SpawnRocks();
-	}
+	CreateThrowableRock();
 }
 
 void CiriOriginal::LaunchScreamAction()

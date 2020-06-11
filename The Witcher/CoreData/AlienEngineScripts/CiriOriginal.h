@@ -22,6 +22,8 @@ public:
 	void SetActionVariables() override;
 	bool IsOnAction() override;
 
+	void CreateThrowableRock();
+
 	void LaunchAction() override;
 	void Scream();
 
