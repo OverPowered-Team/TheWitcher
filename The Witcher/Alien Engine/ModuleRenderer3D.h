@@ -49,6 +49,7 @@ public:
 public:
 
 	SDL_GLContext context;
+	SDL_GLContext back_context;
 	ComponentCamera* scene_fake_camera = nullptr;
 	ComponentCamera* actual_game_camera = nullptr;
 	ComponentCamera* selected_game_camera = nullptr;

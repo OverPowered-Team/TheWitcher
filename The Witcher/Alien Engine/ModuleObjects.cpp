@@ -71,6 +71,7 @@
 ModuleObjects::ModuleObjects(bool start_enabled) :Module(start_enabled)
 {
 	name.assign("ModuleObject");
+	SDL_AtomicSet(&dataIsReady, 0);
 }
 
 ModuleObjects::~ModuleObjects()
@@ -167,9 +168,26 @@ update_status ModuleObjects::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
 
+	//if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+	//	SceneManager::LoadSceneAsync("Lvl_1");
+	//}
+
+	//if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+	//	if (SceneManager::IsSceneAsyncReady()) {
+	//		SceneManager::ChangeToAsyncScene();
+	//	}
+	//	else {
+	//		LOG_ENGINE("NOTNOTNOTNOT");
+	//	}
+	//}
+
 	if (!sceneNameToChange.empty()) {
 		LoadScene(sceneNameToChange.data());
 		sceneNameToChange.clear();
+	}
+
+	if (changeToAsync) {
+		ChangeToAsyncScene();
 	}
 
 	// delete objects
@@ -1503,6 +1521,15 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 		}
 
 		if (!scene_root->children.empty()) { // if scene_root has children, save them
+
+			JSONArraypack* textures = scene->InitNewArray("Scene.Textures");
+			for (auto item = App->resources->resources.begin(); item != App->resources->resources.end(); ++item) {
+				if ((*item)->GetType() == ResourceType::RESOURCE_TEXTURE && (*item)->references > 0 && (*item)->GetID() != 0) {
+					textures->SetAnotherNode();
+					textures->SetString("TextureID", std::to_string((*item)->GetID()).data());
+				}
+			}
+			
 			JSONArraypack* game_objects = scene->InitNewArray("Scene.GameObjects");
 
 			game_objects->SetAnotherNode();
@@ -1650,6 +1677,45 @@ void ModuleObjects::LoadScene(const char* name, bool change_scene)
 	}
 }
 
+void ModuleObjects::LoadSceneAsync(const char* name)
+{
+	ResourceScene* to_load = App->resources->GetSceneByName(name);
+	if (to_load != nullptr) {
+		JSON_Value* value = json_parse_file(to_load->GetLibraryPath());
+		JSON_Object* object = json_value_get_object(value);
+
+		if (value != nullptr && object != nullptr)
+		{
+			JSONfilepack* scene = new JSONfilepack(to_load->GetLibraryPath(), object, value);
+
+			JSONArraypack* textures = scene->GetArray("Scene.Textures");
+			for (uint i = 0; i < textures->GetArraySize(); ++i) {
+				static char f[MAX_PATH] = { 0 };
+				strcpy(f, textures->GetString("TextureID"));
+				char* end = nullptr;
+				u64 textureID = strtoull(f, &end, 10);
+				if (textureID != 0) {
+					ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(textureID);
+					if (texture != nullptr) {
+						texture->IncreaseReferences();
+						texture->ignore_next_increase = true;
+					}
+				}
+				textures->GetAnotherNode();
+			}
+
+			delete scene;
+		}
+	}
+}
+
+void ModuleObjects::ChangeToAsyncScene()
+{
+	LoadScene(toLoad.data());
+	toLoad.clear();
+	changeToAsync = false;
+}
+
 void ModuleObjects::OpenCoScene(const char* name)
 {
 	OPTICK_EVENT();
@@ -1765,9 +1831,17 @@ GameObject* ModuleObjects::GetRoot(bool ignore_prefab)
 			return base_game_object->children.back();
 	}
 	else {
-		for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
-			if ((*item)->ID == scene_active) {
-				return *item;
+		if (base_game_object->children.empty()) {
+			return base_game_object;
+		}
+		else if (base_game_object->children.size() == 1) {
+			return base_game_object->children.back();
+		}
+		else {
+			for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
+				if ((*item)->ID == scene_active) {
+					return *item;
+				}
 			}
 		}
 		return nullptr;

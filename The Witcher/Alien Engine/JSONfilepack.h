@@ -111,7 +111,7 @@ public:
 
 	void SetString(const char* name, const char* string_parameter);
 
-	const char* GetString(const char* name, std::string default_string = std::string());
+	const char* GetString(const char* name, const char* default_string = "Default");
 
 	JSONArraypack* InitNewArray(const char* name);
 

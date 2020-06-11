@@ -67,6 +67,25 @@ public:
 	float GetFogDensity() const;
 	float GetFogGradient() const;
 
+	void EnableHDR();
+	void DisableHDR();
+
+	void SetHDRExposure(const float& exposure);
+	void SetHDRGamma(const float& gamma);
+
+	float GetHDRExposure() const; 
+	float GetHDRGamma() const; 
+
+	void EnableBloom();
+	void DisableBloom();
+
+	void SetBloomThreshold(const float& threshold);
+	void SetBloomIntensity(const float& intensity);
+
+	float GetBloomThreshold() const;
+	float GetBloomIntensity() const;
+
+
 	void SetBackgroundColor(const float3& color);
 	float3 GetBackgroundColor() const;
 
