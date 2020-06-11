@@ -92,6 +92,7 @@ void CiriOriginal::CreateThrowableRock()
 	GameObject* rock_to_throw = GameObject::Instantiate(game_object->GetComponent<CiriFightController>()->rock, game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->transform->GetGlobalPosition());
 	rock_to_throw->GetComponent<RockThrow>()->target = target;
 	rock_to_throw->GetComponent<RockThrow>()->type = RockThrow::RockType::THROW;
+	Destroy(game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]);
 	game_object->GetComponent<CiriFightController>()->rocks_available--;
 
 	//GameManager::instance->particle_pool->GetInstance("Rock_Aura", float3::zero(), float3::zero(), game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1], true);
