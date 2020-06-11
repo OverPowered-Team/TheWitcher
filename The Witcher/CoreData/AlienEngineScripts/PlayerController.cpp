@@ -355,7 +355,8 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
-		ChangeColorParticle();
+		if(attacks->GetCurrentAttack()->IsLast())
+			ChangeColorParticle();
 
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
@@ -895,17 +896,23 @@ void PlayerController::ChangeColorParticle()
 		my_color.y = 1.0f;
 	}
 
-	if (!color_changed)
-		my_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	for (auto it = particles.begin(); it != particles.end(); ++it)
+	if (color_changed)
 	{
-		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		for (auto it = particles.begin(); it != particles.end(); ++it)
 		{
-			for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 			{
-				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
-				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				/*GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
+				if (p_go)
+				{
+					//p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				}*/
+				for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+				{
+					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				}
 			}
 		}
 	}
