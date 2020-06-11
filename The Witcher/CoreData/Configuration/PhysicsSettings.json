@@ -26,6 +26,9 @@
         },
         {
             "Layer": "OscillatorWall"
+        },
+        {
+            "Layer": "DashLayer"
         }
     ],
     "Default": {
@@ -37,7 +40,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": true
     },
     "Wall": {
         "Default": true,
@@ -48,7 +52,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": true
     },
     "Ground": {
         "Default": true,
@@ -59,7 +64,8 @@
         "Drowner": false,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": true
     },
     "Player": {
         "Default": true,
@@ -70,7 +76,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": false
     },
     "Enemy": {
         "Default": true,
@@ -81,7 +88,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": false
     },
     "Drowner": {
         "Default": true,
@@ -92,7 +100,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": false
     },
     "Dashcoll": {
         "Default": true,
@@ -103,7 +112,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": false
     },
     "NoOscillator": {
         "Default": true,
@@ -114,7 +124,8 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": true,
-        "OscillatorWall": false
+        "OscillatorWall": false,
+        "DashLayer": false
     },
     "OscillatorWall": {
         "Default": true,
@@ -125,6 +136,19 @@
         "Drowner": true,
         "Dashcoll": true,
         "NoOscillator": false,
-        "OscillatorWall": true
+        "OscillatorWall": true,
+        "DashLayer": false
+    },
+    "DashLayer": {
+        "Default": true,
+        "Wall": true,
+        "Ground": true,
+        "Player": false,
+        "Enemy": false,
+        "Drowner": false,
+        "Dashcoll": false,
+        "NoOscillator": false,
+        "OscillatorWall": false,
+        "DashLayer": false
     }
 }

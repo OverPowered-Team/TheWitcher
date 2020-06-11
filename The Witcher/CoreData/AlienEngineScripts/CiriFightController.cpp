@@ -43,6 +43,8 @@ void CiriFightController::Start()
 		}
 		position_respawn = float3(children.back()->transform->GetLocalPosition());
 	}
+
+	rocks_respawn = GameObject::FindWithName("Rocks_spawn");
 }
 
 void CiriFightController::Update()
@@ -360,7 +362,7 @@ void CiriFightController::SpawnRocks()
 
 	rocks_available = 5;
 
-	game_object->GetChild("Rock_Positions")->transform->SetGlobalPosition(game_object->GetChild("Rocks_respawn")->transform->GetGlobalPosition());
+	game_object->GetChild("Rock_Positions")->transform->SetGlobalPosition(rocks_respawn->transform->GetGlobalPosition());
 }
 
 void CiriFightController::DestroyRocks()

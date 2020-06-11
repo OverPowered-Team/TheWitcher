@@ -48,17 +48,6 @@ public:
 		std::map<uint, uint> type_kills;
 	};
 
-	struct DashData
-	{
-		float accel_multi = 1.f; 
-		float max_speed = 4.4f; 
-		float min_speed = 2.0f; 
-		float start_speed = 0.f; 
-		float current_acel_multi = 0.f; 
-		bool disappear_on_dash = true;
-		ComponentTrail* dash_trail;
-	};
-
 public:
 	PlayerController();
 	virtual ~PlayerController();
@@ -218,7 +207,7 @@ public:
 	AABB max_aabb;
 
 	// Dash data
-	DashData dashData; 
+	ComponentTrail* dash_trail;
 
 private:
 	float angle = 0.0f;
@@ -256,11 +245,6 @@ ALIEN_FACTORY PlayerController* CreatePlayerController() {
 
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(player->battleCircle);
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(player->max_attacking_enemies);
-	SHOW_TEXT("Dash animation cool data"); 
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.max_speed, 3.f, 5.f);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.min_speed, 2.f, 3.f);
-	SHOW_IN_INSPECTOR_AS_SLIDER_FLOAT(player->dashData.accel_multi, 1.f, 2.f);
-	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(player->dashData.disappear_on_dash); 
 
 	return player;
 }
