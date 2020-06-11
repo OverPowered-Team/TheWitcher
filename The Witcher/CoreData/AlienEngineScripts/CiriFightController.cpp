@@ -118,7 +118,7 @@ void CiriFightController::FinishPhaseOne()
 void CiriFightController::UpdatePhaseTwo()
 {
 	MoveWall();
-	ThrowEnvironmentRocks();
+	//ThrowEnvironmentRocks();
 }
 
 void CiriFightController::FinishPhaseTwo()
@@ -132,7 +132,7 @@ void CiriFightController::FinishPhaseTwo()
 void CiriFightController::UpdatePhaseThree()
 {
 	MoveWall();
-	ThrowEnvironmentRocks();
+	//ThrowEnvironmentRocks();
 	if (!first_wall_door)
 		UpdatePlatform();
 	TransportPlayer();
@@ -328,9 +328,10 @@ void CiriFightController::ThrowEnvironmentRocks()
 			break;
 		}
 		GameObject* rocky = GameObject::Instantiate(rock, position);
-		if (rocky->GetComponent<RockThrow>())
-			rocky->GetComponent<RockThrow>()->ChangeState(RockThrow::RockState::FALL);
-		rock_throwed = true;
+		if (rocky->GetComponent<RockThrow>()) {
+			rocky->GetComponent<RockThrow>()->type = RockThrow::RockType::FALL;
+			rock_throwed = true;
+		}
 	}
 	else if (throw_time % 10 != 0 && rock_throwed)
 		rock_throwed = false;
@@ -357,7 +358,7 @@ void CiriFightController::SpawnRocks()
 	rocks.clear();
 
 	for (int i = 0; i < 5; ++i) {
-		rocks.push_back(GameObject::Instantiate(rock, float3::zero(), true, rock_positions[i]));
+		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
 	}
 
 	rocks_available = 5;
