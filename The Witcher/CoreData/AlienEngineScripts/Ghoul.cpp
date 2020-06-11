@@ -160,9 +160,9 @@ void Ghoul::SetState(const char* state_str)
 bool Ghoul::IsRangeEnemy()
 {
     if (ghoul_type == GhoulType::MINI)
-        return false;
-    else
         return true;
+    else
+        return false;
 }
 
 void Ghoul::Action()
@@ -231,12 +231,17 @@ void Ghoul::OnAnimationEnd(const char* name)
     }
     else if (strcmp(name, "Jump") == 0)
     {
-        if (distance < stats["AttackRange"].GetValue())
-            SetState("Attack");
-        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
-            SetState("Move");
+        if (is_attacking)
+        {
+            if (distance < stats["AttackRange"].GetValue())
+                SetState("Attack");
+            else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+                SetState("Move");
+            else
+                SetState("Idle");
+        }
         else
-            SetState("Idle");
+            SetState("Guard");
 
 
         can_jump = false;
@@ -268,8 +273,8 @@ void Ghoul::OnAnimationEnd(const char* name)
                 GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
-        /*else if (is_attacking)
-            ChangeAttackEnemy();*/
+        else if (is_attacking)
+            ChangeAttackEnemy();
         else if (!is_dead)
             SetState("Idle");
 

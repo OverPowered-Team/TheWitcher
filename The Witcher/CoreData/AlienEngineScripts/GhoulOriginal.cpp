@@ -30,9 +30,9 @@ void GhoulOriginal::UpdateEnemy()
         Move(direction);
         break;
 
-    //case GhoulState::GUARD:
-    //    Guard();
-    //    break;
+    case GhoulState::GUARD:
+        Guard();
+        break;
 
     case GhoulState::HIT:
     {
