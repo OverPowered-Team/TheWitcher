@@ -74,14 +74,13 @@ void CutsceneCamera::ExecuteCutscene()
 		{
 			shots_counter++;
 			PrepareCutscene();
-			LOG("COUNTING %i", shots_counter);
 			return;
 		}
-		if (shots[shots_counter]->element.it_shake && Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_time >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
+		if (shots[shots_counter]->element.it_shake && Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_timer >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
 		{
 			cam_shaking->Shake(shots[shots_counter]->element.info_shake.strength, shots[shots_counter]->element.info_shake.traumaDecay, shots[shots_counter]->element.info_shake.off_set, shots[shots_counter]->element.info_shake.maxyaw, shots[shots_counter]->element.info_shake.maxpitch, shots[shots_counter]->element.info_shake.maxroll);
 			shots[shots_counter]->element.info_shake.has_shaked = true;
-			LOG("IM SHAKING");
+			LOG("I SHAKE");
 		}		
 		break;
 	}
@@ -98,9 +97,7 @@ void CutsceneCamera::ExecuteCutscene()
 					shots[shots_counter]->element.first_frame = false;
 				shots[shots_counter]->element.first_pos = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition();
 				t_speed = Time::GetGameTime();
-				LOG("ENTRE");
 			}
-			LOG("t_speed = %.f", t_speed);
 			float3 current_pos = float3::Lerp(shots[shots_counter]->element.first_pos, shots[shots_counter]->transform->GetGlobalPosition(), (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
 			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(current_pos);
 
@@ -114,19 +111,15 @@ void CutsceneCamera::ExecuteCutscene()
 				}
 				Quat current_rot = Quat::Slerp(shots[shots_counter]->element.first_rot, shots[shots_counter]->element.final_rot, (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
 				camera->transform->SetGlobalRotation(current_rot);
-
 			}
-			LOG("PORCENTAJE: %f", (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
-			LOG("RESTITA: %f", (Time::GetGameTime() - t_speed));
 			if ((Time::GetGameTime() - t_speed) >= shots[shots_counter]->element.transition_speed) {
 				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
+				if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus)
+					camera->transform->SetGlobalRotation(shots[shots_counter]->element.final_rot);
 				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
 				if (shots[shots_counter]->element.it_shake)
 					shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
 				state = CutsceneState::IDLE;
-				LOG("IM VIBING");
-				if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus)
-					camera->transform->SetGlobalRotation(shots[shots_counter]->element.final_rot);
 				break;
 			}
 		}
@@ -206,10 +199,7 @@ void CutsceneCamera::ExecuteCurve()
 			if (shots[shots_counter]->element.curve_info.current_pos > 1)
 			{
 				//shots[shots_counter]->element.curve_info.go_back = true;
-				
 				state = CutsceneState::IDLE;
-				LOG("IM VIBING");
-
 			}
 			front_vector = shots[shots_counter]->element.curve_info.target->transform->GetGlobalPosition() - currentPos;
 			front_vector.Normalize();
