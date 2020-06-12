@@ -147,6 +147,8 @@ public:
 	float GetCurrentDMG();
 	Attack* GetCurrentAttack();
 
+	void AttackEnd();
+
 public:
 	GameObject* weapon_obj;
 	GameObject* weapon2_obj;
@@ -187,6 +189,7 @@ protected:
 	float distance_snapped = 0.0f;
 
 	bool can_execute_input = false;
+	bool attack_finished = false;
 	AttackType next_attack = AttackType::NONE;
 	int next_spell = 0;
 };
@@ -206,6 +209,7 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::CastSpell, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AllowCombo, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::AttackEnd, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AttackShake, player_attacks);
 	return player_attacks;
 } 

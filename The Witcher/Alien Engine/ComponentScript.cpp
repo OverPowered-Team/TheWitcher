@@ -831,6 +831,7 @@ void ComponentScript::ShowVoidFunction(std::function<void()> funct, const char* 
 	}
 }
 
+
 void ComponentScript::LoadData(const char* name, bool is_alien)
 {
 	need_alien = is_alien;
