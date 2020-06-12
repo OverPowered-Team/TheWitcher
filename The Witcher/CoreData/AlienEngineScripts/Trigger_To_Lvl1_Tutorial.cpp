@@ -21,6 +21,6 @@ void Trigger_To_Lvl1_Tutorial::OnTriggerEnter(ComponentCollider* col)
 	if (strcmp(col->game_object_attached->GetTag(), "Player") == 0)
 	{
 		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
-		SceneManager::LoadScene("Lvl_1", FadeToBlackType::FADE);
+		SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::FADE);
 	}
 }

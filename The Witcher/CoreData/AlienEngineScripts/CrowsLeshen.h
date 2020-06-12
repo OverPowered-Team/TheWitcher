@@ -18,6 +18,7 @@ public:
 
 	float max_track_distance = 4.0f;
 	bool tracking = true;
+	bool collided = false;
 	CrowsLeshen();
 	virtual ~CrowsLeshen();
 	

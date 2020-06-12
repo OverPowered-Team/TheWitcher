@@ -392,5 +392,5 @@ void Leshen::SetStats(const char* json)
 
 void Leshen::ChangeScene()
 {
-	SceneManager::LoadScene("Wagonnetes", FadeToBlackType::FADE);
+	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 }
