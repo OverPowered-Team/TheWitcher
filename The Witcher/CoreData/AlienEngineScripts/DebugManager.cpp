@@ -1,6 +1,8 @@
 #include "DebugManager.h"
 #include "PlayerController.h"
 #include "UI_Char_Frame.h"
+#include "Scores_Data.h"
+#include "GameManager.h"
 
 DebugManager::DebugManager() : Alien()
 {
@@ -42,6 +44,11 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
+			if (GameManager::instance)
+			{
+				GameManager::instance->PrepareDataNextScene(false);
+			}
+			Scores_Data::won_level1 = true;
 			SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
@@ -54,6 +61,12 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_6))
 		{
+			if (GameManager::instance)
+			{
+				GameManager::instance->PrepareDataNextScene(false);
+			}
+			Scores_Data::won_level1 = true;
+			Scores_Data::won_level2 = true;
 			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_F))
