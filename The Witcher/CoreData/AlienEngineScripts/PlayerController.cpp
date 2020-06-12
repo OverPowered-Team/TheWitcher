@@ -64,7 +64,10 @@ void PlayerController::Start()
 
 	// Dash
 	//dashData.current_acel_multi = dashData.accel_multi; 
-	dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	GameObject* trail_go = game_object->GetChild("trail");
+	if(trail_go)
+		dash_trail = trail_go->GetComponent<ComponentTrail>();
+	
 	if (dash_trail != nullptr) //todo no ser tant guarro
 	{
 		dash_trail->Stop();
