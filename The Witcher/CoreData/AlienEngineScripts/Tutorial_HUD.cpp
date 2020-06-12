@@ -98,6 +98,36 @@ void Tutorial_HUD::ShowTriggerMagic(bool show)
 	}
 }
 
+void Tutorial_HUD::ShowTriggerRelics(bool show)
+{
+	if (show && (current_state_relics == Current_Showing::ANY || current_state_relics == Current_Showing::FADING_OUT))
+	{
+		if (current_state_relics == Current_Showing::FADING_OUT)
+		{
+			relics_time = relics_time - (Time::GetTimeSinceStart() - relics_time);
+		}
+		else
+		{
+			relics_time = Time::GetTimeSinceStart();
+		}
+
+		current_state_relics = Current_Showing::FADING_IN;
+	}
+	else if (!show && (current_state_relics == Current_Showing::FADING_IN || current_state_relics == Current_Showing::SHOWING))
+	{
+		if (current_state_relics == Current_Showing::FADING_IN)
+		{
+			relics_time = relics_time - (Time::GetTimeSinceStart() - relics_time);
+		}
+		else
+		{
+			relics_time = Time::GetTimeSinceStart();
+		}
+
+		current_state_relics = Current_Showing::FADING_OUT;
+	}
+}
+
 void Tutorial_HUD::Start()
 {
 	// Attack
@@ -128,6 +158,12 @@ void Tutorial_HUD::Start()
 	{
 		(*iter)->SetBackgroundColor(1, 1, 1, 0);
 	}
+
+	// Relics
+	back_relic = game_object->GetChild("RelicsMenu")->GetChild("Back")->GetComponent<ComponentImage>();
+	text_relic = game_object->GetChild("RelicsMenu")->GetChild("Text")->GetComponent<ComponentText>();
+	back_relic->SetBackgroundColor(1, 1, 1, 0);
+	text_relic->SetAlpha(0);
 }
 
 void Tutorial_HUD::Update()
@@ -137,6 +173,8 @@ void Tutorial_HUD::Update()
 	HandleTriggerDash();
 
 	HandleTriggerMagic();
+
+	HandleTriggerRelic();
 }
 
 void Tutorial_HUD::HandleTriggerDash()
@@ -303,6 +341,57 @@ void Tutorial_HUD::HandleTriggerAttack()
 			text_attack->SetAlpha(0);
 
 			current_state_attack = Current_Showing::ANY;
+		}
+
+		break;
+	}
+	case Current_Showing::ANY:
+	{
+		break;
+	}
+	}
+}
+
+void Tutorial_HUD::HandleTriggerRelic()
+{
+	switch (current_state_relics)
+	{
+	case Current_Showing::FADING_IN:
+	{
+		float t = (Time::GetTimeSinceStart() - relics_time) / 0.5f;
+		float lerp = Maths::Lerp(0.0f, 1.0f, t);
+
+		back_relic->SetBackgroundColor(1, 1, 1, lerp);
+		text_relic->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			back_relic->SetBackgroundColor(1, 1, 1, 1);
+			text_relic->SetAlpha(1);
+
+			current_state_relics = Current_Showing::SHOWING;
+		}
+
+		break;
+	}
+	case Current_Showing::SHOWING:
+	{
+		break;
+	}
+	case Current_Showing::FADING_OUT:
+	{
+		float t = (Time::GetTimeSinceStart() - relics_time) / 0.5f;
+		float lerp = Maths::Lerp(1.0f, 0.0f, t);
+
+		back_relic->SetBackgroundColor(1, 1, 1, lerp);
+		text_relic->SetAlpha(lerp);
+
+		if (t >= 1)
+		{
+			back_relic->SetBackgroundColor(1, 1, 1, 0);
+			text_relic->SetAlpha(0);
+
+			current_state_relics = Current_Showing::ANY;
 		}
 
 		break;
