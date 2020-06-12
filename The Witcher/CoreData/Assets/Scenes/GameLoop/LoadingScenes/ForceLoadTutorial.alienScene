@@ -1,0 +1,474 @@
+{
+    "Scene": {
+        "Name": "ForceLoadTutorial",
+        "Textures": [
+            {
+                "TextureID": "17710751461607921381"
+            },
+            {
+                "TextureID": "12549144803805703754"
+            },
+            {
+                "TextureID": "11066051322216812673"
+            },
+            {
+                "TextureID": "15916411393341921607"
+            },
+            {
+                "TextureID": "7938207841734516701"
+            },
+            {
+                "TextureID": "5780782166185194678"
+            },
+            {
+                "TextureID": "9052940945436525570"
+            },
+            {
+                "TextureID": "1848389761158506591"
+            },
+            {
+                "TextureID": "6408337038154005620"
+            },
+            {
+                "TextureID": "3145468442909657238"
+            },
+            {
+                "TextureID": "4203447899337825568"
+            },
+            {
+                "TextureID": "2168148948187343826"
+            },
+            {
+                "TextureID": "16967729447824792858"
+            },
+            {
+                "TextureID": "17619284459737388214"
+            },
+            {
+                "TextureID": "6844231066823889716"
+            },
+            {
+                "TextureID": "154356643716922835"
+            },
+            {
+                "TextureID": "4484228010885122209"
+            },
+            {
+                "TextureID": "16173114978738013675"
+            },
+            {
+                "TextureID": "3257498114827153872"
+            },
+            {
+                "TextureID": "8189780314538143507"
+            },
+            {
+                "TextureID": "6814052300279441929"
+            },
+            {
+                "TextureID": "12741527805591649602"
+            },
+            {
+                "TextureID": "14393183398859135991"
+            },
+            {
+                "TextureID": "17182900750362764705"
+            },
+            {
+                "TextureID": "274773503272737871"
+            },
+            {
+                "TextureID": "14191433223677905876"
+            },
+            {
+                "TextureID": "1467729612577234183"
+            },
+            {
+                "TextureID": "9419440669417023678"
+            },
+            {
+                "TextureID": "7124549509102085705"
+            }
+        ],
+        "GameObjects": [
+            {
+                "Name": "Main Camera",
+                "FamilyNumber": 1,
+                "ID": "12681396527980342626",
+                "ParentID": "7597635590990529204",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "975551064050861301"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 6,
+                        "VerticalFov": 60.000003814697266,
+                        "HoritzontalFov": 91.492843627929688,
+                        "BackCol": [
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            0.10000000149011612,
+                            1
+                        ],
+                        "FarPlane": 200,
+                        "NearPlane": 0.10000000149011612,
+                        "isFovHori": 0,
+                        "ID": "11483321080682586701",
+                        "IsGameCamera": true,
+                        "IsSelectedCamera": false,
+                        "PrintIcon": true,
+                        "IconColor": [
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            0.85000002384185791,
+                            1
+                        ],
+                        "Fog": false,
+                        "Density": 0.035000000149011612,
+                        "Gradient": 1.3500000238418579,
+                        "HDR": false,
+                        "Exposure": 1,
+                        "Gamma": 0,
+                        "Skybox_PositiveX": "Default",
+                        "Skybox_NegativeX": "Default",
+                        "Skybox_PositiveY": "Default",
+                        "Skybox_NegativeY": "Default",
+                        "Skybox_PositiveZ": "Default",
+                        "Skybox_NegativeZ": "Default"
+                    }
+                ]
+            },
+            {
+                "Name": "Canvas",
+                "FamilyNumber": 1,
+                "ID": "9652030502060385580",
+                "ParentID": "7597635590990529204",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10301726395391085269"
+                    },
+                    {
+                        "Enabled": true,
+                        "isWorld": false,
+                        "Type": 19,
+                        "BBType": 0
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7922838902589851409",
+                        "ResourceID": "3827252130659360069",
+                        "DataName": "LoadingBackground",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 14,
+                                "Name": "sceneToChange",
+                                "enumInt": 4
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Image",
+                "FamilyNumber": 2,
+                "ID": "11492906501747254551",
+                "ParentID": "9652030502060385580",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            100,
+                            67,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "18260994966893116743"
+                    },
+                    {
+                        "Width": 10,
+                        "Height": 10,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "0",
+                        "Color": [
+                            9.9999999747524271e-07,
+                            0,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Fire",
+                "FamilyNumber": 2,
+                "ID": "9567111924564481930",
+                "ParentID": "9652030502060385580",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            69.338996887207031,
+                            -29.583999633789063,
+                            -0.40000000596046448
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            5,
+                            5,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "17594002410964292511"
+                    },
+                    {
+                        "Width": 19.200000762939453,
+                        "Height": 10.800000190734863,
+                        "Speed": 20,
+                        "Loop": true,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 26,
+                        "ColorCurrent": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773,
+                            1
+                        ],
+                        "HasAnimatedImages": true,
+                        "AnimatedImages": [
+                            {
+                                "0": "17710751461607921381"
+                            },
+                            {
+                                "1": "12549144803805703754"
+                            },
+                            {
+                                "2": "11066051322216812673"
+                            },
+                            {
+                                "3": "15916411393341921607"
+                            },
+                            {
+                                "4": "7938207841734516701"
+                            },
+                            {
+                                "5": "5780782166185194678"
+                            },
+                            {
+                                "6": "9052940945436525570"
+                            },
+                            {
+                                "7": "1848389761158506591"
+                            },
+                            {
+                                "8": "6408337038154005620"
+                            },
+                            {
+                                "9": "3145468442909657238"
+                            },
+                            {
+                                "10": "4203447899337825568"
+                            },
+                            {
+                                "11": "2168148948187343826"
+                            },
+                            {
+                                "12": "16967729447824792858"
+                            },
+                            {
+                                "13": "17619284459737388214"
+                            },
+                            {
+                                "14": "6844231066823889716"
+                            },
+                            {
+                                "15": "154356643716922835"
+                            },
+                            {
+                                "16": "4484228010885122209"
+                            },
+                            {
+                                "17": "16173114978738013675"
+                            },
+                            {
+                                "18": "3257498114827153872"
+                            },
+                            {
+                                "19": "8189780314538143507"
+                            },
+                            {
+                                "20": "6814052300279441929"
+                            },
+                            {
+                                "21": "12741527805591649602"
+                            },
+                            {
+                                "22": "14393183398859135991"
+                            },
+                            {
+                                "23": "17182900750362764705"
+                            },
+                            {
+                                "24": "274773503272737871"
+                            },
+                            {
+                                "25": "14191433223677905876"
+                            },
+                            {
+                                "26": "1467729612577234183"
+                            },
+                            {
+                                "27": "9419440669417023678"
+                            },
+                            {
+                                "28": "7124549509102085705"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Text",
+                "FamilyNumber": 2,
+                "ID": "9442449172843062783",
+                "ParentID": "9652030502060385580",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            40.5,
+                            -40.087001800537109,
+                            0.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.019999999552965164,
+                            0.019999999552965164,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5509482974262344098"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "7811646240148488575",
+                        "Text": "Loading...",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ],
+                        "Width": 605,
+                        "Interlineal": 1.5,
+                        "Align": 0
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -245,7 +245,21 @@ void Scale_Win::HandleSceneLoad()
 	if (Scores_Data::dead)
 	{
 		Scores_Data::dead = false;
-		SceneManager::LoadScene(Scores_Data::last_scene.c_str());
+		if (strcmp(Scores_Data::last_scene.c_str(), "Lvl_1_Tutorial") == 0) {
+			SceneManager::LoadScene("ForceLoadTutorial", FadeToBlackType::FADE);
+		}
+		else if (strcmp(Scores_Data::last_scene.c_str(), "Lvl_1") == 0) {
+			SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::FADE);
+		}
+		else if (strcmp(Scores_Data::last_scene.c_str(), "Mahakam_1") == 0) {
+			SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::FADE);
+		}
+		else if (strcmp(Scores_Data::last_scene.c_str(), "Wagonnetes") == 0) {
+			SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::FADE);
+		}
+		else if (strcmp(Scores_Data::last_scene.c_str(), "boss_test") == 0) {
+			SceneManager::LoadScene("WagonToCiri", FadeToBlackType::FADE);
+		}
 	}
 	else
 	{
@@ -264,7 +278,7 @@ void Scale_Win::HandleSceneLoad()
 			}
 			else
 			{
-				SceneManager::LoadScene("Wagonnetes", FadeToBlackType::VERTICAL_CURTAIN);
+				SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::VERTICAL_CURTAIN);
 			}
 		}
 	}
