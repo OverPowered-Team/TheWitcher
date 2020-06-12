@@ -211,7 +211,7 @@ void InGame_UI::Update()
 			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
 			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
-			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0);
+			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0.1f);
 
 			if (lerp >= 1)
 			{
