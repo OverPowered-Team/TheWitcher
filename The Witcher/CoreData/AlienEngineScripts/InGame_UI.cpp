@@ -25,6 +25,9 @@ void InGame_UI::Start()
 	ulti_filter = in_game->GetChild("Ulti_Filter")->GetComponent<ComponentImage>();
 	ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
 
+	relics_menu = game_object->GetChild("Relics_Menu");
+	relics_menu->SetEnable(false);
+
 	GameObject::FindWithName("Menu")->SetEnable(true);
 	canvas = game_object->GetComponent<ComponentCanvas>();
 	you_died = GameObject::FindWithName("YouDied");
@@ -66,12 +69,34 @@ void InGame_UI::Update()
 	else
 	{
 		time_paused = Time::GetGameTime() - internal_timer;
-		return;
 	}
 
-	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START))||(Input::GetKeyDown(SDL_SCANCODE_ESCAPE)))&&!died)
+	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START))
+		|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START)) || (Input::GetKeyDown(SDL_SCANCODE_ESCAPE))) 
+		&& !died && !relics_menu->IsEnabled())
 	{
 		PauseMenu(!Time::IsGamePaused());
+	}
+
+	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_BACK))
+		|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_BACK)))
+		&& !died && !pause_menu->IsEnabled())
+	{
+		RelicsMenu(!Time::IsGamePaused());
+	}
+
+	if (relics_menu->IsEnabled())
+	{
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B)
+			|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
+		{
+			RelicsMenu(!Time::IsGamePaused());
+		}
+	}
+
+	if (Time::IsGamePaused())
+	{
+		return;
 	}
 
 	if (checkpoint_saved_text->IsEnabled())
@@ -217,6 +242,18 @@ void InGame_UI::PauseMenu(bool to_open)
 	game_object->GetComponent<DialogueManager>()->Pause(to_open);
 }
 
+void InGame_UI::RelicsMenu(bool to_open)
+{
+	in_game->SetEnable(!to_open);
+	Time::SetPause(to_open);
+	relics_menu->SetEnable(to_open);
+	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	if (to_open)
+	{
+
+	}
+}
+
 void InGame_UI::YouDied()
 {
 	died = true;
@@ -239,11 +276,11 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	float random = Random::GetRandomIntBetweenTwo(1, 2);
 	if (random == 1)
 	{
-		particle->origin_position = float3(-25.f, 43.f, 0);
+		particle->origin_position = float3(-25.f, 43.f, -0.1f);
 	}
 	else
 	{
-		particle->origin_position = float3(25.f, 43.f, 0);
+		particle->origin_position = float3(25.f, 43.f, -0.1f);
 	}
 
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
@@ -257,5 +294,9 @@ void InGame_UI::ShowUltiFilter(bool show)
 {
 	ulti_active = show;
 	changing_alpha_filter = true;
-	time_ulti_filter = Time::GetTimeSinceStart();
+	time_ulti_filter = internal_timer;
+}
+
+void InGame_UI::LoadActiveRelics()
+{
 }

@@ -33,6 +33,7 @@ public:
 	void Update();
 
 	void PauseMenu(bool to_open);
+	void RelicsMenu(bool to_open);
 	
 	void YouDied();
 	void ShowCheckpointSaved();
@@ -41,10 +42,15 @@ public:
 
 	void ShowUltiFilter(bool show);
 
+private:
+
+	void LoadActiveRelics();
+
 public:
 
 	GameObject* in_game = nullptr;
 	GameObject* pause_menu = nullptr;
+	GameObject* relics_menu = nullptr;
 
 	Prefab ulti_particle;
 	Prefab killcount_particle;
