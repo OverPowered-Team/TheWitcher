@@ -115,6 +115,7 @@ void CiriFightController::FinishPhaseOne()
 	phase = 2;
 	phase_change = true;
 	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+	GameObject::FindWithName("Rock_particles1")->SetEnable(true);
 }
 
 void CiriFightController::UpdatePhaseTwo()
@@ -125,7 +126,6 @@ void CiriFightController::UpdatePhaseTwo()
 
 void CiriFightController::FinishPhaseTwo()
 {
-	time_platform = 0.0f;
 	changing_platform = false;
 	phase = 3;
 	phase_change = true;
@@ -193,12 +193,11 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 
 void CiriFightController::MoveWall()
 {
-	time_platform += rescale_platform_value * Time::GetDT() * 60;
 	if (wall != nullptr)
 	{
 		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
 
-		if (time_platform > count_circle && !first_wall_door)
+		if (platform->transform->GetGlobalPosition().y > (*rings_enabled.begin())->transform->GetGlobalPosition().y + 60 && !first_wall_door)
 		{
 			int random_index = Random::GetRandomIntBetweenTwo(1, 4);
 
@@ -219,13 +218,11 @@ void CiriFightController::MoveWall()
 			(*rings_enabled.begin())->SetEnable(false);
 			rings_disabled.push_back(*rings_enabled.begin());
 			rings_enabled.erase(rings_enabled.begin());
-			time_platform = 0.0f;
 			changing_platform = true;
 		}
-		else if (time_platform > count_circle&& first_wall_door)
+		else if (platform->transform->GetGlobalPosition().y > (*rings_enabled.begin())->transform->GetGlobalPosition().y + 60 && first_wall_door)
 		{
 			first_wall_door = false;
-			time_platform = 0.0f;
 		}
 	}
 }
@@ -250,7 +247,7 @@ void CiriFightController::UpdatePlatform()
 				{
 					circle = (*it);
 					changing_platform = false;
-					GameObject::FindWithName("Rock_particles1")->SetEnable(true);
+					
 					if (GameManager::instance->rumbler_manager)
 						GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, 0, 2.0);
 				}
@@ -311,7 +308,7 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::ThrowEnvironmentRocks()
 {
-	throw_time = (int)time_platform;
+	throw_time += rescale_platform_value;
 	if (throw_time % 10 == 0 && !rock_throwed)
 	{
 		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
