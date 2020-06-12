@@ -905,7 +905,7 @@ void PlayerController::ChangeColorParticle()
 		{
 			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 			{
-				GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
+				GameObject* p_go = (*it)->GetChild("effect_attack_relic");
 				if (p_go)
 				{
 					p_go->SetEnable(true);
