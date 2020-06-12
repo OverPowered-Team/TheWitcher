@@ -12,6 +12,7 @@ public:
 	void Update();
 
 	float speed = 5.f;
+	float radius = 3.f;
 
 };
 
@@ -19,6 +20,8 @@ ALIEN_FACTORY Dwarf* CreateDwarf() {
 	Dwarf* alien = new Dwarf();
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->speed);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->radius);
+
 	return alien;
 }
 

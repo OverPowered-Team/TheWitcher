@@ -10,8 +10,10 @@ void Dwarf::Update()
 	auto dist_1 = game_object->transform->GetGlobalPosition() - pos_p1;
 	auto dist_2 = game_object->transform->GetGlobalPosition() - pos_p2;
 
-	auto to_look = (dist_1.Length() < dist_2.Length()) ? pos_p1 : pos_p2;
+	float3 to_look = (dist_1.Length() < dist_2.Length()) ? pos_p1 : pos_p2;
 	auto direction = to_look - game_object->transform->GetGlobalPosition();
+	if (direction.Length() >= radius)
+		return;
 
 	float3 velocity_vec = direction.Normalized() * speed * Time::GetDT();
 	float angle = atan2f(velocity_vec.z, velocity_vec.x);
