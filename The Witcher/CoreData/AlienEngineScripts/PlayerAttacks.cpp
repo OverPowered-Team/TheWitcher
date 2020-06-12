@@ -111,11 +111,11 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f) //THIS IS TO ADVANCE THE TIME THE ANIM HAS TO FINISH WHEN HITFREEZED
+	/*if (player_controller->animator->GetCurrentStateSpeed() == 0.0f) //THIS IS TO ADVANCE THE TIME THE ANIM HAS TO FINISH WHEN HITFREEZED
 	{
 		finish_attack_time += Time::GetDT();
 		return;
-	}
+	}*/
 
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
@@ -125,7 +125,8 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 		
 	//IF ANIM FINISHED 
-	if (Time::GetGameTime() >= finish_attack_time)
+	//if (Time::GetGameTime() >= finish_attack_time)
+	if (attack_finished)
 	{
 		if (!player_controller->mov_input)
 			player_controller->SetState(StateType::IDLE);
@@ -148,6 +149,7 @@ void PlayerAttacks::DoAttack()
 {
 	//Reset attack variables
 	can_execute_input = false;
+	attack_finished = false;
 	next_attack = AttackType::NONE;
 	current_target = nullptr;
 	current_attack->current_collider = 0;
@@ -841,4 +843,9 @@ void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 	//p_system->GetSystem()->SetParticleInitialAngle(float3(0, direction.x > 0 ? angle:-angle, 90));
 
 	player_controller->particles.push_back(new_particle);
+}
+
+void PlayerAttacks::AttackEnd()
+{
+	attack_finished = true;
 }
