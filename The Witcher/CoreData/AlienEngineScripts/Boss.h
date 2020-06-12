@@ -54,8 +54,6 @@ public:
 	std::map<std::string, BossAction*> actions;
 	BossAction* current_action;
 
-	GameObject* meshes = nullptr;
-
 	float action_time = 0;
 	float action_cooldown = 1.5f;
 	float time_to_action;
@@ -90,6 +88,8 @@ public:
 
 	void OrientToPlayer(int target);
 	void OrientToPlayerWithoutSlerp(int target);
+
+
 
 };
 
