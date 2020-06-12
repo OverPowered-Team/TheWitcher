@@ -171,7 +171,6 @@ void Enemy::UpdateEnemy()
 
 	for (auto it = effects.begin(); it != effects.end(); )
 	{
-		LOG("estoy en efectos %f", stats["Health"].GetValue());
 		if ((*it)->UpdateEffect() && (*it)->ticks_time > 0)
 		{
 			for (auto it_stats = stats.begin(); it_stats != stats.end(); ++it_stats)
