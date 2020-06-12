@@ -905,16 +905,12 @@ void PlayerController::ChangeColorParticle()
 		{
 			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 			{
-				/*GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
+				GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
 				if (p_go)
 				{
-					//p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					p_go->SetEnable(true);
+					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
 					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
-				}*/
-				for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
-				{
-					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
-					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
 				}
 			}
 		}
