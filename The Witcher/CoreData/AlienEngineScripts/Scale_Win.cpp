@@ -274,6 +274,8 @@ void Scale_Win::HandleSceneLoad()
 			{
 				Scores_Data::won_level1 = false;
 				Scores_Data::won_level2 = false;
+				Scores_Data::player1_relics.clear();
+				Scores_Data::player2_relics.clear();
 				SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
 			}
 			else

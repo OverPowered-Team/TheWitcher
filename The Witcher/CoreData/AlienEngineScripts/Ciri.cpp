@@ -6,6 +6,7 @@
 #include "CiriFightController.h"
 #include "Ciri.h"
 #include "Scores_Data.h"
+#include "UI_DamageCount.h"
 
 void Ciri::StartEnemy()
 {
@@ -20,16 +21,12 @@ void Ciri::StartEnemy()
 
 	Boss::StartEnemy();
 
-	meshes = game_object->GetChild("Meshes");
-
 	fight_controller = GameObject::FindWithName("Ciri")->GetComponent<CiriFightController>();
 
-	meshes_materials = meshes->GetComponentsInChildrenRecursive<ComponentMaterial>();
-
-	dissolve_mat.color = meshes_materials[0]->material->color;
-	dissolve_mat.used_shader = meshes_materials[0]->material->used_shader;
-	dissolve_mat.simple_depth_shader = meshes_materials[0]->material->simple_depth_shader;
-	dissolve_mat.renderMode = meshes_materials[0]->material->renderMode;
+	dissolve_mat.color = meshes[0]->material->color;
+	dissolve_mat.used_shader = meshes[0]->material->used_shader;
+	dissolve_mat.simple_depth_shader = meshes[0]->material->simple_depth_shader;
+	dissolve_mat.renderMode = meshes[0]->material->renderMode;
 	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 0;
 
 	for (int i = 0; i < meshes_materials.size(); ++i) 
@@ -70,32 +67,67 @@ void Ciri::CleanUpEnemy()
 
 float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	float damage = Boss::GetDamaged(dmg, player, knock_back);
+	SetState("Hit");
 
-	if (stats["Health"].GetValue() <= 0.f) {
-		fight_controller->OnCloneDead(this->game_object);
-		animator->PlayState("Death");
-		disappearing = true;
-		state = Boss::BossState::DYING;
+	if (GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>())
+	{
+		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddDamageCount(dmg, player);
 	}
-	else {
-		if (can_get_interrupted) {
-			animator->PlayState("Hit");
-			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
-			if (current_action)current_action->state = Boss::ActionState::ENDED;
-			SetIdleState();
-		}
 
-		if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
+
+	last_player_hit = player;
+	velocity = knock_back; //This will replace old knockback if there was any...
+
+	if (can_get_interrupted)
+	{
+		animator->PlayState("Hit");
+		PlaySFX("Hit");
+	}
+
+	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
+	float2 temp_pl = float2(last_player_hit->transform->GetGlobalPosition().x, last_player_hit->transform->GetGlobalPosition().z);
+	float angle = acos(math::Dot(temp_e, temp_pl) / (temp_e.LengthSq() * temp_pl.LengthSq())); //sino provar Length	
+	float anglez = math::RadToDeg(angle);
+	float3 rotated_particle = float3(
+		temp_e.x * cos(anglez) - temp_pl.y * sin(anglez),
+		0.0f,
+		temp_e.x * sin(anglez) + temp_pl.y * cos(anglez));
+	math::Quat player_quat = last_player_hit->transform->GetGlobalRotation();
+	float3 particle_rotation = last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_dir;
+
+	SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(), false, particle_rotation, nullptr, player_quat);
+	character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+	if (stats["Health"].GetValue() <= 0.0F) {
+		animator->SetBool("dead", true);
+		is_dead = true;
+		OnDeathHit();
+
+		SetState("Dying");
+		PlaySFX("Death");
+	}
+
+	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		if ((*iter))
 		{
-			stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
-			can_get_interrupted = false;
-		}
-	}
+			//ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+			if (defaultMaterial == nullptr)
+			{
+				defaultMaterial = (ResourceMaterial*)(*iter)->GetMaterial();
+			}
 
-	return damage;
+			if ((*iter))
+			{
+				(*iter)->material = &hitMaterial;
+			}
+		}
+		inHit = true;
+	}
+	return aux_health - stats["Health"].GetValue();
 }
 
 void Ciri::SetActionProbabilities()
@@ -154,29 +186,46 @@ void Ciri::LaunchAction()
 
 float Ciri::GetDamaged(float dmg, float3 knock_back)
 {
-	float damage = Boss::GetDamaged(dmg, knock_back);
-	if (stats["Health"].GetValue() == 0.0F) {
-		fight_controller->OnCloneDead(this->game_object);
-		animator->PlayState("Death");
-		state = Boss::BossState::DYING;
-	}
-	else {
-		if (can_get_interrupted) {
-			animator->PlayState("Hit");
-			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
-			if (current_action)current_action->state = Boss::ActionState::ENDED;
-			SetIdleState();
-		}
+	SetState("Hit");
 
-		if (stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue())
-		{
-			stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-			animator->SetStateSpeed("Hit", stats["HitSpeed"].GetValue());
-			can_get_interrupted = false;
-		}
+	float aux_health = stats["Health"].GetValue();
+	stats["Health"].DecreaseStat(dmg);
+
+	velocity = knock_back; //This will replace old knockback if there was any...
+
+	if (can_get_interrupted)
+	{
+		animator->PlayState("Hit");
+		PlaySFX("Hit");
 	}
-	return damage;
+
+	if (stats["Health"].GetValue() <= 0.0F) {
+		animator->SetBool("dead", true);
+		is_dead = true;
+		OnDeathHit();
+
+		SetState("Dying");
+		PlaySFX("Death");
+	}
+
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		if ((*iter))
+		{
+			//ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+			if (defaultMaterial == nullptr)
+			{
+				defaultMaterial = (ResourceMaterial*)(*iter)->GetMaterial();
+			}
+
+			if ((*iter))
+			{
+				(*iter)->material = &hitMaterial;
+			}
+		}
+		inHit = true;
+	}
+	return aux_health - stats["Health"].GetValue();
 }
 
 void Ciri::LaunchDashAction()
@@ -395,4 +444,26 @@ void Ciri::SetStats(const char* json)
 	}
 
 	JSONfilepack::FreeJSON(stat);
+}
+
+void Ciri::PlaySFX(const char* sfx_name)
+{
+}
+
+bool Ciri::IsHit()
+{
+	if (state == BossState::HIT)
+		return true;
+	else
+		return false;
+}
+
+void Ciri::SetState(const char* state)
+{
+	if (state == "Hit")
+		this->state = BossState::HIT;
+	else if (state == "Dying")
+		this->state = BossState::DYING;
+	else if (state == "Dead")
+		this->state = BossState::DEAD;
 }
