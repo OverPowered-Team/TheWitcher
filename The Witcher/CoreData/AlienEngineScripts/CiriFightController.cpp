@@ -307,8 +307,8 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::ThrowEnvironmentRocks()
 {
-	throw_time += (int)(rescale_platform_value * Time::GetDT() * 60);
-	if (throw_time % 10 == 0 && !rock_throwed)
+	throw_time += rescale_platform_value * Time::GetDT() * 60;
+	if (((int)throw_time) % 10 == 0 && !rock_throwed)
 	{
 		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
 		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 15);
@@ -337,7 +337,7 @@ void CiriFightController::ThrowEnvironmentRocks()
 			rock_throwed = true;
 		}
 	}
-	else if (throw_time % 10 != 0 && rock_throwed)
+	else if (((int)throw_time) % 10 != 0 && rock_throwed)
 		rock_throwed = false;
 	
 }
