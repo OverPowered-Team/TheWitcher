@@ -145,6 +145,7 @@ void CiriFightController::FinishPhaseThree()
 	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
 	DestroyRocks();
 	GameManager::instance->event_manager->ReceiveDialogueEvent(10, 0.5f);
+	GameObject::FindWithName("Butterfly_emitter")->SetEnable(true);
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -248,14 +249,14 @@ void CiriFightController::UpdatePlatform()
 				{
 					circle = (*it);
 					changing_platform = false;
-
+					GameObject::FindWithName("Rock_particles1")->SetEnable(true);
 					if (GameManager::instance->rumbler_manager)
 						GameManager::instance->rumbler_manager->StartRumbler(RumblerType::DECREASING, 0, 2.0);
 				}
 				else if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
-					if (material_platform)
-						material_platform->material->color = { 1,1,1,1 };
+					/*if (material_platform)
+						material_platform->material->color = { 1,1,1,1 };*/
 					material_platform = (*it)->GetComponent<ComponentMaterial>();
 				}
 			}
@@ -267,8 +268,8 @@ void CiriFightController::UpdatePlatform()
 			{
 				if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
-					GameObject::FindWithName("Rock_particles1")->transform->SetEnable(false);
-					GameObject::FindWithName("Rock_particles2")->transform->SetEnable(true);
+					GameObject::FindWithName("Rock_particles1")->SetEnable(false);
+					GameObject::FindWithName("Rock_particles2")->SetEnable(true);
 					circle->GetComponent<ComponentMaterial>()->material->color = { 1,1,1,1 };
 					circle->SetEnable(false);
 					circle = (*it);
@@ -298,8 +299,8 @@ void CiriFightController::UpdatePlatform()
 		{
 			if (material_platform)
 				material_platform->material->color = { 1,1,1,1 };
-			GameObject::FindWithName("Rock_particles2")->transform->SetEnable(false);
-			GameObject::FindWithName("Rock_particles3")->transform->SetEnable(true);
+			GameObject::FindWithName("Rock_particles2")->SetEnable(false);
+			GameObject::FindWithName("Rock_particles3")->SetEnable(true);
 			circle->SetEnable(false);
 			circle = nullptr;
 			ScaleWall();
