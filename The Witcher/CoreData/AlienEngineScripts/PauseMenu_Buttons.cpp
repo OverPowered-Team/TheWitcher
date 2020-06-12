@@ -51,13 +51,27 @@ void PauseMenu_Buttons::RetryLevel()
 {
 	Scores_Data::last_checkpoint_position = float3::inf();
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
-	SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
+	if (strcmp(SceneManager::GetCurrentScene(), "Lvl_1_Tutorial") == 0) {
+		SceneManager::LoadScene("ForceLoadTutorial", FadeToBlackType::FADE);
+	}
+	else if (strcmp(SceneManager::GetCurrentScene(), "Lvl_1") == 0) {
+		SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::FADE);
+	}
+	else if (strcmp(SceneManager::GetCurrentScene(), "Mahakam_1") == 0) {
+		SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::FADE);
+	}
+	else if (strcmp(SceneManager::GetCurrentScene(), "Wagonnetes") == 0) {
+		SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::FADE);
+	}
+	else if (strcmp(SceneManager::GetCurrentScene(), "boss_test") == 0) {
+		SceneManager::LoadScene("WagonToCiri", FadeToBlackType::FADE);
+	}
 }
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
-	SceneManager::LoadScene("Main_Menu");
+	SceneManager::LoadScene("Main_Menu", FadeToBlackType::FADE);
 }
 
 void PauseMenu_Buttons::Exit_Menu()

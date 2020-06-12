@@ -191,12 +191,12 @@ void InGame_UI::Update()
 			{
 				if (strcmp(SceneManager::GetCurrentScene(), "Lvl_1_Tutorial") == 0)
 				{
-					SceneManager::LoadScene("Lvl_1_Tutorial");
+					SceneManager::LoadScene("ForceLoadTutorial", FadeToBlackType::FADE);
 				}
 				else
 				{
 					GameManager::instance->PrepareDataNextScene(true);
-					SceneManager::LoadScene("NewWin_Menu");
+					SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::VERTICAL_CURTAIN);
 				}
 			}
 		}
