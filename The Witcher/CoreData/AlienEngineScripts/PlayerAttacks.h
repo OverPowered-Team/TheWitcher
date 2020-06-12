@@ -155,6 +155,8 @@ public:
 	float snap_angle_value = 0.0f;
 	float snap_distance_value = 0.0f;
 
+	std::vector<Attack*> attacks;
+
 protected:
 	void CreateAttacks();
 	void ConnectAttacks();
@@ -178,7 +180,6 @@ protected:
 	std::vector<ComponentCollider*> colliders;
 	CameraShake* shake = nullptr;
 
-	std::vector<Attack*> attacks;
 	std::vector<Attack*> spells;
 
 	float finish_attack_time = 0.0f;
