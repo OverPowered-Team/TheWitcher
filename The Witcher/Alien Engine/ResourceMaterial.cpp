@@ -272,18 +272,12 @@ void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 	file->SetFloat4("Color", color);
 	file->SetNumber("Smoothness", shaderInputs.standardShaderProperties.smoothness);
 	file->SetNumber("Metalness", shaderInputs.standardShaderProperties.metalness);
-	file->SetBoolean("Emissive", shaderInputs.emissive);
 
 	file->SetNumber("RenderMode", renderMode);
 	file->SetString("ShaderID", std::to_string(used_shader_ID).data());
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
 		file->SetString(std::to_string(iter).data(), std::to_string(textures[iter].first).data());
 	}
-
-	//water values
-	file->SetNumber("water_speed", shaderInputs.oceanShaderProperties.speed);
-	file->SetNumber("water_move", shaderInputs.oceanShaderProperties.water_move);
-	file->SetNumber("reduce_water_tex", shaderInputs.oceanShaderProperties.reduce_water_tex);
 
 	file->FinishSave();
 }
@@ -295,19 +289,13 @@ void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 	color = file->GetFloat4("Color");
 	shaderInputs.standardShaderProperties.smoothness = (float)file->GetNumber("Smoothness");
 	shaderInputs.standardShaderProperties.metalness = (float)file->GetNumber("Metalness");
-	shaderInputs.emissive = file->GetBoolean("Emissive", true);
 	renderMode = (int)file->GetNumber("RenderMode");
-	
 	const char* shader_id = file->GetString("ShaderID");
 	SetShader((ResourceShader*)App->resources->GetResourceWithID(std::stoull(shader_id)));
 	for (uint iter = 0; iter != (uint)TextureType::MAX; ++iter) {
 		textures[iter].first = std::stoull(file->GetString(std::to_string(iter).data()));
 		textures[iter].second = App->resources->GetTextureByID(textures[iter].first);
 	}
-	//water values
-	shaderInputs.oceanShaderProperties.speed = file->GetNumber("water_speed");
-	shaderInputs.oceanShaderProperties.water_move = file->GetNumber("water_move");
-	shaderInputs.oceanShaderProperties.reduce_water_tex = file->GetNumber("reduce_water_tex");
 }
 
 void ResourceMaterial::ApplyMaterial()
@@ -353,7 +341,6 @@ void ResourceMaterial::ApplyMaterial()
 	shaderInputs.particleShaderProperties.color = color;
 	shaderInputs.trailShaderProperties.color = color;
 	shaderInputs.shieldFresnelShaderProperties.color = color;
-	shaderInputs.oceanShaderProperties.diffuse_color = color;
 	shaderInputs.shieldShaderProperties.color = float3(color.x, color.y, color.z);
 
 	used_shader->UpdateUniforms(shaderInputs);
@@ -570,8 +557,6 @@ void ResourceMaterial::ShaderInputsSegment()
 		ImGui::SliderFloat("Smoothness", &shaderInputs.standardShaderProperties.smoothness, 16.f, 128.f);
 		ImGui::SetCursorPosX(posX);
 		if (ImGui::Button("Reset Smoothness"))  shaderInputs.standardShaderProperties.smoothness = DEFAULT_SMOOTHNESS;
-		ImGui::SetCursorPosX(posX);
-		ImGui::Checkbox("Emissive", &shaderInputs.emissive);
 
 		// Normal Map
 		ImGui::Text("Normal Map:");
@@ -605,8 +590,6 @@ void ResourceMaterial::ShaderInputsSegment()
 		ImGui::SameLine(120,15);
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2);
 		ImGui::ColorEdit3("Albedo",color.ptr(), ImGuiColorEditFlags_Float);
-		ImGui::Checkbox("Emissive", &shaderInputs.emissive);
-
 		break; }
 
 	case SHADER_TEMPLATE::TRAIL: {
@@ -699,20 +682,7 @@ void ResourceMaterial::ShaderInputsSegment()
 		InputTexture(TextureType::NORMALS);
 		break;
 	}
-	case SHADER_TEMPLATE::OCEAN_SHADER:
-	{
-		ImGui::SliderFloat("Speed", &shaderInputs.oceanShaderProperties.speed, 0.f, 10.f);
-		ImGui::SliderFloat("water movement", &shaderInputs.oceanShaderProperties.water_move, 0.f, 10.f);
-		ImGui::InputInt("Reduce water texture", &shaderInputs.oceanShaderProperties.reduce_water_tex);
 
-		// Diffuse 
-		ImGui::Text("Diffuse:");
-		InputTexture(TextureType::DIFFUSE);
-		ImGui::SameLine();
-		ImGui::ColorEdit4("color", color.ptr(), ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaBar /*|ImGuiColorEditFlags_NoInputs | */);
-
-		break;
-	}
 	default:
 		LOG_ENGINE("We currently don't support editing this type of uniform...");
 		break;

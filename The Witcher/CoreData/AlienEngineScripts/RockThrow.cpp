@@ -1,7 +1,6 @@
 #include "RockThrow.h"
 #include "PlayerController.h"
 #include "GameManager.h"
-#include "PlayerManager.h"
 #include "ParticlePool.h"
 #include "Enemy.h"
 #include "Boss.h"
@@ -20,32 +19,13 @@ void RockThrow::Start()
 
 void RockThrow::Update()
 {
-	if (!throwable) {
-		if (type == RockType::THROW)
-			throw_direction = (GameManager::instance->player_manager->players[target]->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
-		else {
-			throw_direction = { 0, -4, 0 };
-		}
-		throwable = true;
+	if (timer < lifetime) {
+		timer += Time::GetDT();
+		game_object->transform->AddRotation({ 0.0f, 2.0f, 10.0f });
 	}
-
-	switch (type)
-	{
-	case RockThrow::RockType::NONE:
-		break;
-	case RockThrow::RockType::THROW:
-		game_object->transform->AddRotation(throw_rotation);
-		transform->AddPosition(throw_direction * throw_speed * Time::GetDT());
-		break;
-	case RockThrow::RockType::FALL:
-		game_object->transform->AddRotation(throw_rotation);
-		transform->AddPosition(throw_direction * throw_speed * Time::GetDT());
-		break;
-	default:
-		break;
+	else {
+		Destroy(game_object);
 	}
-
-	game_object->GetComponent<ComponentRigidBody>()->SetPosition(transform->GetGlobalPosition());
 }
 
 void RockThrow::ReleaseExplosionParticle()
@@ -81,9 +61,12 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 			}
 
 		}
+		game_object->GetComponent<ComponentMesh>()->SetEnable(false);
+		game_object->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 
 		if (!particle_instance) {
 			particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object, true);
+			Invoke(std::bind(&RockThrow::ReleaseExplosionParticle, this), 0.6f);
 		}
 
 		collided = true;

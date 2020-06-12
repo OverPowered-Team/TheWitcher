@@ -78,7 +78,6 @@ public:
 	virtual ~DashEffect();
 
 	EffectData* on_dash_effect = nullptr;
-	std::string element;
 };
 
 

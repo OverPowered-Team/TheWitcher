@@ -24,19 +24,12 @@ public:
 
 	int phase = 0;
 
-	int rocks_available = 5;
-
 	std::vector<GameObject*> clone_positions;
-	std::vector<GameObject*> rock_positions;
-	std::vector<GameObject*> rocks;
-	Prefab rock;
-	Prefab rock_orbit;
 
 	// Platform
 	GameObject* platform = nullptr;
 	GameObject* circle = nullptr;
 	GameObject* tornado = nullptr;
-	GameObject* rocks_respawn = nullptr;
 	ComponentMaterial* material_platform = nullptr;
 	int count_circle = 58;
 	bool changing_platform = false;
@@ -52,9 +45,7 @@ public:
 	bool first_wall_door = true;
 
 	// Rocks
-	int throw_time = 0;
 	bool rock_throwed = false;
-	std::vector<GameObject*> rocks_throwed;
 
 public:
 
@@ -83,9 +74,6 @@ public:
 	void ThrowEnvironmentRocks();
 	void TransportPlayer();
 
-	void SpawnRocks();
-	void DestroyRocks();
-
 };
 
 ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
@@ -95,8 +83,6 @@ ALIEN_FACTORY CiriFightController* CreateCiriFightController() {
 
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->platform);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(cirifightcontroller->wall);
-	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->rock);
-	SHOW_IN_INSPECTOR_AS_PREFAB(cirifightcontroller->rock_orbit);
 
 	return cirifightcontroller;
 } 

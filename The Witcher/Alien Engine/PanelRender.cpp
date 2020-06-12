@@ -156,12 +156,5 @@ void PanelRender::PanelLogic()
 		ImGui::ColorEdit3("Ray Color", (float*)&App->objects->ray_color, ImGuiColorEditFlags_Float);
 		ImGui::SliderInt("Ray Line Width", (int*)&App->objects->ray_width, 1, 30);
 	}
-
-	if (ImGui::CollapsingHeader("Bloom")) {
-		ImGui::Spacing();
-		ImGui::Checkbox("Bloom Texture", &App->renderer3D->render_bloom);
-		ImGui::Spacing();
-	}
-
 	ImGui::End();
 }

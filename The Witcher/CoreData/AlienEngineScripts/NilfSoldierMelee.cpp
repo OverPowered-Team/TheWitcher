@@ -37,8 +37,6 @@ void NilfSoldierMelee::UpdateEnemy()
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
 			SetState("Idle");
-			animator->PlayState("Idle");
-			animator->SetBool("stunned", false);
 		}
 		break;
 

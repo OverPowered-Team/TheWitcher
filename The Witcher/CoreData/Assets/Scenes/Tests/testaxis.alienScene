@@ -162,7 +162,7 @@
                 "ParentID": "799656051639142213",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -207,7 +207,7 @@
                         "isFovHori": 0,
                         "ID": "1366186000865324732",
                         "IsGameCamera": true,
-                        "IsSelectedCamera": true,
+                        "IsSelectedCamera": false,
                         "PrintIcon": true,
                         "IconColor": [
                             0.85000002384185791,
@@ -239,7 +239,1076 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "5603267029984128240",
-                        "ListenerID": "2202103438"
+                        "ListenerID": "3904534684"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2298619833427499221",
+                        "ResourceID": "10408381955680660573",
+                        "DataName": "CameraMovement",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "First parameters"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "state",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "distance",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "hor_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "vert_angle",
+                                "float": 35
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "axis",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "smooth_camera",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "smooth_cam_vel",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "is_cinematic",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "cutscene_game_object",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "search_players",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "limiter1",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "limiter2",
+                                "gameobject": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4943251127245696150",
+                        "ResourceID": "8894711529836489338",
+                        "DataName": "CameraShake",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "traumaDecayDef",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxYaw",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxPitch",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "maxRoll",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "off_set",
+                                "float": 5
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3095851224837457585",
+                        "ResourceID": "16057303148137039602",
+                        "DataName": "CameraUltiMode",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "zoom_out_fov",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "speed",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "staying_time",
+                                "float": 0
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11963150826375622979",
+                        "ResourceID": "3479373960671141251",
+                        "DataName": "MusicController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "minimum_volume",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_start_decrease",
+                                "float": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Cutscene",
+                "FamilyNumber": 1,
+                "ID": "4858780716299368179",
+                "ParentID": "799656051639142213",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            8.1694087982177734,
+                            5.6506938934326172,
+                            1.4424903392791748
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12303504496208694018"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16273122384867213812",
+                        "ResourceID": "12574802766922958730",
+                        "DataName": "CutsceneCamera",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "CutsceneElement",
+                "FamilyNumber": 2,
+                "ID": "9103693568239280608",
+                "ParentID": "4858780716299368179",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4505704027227478422",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -21.403608322143555,
+                            9.6187915802001953,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1266027455845715237"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "16918667545990372661",
+                        "ResourceID": "11817244154304052368",
+                        "DataName": "CutsceneShot",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "element.id_shot",
+                                "int": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.transition_speed",
+                                "float": 200
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.stay_time",
+                                "float": 2.5
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "element.it_shake",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only fill the below fields if the camera will shake"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.strength",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.traumaDecay",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.off_set",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxyaw",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxpitch",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxroll",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.shake_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "element.it_focus",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only fill the below field if it will focus some place"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "element.g_o_focus",
+                                "gameobject": "0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "CutsceneElement",
+                "FamilyNumber": 2,
+                "ID": "101651791565198457",
+                "ParentID": "4858780716299368179",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4505704027227478422",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            14.641883850097656,
+                            30.383321762084961
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5696597398989206624"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6349858594235319853",
+                        "ResourceID": "11817244154304052368",
+                        "DataName": "CutsceneShot",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "element.id_shot",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.transition_speed",
+                                "float": 200
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.stay_time",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "element.it_shake",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only fill the below fields if the camera will shake"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.strength",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.traumaDecay",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.off_set",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxyaw",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxpitch",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxroll",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.shake_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "element.it_focus",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only fill the below field if it will focus some place"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "element.g_o_focus",
+                                "gameobject": "12668211591748329981"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "CutsceneElement",
+                "FamilyNumber": 2,
+                "ID": "12036458642407468590",
+                "ParentID": "4858780716299368179",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4505704027227478422",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            11.54301929473877,
+                            8.7430534362792969,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "14717663299346657065"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "6064285980879919398",
+                        "ResourceID": "11817244154304052368",
+                        "DataName": "CutsceneShot",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "element.id_shot",
+                                "int": 2
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.transition_speed",
+                                "float": 200
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.stay_time",
+                                "float": 3
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "element.it_shake",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only fill the below fields if the camera will shake"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.strength",
+                                "float": 0.05000000074505806
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.traumaDecay",
+                                "float": 0.89999997615814209
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.off_set",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxyaw",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxpitch",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.maxroll",
+                                "float": 0.10000000149011612
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "element.info_shake.shake_time",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "element.it_focus",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Only fill the below field if it will focus some place"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "element.g_o_focus",
+                                "gameobject": "0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "FOCUS1",
+                "FamilyNumber": 2,
+                "ID": "12668211591748329981",
+                "ParentID": "4858780716299368179",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            2.5853824615478516,
+                            -5.6506938934326172,
+                            -27.979803085327148
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5138849254285444618"
+                    }
+                ]
+            },
+            {
+                "Name": "CameraTrigger",
+                "FamilyNumber": 1,
+                "ID": "5727495056378745147",
+                "ParentID": "799656051639142213",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -15.593165397644043,
+                            0,
+                            -1.4255292415618896
+                        ],
+                        "Rotation": [
+                            0,
+                            -0.74706083536148071,
+                            0,
+                            0.66475570201873779
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9448940318863535048"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "12276345497320642284",
+                        "ResourceID": "1885528461117586920",
+                        "DataName": "TriggerCamera",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 11,
+                                "Name": "Previous camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.distance",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.hor_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "prev_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static & Axis"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.to_move",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "prev_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Cinematic"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "prev_camera.is_cinematic",
+                                "bool": 0
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "prev_camera.cutscene",
+                                "gameobject": "0"
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Next camera"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Dynamic"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.distance",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.hor_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.vert_angle",
+                                "float": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "next_camera.transition_time",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Static & Axis"
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.to_move",
+                                "gameobject": "7968145103786358031"
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Axis"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "next_camera.axis_type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "If Cinematic"
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "next_camera.is_cinematic",
+                                "bool": 1
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "next_camera.cutscene",
+                                "gameobject": "4858780716299368179"
+                            },
+                            {
+                                "VarType": 12,
+                                "Name": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Enter",
+                "FamilyNumber": 2,
+                "ID": "6498239357667797084",
+                "ParentID": "5727495056378745147",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            -5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11135104812476173368"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15463951136993794009",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Middle",
+                "FamilyNumber": 2,
+                "ID": "683092273001186567",
+                "ParentID": "5727495056378745147",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "5006417622412636434"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "4654929727660112206",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Exit",
+                "FamilyNumber": 2,
+                "ID": "14182696440710169207",
+                "ParentID": "5727495056378745147",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "2795543320085999857",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12275887526358706354"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.10000000149011612,
+                        "StaticFriction": 0,
+                        "DynamicFriction": 0,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            10,
+                            10,
+                            2.5
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "11650241295058633867",
+                        "ResourceID": "9621870720438282818",
+                        "DataName": "CameraEnterExit",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "collider_position",
+                                "int": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Empty GameObject",
+                "FamilyNumber": 1,
+                "ID": "7968145103786358031",
+                "ParentID": "799656051639142213",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -55.626979827880859,
+                            0,
+                            16.056339263916016
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "194287888281710204"
                     }
                 ]
             },
@@ -313,6 +1382,113 @@
                         "ForceGravity": false,
                         "ForceMove": false,
                         "CollisionLayer": "Player"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "631118468106046002",
+                        "ResourceID": "9395924882948176839",
+                        "DataName": "PlayerController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "controller_index",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "player_data.type",
+                                "enumInt": 0
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.gravity",
+                                "float": 30
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.slow_speed",
+                                "float": -2.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.revive_range",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "delay_footsteps",
+                                "float": 0.30300000309944153
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "dash_collider",
+                                "prefab": "10429766039571139112"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "revive_world_ui",
+                                "prefab": "7132461371187878067"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "battleCircle",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Dash animation cool data"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dashData.max_speed",
+                                "float": 4.4000000953674316
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dashData.min_speed",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dashData.accel_multi",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "dashData.disappear_on_dash",
+                                "bool": 1
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15195591200700594999",
+                        "ResourceID": "9933548718136546152",
+                        "DataName": "PlayerAttacks",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "max_snap_angle",
+                                "float": 45
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_angle_value",
+                                "float": 14
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_distance_value",
+                                "float": 8
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "weapon_obj",
+                                "gameobject": "5740980566114885490"
+                            }
+                        ]
                     }
                 ]
             },
@@ -2230,6 +3406,20 @@
                             167.25555419921875,
                             166.93531799316406
                         ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "8163457253442737870",
+                        "ResourceID": "5734830986225575824",
+                        "DataName": "AttackTrigger",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "player_obj",
+                                "gameobject": "15041967717178382210"
+                            }
+                        ]
                     }
                 ]
             },
@@ -2510,6 +3700,20 @@
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
                         "Radius": 0.5
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5349790146785006705",
+                        "ResourceID": "5734830986225575824",
+                        "DataName": "AttackTrigger",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "player_obj",
+                                "gameobject": "15041967717178382210"
+                            }
+                        ]
                     }
                 ]
             },
@@ -3469,6 +4673,113 @@
                         "Bank": "817096458",
                         "Event": "0",
                         "PlayOnAwake": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "14790481489935916480",
+                        "ResourceID": "9933548718136546152",
+                        "DataName": "PlayerAttacks",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "max_snap_angle",
+                                "float": 55
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_angle_value",
+                                "float": 14
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "snap_distance_value",
+                                "float": 8
+                            },
+                            {
+                                "VarType": 9,
+                                "Name": "weapon_obj",
+                                "gameobject": "0"
+                            }
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "17851287403332694549",
+                        "ResourceID": "9395924882948176839",
+                        "DataName": "PlayerController",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "controller_index",
+                                "int": 2
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "player_data.type",
+                                "enumInt": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.gravity",
+                                "float": 30
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.slow_speed",
+                                "float": -2.5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "player_data.revive_range",
+                                "float": 5
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "delay_footsteps",
+                                "float": 0.5
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "dash_collider",
+                                "prefab": "10429766039571139112"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "revive_world_ui",
+                                "prefab": "7132461371187878067"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "battleCircle",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 11,
+                                "Name": "Dash animation cool data"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dashData.max_speed",
+                                "float": 4.4000000953674316
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dashData.min_speed",
+                                "float": 2
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "dashData.accel_multi",
+                                "float": 1
+                            },
+                            {
+                                "VarType": 7,
+                                "Name": "dashData.disappear_on_dash",
+                                "bool": 1
+                            }
+                        ]
                     }
                 ]
             },
@@ -5577,6 +6888,20 @@
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
                         "Radius": 0.5
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2838909525360492105",
+                        "ResourceID": "5734830986225575824",
+                        "DataName": "AttackTrigger",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 9,
+                                "Name": "player_obj",
+                                "gameobject": "12349627283459115237"
+                            }
+                        ]
                     }
                 ]
             },
@@ -6115,234 +7440,6 @@
                         ],
                         "ScaleNegative": false,
                         "ID": "3868544581721464062"
-                    }
-                ]
-            },
-            {
-                "Name": "CutsceneTutorial",
-                "FamilyNumber": 1,
-                "ID": "17120209745638993416",
-                "ParentID": "799656051639142213",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17601586272646598676",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0.26005673408508301,
-                            0,
-                            0.96559333801269531
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "15528448258819004629"
-                    }
-                ]
-            },
-            {
-                "Name": "CutsceneElement",
-                "FamilyNumber": 2,
-                "ID": "8389926031200318602",
-                "ParentID": "17120209745638993416",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17601586272646598676",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -16.282135009765625,
-                            4.4390273094177246,
-                            4.93988037109375
-                        ],
-                        "Rotation": [
-                            0,
-                            0.26005673408508301,
-                            0,
-                            0.96559333801269531
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "15119248024620498562"
-                    }
-                ]
-            },
-            {
-                "Name": "FOCUS1",
-                "FamilyNumber": 2,
-                "ID": "17926398293942693967",
-                "ParentID": "17120209745638993416",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17601586272646598676",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -0.38460797071456909,
-                            -0.35620355606079102,
-                            0.96888923645019531
-                        ],
-                        "Rotation": [
-                            0,
-                            -0.26005673408508301,
-                            0,
-                            0.96559333801269531
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "15045774915579816142"
-                    }
-                ]
-            },
-            {
-                "Name": "CutsceneElement",
-                "FamilyNumber": 2,
-                "ID": "1905183425922976361",
-                "ParentID": "17120209745638993416",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17601586272646598676",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -7.168060302734375,
-                            11.483222961425781,
-                            -20.8524169921875
-                        ],
-                        "Rotation": [
-                            0,
-                            -0.26005673408508301,
-                            0,
-                            0.96559333801269531
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "3033250593290841703"
-                    }
-                ]
-            },
-            {
-                "Name": "FOCUS2",
-                "FamilyNumber": 2,
-                "ID": "4900692019389532849",
-                "ParentID": "17120209745638993416",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "17601586272646598676",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -16.489776611328125,
-                            2.6338958740234375,
-                            140.64801025390625
-                        ],
-                        "Rotation": [
-                            0,
-                            -0.26005673408508301,
-                            0,
-                            0.96559333801269531
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "15659415807219060114"
-                    }
-                ]
-            },
-            {
-                "Name": "CutsceneElement",
-                "FamilyNumber": 2,
-                "ID": "3197367309984613027",
-                "ParentID": "17120209745638993416",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": false,
-                "IsStatic": false,
-                "IsPrefab": true,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "PrefabID": "4505704027227478422",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -16.560726165771484,
-                            4.4390273094177246,
-                            -3.9054660797119141
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            1,
-                            1,
-                            1
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "5879095210462229964"
                     }
                 ]
             }

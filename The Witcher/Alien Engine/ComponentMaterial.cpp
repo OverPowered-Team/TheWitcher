@@ -48,7 +48,7 @@ bool ComponentMaterial::DrawInspector()
 		RightClickMenu("Material");
 
 		ImGui::Checkbox("Cast shadow:", &game_object_attached->cast_shadow);
-
+		
 	}
 	else
 		RightClickMenu("Material");

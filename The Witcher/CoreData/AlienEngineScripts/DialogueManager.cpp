@@ -14,20 +14,13 @@ DialogueManager::~DialogueManager()
 void DialogueManager::Start()
 {
 	audioEmitter = GetComponent<ComponentAudioEmitter>();
-	GameObject* subtitleText = subtitlesUI->GetChild("Subtitles Text");
-	text = subtitleText->GetComponent<ComponentText>();
-	if(text)
-		text->SetAlpha(1.0f);
-	GameObject* subtitleBackground = subtitlesUI->GetChild("Subtitles Background");
-	if (subtitleBackground)
-	{
-		image = subtitleBackground->GetComponent<ComponentImage>();
-		start_bg_alpha = image->current_color.a;
-		image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
-	}
+	text = subtitlesUI->GetChild("Subtitles Text")->GetComponent<ComponentText>();
+	text->SetAlpha(1.0f);
+	image = subtitlesUI->GetChild("Subtitles Background")->GetComponent<ComponentImage>();
+	start_bg_alpha = image->current_color.a;
+	image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
 
-	if(audioEmitter)
-		audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
+	audioEmitter->ChangeVolume(0.5f); // some dialogues are low, so we can change the volume according to this (0->1)
 	LoadJSONDialogues();
 }
 
@@ -66,37 +59,21 @@ void DialogueManager::LoadJSONDialogues()
 
 void DialogueManager::Update()
 {
-	if (text && image && audioEmitter)
+	if (playing)
 	{
-		if (playing)
+		LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
+		if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
 		{
-			LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
-			if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
-			{
-				playing = false;
-				text->SetEnable(false);
-				image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
-				currentDialogue.Reset();
-				audioEmitter->ChangeVolume(0.5f);
-			}
-		}
-		else {
-			audioEmitter->SetState("GameVolumes", "None");
+			playing = false;
+			text->SetEnable(false); 
+			image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, 0.0f);
+			currentDialogue.Reset();
+			audioEmitter->ChangeVolume(0.5f);
 		}
 	}
-
-}
-
-void DialogueManager::Pause(bool pause)
-{
-
-	/*playing = !playing;
-	
-	if (pause) // TODO --> IVAN PLS do the RESUME, I IMPLLORE you. I'll kidnap 1000 children before I let the dialogues die
-		audioEmitter->PauseByEventName(currentDialogue.audioData.eventName.c_str());
-	else
-		*/
-
+	else {
+	audioEmitter->SetState("GameVolumes", "None");
+	}
 
 }
 

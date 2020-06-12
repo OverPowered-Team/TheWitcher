@@ -25,8 +25,7 @@ public:
 	enum(GhoulType,
 		NONE = -1,
 		ORIGINAL,
-		DODGE,
-		MINI);
+		DODGE);
 
 	enum(AwakeBehaviour, 
 		DEFAULT,
@@ -47,14 +46,14 @@ public:
 
 	void Stun(float time) override;
 	bool IsDead() override;
-	bool IsHit() override;
 	bool IsDying() override;
 	void SetState(const char* state_str) override;
-	bool IsRangeEnemy() override;
 
 	void Action();
 
 	void CheckDistance();
+
+	void OnTriggerEnter(ComponentCollider* collider) override;
 
 	void OnAnimationEnd(const char* name) override;
 
@@ -93,7 +92,6 @@ public:
 	float wander_rest_time = 1.f;
 	bool wander_rest = true; 
 	bool can_jump = false;
-	float3 jump_direction;
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
 	AwakeBehaviour awake_behaviour = AwakeBehaviour::DEFAULT;

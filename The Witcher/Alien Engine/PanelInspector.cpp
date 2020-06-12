@@ -293,10 +293,6 @@ void PanelInspector::PanelLogic()
 		{
 			static_cast<ResourceMaterial*>(selected_file)->DisplayMaterialOnInspector();
 		}
-		else if (selected_file->GetType() == ResourceType::RESOURCE_TEXTURE)
-		{
-			static_cast<ResourceTexture*>(selected_file)->DisplayTextureOnInspector();
-		}
 	}
 
 	ImGui::End();

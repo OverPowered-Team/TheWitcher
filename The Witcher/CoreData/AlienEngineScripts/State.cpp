@@ -247,6 +247,19 @@ void RollingState::Update(PlayerController* player)
 {
 	player->player_data.velocity += player->player_data.velocity * player->player_data.slow_speed * Time::GetDT();
 	player->UpdateDashEffect();
+
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
+	{
+		float current_speed = player->animator->GetCurrentStateSpeed();
+		float target_speed = current_speed + player->dashData.current_acel_multi * Time::GetDT();
+
+		if (target_speed > player->dashData.max_speed)
+			target_speed = player->dashData.max_speed;
+		else if (target_speed < player->dashData.min_speed)
+			target_speed = player->dashData.min_speed;
+
+		player->animator->SetStateSpeed("Roll", target_speed);
+	}
 }
 
 State* RollingState::OnAnimationEnd(PlayerController* player, const char* name)
@@ -282,23 +295,71 @@ void RollingState::OnEnter(PlayerController* player)
 	player->audio->StartSound("Play_Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
 
-
-	if (player->player_data.type == PlayerController::PlayerType::GERALT)
+	// Special stuff to make it look cooler
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 	{
-		if (player->dash_trail != nullptr)
-			player->dash_trail->Start();
+		// Animation
+		if (player->dashData.start_speed == 0.0f)
+			player->dashData.start_speed = player->animator->GetCurrentStateSpeed();
+
+		// Particles
+		bool found_dash = false;
+
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				found_dash = true;
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterPlay();
+
+				break;
+			}
+		}
+
+		if (found_dash == false)
+			player->SpawnParticle("Y_Dash_Particle_Emitter", float3(0.f, 0.15f, 0.f));
 	}
+
+	else if (player->player_data.type == PlayerController::PlayerType::GERALT)
+	{
+		if(player->dashData.dash_trail!= nullptr)
+			player->dashData.dash_trail->Start();
+	}
+		
 }
 
 void RollingState::OnExit(PlayerController* player)
 {
-	if (player->player_data.type == PlayerController::PlayerType::GERALT)
+	if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 	{
-		if (player->dash_trail != nullptr)
-			player->dash_trail->Stop();
+		// Animation
+		player->ToggleDashMultiplier();
+
+		// Particles
+		for (auto it = player->particles.begin(); it != player->particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), "Y_Dash_Particle_Emitter") == 0)
+			{
+				(*it)->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				// sub-emitters 
+				for (auto& child : (*it)->GetChildren())
+					child->GetComponent<ComponentParticleSystem>()->OnEmitterStop();
+
+				break;
+			}
+		}
+
 	}
-	else if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
-		player->ReleaseParticle("Yenn_Portal");
+	else if (player->player_data.type == PlayerController::PlayerType::GERALT)
+	{
+		if (player->dashData.dash_trail != nullptr)
+			player->dashData.dash_trail->Stop();	
+	}
 		
 }
 
@@ -345,22 +406,8 @@ void RevivingState::OnEnter(PlayerController* player)
 void RevivingState::OnExit(PlayerController* player)
 {
 	player->animator->SetBool("reviving", false);
-	
-	if (player->player_being_revived->state->type != StateType::DEAD)
-	{
-		player->player_being_revived = nullptr;
-	}
-	else
-		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
-		
+	if(player->player_being_revived->state->type != StateType::DEAD)player->player_being_revived = nullptr;
 	player->input_blocked = false;
-}
-
-State* DeadState::OnAnimationEnd(PlayerController* player, const char* name)
-{
-	player->is_immune = false;
-
-	return new IdleState();
 }
 
 void DeadState::OnEnter(PlayerController* player)
@@ -380,17 +427,10 @@ void DeadState::OnEnter(PlayerController* player)
 
 void DeadState::OnExit(PlayerController* player)
 {
-
 }
 
 State* GroundState::HandleInput(PlayerController* player)
 {
-	if (player->input_blocked)
-	{
-		return nullptr;
-	}
-		
-
 	if (!player->is_grounded)
 	{
 		player->Fall();

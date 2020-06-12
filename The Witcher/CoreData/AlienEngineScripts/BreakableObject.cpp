@@ -18,6 +18,7 @@ void BreakableObject::Explode()
 		auto c = new_obj->GetComponent<ExplodeChildren>();
 		if (c != nullptr)
 			c->SetVars(force, time_to_despawn);
+		//new_obj->transform->SetLocalScale(transform->GetLocalScale());
 
 		auto children = new_obj->GetComponentsInChildren<ComponentRigidBody>();
 		for (auto i = children.begin(); i != children.end(); ++i) {

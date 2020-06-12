@@ -26,7 +26,6 @@ void DashCollider::Update()
 void DashCollider::OnDash(Enemy* enemy)
 {
 	//EFFECT ONDASH
-	enemy->last_player_hit = player_dashing;
 	effect->OnDash(enemy, effect->on_dash_effect);
 }
 

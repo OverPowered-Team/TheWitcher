@@ -62,7 +62,7 @@ public:
 	const u64& GetID() const;
 
 	const bool NeedToLoad() const;
-	virtual void IncreaseReferences();
+	void IncreaseReferences();
 	void DecreaseReferences();
 
 public:

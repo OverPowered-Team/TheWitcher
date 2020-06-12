@@ -55,10 +55,6 @@ void Subtitle::Start()
 	
 	JSONfilepack::FreeJSON(jsonDoc);
 	start_time = Time::GetGameTime();
-
-	skip = GameObject::FindWithName("Text");
-	skip->SetEnable(false);
-	SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
 }
 
 void Subtitle::Update()
@@ -88,17 +84,14 @@ void Subtitle::Update()
 		}
 	}
 	
-	if (SceneManager::IsSceneAsyncReady()) {
-		skip->SetEnable(true);
-
-		if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1, Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
-		{
-			change_scene = true;
-			if (audio)
-				audio->Mute(true);
-			if (song)
-				song->Mute(true);
-			SceneManager::ChangeToAsyncScene();
-		}
+	if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1,Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
+	{
+		change_scene = true;
+		LOG("ENTERED");
+		if(audio)
+			audio->Mute(true);
+		if(song)
+			song->Mute(true);
+		SceneManager::LoadScene("Lvl_1_Tutorial");
 	}
 }

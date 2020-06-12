@@ -2,10 +2,8 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "PlayerController.h"
-#include "ParticlePool.h"
 #include "CiriFightController.h"
 #include "CiriOriginal.h"
-#include "RockThrow.h"
 #include "Boss_Lifebar.h"
 
 
@@ -75,34 +73,6 @@ bool CiriOriginal::IsOnAction()
 	return current_action != nullptr;
 }
 
-void CiriOriginal::CreateThrowableRock()
-{
-	int target = 0;
-
-	if (player_controllers[0]->state->type == StateType::DEAD) {
-		target = 1;
-	}
-	else if (player_controllers[1]->state->type == StateType::DEAD) {
-		target = 0;
-	}
-	else {
-		target = Random::GetRandomIntBetweenTwo(0, 1);
-	}
-
-	GameObject* rock_to_throw = GameObject::Instantiate(game_object->GetComponent<CiriFightController>()->rock, game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]->transform->GetGlobalPosition());
-	rock_to_throw->GetComponent<RockThrow>()->target = target;
-	rock_to_throw->GetComponent<RockThrow>()->type = RockThrow::RockType::THROW;
-	Destroy(game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1]);
-	game_object->GetComponent<CiriFightController>()->rocks_available--;
-
-	//GameManager::instance->particle_pool->GetInstance("Rock_Aura", float3::zero(), float3::zero(), game_object->GetComponent<CiriFightController>()->rocks[game_object->GetComponent<CiriFightController>()->rocks_available - 1], true);
-
-
-	if (game_object->GetComponent<CiriFightController>()->rocks_available == 0) {
-		game_object->GetComponent<CiriFightController>()->SpawnRocks();
-	}
-}
-
 void CiriOriginal::LaunchAction()
 {
 	Boss::LaunchAction();
@@ -144,7 +114,23 @@ void CiriOriginal::Scream()
 
 void CiriOriginal::LaunchRockAction()
 {
-	CreateThrowableRock();
+	int target = 0;
+
+	if (player_controllers[0]->state->type == StateType::DEAD) {
+		target = 1;
+	}
+	else if (player_controllers[1]->state->type == StateType::DEAD) {
+		target = 0;
+	}
+	else {
+		target = Random::GetRandomIntBetweenTwo(0, 1);
+	}
+	float3 throw_direction = (player_controllers[target]->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
+	float distance_force_factor = 0.0f;
+	distance_force_factor = transform->GetGlobalPosition().Distance(player_controllers[target]->transform->GetGlobalPosition()) * rock_force;
+	GameObject* rock_ = GameObject::Instantiate(rock, float3(transform->GetGlobalPosition().x, transform->GetGlobalPosition().y + 5.0f, transform->GetGlobalPosition().z));
+	throw_direction.y = 0;
+	rock_->GetComponent<ComponentRigidBody>()->AddForce(throw_direction * distance_force_factor);
 }
 
 void CiriOriginal::LaunchScreamAction()

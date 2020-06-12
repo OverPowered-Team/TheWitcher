@@ -67,7 +67,6 @@ public:
 	virtual ~DialogueManager();
 	void Start();
 	void Update();
-	void Pause(bool pause);
 
 	bool InputNewDialogue(Dialogue& dialogue, float volume = 0.5f);
 	bool InputNewDialogue(int index, float volume = 0.5f);

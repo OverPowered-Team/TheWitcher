@@ -19,8 +19,6 @@ public:
 	void Start();
 	void Update();
 
-	void OnDrawGizmosSelected() override;
-
 public:
 
 	void RecieveCollisionEnterInteraction(int collider_index);
