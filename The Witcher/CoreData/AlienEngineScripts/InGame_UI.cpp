@@ -211,7 +211,7 @@ void InGame_UI::Update()
 			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
 			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
-			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0);
+			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0.1f);
 
 			if (lerp >= 1)
 			{
@@ -230,7 +230,7 @@ void InGame_UI::Update()
 
 	if (changing_alpha_filter)
 	{
-		float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.25f;
+		float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.5f;
 		float lerp = 0.0f;
 
 		if (ulti_active)
@@ -266,6 +266,10 @@ void InGame_UI::PauseMenu(bool to_open)
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
 	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	if (GameObject::FindWithName("Tutorial_Triggers"))
+	{
+		GameObject::FindWithName("Tutorial_Triggers")->GetChild("HUD")->SetEnable(!to_open);
+	}
 }
 
 void InGame_UI::RelicsMenu(bool to_open)
@@ -277,6 +281,10 @@ void InGame_UI::RelicsMenu(bool to_open)
 	if (to_open)
 	{
 		LoadActiveRelics();
+	}
+	if (GameObject::FindWithName("Tutorial_Triggers"))
+	{
+		GameObject::FindWithName("Tutorial_Triggers")->GetChild("HUD")->SetEnable(!to_open);
 	}
 }
 
@@ -302,11 +310,11 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	float random = Random::GetRandomIntBetweenTwo(1, 2);
 	if (random == 1)
 	{
-		particle->origin_position = float3(-25.f, 43.f, -0.1f);
+		particle->origin_position = float3(0.0f, 0.0f, -0.1f);
 	}
 	else
 	{
-		particle->origin_position = float3(25.f, 43.f, -0.1f);
+		particle->origin_position = float3(25.f, 0.0f, -0.1f);
 	}
 
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();

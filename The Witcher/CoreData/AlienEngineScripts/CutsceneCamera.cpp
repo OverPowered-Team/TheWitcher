@@ -70,58 +70,64 @@ void CutsceneCamera::ExecuteCutscene()
 	{
 	case CutsceneState::IDLE:
 	{
-		if (Time::GetGameTime() - shots[shots_counter]->element.stay_timer >= shots[shots_counter]->element.stay_time)
+		if (!Time::IsGamePaused())
 		{
-			shots_counter++;
-			PrepareCutscene();
-			return;
+			if (Time::GetGameTime() - shots[shots_counter]->element.stay_timer >= shots[shots_counter]->element.stay_time)
+			{
+				shots_counter++;
+				PrepareCutscene();
+				return;
+			}
+			if (shots[shots_counter]->element.it_shake && Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_timer >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
+			{
+				cam_shaking->Shake(shots[shots_counter]->element.info_shake.strength, shots[shots_counter]->element.info_shake.traumaDecay, shots[shots_counter]->element.info_shake.off_set, shots[shots_counter]->element.info_shake.maxyaw, shots[shots_counter]->element.info_shake.maxpitch, shots[shots_counter]->element.info_shake.maxroll);
+				shots[shots_counter]->element.info_shake.has_shaked = true;
+			}
 		}
-		if (shots[shots_counter]->element.it_shake && Time::GetGameTime() - shots[shots_counter]->element.info_shake.shake_timer >= shots[shots_counter]->element.info_shake.shake_time && !shots[shots_counter]->element.info_shake.has_shaked)
-		{
-			cam_shaking->Shake(shots[shots_counter]->element.info_shake.strength, shots[shots_counter]->element.info_shake.traumaDecay, shots[shots_counter]->element.info_shake.off_set, shots[shots_counter]->element.info_shake.maxyaw, shots[shots_counter]->element.info_shake.maxpitch, shots[shots_counter]->element.info_shake.maxroll);
-			shots[shots_counter]->element.info_shake.has_shaked = true;
-		}		
 		break;
 	}
 	case CutsceneState::MOVING:
 	{
-		if (shots[shots_counter]->element.it_curve)
+		if(!Time::IsGamePaused())
 		{
-			ExecuteCurve();
-		}
-		else {
-			if (shots[shots_counter]->element.first_frame)
+			if (shots[shots_counter]->element.it_curve)
 			{
-				if (!shots[shots_counter]->element.it_focus)
-					shots[shots_counter]->element.first_frame = false;
-				shots[shots_counter]->element.first_pos = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition();
-				t_speed = Time::GetGameTime();
+				ExecuteCurve();
 			}
-			float3 current_pos = float3::Lerp(shots[shots_counter]->element.first_pos, shots[shots_counter]->transform->GetGlobalPosition(), (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
-			Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(current_pos);
-
-			if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus) { //Move rotation
+			else {
 				if (shots[shots_counter]->element.first_frame)
 				{
-					shots[shots_counter]->element.first_frame = false;
-					shots[shots_counter]->element.first_rot = camera->transform->GetGlobalRotation();
-					float3 direction = (shots[shots_counter]->element.g_o_focus->transform->GetGlobalPosition() - shots[shots_counter]->transform->GetGlobalPosition()).Normalized();
-					shots[shots_counter]->element.final_rot = Quat::LookAt(float3::unitZ(), direction, float3::unitY(), float3::unitY());
+					if (!shots[shots_counter]->element.it_focus)
+						shots[shots_counter]->element.first_frame = false;
+					shots[shots_counter]->element.first_pos = Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition();
+					t_speed = Time::GetGameTime();
 				}
-				Quat current_rot = Quat::Slerp(shots[shots_counter]->element.first_rot, shots[shots_counter]->element.final_rot, (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
-				camera->transform->SetGlobalRotation(current_rot);
+				float3 current_pos = float3::Lerp(shots[shots_counter]->element.first_pos, shots[shots_counter]->transform->GetGlobalPosition(), (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
+				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(current_pos);
+
+				if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus) { //Move rotation
+					if (shots[shots_counter]->element.first_frame)
+					{
+						shots[shots_counter]->element.first_frame = false;
+						shots[shots_counter]->element.first_rot = camera->transform->GetGlobalRotation();
+						float3 direction = (shots[shots_counter]->element.g_o_focus->transform->GetGlobalPosition() - shots[shots_counter]->transform->GetGlobalPosition()).Normalized();
+						shots[shots_counter]->element.final_rot = Quat::LookAt(float3::unitZ(), direction, float3::unitY(), float3::unitY());
+					}
+					Quat current_rot = Quat::Slerp(shots[shots_counter]->element.first_rot, shots[shots_counter]->element.final_rot, (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
+					camera->transform->SetGlobalRotation(current_rot);
+				}
+				if ((Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed >= 1.f) {
+					Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
+					if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus)
+						camera->transform->SetGlobalRotation(shots[shots_counter]->element.final_rot);
+					shots[shots_counter]->element.stay_timer = Time::GetGameTime();
+					if (shots[shots_counter]->element.it_shake)
+						shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
+					state = CutsceneState::IDLE;
+					break;
+				}
 			}
-			if ((Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed >= 1.f) {
-				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
-				if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus)
-					camera->transform->SetGlobalRotation(shots[shots_counter]->element.final_rot);
-				shots[shots_counter]->element.stay_timer = Time::GetGameTime();
-				if (shots[shots_counter]->element.it_shake)
-					shots[shots_counter]->element.info_shake.shake_timer = Time::GetGameTime();
-				state = CutsceneState::IDLE;
-				break;
-			}
-		}
+		}	
 		break;
 	}
 	}
