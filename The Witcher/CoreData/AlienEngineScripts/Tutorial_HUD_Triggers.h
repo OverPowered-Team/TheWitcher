@@ -10,6 +10,7 @@ enum(TRIGGER_TYPE,
 	ATTACK,
 	DASH,
 	MAGIC,
+	RELICS,
 
 	ANY = -1,
 	);
@@ -38,6 +39,7 @@ private:
 	std::list<PlayerController*> players_triggered_attack;
 	std::list<PlayerController*> players_triggered_dash;
 	std::list<PlayerController*> players_triggered_magic;
+	std::list<PlayerController*> players_triggered_relics;
 
 };
 
