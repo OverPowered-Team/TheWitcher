@@ -307,7 +307,7 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::ThrowEnvironmentRocks()
 {
-	throw_time += rescale_platform_value;
+	throw_time += (int)(rescale_platform_value * Time::GetDT() * 60);
 	if (throw_time % 10 == 0 && !rock_throwed)
 	{
 		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
