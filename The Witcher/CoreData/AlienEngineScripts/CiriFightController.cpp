@@ -150,7 +150,7 @@ void CiriFightController::FinishPhaseFour()
 	Scores_Data::won_level2 = true;
 	GameManager::instance->PrepareDataNextScene(false);
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
-	Destroy(game_object);
+	//Destroy(game_object);
 }
 
 void CiriFightController::UpdatePhaseFour()
