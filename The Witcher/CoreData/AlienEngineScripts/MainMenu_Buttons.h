@@ -7,7 +7,7 @@ class ALIEN_ENGINE_API MainMenu_Buttons : public Alien {
 
 public:
 	bool fullscreen = false;
-	float volume = 1.0f;
+	float volume = 50.0f;
 
 	MainMenu_Buttons();
 	virtual ~MainMenu_Buttons();

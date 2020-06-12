@@ -39,19 +39,29 @@ void MainMenu_Buttons::Muffin()
 
 void MainMenu_Buttons::AddVolume()
 {
-	volume += 0.1f;
-	if (volume >= 1.0f)
-		volume = 1.0f;
+	ComponentAudioEmitter* audio = GetComponent<ComponentAudioEmitter>();
+	if (audio == nullptr)
+		return;
 
-	
+	volume += 5.0f;
+	if (volume >= 100.0f)
+		volume = 100.0f;
+
+	audio->SetRTPCValue("GeneralVolume", volume); 
 
 }
 
 void MainMenu_Buttons::SubtractVolume()
 {
-	volume -= 0.1f;
+	ComponentAudioEmitter* audio = GetComponent<ComponentAudioEmitter>();
+	if (audio == nullptr)
+		return;
+
+	volume -= 5.0f;
 	if (volume <= 0.0f)
 		volume = 0.0f;
+
+	audio->SetRTPCValue("GeneralVolume", volume);
 }
 
 void MainMenu_Buttons::FullScreen()
