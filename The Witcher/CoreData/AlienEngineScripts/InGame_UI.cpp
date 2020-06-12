@@ -344,29 +344,99 @@ void InGame_UI::LoadActiveRelics()
 		{
 			if (dynamic_cast<AttackEffect*>((*effect)))
 			{
+				const char* string_attack = dynamic_cast<AttackEffect*>((*effect))->attack_name.c_str();
 				const char* string_element = dynamic_cast<AttackEffect*>((*effect))->element.c_str();
 
-				for (auto attack = (*player)->attacks->attacks.begin(); attack != (*player)->attacks->attacks.end(); ++attack)
+				if (strcmp(string_attack, "LLL") == 0)
 				{
 					if (strcmp(string_element, "Fire") == 0)
 					{
-						(*vector_images)[attack - (*player)->attacks->attacks.begin()][0]->current_color.a = 1;
+						(*vector_images)[0][0]->current_color.a = 1;
 					}
-					else if (strcmp(string_element, "Poison") == 0)
+					else if (strcmp(string_element, "Ice") == 0)
 					{
-						(*vector_images)[attack - (*player)->attacks->attacks.begin()][1]->current_color.a = 1;
+						(*vector_images)[0][1]->current_color.a = 1;
 					}
 					else if (strcmp(string_element, "Lightning") == 0)
 					{
-						(*vector_images)[attack - (*player)->attacks->attacks.begin()][2]->current_color.a = 1;
+						(*vector_images)[0][2]->current_color.a = 1;
 					}
 					else if (strcmp(string_element, "Poison") == 0)
 					{
-						(*vector_images)[attack - (*player)->attacks->attacks.begin()][3]->current_color.a = 1;
+						(*vector_images)[0][3]->current_color.a = 1;
 					}
 					else if (strcmp(string_element, "Earth") == 0)
 					{
-						(*vector_images)[attack - (*player)->attacks->attacks.begin()][4]->current_color.a = 1;
+						(*vector_images)[0][4]->current_color.a = 1;
+					}
+				}
+				else if (strcmp(string_attack, "HHH") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[1][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[1][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[1][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[1][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[1][4]->current_color.a = 1;
+					}
+				}
+				else if (strcmp(string_attack, "LHL") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[2][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[2][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[2][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[2][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[2][4]->current_color.a = 1;
+					}
+				}
+				else if (strcmp(string_attack, "HLH") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[3][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[3][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[3][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[3][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[3][4]->current_color.a = 1;
 					}
 				}
 			}
@@ -378,7 +448,7 @@ void InGame_UI::LoadActiveRelics()
 				{
 					(*vector_images)[4][0]->current_color.a = 1;
 				}
-				else if (strcmp(string, "Poison") == 0)
+				else if (strcmp(string, "Ice") == 0)
 				{
 					(*vector_images)[4][1]->current_color.a = 1;
 				}
@@ -397,4 +467,8 @@ void InGame_UI::LoadActiveRelics()
 			}
 		}
 	}
+}
+
+void InGame_UI::ResetActiveRelics()
+{
 }
