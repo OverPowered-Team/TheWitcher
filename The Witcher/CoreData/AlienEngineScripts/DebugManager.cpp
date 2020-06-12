@@ -75,6 +75,15 @@ void DebugManager::Update()
 			yennefer_controller->godmode = !yennefer_controller->godmode;
 			GameObject::FindWithName("Godmode")->SetEnable(!GameObject::FindWithName("Godmode")->IsEnabled());
 		}
+
+		if (Input::GetKeyDown(SDL_SCANCODE_H) && geralt_controller->state->type == StateType::DEAD)
+		{
+			geralt_controller->Revive(1);
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_J) && yennefer_controller->state->type == StateType::DEAD)
+		{
+			yennefer_controller->Revive(1);
+		}
 	}
 
 }

@@ -202,6 +202,10 @@ Aitor Vélez Tolosa [AitorVelez](https://github.com/AitorVelez)
   - F3 + 5: Level 2 - Boss
   
   - F3 + 6: NewWin_Menu
+  
+  - F3 + H: Revive Geralt
+  
+  - F3 + J: Revive Yennefer
 
 ### Player controls:
 
