@@ -37,4 +37,37 @@ void MainMenu_Buttons::Muffin()
 	AlienEngine::OpenURL("https://github.com/OverPowered-Team");
 }
 
+void MainMenu_Buttons::AddVolume()
+{
+	ComponentAudioEmitter* audio = GetComponent<ComponentAudioEmitter>();
+	if (audio == nullptr)
+		return;
+
+	volume += 5.0f;
+	if (volume >= 100.0f)
+		volume = 100.0f;
+
+	audio->SetRTPCValue("GeneralVolume", volume); 
+
+}
+
+void MainMenu_Buttons::SubtractVolume()
+{
+	ComponentAudioEmitter* audio = GetComponent<ComponentAudioEmitter>();
+	if (audio == nullptr)
+		return;
+
+	volume -= 5.0f;
+	if (volume <= 0.0f)
+		volume = 0.0f;
+
+	audio->SetRTPCValue("GeneralVolume", volume);
+}
+
+void MainMenu_Buttons::FullScreen()
+{
+	fullscreen = !fullscreen;
+	Screen::SetFullScreen(fullscreen);
+}
+
 

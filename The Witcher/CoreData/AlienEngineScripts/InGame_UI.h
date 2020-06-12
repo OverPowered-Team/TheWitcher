@@ -45,6 +45,7 @@ public:
 private:
 
 	void LoadActiveRelics();
+	void ResetActiveRelics();
 
 public:
 

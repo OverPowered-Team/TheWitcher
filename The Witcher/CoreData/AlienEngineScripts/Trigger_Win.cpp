@@ -28,12 +28,12 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 
 		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
 		{
-			SceneManager::LoadScene("boss_test", FadeToBlackType::FADE);
+			SceneManager::LoadScene("WagonToCiri", FadeToBlackType::FADE);
 		}
 		else if (strcmp(current_scene.c_str(), "Mahakam_1") == 0)
 		{
 			GameManager::instance->PrepareDataNextScene(false);
-			SceneManager::LoadScene("Wagonnetes", FadeToBlackType::FADE);
+			SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::FADE);
 		}	
 		else 
 		{
