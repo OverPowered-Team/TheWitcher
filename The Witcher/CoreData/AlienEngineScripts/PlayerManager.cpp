@@ -45,11 +45,6 @@ void PlayerManager::OnPlayerDead(PlayerController* dead_player)
 
 	if (players_dead.size() == players.size())
 	{
-		Scores_Data::player1_kills = players[0]->player_data.type_kills;
-		Scores_Data::player2_kills = players[1]->player_data.type_kills;
-		Scores_Data::player1_relics = players[0]->relics;
-		Scores_Data::player2_relics = players[1]->relics;
-		Scores_Data::dead = true;
 		in_game_ui->YouDied(); 
 	}
 }
