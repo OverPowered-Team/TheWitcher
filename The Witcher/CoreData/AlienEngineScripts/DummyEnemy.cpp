@@ -2,6 +2,9 @@
 #include "PlayerAttacks.h"
 #include "AttackTrigger.h"
 #include "PlayerController.h"
+#include "GameManager.h"
+#include "RumblerManager.h"
+
 
 DummyEnemy::DummyEnemy() : Alien()
 {
@@ -44,38 +47,50 @@ void DummyEnemy::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "PlayerAttack") == 0)
 	{
+		
+		
 		wiggle = true;
 		wiggleDuration = 0;
 		if (impactSound)
 			impactSound->StartSound();
-
-		if (player == nullptr)
+		AttackTrigger* attack_trigger = col->game_object_attached->GetComponent<AttackTrigger>();
+		if (attack_trigger)
 		{
-			player = col->game_object_attached->GetComponent<AttackTrigger>()->player;
-		}
-
-		if (col->game_object_attached->GetComponent<AttackTrigger>()->player == player)
-		{
-			if (current_buttons.size() >= 5)
+			if (player_controller == nullptr)
+			{
+				player_controller = attack_trigger->player;
+			}
+			
+			if (col->game_object_attached->GetComponent<AttackTrigger>()->player == player_controller && current_buttons.size() >= 3)
 			{
 				DestroyCombo();
 			}
 
+			if (col->game_object_attached->GetComponent<AttackTrigger>()->player != player_controller)
+			{
+				player_controller = col->game_object_attached->GetComponent<AttackTrigger>()->player;
+				DestroyCombo();
+			}
+			
 			float position = current_buttons.size() * 5.f - 10.f;
 
-			if (player->attacks->GetCurrentAttack()->info.name.back() == 'L')
+			if (player_controller->attacks->GetCurrentAttack()->info.name.back() == 'L')
 			{
+				//Input::DoRumble(player_controller->controller_index, 1.f, 120.0f);
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::LIGHT_ATTACK, player_controller->controller_index);
 				current_buttons.push_back(GameObject::Instantiate(button_x, float3(position, 0, 0), false, game_object->GetChild("Combo_UI")));
 			}
 			else
 			{
+				//Input::DoRumble(player_controller->controller_index, 1.f, 120.0f);
+				GameManager::instance->rumbler_manager->StartRumbler(RumblerType::HEAVY_ATTACK, player_controller->controller_index);
 				current_buttons.push_back(GameObject::Instantiate(button_y, float3(position, 0, 0), false, game_object->GetChild("Combo_UI")));
-
 			}
 
 			showing_combo = true;
 			time_showing = Time::GetTimeSinceStart();
 		}
+		
 	}
 }
 
@@ -125,5 +140,5 @@ void DummyEnemy::DestroyCombo()
 	}
 	current_buttons.clear();
 	showing_combo = false;
-	player = nullptr;
+	player_controller = nullptr;
 }

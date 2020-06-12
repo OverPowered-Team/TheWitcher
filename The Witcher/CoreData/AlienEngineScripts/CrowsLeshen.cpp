@@ -56,7 +56,7 @@ void CrowsLeshen::Update()
 		}
 	}
 
-	transform->AddPosition(transform->forward * speed);
+	transform->AddPosition(transform->forward * speed * 60 * Time::GetDT());
 	
 
 	if (life_time <= total_life_time) {

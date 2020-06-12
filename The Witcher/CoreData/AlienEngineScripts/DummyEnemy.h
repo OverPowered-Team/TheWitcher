@@ -28,7 +28,7 @@ private:
 	int current_combo_number = 0;
 	float time_showing = 0.0f;
 	bool showing_combo = false;
-	PlayerController* player = nullptr;
+	PlayerController* player_controller = nullptr;
 
 	std::vector<GameObject*> current_buttons;
 
