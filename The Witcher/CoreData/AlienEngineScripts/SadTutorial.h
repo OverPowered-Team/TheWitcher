@@ -22,7 +22,6 @@ public:
 	bool has_pre_exploded = false;
 	ComponentAudioEmitter* emitter = nullptr;
 	ComponentParticleSystem* particle_emmitter = nullptr;
-	GameObject* go_particle = nullptr;
 };
 
 ALIEN_FACTORY SadTutorial* CreateSadTutorial() {
