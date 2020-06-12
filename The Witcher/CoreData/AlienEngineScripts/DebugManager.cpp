@@ -30,31 +30,31 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_0))
 		{
-			SceneManager::LoadScene("Main_Menu");
+			SceneManager::LoadScene("Main_Menu", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_1))
 		{
-			SceneManager::LoadScene("Lvl_1_Tutorial");
+			SceneManager::LoadScene("ForceLoadTutorial", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_2))
 		{
-			SceneManager::LoadScene("Lvl_1");
+			SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
-			SceneManager::LoadScene("Mahakam_1");
+			SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
 		{
-			SceneManager::LoadScene("Wagonnetes");
+			SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_5))
 		{
-			SceneManager::LoadScene("boss_test");
+			SceneManager::LoadScene("WagonToCiri", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_6))
 		{
-			SceneManager::LoadScene("NewWin_Menu");
+			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_F))
 		{
@@ -74,6 +74,15 @@ void DebugManager::Update()
 			geralt_controller->godmode = !geralt_controller->godmode;
 			yennefer_controller->godmode = !yennefer_controller->godmode;
 			GameObject::FindWithName("Godmode")->SetEnable(!GameObject::FindWithName("Godmode")->IsEnabled());
+		}
+
+		if (Input::GetKeyDown(SDL_SCANCODE_H) && geralt_controller->state->type == StateType::DEAD)
+		{
+			geralt_controller->Revive(1);
+		}
+		if (Input::GetKeyDown(SDL_SCANCODE_J) && yennefer_controller->state->type == StateType::DEAD)
+		{
+			yennefer_controller->Revive(1);
 		}
 	}
 

@@ -45,6 +45,7 @@ public:
 private:
 
 	void LoadActiveRelics();
+	void ResetActiveRelics();
 
 public:
 
@@ -90,6 +91,10 @@ private:
 
 	// Timer
 	float internal_timer = 0.0f;
+
+	// Relics Menu
+	std::vector<std::vector<ComponentImage*>> geralt_relics;
+	std::vector<std::vector<ComponentImage*>> yennefer_relics;
 };
 
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {

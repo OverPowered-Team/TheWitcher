@@ -7,6 +7,8 @@
 #include "Scores_Data.h"
 #include "UI_DamageCount.h"
 #include "DialogueManager.h"
+#include "Effect.h"
+#include "PlayerAttacks.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -39,6 +41,30 @@ void InGame_UI::Start()
 	checkpoint_saved_text = in_game->GetChild("NewCheckpoint");
 	component_checkpoint_saved_text = checkpoint_saved_text->GetComponent<ComponentText>();
 	checkpoint_saved_text->SetEnable(false);
+
+	for (int i = 0; i < 5; ++i)
+	{
+		std::vector<ComponentImage*> relics;
+
+		for (int j = 0; j < 5; ++j)
+		{
+			relics.push_back(relics_menu->GetChild("Relics_G")->GetChild(i)->GetChild(j)->GetComponent<ComponentImage>());
+		}
+
+		geralt_relics.push_back(relics);
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		std::vector<ComponentImage*> relics;
+
+		for (int j = 0; j < 5; ++j)
+		{
+			relics.push_back(relics_menu->GetChild("Relics_Y")->GetChild(i)->GetChild(j)->GetComponent<ComponentImage>());
+		}
+
+		yennefer_relics.push_back(relics);
+	}
 }
 
 void InGame_UI::Update()
@@ -165,12 +191,12 @@ void InGame_UI::Update()
 			{
 				if (strcmp(SceneManager::GetCurrentScene(), "Lvl_1_Tutorial") == 0)
 				{
-					SceneManager::LoadScene("Lvl_1_Tutorial");
+					SceneManager::LoadScene("ForceLoadTutorial", FadeToBlackType::FADE);
 				}
 				else
 				{
 					GameManager::instance->PrepareDataNextScene(true);
-					SceneManager::LoadScene("NewWin_Menu");
+					SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::VERTICAL_CURTAIN);
 				}
 			}
 		}
@@ -250,7 +276,7 @@ void InGame_UI::RelicsMenu(bool to_open)
 	game_object->GetComponent<DialogueManager>()->Pause(to_open);
 	if (to_open)
 	{
-
+		LoadActiveRelics();
 	}
 }
 
@@ -298,5 +324,151 @@ void InGame_UI::ShowUltiFilter(bool show)
 }
 
 void InGame_UI::LoadActiveRelics()
+{
+	std::vector <std::vector <ComponentImage*>>* vector_images;
+
+	auto player = GameManager::instance->player_manager->players.begin();
+	for (; player != GameManager::instance->player_manager->players.end(); ++player)
+	{
+		if ((*player)->controller_index == 1)
+		{
+			vector_images = &geralt_relics;
+		}
+		else
+		{
+			vector_images = &yennefer_relics;
+		}
+
+		auto effect = (*player)->effects.begin();
+		for (; effect != (*player)->effects.end(); ++effect)
+		{
+			if (dynamic_cast<AttackEffect*>((*effect)))
+			{
+				const char* string_attack = dynamic_cast<AttackEffect*>((*effect))->attack_name.c_str();
+				const char* string_element = dynamic_cast<AttackEffect*>((*effect))->element.c_str();
+
+				if (strcmp(string_attack, "LLL") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[0][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[0][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[0][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[0][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[0][4]->current_color.a = 1;
+					}
+				}
+				else if (strcmp(string_attack, "HHH") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[1][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[1][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[1][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[1][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[1][4]->current_color.a = 1;
+					}
+				}
+				else if (strcmp(string_attack, "LHL") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[2][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[2][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[2][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[2][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[2][4]->current_color.a = 1;
+					}
+				}
+				else if (strcmp(string_attack, "HLH") == 0)
+				{
+					if (strcmp(string_element, "Fire") == 0)
+					{
+						(*vector_images)[3][0]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Ice") == 0)
+					{
+						(*vector_images)[3][1]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Lightning") == 0)
+					{
+						(*vector_images)[3][2]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Poison") == 0)
+					{
+						(*vector_images)[3][3]->current_color.a = 1;
+					}
+					else if (strcmp(string_element, "Earth") == 0)
+					{
+						(*vector_images)[3][4]->current_color.a = 1;
+					}
+				}
+			}
+			else
+			{
+				const char* string = dynamic_cast<DashEffect*>((*effect))->element.c_str();
+
+				if (strcmp(string, "Fire") == 0)
+				{
+					(*vector_images)[4][0]->current_color.a = 1;
+				}
+				else if (strcmp(string, "Ice") == 0)
+				{
+					(*vector_images)[4][1]->current_color.a = 1;
+				}
+				else if (strcmp(string, "Lightning") == 0)
+				{
+					(*vector_images)[4][2]->current_color.a = 1;
+				}
+				else if (strcmp(string, "Poison") == 0)
+				{
+					(*vector_images)[4][3]->current_color.a = 1;
+				}
+				else if (strcmp(string, "Earth") == 0)
+				{
+					(*vector_images)[4][4]->current_color.a = 1;
+				}
+			}
+		}
+	}
+}
+
+void InGame_UI::ResetActiveRelics()
 {
 }

@@ -49,45 +49,6 @@ void VagoneteMove::Update()
 	}
 
 	FollowCurve();
-
-	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_5)) {
-		SceneManager::LoadScene(SceneManager::GetCurrentScene());
-	}
-
-	if (Input::GetKeyRepeat(SDL_SCANCODE_F3))
-	{
-		if (Input::GetKeyDown(SDL_SCANCODE_G))
-		{
-			godmode = !godmode;
-			HUD->godmode->SetEnable(godmode);
-		}
-
-		if (Input::GetKeyDown(SDL_SCANCODE_0))
-		{
-			SceneManager::LoadScene("Main_Menu");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_1))
-		{
-			SceneManager::LoadScene("Lvl_1_Tutorial");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_2))
-		{
-			SceneManager::LoadScene("Lvl_1");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_3))
-		{
-			SceneManager::LoadScene("Wagonnetes");
-		}
-
-		if (Input::GetKeyDown(SDL_SCANCODE_4))
-		{
-			SceneManager::LoadScene("boss_test");
-		}
-		if (Input::GetKeyDown(SDL_SCANCODE_W))
-		{
-			SceneManager::LoadScene("NewWin_Menu");
-		}
-	}
 }
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
@@ -123,7 +84,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		}
 	}
 	else if (strcmp("VagoneteDie", col->game_object_attached->GetTag()) == 0) {
-		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+		SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::VERTICAL_CURTAIN);
 	}
 	else if (strcmp("VagoneteVelocity", col->game_object_attached->GetTag()) == 0) {
 		WagoneteAddVelocity* vel = col->game_object_attached->GetComponent<WagoneteAddVelocity>();
@@ -151,7 +112,7 @@ void VagoneteMove::DecreaseLife()
 		HUD->UpdateLifebar(vagonete_life, max_life);
 
 		if (vagonete_life <= 0) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
+			SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 	}
 }
