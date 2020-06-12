@@ -1,7 +1,5 @@
 # TheWitcher
 
-hola caracola 
-
 TheWitcher v.0.5.0
 
 ## Description
