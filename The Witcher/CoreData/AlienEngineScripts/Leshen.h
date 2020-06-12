@@ -39,6 +39,8 @@ public:
 	int rand_x = 0;
 	int rand_z = 0;
 
+	GameObject* mesh = nullptr;
+
 
 public:
 	void StartEnemy() override;

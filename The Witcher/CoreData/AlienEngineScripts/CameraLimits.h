@@ -17,6 +17,8 @@ public:
 
 	std::vector<int> subtitles;
 
+public:
+	ComponentAudioEmitter* emitter = nullptr;
 };
 
 ALIEN_FACTORY CameraLimits* CreateCameraLimits() {

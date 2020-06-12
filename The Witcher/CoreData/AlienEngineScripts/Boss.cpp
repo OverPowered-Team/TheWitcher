@@ -71,6 +71,11 @@ void Boss::UpdateEnemy()
 			state = BossState::ATTACK;
 		else
 			state = BossState::IDLE;
+
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+
 		break;
 	case Boss::BossState::DYING: {
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();

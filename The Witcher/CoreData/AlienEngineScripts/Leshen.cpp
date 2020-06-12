@@ -26,7 +26,7 @@ void Leshen::StartEnemy()
 
 	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
-	meshes = game_object->GetChild("Meshes");
+	mesh = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 
@@ -178,7 +178,7 @@ void Leshen::LaunchCloudAction()
 {
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
-	meshes->SetEnable(false);
+	mesh->SetEnable(false);
 	SpawnParticle("Cloud", float3::zero(), true);
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
@@ -312,7 +312,7 @@ void Leshen::EndCrowsAction()
 
 void Leshen::EndCloudAction()
 {
-	meshes->SetEnable(true);
+	mesh->SetEnable(true);
 	ReleaseParticle("Cloud");
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
