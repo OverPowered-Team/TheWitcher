@@ -40,19 +40,19 @@ void MainMenu_Buttons::Muffin()
 void MainMenu_Buttons::AddVolume()
 {
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();
-	UIConfig::AddVolume(emitter);
+	//UIConfig::AddVolume(emitter);
 
 }
 
 void MainMenu_Buttons::SubtractVolume()
 {
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();
-	UIConfig::SubtractVolume(emitter);
+	//UIConfig::SubtractVolume(emitter);
 }
 
 void MainMenu_Buttons::FullScreen()
 {
-	UIConfig::FullScreen();
+	//UIConfig::FullScreen();
 }
 
 
