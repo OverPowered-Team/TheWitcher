@@ -16,23 +16,23 @@ void Training_Zone::Start()
 
 void Training_Zone::Update()
 {
-	if (!has_started) {
-		return;
-	}
+	if (!has_started) { return; }
 
 	if (!Time::IsGamePaused())
 	{
-		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
+		internal_timer += Time::GetDT();
 
 		if (time_paused != 0.0f)
 		{
 			current_oscilating_time += time_paused;
+			internal_timer += time_paused;
 			time_paused = 0.0f;
 		}
 	}
 	else
 	{
-		time_paused = Time::GetGameTime() - internal_timer;
+		time_paused += Time::GetDT();
+
 		return;
 	}
 
