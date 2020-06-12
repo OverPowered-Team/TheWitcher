@@ -18,9 +18,7 @@ void SadTutorial::Start()
 	for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
 		(*ip)->Pause();
 	
-	go_particle = GameObject::FindWithName("CiriExplosion");
 	timer_explosion = Time::GetGameTime();
-
 }
 
 void SadTutorial::Update()
@@ -33,12 +31,8 @@ void SadTutorial::Update()
 
 		for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
 			(*ip)->Play();
-		//emitter->StartSound("Play_Explosion");
-		//Explosion sound insert here
-		//Animation explosion here
 
 		has_exploded = true;
-
 	}
 	if (Time::GetGameTime() - timer_explosion >= time_to_explode+1 && !has_post_exploded)
 	{

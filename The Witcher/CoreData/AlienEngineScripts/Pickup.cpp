@@ -48,6 +48,7 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 			}
 			}
 			GameObject::Destroy(this->game_object);
+			LOG("PICKUP");
 		}
 	}
 }
