@@ -30,10 +30,12 @@ void UltiBar::Start()
 
 void UltiBar::Update()
 {
+	internal_timer += Time::GetDT();
+
 	// Bar Charges With Lerp
 	if (bar_charging)
 	{
-		float t = (Time::GetGameTime() - bar_charging_time) * (1 / ulti_increase_lerp_time);
+		float t = (internal_timer - bar_charging_time) * (1 / ulti_increase_lerp_time);
 		float lerp = Maths::Lerp(previous_bar_value, new_bar_value, t);
 
 		normal_ulti->SetBarValue(lerp);
@@ -53,8 +55,8 @@ void UltiBar::Update()
 				controls->SetEnable(true);
 
 				// Lerping Time Settings
-				glow_time = Time::GetGameTime();
-				actual_time = Time::GetGameTime();
+				glow_time = internal_timer;
+				actual_time = internal_timer;
 			}
 		}
 	}
@@ -67,7 +69,7 @@ void UltiBar::Update()
 	// Charged Bar Glowing
 	if (is_bar_charged)
 	{
-		float t = (Time::GetGameTime() - glow_time);
+		float t = (internal_timer - glow_time);
 		float color = 0.0f;
 
 		if (glowing)
@@ -84,7 +86,7 @@ void UltiBar::Update()
 		if (t >= 1)
 		{
 			glowing = !glowing;
-			glow_time = Time::GetGameTime();
+			glow_time = internal_timer;
 		}
 	}
 }
@@ -107,16 +109,16 @@ void UltiBar::UpdateBar(float actual_value)
 	previous_bar_value = normal_ulti->GetBarValue();
 	new_bar_value = actual_value;
 	bar_charging = true;
-	bar_charging_time = Time::GetGameTime();
+	bar_charging_time = internal_timer;
 }
 
 void UltiBar::ControlsLerp()
 {
-	float t = (Time::GetGameTime() - actual_time) * (1 / time_to_lerp_controls);
+	float t = (internal_timer - actual_time) * (1 / time_to_lerp_controls);
 	float scale = 0.0f;
 	float color = 0.f;
 
-	if ((Time::GetGameTime() - actual_time) < (time_to_lerp_controls * 0.5f))
+	if ((internal_timer - actual_time) < (time_to_lerp_controls * 0.5f))
 	{
 		scale = Maths::Lerp(pre_scale, (pre_scale * (1.f + 1.0f / 6.0f)), t * 2);
 		color = Maths::Lerp(0.275f, 0.425f, t * 2);
@@ -135,7 +137,7 @@ void UltiBar::ControlsLerp()
 	if (t >= 1)
 	{
 		++shining_count;
-		actual_time = Time::GetGameTime();
+		actual_time = internal_timer;
 
 		if (shining_count >= times_shine)
 		{
@@ -144,4 +146,12 @@ void UltiBar::ControlsLerp()
 			controls->SetEnable(false);
 		}
 	}
+}
+
+void UltiBar::UpdateTimes(float time_paused)
+{
+	internal_timer += time_paused;
+	actual_time += time_paused;
+	glow_time += time_paused;
+	bar_charging_time += time_paused;
 }

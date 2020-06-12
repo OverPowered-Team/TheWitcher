@@ -88,25 +88,6 @@ void Relic_Notification::ShowRelic(Notification* notification)
 		yennefer_portrait->SetEnable(true);
 	}
 
-	//effect->element = "Fire";
-	//break;
-	//case Relic_Effect::ICE:
-	//	effect->OnHit = &ApplyEffectOnHit;
-	//	effect->element = "Ice";
-	//	break;
-	//case Relic_Effect::EARTH:
-	//	effect->OnHit = &ApplyEffectOnHit;
-	//	effect->AddMultiplicativeModifier(valor, "Attack_Damage");
-	//	effect->element = "Earth";
-	//	break;
-	//case Relic_Effect::LIGHTNING:
-	//	effect->OnHit = &ApplyEffectOnHit;
-	//	effect->element = "Lightning";
-	//	break;
-	//case Relic_Effect::POISON:
-	//	effect->OnHit = &ApplyEffectOnHit;
-	//	effect->element = "Poison";
-
 	relic_title->SetText(notification->relic_name);
 	description->SetText(notification->description);
 	if (notification->attack_type.size() != 0)
@@ -127,7 +108,7 @@ void Relic_Notification::ShowRelic(Notification* notification)
 		{
 			relic_images[3]->SetEnable(true);
 		}
-		else if (strcmp(notification->attack_type.c_str(), "Lighting") == 0)
+		else if (strcmp(notification->attack_type.c_str(), "Lightning") == 0)
 		{
 			relic_images[4]->SetEnable(true);
 		}

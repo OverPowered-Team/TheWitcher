@@ -15,8 +15,10 @@ void BarrelDrop::Start()
 {
 	barrel = game_object->GetComponent<ExplodeChildren>();
 	camera = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraMovement>();
-	p1 = camera->players[0]->GetComponent<PlayerController>();
-	p2 = camera->players[1]->GetComponent<PlayerController>();
+	if (camera != nullptr) {
+		p1 = camera->players[0]->GetComponent<PlayerController>();
+		p2 = camera->players[1]->GetComponent<PlayerController>();
+	}
 }
 
 void BarrelDrop::Update()

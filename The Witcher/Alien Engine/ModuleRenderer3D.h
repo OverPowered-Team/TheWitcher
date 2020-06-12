@@ -49,6 +49,7 @@ public:
 public:
 
 	SDL_GLContext context;
+	SDL_GLContext back_context;
 	ComponentCamera* scene_fake_camera = nullptr;
 	ComponentCamera* actual_game_camera = nullptr;
 	ComponentCamera* selected_game_camera = nullptr;
@@ -60,6 +61,7 @@ public:
 	int line_grid_width = 1;
 	float4 last_color = float4(0.f, 0.f, 0.f, 0.f);
 	bool render_skybox = true;
+	bool render_bloom = false; 
 
 	// Screen quad to render
 	uint screen_quad_VAO = 0;

@@ -64,11 +64,11 @@ void PlayerController::Start()
 
 	// Dash
 	//dashData.current_acel_multi = dashData.accel_multi; 
-	//dashData.dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
-	//if (dashData.dash_trail != nullptr) //todo no ser tant guarro
-	//{
-	//	dashData.dash_trail->Stop();
-	//}
+	dash_trail = game_object->GetChild("trail")->GetComponent<ComponentTrail>();
+	if (dash_trail != nullptr) //todo no ser tant guarro
+	{
+		dash_trail->Stop();
+	}
 }
 
 void PlayerController::Update()
@@ -79,7 +79,7 @@ void PlayerController::Update()
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
-	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
+	State* new_state = state->HandleInput(this);
 	if (new_state != nullptr)
 		SwapState(new_state);
 
@@ -156,21 +156,6 @@ void PlayerController::CheckGround()
 	}
 }
 
-void PlayerController::ToggleDashMultiplier()
-{   
-	if (player_data.type == PlayerController::PlayerType::YENNEFER)
-	{
-		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi;
-
-		if (dashData.disappear_on_dash)
-		{
-			auto meshes = game_object->GetChild("Meshes");
-			meshes->SetEnable(!meshes->IsEnabled());
-		}
-	}
-		
-}
-
 void PlayerController::ChangeCollisionLayer(std::string layer, float time)
 {
 	controller->SetCollisionLayer(layer);
@@ -214,7 +199,7 @@ void PlayerController::UpdateInput()
 
 
 	// DEBUG
-	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::YENNEFER))
 		ReceiveDamage(10, float3::zero(), false); 
 }
 
@@ -370,7 +355,8 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
-		ChangeColorParticle();
+		if(attacks->GetCurrentAttack()->IsLast())
+			ChangeColorParticle();
 
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
@@ -439,7 +425,6 @@ void PlayerController::Revive(float minigame_value)
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
-	is_immune = false;
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
@@ -448,8 +433,6 @@ void PlayerController::Revive(float minigame_value)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
 		GameManager::instance->event_manager->OnPlayerRevive(this);
-
-	SetState(StateType::IDLE);
 }
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
@@ -488,7 +471,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
 			Die();
 		}
-		else
+		else if(knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
@@ -735,7 +718,6 @@ void PlayerController::HitFreeze(float freeze_time)
 	float speed = animator->GetCurrentStateSpeed();
 	std::string state_name = animator->GetCurrentStateName();
 
-	LOG("FREEZING %s",state_name.c_str());
 	animator->SetStateSpeed(state_name.c_str(), 0);
 	PauseParticle();
 	is_immune = true;
@@ -808,6 +790,14 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
 			(*it)->SetEnable(false);
+
+			parent = parent != nullptr ? parent : this->game_object;
+			(*it)->SetNewParent(parent);
+			if (local)
+				(*it)->transform->SetLocalPosition(pos);
+			else
+				(*it)->transform->SetGlobalPosition(pos);
+
 			(*it)->SetEnable(true);
 			
 			return;
@@ -831,6 +821,19 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		GameObject* new_particle = GameManager::instance->particle_pool->GetInstance(particle_name, pos, parent != nullptr? parent:this->game_object, local);
 		particles.insert(std::pair(particle_name, new_particle));
 	}*/
+}
+
+void PlayerController::SpawnDashParticle()
+{
+	if (player_data.type == PlayerType::YENNEFER)
+	{
+		float3 pos = particle_spawn_positions[1]->transform->GetGlobalPosition();
+		if(!is_immune)
+			pos += transform->forward * 0.8f;
+
+		SpawnParticle("Yenn_Portal", pos, false, float3::zero(), GameManager::instance->game_object);
+	}
+		
 }
 
 void PlayerController::ReleaseParticle(std::string particle_name)
@@ -893,17 +896,23 @@ void PlayerController::ChangeColorParticle()
 		my_color.y = 1.0f;
 	}
 
-	if (!color_changed)
-		my_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	for (auto it = particles.begin(); it != particles.end(); ++it)
+	if (color_changed)
 	{
-		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+		for (auto it = particles.begin(); it != particles.end(); ++it)
 		{
-			for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 			{
-				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
-				(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				/*GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
+				if (p_go)
+				{
+					//p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				}*/
+				for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+				{
+					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				}
 			}
 		}
 	}
@@ -918,7 +927,7 @@ void PlayerController::CheckEnemyCircle()
 		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
-			float avoid_distance = avoid_direction.LengthSq();
+			float avoid_distance = avoid_direction.Length();
 			if (avoid_distance > battleCircle)
 				continue;
 
@@ -926,7 +935,7 @@ void PlayerController::CheckEnemyCircle()
 
 			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
-			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
+			if (!enemy->is_battle_circle && (enemy->type == EnemyType::NILFGAARD_SOLDIER || enemy->type == EnemyType::GHOUL) && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
 		}
 	}
@@ -1006,6 +1015,7 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
+				dash_coll->player_dashing = this;
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
@@ -1063,18 +1073,39 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
 				knock_speed.y = 0;
 
-				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, !enemy->is_mini);
 				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
-
+				
 				return;
 			}
 		}
 	}
 }
 
+void PlayerController::StartImmune()
+{
+	is_immune = true;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("DashLayer");
+		meshes->SetEnable(false);
+	}
+}
+
+void PlayerController::StopImmune()
+{
+	is_immune = false;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("Player");
+		meshes->SetEnable(true);
+	}
+}
+
 void PlayerController::OnEnemyKill(uint enemy_type)
 {
-	LOG("ENEMY KILL");
 	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
 	{
 		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));

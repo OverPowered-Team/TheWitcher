@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
+#include "RockThrow.h"
 #include "CiriFightController.h"
 #include "Scores_Data.h"
 #include "RumblerManager.h"
@@ -22,6 +23,7 @@ CiriFightController::~CiriFightController()
 void CiriFightController::Start()
 {
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
+	rock_positions = game_object->GetChild("Rock_Positions")->GetChildren();
 
 	if (platform)
 		material_platform = (*platform->GetChildren().begin())->GetComponent<ComponentMaterial>();
@@ -41,6 +43,8 @@ void CiriFightController::Start()
 		}
 		position_respawn = float3(children.back()->transform->GetLocalPosition());
 	}
+
+	rocks_respawn = GameObject::FindWithName("Rocks_spawn");
 }
 
 void CiriFightController::Update()
@@ -55,6 +59,9 @@ void CiriFightController::Update()
 		fight_started = true;
 		phase_change = true;
 		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
+		SpawnRocks();
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
 	}
 	if (fight_started) {
 		switch (phase)
@@ -94,8 +101,6 @@ void CiriFightController::UpdatePhaseZero()
 void CiriFightController::FinishPhaseZero()
 {
 	phase++;
-	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
-	GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
 	this->GetComponent<ComponentCharacterController>()->Move(float3::zero());
 }
 
@@ -137,6 +142,7 @@ void CiriFightController::FinishPhaseThree()
 {
 	phase = 4;
 	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
+	DestroyRocks();
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -144,7 +150,7 @@ void CiriFightController::FinishPhaseFour()
 	Scores_Data::won_level2 = true;
 	GameManager::instance->PrepareDataNextScene(false);
 	SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
-	Destroy(game_object);
+	//Destroy(game_object);
 }
 
 void CiriFightController::UpdatePhaseFour()
@@ -177,7 +183,7 @@ void CiriFightController::OnCloneDead(GameObject* clone)
 		FinishPhaseThree();
 	
 	if(clones_dead < 6)
-		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
+		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[Random::GetRandomIntBetweenTwo(0, 2)]->transform->GetGlobalPosition());
 }
 
 
@@ -259,6 +265,8 @@ void CiriFightController::UpdatePlatform()
 			{
 				if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
+					GameObject::FindWithName("Rock_particles1")->transform->SetEnable(false);
+					GameObject::FindWithName("Rock_particles2")->transform->SetEnable(true);
 					circle->GetComponent<ComponentMaterial>()->material->color = { 1,1,1,1 };
 					circle->SetEnable(false);
 					circle = (*it);
@@ -288,6 +296,8 @@ void CiriFightController::UpdatePlatform()
 		{
 			if (material_platform)
 				material_platform->material->color = { 1,1,1,1 };
+			GameObject::FindWithName("Rock_particles2")->transform->SetEnable(false);
+			GameObject::FindWithName("Rock_particles3")->transform->SetEnable(true);
 			circle->SetEnable(false);
 			circle = nullptr;
 			ScaleWall();
@@ -297,7 +307,7 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::ThrowEnvironmentRocks()
 {
-	int throw_time = (int)time_platform;
+	throw_time = (int)time_platform;
 	if (throw_time % 10 == 0 && !rock_throwed)
 	{
 		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
@@ -321,8 +331,11 @@ void CiriFightController::ThrowEnvironmentRocks()
 		default:
 			break;
 		}
-		GameObject::Instantiate(game_object->GetComponent<CiriOriginal>()->rock, position);
-		rock_throwed = true;
+		GameObject* rocky = GameObject::Instantiate(rock, position);
+		if (rocky->GetComponent<RockThrow>()) {
+			rocky->GetComponent<RockThrow>()->type = RockThrow::RockType::FALL;
+			rock_throwed = true;
+		}
 	}
 	else if (throw_time % 10 != 0 && rock_throwed)
 		rock_throwed = false;
@@ -332,14 +345,49 @@ void CiriFightController::ThrowEnvironmentRocks()
 void CiriFightController::TransportPlayer()
 {
 	// tp y da�o
-	for (uint i = 0; i < GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players.size(); ++i)
+	for (uint i = 0; i < GameManager::instance->player_manager->players.size(); ++i)
 	{
-		if (platform->transform->GetGlobalPosition().y > GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->transform->GetGlobalPosition().y - 3)
+		if (platform->transform->GetGlobalPosition().y > GameManager::instance->player_manager->players[i]->transform->GetGlobalPosition().y - 3)
 		{
-			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[0]->transform->SetGlobalPosition(platform->transform->GetGlobalPosition() + float3(0, 5, 0));
-			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[1]->transform->SetGlobalPosition(platform->transform->GetGlobalPosition() + float3(0, 5, 0));
+			LOG("Entro en la mierda: posicion de plataforma en y = %f     , posicion del muerto en y = %f", platform->transform->GetGlobalPosition().y, GameManager::instance->player_manager->players[i]->transform->GetGlobalPosition().y)
+			if (GameManager::instance->player_manager->players[i]->controller_index == 1)
+			{
+				GameManager::instance->player_manager->players[0]->transform->SetGlobalPosition(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[0]->GetComponent<ComponentCharacterController>()->SetPosition(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[0]->state->type = StateType::IDLE;
+			}
+			else
+			{
+				GameManager::instance->player_manager->players[1]->transform->SetGlobalPosition(GameManager::instance->player_manager->players[0]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[1]->GetComponent<ComponentCharacterController>()->SetPosition(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition());
+				GameManager::instance->player_manager->players[1]->state->type = StateType::IDLE;
+			}
+				
+
 			GameObject::FindWithName("Main Camera")->transform->SetGlobalPosition(GameObject::FindWithName("Main Camera")->GetComponent<CameraMovement>()->CalculateMidPoint() + GameObject::FindWithName("Main Camera")->GetComponent<CameraMovement>()->trg_offset);
-			GameObject::FindWithName("GameManager")->GetComponent<PlayerManager>()->players[i]->ReceiveDamage(200);
+			GameManager::instance->player_manager->players[i]->ReceiveDamage(200);
 		}
 	}
+}
+
+void CiriFightController::SpawnRocks()
+{
+	rocks.clear();
+
+	for (int i = 0; i < 5; ++i) {
+		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
+	}
+
+	rocks_available = 5;
+
+	game_object->GetChild("Rock_Positions")->transform->SetGlobalPosition(rocks_respawn->transform->GetGlobalPosition());
+}
+
+void CiriFightController::DestroyRocks()
+{
+	for (int i = 0; i < 5; ++i) {
+		Destroy(rocks[i]);
+	}
+
+	rocks.clear();
 }

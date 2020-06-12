@@ -79,6 +79,11 @@ bool Drowned::IsDying()
 	return (state == DrownedState::DYING ? true : false);
 }
 
+bool Drowned::IsHit()
+{
+	return (state == DrownedState::HIT ? true : false);
+}
+
 bool Drowned::IsState(const char* state_str)
 {
 	if (state_str == "Idle")
@@ -152,9 +157,19 @@ void Drowned::SetState(const char* state_str)
 		animator->SetFloat("speed", 0.0F);
 		is_hide = false;
 		animator->SetBool("hide", false);
+		SpawnParticle("DigParticle", particle_spawn_positions[2]->transform->GetGlobalPosition());
+		SpawnParticle("HeadDigParticle", particle_spawn_positions[0]->transform->GetGlobalPosition(), false, float3::zero(), particle_spawn_positions[0]);
 	}
 	else if (state_str == "Hide")
+	{
 		state = DrownedState::HIDE;
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+		velocity = float3::zero();
+		animator->SetFloat("speed", 0.0F);
+		SpawnParticle("DigParticle", particle_spawn_positions[2]->transform->GetGlobalPosition());
+		SpawnParticle("HeadDigParticle", particle_spawn_positions[0]->transform->GetGlobalPosition(), false, float3::zero(), particle_spawn_positions[0]);
+		is_hiding = true;
+	}
 	else if (state_str == "Hit")
 		state = DrownedState::HIT;
 	else if (state_str == "Dying")

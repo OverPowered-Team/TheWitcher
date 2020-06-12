@@ -6,6 +6,7 @@
 #include "UltiBar.h"
 #include "Scores_Data.h"
 #include "UI_DamageCount.h"
+#include "DialogueManager.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -39,6 +40,35 @@ void InGame_UI::Start()
 
 void InGame_UI::Update()
 {
+	if (!Time::IsGamePaused())
+	{
+		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
+
+		if (time_paused != 0.0f)
+		{
+			time_checkpoint += time_paused;
+			time += time_paused;
+			time_ulti_filter += time_paused;
+
+			for (auto i = particles.begin(); i != particles.end(); ++i)
+			{
+				(*i)->time_passed += time_paused;
+			}
+
+			in_game->GetChild("Character2")->GetComponent<UI_Char_Frame>()->UpdateTimes(time_paused);
+			in_game->GetChild("Character1")->GetComponent<UI_Char_Frame>()->UpdateTimes(time_paused);
+			in_game->GetChild("Ulti_Bar")->GetComponent<UltiBar>()->UpdateTimes(time_paused);
+			in_game->GetComponent<UI_DamageCount>()->UpdateTimes(time_paused);
+
+			time_paused = 0.0f;
+		}
+	}
+	else
+	{
+		time_paused = Time::GetGameTime() - internal_timer;
+		return;
+	}
+
 	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START))||(Input::GetKeyDown(SDL_SCANCODE_ESCAPE)))&&!died)
 	{
 		PauseMenu(!Time::IsGamePaused());
@@ -46,7 +76,7 @@ void InGame_UI::Update()
 
 	if (checkpoint_saved_text->IsEnabled())
 	{
-		float t = (Time::GetGameTime() - time_checkpoint) / 0.5f;
+		float t = (internal_timer - time_checkpoint) / 0.5f;
 		float lerp = 0.0f;
 
 		switch (checkpoint_state)
@@ -77,12 +107,12 @@ void InGame_UI::Update()
 			case CP_STATE::FADE_IN:
 			{
 				checkpoint_state = CP_STATE::SHOW;
-				time_checkpoint = Time::GetGameTime() + 1.5f;
+				time_checkpoint = internal_timer + 1.5f;
 				break;
 			}
 			case CP_STATE::SHOW:
 			{
-				time_checkpoint = Time::GetGameTime();
+				time_checkpoint = internal_timer;
 				checkpoint_state = CP_STATE::FADE_OUT;
 				break;
 			}
@@ -97,12 +127,12 @@ void InGame_UI::Update()
 
 	if (died)
 	{
-		if (time + waiting < Time::GetGameTime())
+		if (time + waiting < internal_timer)
 		{
 			if (!died_gone)
 			{
 				you_died->SetEnable(true);
-				time = Time::GetGameTime();
+				time = internal_timer;
 				waiting = 2;
 				died_gone = true;
 			}
@@ -126,7 +156,7 @@ void InGame_UI::Update()
 		auto particle = particles.begin();
 		for (; particle != particles.end(); ++particle)
 		{
-			float lerp = (Time::GetGameTime() - (*particle)->time_passed) / time_lerp_ult_part;
+			float lerp = (internal_timer - (*particle)->time_passed) / time_lerp_ult_part;
 			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
 			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
@@ -184,18 +214,19 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
+	game_object->GetComponent<DialogueManager>()->Pause(to_open);
 }
 
 void InGame_UI::YouDied()
 {
 	died = true;
-	time = Time::GetGameTime();
+	time = internal_timer;
 }
 
 void InGame_UI::ShowCheckpointSaved()
 {
 	checkpoint_saved_text->SetEnable(true);
-	time_checkpoint = Time::GetGameTime();
+	time_checkpoint = internal_timer;
 }
 
 void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
@@ -217,7 +248,7 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
 	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
-	particle->time_passed = Time::GetGameTime();
+	particle->time_passed = internal_timer;
 
 	particles.push_back(particle);
 }

@@ -179,6 +179,8 @@ void ResourceShader::TryToSetShaderType()
 		shaderType = SHADER_TEMPLATE::SHIELD_FRESNEL;
 	else if (std::strcmp(name.c_str(), "dissolve_shader") == 0)
 		shaderType = SHADER_TEMPLATE::DISSOLVE;
+	else if (std::strcmp(name.c_str(), "ocean_water_shader") == 0)
+		shaderType = SHADER_TEMPLATE::OCEAN_SHADER;
 	else 
 		shaderType = SHADER_TEMPLATE::NO_TEMPLATE;
 }
@@ -206,6 +208,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		SetUniform4f("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
 		SetUniform1f("objectMaterial.smoothness", inputs.standardShaderProperties.smoothness);
 		SetUniform1f("objectMaterial.metalness", inputs.standardShaderProperties.metalness);
+		SetUniform1i("objectMaterial.emissive", inputs.emissive);
 		break; }
 
 	case SHADER_TEMPLATE::WAVE: {
@@ -219,6 +222,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 
 	case SHADER_TEMPLATE::PARTICLE: {
 		SetUniform4f("objectMaterial.diffuse_color", inputs.particleShaderProperties.color);
+		SetUniform1i("objectMaterial.emissive", inputs.emissive);
 		break; }
 	case SHADER_TEMPLATE::TRAIL: {
 		SetUniform4f("objectMaterial.diffuse_color", inputs.trailShaderProperties.color);
@@ -236,7 +240,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		SetUniform1i("dudv_map", 3);
 		SetUniform1f("move_factor", Time::GetTimeSinceStart() * 0.075f);
 		SetUniformFloat3("camera_position", App->renderer3D->actual_game_camera->GetCameraPosition());
-		ApplyLightsUniforms();
+		//ApplyLightsUniforms();
 		break; }
 
 	case SHADER_TEMPLATE::SHIELD: {
@@ -261,7 +265,14 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		glBindTexture(GL_TEXTURE_2D, App->resources->alpha_noise_texture->id);
 		SetUniform1i("alpha_noise", 3);
 		SetUniform1f("burn", inputs.dissolveFresnelShaderProperties.burn);
-		ApplyLightsUniforms();
+		//ApplyLightsUniforms();
+		break; }
+
+	case SHADER_TEMPLATE::OCEAN_SHADER: {
+		SetUniform4f("objectMaterial.diffuse_color", inputs.oceanShaderProperties.diffuse_color);
+		SetUniform1f("iTime", inputs.oceanShaderProperties.water_move * Time::GetTimeSinceStart());
+		SetUniform1f("speed", inputs.oceanShaderProperties.speed * Time::GetTimeSinceStart());
+		SetUniform1i("water_texture_size", inputs.oceanShaderProperties.reduce_water_tex);
 		break; }
 
 	default:
@@ -286,6 +297,9 @@ void ResourceShader::ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera)
 			SetUniform1f("density", camera->fogDensity);
 			SetUniform1f("gradient", camera->fogGradient);
 		}
+		if(camera->bloom)
+			SetUniform1f("bloom_threshold", camera->threshold);
+
 		ApplyLightsUniforms();
 		break;
 
@@ -341,6 +355,13 @@ void ResourceShader::ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera)
 		break;
 	}
 
+	case SHADER_TEMPLATE::OCEAN_SHADER:
+	{
+		SetUniformMat4f("view", camera->GetViewMatrix4x4());
+		SetUniformMat4f("projection", camera->GetProjectionMatrix4f4());
+		
+		break;
+	}
 	}
 }
 

@@ -6,6 +6,7 @@
 #include "CameraShake.h"
 #include "RumblerManager.h"
 #include "ParticlePool.h"
+#include "Scores_Data.h"
 
 #include "UI_Char_Frame.h"
 
@@ -28,7 +29,7 @@ Attack_Tags GetTag(std::string str)
 	return Attack_Tags::T_None;
 }
 
-static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon} };
+static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon}, {"Weapon2",Collider_Type::C_Weapon2} };
 
 Collider_Type GetColliderType(std::string str)
 {
@@ -52,7 +53,14 @@ void PlayerAttacks::Start()
 
 	colliders = game_object->GetChild("Attacks_Collider")->GetComponents<ComponentCollider>();
 	if (weapon_obj)
+	{
 		colliders.push_back(weapon_obj->GetComponent<ComponentCollider>());
+	}
+	if (weapon2_obj)
+	{
+		colliders.push_back(weapon2_obj->GetComponent<ComponentCollider>());
+	}
+		
 
 	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 	{
@@ -62,6 +70,8 @@ void PlayerAttacks::Start()
 	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
 	CreateAttacks();
+
+	ReLoadRelics();
 }
 
 void PlayerAttacks::StartAttack(AttackType attack)
@@ -267,9 +277,11 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0 && !(*i)->game_object_attached->GetComponent<Enemy>()->IsDead())
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
-			enemies_in_range.push_back((*i)->game_object_attached);
+			Enemy* enemy = (*i)->game_object_attached->GetComponent<Enemy>();
+			if(enemy && !enemy->IsDead())
+				enemies_in_range.push_back((*i)->game_object_attached);
 		}
 	}
 
@@ -299,6 +311,24 @@ bool PlayerAttacks::FindSnapTarget()
 	}
 
 	return false;
+}
+
+void PlayerAttacks::ReLoadRelics()
+{
+	if (player_controller->controller_index == 1 && Scores_Data::player1_relics.size() > 0)
+	{
+		for (auto it = Scores_Data::player1_relics.begin(); it != Scores_Data::player1_relics.end(); it++)
+		{
+			player_controller->PickUpRelic((*it));
+		}
+	}
+	else if (player_controller->controller_index == 2 && Scores_Data::player2_relics.size() > 0)
+	{
+		for (auto it = Scores_Data::player2_relics.begin(); it != Scores_Data::player2_relics.end(); it++)
+		{
+			player_controller->PickUpRelic((*it));
+		}
+	}
 }
 
 void PlayerAttacks::ReceiveInput(AttackType attack, int spell_index)
@@ -353,6 +383,16 @@ void PlayerAttacks::ActivateCollider()
 			box_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
 			box_collider->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
 			box_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+
+			//YENN EXCEPTION
+			if (player_controller->player_data.type == PlayerController::PlayerType::YENNEFER)
+			{
+				if (current_attack->info.colliders[current_attack->current_collider].type == Collider_Type::C_Weapon)
+					weapon_obj->SetEnable(true);
+				else if(current_attack->info.colliders[current_attack->current_collider].type == Collider_Type::C_Weapon2)
+					weapon2_obj->SetEnable(true);
+			}
+
 		}
 			break;
 		}
@@ -382,7 +422,7 @@ void PlayerAttacks::CastSpell()
 {
 	if (current_attack)
 	{
-		LOG("Casting Spell %s", current_attack->info.name.c_str());
+		LOG("Casting Spell %s with %f cost", current_attack->info.name.c_str(), current_attack->info.stats["Cost"].GetValue());
 		player_controller->PlayAttackParticle();
 		player_controller->audio->StartSound(current_attack->info.audio_name.c_str());
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());

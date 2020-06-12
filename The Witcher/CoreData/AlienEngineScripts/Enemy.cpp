@@ -20,6 +20,30 @@ void Enemy::Awake()
 	particle_spawn_positions.push_back(game_object->GetChildRecursive("Body_Position"));
 	particle_spawn_positions.push_back(game_object->GetChildRecursive("Feet_Position"));
 	particle_spawn_positions.push_back(game_object->GetChildRecursive("Attack_Position"));
+
+	hitMaterial.color = float4(1, 1, 1, 1);
+
+	GameObject* mesh = game_object->GetChild("Mesh");
+	if (mesh)
+	{
+		meshes = mesh->GetComponentsInChildrenRecursive<ComponentMaterial>();
+		//for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+		//{
+		//	if ((*iter) && (*iter)->HasChildren())
+		//	{
+		//		std::vector<GameObject*> childs = (*iter)->GetChildren();
+		//		for (auto iter2 = childs.begin(); iter2 != meshes.end(); iter2++)
+		//		{
+		//			if ((*iter2))
+		//			{
+		//				meshes.push_back((*iter2));
+		//			}
+		//		}	
+		//	}
+		//}
+		LOG("Got Meshes");
+	}
+
 }
 
 void Enemy::StartEnemy()
@@ -155,7 +179,7 @@ void Enemy::UpdateEnemy()
 				it_stats->second.ModifyCurrentStat((*it));
 				
 				//Temporal solution
-				if (it_stats->first == "Health" && !IsDead())
+				if (it_stats->first == "Health" && !IsDead() && !IsDying())
 				{
 					if (stats["Health"].GetValue() <= 0)
 					{
@@ -191,7 +215,27 @@ void Enemy::UpdateEnemy()
 		}
 		++it;
 	}
-
+	if (inHit)
+	{
+		whiteTime += Time::GetDT();
+		if (whiteTime > 0.1)
+		{
+			for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+			{
+				if ((*iter))
+				{
+					/*ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+					if (material)
+					{*/
+						if(defaultMaterial)
+							(*iter)->material = defaultMaterial;
+					/*}*/
+				}
+			}
+			whiteTime = 0;
+			inHit = false;
+		}
+	}
 }
 
 void Enemy::CleanUpEnemy()
@@ -226,21 +270,30 @@ void Enemy::SetStats(const char* json)
 
 void Enemy::Move(float3 direction)
 {
+	
+	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
-	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
-	if (avoid_vector.LengthSq() > 0)
+	// Option 1 : Works only one steering at the time. Avoid zone has to be small
+	/*if (avoid_vector.Length() > 0)
 		velocity += avoid_vector;
 	else
-		velocity += velocity_vec;
+		velocity += velocity_vec;*/
 
-	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	// Option 2: Add of the two steering
+	//velocity += avoid_vector + velocity_vec;
+
+	// Option 3: Add of two steering with weights
+	velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
+
+	if (velocity.Length() > stats["Agility"].GetValue())
 	{
 		velocity = velocity.Normalized()* stats["Agility"].GetValue();
 	}
-
+	LOG("%f", velocity.Length());
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
-	animator->SetFloat("speed", velocity.LengthSq());
+	animator->SetFloat("speed", velocity.Length());
 
 	float angle = atan2f(velocity.z, velocity.x);
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
@@ -251,27 +304,35 @@ void Enemy::Move(float3 direction)
 
 void Enemy::Guard()
 {
+	float avoid_force = 0.0f;
 	float3 velocity_vec = direction.Normalized() * stats["Acceleration"].GetValue() * Time::GetDT();
-	float3 avoid_vector = steeringAvoid->AvoidObstacle();
+	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
+	// Option 1: Combiantion of behaviours
+	/*if (player_controllers[current_player]->battleCircle < distance)
+		velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
+	else
+		velocity = float3::zero();*/
+
+	// Option 2: Different behaviours
 	if (avoid_vector.LengthSq() > 0)
 		velocity += avoid_vector;
-	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance )
+	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance)
 		velocity += velocity_vec;
 	else if (stats["AttackRange"].GetValue() > distance)
 		velocity -= velocity_vec;
-	else
+	else 
 		velocity = float3::zero();
 
-	animator->SetFloat("speed", velocity.LengthSq());
+	animator->SetFloat("speed", velocity.Length());
 
-	if (velocity.LengthSq() > stats["Agility"].GetValue())
+	if (velocity.Length() > stats["Agility"].GetValue())
 		velocity = velocity.Normalized() * stats["Agility"].GetValue();
 
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 
 	float angle;
-	if(velocity.LengthSq() == 0.0f)
+	if(velocity.Length() == 0.0f)
 		angle = atan2f(velocity_vec.z, velocity_vec.x);
 	else
 		angle = atan2f(velocity.z, velocity.x);
@@ -317,8 +378,19 @@ void Enemy::Decapitate(PlayerController* player)
 
 	if (decapitated_head)
 	{
-		game_object->GetChild("Head")->SetEnable(false); //disable old head
+		// If not working, check prefab
+		game_object->GetChild("Mesh")->GetChild("Head")->SetEnable(false); //disable old head
 		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
+		
+		vector<GameObject*> iss = decapitated_head->GetChildren();
+		for (auto it = iss.begin(); it != iss.end(); it++)
+		{
+			if (strcmp((*it)->GetName(),"blood_head_particle" )==0)
+			{
+				(*it)->SetEnable(true);
+			}
+		}
+		
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 		head_rb->SetRotation(particle_spawn_positions[0]->transform->GetGlobalRotation());
@@ -335,12 +407,19 @@ void Enemy::Decapitate(PlayerController* player)
 
 void Enemy::CanGetInterrupted()
 {
-	can_get_interrupted = true;
+	//can_get_interrupted = true;
 }
 
 void Enemy::RotatePlayer()
 {
 	float angle = atan2f(direction.z, direction.x);
+	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
+	transform->SetGlobalRotation(rot);
+}
+
+void Enemy::RotateToPlayerSmooth(float perc)
+{
+	float angle = atan2f(direction.z, direction.x) * perc;
 	Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 	transform->SetGlobalRotation(rot);
 }
@@ -356,27 +435,27 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
-	LOG("estoy en getdamage %f", stats["Health"].GetValue());
+
 	last_player_hit = player;
 	velocity = knock_back; //This will replace old knockback if there was any...
 
-	if (can_get_interrupted || stats["Health"].GetValue() == 0.0F) {
+	if (can_get_interrupted)
+	{
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
-		if (!is_hit_inmune)
-		{
-			stats["HitSpeed"].IncreaseStat(increase_hit_animation);
-			animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		}
 	}
 
-	if ((stats["HitSpeed"].GetValue() == stats["HitSpeed"].GetMaxValue()))
-	{
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
-		can_get_interrupted = false;
-	}
-
+	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
+	float2 temp_pl = float2(last_player_hit->transform->GetGlobalPosition().x, last_player_hit->transform->GetGlobalPosition().z);
+	float angle = acos(math::Dot(temp_e, temp_pl) / (temp_e.LengthSq() * temp_pl.LengthSq())); //sino provar Length	
+	LOG("%f", angle);//radians
+	float anglez = math::RadToDeg(angle);
+	LOG("%f", anglez);//degree
+	float3 rotated_particle = float3(
+		temp_e.x * cos(anglez) - temp_pl.y * sin(anglez),
+		0.0f,
+		temp_e.x * sin(anglez) + temp_pl.y * cos(anglez));
+	LOG("X %f, Z %f", rotated_particle.x, rotated_particle.z);
 	math::Quat player_quat =last_player_hit->transform->GetGlobalRotation();
 	float3 particle_rotation = last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_dir;
 
@@ -399,7 +478,23 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	}
 
 	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		if ((*iter))
+		{
+			//ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+			if (defaultMaterial == nullptr)
+			{
+				defaultMaterial = (ResourceMaterial*)(*iter)->GetMaterial();
+			}
 
+			if ((*iter))
+			{
+				(*iter)->material = &hitMaterial;
+			}
+		}
+		inHit = true;
+	}
 	return aux_health - stats["Health"].GetValue();
 }
 
@@ -483,9 +578,9 @@ void Enemy::HitFreeze(float freeze_time)
 
 void Enemy::SpawnAttackParticle()
 {
-	SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetGlobalPosition());
+	/*SpawnParticle("EnemyAttackParticle", particle_spawn_positions[3]->transform->GetGlobalPosition());
 	HitFreeze(0.05);
-	can_get_interrupted = false;
+	can_get_interrupted = false;*/
 	// Sonidito de clinck de iluminacion espada maestra
 }
 
@@ -526,10 +621,10 @@ void Enemy::SpawnParticle(std::string particle_name, float3 pos, bool local, flo
 	
 	if (new_particle == nullptr)
 		return;
-	else {
-		if (!quat_rot.Equals(math::Quat::identity()))
-			new_particle->transform->SetGlobalRotation(quat_rot * quat_rot.RotateX(DEGTORAD * (rotation.x)) * quat_rot.RotateY(DEGTORAD * (rotation.y)) * quat_rot.RotateZ(DEGTORAD * (rotation.z)));
-	}
+	
+	if (!quat_rot.Equals(math::Quat::identity()))
+		new_particle->transform->SetGlobalRotation(quat_rot * quat_rot.RotateX(DEGTORAD * (rotation.x)) * quat_rot.RotateY(DEGTORAD * (rotation.y)) * quat_rot.RotateZ(DEGTORAD * (rotation.z)));
+
 
 	particles.push_back(new_particle);
 }
@@ -566,7 +661,7 @@ void Enemy::ChangeAttackEnemy(bool deleting)
 	std::vector<Enemy*> enemy_vec = player_controllers[current_player]->enemy_battle_circle;
 	for (int i = 0; i < enemy_vec.size(); ++i)
 	{
-		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies)
+		if (!enemy_vec[i]->is_attacking && enemy_vec[i] != this && player_controllers[current_player]->current_attacking_enemies < player_controllers[current_player]->max_attacking_enemies && !enemy_vec[i]->IsDying() && !enemy_vec[i]->IsDead())
 		{
 			enemy_vec[i]->AddAttacking(player_controllers[current_player]);
 
@@ -630,10 +725,17 @@ void Enemy::RemoveAttacking(PlayerController* player_controller)
 		SetState("Guard");
 }
 
+void Enemy::OnControllerColliderHit(const ControllerColliderHit& hit)
+{
+	if (IsHit() && hit.collider->GetCollisionLayer() == "Player")
+	{
+		velocity = float3::zero();
+	}
+}
+
 void Enemy::SpawnHealthOrb()
 {
-	int rand_num = Random::GetRandomIntBetweenTwo(0,1);
+	int rand_num = Random::GetRandomIntBetweenTwo(0,2);
 	if(rand_num == 0)
 		GameObject::Instantiate(life_orb, transform->GetGlobalPosition() + float3::unitY() * 0.5);
 }
-	
