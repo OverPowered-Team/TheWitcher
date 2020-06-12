@@ -1,0 +1,958 @@
+{
+    "Name": "ciri_torbellino",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "ciri_torbellino",
+                "FamilyNumber": 1,
+                "ID": "3050137551959109964",
+                "ParentID": "620220625201035254",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4365296570035729126",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11667259859747279456"
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 9,
+                        "Center": [
+                            0,
+                            6.0500001907348633,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Radius": 3.7999999523162842,
+                        "Height": 13,
+                        "Orientation": 1
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "15783563758808650001",
+                        "ResourceID": "15415674354658511102",
+                        "DataName": "CiriNado",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "ciri_torbellino1",
+                "FamilyNumber": 2,
+                "ID": "4215818670561647892",
+                "ParentID": "3050137551959109964",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4365296570035729126",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8929196574561519955"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "9151697210021661165",
+                        "Billboard": 2,
+                        "Start": {
+                            "Position": [
+                                -0.0091546252369880676,
+                                -0.024349169805645943,
+                                0.0048010819591581821
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                0,
+                                3.9999997615814209,
+                                -4.76837158203125e-07
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 4,
+                            "Color": [
+                                1,
+                                1,
+                                1,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 3,
+                            "Size3D": [
+                                3,
+                                3,
+                                3
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": true,
+                            "Angle3D": [
+                                -90,
+                                0,
+                                0
+                            ],
+                            "Random": false,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "StartTime": 0,
+                            "FinalTime": 5,
+                            "Speed": 1,
+                            "Color": [
+                                0.029032230377197266,
+                                1,
+                                0.53017663955688477,
+                                1
+                            ],
+                            "Size": 8,
+                            "Size3D": [
+                                8,
+                                8,
+                                8
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": true,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                1000
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 2,
+                            "Zone": 0,
+                            "Distance": 20,
+                            "Radius": 5,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "MaxLife": 10,
+                            "CurrentLife": 1.06600022315979,
+                            "SpawnRate": 40,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                -90.000007629394531,
+                                0,
+                                0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "12487275562159827445",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Name": "ciri_torbellino2",
+                "FamilyNumber": 2,
+                "ID": "3129137936999145578",
+                "ParentID": "3050137551959109964",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4365296570035729126",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16787149710028538452"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "17551856502869096818",
+                        "Billboard": 2,
+                        "Start": {
+                            "Position": [
+                                0.031352315098047256,
+                                0.042895626276731491,
+                                0.043377380818128586
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                0,
+                                3.9999997615814209,
+                                -4.76837158203125e-07
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 4,
+                            "Color": [
+                                1,
+                                1,
+                                1,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 3,
+                            "Size3D": [
+                                3,
+                                3,
+                                3
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": true,
+                            "Angle3D": [
+                                -90,
+                                0,
+                                0
+                            ],
+                            "Random": false,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "StartTime": 0,
+                            "FinalTime": 5,
+                            "Speed": 1,
+                            "Color": [
+                                0,
+                                1,
+                                0.47741913795471191,
+                                1
+                            ],
+                            "Size": 8,
+                            "Size3D": [
+                                8,
+                                8,
+                                8
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": true,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                1000
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 2,
+                            "Zone": 0,
+                            "Distance": 20,
+                            "Radius": 5,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "MaxLife": 10,
+                            "CurrentLife": 1.06600022315979,
+                            "SpawnRate": 29.999998092651367,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                -90.000007629394531,
+                                0,
+                                0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "12487275562159827445",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Name": "ciri_torbellino3",
+                "FamilyNumber": 2,
+                "ID": "7255508235453377567",
+                "ParentID": "3050137551959109964",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4365296570035729126",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10623776175859610532"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "1282406998354048311",
+                        "Billboard": 2,
+                        "Start": {
+                            "Position": [
+                                -0.015354793518781662,
+                                -0.0039882226847112179,
+                                -0.046471800655126572
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                -0,
+                                1.9999998807907104,
+                                2.384185791015625e-07
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": -2,
+                            "Color": [
+                                1,
+                                1,
+                                1,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 3,
+                            "Size3D": [
+                                3,
+                                3,
+                                3
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": true,
+                            "Angle3D": [
+                                -90,
+                                0,
+                                0
+                            ],
+                            "Random": false,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "StartTime": 0,
+                            "FinalTime": 5,
+                            "Speed": -0.5,
+                            "Color": [
+                                0.029032230377197266,
+                                1,
+                                0.53017663955688477,
+                                1
+                            ],
+                            "Size": 8,
+                            "Size3D": [
+                                8,
+                                8,
+                                8
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": true,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                1000
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 2,
+                            "Zone": 0,
+                            "Distance": 20,
+                            "Radius": 5,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "MaxLife": 10,
+                            "CurrentLife": 1.06600022315979,
+                            "SpawnRate": 40,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                90.000007629394531,
+                                0,
+                                -0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "12487275562159827445",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
+                    }
+                ]
+            },
+            {
+                "Name": "ciri_torbellino4",
+                "FamilyNumber": 2,
+                "ID": "9200772746011243909",
+                "ParentID": "3050137551959109964",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "4365296570035729126",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12228507527791601854"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "11596889361153758495",
+                        "Billboard": 2,
+                        "Start": {
+                            "Position": [
+                                0.016181092709302902,
+                                -0.048239503055810928,
+                                0.021241147071123123
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": true,
+                            "Velocity": [
+                                -0,
+                                1.9999998807907104,
+                                2.384185791015625e-07
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": -2,
+                            "Color": [
+                                1,
+                                1,
+                                1,
+                                1
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 3,
+                            "Size3D": [
+                                3,
+                                3,
+                                3
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": true,
+                            "Angle3D": [
+                                -90,
+                                0,
+                                0
+                            ],
+                            "Random": false,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": true,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "StartTime": 0,
+                            "FinalTime": 5,
+                            "Speed": -0.5,
+                            "Color": [
+                                0,
+                                1,
+                                0.47741913795471191,
+                                1
+                            ],
+                            "Size": 8,
+                            "Size3D": [
+                                8,
+                                8,
+                                8
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": true,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                1000
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 2,
+                            "Zone": 0,
+                            "Distance": 20,
+                            "Radius": 5,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                0.10000000149011612,
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "MaxLife": 10,
+                            "CurrentLife": 1.06600022315979,
+                            "SpawnRate": 29.999998092651367,
+                            "Delay": 0,
+                            "Loop": true,
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "RelativeRotation": [
+                                90.000007629394531,
+                                0,
+                                -0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "12487275562159827445",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

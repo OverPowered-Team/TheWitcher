@@ -135,7 +135,7 @@ void NilfgaardSoldier::Stun(float time)
 	if (state != NilfgaardSoldierState::STUNNED && state != NilfgaardSoldierState::DEAD && state != NilfgaardSoldierState::DYING)
 	{
 		state = NilfgaardSoldierState::STUNNED;
-		animator->PlayState("Dizzy");
+		animator->SetBool("stunned", true);
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
 		audio_emitter->StartSound("Play_Dizzy_Enemy");
@@ -149,6 +149,11 @@ bool NilfgaardSoldier::IsDead()
 bool NilfgaardSoldier::IsDying()
 {
 	return (state == NilfgaardSoldierState::DYING ? true : false);
+}
+
+bool NilfgaardSoldier::IsHit()
+{
+	return (state == NilfgaardSoldierState::HIT ? true : false);
 }
 
 void NilfgaardSoldier::SetState(const char* state_str)
@@ -203,9 +208,12 @@ void NilfgaardSoldier::SetState(const char* state_str)
 void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 
 	if (strcmp(name, "Attack") == 0 || strcmp(name, "Shoot") == 0) {
-		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		can_get_interrupted = true;
+		//stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		//animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		if(nilf_type != NilfgaardType::SWORD_SHIELD)
+			can_get_interrupted = true;
 		ReleaseParticle("EnemyAttackParticle");
+
 		if (distance < stats["VisionRange"].GetValue())
 			SetState("Move");
 		else
@@ -214,6 +222,10 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");
+
+		if (nilf_type == NilfgaardType::SWORD_SHIELD)
+			return;
+
 		if (stats["Health"].GetValue() <= 0.0F) {
 			SetState("Hit");
 			if (!IsRangeEnemy())
@@ -231,14 +243,24 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		{
 			ChangeAttackEnemy();		
 		}
-		else if (!is_dead)
-			SetState("Idle");
+		else if (!is_dead) 
+		{
+			SetState("Guard");
+		}
+
 	}
-	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
+	else if ((strcmp(name, "Dizzy") == 0))
 	{
-		state = NilfgaardSoldierState::DYING;
-		//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
-		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+		if (stats["Health"].GetValue() <= 0) 
+		{
+			state = NilfgaardSoldierState::DYING;
+			//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
+			GameManager::instance->player_manager->IncreaseUltimateCharge(10);
+		}
+		else
+		{
+			can_get_interrupted = false;
+		}
 	}
 }
 

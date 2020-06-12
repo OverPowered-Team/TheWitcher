@@ -13,10 +13,10 @@
 #include "State.h"
 #include "../../ComponentDeformableMesh.h"
 #include "CameraShake.h"
-
+#include "../../ComponentTrail.h"
 #include "Bonfire.h"
 #include "Scores_Data.h"
-
+#include "UI_DamageCount.h"
 #include "InGame_UI.h"
 #include "DashCollider.h"
 
@@ -40,7 +40,7 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
-
+	
 	LoadStats();
 	CalculateAABB();
 	InitKeyboardControls();
@@ -58,8 +58,20 @@ void PlayerController::Start()
 	state = new IdleState();
 	state->OnEnter(this);
 
+	layers.push_back("Ground");
+	layers.push_back("Default");
+	layers.push_back("Player");
+
 	// Dash
-	dashData.current_acel_multi = dashData.accel_multi; 
+	//dashData.current_acel_multi = dashData.accel_multi; 
+	GameObject* trail_go = game_object->GetChild("trail");
+	if(trail_go)
+		dash_trail = trail_go->GetComponent<ComponentTrail>();
+	
+	if (dash_trail != nullptr) //todo no ser tant guarro
+	{
+		dash_trail->Stop();
+	}
 }
 
 void PlayerController::Update()
@@ -70,7 +82,7 @@ void PlayerController::Update()
 	UpdateInput();
 
 	//State Machine--------------------------------------------------------
-	State* new_state = !input_blocked? state->HandleInput(this): nullptr;
+	State* new_state = state->HandleInput(this);
 	if (new_state != nullptr)
 		SwapState(new_state);
 
@@ -102,6 +114,12 @@ void PlayerController::Update()
 	CheckEnemyCircle();
 
 	CheckGround();
+
+	if (layer_changed && collision_timer < Time::GetTimeSinceStart())
+	{
+		controller->SetCollisionLayer("Player");
+		layer_changed = false;
+	}
 }
 
 void PlayerController::CheckGround()
@@ -109,15 +127,23 @@ void PlayerController::CheckGround()
 	direction = GetDirectionVector();
 
 	RaycastHit hit;
-
-	float ground_distance = 0.2F;
+	is_grounded = false;
+	float ground_distance = 0.3F;
 	float offset = transform->GetGlobalScale().y * 0.5f;
+
+	//capsulecast
+	float4x4 cast_transform = transform->GetGlobalMatrix();
+	cast_transform.Translate(float3(0, offset, 0));
 	
+	//raycast
 	float3 center_position = transform->GetGlobalPosition();
 	center_position.y += offset;
-	
-	is_grounded = false;
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask("Ground")))
+
+	Physics::SetQueryHitTriggers(false);
+	Physics::SetQueryInitialOverlaping(false);
+
+	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
@@ -125,25 +151,19 @@ void PlayerController::CheckGround()
 			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
+
+			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+			if (angle > 45 && direction.y > 0)
+				is_grounded = false;
 		}
-		/*if (direction_vector.y > 0) //temporal?
-			direction_vector.y = 0;*/
 	}
 }
 
-void PlayerController::ToggleDashMultiplier()
-{   
-	if (player_data.type == PlayerController::PlayerType::YENNEFER)
-	{
-		dashData.current_acel_multi = -1.0f * dashData.current_acel_multi;
-
-		if (dashData.disappear_on_dash)
-		{
-			auto meshes = game_object->GetChild("Meshes");
-			meshes->SetEnable(!meshes->IsEnabled());
-		}
-	}
-		
+void PlayerController::ChangeCollisionLayer(std::string layer, float time)
+{
+	controller->SetCollisionLayer(layer);
+	collision_timer = Time::GetTimeSinceStart() + time;
+	layer_changed = true;
 }
 
 void PlayerController::UpdateInput()
@@ -182,7 +202,7 @@ void PlayerController::UpdateInput()
 
 
 	// DEBUG
-	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::GERALT))
+	if (Input::GetKeyDown(SDL_SCANCODE_KP_9) && (player_data.type == PlayerController::PlayerType::YENNEFER))
 		ReceiveDamage(10, float3::zero(), false); 
 }
 
@@ -338,6 +358,9 @@ void PlayerController::PlayAttackParticle()
 	{
 		SpawnParticle(attacks->GetCurrentAttack()->info.particle_name, attacks->GetCurrentAttack()->info.particle_pos);
 		
+		if(attacks->GetCurrentAttack()->IsLast())
+			ChangeColorParticle();
+
 		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
 		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
@@ -405,7 +428,6 @@ void PlayerController::Revive(float minigame_value)
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
-	is_immune = false;
 
 	if(HUD)
 		HUD->GetComponent<UI_Char_Frame>()->LifeChange(player_data.stats["Health"].GetValue(), player_data.stats["Health"].GetMaxValue());
@@ -414,8 +436,6 @@ void PlayerController::Revive(float minigame_value)
 		GameManager::instance->rumbler_manager->StartRumbler(RumblerType::REVIVE, controller_index);
 	if(GameManager::instance->event_manager)
 		GameManager::instance->event_manager->OnPlayerRevive(this);
-
-	SetState(StateType::IDLE);
 }
 
 void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
@@ -449,19 +469,17 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		}
 
 		attacks->CancelAttack();
-		//if (knock) {
-			if (player_data.stats["Health"].GetValue() == 0)
-			{
-				shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
-				Die();
-			}
-			else
-			{
-				animator->PlayState("Hit");
-				player_data.velocity = knock_speed;
-				SetState(StateType::HIT);
-			}
-		//}
+		if (player_data.stats["Health"].GetValue() == 0)
+		{
+			shake->Shake(0.16f, 1, 5.f, 0.5f, 0.5f, 0.5f);
+			Die();
+		}
+		else if(knock)
+		{
+			animator->PlayState("Hit");
+			player_data.velocity = knock_speed;
+			SetState(StateType::HIT);
+		}
 
 		if (GameManager::instance->rumbler_manager)
 			GameManager::instance->rumbler_manager->StartRumbler(RumblerType::RECEIVE_HIT, controller_index);
@@ -494,7 +512,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 
 void PlayerController::AbsorbHit()
 {
-	for (auto it = effects.begin(); it != effects.end();)
+	for (auto it = effects.begin(); it != effects.end(); ++it)
 	{
 		for (auto mods = (*it)->additive_modifiers.begin(); mods != (*it)->additive_modifiers.end(); ++mods)
 		{
@@ -575,8 +593,6 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		return it;
 	}
 
-	it = effects.erase(it);
-
 	if (tmp_effect->spawned_particle != nullptr)
 	{
 		GameManager::instance->particle_pool->ReleaseInstance(tmp_effect->vfx_on_apply, tmp_effect->spawned_particle);
@@ -595,7 +611,7 @@ std::vector<Effect*>::iterator PlayerController::RemoveEffect(std::vector<Effect
 		}
 	}
 
-
+	it = effects.erase(it);
 
 	/*for (auto it = particles.begin(); it != particles.end();)
 	{
@@ -648,7 +664,8 @@ bool PlayerController::CheckBoundaries()
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_AXIS
 							|| cam->state == CameraMovement::CameraState::MOVING_TO_DYNAMIC
 							|| cam->state == CameraMovement::CameraState::AXIS
-							|| p->state->type == StateType::JUMPING)
+							|| p->state->type == StateType::JUMPING
+							|| cam->state == CameraMovement::CameraState::CINEMATIC)
 							return true;
 
 						cam->prev_state = cam->state;
@@ -704,7 +721,6 @@ void PlayerController::HitFreeze(float freeze_time)
 	float speed = animator->GetCurrentStateSpeed();
 	std::string state_name = animator->GetCurrentStateName();
 
-	LOG("FREEZING %s",state_name.c_str());
 	animator->SetStateSpeed(state_name.c_str(), 0);
 	PauseParticle();
 	is_immune = true;
@@ -732,6 +748,12 @@ void PlayerController::PauseParticle()
 			if (p_system)
 				p_system->Pause();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+			
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Pause();
+			
+
 			return;
 		}
 	}
@@ -751,6 +773,11 @@ void PlayerController::ResumeParticle()
 			if (p_system)
 				p_system->Play();
 
+			vector<ComponentParticleSystem*> son_particle = (*it)->GetComponentsInChildren<ComponentParticleSystem>();
+
+			for (vector<ComponentParticleSystem*>::iterator ip = son_particle.begin(); ip != son_particle.end(); ++ip)
+				(*ip)->Play();
+
 			return;
 		}
 	}
@@ -766,6 +793,14 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 		if (std::strcmp((*it)->GetName(), particle_name.c_str()) == 0)
 		{
 			(*it)->SetEnable(false);
+
+			parent = parent != nullptr ? parent : this->game_object;
+			(*it)->SetNewParent(parent);
+			if (local)
+				(*it)->transform->SetLocalPosition(pos);
+			else
+				(*it)->transform->SetGlobalPosition(pos);
+
 			(*it)->SetEnable(true);
 			
 			return;
@@ -791,6 +826,19 @@ void PlayerController::SpawnParticle(std::string particle_name, float3 pos, bool
 	}*/
 }
 
+void PlayerController::SpawnDashParticle()
+{
+	if (player_data.type == PlayerType::YENNEFER)
+	{
+		float3 pos = particle_spawn_positions[1]->transform->GetGlobalPosition();
+		if(!is_immune)
+			pos += transform->forward * 0.8f;
+
+		SpawnParticle("Yenn_Portal", pos, false, float3::zero(), GameManager::instance->game_object);
+	}
+		
+}
+
 void PlayerController::ReleaseParticle(std::string particle_name)
 {
 	if (particle_name == "")
@@ -813,7 +861,66 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 		particles.erase(particle_name);
 	}*/
 }
+void PlayerController::ChangeColorParticle()
+{
+	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
+	bool color_changed = false;
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	{
+		color_changed = true;
+		my_color.x = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+	{
+		color_changed = true;
+		my_color.z = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.5)
+			my_color.x += 0.5f;
+		else
+			my_color.x = 1.0f;
+		my_color.y += 0.5f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+	{
+		color_changed = true;
+		if (my_color.x <= 0.3f)
+			my_color.x += 0.7f;
+		else
+			my_color.x = 1.0f;
+		my_color.y = 1.0f;
+	}
+	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+	{
+		color_changed = true;
+		my_color.y = 1.0f;
+	}
 
+	if (color_changed)
+	{
+		for (auto it = particles.begin(); it != particles.end(); ++it)
+		{
+			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
+			{
+				/*GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
+				if (p_go)
+				{
+					//p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				}*/
+				for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
+				{
+					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
+					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
+				}
+			}
+		}
+	}
+
+}
 void PlayerController::CheckEnemyCircle()
 {
 	std::vector<ComponentCollider*> colliders = Physics::OverlapSphere(transform->GetGlobalPosition(), battleCircle);
@@ -823,15 +930,15 @@ void PlayerController::CheckEnemyCircle()
 		if (strcmp(colliders[i]->game_object_attached->GetTag(), "Enemy") == 0)
 		{
 			float3 avoid_direction = colliders[i]->game_object_attached->transform->GetGlobalPosition() - transform->GetGlobalPosition();
-			float avoid_distance = avoid_direction.LengthSq();
+			float avoid_distance = avoid_direction.Length();
 			if (avoid_distance > battleCircle)
 				continue;
 
 			Enemy* enemy = colliders[i]->game_object_attached->GetComponent<Enemy>();
 
-			LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
+			//LOG("Current %s attacking enemies: %i", game_object->GetName(), current_attacking_enemies);
 
-			if (!enemy->is_battle_circle && enemy->type == EnemyType::NILFGAARD_SOLDIER && !enemy->IsRangeEnemy())
+			if (!enemy->is_battle_circle && (enemy->type == EnemyType::NILFGAARD_SOLDIER || enemy->type == EnemyType::GHOUL) && !enemy->IsRangeEnemy())
 				enemy->AddBattleCircle(this);
 		}
 	}
@@ -911,6 +1018,7 @@ void PlayerController::UpdateDashEffect()
 				go->transform->SetGlobalRotation(this->transform->GetGlobalRotation());
 				DashCollider* dash_coll = go->GetComponent<DashCollider>();
 				dash_coll->effect = (DashEffect*)(*it);
+				dash_coll->player_dashing = this;
 
 				if (dash_coll->effect->on_dash_effect->name != "")
 					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
@@ -968,16 +1076,39 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				float3 knock_speed = -direction * enemy->stats["KnockBack"].GetValue();
 				knock_speed.y = 0;
 
-				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed);
+				ReceiveDamage(enemy->stats["Damage"].GetValue(), knock_speed, !enemy->is_mini);
+				HUD->parent->GetComponent<UI_DamageCount>()->PlayerHasBeenHit(this);
+				
 				return;
 			}
 		}
 	}
 }
 
+void PlayerController::StartImmune()
+{
+	is_immune = true;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("DashLayer");
+		meshes->SetEnable(false);
+	}
+}
+
+void PlayerController::StopImmune()
+{
+	is_immune = false;
+	if (state->type == StateType::ROLLING && player_data.type == PlayerType::YENNEFER)
+	{
+		GameObject* meshes = game_object->GetChild("Meshes");
+		controller->SetCollisionLayer("Player");
+		meshes->SetEnable(true);
+	}
+}
+
 void PlayerController::OnEnemyKill(uint enemy_type)
 {
-	LOG("ENEMY KILL");
 	if (player_data.type_kills.find(enemy_type) == player_data.type_kills.end()) //if this type was never killed create new entry
 	{
 		player_data.type_kills.insert(std::pair<uint, uint>(enemy_type, 0));

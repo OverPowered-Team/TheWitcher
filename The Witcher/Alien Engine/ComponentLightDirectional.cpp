@@ -236,6 +236,7 @@ bool ComponentLightDirectional::DrawInspector()
 		ImGui::Spacing();
 
 		ImGui::Checkbox("Casts Shadows", &castShadows);
+		ImGui::DragFloat("Shadow Intensity", &light_props.shadowIntensity, 0.01, 0.0, 1.0);
 
 		ImGui::DragFloat("baked Shadow Map Size", &sizefrustrumbaked);
 
@@ -268,6 +269,7 @@ void ComponentLightDirectional::Clone(Component* clone)
 	ComponentLightDirectional* light = (ComponentLightDirectional*)clone;
 	light->renderer_id = renderer_id;
 	light->print_icon = print_icon;
+	light->light_props = light_props;
 }
 
 void ComponentLightDirectional::Reset()
@@ -301,6 +303,8 @@ void ComponentLightDirectional::SaveComponent(JSONArraypack* to_save)
 	to_save->SetFloat3("Specular", float3(light_props.specular));
 	to_save->SetBoolean("CastShadows", castShadows);
 	to_save->SetNumber("SizeBakedShadow", sizefrustrumbaked);
+	to_save->SetNumber("sadowIntensity", float(light_props.shadowIntensity));
+
 }
 
 void ComponentLightDirectional::LoadComponent(JSONArraypack* to_load)
@@ -319,9 +323,12 @@ void ComponentLightDirectional::LoadComponent(JSONArraypack* to_load)
 
 	try {
 		sizefrustrumbaked = to_load->GetNumber("SizeBakedShadow");
+		light_props.shadowIntensity = (float)to_load->GetNumber("shadowIntensity");
+
 	}
 	catch (...) {
 		sizefrustrumbaked = 78.0f;
+		light_props.shadowIntensity = 0.5f;
 	}
 }
 

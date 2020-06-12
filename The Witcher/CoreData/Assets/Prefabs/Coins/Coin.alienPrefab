@@ -1,11 +1,12 @@
 {
+    "Name": "Coin",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "Coin",
                 "FamilyNumber": 1,
-                "ID": "6556064291511045891",
-                "ParentID": "15093234233693103333",
+                "ID": "5492668950559380051",
+                "ParentID": "4083149686072145124",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,15 +20,15 @@
                     {
                         "Type": 0,
                         "Position": [
+                            -1.7404904365539551,
                             0,
-                            1.8856770992279053,
-                            0
+                            0.82485663890838623
                         ],
                         "Rotation": [
                             0,
                             0,
-                            0,
-                            1
+                            -0.7071068286895752,
+                            0.70710670948028564
                         ],
                         "Scale": [
                             1,
@@ -35,7 +36,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "7083231607493882275"
+                        "ID": "1168857770850412876"
                     },
                     {
                         "Type": 1,
@@ -45,7 +46,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "17456457495607830162",
+                        "ID": "6243501862897206345",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "4037644398100748803",
@@ -53,14 +54,66 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "13320157005612277321",
+                        "ID": "7918860808691075399",
                         "HasMaterial": true,
                         "MaterialID": "12666996828601232019",
                         "Enabled": true
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "7953479712941120317",
+                        "ResourceID": "5",
+                        "DataName": "Pickup",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "duration",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "value",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 6,
+                                "Name": "stat_to_change",
+                                "string": ""
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "picky",
+                                "enumInt": 0
+                            }
+                        ]
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": true,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            0.40387725830078125,
+                            0.056159019470214844,
+                            0.40387725830078125
+                        ]
                     }
                 ]
             }
         ]
-    },
-    "Name": "Coin"
+    }
 }

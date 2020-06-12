@@ -14,6 +14,14 @@ NilfSoldierShield::~NilfSoldierShield()
 {
 }
 
+void NilfSoldierShield::StartEnemy()
+{
+	can_get_interrupted = false;
+	NilfgaardSoldier::StartEnemy();
+
+	particle_spawn_positions.push_back(game_object->GetChildRecursive("Shield_Position"));
+}
+
 void NilfSoldierShield::UpdateEnemy()
 {
 	Enemy::UpdateEnemy();
@@ -28,6 +36,7 @@ void NilfSoldierShield::UpdateEnemy()
 	case NilfgaardSoldierState::MOVE:
 		Move(direction);
 		break;
+
 	case NilfgaardSoldierState::HIT:
 	{
 		velocity += velocity * knock_slow * Time::GetDT();
@@ -35,6 +44,7 @@ void NilfSoldierShield::UpdateEnemy()
 		character_ctrl->Move(velocity * Time::GetDT());
 	}
 	break;
+
 	case NilfgaardSoldierState::AUXILIAR:
 		if (stats["BlockRange"].GetValue() < distance)
 		{
@@ -51,7 +61,12 @@ void NilfSoldierShield::UpdateEnemy()
 	case NilfgaardSoldierState::STUNNED:
 		if (Time::GetGameTime() - current_stun_time > stun_time)
 		{
-			state = NilfgaardSoldierState::IDLE;
+			if(is_attacking)
+				SetState("Idle");
+			else
+				SetState("Guard");
+			animator->PlayState("Idle");
+			animator->SetBool("stunned", false);
 		}
 		break;
 
@@ -88,6 +103,7 @@ void NilfSoldierShield::Action()
 	}
 	else
 	{
+		is_blocked = false;
 		animator->PlayState("Attack");
 		animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
 		state = NilfgaardSoldierState::ATTACK;
@@ -96,10 +112,11 @@ void NilfSoldierShield::Action()
 
 void NilfSoldierShield::Block()
 {
+	RotateToPlayerSmooth(0.9f);
 	float b_time = (has_been_attacked) ? block_attack_time : block_time;
 	if (Time::GetGameTime() - current_time > b_time)
 	{
-		ReleaseParticle("ClinckEmitter");
+		ReleaseParticle("BlinkEmitter");
 
 		if (stats["AttackRange"].GetValue() < distance)
 		{
@@ -118,13 +135,15 @@ void NilfSoldierShield::Block()
 	}
 	else if (break_shield_attack >= max_break_shield_attack)
 	{
-		ReleaseParticle("ClinckEmitter");
+		ReleaseParticle("BlinkEmitter");
 
-		state = NilfgaardSoldierState::HIT;
+		Stun(5.0f);
 		animator->PlayState("Hit");
 		has_been_attacked = false;
 		break_shield_attack = 0;
 		is_blocked = false;
+
+		ChangeAttackEnemy();
 	}
 }
 
@@ -146,12 +165,54 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 	{
 		has_been_attacked = true;
 		current_time = Time::GetGameTime();
-		break_shield_attack++;
-		//SpawnParticle("ClinckEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
+		if(player->attacks->GetCurrentAttack()->IsLast() || player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Spell))
+			break_shield_attack += 2;
+		else 
+			break_shield_attack++;
+
+		SpawnParticle("BlinkEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
 		PlaySFX("Block");
 	}
 	else
-		damage = Enemy::GetDamaged(dmg, player, knock_back);
+	{
+		if (!CheckPlayerForward())
+		{
+			if(state != NilfgaardSoldierState::STUNNED)
+				animator->PlayState("Hit");
 
+			Stun(5.0f);
+			has_been_attacked = false;
+			break_shield_attack = 0;
+			is_blocked = false;
+		}
+
+		float aux_health = stats["Health"].GetValue();
+		stats["Health"].DecreaseStat(dmg);
+
+		last_player_hit = player;
+		velocity = knock_back; 
+
+		SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(), false, float3(0.0f, 0.0f, -20.0f));
+		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
+
+		if (stats["Health"].GetValue() <= 0.0F) {
+
+			animator->SetBool("dead", true);
+			is_dead = true;
+			OnDeathHit();
+
+			if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
+			{
+				SetState("Dying");
+				PlaySFX("Death");
+
+				Decapitate(player);
+			}
+		}
+
+		HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
+
+		damage = aux_health - stats["Health"].GetValue();
+	}
 	return damage;
 }

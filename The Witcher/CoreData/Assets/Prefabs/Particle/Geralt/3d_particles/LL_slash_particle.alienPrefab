@@ -1,11 +1,12 @@
 {
+    "Name": "LL_slash_particle",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "LL_slash_particle",
                 "FamilyNumber": 1,
-                "ID": "17191696301487158567",
-                "ParentID": "7059605605244425865",
+                "ID": "17532135670877328122",
+                "ParentID": "620220625201035254",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,11 +36,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18298623606842547469"
+                        "ID": "16584190845669644115"
                     },
                     {
                         "Type": 15,
-                        "ID": "14552506866183938862",
+                        "ID": "12832891754808909587",
                         "Billboard": 4,
                         "Start": {
                             "Position": [
@@ -53,11 +54,11 @@
                                 0,
                                 1
                             ],
-                            "Global": false,
+                            "Global": true,
                             "Velocity": [
                                 0,
-                                0,
-                                -0
+                                -0,
+                                0
                             ],
                             "Force": [
                                 0,
@@ -66,10 +67,10 @@
                             ],
                             "Speed": 0,
                             "Color": [
+                                0.99999397993087769,
+                                0.99998998641967773,
                                 1,
-                                1,
-                                1,
-                                1
+                                0.9329608678817749
                             ],
                             "SizeStart3D": true,
                             "Size": 1,
@@ -91,10 +92,27 @@
                                 0,
                                 140
                             ],
+                            "Random": false,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 5,
                             "Speed": 1,
                             "Color": [
@@ -144,7 +162,7 @@
                                 10
                             ],
                             "MaxLife": 0.20000000298023224,
-                            "CurrentLife": 1.3569999933242798,
+                            "CurrentLife": 0.21300002932548523,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -203,11 +221,19 @@
                             "MeshesAttached": {
                                 "MeshID_0": "7105965715064609668"
                             }
+                        },
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
                         }
                     }
                 ]
             }
         ]
-    },
-    "Name": "LL_slash_particle"
+    }
 }

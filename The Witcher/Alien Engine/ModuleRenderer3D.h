@@ -31,6 +31,9 @@ public:
 	static void BeginDebugDraw(float4& color);
 	static void EndDebugDraw();
 
+	void GenerateScreenQuadVAO();
+	void DestroyScreenQuadVAO();
+
 	void RenderCircleAroundZ(const float& x, const float& y, const float& z, const float& radius, const float& line_width = 2.0f, const int& segments = 50);
 	void RenderCircleAroundX(const float& x, const float& y, const float& z, const float& radius, const float& line_width = 2.0f, const int& segments = 50);
 
@@ -46,6 +49,7 @@ public:
 public:
 
 	SDL_GLContext context;
+	SDL_GLContext back_context;
 	ComponentCamera* scene_fake_camera = nullptr;
 	ComponentCamera* actual_game_camera = nullptr;
 	ComponentCamera* selected_game_camera = nullptr;
@@ -57,4 +61,10 @@ public:
 	int line_grid_width = 1;
 	float4 last_color = float4(0.f, 0.f, 0.f, 0.f);
 	bool render_skybox = true;
+	bool render_bloom = false; 
+
+	// Screen quad to render
+	uint screen_quad_VAO = 0;
+	uint screen_quad_VBO = 0;
+
 };

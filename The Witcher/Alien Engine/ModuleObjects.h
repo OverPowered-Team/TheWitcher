@@ -15,6 +15,7 @@
 #include <stack>
 #include <functional>
 #include <map>
+#include "SDL/include/SDL_thread.h"
 #include <string>
 
 class ReturnZ;
@@ -168,6 +169,8 @@ public:
 	// scenes
 	void SaveScene(ResourceScene* scene, const char* force_with_path = nullptr);
 	void LoadScene(const char * name, bool change_scene = true);
+	void LoadSceneAsync(const char* name);
+	void ChangeToAsyncScene();
 	void OpenCoScene(const char* name);
 	void CreateEmptyScene();
 
@@ -204,6 +207,7 @@ private:
 	void CreateJsonScript(GameObject* obj, JSONArraypack* to_save);
 	void ReAssignScripts(JSONArraypack* to_load);
 	void DeleteReturns();
+	void UpdateUIInput();
 	void UpdateGamePadInput();
 	u64 SetNewSelected(std::string neightbour, u64 selected_neightbour);
 	ComponentCanvas* GetCanvas();
@@ -215,10 +219,11 @@ public:
 	bool inPrefabCreation = false;
 	bool inHotReload = false;
 	u64 scene_active = 0;
-
+	std::string toLoad;
+	SDL_atomic_t dataIsReady;
 	//Focus
 	u64 selected_ui = -1;
-
+	bool changeToAsync = false;
 	std::vector<ResourceScene*> current_scenes;
 
 	Viewport* current_viewport = nullptr;
@@ -327,6 +332,13 @@ public:
 
 	WaterFrameBuffers* wfbos = nullptr;
 
+	bool inputUiGamePad = true;
+	uint quadVAO = 0;
+	uint quadVBO = 0;
+	float exposure = 1.0f;
+	float gamma = 1.0f;
+	bool hdr = true;
+
 private:
 	// root
 	GameObject* base_game_object = nullptr;
@@ -338,5 +350,6 @@ private:
 
 
 	std::list<InvokeInfo*> invokes;
+
 };
 

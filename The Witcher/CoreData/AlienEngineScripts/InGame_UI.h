@@ -5,6 +5,7 @@
 
 class PlayerController;
 class UltiBar;
+class DialogueManager;
 
 enum(CP_STATE,
 	FADE_IN,
@@ -32,6 +33,7 @@ public:
 	void Update();
 
 	void PauseMenu(bool to_open);
+	void RelicsMenu(bool to_open);
 	
 	void YouDied();
 	void ShowCheckpointSaved();
@@ -40,17 +42,22 @@ public:
 
 	void ShowUltiFilter(bool show);
 
+private:
+
+	void LoadActiveRelics();
+
 public:
 
 	GameObject* in_game = nullptr;
 	GameObject* pause_menu = nullptr;
+	GameObject* relics_menu = nullptr;
 
 	Prefab ulti_particle;
 	Prefab killcount_particle;
 
-	float time_lerp_ult_part = 0.75f;
-
+	float time_lerp_ult_part = 1.5f;
 	float ulti_filter_alpha = 0.2f;
+	float time_paused = 0.0f;
 
 private:
 
@@ -80,6 +87,9 @@ private:
 	// Charging ultibar particles
 	std::vector<UI_Particles*> particles;
 	UltiBar* ulti_bar = nullptr;
+
+	// Timer
+	float internal_timer = 0.0f;
 };
 
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {

@@ -24,6 +24,10 @@ public:
 
 	void StartFadeKillCount(int new_kill_count);
 
+	void PlayerOnFire(bool is_on_fire);
+
+	void UpdateTimes(float time_paused);
+
 public:
 
 	enum(CHARACTER,
@@ -41,6 +45,7 @@ public:
 	GameObject* kill_count = nullptr;
 	ComponentText* kill_count_number = nullptr;
 	ComponentText* kill_count_number_X = nullptr;
+	ComponentAnimatedImage* fire = nullptr;
 
 private:
 
@@ -68,6 +73,20 @@ private:
 	float chaos_time = 0.0f;
 	bool changing_chaos = false;
 
+	// Shake
+	bool portrait_shaking = false;
+	float shake_off_set = 100.0f;
+	float shake_post_off_set = 0.0f;
+	float original_portrait_x = 0.0f;
+	float original_portrait_y = 0.0f;
+	float start_shake_time = 0.0f;
+
+	// Fire
+	float goal_alpha_fire = 0.0f;
+	float current_fire_alpha = 0.0f;
+	bool is_fire_changing = false;
+	float fire_fade_time = 0.0f;
+
 	// Kill Count
 	bool is_showing_kill_count = false;
 	float killcount_lerp_time = 0.0f;
@@ -80,6 +99,9 @@ private:
 
 	ComponentBar* lifebar = nullptr;
 	ComponentBar* mana_bar = nullptr;
+
+	// Internal Timer
+	float internal_timer = 0.0f;
 };
 
 ALIEN_FACTORY UI_Char_Frame* CreateUI_Char_Frame() {

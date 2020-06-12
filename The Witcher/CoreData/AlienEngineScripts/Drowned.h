@@ -17,6 +17,7 @@ public:
 	enum(DrownedState,
 		NONE = -1,
 		IDLE,
+		IDLE_OUT,
 		MOVE,
 		ATTACK,
 		GETOFF,
@@ -38,6 +39,7 @@ public:
 	void Stun(float time) override;
 	bool IsDead() override;
 	bool IsDying() override;
+	bool IsHit() override;
 	bool IsState(const char*) override;
 	void PlaySFX(const char* sfx_name);
 
@@ -47,5 +49,6 @@ public:
 	DrownedType drowned_type = DrownedType::NONE;
 	MusicController* m_controller = nullptr;
 	bool is_hide = true;
+	bool is_hiding = false;
 };
 

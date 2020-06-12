@@ -1,0 +1,69 @@
+{
+    "Controller": {
+        "Name": "CiriAuraController",
+        "NumStates": 3,
+        "NumTransitions": 2,
+        "States": [
+            {
+                "Name": "Idle",
+                "Speed": 1,
+                "Clip": "7250869410207821458"
+            },
+            {
+                "Name": "Run",
+                "Speed": 1,
+                "Clip": "2192563996881123994"
+            },
+            {
+                "Name": "Entry",
+                "Speed": 1,
+                "Clip": "9374596325273108046"
+            }
+        ],
+        "Transitions": [
+            {
+                "Source": "Idle",
+                "Target": "Run",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 0
+                    }
+                ]
+            },
+            {
+                "Source": "Entry",
+                "Target": "Idle",
+                "Blend": 0.25,
+                "End": false,
+                "IntConditions": [],
+                "FloatConditions": [],
+                "BoolConditions": [
+                    {
+                        "Type": "bool",
+                        "CompText": "True",
+                        "ParameterIndex": 1
+                    }
+                ]
+            }
+        ],
+        "IntParameters": [],
+        "FloatParameters": [],
+        "BoolParameters": [
+            {
+                "Name": "Run",
+                "Value": false
+            },
+            {
+                "Name": "Appeared",
+                "Value": false
+            }
+        ],
+        "Events": []
+    }
+}

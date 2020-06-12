@@ -16,6 +16,7 @@ ResourceTexture::ResourceTexture(const char* path, const uint& id, const uint& w
 	this->height = height;
 	name = App->file_system->GetBaseFileName(path);
 	type = ResourceType::RESOURCE_TEXTURE;
+
 }
 
 ResourceTexture::ResourceTexture(const char* path)
@@ -23,6 +24,7 @@ ResourceTexture::ResourceTexture(const char* path)
 	name = App->file_system->GetBaseFileName(path); 
 	this->path = std::string(path); 
 	type = ResourceType::RESOURCE_TEXTURE;
+
 }
 
 ResourceTexture::~ResourceTexture()
@@ -173,6 +175,32 @@ bool ResourceTexture::DeleteMetaData()
 	delete this;
 
 	return true;
+}
+
+void ResourceTexture::DisplayTextureOnInspector()
+{
+	if (ImGui::CollapsingHeader(GetName(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		/*ImGui::Combo("Texture parametres", &wrap_type, "ClampToEdge\0Repeat\0MirroredRepeat\0ClampToBorder\0");
+		ImGui::Combo("Texture filter", &wrap_type, "Nearest\0Arroundir\0NearestMipMapNearest\0LinearMipMapNearest\0NearestMipMapLinear\0LinearMipMapLinear\0");*/
+		ImGui::Text("References : %i", references);
+	}
+
+}
+	
+void ResourceTexture::IncreaseReferences()
+{
+	if (ignore_next_increase) {
+		ignore_next_increase = false;
+	}
+	else {
+		if (references == 0) {
+			LoadMemory();
+		}
+		if (App->objects->enable_instancies) {
+			++references;
+		}
+	}
 }
 
 

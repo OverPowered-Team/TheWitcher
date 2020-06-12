@@ -52,6 +52,7 @@ public:
 	virtual void SetState(const char* state) {};
 	virtual bool IsDead() { LOG("Calling virtual function of IsDead!"); return false; };
 	virtual bool IsDying() { LOG("Calling virtual function of IsDying()"); return false; }
+	virtual bool IsHit() { LOG("Calling virtual function of IsDying()"); return false; }
 	virtual bool IsRangeEnemy() { LOG("Calling virtual function of IsDead!"); return false; }
 	virtual void Decapitate(PlayerController* player);
 
@@ -59,6 +60,9 @@ public:
 	virtual void OnDeathHit() {}
 
 	virtual void CanGetInterrupted();
+
+	virtual void RotatePlayer();
+	virtual void RotateToPlayerSmooth(float perc = 0.9f);
 
 	virtual float GetDamaged(float dmg, PlayerController* player, float3 knock_back = float3::zero());
 	virtual float GetDamaged(float dmg, float3 knock_back = float3::zero());
@@ -68,7 +72,7 @@ public:
 	void HitFreeze(float freeze_time);
 	void SpawnAttackParticle();
 	void StopHitFreeze(float speed, std::string name);
-	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = false, float3 rotation = float3::zero(), GameObject* parent = nullptr);
+	void SpawnParticle(std::string particle_name, float3 pos = float3::zero(), bool local = false, float3 rotation = float3::zero(), GameObject* parent = nullptr, math::Quat quat_rot =math::Quat::identity());
 	void ReleaseParticle(std::string particle_name);
 	void ReleaseAllParticles();
 	void ChangeAttackEnemy(bool deleting = false);
@@ -76,6 +80,7 @@ public:
 	void AddBattleCircle(PlayerController* player_controller);
 	void AddAttacking(PlayerController* player_controller);
 	void RemoveAttacking(PlayerController* player_controller);
+	void OnControllerColliderHit(const ControllerColliderHit& hit) override;
 
 	void SpawnHealthOrb();
 
@@ -88,7 +93,7 @@ public:
 	float increase_hit_animation = 1.0f;
 	float gravity = -20.0f;
 	bool is_immune = false;
-
+	bool is_mini = false;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;
@@ -112,10 +117,17 @@ public:
 	Prefab head_prefab;
 	Prefab life_orb;
 
+	ResourceMaterial hitMaterial;
+	ResourceMaterial* defaultMaterial = nullptr;
+	bool inHit = false;
+	float whiteTime = 0;
+	std::vector<ComponentMaterial*> meshes;
+	
+	PlayerController* last_player_hit;
+
 protected:
 	std::vector<GameObject*> particle_spawn_positions;
 	std::vector<Effect*> effects;
-	PlayerController* last_player_hit;
 	GameObject* decapitated_head = nullptr;
 	float current_stun_time = 0.0f;
 	float stun_time = 0.0f;
@@ -123,4 +135,5 @@ protected:
 	int current_player = 0;
 	bool is_dead = false;
 	bool was_dizzy = false;
+	
 };

@@ -51,7 +51,6 @@ void main()
     //gl_ClipDistance[0] = -1;
     // --------------------------------------- 
 
-    
     // --------------- Animation -------------
     vec3 blendpos = vec3(0,0,0);
     if(animate == 1)
@@ -349,7 +348,7 @@ float ShadowCalculation(DirectionalLight light,vec4 fragPosLightSpace, vec3 norm
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
     float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;  
+    float shadow = currentDepth - 0.002 > closestDepth  ? 1.0 : 0.0;  
 
     if(projCoords.z > 1.0)
         shadow = 0.0;

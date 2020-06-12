@@ -1,11 +1,12 @@
 {
+    "Name": "blood_enemy_hit_test",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "blood_enemy_hit_test",
                 "FamilyNumber": 1,
-                "ID": "16086941305223348888",
-                "ParentID": "9807714731943911060",
+                "ID": "17853036606291388368",
+                "ParentID": "620220625201035254",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -27,7 +28,7 @@
                             0,
                             0,
                             0,
-                            0
+                            1
                         ],
                         "Scale": [
                             1,
@@ -35,11 +36,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17330697328311743429"
+                        "ID": "3543068106627839647"
                     },
                     {
                         "Type": 15,
-                        "ID": "1934170633126410815",
+                        "ID": "17699023903103117926",
                         "Billboard": 4,
                         "Start": {
                             "Position": [
@@ -55,16 +56,16 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.40789461135864258,
-                                3.8888723850250244,
-                                -1.5330665111541748
+                                -4.9518985748291016,
+                                -0.64049214124679565,
+                                0.26166391372680664
                             ],
                             "Force": [
                                 0,
                                 0,
                                 0
                             ],
-                            "Speed": 4.1999998092651367,
+                            "Speed": 5,
                             "Color": [
                                 1,
                                 1,
@@ -76,7 +77,7 @@
                             "Size3D": [
                                 0.10000000149011612,
                                 0.10000000149011612,
-                                0.05000000074505806
+                                0.10000000149011612
                             ],
                             "LightColor": [
                                 0,
@@ -84,19 +85,36 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 2,
-                            "AxisRotationStart": false,
+                            "MaxLifeTime": 0.5,
+                            "AxisRotationStart": true,
                             "Angle3D": [
                                 0,
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
-                            "RotateOverLifeTime": false
+                            "RotateOverLifeTime": true
                         },
                         "End": {
-                            "FinalTime": 2,
-                            "Speed": 1,
+                            "StartTime": 0,
+                            "FinalTime": 0.5,
+                            "Speed": 0.5,
                             "Color": [
                                 0.0030395388603210449,
                                 0.0010716915130615234,
@@ -135,17 +153,17 @@
                         "Emmitter": {
                             "Shape": 3,
                             "Zone": 0,
-                            "Distance": 1.7999999523162842,
+                            "Distance": 0.60000002384185791,
                             "Radius": 0.40000000596046448,
-                            "OutRadius": 1,
+                            "OutRadius": 0.10000000149011612,
                             "CubeSize": [
                                 10,
                                 5,
                                 10
                             ],
-                            "MaxLife": 2,
-                            "CurrentLife": 2.0169990062713623,
-                            "SpawnRate": 0,
+                            "MaxLife": 0.20000000298023224,
+                            "CurrentLife": 0.20500002801418304,
+                            "SpawnRate": 3000,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
@@ -164,9 +182,9 @@
                                 -0
                             ],
                             "RelativeRotation": [
+                                -80.999977111816406,
                                 -90,
-                                -8.5377359937410802e-07,
-                                9.0000143051147461
+                                0
                             ],
                             "Scale": [
                                 0,
@@ -175,11 +193,7 @@
                             ]
                         },
                         "Bursts": {
-                            "Size": 1
-                        },
-                        "Burst": {
-                            "TimeBurst-0": 0,
-                            "PartsInstanciate-0": 426
+                            "Size": 0
                         },
                         "Blending": {
                             "Source": 6,
@@ -203,11 +217,19 @@
                             "MeshesAttached": {
                                 "MeshID_0": "2022509082379497598"
                             }
+                        },
+                        "HasLight": false,
+                        "Light": {
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
                         }
                     }
                 ]
             }
         ]
-    },
-    "Name": "blood_enemy_hit_test"
+    }
 }

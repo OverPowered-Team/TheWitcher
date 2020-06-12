@@ -25,7 +25,7 @@ enum class ResourceType {
 };
 
 
-class Resource {
+class __declspec(dllexport) Resource {
 
 public:
 
@@ -62,7 +62,7 @@ public:
 	const u64& GetID() const;
 
 	const bool NeedToLoad() const;
-	void IncreaseReferences();
+	virtual void IncreaseReferences();
 	void DecreaseReferences();
 
 public:

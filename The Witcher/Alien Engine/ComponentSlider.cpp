@@ -60,7 +60,7 @@ bool ComponentSlider::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((texture == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((texture == nullptr || App->resources->GetResourceWithID(texture->GetID()) == nullptr) ? "NULL" : std::string(texture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && texture != nullptr) {
 			App->ui->panel_project->SelectFile(texture->GetAssetsPath(), App->resources->assets);
@@ -109,7 +109,7 @@ bool ComponentSlider::DrawInspector()
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_ButtonActive, { 0.16f, 0.29F, 0.5, 1 });
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);
 
-		ImGui::Button((sliderTexture == nullptr) ? "NULL" : std::string(sliderTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
+		ImGui::Button((sliderTexture == nullptr || App->resources->GetResourceWithID(sliderTexture->GetID()) == nullptr) ? "NULL" : std::string(sliderTexture->GetName()).data(), { ImGui::GetWindowWidth() * 0.55F , 0 });
 
 		if (ImGui::IsItemClicked() && sliderTexture != nullptr) {
 			App->ui->panel_project->SelectFile(sliderTexture->GetAssetsPath(), App->resources->assets);
@@ -564,8 +564,14 @@ void ComponentSlider::Update()
 			default:
 				break;
 			}
-			if (canvas->game_object_attached->enabled || canvas->allow_navigation)
-				UILogicGamePad();
+
+			if (canvas != nullptr && canvas->game_object_attached->enabled && canvas->allow_navigation)
+			{
+				if (App->objects->inputUiGamePad)
+					UILogicGamePad();
+				else
+					UILogicMouse();
+			}
 		}
 	}
 }
@@ -857,7 +863,7 @@ bool ComponentSlider::OnClick()
 
 bool ComponentSlider::OnPressed()
 {
-	if (active)
+	if (active && App->objects->inputUiGamePad)
 	{
 
 		if (Input::GetControllerButtonRepeat(1, Input::CONTROLLER_BUTTON_DPAD_RIGHT) || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || /*Input::GetControllerHoritzontalLeftAxis(1) < -0.2f*/ Input::GetControllerJoystickLeft(1, Input::JOYSTICK_BUTTONS::JOYSTICK_RIGHT) == KEY_REPEAT)
@@ -881,6 +887,34 @@ bool ComponentSlider::OnPressed()
 
 		current_color = pressed_color;
 		slider_current_color = slider_pressed_color;
+	}
+	else if (active && !App->objects->inputUiGamePad)
+	{
+		ComponentTransform* trans = game_object_attached->GetComponent<ComponentTransform>();
+		if (trans == nullptr)
+			return false;
+
+		float width = (sliderX + ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (sliderX - ((trans->global_transformation[0][0] * sliderScaleX / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
+		float width_bg = (x + ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F) - (x - ((trans->global_transformation[0][0] / (canvas->width * 0.5F)) * App->ui->panel_game->width) * 0.5F);
+
+		int xmotion = App->input->GetMouseXMotion();
+
+		if (xmotion > 0)
+		{
+			factor += (0.01f* xmotion);
+		}
+		if (xmotion < 0)
+		{
+			factor += (0.01f* xmotion);
+		}
+		if (factor>=1.0f)
+		{
+			factor = 1.0f;
+		}
+		if (factor <= 0.0f)
+		{
+			factor = 0.0f;
+		}
 	}
 	return true;
 }

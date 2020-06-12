@@ -19,6 +19,7 @@ enum class Attack_Tags {
 	T_Ice,
 	T_Earth,
 	T_Lightning,
+	T_Poison,
 	T_Chaining,
 	T_None
 };
@@ -26,7 +27,8 @@ enum class Attack_Tags {
 enum class Collider_Type {
 	C_Box,
 	C_Sphere,
-	C_Weapon
+	C_Weapon,
+	C_Weapon2
 };
 
 class Attack {
@@ -56,7 +58,7 @@ public:
 		std::string next_heavy = "";
 		float3 particle_pos;
 		float3 knock_direction;
-
+		float3 hit_particle_dir;
 		float freeze_time = 0.0f;
 		float movement_strength = 0.0f;
 		float max_distance_traveled = 0.0f;
@@ -145,8 +147,12 @@ public:
 	float GetCurrentDMG();
 	Attack* GetCurrentAttack();
 
+	void AttackEnd();
+
 public:
 	GameObject* weapon_obj;
+	GameObject* weapon2_obj;
+
 	float max_snap_angle = 0.0f;
 	float snap_angle_value = 0.0f;
 	float snap_distance_value = 0.0f;
@@ -160,6 +166,7 @@ protected:
 	void SelectAttack(AttackType attack);
 	void SnapToTarget();
 	bool FindSnapTarget();
+	void ReLoadRelics();
 	float3 GetMovementVector();
 
 
@@ -182,6 +189,7 @@ protected:
 	float distance_snapped = 0.0f;
 
 	bool can_execute_input = false;
+	bool attack_finished = false;
 	AttackType next_attack = AttackType::NONE;
 	int next_spell = 0;
 };
@@ -194,12 +202,14 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon_obj);
+	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon2_obj);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::UpdateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::DeactivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::CastSpell, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AllowCombo, player_attacks);
+	SHOW_VOID_FUNCTION(PlayerAttacks::AttackEnd, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::AttackShake, player_attacks);
 	return player_attacks;
 } 

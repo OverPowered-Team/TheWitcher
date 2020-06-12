@@ -31,6 +31,8 @@ enum class TextureType {
 
 struct ShaderInputs
 {
+	bool emissive = true;
+
 	struct StandardShaderProperties
 	{
 		float4 diffuse_color = float4::one;
@@ -82,17 +84,26 @@ struct ShaderInputs
 		float burn = 0.5f;
 	} dissolveFresnelShaderProperties;
 
+	struct OceanShaderProperties {
+		float speed = 0.5f;
+		float water_move = 1.0f;
+		float4 diffuse_color = { 0.0,0.0,0.0,1.0 };
+		int reduce_water_tex = 4;
+
+	} oceanShaderProperties;
 };
 
 class ResourceShader; 
 class ResourceTexture; 
 class JSONfilepack;
 
-class ResourceMaterial : public Resource {
+class __declspec(dllexport) ResourceMaterial : public Resource {
 
 public:
 
 	ResourceMaterial();
+	ResourceMaterial(ResourceMaterial* material);
+
 	virtual ~ResourceMaterial();
 
 	bool LoadMemory() override;

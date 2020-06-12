@@ -1,0 +1,843 @@
+{
+    "Name": "Door",
+    "Prefab": {
+        "GameObjects": [
+            {
+                "Name": "Door",
+                "FamilyNumber": 1,
+                "ID": "6641551706823435602",
+                "ParentID": "4751338569369058116",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": true,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "9905671089871830504"
+                    }
+                ]
+            },
+            {
+                "Name": "BreakableFence",
+                "FamilyNumber": 2,
+                "ID": "11898653764259275097",
+                "ParentID": "6641551706823435602",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8932199333027712375"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "16503838415979773447",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "281920166162972555",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "1507898778398547081",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "10632101801179606268",
+                        "ResourceID": "1298910078177058173",
+                        "DataName": "FenceDoor",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 0,
+                                "Name": "hits_to_broke",
+                                "int": 1
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "force",
+                                "float": 10
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_to_despawn",
+                                "float": 5
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Broken_fence_door",
+                "FamilyNumber": 2,
+                "ID": "12233564295559565334",
+                "ParentID": "6641551706823435602",
+                "Enabled": false,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "11042305677412537762"
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence13",
+                "FamilyNumber": 3,
+                "ID": "8334852029924714536",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12433904531924009140"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "15894644417851426203",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "8246404764382411619",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "6688017196345835532",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence15",
+                "FamilyNumber": 3,
+                "ID": "15153437629213651655",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "7608909410118690653"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "3652179486935614907",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "17013935220940480206",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "5373685081637387605",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence14",
+                "FamilyNumber": 3,
+                "ID": "1921756869945647281",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "12557496426408684239"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "10789189031197271003",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "18260426187548079908",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "12116067860299800792",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence17",
+                "FamilyNumber": 3,
+                "ID": "8461218299283988476",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "10136531018938644219"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "3979624975180369821",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "9895886376575746660",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "11520372865456627253",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence16",
+                "FamilyNumber": 3,
+                "ID": "9679591169182660967",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "4661241150129571549"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "10132467579290522257",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "6019354998407727101",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "5698700803659061149",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence20",
+                "FamilyNumber": 3,
+                "ID": "11922017523533674161",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15540896332364515512"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "3470705206141626755",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "3038245360949837238",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "11523187756052904345",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            },
+            {
+                "Name": "BrokenFence19",
+                "FamilyNumber": 3,
+                "ID": "5067996038765383439",
+                "ParentID": "12233564295559565334",
+                "Enabled": true,
+                "ParentEnabled": false,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "11353216794061112028",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.20000000298023224,
+                            0.30000001192092896,
+                            0.10000000149011612
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "3935103910716414019"
+                    },
+                    {
+                        "Type": 1,
+                        "ViewMesh": false,
+                        "Wireframe": false,
+                        "ViewVertexNormals": false,
+                        "ViewFaceNormals": false,
+                        "DrawAABB": false,
+                        "DrawOBB": false,
+                        "ID": "2516269031560042854",
+                        "HasMesh": true,
+                        "IsPrimitive": false,
+                        "MeshID": "11313098972482919753",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "16533942043056029476",
+                        "HasMaterial": true,
+                        "MaterialID": "1008227401734361930",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 11,
+                        "IsKinematic": 1,
+                        "Mass": 1,
+                        "Drag": 0,
+                        "AngularDrag": 0.10000000149011612,
+                        "FreezePosX": false,
+                        "FreezePosY": false,
+                        "FreezePosZ": false,
+                        "FreezeRotX": false,
+                        "FreezeRotY": false,
+                        "FreezeRotZ": false
+                    },
+                    {
+                        "Enabled": true,
+                        "Type": 10,
+                        "Center": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "VertexLimit": 64
+                    }
+                ]
+            }
+        ]
+    }
+}

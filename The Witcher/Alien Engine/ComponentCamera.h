@@ -67,6 +67,25 @@ public:
 	float GetFogDensity() const;
 	float GetFogGradient() const;
 
+	void EnableHDR();
+	void DisableHDR();
+
+	void SetHDRExposure(const float& exposure);
+	void SetHDRGamma(const float& gamma);
+
+	float GetHDRExposure() const; 
+	float GetHDRGamma() const; 
+
+	void EnableBloom();
+	void DisableBloom();
+
+	void SetBloomThreshold(const float& threshold);
+	void SetBloomIntensity(const float& intensity);
+
+	float GetBloomThreshold() const;
+	float GetBloomIntensity() const;
+
+
 	void SetBackgroundColor(const float3& color);
 	float3 GetBackgroundColor() const;
 
@@ -121,9 +140,23 @@ public:
 	Skybox* skybox = nullptr;
 	Cubemap* cubemap = nullptr;
 	ResourceShader* skybox_shader = nullptr;
-	uint skybox_texture_id = 0u;
 	
+	// === FOG === 
+
 	bool activeFog = false;
 	float fogDensity = 0.035;
 	float fogGradient = 1.35;
+
+	// === HDR === 
+
+	bool hdr = false; 
+	float gamma = 0.0f;
+	float exposure = 1.0f;
+
+	// === BLOOM === 
+
+	bool bloom = true; 
+	float threshold = 1.0f; 
+	int blur_iters = 10;
+
 };

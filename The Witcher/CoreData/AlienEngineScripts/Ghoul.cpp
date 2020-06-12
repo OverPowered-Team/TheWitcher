@@ -26,6 +26,8 @@ void Ghoul::StartEnemy()
     state = GhoulState::IDLE;
     decapitation_particle = "decapitation_particle_ghoul";
     m_controller = Camera::GetCurrentCamera()->game_object_attached->GetComponent<MusicController>();
+    range_collider = game_object->GetChild("EnemyRangeAttack")->GetComponent<ComponentBoxCollider>();
+    range_collider->SetEnable(false);
     Enemy::StartEnemy();
 }
 
@@ -47,16 +49,19 @@ void Ghoul::SetStats(const char* json)
             else
                 break;
 
-        stats["Health"] = Stat("Health", stat_weapon->GetNumber("MinHealth"), stat_weapon->GetNumber("Health"), stat_weapon->GetNumber("MaxHealth"));
-        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("MinAgility"), stat_weapon->GetNumber("Agility"), stat_weapon->GetNumber("MaxAgility"));
-        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("MinDamage"), stat_weapon->GetNumber("Damage"), stat_weapon->GetNumber("MaxDamage"));
-        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("MinAttackSpeed"), stat_weapon->GetNumber("AttackSpeed"), stat_weapon->GetNumber("MaxAttackSpeed"));
+        stats["Health"] = Stat("Health", stat_weapon->GetNumber("Health"));
+        stats["Agility"] = Stat("Agility", stat_weapon->GetNumber("Agility"));
+        stats["Damage"] = Stat("Damage", stat_weapon->GetNumber("Damage"));
+        stats["AttackSpeed"] = Stat("AttackSpeed", stat_weapon->GetNumber("AttackSpeed"));
         stats["AttackRange"] = Stat("AttackRange", stat_weapon->GetNumber("AttackRange"));
         stats["JumpRange"] = Stat("JumpRange", stat_weapon->GetNumber("JumpAttackRange"));
         stats["VisionRange"] = Stat("VisionRange", stat_weapon->GetNumber("VisionRange"));
+        stats["MoveRange"] = Stat("MoveRange", stat_weapon->GetNumber("MoveRange"));
         stats["JumpForce"] = Stat("JumpForce", stat_weapon->GetNumber("JumpForce"));
         stats["HitSpeed"] = Stat("HitSpeed", stat_weapon->GetNumber("HitSpeed"));
+        stats["Acceleration"] = Stat("Acceleration", stat_weapon->GetNumber("Acceleration"));
         stats["HitSpeed"].SetMaxValue(stat_weapon->GetNumber("MaxHitSpeed"));
+
     }
 
     JSONfilepack::FreeJSON(stat);
@@ -77,16 +82,9 @@ void Ghoul::CleanUpEnemy()
 
 void Ghoul::JumpImpulse()
 {
-    if (distance > stats["AttackRange"].GetValue())
+    if (can_jump)
     {
-        float3 jump_direction = direction * stats["Agility"].GetValue() * stats["JumpForce"].GetValue();
         character_ctrl->Move(jump_direction * Time::GetDT() * Time::GetScaleTime());
-    }
-    else
-    {
-        animator->PlayState("Slash");
-        animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
-        state = GhoulState::ATTACK;
     }
 }
 
@@ -105,6 +103,10 @@ void Ghoul::Stun(float time)
 bool Ghoul::IsDead()
 {
     return (state == GhoulState::DEAD ? true : false);
+}
+bool Ghoul::IsHit()
+{
+    return (state == GhoulState::HIT ? true: false);
 }
 bool Ghoul::IsDying()
 {
@@ -155,20 +157,37 @@ void Ghoul::SetState(const char* state_str)
         LOG("Incorrect state name: %s", state_str);
 }
 
+bool Ghoul::IsRangeEnemy()
+{
+    if (ghoul_type == GhoulType::MINI)
+        return false;
+    else
+        return true;
+}
+
 void Ghoul::Action()
 {
     // Check if inside range or just entered
     if (distance < stats["AttackRange"].GetValue())
     {
         animator->PlayState("Slash");
+        RotatePlayer();
         animator->SetCurrentStateSpeed(stats["AttackSpeed"].GetValue());
         state = GhoulState::ATTACK;
     }
-    else if (distance < stats["JumpRange"].GetValue() && distance > stats["AttackRange"].GetValue())
+    else if (distance < stats["MoveRange"].GetValue() && distance > stats["AttackRange"].GetValue())
     {
+        state = GhoulState::MOVE;
+    }
+    else if (distance < stats["JumpRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+    {
+        RotatePlayer();
         animator->PlayState("Jump");
+        jump_speed = (distance + 1) / 1.13f * animator->GetCurrentStateSpeed();
+        jump_direction = direction.Normalized() * jump_speed;
         state = GhoulState::JUMP;
     }
+
 }
 
 void Ghoul::CheckDistance()
@@ -176,18 +195,13 @@ void Ghoul::CheckDistance()
 	if (state == GhoulState::AWAKE)
 		return; 
 
-    if (distance < stats["JumpRange"].GetValue())
+    if (distance < stats["VisionRange"].GetValue() || is_obstacle)
     {
-        animator->SetFloat("speed", 0.0F);
-        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
         Action();
     }
-
-    if (distance > stats["VisionRange"].GetValue() && !is_obstacle)
+    else if (distance > stats["VisionRange"].GetValue() && !is_obstacle)
     {
-        state = GhoulState::IDLE;
-        character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
-        animator->SetFloat("speed", 0.0F);
+        SetState("Idle");
         if (m_controller && is_combat) {
             is_combat = false;
             m_controller->EnemyLostSight((Enemy*)this);
@@ -202,43 +216,41 @@ void Ghoul::CheckDistance()
     }
 }
 
-void Ghoul::OnTriggerEnter(ComponentCollider* collider)
-{
-    if (strcmp(collider->game_object_attached->GetTag(), "PlayerAttack") == 0 && state != GhoulState::DEAD) {
-        PlayerController* player = collider->game_object_attached->GetComponentInParent<PlayerController>();
-        if (player && player->attacks->GetCurrentAttack()->CanHit(this))
-        {
-            float dmg_received = player->attacks->GetCurrentDMG();
-            float3 knock = player->attacks->GetKnockBack(this->transform);
-
-            player->OnHit(this, GetDamaged(dmg_received, player, knock));
-
-            HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
-        }
-    }
-}
-
 void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
-        stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        //stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+        //animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
-        {
             SetState("Move");
-        }
         else
-        {
             SetState("Idle");
-        }
+        animator->SetBool("attack", false);
     }
     else if (strcmp(name, "Jump") == 0)
     {
-        if (distance < stats["VisionRange"].GetValue())
+        if (distance < stats["AttackRange"].GetValue())
+            SetState("Attack");
+        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
             SetState("Move");
         else
             SetState("Idle");
+
+        can_jump = false;
+        if (ghoul_type != GhoulType::MINI)
+        {
+            ReleaseParticle("AreaAttackSlash");
+            ReleaseParticle("AreaAttackSphere");
+            ReleaseParticle("AreaAttackRock");
+        }
+        else
+        {
+            ReleaseParticle("AreaAttackSlashMini");
+            ReleaseParticle("AreaAttackSphereMini");
+            ReleaseParticle("AreaAttackRockMini");
+        }
     }
     else if (strcmp(name, "Hit") == 0)
     {
@@ -256,6 +268,7 @@ void Ghoul::OnAnimationEnd(const char* name)
                 GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
+        animator->SetBool("attack", false);
     }
     else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
     {
@@ -270,6 +283,28 @@ void Ghoul::OnDrawGizmosSelected()
 	if(awake_behaviour == AwakeBehaviour::WANDER)
 		Gizmos::DrawWireSphere(start_pos, wander_radius, Color::Blue());
 	
+}
+
+void Ghoul::ActivateRangeCollider()
+{
+    range_collider->SetEnable(true);
+    if (ghoul_type != GhoulType::MINI) 
+    {
+        SpawnParticle("AreaAttackSlash", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackSphere", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackRock", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    }
+    else
+    {
+        SpawnParticle("AreaAttackSlashMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackSphereMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+        SpawnParticle("AreaAttackRockMini", particle_spawn_positions[2]->transform->GetGlobalPosition());
+    }
+}
+
+void Ghoul::DeactivateRangeCollider()
+{
+    range_collider->SetEnable(false);
 }
 
 void Ghoul::PlaySFX(const char* sfx_name)
@@ -298,6 +333,16 @@ bool Ghoul::IsState(const char* state_str)
         return (state == GhoulState::STUNNED ? true : false);
     else
         LOG("Incorrect state name: %s", state_str);
+}
+
+void Ghoul::CanJump()
+{
+    can_jump = true;
+}
+
+void Ghoul::CanNotJump()
+{
+    can_jump = false;
 }
 
 void Ghoul::DoAwake() // Do this in other enemies

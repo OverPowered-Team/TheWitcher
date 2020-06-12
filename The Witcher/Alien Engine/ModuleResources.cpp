@@ -715,6 +715,10 @@ void ModuleResources::ReadAllMetaData()
 	water_shader = GetShaderByName("water_shader");
 	shield_fresnel_shader = GetShaderByName("shield_fresnel_shader");
 	trail_shader = GetShaderByName("trail_shader");
+	hdr_shader = GetShaderByName("hdr_shader");
+	hdr_shader->IncreaseReferences();
+	blur_shader = GetShaderByName("blur_shader");
+	blur_shader->IncreaseReferences();
 
 	// Init Materials
 	App->file_system->DiscoverFiles(MATERIALS_FOLDER, files, directories);
@@ -797,7 +801,9 @@ void ModuleResources::ReadAllMetaData()
 	default_particle_shader = (ResourceShader*)GetResourceWithID(2017390725125490915);
 	shield_fresnel_shader = (ResourceShader*)GetResourceWithID(5257671272918645017);
 	shield_shader = (ResourceShader*)GetResourceWithID(15018513288750837760);
+	hdr_shader = (ResourceShader*)GetResourceWithID(8647831716955899237);
 	trail_shader = (ResourceShader*)GetResourceWithID(7102128801140120336);
+	blur_shader = (ResourceShader*)GetResourceWithID(5115047997303984257);
 	default_particle_shader->SetName("particle_shader");
 	default_particle_shader->TryToSetShaderType();
 	shield_fresnel_shader->SetName("shield_fresnel_shader");
@@ -806,7 +812,10 @@ void ModuleResources::ReadAllMetaData()
 	shield_shader->TryToSetShaderType();
 	trail_shader->SetName("trail_shader");
 	trail_shader->TryToSetShaderType();
-
+	hdr_shader->SetName("hdr_shader");
+	hdr_shader->IncreaseReferences();
+	blur_shader->SetName("blur_shader");
+	blur_shader->IncreaseReferences();
 	// materials
 	App->file_system->DiscoverFiles(LIBRARY_MATERIALS_FOLDER, files, directories, true);
 	for (uint i = 0; i < files.size(); ++i) {

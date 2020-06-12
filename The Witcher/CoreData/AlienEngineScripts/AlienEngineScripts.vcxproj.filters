@@ -229,9 +229,6 @@
     <ClCompile Include="Bonfire.cpp">
       <Filter>Scripts\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="BlockerObstacle.cpp">
-      <Filter>Scripts\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Floating.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -316,8 +313,6 @@
     <ClCompile Include="CloudLeshen.cpp">
       <Filter>Scripts\Enemies\Leshen</Filter>
     </ClCompile>
-    <ClCompile Include="SteeringAvoid.cpp">
-    </ClCompile>
     <ClCompile Include="Boss_Lifebar.cpp">
       <Filter>Scripts\UI\HUD</Filter>
     </ClCompile>
@@ -348,8 +343,59 @@
     <ClCompile Include="Pickup.cpp">
       <Filter>Scripts\Player</Filter>
     </ClCompile>
+    <ClCompile Include="CutsceneCamera.cpp">
+      <Filter>Scripts\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="CutsceneShot.cpp">
+      <Filter>Scripts\Cameras</Filter>
+    </ClCompile>
     <ClCompile Include="AttackTrigger.cpp">
       <Filter>Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraWagonette.cpp">
+      <Filter>Scripts\Vagoneta</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_DamageCount.cpp">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="WagoneteAddVelocity.cpp">
+      <Filter>Scripts\Vagoneta</Filter>
+    </ClCompile>
+    <ClCompile Include="CiriNado.cpp">
+    </ClCompile>
+    <ClCompile Include="DummyEnemy.cpp">
+      <Filter>Scripts\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SteeringAvoid.cpp">
+      <Filter>Scripts\Enemies\Steering</Filter>
+    </ClCompile>
+    <ClCompile Include="GhoulMini.cpp">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClCompile>
+    <ClCompile Include="SteeringAvoidObstacle.cpp">
+      <Filter>Scripts\Enemies\Steering</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockerObstacle.cpp">
+      <Filter>Scripts\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BarrelDrop.cpp">
+      <Filter>Scripts\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="RockCarousel.cpp" />
+    <ClCompile Include="CiriAura.cpp" />
+    <ClCompile Include="CiriAuraTrigger.cpp" />
+    <ClCompile Include="SadTutorial.cpp">
+      <Filter>Scripts\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="RockOrbit.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="FenceDoor.cpp">
+      <Filter>Scripts\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TestingThread.cpp" />
+    <ClCompile Include="CiriDeadZone.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -593,9 +639,6 @@
     <ClInclude Include="Bonfire.h">
       <Filter>Scripts\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="BlockerObstacle.h">
-      <Filter>Scripts\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Floating.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -680,8 +723,6 @@
     <ClInclude Include="CloudLeshen.h">
       <Filter>Scripts\Enemies\Leshen</Filter>
     </ClInclude>
-    <ClInclude Include="SteeringAvoid.h">
-    </ClInclude>
     <ClInclude Include="Boss_Lifebar.h">
       <Filter>Scripts\UI\HUD</Filter>
     </ClInclude>
@@ -709,8 +750,59 @@
     <ClInclude Include="Pickup.h">
       <Filter>Scripts\Player</Filter>
     </ClInclude>
+    <ClInclude Include="CutsceneCamera.h">
+      <Filter>Scripts\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="CutsceneShot.h">
+      <Filter>Scripts\Cameras</Filter>
+    </ClInclude>
     <ClInclude Include="AttackTrigger.h">
       <Filter>Scripts\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraWagonette.h">
+      <Filter>Scripts\Vagoneta</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_DamageCount.h">
+      <Filter>Scripts\UI\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="WagoneteAddVelocity.h">
+      <Filter>Scripts\Vagoneta</Filter>
+    </ClInclude>
+    <ClInclude Include="CiriNado.h">
+    </ClInclude>
+    <ClInclude Include="DummyEnemy.h">
+      <Filter>Scripts\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringAvoid.h">
+      <Filter>Scripts\Enemies\Steering</Filter>
+    </ClInclude>
+    <ClInclude Include="GhoulMini.h">
+      <Filter>Scripts\Enemies\Ghoul</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringAvoidObstacle.h">
+      <Filter>Scripts\Enemies\Steering</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockerObstacle.h">
+      <Filter>Scripts\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BarrelDrop.h">
+      <Filter>Scripts\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="RockCarousel.h" />
+    <ClInclude Include="CiriAura.h" />
+    <ClInclude Include="CiriAuraTrigger.h" />
+    <ClInclude Include="SadTutorial.h">
+      <Filter>Scripts\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="RockOrbit.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="FenceDoor.h">
+      <Filter>Scripts\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TestingThread.h" />
+    <ClInclude Include="CiriDeadZone.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -788,6 +880,9 @@
     </Filter>
     <Filter Include="Scripts\Objects">
       <UniqueIdentifier>{c5fbad49-d2c4-4e75-89d0-8646dfde0057}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Enemies\Steering">
+      <UniqueIdentifier>{a22813e1-06a0-4f2c-af88-93c611da76da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

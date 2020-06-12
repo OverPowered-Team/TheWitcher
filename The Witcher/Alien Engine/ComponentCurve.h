@@ -44,14 +44,13 @@ public:
 
 	int detail = 50;
 
+	float length = 0.f;
 private:
 
 	std::vector<float3> control_points;
 	std::vector<float3> control_points_normals;
 
 	float3 position = float3::zero();
-
-	float length = 0.f;
 };
 
 class __declspec(dllexport) ComponentCurve : public Component {

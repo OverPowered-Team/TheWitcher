@@ -31,7 +31,7 @@ void Boss::UpdateEnemy()
 		break;
 	case Boss::BossState::IDLE:
 		if (player_distance[0] < stats["VisionRange"].GetValue() || player_distance[1] < stats["VisionRange"].GetValue()) {
-			LOG("IDLESATATE");
+
 			if (time_to_action <= action_cooldown)
 				time_to_action += Time::GetDT();
 			else {

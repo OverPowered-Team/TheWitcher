@@ -6,6 +6,7 @@
 #include "CameraShake.h"
 #include "RumblerManager.h"
 #include "ParticlePool.h"
+#include "Scores_Data.h"
 
 #include "UI_Char_Frame.h"
 
@@ -18,7 +19,7 @@
 
 static std::unordered_map<std::string, Attack_Tags> const tag_table = { {"AOE",Attack_Tags::T_AOE}, {"Projectile",Attack_Tags::T_Projectile},
 {"Trap",Attack_Tags::T_Trap}, {"Buff",Attack_Tags::T_Buff}, {"Debuff",Attack_Tags::T_Debuff}, {"Fire",Attack_Tags::T_Fire}, {"Ice",Attack_Tags::T_Ice},
-{"Earth",Attack_Tags::T_Earth}, {"Lightning",Attack_Tags::T_Lightning}, {"Chaining",Attack_Tags::T_Chaining}, {"Spell",Attack_Tags::T_Spell} };
+{"Earth",Attack_Tags::T_Earth}, {"Lightning",Attack_Tags::T_Lightning}, {"Poison",Attack_Tags::T_Poison}, {"Chaining",Attack_Tags::T_Chaining}, {"Spell",Attack_Tags::T_Spell} };
 
 Attack_Tags GetTag(std::string str)
 {
@@ -28,7 +29,7 @@ Attack_Tags GetTag(std::string str)
 	return Attack_Tags::T_None;
 }
 
-static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon} };
+static std::unordered_map<std::string, Collider_Type> const coll_table = { {"Box",Collider_Type::C_Box}, {"Sphere",Collider_Type::C_Sphere}, {"Weapon",Collider_Type::C_Weapon}, {"Weapon2",Collider_Type::C_Weapon2} };
 
 Collider_Type GetColliderType(std::string str)
 {
@@ -52,7 +53,14 @@ void PlayerAttacks::Start()
 
 	colliders = game_object->GetChild("Attacks_Collider")->GetComponents<ComponentCollider>();
 	if (weapon_obj)
+	{
 		colliders.push_back(weapon_obj->GetComponent<ComponentCollider>());
+	}
+	if (weapon2_obj)
+	{
+		colliders.push_back(weapon2_obj->GetComponent<ComponentCollider>());
+	}
+		
 
 	for (std::vector<ComponentCollider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 	{
@@ -62,6 +70,8 @@ void PlayerAttacks::Start()
 	shake = Camera::GetCurrentCamera()->game_object_attached->GetComponent<CameraShake>();
 
 	CreateAttacks();
+
+	ReLoadRelics();
 }
 
 void PlayerAttacks::StartAttack(AttackType attack)
@@ -101,11 +111,11 @@ bool PlayerAttacks::StartSpell(uint spell_index)
 
 void PlayerAttacks::UpdateCurrentAttack()
 {
-	if (player_controller->animator->GetCurrentStateSpeed() == 0.0f) //THIS IS TO ADVANCE THE TIME THE ANIM HAS TO FINISH WHEN HITFREEZED
+	/*if (player_controller->animator->GetCurrentStateSpeed() == 0.0f) //THIS IS TO ADVANCE THE TIME THE ANIM HAS TO FINISH WHEN HITFREEZED
 	{
 		finish_attack_time += Time::GetDT();
 		return;
-	}
+	}*/
 
 	if (current_target && Time::GetGameTime() < start_attack_time + snap_time)
 		SnapToTarget();
@@ -115,7 +125,8 @@ void PlayerAttacks::UpdateCurrentAttack()
 	}
 		
 	//IF ANIM FINISHED 
-	if (Time::GetGameTime() >= finish_attack_time)
+	//if (Time::GetGameTime() >= finish_attack_time)
+	if (attack_finished)
 	{
 		if (!player_controller->mov_input)
 			player_controller->SetState(StateType::IDLE);
@@ -138,6 +149,7 @@ void PlayerAttacks::DoAttack()
 {
 	//Reset attack variables
 	can_execute_input = false;
+	attack_finished = false;
 	next_attack = AttackType::NONE;
 	current_target = nullptr;
 	current_attack->current_collider = 0;
@@ -199,6 +211,9 @@ void PlayerAttacks::OnAddAttackEffect(AttackEffect* new_effect)
 	{
 		if ((*it)->info.name == new_effect->GetAttackIdentifier())
 		{
+			Attack_Tags element_tag = GetTag(new_effect->element);
+			if(element_tag != Attack_Tags::T_None)
+				(*it)->info.tags.push_back(element_tag);
 			(*it)->info.stats["Damage"].ApplyEffect(new_effect);
 		}
 	}
@@ -213,7 +228,7 @@ void PlayerAttacks::CancelAttack()
 	if (current_attack != nullptr)
 	{
 		player_controller->ReleaseAttackParticle();
-		if(colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
+		if(colliders.size() > 0 && colliders[(int)current_attack->info.colliders[current_attack->current_collider].type])
 			colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
 		
 		current_attack = nullptr;
@@ -264,9 +279,11 @@ bool PlayerAttacks::FindSnapTarget()
 
 	for (auto i = colliders_in_range.begin(); i != colliders_in_range.end(); ++i)
 	{
-		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0 && !(*i)->game_object_attached->GetComponent<Enemy>()->IsDead())
+		if (std::strcmp((*i)->game_object_attached->GetTag(), "Enemy") == 0)
 		{
-			enemies_in_range.push_back((*i)->game_object_attached);
+			Enemy* enemy = (*i)->game_object_attached->GetComponent<Enemy>();
+			if(enemy && !enemy->IsDead())
+				enemies_in_range.push_back((*i)->game_object_attached);
 		}
 	}
 
@@ -296,6 +313,24 @@ bool PlayerAttacks::FindSnapTarget()
 	}
 
 	return false;
+}
+
+void PlayerAttacks::ReLoadRelics()
+{
+	if (player_controller->controller_index == 1 && Scores_Data::player1_relics.size() > 0)
+	{
+		for (auto it = Scores_Data::player1_relics.begin(); it != Scores_Data::player1_relics.end(); it++)
+		{
+			player_controller->PickUpRelic((*it));
+		}
+	}
+	else if (player_controller->controller_index == 2 && Scores_Data::player2_relics.size() > 0)
+	{
+		for (auto it = Scores_Data::player2_relics.begin(); it != Scores_Data::player2_relics.end(); it++)
+		{
+			player_controller->PickUpRelic((*it));
+		}
+	}
 }
 
 void PlayerAttacks::ReceiveInput(AttackType attack, int spell_index)
@@ -350,6 +385,16 @@ void PlayerAttacks::ActivateCollider()
 			box_collider->SetCenter(current_attack->info.colliders[current_attack->current_collider].position);
 			box_collider->SetSize(current_attack->info.colliders[current_attack->current_collider].size);
 			box_collider->SetRotation(current_attack->info.colliders[current_attack->current_collider].rotation);
+
+			//YENN EXCEPTION
+			if (player_controller->player_data.type == PlayerController::PlayerType::YENNEFER)
+			{
+				if (current_attack->info.colliders[current_attack->current_collider].type == Collider_Type::C_Weapon)
+					weapon_obj->SetEnable(true);
+				else if(current_attack->info.colliders[current_attack->current_collider].type == Collider_Type::C_Weapon2)
+					weapon2_obj->SetEnable(true);
+			}
+
 		}
 			break;
 		}
@@ -359,7 +404,7 @@ void PlayerAttacks::ActivateCollider()
 
 void PlayerAttacks::UpdateCollider()
 {
-	if (current_attack->current_collider + 1 < current_attack->info.colliders.size())
+	if (current_attack && current_attack->current_collider + 1 < current_attack->info.colliders.size())
 	{
 		colliders[(int)current_attack->info.colliders[current_attack->current_collider].type]->SetEnable(false);
 		current_attack->current_collider++;
@@ -379,7 +424,7 @@ void PlayerAttacks::CastSpell()
 {
 	if (current_attack)
 	{
-		LOG("Casting Spell %s", current_attack->info.name.c_str());
+		LOG("Casting Spell %s with %f cost", current_attack->info.name.c_str(), current_attack->info.stats["Cost"].GetValue());
 		player_controller->PlayAttackParticle();
 		player_controller->audio->StartSound(current_attack->info.audio_name.c_str());
 		player_controller->player_data.stats["Chaos"].DecreaseStat(current_attack->info.stats["Cost"].GetValue());
@@ -422,7 +467,8 @@ void PlayerAttacks::CastSpell()
 			GameObject* projectile_go = GameObject::Instantiate(current_attack->info.prefab_to_spawn.c_str(),
 				player_controller->particle_spawn_positions[1]->transform->GetGlobalPosition());
 
-			shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
+			if(shake)
+				shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
 
 			float3 direction = current_target ? (current_target->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized() : this->transform->forward;
 			Quat rot = projectile_go->transform->GetGlobalRotation();
@@ -545,7 +591,7 @@ float3 PlayerAttacks::GetKnockBack(ComponentTransform* enemy_transform)
 
 void PlayerAttacks::AttackShake()
 {
-	if (current_attack->info.shake == 1)
+	if (current_attack && current_attack->info.shake == 1)
 	{
 		shake->Shake(0.13f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
 		/*if (GameManager::instance->rumbler_manager)
@@ -588,6 +634,9 @@ void PlayerAttacks::CreateAttacks()
 			info.particle_pos = float3(attack_combo->GetNumber("particle_pos.pos_x"),
 				attack_combo->GetNumber("particle_pos.pos_y"),
 				attack_combo->GetNumber("particle_pos.pos_z"));
+
+			info.hit_particle_dir = float3(attack_combo->GetNumber("hit_particle_dir.dir_x"),
+				attack_combo->GetNumber("hit_particle_dir.dir_y"), attack_combo->GetNumber("hit_particle_dir.dir_z"));
 
 			JSONArraypack* colliders_array = attack_combo->GetArray("colliders");
 			if(colliders_array)
@@ -794,4 +843,9 @@ void PlayerAttacks::SpawnChainParticle(float3 from, float3 to)
 	//p_system->GetSystem()->SetParticleInitialAngle(float3(0, direction.x > 0 ? angle:-angle, 90));
 
 	player_controller->particles.push_back(new_particle);
+}
+
+void PlayerAttacks::AttackEnd()
+{
+	attack_finished = true;
 }

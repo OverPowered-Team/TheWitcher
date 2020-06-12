@@ -54,6 +54,7 @@ struct ParticleLight
 	int max_lights = 10;
 	bool casting_particles = false;
 	bool size_range = false;
+	bool emitting = false;
 
 };
 
@@ -130,7 +131,10 @@ public:
 
 	void SetLight(ResourcePrefab* light, GameObject* go);
 	void RemoveLight();
-	
+
+	void StartLight();
+	void StopLight();
+
 	void SetMesh(ResourceMesh* mesh);
 	void SetMeshes(std::vector<ResourceMesh*> meshes);
 	void RemoveMesh();
@@ -196,6 +200,7 @@ public:
 
 	// Animation
 	int currentFrame = 0;
+	float animationTime = 0.f;
 	int sheetWidth, sheetHeight;
 
 	//Lights

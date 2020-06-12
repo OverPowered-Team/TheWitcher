@@ -59,7 +59,7 @@ void ComponentLightPoint::Update()
 	OPTICK_EVENT();
 
 	//If Light is attached to GameObject or Emmitter, we call this function
-	if(!light_props.casting_particles)
+	if(light_props.enabled)
 		LightLogic();
 
 	//Else, we update light position from every particle
@@ -120,6 +120,7 @@ bool ComponentLightPoint::DrawInspector()
 		ImGui::DragFloat("Linear", &light_props.linear, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("Quadratic", &light_props.quadratic, 0.01f, 0.0f, 2.0f);
 
+		ImGui::Checkbox("Interact with Shadows", &light_props.affect_shadows);
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
@@ -145,6 +146,7 @@ void ComponentLightPoint::Clone(Component* clone)
 	ComponentLightPoint* light = (ComponentLightPoint*)clone;
 	light->renderer_id = renderer_id;
 	light->print_icon = print_icon;
+	light->light_props = light_props;
 }
 
 void ComponentLightPoint::Reset()
@@ -178,6 +180,8 @@ void ComponentLightPoint::SaveComponent(JSONArraypack* to_save)
 	to_save->SetNumber("Constant", float(light_props.constant));
 	to_save->SetNumber("Linear", float(light_props.linear));
 	to_save->SetNumber("Quadratic", float(light_props.quadratic));
+	to_save->SetBoolean("InteractWithShadows", light_props.affect_shadows);
+
 }
 
 void ComponentLightPoint::LoadComponent(JSONArraypack* to_load)
@@ -193,6 +197,13 @@ void ComponentLightPoint::LoadComponent(JSONArraypack* to_load)
 	light_props.constant = (float)to_load->GetNumber("Constant");
 	light_props.linear = (float)to_load->GetNumber("Linear");
 	light_props.quadratic = (float)to_load->GetNumber("Quadratic");
+
+	try {
+		light_props.affect_shadows = to_load->GetBoolean("InteractWithShadows");
+	}
+	catch (...) {
+		light_props.affect_shadows = true;
+	}
 }
 
 void ComponentLightPoint::DrawIconLight()
@@ -228,5 +239,7 @@ void ComponentLightPoint::SetProperties(PointLightProperties props)
 	light_props.linear = props.linear;
 	light_props.quadratic = props.quadratic;
 	light_props.casting_particles = props.casting_particles;
+
+	light_props.enabled = props.enabled;
 
 }

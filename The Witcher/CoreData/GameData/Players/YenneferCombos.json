@@ -3,45 +3,21 @@
     {
       "name": "L",
       "button": "L",
-      "particle_name": "p_yen_atk_1_parent",
+      "particle_name": "Yenn_Laser",
       "particle_pos": {
-        "pos_x": -0.18,
-        "pos_y": 0.75,
-        "pos_z": 0.6
+        "pos_x": 0.0,
+        "pos_y": 0.57,
+        "pos_z": 0.58
       },
       "colliders": [
         {
           "type": "Box",
           "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.1,
+          "pos_y": 0.55,
+          "pos_z": 3.4,
           "width": 1,
           "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.9,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 2.7,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
+          "depth": 5.5,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -58,13 +34,13 @@
           "value": 0.5
         }
       ],
-      "activation_frame": 30,
+      "activation_frame": 29,
       "movement_strength": 0.0,
       "max_distance_traveled": 1.0,
-      "snap_detection_range": 5.5,
-      "min_distance_to_target": 4.5,
+      "snap_detection_range": 7,
+      "min_distance_to_target": 6,
       "next_attack_light": "LL",
-      "next_attack_heavy": "End",
+      "next_attack_heavy": "LH",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test",
@@ -73,45 +49,21 @@
     {
       "name": "LL",
       "button": "LL",
-      "particle_name": "p_yen_atk_1_parent_2",
+      "particle_name": "Yenn_Knockup",
       "particle_pos": {
-        "pos_x": 0.05,
-        "pos_y": 0.75,
-        "pos_z": 0.6
+        "pos_x": 0.00,
+        "pos_y": 0.6,
+        "pos_z": 3.6
       },
       "colliders": [
         {
           "type": "Box",
           "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.1,
+          "pos_y": 0.25,
+          "pos_z": 3.4,
           "width": 1,
           "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 1.9,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        },
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.4,
-          "pos_z": 2.7,
-          "width": 1,
-          "height": 1,
-          "depth": 0.8,
+          "depth": 5.5,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -119,22 +71,26 @@
       ],
       "knock_back": {
         "x": 0,
-        "y": 0,
+        "y": 1,
         "z": 0
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.6
+        },
+        {
+          "name": "KnockBack",
+          "value": 40
         }
       ],
-      "activation_frame": 10,
+      "activation_frame": 12,
       "movement_strength": 0.0,
       "max_distance_traveled": 1.0,
-      "snap_detection_range": 5.5,
-      "min_distance_to_target": 4.5,
+      "snap_detection_range": 7,
+      "min_distance_to_target": 6,
       "next_attack_light": "LLL",
-      "next_attack_heavy": "LLH",
+      "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test",
@@ -144,21 +100,21 @@
     {
       "name": "LLL",
       "button": "LLL",
-      "particle_name": "yenn_LLL_particle",
+      "particle_name": "Yenn_Knockdown",
       "particle_pos": {
-        "pos_x": 0.018,
-        "pos_y": 0.465,
-        "pos_z": 0.743
+        "pos_x": 0.0,
+        "pos_y": 3.5,
+        "pos_z": 3.4
       },
       "colliders": [
         {
           "type": "Box",
-          "pos_x": 0.0,
-          "pos_y": 0.4,
-          "pos_z": 2.35,
-          "width": 2.6,
-          "height": 1,
-          "depth": 3.6,
+          "pos_x": 0,
+          "pos_y": 3,
+          "pos_z": 3.4,
+          "width": 1,
+          "height": 2.1,
+          "depth": 5.5,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -166,6 +122,56 @@
       ],
       "knock_back": {
         "x": 0,
+        "y": -1,
+        "z": 0
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.8
+        },
+        {
+          "name": "KnockBack",
+          "value": 25
+        }
+      ],
+      "activation_frame": 9,
+      "movement_strength": 0,
+      "max_distance_traveled": 1.0,
+      "snap_detection_range": 7,
+      "min_distance_to_target": 6,
+      "next_attack_light": "End",
+      "next_attack_heavy": "End",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test",
+      "enemy_hit_particle": "blood_enemy_hit_test"
+    },
+    {
+      "name": "H",
+      "button": "H",
+      "particle_name": "y_H_slash",
+      "particle_pos": {
+        "pos_x": -0.0,
+        "pos_y": 0.482,
+        "pos_z": 0
+      },
+      "colliders": [
+        {
+          "type": "Weapon",
+          "pos_x": 0,
+          "pos_y": 0,
+          "pos_z": 0,
+          "width": 10,
+          "height": 10,
+          "depth": 17,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": -1,
         "y": 0,
         "z": 0
       },
@@ -173,198 +179,18 @@
         {
           "name": "Damage",
           "value": 0.7
+        },
+        {
+          "name": "KnockBack",
+          "value": 5
         }
       ],
-      "activation_frame": 18,
-      "movement_strength": 0,
+      "activation_frame": 8,
       "max_distance_traveled": 1.0,
-      "snap_detection_range": 5.5,
-      "min_distance_to_target": 4.5,
-      "next_attack_light": "LLLL",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.1,
-      "cam_shake": 0,
-      "allow_particle": "allow_test",
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "LLH",
-      "button": "LLH",
-      "particle_name": "y_heavy_basic",
-      "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
-      },
-      "colliders": [
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 0.400,
-          "pos_z": 3.0000,
-          "width": 2.000,
-          "height": 1.000,
-          "depth": 5.200,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.6
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 1.0,
-      "movement_strength": 0,
-      "min_distance_to_target": 4.5,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "End",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.1,
-      "cam_shake": 0,
-      "allow_particle": "allow_test",
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "LLLL",
-      "button": "LLLL",
-      "particle_name": "Yenn_Energy_Sphere",
-      "particle_pos": {
-        "pos_x": 0.018,
-        "pos_y": 0.465,
-        "pos_z": 0.743
-      },
-      "colliders": [
-        {
-          "type": "Box",
-          "pos_x": 0.0,
-          "pos_y": 0.4,
-          "pos_z": 2.35,
-          "width": 2.6,
-          "height": 1,
-          "depth": 3.6,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 0.9
-        }
-      ],
-      "activation_frame": 37,
-      "max_distance_traveled": 1.0,
-      "movement_strength": 0,
-      "min_distance_to_target": 4.5,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "LLLLL",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.1,
-      "cam_shake": 0,
-      "allow_particle": "allow_test",
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "LLLLL",
-      "button": "LLLLL",
-      "particle_name": "p_yen_atk_4",
-      "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
-      },
-      "colliders": [
-        {
-          "type": "Box",
-          "pos_x": 0.000,
-          "pos_y": 1.7,
-          "pos_z": 0,
-          "width": 8,
-          "height": 2,
-          "depth": 8,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.3
-        }
-      ],
-      "activation_frame": 39,
-      "max_distance_traveled": 1.0,
-      "movement_strength": 0.0,
-      "min_distance_to_target": 4.5,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "End",
-      "next_attack_heavy": "End",
-      "freeze_time": 0.1,
-      "cam_shake": 1,
-      "allow_particle": "allow_test",
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "H",
-      "button": "H",
-      "particle_name": "y_heavy_basic",
-      "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
-      },
-      "colliders": [
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 1.7,
-          "pos_z": 1.75,
-          "width": 1.4,
-          "height": 2.9,
-          "depth": 2.5,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 0.8
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 1.0,
-      "movement_strength": 0.0,
-      "min_distance_to_target": 3.4,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "End",
+      "movement_strength": 0.2,
+      "min_distance_to_target": 2.5,
+      "snap_detection_range": 4,
+      "next_attack_light": "HL",
       "next_attack_heavy": "HH",
       "freeze_time": 0.1,
       "cam_shake": 0,
@@ -374,43 +200,47 @@
     {
       "name": "HH",
       "button": "HH",
-      "particle_name": "y_heavy_basic",
+      "particle_name": "y_HH_slash",
       "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
+        "pos_x": -0.0,
+        "pos_y": 0.482,
+        "pos_z": 0
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Weapon2",
           "pos_x": 0,
-          "pos_y": 1.7,
-          "pos_z": 1.75,
-          "width": 1.4,
-          "height": 2.9,
-          "depth": 2.5,
+          "pos_y": 0,
+          "pos_z": 0,
+          "width": 10,
+          "height": 10,
+          "depth": 17,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
         }
       ],
       "knock_back": {
-        "x": 0,
+        "x": 1,
         "y": 0,
         "z": 0
       },
       "stats": [
         {
           "name": "Damage",
-          "value": 0.9
+          "value": 0.8
+        },
+        {
+          "name": "KnockBack",
+          "value": 5
         }
       ],
-      "activation_frame": 25,
+      "activation_frame": 8,
       "max_distance_traveled": 1.0,
       "movement_strength": 0.0,
-      "min_distance_to_target": 3.4,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "HHL",
+      "min_distance_to_target": 2.5,
+      "snap_detection_range": 4,
+      "next_attack_light": "End",
       "next_attack_heavy": "HHH",
       "freeze_time": 0.1,
       "cam_shake": 0,
@@ -420,21 +250,21 @@
     {
       "name": "HHH",
       "button": "HHH",
-      "particle_name": "y_heavy_basic",
+      "particle_name": "Yenn_Shotgun",
       "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
+        "pos_x": 0,
+        "pos_y": 0.6,
+        "pos_z": 0.3
       },
       "colliders": [
         {
           "type": "Box",
           "pos_x": 0,
-          "pos_y": 2.25,
-          "pos_z": 1.55,
-          "width": 1.9,
-          "height": 3.3,
-          "depth": 4.8,
+          "pos_y": 0.6,
+          "pos_z": 1.5,
+          "width": 1.3,
+          "height": 1,
+          "depth": 2.4,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -443,44 +273,97 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 1
+        },
+        {
+          "name": "KnockBack",
+          "value": 25
         }
       ],
-      "activation_frame": 25,
+      "activation_frame": 24,
       "max_distance_traveled": 1.0,
       "movement_strength": 0.0,
-      "min_distance_to_target": 3.4,
-      "snap_detection_range": 5.5,
+      "min_distance_to_target": 2.5,
+      "snap_detection_range": 4,
       "next_attack_light": "End",
-      "next_attack_heavy": "HHHH",
+      "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test",
       "enemy_hit_particle": "blood_enemy_hit_test"
     },
     {
-      "name": "HHL",
-      "button": "HHL",
-      "particle_name": "y_torbellino",
+      "name": "LH",
+      "button": "LH",
+      "particle_name": "Yenn_Pull",
       "particle_pos": {
-        "pos_x": 0,
-        "pos_y": 0.5,
-        "pos_z": 1
+        "pos_x": 0.0,
+        "pos_y": 0.57,
+        "pos_z": 6.6
+      },
+      "colliders": [
+ {
+          "type": "Box",
+          "pos_x": 0,
+          "pos_y": 0.55,
+          "pos_z": 3.4,
+          "width": 1,
+          "height": 1,
+          "depth": 5.5,
+          "rot_x": 0,
+          "rot_y": 0,
+          "rot_z": 0
+        }
+      ],
+      "knock_back": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "stats": [
+        {
+          "name": "Damage",
+          "value": 0.7
+        },
+        {
+          "name": "KnockBack",
+          "value": 30
+        }
+      ],
+      "activation_frame": 14,
+      "max_distance_traveled": 1.0,
+      "movement_strength": 0,
+      "min_distance_to_target": 7,
+      "snap_detection_range": 6,
+      "next_attack_light": "LHL",
+      "next_attack_heavy": "End",
+      "freeze_time": 0.1,
+      "cam_shake": 0,
+      "allow_particle": "allow_test",
+      "enemy_hit_particle": "blood_enemy_hit_test"
+    },
+
+    {
+      "name": "LHL",
+      "button": "LHL",
+      "particle_name": "Yenn_GravityBall",
+      "particle_pos": {
+        "pos_x": 0.0,
+        "pos_y": 0.8,
+        "pos_z": 1.2
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Sphere",
           "pos_x": 0,
-          "pos_y": 0.75,
-          "pos_z": 0,
-          "width": 5,
-          "height": 1.7,
-          "depth": 5,
+          "pos_y": 0.8,
+          "pos_z": 1.2,
+          "radius": 0.9,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -497,12 +380,12 @@
           "value": 1.2
         }
       ],
-      "activation_frame": 25,
+      "activation_frame": 13,
       "max_distance_traveled": 1.0,
-      "movement_strength": 0.0,
-      "min_distance_to_target": 4.5,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "HHLL",
+      "movement_strength": 0,
+      "min_distance_to_target": 2.5,
+      "snap_detection_range": 4,
+      "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.1,
       "cam_shake": 0,
@@ -510,23 +393,21 @@
       "enemy_hit_particle": "blood_enemy_hit_test"
     },
     {
-      "name": "HHLL",
-      "button": "HHLL",
-      "particle_name": "y_torbellino",
+      "name": "HL",
+      "button": "HL",
+      "particle_name": "Yenn_AOEPull",
       "particle_pos": {
         "pos_x": 0,
-        "pos_y": -1.5,
-        "pos_z": 1
+        "pos_y": 0.5,
+        "pos_z": 0
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Sphere",
           "pos_x": 0,
-          "pos_y": 0.75,
+          "pos_y": 0.5,
           "pos_z": 0,
-          "width": 5,
-          "height": 1.7,
-          "depth": 5,
+          "radius": 2.8,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -535,44 +416,46 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": -1
       },
       "stats": [
         {
           "name": "Damage",
           "value": 0.8
+        },
+        {
+          "name": "KnockBack",
+          "value": 10
         }
       ],
-      "activation_frame": 25,
+      "activation_frame": 19,
       "max_distance_traveled": 1.0,
       "movement_strength": 0.0,
-      "min_distance_to_target": 4.5,
-      "snap_detection_range": 5.5,
+      "min_distance_to_target": 2.5,
+      "snap_detection_range": 4,
       "next_attack_light": "End",
-      "next_attack_heavy": "End",
+      "next_attack_heavy": "HLH",
       "freeze_time": 0.1,
       "cam_shake": 0,
       "allow_particle": "allow_test",
       "enemy_hit_particle": "blood_enemy_hit_test"
     },
     {
-      "name": "HHHH",
-      "button": "HHHH",
-      "particle_name": "y_heavy_basic",
+      "name": "HLH",
+      "button": "HLH",
+      "particle_name": "Yenn_AOEBlast",
       "particle_pos": {
-        "pos_x": -0.25,
+        "pos_x": 0,
         "pos_y": 0.5,
-        "pos_z": 1
+        "pos_z": 0
       },
       "colliders": [
         {
-          "type": "Box",
+          "type": "Sphere",
           "pos_x": 0,
-          "pos_y": 1.95,
-          "pos_z": 3.2,
-          "width": 1.9,
-          "height": 3.3,
-          "depth": 5.3,
+          "pos_y": 0.5,
+          "pos_z": 0,
+          "radius": 2.8,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
@@ -581,65 +464,23 @@
       "knock_back": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": 1
       },
       "stats": [
         {
           "name": "Damage",
-          "value": 1.2
+          "value": 1
+        },
+        {
+          "name": "KnockBack",
+          "value": 4
         }
       ],
-      "activation_frame": 25,
+      "activation_frame": 16,
       "max_distance_traveled": 1.0,
       "movement_strength": 0.0,
-      "min_distance_to_target": 3.4,
-      "snap_detection_range": 5.5,
-      "next_attack_light": "End",
-      "next_attack_heavy": "HHHHH",
-      "freeze_time": 0.1,
-      "cam_shake": 0,
-      "allow_particle": "allow_test",
-      "enemy_hit_particle": "blood_enemy_hit_test"
-    },
-    {
-      "name": "HHHHH",
-      "button": "HHHHH",
-      "particle_name": "y_heavy_basic",
-      "particle_pos": {
-        "pos_x": -0.25,
-        "pos_y": 0.5,
-        "pos_z": 1
-      },
-      "colliders": [
-        {
-          "type": "Box",
-          "pos_x": 0,
-          "pos_y": 1.95,
-          "pos_z": 3.2,
-          "width": 1.9,
-          "height": 3.3,
-          "depth": 5.3,
-          "rot_x": 0,
-          "rot_y": 0,
-          "rot_z": 0
-        }
-      ],
-      "knock_back": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "stats": [
-        {
-          "name": "Damage",
-          "value": 1.4
-        }
-      ],
-      "activation_frame": 25,
-      "max_distance_traveled": 1.0,
-      "movement_strength": 0.0,
-      "min_distance_to_target": 3.4,
-      "snap_detection_range": 5.5,
+      "min_distance_to_target": 2.5,
+      "snap_detection_range": 4,
       "next_attack_light": "End",
       "next_attack_heavy": "End",
       "freeze_time": 0.1,
@@ -806,7 +647,7 @@
       "effect": "",
       "activation_frame": 25,
       "movement_strength": 0,
-      "min_distance_to_target": 3.0,
+      "min_distance_to_target": 5.0,
       "max_distance_traveled": 1,
       "snap_detection_range": 10,
       "colliders": [
@@ -840,7 +681,7 @@
       "particle_name": "p_flamethrower",
       "particle_pos": {
         "pos_x": 0,
-        "pos_y": 0.55,
+        "pos_y": 0.65,
         "pos_z": 0.3
       },
       "audio_name": "Play_fire_runestone",
@@ -864,36 +705,36 @@
       "colliders": [
         {
           "type": "Box",
-          "pos_x": 0.1,
+          "pos_x": 0.0,
           "pos_y": 0.5,
-          "pos_z": 1.1,
-          "width": 0.8,
-          "height": 0.9,
-          "depth": 1.35,
+          "pos_z": 0.65,
+          "width": 0.5,
+          "height": 0.7,
+          "depth": 0.75,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
         },
         {
           "type": "Box",
-          "pos_x": 0.1,
+          "pos_x": 0.0,
           "pos_y": 0.5,
-          "pos_z": 2.45,
+          "pos_z": 1.05,
           "width": 0.8,
           "height": 0.9,
-          "depth": 1.35,
+          "depth": 1.4,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0
         },
         {
           "type": "Box",
-          "pos_x": 0.1,
+          "pos_x": 0.0,
           "pos_y": 0.5,
-          "pos_z": 3.625,
+          "pos_z": 1.55,
           "width": 0.8,
           "height": 0.9,
-          "depth": 1,
+          "depth": 2.1,
           "rot_x": 0,
           "rot_y": 0,
           "rot_z": 0

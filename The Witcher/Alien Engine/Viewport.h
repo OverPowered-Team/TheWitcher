@@ -13,10 +13,18 @@ public:
 		DEPTH_TEAXTURE,
 		NORMAL_FBO,
 		NORMAL_TEXTURE,
+		BLOOM_TEXTURE,
 		NORMAL_DEPTH_RBO,
 		MULTISAMPLING_FBO,
-		MULTISAMPLING_COLOR_RBO,
+		MULTISAMPLING_COLOR_RBO1,
+		MULTISAMPLING_COLOR_RBO2,
 		MULTISAMPLING_DEPTH_RBO,
+		POST_PROC_FBO,
+		POST_PROC_TEXTURE,
+		POST_PROC_MULTISAMPLING_FBO,
+		POST_PROC_MULTISAMPLING_COLOR,
+		POST_PROC_MULTISAMPLING_DEPTH,
+		MAX
 	};
 
 	FBO();
@@ -35,6 +43,13 @@ public:
 
 	uint GetFBOTexture();
 
+	uint GetSecondTextureAttachment(); 
+
+	uint GetPostProcTexture(); 
+
+	uint GetPostProcFinalFBO();
+	uint GetPostProcMSAAFBO();
+
 	uint GetFBO();
 
 	// Only multiple of 2 values // 0 : MSAA disabled // 2-16 : MSAA enabled
@@ -51,10 +66,15 @@ public:
 		return msaa;
 	}
 
+public: 
+
+	uint pingPongFBO[2] = { 0, 0 };
+	uint pingPongTex[2] = { 0, 0 };
+
 private:
 
 	bool z_buffer_mode = true;
-	uint ID[8];
+	uint ID[BufferType::MAX];
 	uint msaa = 4;
 	float2 position;
 
@@ -63,7 +83,6 @@ private:
 
 
 class ComponentCamera;
-class FBO;
 
 class Viewport
 {
@@ -81,6 +100,12 @@ public:
 
 	void EndViewport();
 
+	void ApplyPostProcessing();
+
+	void BlurImage();
+
+	void FinalPass();
+
 	void SetPos(float2 position);
 
 	void SetSize(float width, float height);
@@ -91,8 +116,20 @@ public:
 
 	uint GetFBO();
 
+	// PostProc FBO with MSAA, depth buffer
+	uint GetPostProcFBO();
+
+	// Final fbo with only a colored mesh, that is what the player sees
+	uint GetPostProcFinalFBO();
+
 	uint GetTexture();
 
+	uint GetBlurredTexture();
+
+	uint GetPostProcTexture(); 
+
+	void BlitFboToFbo(uint from, uint to, bool color = true, bool depth = false, bool stencil = false);
+	
 	bool ScreenPointToViewport(float2& screen_point);
 
 	bool CanRender();

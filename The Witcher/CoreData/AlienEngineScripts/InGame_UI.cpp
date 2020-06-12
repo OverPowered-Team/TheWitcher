@@ -5,6 +5,8 @@
 #include "PlayerManager.h"
 #include "UltiBar.h"
 #include "Scores_Data.h"
+#include "UI_DamageCount.h"
+#include "DialogueManager.h"
 
 InGame_UI::InGame_UI() : Alien()
 {
@@ -23,6 +25,9 @@ void InGame_UI::Start()
 	ulti_filter = in_game->GetChild("Ulti_Filter")->GetComponent<ComponentImage>();
 	ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
 
+	relics_menu = game_object->GetChild("Relics_Menu");
+	relics_menu->SetEnable(false);
+
 	GameObject::FindWithName("Menu")->SetEnable(true);
 	canvas = game_object->GetComponent<ComponentCanvas>();
 	you_died = GameObject::FindWithName("YouDied");
@@ -38,14 +43,65 @@ void InGame_UI::Start()
 
 void InGame_UI::Update()
 {
-	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START)) || (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START))||(Input::GetKeyDown(SDL_SCANCODE_ESCAPE)))&&!died)
+	if (!Time::IsGamePaused())
+	{
+		internal_timer += Time::GetGameTime() - (internal_timer + time_paused);
+
+		if (time_paused != 0.0f)
+		{
+			time_checkpoint += time_paused;
+			time += time_paused;
+			time_ulti_filter += time_paused;
+
+			for (auto i = particles.begin(); i != particles.end(); ++i)
+			{
+				(*i)->time_passed += time_paused;
+			}
+
+			in_game->GetChild("Character2")->GetComponent<UI_Char_Frame>()->UpdateTimes(time_paused);
+			in_game->GetChild("Character1")->GetComponent<UI_Char_Frame>()->UpdateTimes(time_paused);
+			in_game->GetChild("Ulti_Bar")->GetComponent<UltiBar>()->UpdateTimes(time_paused);
+			in_game->GetComponent<UI_DamageCount>()->UpdateTimes(time_paused);
+
+			time_paused = 0.0f;
+		}
+	}
+	else
+	{
+		time_paused = Time::GetGameTime() - internal_timer;
+	}
+
+	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START))
+		|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START)) || (Input::GetKeyDown(SDL_SCANCODE_ESCAPE))) 
+		&& !died && !relics_menu->IsEnabled())
 	{
 		PauseMenu(!Time::IsGamePaused());
 	}
 
+	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_BACK))
+		|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_BACK)))
+		&& !died && !pause_menu->IsEnabled())
+	{
+		RelicsMenu(!Time::IsGamePaused());
+	}
+
+	if (relics_menu->IsEnabled())
+	{
+		if (Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_B)
+			|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
+		{
+			RelicsMenu(!Time::IsGamePaused());
+		}
+	}
+
+	if (Time::IsGamePaused())
+	{
+		return;
+	}
+
 	if (checkpoint_saved_text->IsEnabled())
 	{
-		float t = (Time::GetGameTime() - time_checkpoint) / 0.5f;
+		float t = (internal_timer - time_checkpoint) / 0.5f;
 		float lerp = 0.0f;
 
 		switch (checkpoint_state)
@@ -76,12 +132,12 @@ void InGame_UI::Update()
 			case CP_STATE::FADE_IN:
 			{
 				checkpoint_state = CP_STATE::SHOW;
-				time_checkpoint = Time::GetGameTime() + 1.5f;
+				time_checkpoint = internal_timer + 1.5f;
 				break;
 			}
 			case CP_STATE::SHOW:
 			{
-				time_checkpoint = Time::GetGameTime();
+				time_checkpoint = internal_timer;
 				checkpoint_state = CP_STATE::FADE_OUT;
 				break;
 			}
@@ -96,12 +152,12 @@ void InGame_UI::Update()
 
 	if (died)
 	{
-		if (time + waiting < Time::GetGameTime())
+		if (time + waiting < internal_timer)
 		{
 			if (!died_gone)
 			{
 				you_died->SetEnable(true);
-				time = Time::GetGameTime();
+				time = internal_timer;
 				waiting = 2;
 				died_gone = true;
 			}
@@ -113,10 +169,7 @@ void InGame_UI::Update()
 				}
 				else
 				{
-					Scores_Data::dead = true;
-					Scores_Data::player1_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[0]->player_data.total_kills;
-					Scores_Data::player2_kills = GameObject::FindWithName("GameManager")->GetComponent<GameManager>()->player_manager->players[1]->player_data.total_kills;
-					Scores_Data::last_scene = SceneManager::GetCurrentScene();
+					GameManager::instance->PrepareDataNextScene(true);
 					SceneManager::LoadScene("NewWin_Menu");
 				}
 			}
@@ -128,11 +181,11 @@ void InGame_UI::Update()
 		auto particle = particles.begin();
 		for (; particle != particles.end(); ++particle)
 		{
-			float lerp = (Time::GetGameTime() - (*particle)->time_passed) / time_lerp_ult_part;
+			float lerp = (internal_timer - (*particle)->time_passed) / time_lerp_ult_part;
 			float position_x = Maths::Lerp((*particle)->origin_position.x, (*particle)->final_position.x, lerp);
 			float position_y = Maths::Lerp((*particle)->origin_position.y, (*particle)->final_position.y, lerp);
 
-			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 1);
+			(*particle)->particle->transform->SetLocalPosition(position_x, position_y, 0);
 
 			if (lerp >= 1)
 			{
@@ -186,18 +239,31 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
+	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+}
+
+void InGame_UI::RelicsMenu(bool to_open)
+{
+	in_game->SetEnable(!to_open);
+	Time::SetPause(to_open);
+	relics_menu->SetEnable(to_open);
+	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	if (to_open)
+	{
+
+	}
 }
 
 void InGame_UI::YouDied()
 {
 	died = true;
-	time = Time::GetGameTime();
+	time = internal_timer;
 }
 
 void InGame_UI::ShowCheckpointSaved()
 {
 	checkpoint_saved_text->SetEnable(true);
-	time_checkpoint = Time::GetGameTime();
+	time_checkpoint = internal_timer;
 }
 
 void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
@@ -207,10 +273,19 @@ void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
 		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	particle->origin_position = float3(0, 43.f, 0);
+	float random = Random::GetRandomIntBetweenTwo(1, 2);
+	if (random == 1)
+	{
+		particle->origin_position = float3(-25.f, 43.f, -0.1f);
+	}
+	else
+	{
+		particle->origin_position = float3(25.f, 43.f, -0.1f);
+	}
+
 	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
 	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
-	particle->time_passed = Time::GetGameTime();
+	particle->time_passed = internal_timer;
 
 	particles.push_back(particle);
 }
@@ -219,5 +294,9 @@ void InGame_UI::ShowUltiFilter(bool show)
 {
 	ulti_active = show;
 	changing_alpha_filter = true;
-	time_ulti_filter = Time::GetTimeSinceStart();
+	time_ulti_filter = internal_timer;
+}
+
+void InGame_UI::LoadActiveRelics()
+{
 }

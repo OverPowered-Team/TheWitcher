@@ -1,6 +1,7 @@
 #include "VagoneteMove.h"
 #include "VagoneteDirection.h"
 #include "Wagonnete_UI.h"
+#include "WagoneteAddVelocity.h"
 #include "VagoneteObstacle.h"
 
 Quat VagoneteInputs::playerRotation = Quat::identity();
@@ -27,8 +28,12 @@ void VagoneteMove::Start()
 {
 	curve = GameObject::FindWithName("Curve")->GetComponent<ComponentCurve>();
 	rigid_body = GetComponent<ComponentRigidBody>();
+
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::GERALT));
 	players.push_back(new VagoneteInputs(PlayerController::PlayerType::YENNEFER));
+	players[0]->other_player = players[1];
+	players[1]->other_player = players[0];
+
 	max_life = vagonete_life;
 	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
 }
@@ -44,10 +49,6 @@ void VagoneteMove::Update()
 	}
 
 	FollowCurve();
-
-	if (Input::GetKeyDown(SDL_SCANCODE_1)) {
-		actual_pos = 0;
-	}
 
 	if (Input::GetKeyRepeat(SDL_SCANCODE_F3) && Input::GetKeyDown(SDL_SCANCODE_5)) {
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
@@ -96,27 +97,26 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		if (direction != nullptr) {
 			if (VagoneteInputs::globalInclination == 0) {
 				if (direction->default_right) {
-					curve = direction->curve_right->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_right->GetComponent<ComponentCurve>();
 				}
 				else {
-					curve = direction->curve_left->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_left->GetComponent<ComponentCurve>();
 				}
 			}
 			else {
 				if (VagoneteInputs::globalInclination > 0) {
-					curve = direction->curve_left->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_left->GetComponent<ComponentCurve>();
 				}
 				else {
-					curve = direction->curve_right->GetComponent<ComponentCurve>();
+					next_curve = direction->curve_right->GetComponent<ComponentCurve>();
 				}
 			}
-			actual_pos = 0.0F;
-			speed = 10.f; // CHANGED :( We R sorry direction->velocity;
 		}
+		LOG("BIFURCATION TRIGGER HIT");
 	}
 	else if (strcmp("VagoneteCover", col->game_object_attached->GetTag()) == 0) {
 		for (auto item = players.begin(); item != players.end(); ++item) {
-			if ((*item)->state != VagoneteInputs::State::COVER) 
+			if ((*item)->state != VagoneteInputs::State::COVER)
 			{
 				DecreaseLife();
 			}
@@ -124,6 +124,10 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 	}
 	else if (strcmp("VagoneteDie", col->game_object_attached->GetTag()) == 0) {
 		SceneManager::LoadScene(SceneManager::GetCurrentScene());
+	}
+	else if (strcmp("VagoneteVelocity", col->game_object_attached->GetTag()) == 0) {
+		WagoneteAddVelocity* vel = col->game_object_attached->GetComponent<WagoneteAddVelocity>();
+		SetVelocity(vel->max_velocity, vel->acceleration);
 	}
 	else if (strcmp("VagoneteObstacle", col->game_object_attached->GetTag()) == 0) {
 		if (col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
@@ -147,34 +151,21 @@ void VagoneteMove::DecreaseLife()
 		HUD->UpdateLifebar(vagonete_life, max_life);
 
 		if (vagonete_life <= 0) {
-			SceneManager::LoadScene(SceneManager::GetCurrentScene());
+			SceneManager::LoadScene(SceneManager::GetCurrentScene(), FadeToBlackType::FADE);
 		}
 	}
 }
 
-void VagoneteMove::FollowCurve()
+void VagoneteMove::SetVelocity(float max_velocity, float acceleration)
 {
-	/*
+	this->acceleration = (max_velocity < this->max_velocity) ? -acceleration : acceleration;
+	this->max_velocity = max_velocity;
+}
+
+void VagoneteMove::FollowCurve()
+{	
 	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
-	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
-
-	//Pitch (slope)
-	float3 railVector = (currentPos - nextPos).Normalized();
-	Quat rot = Quat::LookAt(float3::unitX(), railVector, float3::unitY(), float3::unitY());
-
-	//Inclination (normals + players)
-	float3 inclinationVector = curve->curve.NormalAtDistance(actual_pos).Normalized();
-	Quat inclinationRot = Quat::RotateFromTo(float3::unitY(), inclinationVector);
-	inclinationRot.Inverse();
-	rot = rot * inclinationRot;
-
-	rigid_body->SetRotation(rot * VagoneteInputs::playerRotation);
-	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
-	actual_pos += speed * Time::GetDT();
-	*/
-
-	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
-	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5);
+	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT() * 5);
 
 	float3 vector = (currentPos - nextPos).Normalized();
 	float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
@@ -183,22 +174,21 @@ void VagoneteMove::FollowCurve()
 	rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
 	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
 
-	/*float3 next_pos = curve->curve.ValueAtDistance(actual_pos);
-	float3 diff_pos = (curve->curve.ValueAtDistance(actual_pos + speed * Time::GetDT() * 5) - next_pos).Normalized();
-	float3 jajauqeloco = transform->up.Cross(-diff_pos);
-	float3 HEIL = transform->right;
+	actual_pos += current_speed * Time::GetDT();
 
-	rigid_body->SetRotation(
-		  Quat::RotateFromTo(transform->up, curve->curve.NormalAtDistance(actual_pos)) 
-		* Quat::RotateFromTo(-transform->right.Normalized(), diff_pos.Normalized())
-		* rigid_body->GetRotation()
-	);
+	current_speed += acceleration * Time::GetDT();
+	if (acceleration > 0) {
+		current_speed = Maths::Clamp(current_speed, 0.0F, max_velocity);
+	}
+	else {
+		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
+	}
 
-
-
-	rigid_body->SetPosition(next_pos);*/
-
-	actual_pos += speed * Time::GetDT();
+	if (actual_pos > curve->curve.length && next_curve != nullptr) {
+		actual_pos = current_speed * Time::GetDT();
+		curve = next_curve;
+		next_curve = nullptr;
+	}
 }
 
 VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
@@ -212,7 +202,6 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationLeft = SDL_SCANCODE_A;
 		keyboardInput.inclinationRight = SDL_SCANCODE_D;
 		keyboardInput.cover = SDL_SCANCODE_S;
-		keyboardInput.jump = SDL_SCANCODE_W;
 		player = GameObject::FindWithName("Geralt_Prefab"); // TODO: Change this to only find in children of GameObject
 		break; }
 	case PlayerController::PlayerType::YENNEFER: {
@@ -220,7 +209,6 @@ VagoneteInputs::VagoneteInputs(PlayerController::PlayerType type)
 		keyboardInput.inclinationLeft = SDL_SCANCODE_LEFT;
 		keyboardInput.inclinationRight = SDL_SCANCODE_RIGHT;
 		keyboardInput.cover = SDL_SCANCODE_DOWN;
-		keyboardInput.jump = SDL_SCANCODE_UP;
 		player = GameObject::FindWithName("Yenn_Ready");
 		break; }
 	default: {
@@ -242,7 +230,6 @@ void VagoneteInputs::UpdateInputs()
 	case VagoneteInputs::State::IDLE: {
 		bool rightInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationRight) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_RIGHT) == Input::KEY_REPEAT;;
 		bool leftInclinationInput = Input::GetKeyRepeat(keyboardInput.inclinationLeft) || Input::GetControllerJoystickLeft(controllerIndex, Input::JOYSTICK_LEFT) == Input::KEY_REPEAT;
-		bool jumpInput = Input::GetKeyRepeat(keyboardInput.jump) || Input::GetControllerButtonDown(controllerIndex, Input::CONTROLLER_BUTTON_A);
 		bool coverInput = Input::GetKeyRepeat(keyboardInput.cover) || Input::GetControllerJoystickLeft(controllerIndex,Input::JOYSTICK_DOWN) == Input::KEY_REPEAT;
 
 		if (state == State::COVER) {
@@ -257,10 +244,6 @@ void VagoneteInputs::UpdateInputs()
 				state = State::INCLINATION;
 				globalState = State::INCLINATION;
 			}
-			else if (jumpInput) {
-				state = State::JUMP;
-				globalState = State::JUMP;
-			}
 			else if (coverInput) {
 				state = State::COVER;
 			}
@@ -268,9 +251,6 @@ void VagoneteInputs::UpdateInputs()
 				state = State::IDLE;
 			}
 		}
-
-		break; }
-	case VagoneteInputs::State::JUMPING: {
 
 		break; }
 	case VagoneteInputs::State::INCLINATION: {
@@ -318,12 +298,6 @@ void VagoneteInputs::DoAction()
 {
 	switch (state)
 	{
-	case VagoneteInputs::State::JUMP: {
-		state = State::IDLE;
-		break; }
-	case VagoneteInputs::State::JUMPING: {
-		state = State::IDLE;
-		break; }
 	case VagoneteInputs::State::INCLINATION: {
 		Inclination();
 		break; }

@@ -7,6 +7,9 @@
 #include "ParticlePool.h"
 #include "EffectsFactory.h"
 #include "RumblerManager.h"
+#include "Scores_Data.h"
+#include "UI_DamageCount.h"
+#include "PlayerController.h"
 
 GameManager::GameManager() : Alien()
 {
@@ -20,7 +23,7 @@ GameManager::~GameManager()
 
 void GameManager::Awake()
 {
-	//effects_factory = new EffectsFactory();
+	effects_factory = new EffectsFactory();
 
 	event_manager = game_object->GetComponent<EventManager>();
 	enemy_manager = game_object->GetComponent<EnemyManager>();
@@ -39,4 +42,15 @@ void GameManager::Start()
 void GameManager::Update()
 {
 	
+}
+
+void GameManager::PrepareDataNextScene(bool dead)
+{
+	Scores_Data::dead = dead;
+	Scores_Data::player1_kills = player_manager->players[0]->player_data.type_kills;
+	Scores_Data::player2_kills = player_manager->players[1]->player_data.type_kills;
+	GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
+	Scores_Data::player1_relics = player_manager->players[0]->relics;
+	Scores_Data::player2_relics = player_manager->players[1]->relics;
+	Scores_Data::last_scene = SceneManager::GetCurrentScene();
 }

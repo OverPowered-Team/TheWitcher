@@ -13,18 +13,19 @@ BreakableObject::~BreakableObject()
 
 void BreakableObject::Explode()
 {
-	GameObject* new_obj = GameObject::Instantiate(object_broken, transform->GetGlobalPosition());
-	auto c = new_obj->GetComponent<ExplodeChildren>();
-	if (c != nullptr)
-		c->SetVars(force, time_to_despawn);
-	new_obj->transform->SetLocalScale(transform->GetGlobalScale());
+	GameObject* new_obj = GameObject::Instantiate(object_broken, transform->GetGlobalPosition()/*, false, game_object->parent*/);
+	if (new_obj != nullptr) {
+		auto c = new_obj->GetComponent<ExplodeChildren>();
+		if (c != nullptr)
+			c->SetVars(force, time_to_despawn);
 
-	auto children = new_obj->GetComponentsInChildren<ComponentRigidBody>();
-	for (auto i = children.begin(); i != children.end(); ++i) {
+		auto children = new_obj->GetComponentsInChildren<ComponentRigidBody>();
+		for (auto i = children.begin(); i != children.end(); ++i) {
 			(*i)->SetPosition((*i)->game_object_attached->transform->GetGlobalPosition());
-	}
+		}
 
-	new_obj->GetComponent<ExplodeChildren>()->Explode();
+		new_obj->GetComponent<ExplodeChildren>()->Explode();
+	}
 
 	GameObject::Destroy(game_object);
 }

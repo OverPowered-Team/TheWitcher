@@ -1,6 +1,32 @@
 {
     "Scene": {
         "Name": "NewWin_Menu",
+        "Textures": [
+            {
+                "TextureID": "13350467954505577842"
+            },
+            {
+                "TextureID": "246031399327508869"
+            },
+            {
+                "TextureID": "14960526280996216029"
+            },
+            {
+                "TextureID": "5577422964441565569"
+            },
+            {
+                "TextureID": "6333209860796209319"
+            },
+            {
+                "TextureID": "15512998250041092473"
+            },
+            {
+                "TextureID": "5239295638391244311"
+            },
+            {
+                "TextureID": "17269315272215311314"
+            }
+        ],
         "GameObjects": [
             {
                 "Name": "Camera",
@@ -41,7 +67,7 @@
                         "Enabled": true,
                         "Type": 6,
                         "VerticalFov": 60.000003814697266,
-                        "HoritzontalFov": 94.834671020507813,
+                        "HoritzontalFov": 91.492843627929688,
                         "BackCol": [
                             0.10000000149011612,
                             0.10000000149011612,
@@ -64,6 +90,9 @@
                         "Fog": false,
                         "Density": 0.035000000149011612,
                         "Gradient": 1.3500000238418579,
+                        "HDR": true,
+                        "Exposure": 1.1299999952316284,
+                        "Gamma": 0.77999997138977051,
                         "Skybox_PositiveX": "Library\/Textures\/16365362325777703218.dds",
                         "Skybox_NegativeX": "Library\/Textures\/6647353476053033927.dds",
                         "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
@@ -75,7 +104,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "6614237717751499353",
-                        "ListenerID": "814757085"
+                        "ListenerID": "4187024158"
                     }
                 ]
             },
@@ -539,7 +568,7 @@
                 "ParentID": "15357815709789583193",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": true,
@@ -577,8 +606,28 @@
                         "Inspector": [
                             {
                                 "VarType": 8,
-                                "Name": "enemy_heads",
+                                "Name": "ghoul_head",
+                                "prefab": "14491753123125795735"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nilfgaardian_head",
                                 "prefab": "2488502543085242696"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "leshen_head",
+                                "prefab": "0"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ciri_head",
+                                "prefab": "0"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "drowned_head",
+                                "prefab": "16790516391266513387"
                             },
                             {
                                 "VarType": 8,
@@ -917,8 +966,28 @@
                         "Inspector": [
                             {
                                 "VarType": 8,
-                                "Name": "enemy_heads",
+                                "Name": "ghoul_head",
+                                "prefab": "14491753123125795735"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "nilfgaardian_head",
                                 "prefab": "2488502543085242696"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "leshen_head",
+                                "prefab": "0"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "ciri_head",
+                                "prefab": "0"
+                            },
+                            {
+                                "VarType": 8,
+                                "Name": "drowned_head",
+                                "prefab": "16790516391266513387"
                             },
                             {
                                 "VarType": 8,
@@ -1014,7 +1083,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13177700800976414071",
+                        "ID": "6400987107833740083",
                         "Text": "4872",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -1068,7 +1137,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "639174685965304101",
+                        "ID": "7314264150860268396",
                         "Text": "5623",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -1113,16 +1182,16 @@
                             1
                         ],
                         "Scale": [
-                            10,
-                            10,
+                            8,
+                            8,
                             1
                         ],
                         "ScaleNegative": false,
                         "ID": "16493090976228441335"
                     },
                     {
-                        "Width": 7,
-                        "Height": 5,
+                        "Width": 10.079999923706055,
+                        "Height": 5.130000114440918,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
@@ -1153,8 +1222,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -7.0887537002563477,
-                            -0.81757760047912598,
+                            -8.8999996185302734,
+                            -1,
                             0
                         ],
                         "Rotation": [
@@ -1173,7 +1242,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "3139313410931490899",
+                        "ID": "5463337205023579632",
                         "Text": "Go to Level 2",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1227,7 +1296,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "13581200299401931756",
+                        "ID": "711198927213487878",
                         "Text": "-Geralt-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1281,7 +1350,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5088546384403750988",
+                        "ID": "14499656600620720308",
                         "Text": "-Yennefer-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1326,16 +1395,16 @@
                             1
                         ],
                         "Scale": [
-                            10,
-                            10,
+                            8,
+                            8,
                             1
                         ],
                         "ScaleNegative": false,
                         "ID": "1807586485847697053"
                     },
                     {
-                        "Width": 7,
-                        "Height": 5,
+                        "Width": 10.090000152587891,
+                        "Height": 5.1500000953674316,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
@@ -1356,7 +1425,7 @@
                 "ParentID": "6167678599204295045",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -1366,8 +1435,8 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -7.1416764259338379,
-                            -1.0209803581237793,
+                            -8.8999996185302734,
+                            -1.2000000476837158,
                             0
                         ],
                         "Rotation": [
@@ -1386,7 +1455,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "12746652979192099287",
+                        "ID": "10127313543215575813",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1732,7 +1801,8 @@
                             0.99998998641967773
                         ],
                         "CastShadows": true,
-                        "SizeBakedShadow": 153
+                        "SizeBakedShadow": 153,
+                        "sadowIntensity": 0
                     }
                 ]
             }

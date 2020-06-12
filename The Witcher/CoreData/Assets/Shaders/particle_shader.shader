@@ -38,6 +38,7 @@ struct Material {
     sampler2D diffuseTexture;
     bool hasDiffuseTexture;
 
+    bool emissive;
     
 };
 uniform Material objectMaterial;
@@ -50,7 +51,8 @@ in vec2 texCoords;
 in float visibility;
 
 // Outs
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BloomColor;
 
 void main()
 {
@@ -69,5 +71,14 @@ void main()
     if(activeFog)
     {
         FragColor = mix(vec4(backgroundColor, 1.0), FragColor, visibility);
+    }
+
+    if(objectMaterial.emissive)
+    {
+        BloomColor = vec4(FragColor.rgb, 1.0f);
+    }
+    else 
+    {
+        BloomColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
 }

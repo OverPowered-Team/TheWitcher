@@ -25,7 +25,8 @@ public:
 	enum(GhoulType,
 		NONE = -1,
 		ORIGINAL,
-		DODGE);
+		DODGE,
+		MINI);
 
 	enum(AwakeBehaviour, 
 		DEFAULT,
@@ -46,21 +47,27 @@ public:
 
 	void Stun(float time) override;
 	bool IsDead() override;
+	bool IsHit() override;
 	bool IsDying() override;
 	void SetState(const char* state_str) override;
+	bool IsRangeEnemy() override;
 
 	void Action();
 
 	void CheckDistance();
 
-	void OnTriggerEnter(ComponentCollider* collider) override;
-
 	void OnAnimationEnd(const char* name) override;
 
 	void OnDrawGizmosSelected(); 
 
+	void ActivateRangeCollider();
+	void DeactivateRangeCollider();
+
 	void PlaySFX(const char* sfx_name);
 	bool IsState(const char* state_str) override;
+
+	void CanJump();
+	void CanNotJump();
 // Group tactics
 	//void OnGroupStrengthChange(float strength_multi) override;
 
@@ -74,6 +81,9 @@ private:
 	float3 lastWanderTargetPos;
 	bool curve_patrol_go = true; 
 	float current_curve_point = 0.f;
+	float jump_speed = 0.0f;
+	ComponentCollider* range_collider = nullptr;
+
 public: 
 	float curve_speed = 0.02f;
 	bool patrol = false;
@@ -82,6 +92,8 @@ public:
 	float wander_precision = 0.5f; 
 	float wander_rest_time = 1.f;
 	bool wander_rest = true; 
+	bool can_jump = false;
+	float3 jump_direction;
 	GhoulState state = GhoulState::AWAKE;
 	GhoulType ghoul_type = GhoulType::NONE;
 	AwakeBehaviour awake_behaviour = AwakeBehaviour::DEFAULT;

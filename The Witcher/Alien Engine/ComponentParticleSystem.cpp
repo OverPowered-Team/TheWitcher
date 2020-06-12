@@ -14,9 +14,11 @@
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
 #include "ResourcePrefab.h"
+#include "RandomHelper.h"
 #include "Optick/include/optick.h"
 #include "ComponentMaterial.h"
 #include "mmgr/mmgr.h"
+#include "ComponentLightPoint.h"
 
 ComponentParticleSystem::ComponentParticleSystem(GameObject* parent) : Component(parent)
 {
@@ -124,8 +126,12 @@ void ComponentParticleSystem::DrawGame()
 #ifndef GAME_VERSION
 	if (App->objects->printing_scene)
 	{
-		if(game_object_attached->selected)
+		if (game_object_attached->selected)
+		{
 			Draw();
+		}
+		
+
 	}
 	else 
 		Draw();
@@ -149,7 +155,6 @@ void ComponentParticleSystem::DebugDraw()
 void ComponentParticleSystem::Draw()
 {
 	OPTICK_EVENT();
-
 	particleSystem->DrawParticles();
 
 }
@@ -205,49 +210,14 @@ bool ComponentParticleSystem::DrawInspector()
 			ParticleEmmitter* emmitter = &particleSystem->emmitter;
 
 			ImGui::Spacing();
-			ImGui::Checkbox("Draw Emmitter", &drawEmmitter);
+			ImGui::Spacing();
+			
 
-			if (ImGui::TreeNode("Shape Options"))
-			{
-				shapeSelected = (int)particleSystem->emmitter.GetShape();
-				if (ImGui::Combo("Shape", &shapeSelected, "Sphere\0Hemisphere\0Cube\0Cone\0\0")) { emmitter->SetShape((Emmitter_Shape)shapeSelected); }
-
-				switch (emmitter->GetShape())
-				{
-				case Emmitter_Shape::Sphere:
-				{
-					float radius = emmitter->GetRadius();
-					if (ImGui::DragFloat("Radius", &radius, 0.2f, 0.0f, FLT_MAX)) { emmitter->SetRadius(radius); }
-
-					int zoneSelected = (int)emmitter->GetZone();
-					if (ImGui::Combo("Emmission Zone", &zoneSelected, "Center\0Volume\0\0")) { emmitter->SetZone((Emmitter_Zone)zoneSelected); }
-				}
-				break;
-
-				case Emmitter_Shape::Cone:
-				{
-					// Not inner radius yet
-
-					float outRadius = emmitter->GetOutRadius();
-					if (ImGui::DragFloat("Outter Radius", &outRadius, 0.2f, 0.0f, FLT_MAX)) { emmitter->SetOutRadius(outRadius); }
-
-					float distance = emmitter->GetDistance();
-					if (ImGui::DragFloat("Distance", &distance, 0.2f, 0.0f, FLT_MAX)) { emmitter->SetDistance(distance); }
-				}
-				break;
-
-				case Emmitter_Shape::Cube:
-					ImGui::DragFloat3("Cube Size", emmitter->GetCubeSize(), 1.0f, 0.0f, FLOAT_INF);
-					break;
-
-				}
-
-				ImGui::TreePop();
-			}
 
 
 			float duration = emmitter->GetMaxLife();
-			if (ImGui::DragFloat("Duration", &duration, 1.0F, 0.0F, FLT_MAX)) 
+			ImGui::Text("Duration "); ImGui::SameLine(200, 15);
+			if (ImGui::DragFloat("##Duration", &duration, 1.0F, 0.0F, FLT_MAX)) 
 			{ 
 				if (cntl_Z)
 				 ReturnZ::AddNewAction(ReturnZ::ReturnActions::CHANGE_COMPONENT, this); 
@@ -260,31 +230,97 @@ bool ComponentParticleSystem::DrawInspector()
 			}
 
 			bool loop = emmitter->GetLoop();
-			if (ImGui::Checkbox("Looping", &loop)) { emmitter->SetLoop(loop); }
+			ImGui::Text("Looping "); ImGui::SameLine(200, 15);
+			if (ImGui::Checkbox("##Looping", &loop)) { emmitter->SetLoop(loop); }
 
 			float delay = emmitter->GetDelay();
-			if (ImGui::DragFloat("Delay", &delay, 0.2f, 0.00f, FLT_MAX)) { emmitter->SetDelay(delay); }
+			ImGui::Text("Delay "); ImGui::SameLine(200, 15);
+			if (ImGui::DragFloat("##Delay", &delay, 0.2f, 0.00f, FLT_MAX)) { emmitter->SetDelay(delay); }
 
 			float spawnRate = emmitter->GetSpawnRate();
-			if (ImGui::DragFloat("Spawn Rate", &spawnRate, 0.2f, 0.00f, FLT_MAX)) { emmitter->SetSpawnRate(spawnRate); }
+			ImGui::Text("Spawn Rate "); ImGui::SameLine(200, 15);
+			if (ImGui::DragFloat("##Spawn Rate", &spawnRate, 0.2f, 0.00f, FLT_MAX)) { emmitter->SetSpawnRate(spawnRate); }
 
+			ImGui::Spacing();
+			ImGui::Spacing();
 
 			float3 pos = particleSystem->emmitter.GetRelativePosition();
-			if (ImGui::DragFloat3("Position", (float*)&pos)) { emmitter->SetRelativePosition(pos); }
+			ImGui::Text("Position "); ImGui::SameLine(200, 15);
+			if (ImGui::DragFloat3("##Position", (float*)&pos)) { emmitter->SetRelativePosition(pos); }
 
 			float3 rot = particleSystem->emmitter.GetRelativeRotation();
-			if (ImGui::DragFloat3("Rotation", (float*)&rot)) { emmitter->SetRelativeRotation(rot); }
+			ImGui::Text("Rotation "); ImGui::SameLine(200, 15);
+			if (ImGui::DragFloat3("##Rotation", (float*)&rot)) { emmitter->SetRelativeRotation(rot); }
+			
+			ImGui::Spacing();
+			ImGui::Spacing();
 
-			if (ImGui::TreeNodeEx("Bursts"))
+
+			if (ImGui::CollapsingHeader("Shape", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::Spacing();
+				ImGui::Text("Debug Emmitter "); ImGui::SameLine(200, 15);
+				ImGui::Checkbox("##Draw Emmitter", &drawEmmitter);
+				shapeSelected = (int)particleSystem->emmitter.GetShape();
+				ImGui::Text("Shape "); ImGui::SameLine(200, 15);
+				if (ImGui::Combo("##Shape", &shapeSelected, "Sphere\0Hemisphere\0Cube\0Cone\0\0")) { emmitter->SetShape((Emmitter_Shape)shapeSelected); }
+
+				switch (emmitter->GetShape())
+				{
+				case Emmitter_Shape::Sphere:
+				{
+					float radius = emmitter->GetRadius();
+					ImGui::Text("Radius "); ImGui::SameLine(200, 15);
+					if (ImGui::DragFloat("##Radius", &radius, 0.2f, 0.0f, FLT_MAX)) { emmitter->SetRadius(radius); }
+
+					int zoneSelected = (int)emmitter->GetZone();
+					ImGui::Text("Emmission Zone "); ImGui::SameLine(200, 15);
+					if (ImGui::Combo("##Emmission Zone", &zoneSelected, "Center\0Volume\0\0")) { emmitter->SetZone((Emmitter_Zone)zoneSelected); }
+				}
+				break;
+
+				case Emmitter_Shape::Cone:
+				{
+					// Not inner radius yet
+
+					float outRadius = emmitter->GetOutRadius();
+					ImGui::Text("Outter Radius "); ImGui::SameLine(200, 15);
+					if (ImGui::DragFloat("##Outter Radius", &outRadius, 0.2f, 0.0f, FLT_MAX)) { emmitter->SetOutRadius(outRadius); }
+
+					float distance = emmitter->GetDistance();
+					ImGui::Text("Distance "); ImGui::SameLine(200, 15);
+					if (ImGui::DragFloat("##Distance", &distance, 0.2f, 0.0f, FLT_MAX)) { emmitter->SetDistance(distance); }
+				}
+				break;
+
+				case Emmitter_Shape::Cube:
+					ImGui::Text("Cube Size "); ImGui::SameLine(200, 15);
+					ImGui::DragFloat3("##Cube Size", emmitter->GetCubeSize(), 1.0f, 0.0f, FLOAT_INF);
+					break;
+
+				}
+				ImGui::Spacing();
+				//ImGui::Head();
+			}
+
+			//ImGui::Text("Bursts "); ImGui::SameLine(200, 15);
+			if (ImGui::CollapsingHeader("Bursts", ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				for (int i = 0; i < emmitter->bursts.size(); ++i)
 				{
+					ImGui::Spacing();
 					ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_DefaultOpen;
 					if (ImGui::TreeNodeEx((void*)(intptr_t)i, base_flags, "Burst %i", i))
 					{
-						ImGui::DragFloat("Time", &emmitter->bursts[i].timeToBurst, 0.1f, 0, emmitter->GetMaxLife());
-						ImGui::DragInt("Particles", &emmitter->bursts[i].partsToInstantiate, 1.0f, 0, MAX_PARTICLES_TO_BURST);
+						ImGui::Text("Time "); ImGui::SameLine(200, 15);
+						ImGui::DragFloat("##Time", &emmitter->bursts[i].timeToBurst, 0.1f, 0, emmitter->GetMaxLife());
+
+						ImGui::Text("Particles "); ImGui::SameLine(200, 15);
+						ImGui::DragInt("##Particles", &emmitter->bursts[i].partsToInstantiate, 1.0f, 0, MAX_PARTICLES_TO_BURST);
+						ImGui::Text(""); ImGui::SameLine(200, 15);
 						if (ImGui::Button("Remove")) emmitter->RemoveBurst(i);
+						ImGui::Spacing();
+						
 						ImGui::TreePop();
 
 					}
@@ -292,7 +328,7 @@ bool ComponentParticleSystem::DrawInspector()
 
 				if (ImGui::Button("Add Burst")) { emmitter->bursts.push_back(Burst()); }
 
-				ImGui::TreePop();
+				//ImGui::TreePop();
 			}
 
 			ImGui::TreePop();
@@ -306,23 +342,33 @@ bool ComponentParticleSystem::DrawInspector()
 
 		if (ImGui::TreeNodeEx("Particle", ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			
 			ImGui::Spacing();
 			ImGui::Separator();
 			ImGui::Spacing();
 
-			ImGui::DragFloat("Life Time", &particleSystem->particleInfo.maxLifeTime, 1.0f, 0.0f, FLT_MAX);
-			ImGui::DragFloat("Speed", (float*)&particleSystem->particleInfo.speed, 0.2f);
+			ImGui::Text("Life Time "); ImGui::SameLine(200, 15);
+			ImGui::DragFloat("##Life Time", &particleSystem->particleInfo.maxLifeTime, 1.0f, 0.0f, FLT_MAX);
 
+
+			ImGui::Text("Simulation Space "); ImGui::SameLine(200, 15);
 			if (ImGui::RadioButton("Global", &transformSelected, 0)) { particleSystem->particleInfo.globalTransform = true; }
 			ImGui::SameLine();
 			if (ImGui::RadioButton("Local", &transformSelected, 1)) { particleSystem->particleInfo.globalTransform = false; }
-
+			
+			ImGui::Spacing();
 			// Initial State || Final State
 			
-			if (ImGui::TreeNodeEx("Start State", ImGuiTreeNodeFlags_DefaultOpen))
+			if (ImGui::CollapsingHeader("Start State", ImGuiTreeNodeFlags_DefaultOpen))
 			{
+				ImGui::Spacing();
+				ImGui::Spacing();
 
-				if (ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview))
+				ImGui::Text("Speed "); ImGui::SameLine(200, 15);
+				ImGui::DragFloat("##Speed", (float*)&particleSystem->particleInfo.speed, 0.2f);
+				ImGui::Spacing();
+				ImGui::Text("Color "); ImGui::SameLine(200, 15);
+				if (ImGui::ColorPicker4("##Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview))
 				{
 					if (particleSystem->material != nullptr)
 						particleSystem->material->color = particleSystem->particleInfo.color;
@@ -336,6 +382,8 @@ bool ComponentParticleSystem::DrawInspector()
 						particleSystem->particleInfo.color = particleSystem->material->color;
 				}
 
+				ImGui::Spacing();
+				ImGui::Spacing();
 				/*if (particleSystem->material != nullptr) {
 
 					if(ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview))
@@ -345,105 +393,139 @@ bool ComponentParticleSystem::DrawInspector()
 					ImGui::ColorPicker4("Color", (float*)&particleSystem->particleInfo.color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);*/
 
 				//ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX);
+		
+				if (random_rot)
+				{
+					ImGui::Text("Start 3D Rotation "); ImGui::SameLine(200, 15);
+					if (ImGui::Checkbox("##Start 3D Rotation", &particleSystem->particleInfo.axisRot3DStart))
+					{
+						particleSystem->particleInfo.angle3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angle3D.z);
+					}
+					//ImGui::Spacing();
+					if (particleSystem->particleInfo.axisRot3DStart)
+					{
+						ImGui::Text("Start 3D Rotation: ");
+						ImGui::DragFloat2("X", (float*)&particleSystem->particleInfo.randomAngleX, 0.1f, 0.0f, 360.0f);
+						particleSystem->particleInfo.angle3D.x = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleX);
+						
+						ImGui::DragFloat2("Y", (float*)&particleSystem->particleInfo.randomAngleY, 0.1f, 0.0f, 360.0f);
+						particleSystem->particleInfo.angle3D.y = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleY);
+						
+						ImGui::DragFloat2("Z", (float*)&particleSystem->particleInfo.randomAngleZ, 0.1f, 0.0f, 360.0f);
+						particleSystem->particleInfo.angle3D.z = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleZ); 
+					}
+					else
+					{
+						ImGui::Text("Start Rotation: "); ImGui::SameLine(200, 15);
+						ImGui::DragFloat2("##StartRotationRandom", (float*)&particleSystem->particleInfo.randomAngleZ, 0.1f, 0.0f, 360.0f);
 
-				if (ImGui::Checkbox("3D Size", &particleSystem->particleInfo.size3DStart)){
+						particleSystem->particleInfo.angle3D.z = CalculateRandomBetweenTwoConstants(particleSystem->particleInfo.randomAngleZ);
+					}
+				}
+				else
+				{
+					ImGui::Text("Start 3D Rotation "); ImGui::SameLine(200, 15);
+					if (ImGui::Checkbox("##Start 3D Rotation", &particleSystem->particleInfo.axisRot3DStart))
+					{
+						particleSystem->particleInfo.angle3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angle3D.z);
+					}
+					//ImGui::Spacing();
+					if (particleSystem->particleInfo.axisRot3DStart)
+					{
+						ImGui::Text("Start 3D Rotation: "); ImGui::SameLine(200, 15);
+						ImGui::DragFloat3("##rot3D", (float*)&particleSystem->particleInfo.angle3D, 0.1f, 0.0f, 360.0f);
+					}
+					else
+					{
+						ImGui::Text("Start Rotation: "); ImGui::SameLine(200, 15);
+						ImGui::DragFloat("##StartRotation", (float*)&particleSystem->particleInfo.angle3D.z, 0.1f, 0.0f, 360.0f);
+					}
+				}
+				ImGui::SameLine();
+				SetConfigurationArrow();
+				ImGui::Spacing();
+				ImGui::Spacing();
+
+				ImGui::Text("3D Size "); ImGui::SameLine(200, 15);
+				if (ImGui::Checkbox("##3D Size", &particleSystem->particleInfo.size3DStart)) {
 					particleSystem->particleInfo.size = particleSystem->particleInfo.size3D.x;
 					particleSystem->particleInfo.size3D = float3(particleSystem->particleInfo.size, particleSystem->particleInfo.size, particleSystem->particleInfo.size);
 
 					particleSystem->endInfo.size = particleSystem->endInfo.size3D.x;
 					particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
-					
+
 				}
-				ImGui::Spacing();
+				//ImGui::Spacing();
 				if (particleSystem->particleInfo.size3DStart)
 				{
-					ImGui::Text("3D Size: "); ImGui::SameLine(200, 15);
+					ImGui::Text("3D Size "); ImGui::SameLine(200, 15);
 					if (ImGui::DragFloat3("##size3D", (float*)&particleSystem->particleInfo.size3D, 0.1f, 0.0f, FLT_MAX)) {
 					}
 				}
 				else
 				{
-					if (ImGui::DragFloat("Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX)) {
+					ImGui::Text("Size "); ImGui::SameLine(200, 15);
+					if (ImGui::DragFloat("##Size", (float*)&particleSystem->particleInfo.size, 0.1f, 0.0f, FLT_MAX)) {
 						particleSystem->particleInfo.size3D = float3(particleSystem->particleInfo.size, particleSystem->particleInfo.size, particleSystem->particleInfo.size);
 					}
-				
+
 				}
 
-
-				if (ImGui::Checkbox("Start 3D Rotation", &particleSystem->particleInfo.axisRot3DStart))
-				{
-					particleSystem->particleInfo.angle3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angle3D.z);
-				}
 				ImGui::Spacing();
-				if (particleSystem->particleInfo.axisRot3DStart)
-				{
-					ImGui::Text("Start 3D Rotation: "); ImGui::SameLine(200, 15);
-					ImGui::DragFloat3("##rot3D", (float*)&particleSystem->particleInfo.angle3D, 0.1f, 0.0f, 360.0f);
-				}
-				else
-					ImGui::DragFloat("Start Rotation", (float*)&particleSystem->particleInfo.angle3D.z, 0.1f, 0.0f, 360.0f);
-
-
+				ImGui::Spacing();
 				//ImGui::DragFloat3("Start Rotation 3D", (float*)&particleSystem->particleInfo.angle3D, 0.1f, 0.0f, 360.0f);
-				ImGui::DragFloat3("Gravity", (float*)&particleSystem->particleInfo.force);
+				ImGui::Text("Force "); ImGui::SameLine(200, 15);
+				ImGui::DragFloat3("##Gravity", (float*)&particleSystem->particleInfo.force);
+				ImGui::Spacing();
+				ImGui::Spacing();
 				ImGui::Checkbox("Change Over Time", &particleSystem->particleInfo.changeOverLifeTime);
 
-				ImGui::TreePop();
+				//ImGui::TreePop();
 			}
+			
 
 			if (particleSystem->particleInfo.changeOverLifeTime)
 			{
-				if (ImGui::TreeNodeEx("Final State", ImGuiTreeNodeFlags_DefaultOpen))
+				if (ImGui::CollapsingHeader("Final State", ImGuiTreeNodeFlags_DefaultOpen))
 				{
-					ImGui::DragFloat("Final Time", &particleSystem->particleInfo.changedTime, 0.1f, 0.0f, particleSystem->particleInfo.maxLifeTime);
 					ImGui::Spacing();
 					ImGui::Spacing();
-					ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+					ImGui::Text("Start LerpTime "); ImGui::SameLine(200, 15);
+					ImGui::DragFloat("##Start Time", &particleSystem->particleInfo.changedStartTime, 0.1f, 0.0f, particleSystem->particleInfo.maxLifeTime);
 
-					/*if (particleSystem->material != nullptr)
-						ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
-							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
-					else
-						ImGui::ColorPicker4("Color", (float*)&particleSystem->endInfo.color,
-							ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);*/
+					ImGui::Text("Final LerpTime "); ImGui::SameLine(200, 15);
+					ImGui::DragFloat("##Final Time", &particleSystem->particleInfo.changedTime, 0.1f, 0.0f, particleSystem->particleInfo.maxLifeTime);
+					ImGui::Spacing();
+					ImGui::Spacing();
+					ImGui::Text("Speed "); ImGui::SameLine(200, 15);
+					ImGui::DragFloat("##SpeedFinal", &particleSystem->endInfo.speed, 0.2f);
 
-					ImGui::DragFloat("Speed", &particleSystem->endInfo.speed, 0.2f);
-					//ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX);
-					
-					
-					/*if (ImGui::Checkbox("3D Size", &particleSystem->particleInfo.size3DStart))
-					{
-						particleSystem->endInfo.size = particleSystem->endInfo.size3D.x;
-						particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
-					}*/
+					ImGui::Spacing();
+					ImGui::Spacing();
+
+					ImGui::Text("Color "); ImGui::SameLine(200, 15);
+					ImGui::ColorPicker4("##ColorFinal", (float*)&particleSystem->endInfo.color,ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview);
+
 					ImGui::Spacing();
 					if (particleSystem->particleInfo.size3DStart)
 					{
-						ImGui::Text("3D Size: "); ImGui::SameLine(200, 15);
-						ImGui::DragFloat3("##size3D", (float*)&particleSystem->endInfo.size3D, 0.1f, 0.0f, FLT_MAX);
+						ImGui::Text("3D Size "); ImGui::SameLine(200, 15);
+						ImGui::DragFloat3("##size3DFinal", (float*)&particleSystem->endInfo.size3D, 0.1f, 0.0f, FLT_MAX);
 					}
 					else
 					{
-						if (ImGui::DragFloat("Size", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX)) {
+						ImGui::Text("Size "); ImGui::SameLine(200, 15);
+						if (ImGui::DragFloat("##SizeFinal", (float*)&particleSystem->endInfo.size, 0.1f, 0.0f, FLT_MAX)) {
 							particleSystem->endInfo.size3D = float3(particleSystem->endInfo.size, particleSystem->endInfo.size, particleSystem->endInfo.size);
 						}
 
 					}
 					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					ImGui::DragFloat3("Gravity", (float*)&particleSystem->endInfo.force);
+					ImGui::Text("Force "); ImGui::SameLine(200, 15);
+					ImGui::DragFloat3("##ForceFinal", (float*)&particleSystem->endInfo.force);
+
 					ImVec2 size = ImGui::GetItemRectSize();
+					ImGui::Text(""); ImGui::SameLine(200, 15);
 					if (ImGui::Button("Equalize Values", size))
 						particleSystem->endInfo = particleSystem->particleInfo;
 
@@ -464,7 +546,8 @@ bool ComponentParticleSystem::DrawInspector()
 							ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 						}
 
-						if (ImGui::Checkbox("Separate Axis", &particleSystem->particleInfo.axisRot3D))
+						ImGui::Text("Separate Axis: "); ImGui::SameLine(230, 15);
+						if (ImGui::Checkbox("##Separate Axis", &particleSystem->particleInfo.axisRot3D))
 						{
 							particleSystem->particleInfo.angularVelocity3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angularVelocity3D.z);
 							particleSystem->particleInfo.angularAcceleration3D = math::float3(0.0f, 0.0f, particleSystem->particleInfo.angularAcceleration3D.z);
@@ -505,7 +588,7 @@ bool ComponentParticleSystem::DrawInspector()
 					}
 
 
-					ImGui::TreePop();
+					//ImGui::TreePop();
 				}
 			}
 			/*else
@@ -909,7 +992,7 @@ bool ComponentParticleSystem::DrawInspector()
 				if (ImGui::Button("Delete", { ImGui::GetWindowWidth() * 0.15F , 0 }))
 				{
 
-					if (particleSystem->light != nullptr) {
+					if (particleSystem->point_light != nullptr) {
 						particleSystem->RemoveLight();
 					}
 				}
@@ -919,20 +1002,32 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::Text("Casting "); ImGui::SameLine(210, 15);
 				if (ImGui::RadioButton("Emitter", &castLightSelected, 0)) {
 					if (particleSystem->point_light != nullptr) particleSystem
-						->point_light->light_props.casting_particles = false;
+						->point_light->light_props.casting_particles = false; particleSystem
+						->point_light->light_props.enabled = true;
 				}
 				ImGui::SameLine();
 				if (ImGui::RadioButton("Particles", &castLightSelected, 1)) {
 					if (particleSystem->point_light != nullptr) particleSystem
-						->point_light->light_props.casting_particles = true;
+						->point_light->light_props.casting_particles = true; particleSystem
+						->point_light->light_props.enabled = false;
 				}
 				ImGui::SameLine();
 				if (ImGui::RadioButton("Both", &castLightSelected, 2)) {
-					
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = true; particleSystem
+						->point_light->light_props.enabled = true;
 				}
 
 				ImGui::Spacing();
-				
+				static bool light = false;
+				ImGui::Text("Emitting "); ImGui::SameLine(210, 15);
+				ImGui::Checkbox("##lemitting", &particleSystem->lightProperties.emitting);
+
+				if (particleSystem->point_light != nullptr)
+					particleSystem->point_light->light_props.enabled = particleSystem->lightProperties.emitting;
+					
+				ImGui::Spacing();
+
 				ImGui::Text("Random Distribution "); ImGui::SameLine(210, 15);
 				ImGui::Checkbox("##lrandom", &particleSystem->lightProperties.random_distribution);
 				ImGui::Spacing();
@@ -981,8 +1076,8 @@ bool ComponentParticleSystem::DrawInspector()
 				}
 
 				ImGui::Spacing();
-				ImGui::Text("Size Affects Range "); ImGui::SameLine(210, 15);
-				ImGui::Checkbox("##lalpha", &particleSystem->lightProperties.size_range);
+				ImGui::Text("Size Affects Intensity "); ImGui::SameLine(210, 15);
+				ImGui::Checkbox("##lrange", &particleSystem->lightProperties.size_range);
 
 				ImGui::Spacing();
 				ImGui::Text("Maximum Lights "); ImGui::SameLine(210, 15);
@@ -1003,7 +1098,9 @@ bool ComponentParticleSystem::DrawInspector()
 				ImGui::TreePop();
 			}
 			
-			
+			/*if (particleSystem->point_light != nullptr)
+				particleSystem->point_light->light_props.enabled = particleSystem->lightProperties.emitting;*/
+
 			static bool enable_blend = false;
 
 			ImGui::Checkbox("##pptActiveBlend", &enable_blend);
@@ -1298,12 +1395,22 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 	to_save->SetBoolean("Start.AxisRotationStart", particleSystem->particleInfo.axisRot3DStart);
 	// Angle Rotation
 	to_save->SetFloat3("Start.Angle3D", particleSystem->particleInfo.angle3D);
+	// Random
+	to_save->SetBoolean("Start.Random", random_rot);
+	// Random Z
+	to_save->SetFloat3("Start.RandomAngleZ", float3(particleSystem->particleInfo.randomAngleZ, 0));
+	// Random Y
+	to_save->SetFloat3("Start.RandomAngleY", float3(particleSystem->particleInfo.randomAngleY, 0));
+	// Random X
+	to_save->SetFloat3("Start.RandomAngleX", float3(particleSystem->particleInfo.randomAngleX, 0));
 	// changeOverLifeTime
 	to_save->SetBoolean("Start.ChangeOverLifeTime", particleSystem->particleInfo.changeOverLifeTime);
 	// rotateOverLifeTime
 	to_save->SetBoolean("Start.RotateOverLifeTime", particleSystem->particleInfo.rotateOverTime);
 
 	// ----------------- Particle System End Info -------------------- //
+	// Start Time
+	to_save->SetNumber("End.StartTime", particleSystem->particleInfo.changedStartTime);
 	// Final Time
 	to_save->SetNumber("End.FinalTime", particleSystem->particleInfo.changedTime);
 	// Speed
@@ -1431,6 +1538,23 @@ void ComponentParticleSystem::SaveComponent(JSONArraypack* to_save)
 		}
 
 	}
+	// ------------------------ Light Info ------------------------ //
+
+	to_save->SetBoolean("HasLight", (particleSystem->point_light != nullptr) ? true : false);
+	if (particleSystem->point_light != nullptr)
+	{
+		to_save->SetString("PrefabLightID", std::to_string(particleSystem->light->GetID()).data());
+	}
+	to_save->SetBoolean("Light.Emitting", particleSystem->lightProperties.emitting);
+	to_save->SetNumber("Light.Casting", castLightSelected);
+	to_save->SetBoolean("Light.Random", particleSystem->lightProperties.random_distribution);
+	to_save->SetBoolean("Light.ColorParticle", particleSystem->lightProperties.particle_color);
+	to_save->SetBoolean("Light.Alpha", particleSystem->lightProperties.alpha_intensity);
+	to_save->SetBoolean("Light.Size", particleSystem->lightProperties.size_range);
+	to_save->SetNumber("Light.MaxLights", particleSystem->lightProperties.max_lights);
+
+
+
 
 	// --------------- Deprecated -------------------- //
 	/*to_save->SetBoolean("TextureEnabled", texture_activated);
@@ -1498,6 +1622,25 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	particleSystem->particleInfo.axisRot3DStart = to_load->GetBoolean("Start.AxisRotationStart");
 	// Angle Rotation
 	particleSystem->particleInfo.angle3D = to_load->GetFloat3("Start.Angle3D");
+
+	try
+	{
+		// Random
+		random_rot = to_load->GetBoolean("Start.Random");
+
+		if (random_rot)
+		{
+			particleSystem->particleInfo.randomAngleZ = float2(to_load->GetFloat3("Start.RandomAngleZ").x, to_load->GetFloat3("Start.RandomAngleZ").y);
+			particleSystem->particleInfo.randomAngleY = float2(to_load->GetFloat3("Start.RandomAngleY").x, to_load->GetFloat3("Start.RandomAngleY").y);
+			particleSystem->particleInfo.randomAngleX = float2(to_load->GetFloat3("Start.RandomAngleX").x, to_load->GetFloat3("Start.RandomAngleX").y);
+		}
+		
+	}
+	catch (...)
+	{
+		random_rot = false;
+	}
+
 	// changeOverLifeTime
 	particleSystem->particleInfo.changeOverLifeTime = to_load->GetBoolean("Start.ChangeOverLifeTime");
 	// rotateOverLifeTime
@@ -1507,10 +1650,12 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 	// ----------------- Particle System End Info -------------------- //
 	try {
 	// Final Time
+		particleSystem->particleInfo.changedStartTime = to_load->GetNumber("End.StartTime");
 		particleSystem->particleInfo.changedTime = to_load->GetNumber("End.FinalTime");
 	}
 	catch (...)
 	{
+		particleSystem->particleInfo.changedTime = 2;
 		particleSystem->particleInfo.changedTime = 5;
 	}
 	try {
@@ -1688,9 +1833,94 @@ void ComponentParticleSystem::LoadComponent(JSONArraypack* to_load)
 		particleSystem->mesh_mode = false;
 	}
 	
+	// ---------------------- Lights -------------------------- //
+	try {
+
+		if (to_load->GetBoolean("HasLight")) {
+			enable_light = true;
+			particleSystem->lightProperties.emitting = to_load->GetBoolean("Light.Emitting");
+			u64 ID = std::stoull(to_load->GetString("PrefabLightID"));
+
+			if (ID != 0) {
+				ResourcePrefab* prefab = (ResourcePrefab*)App->resources->GetResourceWithID(ID);
+				particleSystem->SetLight(prefab, game_object_attached);
+
+				//Temporal stuff
+				c_ambient = particleSystem->point_light->light_props.ambient;
+				c_diffuse = particleSystem->point_light->light_props.diffuse;
+				intensity = particleSystem->point_light->light_props.intensity;
+				new_intensity = intensity * particleSystem->particleInfo.color.w;
+			}
+
+			//particleSystem->lightProperties.casting_particles = to_load->GetBoolean("Light.Casting");
+			castLightSelected = to_load->GetNumber("Light.Casting");
+
+			if (particleSystem->lightProperties.emitting)
+			{
+				if (castLightSelected == 0) {
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = false; particleSystem
+						->point_light->light_props.enabled = true;
+				}
+
+				if (castLightSelected == 1) {
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = true; particleSystem
+						->point_light->light_props.enabled = false;
+				}
+
+				if (castLightSelected == 2) {
+					if (particleSystem->point_light != nullptr) particleSystem
+						->point_light->light_props.casting_particles = true; particleSystem
+						->point_light->light_props.enabled = true;
+				}
+			}
+			particleSystem->lightProperties.random_distribution = to_load->GetBoolean("Light.Random");
+			particleSystem->lightProperties.particle_color = to_load->GetBoolean("Light.ColorParticle");
+
+			if (particleSystem->lightProperties.particle_color)
+			{
+				if (particleSystem->point_light != nullptr)
+				{
+					particleSystem->point_light->light_props.ambient = particleSystem->particleInfo.color.xyz();
+					particleSystem->point_light->light_props.diffuse = particleSystem->particleInfo.color.xyz();
+				}
+			}
+			else
+			{
+				if (particleSystem->point_light != nullptr)
+				{
+					particleSystem->point_light->light_props.ambient = c_ambient;
+					particleSystem->point_light->light_props.diffuse = c_diffuse;
+				}
+			}
+
+			particleSystem->lightProperties.alpha_intensity = to_load->GetBoolean("Light.Alpha");
+			if (particleSystem->lightProperties.alpha_intensity)
+			{
+				if (particleSystem->point_light != nullptr)
+				{
+					particleSystem->point_light->light_props.intensity = new_intensity;
+				}
+			}
+			else
+			{
+				if (particleSystem->point_light != nullptr)
+				{
+					particleSystem->point_light->light_props.intensity = intensity;
+				}
+			}
+			particleSystem->lightProperties.size_range = to_load->GetBoolean("Light.Size");
+			particleSystem->lightProperties.max_lights = to_load->GetNumber("Light.MaxLights");
+
+		}
+	}
+	catch (...)
+	{
+		enable_light = false;
+	}
 
 	
-
 	
 	// ---------------------- Deprecated -------------------------- //
 	/*texture_activated = to_load->GetBoolean("TextureEnabled");
@@ -1853,5 +2083,26 @@ void ComponentParticleSystem::SaveParticles()
 	}
 }
 
+void ComponentParticleSystem::SetConfigurationArrow()
+{
+
+	const char* options[] = { "Constant", "Random Between Two Constants" };
+
+	if (ImGui::ArrowButton("##StartRot", ImGuiDir_Down)) { ImGui::OpenPopup("Options_SatartRot"); }
+	if (ImGui::BeginPopup("Options_SatartRot"))
+	{
+		if (ImGui::Selectable(options[0])) { random_rot = false; }
+		if (ImGui::Selectable(options[1])) { random_rot = true; }
+
+		ImGui::EndPopup();
+	}
+	
+}
+
+float ComponentParticleSystem::CalculateRandomBetweenTwoConstants(float2 constants)
+{
+	float output = Random::GetRandomFloatBetweenTwo(constants.x, constants.y);
+	return output;
+}
 
 
