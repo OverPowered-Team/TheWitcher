@@ -17,7 +17,6 @@
 #include "..\..\..\Alien Engine\ComponentDeformableMesh.h"
 #include "..\..\..\Alien Engine\ComponentConvexHullCollider.h"
 #include "..\..\..\Alien Engine\ComponentBar.h"
-#include "..\..\..\Alien Engine\ComponentAnimatedImage.h"
 // physix ----
 #include "..\..\..\Alien Engine\ComponentRigidBody.h"
 #include "..\..\..\Alien Engine\ComponentCharacterController.h"

@@ -33,7 +33,6 @@ public:
 	float end_seconds = 69;
 	float start_time;
 	bool change_scene = false;
-	GameObject* skip = nullptr;
 
 };
 

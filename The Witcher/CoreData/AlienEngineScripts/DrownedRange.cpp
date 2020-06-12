@@ -109,7 +109,7 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	if (strcmp(name, "Attack") == 0) {
 		if (distance < stats["HideDistance"].GetValue() || distance > stats["AttackRange"].GetValue())
 		{
-			SetState("Hide");
+			state = DrownedState::HIDE;
 			current_hide_time = Time::GetGameTime();
 			animator->SetBool("hide", true);
 		}
@@ -119,14 +119,14 @@ void DrownedRange::OnAnimationEnd(const char* name)
 			animator->SetBool("hide", false);
 		}
 		can_get_interrupted = true;
-		//stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		//animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
+		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
+		animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
 	}
 	else if (strcmp(name, "Hit") == 0) {
 		ReleaseParticle("hit_particle");
 		if (!is_dead)
 		{
-			SetState("Hide");
+			state = DrownedState::ATTACK;
 		}
 		else
 		{
@@ -148,13 +148,5 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	else if (strcmp(name, "GetOff") == 0)
 	{
 		SetState("Attack");
-		ReleaseParticle("DigParticle");
-		ReleaseParticle("HeadDigParticle");
-	}
-	else if (strcmp(name, "Hide") == 0)
-	{
-		ReleaseParticle("DigParticle");
-		ReleaseParticle("HeadDigParticle");
-		is_hiding = false;
 	}
 }

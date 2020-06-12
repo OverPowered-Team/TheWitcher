@@ -10,8 +10,6 @@
 #include "ModuleCamera3D.h"
 #include "glew/include/glew.h"
 
-#include "Optick/include/optick.h"
-
 // FBO ========================================================================
 
 FBO::FBO()
@@ -31,33 +29,17 @@ FBO::~FBO()
 
 void FBO::BeginFBO(const Color& color)
 {
-	OPTICK_EVENT();
-
 	glBindFramebuffer(GL_FRAMEBUFFER, ID[MULTISAMPLING_FBO]);
-	glClearColor(color.r, color.g, color.b, 0.0f);
+	glClearColor(color.r, color.g, color.b, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	float black[] = { 0.0f, 0.0f, 0.0f ,0.0f };
-	glClearBufferfv(GL_COLOR, 1, black);
-
 }
 
 void FBO::EndFBO()
 {
-	OPTICK_EVENT();
-
 	// Blit Frame buffer -------------------------------------------------------
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, ID[MULTISAMPLING_FBO]);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, ID[NORMAL_FBO]);
-
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-
-	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-	glDrawBuffer(GL_COLOR_ATTACHMENT1);
-	glReadBuffer(GL_COLOR_ATTACHMENT1);
 
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
@@ -67,10 +49,6 @@ void FBO::EndFBO()
 	// Generate Mipmap --------------------------------------------------------
 
 	glBindTexture(GL_TEXTURE_2D, ID[NORMAL_TEXTURE]);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	
-	glBindTexture(GL_TEXTURE_2D, ID[BLOOM_TEXTURE]);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -84,8 +62,6 @@ void FBO::EndFBO()
 
 void FBO::UpdateFBO(float width, float height)
 {
-	OPTICK_EVENT();
-
 	this->width = width;
 	this->height = height;
 	bool fboUsed = true;
@@ -108,22 +84,7 @@ void FBO::UpdateFBO(float width, float height)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	// NORMAL TEXTURE 2nd Attachment
-	glBindTexture(GL_TEXTURE_2D, ID[BLOOM_TEXTURE]);
-
-	{
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, 0);
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	// HDR TEXTURE (Final Texture)
+	// HDR TEXTURE
 	glBindTexture(GL_TEXTURE_2D, ID[POST_PROC_TEXTURE]);
 
 	{
@@ -153,7 +114,6 @@ void FBO::UpdateFBO(float width, float height)
 	// Attachment ------------------------------------------
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID[NORMAL_TEXTURE], 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, ID[BLOOM_TEXTURE], 0); // Bloom attachment
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, ID[NORMAL_DEPTH_RBO]);
 
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -193,35 +153,11 @@ void FBO::UpdateFBO(float width, float height)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	//----------------------------------------------- PING PONG BLOOM FBOs & Texs ------------------------------------------
-	
-	for (unsigned int i = 0; i < 2; i++)
-	{
-		glBindFramebuffer(GL_FRAMEBUFFER, pingPongFBO[i]);
-		glBindTexture(GL_TEXTURE_2D, pingPongTex[i]);
-		glTexImage2D(
-			GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL
-		);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glFramebufferTexture2D(
-			GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingPongTex[i], 0
-		);
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 	//----------------------------------------------- Multisample FBO -----------------------------------------------
 
 	// Color -----------------------------------------------
 
-	glBindRenderbuffer(GL_RENDERBUFFER, ID[MULTISAMPLING_COLOR_RBO1]);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, msaa, GL_RGBA16F, width, height);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	glBindRenderbuffer(GL_RENDERBUFFER, ID[MULTISAMPLING_COLOR_RBO2]);
+	glBindRenderbuffer(GL_RENDERBUFFER, ID[MULTISAMPLING_COLOR_RBO]);
 	glRenderbufferStorageMultisample(GL_RENDERBUFFER, msaa, GL_RGBA16F, width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
@@ -238,12 +174,9 @@ void FBO::UpdateFBO(float width, float height)
 
 	// Attachment ------------------------------------------
 
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, ID[MULTISAMPLING_COLOR_RBO1]);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, ID[MULTISAMPLING_COLOR_RBO2]);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, ID[MULTISAMPLING_COLOR_RBO]);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, ID[MULTISAMPLING_DEPTH_RBO]);
 
-	uint bloom_attach[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	glDrawBuffers(2, bloom_attach);
 
 	GLenum status_2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status_2 != GL_FRAMEBUFFER_COMPLETE)
@@ -267,20 +200,16 @@ void FBO::UpdateFBO(float width, float height)
 void FBO::GenerateFBO()
 {
 	glGenTextures(1, &ID[NORMAL_TEXTURE]);
-	glGenTextures(1, &ID[BLOOM_TEXTURE]);
 	glGenTextures(1, &ID[DEPTH_TEAXTURE]);
 	glGenTextures(1, &ID[POST_PROC_TEXTURE]);
-	glGenTextures(2, pingPongTex);
 
 	glGenFramebuffers(1, &ID[NORMAL_FBO]);
 	glGenFramebuffers(1, &ID[MULTISAMPLING_FBO]);
 	glGenFramebuffers(1, &ID[POST_PROC_FBO]);
 	glGenFramebuffers(1, &ID[POST_PROC_MULTISAMPLING_FBO]);
-	glGenFramebuffers(2, pingPongFBO);
 
 	glGenRenderbuffers(1, &ID[NORMAL_DEPTH_RBO]);
-	glGenRenderbuffers(1, &ID[MULTISAMPLING_COLOR_RBO1]);
-	glGenRenderbuffers(1, &ID[MULTISAMPLING_COLOR_RBO2]);
+	glGenRenderbuffers(1, &ID[MULTISAMPLING_COLOR_RBO]);
 	glGenRenderbuffers(1, &ID[MULTISAMPLING_DEPTH_RBO]);
 	glGenRenderbuffers(1, &ID[POST_PROC_MULTISAMPLING_COLOR]);
 	glGenRenderbuffers(1, &ID[POST_PROC_MULTISAMPLING_DEPTH]);
@@ -289,20 +218,16 @@ void FBO::GenerateFBO()
 void FBO::DeleteFBO()
 {
 	glDeleteTextures(1, &ID[NORMAL_TEXTURE]);
-	glDeleteTextures(1, &ID[BLOOM_TEXTURE]);
 	glDeleteTextures(1, &ID[DEPTH_TEAXTURE]);
 	glDeleteTextures(1, &ID[POST_PROC_TEXTURE]);
-	glDeleteTextures(2, pingPongTex);
 
 	glDeleteFramebuffers(1, &ID[NORMAL_FBO]);
 	glDeleteFramebuffers(1, &ID[MULTISAMPLING_FBO]);
 	glDeleteFramebuffers(1, &ID[POST_PROC_FBO]);
 	glDeleteFramebuffers(1, &ID[POST_PROC_MULTISAMPLING_FBO]);
-	glDeleteFramebuffers(2, pingPongFBO);
 
 	glDeleteRenderbuffers(1, &ID[NORMAL_DEPTH_RBO]);
-	glDeleteRenderbuffers(1, &ID[MULTISAMPLING_COLOR_RBO1]);
-	glDeleteRenderbuffers(1, &ID[MULTISAMPLING_COLOR_RBO2]);
+	glDeleteRenderbuffers(1, &ID[MULTISAMPLING_COLOR_RBO]);
 	glDeleteRenderbuffers(1, &ID[MULTISAMPLING_DEPTH_RBO]);
 	glDeleteRenderbuffers(1, &ID[POST_PROC_MULTISAMPLING_COLOR]);
 	glDeleteRenderbuffers(1, &ID[POST_PROC_MULTISAMPLING_DEPTH]);
@@ -316,11 +241,6 @@ void FBO::DeleteFBO()
 uint FBO::GetFBOTexture()
 {
 	return ID[NORMAL_TEXTURE];
-}
-
-uint FBO::GetSecondTextureAttachment()
-{
-	return ID[BLOOM_TEXTURE];
 }
 
 uint FBO::GetPostProcTexture()
@@ -374,8 +294,6 @@ ComponentCamera* Viewport::GetCamera()
 
 void Viewport::BeginViewport()
 {
-	//OPTICK_EVENT(); <- this breaks all (?)
-
 	if (to_update)
 	{
 		fbo->UpdateFBO(width, height);
@@ -418,8 +336,6 @@ void Viewport::BeginViewport()
 
 void Viewport::EndViewport()
 {
-	OPTICK_EVENT();
-
 	// Disables --------------------------------------------
 	glDisable(GL_LIGHTING);
 	glDisable(GL_POLYGON_SMOOTH);
@@ -432,16 +348,11 @@ void Viewport::EndViewport()
 
 void Viewport::ApplyPostProcessing()
 {
-	// --------------------- Blur Bright Pixels Image (2nd Attachment) --------------------------------------
-	OPTICK_EVENT();
-
-	BlurImage();
-
 	// First copy depth and stencil from Normal MSAA FBO onto Post processing MSAA FBO 
 
 	BlitFboToFbo(GetFBO(), GetPostProcFBO(), false, true, true);
 
-	// ---------------------  Then draw Plane with the HDR Mixing Both Images--------------------- 
+	// ---------------------  Then draw Plane with  the HDR --------------------- 
 
 	// This plane doesnt need to be "placed" in the space so no depth testing
 	glDisable(GL_DEPTH_TEST);
@@ -458,15 +369,8 @@ void Viewport::ApplyPostProcessing()
 	// Get Rendered Texture
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, GetTexture());
-	App->resources->hdr_shader->SetUniform1i("hdrBuffer", 0);
-
-	// Get blurred image
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, fbo->pingPongTex[0]);
-	App->resources->hdr_shader->SetUniform1i("bloomBlur", 1);
 
 	// Set Uniforms
-	App->resources->hdr_shader->SetUniform1i("bloom", camera->bloom);
 	App->resources->hdr_shader->SetUniform1i("hdr", camera->hdr);
 	App->resources->hdr_shader->SetUniform1f("exposure", camera->exposure);
 	App->resources->hdr_shader->SetUniform1f("gamma", camera->gamma);
@@ -478,48 +382,13 @@ void Viewport::ApplyPostProcessing()
 
 	// Unbinds
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindVertexArray(0);
 	App->resources->hdr_shader->Unbind();
 }
 
-void Viewport::BlurImage()
-{
-	OPTICK_EVENT();
-
-	bool first_iteration = true; 
-	bool horizontal = true; 
-	App->resources->blur_shader->Bind(); 
-
-	for (uint i = 0; i < camera->blur_iters; ++i)
-	{
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo->pingPongFBO[horizontal]);
-		App->resources->blur_shader->SetUniform1i("horizontal", horizontal);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, first_iteration ? fbo->GetSecondTextureAttachment() : fbo->pingPongTex[!horizontal]);
-
-		// Render quad
-		glBindVertexArray(App->renderer3D->screen_quad_VAO);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-		horizontal = !horizontal;
-		if (first_iteration)
-			first_iteration = false;
-	}
-
-
-	glBindVertexArray(0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	App->resources->blur_shader->Unbind();
-}
-
 void Viewport::FinalPass()
 {
-	OPTICK_EVENT();
 	// Copy only color from PostProcMSAA FBO to the final PostProc texture
 	BlitFboToFbo(GetPostProcFBO(), GetPostProcFinalFBO());
 
@@ -576,11 +445,6 @@ uint Viewport::GetTexture()
 	return fbo->GetFBOTexture();
 }
 
-uint Viewport::GetBlurredTexture()
-{
-	return fbo->pingPongTex[0];
-}
-
 uint Viewport::GetPostProcTexture()
 {
 	return fbo->GetPostProcTexture();
@@ -588,8 +452,6 @@ uint Viewport::GetPostProcTexture()
 
 void Viewport::BlitFboToFbo(uint from, uint to, bool color, bool depth, bool stencil)
 {
-	OPTICK_EVENT();
-
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, from);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, to);
 

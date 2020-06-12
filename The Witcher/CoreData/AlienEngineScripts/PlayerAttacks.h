@@ -27,8 +27,7 @@ enum class Attack_Tags {
 enum class Collider_Type {
 	C_Box,
 	C_Sphere,
-	C_Weapon,
-	C_Weapon2
+	C_Weapon
 };
 
 class Attack {
@@ -149,8 +148,6 @@ public:
 
 public:
 	GameObject* weapon_obj;
-	GameObject* weapon2_obj;
-
 	float max_snap_angle = 0.0f;
 	float snap_angle_value = 0.0f;
 	float snap_distance_value = 0.0f;
@@ -164,7 +161,6 @@ protected:
 	void SelectAttack(AttackType attack);
 	void SnapToTarget();
 	bool FindSnapTarget();
-	void ReLoadRelics();
 	float3 GetMovementVector();
 
 
@@ -199,7 +195,6 @@ ALIEN_FACTORY PlayerAttacks* CreatePlayerAttacks() {
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_angle_value);
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(player_attacks->snap_distance_value);
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon_obj);
-	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(player_attacks->weapon2_obj);
 
 	SHOW_VOID_FUNCTION(PlayerAttacks::ActivateCollider, player_attacks);
 	SHOW_VOID_FUNCTION(PlayerAttacks::UpdateCollider, player_attacks);

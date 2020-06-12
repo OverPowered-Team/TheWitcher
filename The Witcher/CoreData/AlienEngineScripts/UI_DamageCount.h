@@ -37,8 +37,6 @@ public:
 
 	void AddRemainingComboPoints();
 
-	void UpdateTimes(float time_paused);
-
 public:
 
 	Prefab text_left;
@@ -67,6 +65,7 @@ private:
 	ComponentText* damagecount_player2 = nullptr;
 
 	float	internal_timer = 0.0f;
+	float	time_paused = 0.0f;
 
 	// TimeCount
 	float	damage_count1_time = 0.0f;

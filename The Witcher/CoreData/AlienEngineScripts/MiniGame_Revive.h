@@ -36,9 +36,9 @@ public:
 	PlayerController* player_dead = nullptr;
 	PlayerController* player_reviving = nullptr;
 
-private:
-
-	void HeartPumPum();
+	// Green Part Reduction
+	float original_scale_green = 0.250f;
+	float desired_scale_green = 0.05f;
 
 private:
 	GameObject* moving_part = nullptr;
@@ -46,7 +46,6 @@ private:
 	GameObject* start_X = nullptr;
 	GameObject* game_A = nullptr;
 	GameObject* good_part = nullptr;
-	GameObject* heart = nullptr;
 
 	int sign = 1;
 	int actual_inputs = 0;
@@ -54,19 +53,12 @@ private:
 	float time = 0.0f;
 	bool effects_change = false;
 
-	float position_goal = 2.0f;
-	float original_moving_position = 0.0f;
-
-	bool heart_pumpum = false;
-	float heart_time = 0.0f;
-
 	// Green Part reduction
 	int correct_inputs = 0;
 	float previous_scale = 0.0f;
 	float new_scale = 0.0f;
 	bool green_reducing = false;
 
-	bool first_frame = true;
 };
 
 ALIEN_FACTORY MiniGame_Revive* CreateMiniGame_Revive() {
@@ -75,6 +67,8 @@ ALIEN_FACTORY MiniGame_Revive* CreateMiniGame_Revive() {
 
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->lerp_time);
 	SHOW_IN_INSPECTOR_AS_INPUT_INT(alien->input_times);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->original_scale_green);
+	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->desired_scale_green);
 
 	return alien;
 } 

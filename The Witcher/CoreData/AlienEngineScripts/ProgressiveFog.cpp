@@ -10,36 +10,18 @@ ProgressiveFog::~ProgressiveFog()
 
 void ProgressiveFog::Start()
 {
-	LOG("Starting to load Progressive Fog");
-
-	std::vector<ComponentSphereCollider*> colliders = game_object->GetComponentsInChildren<ComponentSphereCollider>();
+	std::vector colliders = game_object->GetComponentsInChildren<ComponentSphereCollider>();
 
 	if (!colliders.empty())
 	{
-		outterCol = colliders.at(0);
-		innerCol = colliders.at(1);
-
-		if (innerRadius > outterRadius)
-		{
-			innerRadius = outterRadius;
-			LOG("Fog radius are incorrect, Inner Radius must be smaller than Outter Radius");
-		}
-
-		innerCol->SetRadius(innerRadius);
-		outterCol->SetRadius(outterRadius);
+		innerCol = colliders.at(0);
+		outterCol = colliders.at(1);
+		LOG("Set inner to %f, and outter to %f", innerRadius, outterRadius);
 	}
 	else
 		LOG("Could not get fog colliders");
 
-	GameObject* cam = game_object->FindWithName("Main Camera");
-
-	if (cam != nullptr)
-		camera = cam->GetComponent<ComponentCamera>();
-	else 
-		LOG("Could not find Main camera")
-
-	if(camera == nullptr) 
-		LOG("Could not find Main camera")
+	camera = game_object->FindWithName("Main Camera")->GetComponent<ComponentCamera>();
 }
 
 void ProgressiveFog::Update()
@@ -62,12 +44,6 @@ void ProgressiveFog::Update()
 	}
 }
 
-void ProgressiveFog::OnDrawGizmosSelected()
-{
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), innerRadius * 0.5f, Color::Red());
-	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), outterRadius * 0.5f, Color::Blue());
-}
-
 void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 {
 	switch (collider_index)
@@ -80,7 +56,7 @@ void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 		camera->SetFogDensity(0.0001f);
 		camera->SetFogGradient(targetFogGradient);
 
-		//LOG("State in TRANSITION");
+		LOG("State in TRANSITION");
 		break;
 
 	case 2:
@@ -89,7 +65,7 @@ void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 		camera->SetFogDensity(targetFogDensity);
 		//camera->SetFogGradient(targetFogGradient);
 
-		//LOG("State ON");
+		LOG("State ON");
 		break;
 	}
 }
@@ -101,12 +77,12 @@ void ProgressiveFog::RecieveCollisionExitInteraction(int collider_index)
 	case 1:
 		fogState = FogState::OFF;
 		camera->DisableFog();
-		//LOG("State in OFF");
+		LOG("State in OFF");
 		break;
 
 	case 2:
 		fogState = FogState::TRANSITION;
-		//LOG("State in TRANSITION");
+		LOG("State in TRANSITION");
 		break;
 	}
 }

@@ -184,22 +184,22 @@ void CameraMovement::Update()
     }
     case CameraState::MOVING_TO_CINEMATIC:
     {
-        //current_transition_time += Time::GetDT();
-        //float3 trg_pos = CalculateMidPoint() + cutscene_game_object->transform->GetGlobalPosition();
-        //float3 curr_pos = transform->GetGlobalPosition();
-        //float min_dist = 0.1f;
-        //if ((trg_pos - curr_pos).Length() < min_dist) {
-        //    LOG("Finished transition");
-        //    transform->SetGlobalPosition(trg_pos);
+        current_transition_time += Time::GetDT();
+        float3 trg_pos = CalculateMidPoint() + cutscene_game_object->transform->GetGlobalPosition();
+        float3 curr_pos = transform->GetGlobalPosition();
+        float min_dist = 0.1f;
+        if ((trg_pos - curr_pos).Length() < min_dist) {
+            LOG("Finished transition");
+            transform->SetGlobalPosition(trg_pos);
             if (cutscene_game_object) {
                 cutscene_game_object->GetComponent<CutsceneCamera>()->PrepareCutscene();
                 state = CameraState::CINEMATIC;
             }
-        //}
-        //else {
-        //    float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
-        //    transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
-        //}
+        }
+        else {
+            float time_percent = (current_transition_time / curr_transition.transition_time);//A value from 0 to 1, 0 meaning it has just started and 1 meaning it has finished
+            transform->SetGlobalPosition(transform->GetGlobalPosition() + (trg_pos - curr_pos) * (time_percent));//Faster on the beggining
+        }
         break;
     }
     case CameraState::CINEMATIC: 

@@ -25,8 +25,6 @@ public:
 	void BuildCutscene();
 	void PrepareCutscene();
 	void ExecuteCutscene();
-	void ExecuteCurve();
-	void BuildCurve(CutsceneShot* shot);
 	static bool OrderCutscenes(CutsceneShot* i, CutsceneShot* j);
 public:
 	vector<CutsceneShot*> shots;
@@ -36,10 +34,6 @@ public:
 	int shots_counter = 0;
 	CutsceneState state = CutsceneState::IDLE;
 	float current_move_time = 0.f;
-	float rot_percentage = 0.f;
-	float3 original_rot;
-	float rotation_start = 0.f;
-	float t_speed = 0.f;
 };
 
 ALIEN_FACTORY CutsceneCamera* CreateCutsceneCamera() {

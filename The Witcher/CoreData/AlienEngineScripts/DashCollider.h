@@ -20,7 +20,6 @@ public:
 
 	DashEffect* effect = nullptr;
 	float start_time = 0.0;
-	PlayerController* player_dashing = nullptr;
 	
 };
 

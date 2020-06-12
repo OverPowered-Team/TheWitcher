@@ -17,7 +17,6 @@ public:
 
 	void UpdateLifebar(float new_life, float max_life);
 
-	// TODO: pause (ui, dialogues)
 public:
 
 	GameObject* godmode = nullptr;

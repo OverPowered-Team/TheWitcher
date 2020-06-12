@@ -71,7 +71,6 @@
 ModuleObjects::ModuleObjects(bool start_enabled) :Module(start_enabled)
 {
 	name.assign("ModuleObject");
-	SDL_AtomicSet(&dataIsReady, 0);
 }
 
 ModuleObjects::~ModuleObjects()
@@ -168,26 +167,9 @@ update_status ModuleObjects::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
 
-	//if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-	//	SceneManager::LoadSceneAsync("Lvl_1");
-	//}
-
-	//if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
-	//	if (SceneManager::IsSceneAsyncReady()) {
-	//		SceneManager::ChangeToAsyncScene();
-	//	}
-	//	else {
-	//		LOG_ENGINE("NOTNOTNOTNOT");
-	//	}
-	//}
-
 	if (!sceneNameToChange.empty()) {
 		LoadScene(sceneNameToChange.data());
 		sceneNameToChange.clear();
-	}
-
-	if (changeToAsync) {
-		ChangeToAsyncScene();
 	}
 
 	// delete objects
@@ -357,26 +339,10 @@ update_status ModuleObjects::PostUpdate(float dt)
 			//predraw	
 			CalculateShadows(dynamic_to_draw, viewport, static_to_draw, frustum_camera);
 
-			glBindFramebuffer(GL_FRAMEBUFFER, current_viewport->GetFBO());
 			glViewport(0, 0, current_viewport->GetSize().x, current_viewport->GetSize().y);
-				
-			// Disable to draw on bloom texture, otherwise skybox & debug draws are bloomed
-			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-
+			glBindFramebuffer(GL_FRAMEBUFFER, current_viewport->GetFBO());
+									
 			viewport->GetCamera()->DrawSkybox(); 
-
-			// Debug Draws 
-			if (printing_scene)
-			{
-				for (std::map<Component*, std::function<void()>>::iterator it = debug_draw_list.begin(); it != debug_draw_list.end(); ++it)
-				{
-					(*it).second();
-				}
-			}
-
-			// Enable to draw on bloom texture
-			uint bloom_attach[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-			glDrawBuffers(2, bloom_attach);
 
 			// Draw Solid Meshes 
 			ResourceShader* current_used_shader = App->resources->default_shader;
@@ -414,6 +380,17 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 
+			// Draw Debugging Options
+
+			if (printing_scene)
+			{
+				for (std::map<Component*, std::function<void()>>::iterator it = debug_draw_list.begin(); it != debug_draw_list.end(); ++it)
+				{
+					(*it).second();
+				}
+			}
+
+			
 			// Then draw transparents meshes
 			
 			glEnable(GL_BLEND);
@@ -482,10 +459,12 @@ update_status ModuleObjects::PostUpdate(float dt)
 			// Draw Plane with postprocessing on MSAA PostProc FBO
 			viewport->ApplyPostProcessing();
 
+
 			// ------------------ Then we draw UI on top of the post processing FBO ------------------
 
 			glBindFramebuffer(GL_FRAMEBUFFER, viewport->GetPostProcFBO());
 			glViewport(0, 0, viewport->GetSize().x, viewport->GetSize().y);
+
 			// Enable Depth Test for UI In-World
 			glEnable(GL_DEPTH_TEST);
 
@@ -519,16 +498,18 @@ update_status ModuleObjects::PostUpdate(float dt)
 				}
 			}
 			
+			
+
 			if (printing_scene)
 				OnDrawGizmos();
 			if (isGameCamera) {
 				OnPostRender(viewport->GetCamera());
 			}
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glDisable(GL_DEPTH_TEST);
 
 		}
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glDisable(GL_DEPTH_TEST);
 		// And finally draw all into the final PostProcFBO's Texture
 		viewport->FinalPass();
 		//viewport->EndViewport();
@@ -579,14 +560,7 @@ update_status ModuleObjects::PostUpdate(float dt)
 		glViewport(0, 0, game_viewport->GetSize().x, game_viewport->GetSize().y);
 		glBindFramebuffer(GL_FRAMEBUFFER, game_viewport->GetFBO());
 
-		// Disable to draw on bloom texture, otherwise skybox draws are bloomed
-		glDrawBuffer(GL_COLOR_ATTACHMENT0);
-
 		game_viewport->GetCamera()->DrawSkybox();
-
-		// Enable to draw on bloom texture
-		uint bloom_attach[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-		glDrawBuffers(2, bloom_attach);
 
 		// Draw Solid Meshes 
 		ResourceShader* current_used_shader = App->resources->default_shader;
@@ -1521,15 +1495,6 @@ void ModuleObjects::SaveScene(ResourceScene* to_load_scene, const char* force_wi
 		}
 
 		if (!scene_root->children.empty()) { // if scene_root has children, save them
-
-			JSONArraypack* textures = scene->InitNewArray("Scene.Textures");
-			for (auto item = App->resources->resources.begin(); item != App->resources->resources.end(); ++item) {
-				if ((*item)->GetType() == ResourceType::RESOURCE_TEXTURE && (*item)->references > 0 && (*item)->GetID() != 0) {
-					textures->SetAnotherNode();
-					textures->SetString("TextureID", std::to_string((*item)->GetID()).data());
-				}
-			}
-			
 			JSONArraypack* game_objects = scene->InitNewArray("Scene.GameObjects");
 
 			game_objects->SetAnotherNode();
@@ -1677,45 +1642,6 @@ void ModuleObjects::LoadScene(const char* name, bool change_scene)
 	}
 }
 
-void ModuleObjects::LoadSceneAsync(const char* name)
-{
-	ResourceScene* to_load = App->resources->GetSceneByName(name);
-	if (to_load != nullptr) {
-		JSON_Value* value = json_parse_file(to_load->GetLibraryPath());
-		JSON_Object* object = json_value_get_object(value);
-
-		if (value != nullptr && object != nullptr)
-		{
-			JSONfilepack* scene = new JSONfilepack(to_load->GetLibraryPath(), object, value);
-
-			JSONArraypack* textures = scene->GetArray("Scene.Textures");
-			for (uint i = 0; i < textures->GetArraySize(); ++i) {
-				static char f[MAX_PATH] = { 0 };
-				strcpy(f, textures->GetString("TextureID"));
-				char* end = nullptr;
-				u64 textureID = strtoull(f, &end, 10);
-				if (textureID != 0) {
-					ResourceTexture* texture = (ResourceTexture*)App->resources->GetResourceWithID(textureID);
-					if (texture != nullptr) {
-						texture->IncreaseReferences();
-						texture->ignore_next_increase = true;
-					}
-				}
-				textures->GetAnotherNode();
-			}
-
-			delete scene;
-		}
-	}
-}
-
-void ModuleObjects::ChangeToAsyncScene()
-{
-	LoadScene(toLoad.data());
-	toLoad.clear();
-	changeToAsync = false;
-}
-
 void ModuleObjects::OpenCoScene(const char* name)
 {
 	OPTICK_EVENT();
@@ -1831,17 +1757,9 @@ GameObject* ModuleObjects::GetRoot(bool ignore_prefab)
 			return base_game_object->children.back();
 	}
 	else {
-		if (base_game_object->children.empty()) {
-			return base_game_object;
-		}
-		else if (base_game_object->children.size() == 1) {
-			return base_game_object->children.back();
-		}
-		else {
-			for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
-				if ((*item)->ID == scene_active) {
-					return *item;
-				}
+		for (auto item = base_game_object->children.begin(); item != base_game_object->children.end(); ++item) {
+			if ((*item)->ID == scene_active) {
+				return *item;
 			}
 		}
 		return nullptr;
