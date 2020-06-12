@@ -32,7 +32,7 @@ void Extra_Menus::Start()
 		previous_menu = GameObject::FindWithName("Pause_Menu")->GetChild("Menu");
 	}
 
-	ComponentCheckbox* checkbox = game_object->GetChild("Settings")->GetChild("CheckboxFS")->GetComponent<ComponentCheckbox>();
+	//ComponentCheckbox* checkbox = game_object->GetChild("Settings")->GetChild("CheckboxFS")->GetComponent<ComponentCheckbox>();
 	// checkbox->SetStatus(true);
 
 }
