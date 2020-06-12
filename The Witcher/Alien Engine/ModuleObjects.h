@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Module.h"
@@ -10,7 +9,6 @@
 #include <map>
 #include <utility>
 #include "Octree.h"
-#include "WaterFrameBuffers.h"
 #include "ComponentCamera.h"
 #include <stack>
 #include <functional>
@@ -329,8 +327,6 @@ public:
 	std::map<Component*, std::function<void()>> debug_draw_list;
 
 	std::string sceneNameToChange;
-
-	WaterFrameBuffers* wfbos = nullptr;
 
 	bool inputUiGamePad = true;
 	uint quadVAO = 0;
