@@ -359,92 +359,92 @@ void InGame_UI::LoadActiveRelics()
 				{
 					if (strcmp(string_element, "Fire") == 0)
 					{
-						(*vector_images)[0][0]->current_color.a = 1;
+						(*vector_images)[0][0]->SetBackgroundColor(1, 0.62f, 0, 1);
 					}
 					else if (strcmp(string_element, "Ice") == 0)
 					{
-						(*vector_images)[0][1]->current_color.a = 1;
+						(*vector_images)[0][1]->SetBackgroundColor(0, 0.735f, 1, 1);
 					}
 					else if (strcmp(string_element, "Lightning") == 0)
 					{
-						(*vector_images)[0][2]->current_color.a = 1;
+						(*vector_images)[0][2]->SetBackgroundColor(1, 1, 0.130f, 1);
 					}
 					else if (strcmp(string_element, "Poison") == 0)
 					{
-						(*vector_images)[0][3]->current_color.a = 1;
+						(*vector_images)[0][3]->SetBackgroundColor(0, 0.5f, 0, 1);
 					}
 					else if (strcmp(string_element, "Earth") == 0)
 					{
-						(*vector_images)[0][4]->current_color.a = 1;
+						(*vector_images)[0][4]->SetBackgroundColor(0.7f, 0.5f, 0.25f, 1);
 					}
 				}
 				else if (strcmp(string_attack, "HHH") == 0)
 				{
 					if (strcmp(string_element, "Fire") == 0)
 					{
-						(*vector_images)[1][0]->current_color.a = 1;
+						(*vector_images)[1][0]->SetBackgroundColor(1, 0.62f, 0, 1);
 					}
 					else if (strcmp(string_element, "Ice") == 0)
 					{
-						(*vector_images)[1][1]->current_color.a = 1;
+						(*vector_images)[1][1]->SetBackgroundColor(0, 0.735f, 1, 1);
 					}
 					else if (strcmp(string_element, "Lightning") == 0)
 					{
-						(*vector_images)[1][2]->current_color.a = 1;
+						(*vector_images)[1][2]->SetBackgroundColor(1, 1, 0.130f, 1);
 					}
 					else if (strcmp(string_element, "Poison") == 0)
 					{
-						(*vector_images)[1][3]->current_color.a = 1;
+						(*vector_images)[1][3]->SetBackgroundColor(0, 0.5f, 0, 1);
 					}
 					else if (strcmp(string_element, "Earth") == 0)
 					{
-						(*vector_images)[1][4]->current_color.a = 1;
+						(*vector_images)[1][4]->SetBackgroundColor(0.7f, 0.5f, 0.25f, 1);
 					}
 				}
 				else if (strcmp(string_attack, "LHL") == 0)
 				{
 					if (strcmp(string_element, "Fire") == 0)
 					{
-						(*vector_images)[2][0]->current_color.a = 1;
+						(*vector_images)[2][0]->SetBackgroundColor(1, 0.62f, 0, 1);
 					}
 					else if (strcmp(string_element, "Ice") == 0)
 					{
-						(*vector_images)[2][1]->current_color.a = 1;
+						(*vector_images)[2][1]->SetBackgroundColor(0, 0.735f, 1, 1);
 					}
 					else if (strcmp(string_element, "Lightning") == 0)
 					{
-						(*vector_images)[2][2]->current_color.a = 1;
+						(*vector_images)[2][2]->SetBackgroundColor(1, 1, 0.130f, 1);
 					}
 					else if (strcmp(string_element, "Poison") == 0)
 					{
-						(*vector_images)[2][3]->current_color.a = 1;
+						(*vector_images)[2][3]->SetBackgroundColor(0, 0.5f, 0, 1);
 					}
 					else if (strcmp(string_element, "Earth") == 0)
 					{
-						(*vector_images)[2][4]->current_color.a = 1;
+						(*vector_images)[2][4]->SetBackgroundColor(0.7f, 0.5f, 0.25f, 1);
 					}
 				}
 				else if (strcmp(string_attack, "HLH") == 0)
 				{
 					if (strcmp(string_element, "Fire") == 0)
 					{
-						(*vector_images)[3][0]->current_color.a = 1;
+						(*vector_images)[3][0]->SetBackgroundColor(1, 0.62f, 0, 1);
 					}
 					else if (strcmp(string_element, "Ice") == 0)
 					{
-						(*vector_images)[3][1]->current_color.a = 1;
+						(*vector_images)[3][1]->SetBackgroundColor(0, 0.735f, 1, 1);
 					}
 					else if (strcmp(string_element, "Lightning") == 0)
 					{
-						(*vector_images)[3][2]->current_color.a = 1;
+						(*vector_images)[3][2]->SetBackgroundColor(1, 1, 0.130f, 1);
 					}
 					else if (strcmp(string_element, "Poison") == 0)
 					{
-						(*vector_images)[3][3]->current_color.a = 1;
+						(*vector_images)[3][3]->SetBackgroundColor(0, 0.5f, 0, 1);
 					}
 					else if (strcmp(string_element, "Earth") == 0)
 					{
-						(*vector_images)[3][4]->current_color.a = 1;
+						(*vector_images)[3][4]->SetBackgroundColor(0.7f, 0.5f, 0.25f, 1);
 					}
 				}
 			}
@@ -454,23 +454,23 @@ void InGame_UI::LoadActiveRelics()
 
 				if (strcmp(string, "Fire") == 0)
 				{
-					(*vector_images)[4][0]->current_color.a = 1;
+					(*vector_images)[4][0]->SetBackgroundColor(1, 0.62f, 0, 1);
 				}
 				else if (strcmp(string, "Ice") == 0)
 				{
-					(*vector_images)[4][1]->current_color.a = 1;
+					(*vector_images)[4][1]->SetBackgroundColor(0, 0.735f, 1, 1);
 				}
 				else if (strcmp(string, "Lightning") == 0)
 				{
-					(*vector_images)[4][2]->current_color.a = 1;
+					(*vector_images)[4][2]->SetBackgroundColor(1, 1, 0.130f, 1);
 				}
 				else if (strcmp(string, "Poison") == 0)
 				{
-					(*vector_images)[4][3]->current_color.a = 1;
+					(*vector_images)[4][3]->SetBackgroundColor(0, 0.5f, 0, 1);
 				}
 				else if (strcmp(string, "Earth") == 0)
 				{
-					(*vector_images)[4][4]->current_color.a = 1;
+					(*vector_images)[4][4]->SetBackgroundColor(0.7f, 0.5f, 0.25f, 1);
 				}
 			}
 		}
