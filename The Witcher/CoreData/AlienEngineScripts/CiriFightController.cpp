@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "EventManager.h"
 #include "EnemyManager.h"
 #include "PlayerManager.h"
 #include "PlayerController.h"
@@ -143,6 +144,7 @@ void CiriFightController::FinishPhaseThree()
 	phase = 4;
 	GameManager::instance->particle_pool->ReleaseInstance("ciri_tornado", tornado);
 	DestroyRocks();
+	GameManager::instance->event_manager->ReceiveDialogueEvent(10, 0.5f);
 }
 
 void CiriFightController::FinishPhaseFour()
