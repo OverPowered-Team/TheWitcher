@@ -147,6 +147,7 @@ void CiriFightController::FinishPhaseThree()
 	DestroyRocks();
 	GameManager::instance->event_manager->ReceiveDialogueEvent(10, 0.5f);
 	GameObject::FindWithName("Butterfly_emitter")->SetEnable(true);
+	GameObject::FindWithName("Rock_particles3")->SetEnable(false);
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -266,8 +267,6 @@ void CiriFightController::UpdatePlatform()
 			{
 				if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
-					GameObject::FindWithName("Rock_particles1")->SetEnable(false);
-					GameObject::FindWithName("Rock_particles2")->SetEnable(true);
 					circle->GetComponent<ComponentMaterial>()->material->color = { 1,1,1,1 };
 					circle->SetEnable(false);
 					circle = (*it);
@@ -292,12 +291,12 @@ void CiriFightController::UpdatePlatform()
 	if (circle)
 	{
 		circle->transform->SetLocalPosition(circle->transform->GetLocalPosition().x, circle->transform->GetLocalPosition().y - (rescale_platform_value * 2), circle->transform->GetLocalPosition().z);
-
+		GameObject::FindWithName("Rock_particles1")->SetEnable(false);
+		
 		if (changing_platform)
 		{
 			if (material_platform)
 				material_platform->material->color = { 1,1,1,1 };
-			GameObject::FindWithName("Rock_particles2")->SetEnable(false);
 			GameObject::FindWithName("Rock_particles3")->SetEnable(true);
 			circle->SetEnable(false);
 			circle = nullptr;
@@ -345,12 +344,11 @@ void CiriFightController::ThrowEnvironmentRocks()
 
 void CiriFightController::TransportPlayer()
 {
-	// tp y da�o
 	for (uint i = 0; i < GameManager::instance->player_manager->players.size(); ++i)
 	{
 		if (platform->transform->GetGlobalPosition().y > GameManager::instance->player_manager->players[i]->transform->GetGlobalPosition().y - 3)
 		{
-			LOG("Entro en la mierda: posicion de plataforma en y = %f     , posicion del muerto en y = %f", platform->transform->GetGlobalPosition().y, GameManager::instance->player_manager->players[i]->transform->GetGlobalPosition().y)
+			
 			if (GameManager::instance->player_manager->players[i]->controller_index == 1)
 			{
 				GameManager::instance->player_manager->players[0]->transform->SetGlobalPosition(GameManager::instance->player_manager->players[1]->transform->GetGlobalPosition());
@@ -378,7 +376,7 @@ void CiriFightController::SpawnRocks()
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
 		if (phase > 1) {
-			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.03f;
+			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.05f;
 		}
 	}
 
