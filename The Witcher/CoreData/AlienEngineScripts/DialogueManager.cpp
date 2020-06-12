@@ -13,6 +13,7 @@ DialogueManager::~DialogueManager()
 
 void DialogueManager::Start()
 {
+	subtitlesUI = GameObject::FindWithName("Subtitles UI");
 	audioEmitter = GetComponent<ComponentAudioEmitter>();
 	GameObject* subtitleText = subtitlesUI->GetChild("Subtitles Text");
 	text = subtitleText->GetComponent<ComponentText>();
