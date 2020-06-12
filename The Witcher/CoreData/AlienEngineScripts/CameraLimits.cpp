@@ -11,11 +11,20 @@ CameraLimits::~CameraLimits()
 void CameraLimits::Start()
 {
     subtitles.push_back(0);
+    emitter = GetComponent<ComponentAudioEmitter>();
 }
 
 void CameraLimits::Update()
 {
-	
+    if (Input::GetKeyDown(SDL_SCANCODE_9))
+    {
+        emitter->SetRTPCValue("GeneralVolume", 0);
+        LOG("DOWN");
+    }
+    if (Input::GetKeyDown(SDL_SCANCODE_8))
+    {
+        emitter->SetRTPCValue("GeneralVolume", 50);
+    }
 }
 
 void CameraLimits::OnDrawGizmos()
