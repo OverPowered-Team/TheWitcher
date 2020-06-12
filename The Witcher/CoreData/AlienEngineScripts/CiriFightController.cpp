@@ -4,6 +4,7 @@
 #include "PlayerManager.h"
 #include "PlayerController.h"
 #include "RockThrow.h"
+#include "RockOrbit.h"
 #include "CiriFightController.h"
 #include "Scores_Data.h"
 #include "RumblerManager.h"
@@ -378,6 +379,9 @@ void CiriFightController::SpawnRocks()
 
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
+		if (phase > 1) {
+			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.03f;
+		}
 	}
 
 	rocks_available = 5;
