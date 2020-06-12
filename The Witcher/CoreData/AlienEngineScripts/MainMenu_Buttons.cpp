@@ -37,4 +37,27 @@ void MainMenu_Buttons::Muffin()
 	AlienEngine::OpenURL("https://github.com/OverPowered-Team");
 }
 
+void MainMenu_Buttons::AddVolume()
+{
+	volume += 0.1f;
+	if (volume >= 1.0f)
+		volume = 1.0f;
+
+	
+
+}
+
+void MainMenu_Buttons::SubtractVolume()
+{
+	volume -= 0.1f;
+	if (volume <= 0.0f)
+		volume = 0.0f;
+}
+
+void MainMenu_Buttons::FullScreen()
+{
+	fullscreen = !fullscreen;
+	Screen::SetFullScreen(fullscreen);
+}
+
 

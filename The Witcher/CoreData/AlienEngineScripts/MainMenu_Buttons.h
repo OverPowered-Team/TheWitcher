@@ -6,6 +6,8 @@
 class ALIEN_ENGINE_API MainMenu_Buttons : public Alien {
 
 public:
+	bool fullscreen = false;
+	float volume = 1.0f;
 
 	MainMenu_Buttons();
 	virtual ~MainMenu_Buttons();
@@ -15,6 +17,11 @@ public:
 	void Controls();
 	void Credits();
 	void Muffin();
+
+	void AddVolume();
+	void SubtractVolume();
+
+	void FullScreen();
 
 };
 
@@ -27,6 +34,9 @@ ALIEN_FACTORY MainMenu_Buttons* CreateMainMenu_Buttons() {
 	SHOW_VOID_FUNCTION(MainMenu_Buttons::ExitGame, alien);
 	SHOW_VOID_FUNCTION(MainMenu_Buttons::Controls, alien);
 	SHOW_VOID_FUNCTION(MainMenu_Buttons::Credits, alien);
+	SHOW_VOID_FUNCTION(MainMenu_Buttons::AddVolume, alien);
+	SHOW_VOID_FUNCTION(MainMenu_Buttons::SubtractVolume, alien);
+	SHOW_VOID_FUNCTION(MainMenu_Buttons::FullScreen, alien);
 
 	return alien;
 } 
