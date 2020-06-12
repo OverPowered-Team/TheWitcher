@@ -80,7 +80,6 @@ void CutsceneCamera::ExecuteCutscene()
 		{
 			cam_shaking->Shake(shots[shots_counter]->element.info_shake.strength, shots[shots_counter]->element.info_shake.traumaDecay, shots[shots_counter]->element.info_shake.off_set, shots[shots_counter]->element.info_shake.maxyaw, shots[shots_counter]->element.info_shake.maxpitch, shots[shots_counter]->element.info_shake.maxroll);
 			shots[shots_counter]->element.info_shake.has_shaked = true;
-			LOG("I SHAKE");
 		}		
 		break;
 	}
@@ -112,7 +111,7 @@ void CutsceneCamera::ExecuteCutscene()
 				Quat current_rot = Quat::Slerp(shots[shots_counter]->element.first_rot, shots[shots_counter]->element.final_rot, (Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed);
 				camera->transform->SetGlobalRotation(current_rot);
 			}
-			if ((Time::GetGameTime() - t_speed) >= shots[shots_counter]->element.transition_speed) {
+			if ((Time::GetGameTime() - t_speed) / shots[shots_counter]->element.transition_speed >= 1.f) {
 				Camera::GetCurrentCamera()->game_object_attached->transform->SetGlobalPosition(shots[shots_counter]->transform->GetGlobalPosition());
 				if (shots[shots_counter]->element.it_focus && shots[shots_counter]->element.g_o_focus)
 					camera->transform->SetGlobalRotation(shots[shots_counter]->element.final_rot);
