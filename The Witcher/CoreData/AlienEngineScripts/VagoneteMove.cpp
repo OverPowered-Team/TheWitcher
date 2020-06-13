@@ -95,18 +95,19 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		SetVelocity(vel->max_velocity, vel->acceleration);
 	}
 	else if (strcmp("VagoneteObstacle", col->game_object_attached->GetTag()) == 0) {
-		if (col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
+		LOG("AAAAAAAAA");
+		if (!col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
 			if (VagoneteInputs::globalInclination >= -35) {
 				DecreaseLife();
-				for (int i = 1; i < 3; ++i)
-					Input::DoRumble(i, rumble_strength, 1.5f);
+				Input::DoRumble(1, rumble_strength, 1.5f);
+				Input::DoRumble(2, rumble_strength, 1.5f);
 			}
 		}
 		else {
 			if (VagoneteInputs::globalInclination <= 35) {
 				DecreaseLife();
-				for (int i = 1; i < 3; ++i)
-					Input::DoRumble(i, rumble_strength, 1.f);
+				Input::DoRumble(1, rumble_strength, 1.5f);
+				Input::DoRumble(2, rumble_strength, 1.5f);
 			}
 		}
 	}
