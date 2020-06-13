@@ -1103,22 +1103,11 @@ void PlayerController::OnEnemyKill(uint enemy_type)
 
 	player_data.total_kills++;
 	player_data.type_kills[enemy_type]++;
-	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 
 	//UI
 	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
-	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
-void PlayerController::OnUltimateActivation(float value)
-{
-	animator->IncreaseAllStateSpeeds(2.0f);
-}
-
-void PlayerController::OnUltimateDeactivation(float value)
-{
-	animator->DecreaseAllStateSpeeds(2.0f);
-}
 void PlayerController::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range

@@ -236,7 +236,6 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 			else
 			{
 				state = NilfgaardSoldierState::DYING;
-				GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 			}
 		}
 		else if (is_attacking)
@@ -254,8 +253,6 @@ void NilfgaardSoldier::OnAnimationEnd(const char* name) {
 		if (stats["Health"].GetValue() <= 0) 
 		{
 			state = NilfgaardSoldierState::DYING;
-			//GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition(), UI_Particle_Type::ULTI);
-			GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 		}
 		else
 		{
