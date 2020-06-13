@@ -263,6 +263,12 @@ void InGame_UI::PauseMenu(bool to_open)
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
 	GameManager::instance->dialogue_manager->Pause(to_open);
+
+	if (GameObject::FindWithName("Boss_HUD"))
+	{
+		GameObject::FindWithName("Boss_HUD")->GetChild("Boss_Life")->SetEnable(!to_open);
+	}
+
 	if (GameObject::FindWithName("Tutorial_Triggers"))
 	{
 		GameObject::FindWithName("Tutorial_Triggers")->GetChild("HUD")->SetEnable(!to_open);
@@ -279,6 +285,12 @@ void InGame_UI::RelicsMenu(bool to_open)
 	{
 		LoadActiveRelics();
 	}
+
+	if (GameObject::FindWithName("Boss_HUD"))
+	{
+		GameObject::FindWithName("Boss_HUD")->GetChild("Boss_Life")->SetEnable(!to_open);
+	}
+
 	if (GameObject::FindWithName("Tutorial_Triggers"))
 	{
 		GameObject::FindWithName("Tutorial_Triggers")->GetChild("HUD")->SetEnable(!to_open);

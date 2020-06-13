@@ -10,6 +10,7 @@
 #include "ModuleWindow.h"
 #include "ResourceScene.h"
 #include "ComponentMesh.h"
+#include "PanelGame.h"
 #include "ComponentUI.h"
 #include "ComponentCanvas.h"
 #include "ComponentImage.h"
@@ -1680,6 +1681,13 @@ void ModuleObjects::LoadScene(const char* name, bool change_scene)
 			if (change_scene) {
 				current_scenes.clear();
 				current_scenes.push_back(to_load);
+				if (strcmp(to_load->GetName(), "boss_test") == 0) {
+#ifndef GAME_VERSION
+					App->renderer3D->OnResize(App->ui->panel_game->width, App->ui->panel_game->height);
+#else
+					App->renderer3D->OnResize(App->window->width, App->window->height);
+#endif
+				}
 			}
 		}
 		else {

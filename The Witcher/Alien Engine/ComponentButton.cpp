@@ -1812,14 +1812,8 @@ void ComponentButton::Draw(bool isGame)
 		scale.z = matrix[2][2];
 
 
-		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
+		float4x4 uiLocal = float4x4::FromTRS(game_object_attached->transform->GetGlobalPosition(), game_object_attached->transform->GetGlobalRotation(), game_object_attached->transform->GetGlobalScale());
 		float4x4 uiGlobal = uiLocal;
-
-		/*if (game_object_attached->parent->GetComponent<ComponentCanvas>() != nullptr)
-		{
-			float4x4 parentGlobal = canvas->GetGlobalTransform();
-			uiGlobal = parentGlobal * uiLocal;
-		}*/
 
 		glPushMatrix();
 		glMultMatrixf(uiGlobal.Transposed().ptr());
