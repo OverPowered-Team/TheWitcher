@@ -478,6 +478,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
+			player_data.vertical_speed = knock_speed.y;
 			SetState(StateType::HIT);
 		}
 
