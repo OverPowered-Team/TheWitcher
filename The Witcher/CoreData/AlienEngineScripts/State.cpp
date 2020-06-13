@@ -285,6 +285,23 @@ void RollingState::OnEnter(PlayerController* player)
 
 	if (player->player_data.type == PlayerController::PlayerType::GERALT)
 	{
+
+		//Trail* pl_trail = player->dash_trail->GetTrail();
+		//pl_trail->SetVector(TrailVector::X);
+
+
+		float radrot = player->transform->GetGlobalRotation().Angle();
+		//float3 kpasa = player->transform->GetGlobalRotation().ToEulerXYZ();
+		//LOG("euler x %f y %f z %f\n", kpasa.x, kpasa.y, kpasa.z);
+		//float3 ttry = kpasa * RADTODEG;
+		//LOG("radtodeg x %f y %f z %f\n", ttry.x, ttry.y, ttry.z);
+
+		float3 what = player->transform->GetGlobalRotation().WorldY();
+		LOG("radtodeg x %f y %f z %f\n", what.x, what.y, what.z);
+
+		LOG("rad orient %f\n", radrot);
+		float degrot = RADTODEG * radrot;
+		LOG("deg orietn %f\n\n\n", degrot);
 		if (player->dash_trail != nullptr)
 			player->dash_trail->Start();
 	}
@@ -300,6 +317,15 @@ void RollingState::OnExit(PlayerController* player)
 	else if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 		player->ReleaseParticle("Yenn_Portal");
 		
+}
+
+TrailVector RollingState::trailvec(float angle)
+{
+	if (angle >= 0 && angle <= 45)
+		return TrailVector::Z;
+	//else if(angle >= 46)
+
+	return TrailVector();
 }
 
 void HitState::Update(PlayerController* player)
