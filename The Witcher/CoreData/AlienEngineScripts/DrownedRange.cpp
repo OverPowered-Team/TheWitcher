@@ -150,11 +150,13 @@ void DrownedRange::OnAnimationEnd(const char* name)
 		SetState("Attack");
 		ReleaseParticle("DigParticle");
 		ReleaseParticle("HeadDigParticle");
+		ReleaseParticle("DirtSkirt");
 	}
 	else if (strcmp(name, "Hide") == 0)
 	{
 		ReleaseParticle("DigParticle");
 		ReleaseParticle("HeadDigParticle");
+		ReleaseParticle("DirtSkirt");
 		is_hiding = false;
 	}
 }
