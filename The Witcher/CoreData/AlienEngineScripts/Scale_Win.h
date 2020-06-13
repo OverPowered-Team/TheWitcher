@@ -65,6 +65,12 @@ private:
 	// Scores
 	ComponentText* score_text_1 = nullptr;
 	ComponentText* score_text_2 = nullptr;
+	ComponentText* damage_done = nullptr;
+
+	// Initial Damage
+	bool is_damage_setting = true;
+	float damage_time = 3.0f;
+	float start_time_damage = 0.0f;
 
 	// Time
 	float time = 0.0f;
