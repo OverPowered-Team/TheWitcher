@@ -5,8 +5,8 @@
             {
                 "Name": "Door",
                 "FamilyNumber": 1,
-                "ID": "6641551706823435602",
-                "ParentID": "4751338569369058116",
+                "ID": "821822296947140285",
+                "ParentID": "13662032347109013547",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -20,31 +20,38 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -447.90664672851563,
+                            -8.0264701843261719,
+                            -195.81777954101563
                         ],
                         "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
+                            1,
+                            1.9106852534064682e-15,
+                            -4.371138473402425e-08,
+                            -4.3711388286737929e-08
                         ],
                         "Scale": [
                             1,
-                            1,
+                            1.1000000238418579,
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "9905671089871830504"
+                        "ID": "11239435452864213716"
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "10223733205488004333",
+                        "ResourceID": "1298910078177058173",
+                        "DataName": "FenceDoor",
+                        "HasInspector": false
                     }
                 ]
             },
             {
                 "Name": "BreakableFence",
                 "FamilyNumber": 2,
-                "ID": "11898653764259275097",
-                "ParentID": "6641551706823435602",
+                "ID": "18246512875765491829",
+                "ParentID": "821822296947140285",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -74,7 +81,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "8932199333027712375"
+                        "ID": "12974807055766413403"
                     },
                     {
                         "Type": 1,
@@ -84,7 +91,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "16503838415979773447",
+                        "ID": "8928443549744450872",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "281920166162972555",
@@ -92,30 +99,10 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1507898778398547081",
+                        "ID": "15891925163808357073",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
-                    },
-                    {
-                        "Enabled": true,
-                        "Type": 10,
-                        "Center": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0
-                        ],
-                        "IsTrigger": false,
-                        "Bouncing": 0.5,
-                        "StaticFriction": 0.5,
-                        "DynamicFriction": 0.5,
-                        "CollisionLayer": "Default",
-                        "VertexLimit": 64
                     },
                     {
                         "Type": 11,
@@ -131,16 +118,40 @@
                         "FreezeRotZ": false
                     },
                     {
+                        "Enabled": true,
+                        "Type": 7,
+                        "Center": [
+                            0,
+                            3.2000000476837158,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "IsTrigger": false,
+                        "Bouncing": 0.5,
+                        "StaticFriction": 0.5,
+                        "DynamicFriction": 0.5,
+                        "CollisionLayer": "Default",
+                        "Size": [
+                            18.206821441650391,
+                            12.795999526977539,
+                            0.57485294342041016
+                        ]
+                    },
+                    {
                         "Type": 29,
-                        "ID": "10632101801179606268",
-                        "ResourceID": "1298910078177058173",
-                        "DataName": "FenceDoor",
+                        "ID": "287939162131435666",
+                        "ResourceID": "5591301133612282711",
+                        "DataName": "BreakDoor",
                         "HasInspector": true,
                         "Inspector": [
                             {
                                 "VarType": 0,
                                 "Name": "hits_to_broke",
-                                "int": 1
+                                "int": 4
                             },
                             {
                                 "VarType": 3,
@@ -159,8 +170,8 @@
             {
                 "Name": "Broken_fence_door",
                 "FamilyNumber": 2,
-                "ID": "12233564295559565334",
-                "ParentID": "6641551706823435602",
+                "ID": "13238378375283158297",
+                "ParentID": "821822296947140285",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -190,15 +201,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "11042305677412537762"
+                        "ID": "11235647542453968919"
                     }
                 ]
             },
             {
                 "Name": "BrokenFence13",
                 "FamilyNumber": 3,
-                "ID": "8334852029924714536",
-                "ParentID": "12233564295559565334",
+                "ID": "3276157823781672305",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -228,7 +239,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "12433904531924009140"
+                        "ID": "12111842849941821324"
                     },
                     {
                         "Type": 1,
@@ -238,7 +249,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "15894644417851426203",
+                        "ID": "3430815435949945699",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "8246404764382411619",
@@ -246,7 +257,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6688017196345835532",
+                        "ID": "8779044136236177141",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
@@ -289,8 +300,8 @@
             {
                 "Name": "BrokenFence15",
                 "FamilyNumber": 3,
-                "ID": "15153437629213651655",
-                "ParentID": "12233564295559565334",
+                "ID": "13041748626077172993",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -320,7 +331,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "7608909410118690653"
+                        "ID": "18361667666369109068"
                     },
                     {
                         "Type": 1,
@@ -330,7 +341,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3652179486935614907",
+                        "ID": "9032108241082330951",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "17013935220940480206",
@@ -338,7 +349,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "5373685081637387605",
+                        "ID": "9472910659389239075",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
@@ -381,8 +392,8 @@
             {
                 "Name": "BrokenFence14",
                 "FamilyNumber": 3,
-                "ID": "1921756869945647281",
-                "ParentID": "12233564295559565334",
+                "ID": "1179662699678552596",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -412,7 +423,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "12557496426408684239"
+                        "ID": "747086336500243724"
                     },
                     {
                         "Type": 1,
@@ -422,7 +433,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10789189031197271003",
+                        "ID": "13731614283412274094",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "18260426187548079908",
@@ -430,7 +441,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "12116067860299800792",
+                        "ID": "9975436719657956662",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
@@ -473,8 +484,8 @@
             {
                 "Name": "BrokenFence17",
                 "FamilyNumber": 3,
-                "ID": "8461218299283988476",
-                "ParentID": "12233564295559565334",
+                "ID": "8279712438475005090",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -504,7 +515,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "10136531018938644219"
+                        "ID": "12321674579139527008"
                     },
                     {
                         "Type": 1,
@@ -514,7 +525,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3979624975180369821",
+                        "ID": "14569511037897097335",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "9895886376575746660",
@@ -522,7 +533,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "11520372865456627253",
+                        "ID": "10183817121668342438",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
@@ -565,8 +576,8 @@
             {
                 "Name": "BrokenFence16",
                 "FamilyNumber": 3,
-                "ID": "9679591169182660967",
-                "ParentID": "12233564295559565334",
+                "ID": "8636894239844381702",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -596,7 +607,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "4661241150129571549"
+                        "ID": "17942093155001718724"
                     },
                     {
                         "Type": 1,
@@ -606,7 +617,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "10132467579290522257",
+                        "ID": "12649352293801810577",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "6019354998407727101",
@@ -614,7 +625,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "5698700803659061149",
+                        "ID": "10421298363070623693",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
@@ -657,8 +668,8 @@
             {
                 "Name": "BrokenFence20",
                 "FamilyNumber": 3,
-                "ID": "11922017523533674161",
-                "ParentID": "12233564295559565334",
+                "ID": "18406613008606036037",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -688,7 +699,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "15540896332364515512"
+                        "ID": "8388097881628777269"
                     },
                     {
                         "Type": 1,
@@ -698,7 +709,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "3470705206141626755",
+                        "ID": "780208691240813470",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "3038245360949837238",
@@ -706,7 +717,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "11523187756052904345",
+                        "ID": "16880464196261118980",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
@@ -749,8 +760,8 @@
             {
                 "Name": "BrokenFence19",
                 "FamilyNumber": 3,
-                "ID": "5067996038765383439",
-                "ParentID": "12233564295559565334",
+                "ID": "4485330524322036810",
+                "ParentID": "13238378375283158297",
                 "Enabled": true,
                 "ParentEnabled": false,
                 "Selected": false,
@@ -780,7 +791,7 @@
                             0.10000000149011612
                         ],
                         "ScaleNegative": false,
-                        "ID": "3935103910716414019"
+                        "ID": "4878815104049289023"
                     },
                     {
                         "Type": 1,
@@ -790,7 +801,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "2516269031560042854",
+                        "ID": "10757765902999232106",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "11313098972482919753",
@@ -798,7 +809,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "16533942043056029476",
+                        "ID": "12138439633924192983",
                         "HasMaterial": true,
                         "MaterialID": "1008227401734361930",
                         "Enabled": true
