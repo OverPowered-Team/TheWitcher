@@ -196,7 +196,7 @@ void CiriFightController::MoveWall()
 {
 	if (wall != nullptr)
 	{
-		wall->transform->AddPosition({ 0, -rescale_platform_value, 0 });
+		wall->transform->AddPosition({ 0, -rescale_platform_value * 60 * Time::GetDT(), 0 });
 
 		if (platform->transform->GetGlobalPosition().y > (*rings_enabled.begin())->transform->GetGlobalPosition().y + 60 && !first_wall_door)
 		{
@@ -307,8 +307,8 @@ void CiriFightController::UpdatePlatform()
 
 void CiriFightController::ThrowEnvironmentRocks()
 {
-	throw_time += rescale_platform_value;
-	if (throw_time % 10 == 0 && !rock_throwed)
+	throw_time += rescale_platform_value * Time::GetDT() * 60;
+	if (((int)throw_time) % 10 == 0 && !rock_throwed)
 	{
 		float random_x = (float)Random::GetRandomIntBetweenTwo(1, 15);
 		float random_z = (float)Random::GetRandomIntBetweenTwo(1, 15);
@@ -337,7 +337,7 @@ void CiriFightController::ThrowEnvironmentRocks()
 			rock_throwed = true;
 		}
 	}
-	else if (throw_time % 10 != 0 && rock_throwed)
+	else if (((int)throw_time) % 10 != 0 && rock_throwed)
 		rock_throwed = false;
 	
 }
@@ -376,7 +376,7 @@ void CiriFightController::SpawnRocks()
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
 		if (phase > 1) {
-			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.05f;
+			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.04f;
 		}
 	}
 

@@ -260,3 +260,8 @@ void ComponentAudioEmitter::PauseByEventName(const char* event_name)
 {
 	source->PauseEventByName(event_name);
 }
+
+void ComponentAudioEmitter::ResumeByEventName(const char* event_name)
+{
+	source->ResumeEventByName(event_name);
+}

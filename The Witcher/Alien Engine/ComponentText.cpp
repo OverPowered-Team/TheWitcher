@@ -39,6 +39,8 @@ ComponentText::ComponentText(GameObject* obj) : ComponentUI(obj)
 ComponentText::~ComponentText()
 {
 	font->DecreaseReferences();
+
+	DeleteVAOVBO();
 }
 
 bool ComponentText::DrawInspector()
@@ -722,6 +724,28 @@ void ComponentText::GenerateVAOVBO()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
+
+void ComponentText::DeleteVAOVBO()
+{
+	
+	if (VAO != 0)
+		glDeleteVertexArrays(1, &VAO);
+	
+	if(verticesID != 0)
+		glDeleteBuffers(1, &verticesID);
+	
+	if (uvID != 0)
+		glDeleteBuffers(1, &uvID);
+
+	if(text_background.id != 0)
+		glDeleteBuffers(1, &text_background.id);
+
+	VAO = 0;
+	verticesID = 0; 
+	uvID = 0;
+	text_background.id = 0;
+}
+
 
 void ComponentText::SetText(const char* newText)
 {

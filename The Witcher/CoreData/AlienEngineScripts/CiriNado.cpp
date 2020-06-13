@@ -22,7 +22,7 @@ void CiriNado::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
-		if (player_ctrl && !player_ctrl->is_immune) {
+		if (player_ctrl) {
 			knock_back = (player_ctrl->game_object->transform->GetGlobalPosition() - transform->GetGlobalPosition()).Normalized();
 			player_ctrl->ReceiveDamage(0, knock_back * knock_force);
 		}

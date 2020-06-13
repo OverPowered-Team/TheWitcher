@@ -10,6 +10,7 @@
 #include "ModuleWindow.h"
 #include "ResourceScene.h"
 #include "ComponentMesh.h"
+#include "PanelGame.h"
 #include "ComponentUI.h"
 #include "ComponentCanvas.h"
 #include "ComponentImage.h"
@@ -77,8 +78,6 @@ ModuleObjects::ModuleObjects(bool start_enabled) :Module(start_enabled)
 ModuleObjects::~ModuleObjects()
 {
 	DeleteReturns();
-
-	RELEASE(wfbos);
 }
 
 bool ModuleObjects::Init()
@@ -117,8 +116,6 @@ bool ModuleObjects::Start()
 
 
 	game_viewport = new Viewport(nullptr);
-
-	wfbos = new WaterFrameBuffers();
 
 #ifndef GAME_VERSION
 	GameObject* scene_root = new GameObject();
@@ -757,9 +754,21 @@ void ModuleObjects::CalculateShadows(std::vector<GameObject*>& dynamic_to_draw, 
 			if ((*it) != nullptr && (*it)->cast_shadow) {
 				if (!printing_scene)
 				{
-					(*iter)->light->sizefrustrum = viewport->GetCamera()->frustum.farPlaneDistance * 0.5f;
-					float3 camera_pos = viewport->GetCamera()->frustum.CenterPoint() / (*iter)->light->sizefrustrum;
-					float halfFarPlaneD = (*iter)->light->sizefrustrum * 0.5f;
+					float3 camera_pos;
+					float halfFarPlaneD;
+					if (viewport->GetCamera()->base_frustum == 0)
+					{
+						(*iter)->light->sizefrustrum = viewport->GetCamera()->far_plane_shadows;
+						camera_pos = viewport->GetCamera()->GetCameraPosition() / (*iter)->light->sizefrustrum;
+						halfFarPlaneD = (*iter)->light->sizefrustrum * 0.25f;
+					}
+					if (viewport->GetCamera()->base_frustum == 1)
+					{
+						(*iter)->light->sizefrustrum = viewport->GetCamera()->frustum.farPlaneDistance * 0.5;
+						camera_pos = viewport->GetCamera()->frustum.CenterPoint() / (*iter)->light->sizefrustrum;
+						halfFarPlaneD = (*iter)->light->sizefrustrum * 0.5f;
+					}
+
 					float3 light_pos = float3((camera_pos.x - (*iter)->direction.x * halfFarPlaneD), (camera_pos.y - (*iter)->direction.y * halfFarPlaneD), (camera_pos.z - (*iter)->direction.z * halfFarPlaneD));
 
 					glm::mat4 viewMatrix = glm::lookAt(glm::vec3((float)camera_pos.x, (float)camera_pos.y, (float)-camera_pos.z),
@@ -770,7 +779,10 @@ void ModuleObjects::CalculateShadows(std::vector<GameObject*>& dynamic_to_draw, 
 
 					(*iter)->fake_position = camera_pos;
 
-					(*it)->PreDrawGame(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);
+					if(viewport->GetCamera()->base_frustum == 0)
+						(*it)->PreDrawGame(viewport->GetCamera(), (*iter)->viewMat, viewport->GetCamera()->projectionMatrixByShadows, (*iter)->fake_position);
+					if (viewport->GetCamera()->base_frustum == 1)
+						(*it)->PreDrawGame(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);
 				}
 				/*else
 				(*it).second->PreDrawScene(viewport->GetCamera(), (*iter)->viewMat, (*iter)->projMat, (*iter)->fake_position);*/
@@ -1669,6 +1681,13 @@ void ModuleObjects::LoadScene(const char* name, bool change_scene)
 			if (change_scene) {
 				current_scenes.clear();
 				current_scenes.push_back(to_load);
+				if (strcmp(to_load->GetName(), "boss_test") == 0) {
+#ifndef GAME_VERSION
+					App->renderer3D->OnResize(App->ui->panel_game->width, App->ui->panel_game->height);
+#else
+					App->renderer3D->OnResize(App->window->width, App->window->height);
+#endif
+				}
 			}
 		}
 		else {

@@ -143,9 +143,6 @@ public:
 	template <class Comp>
 	std::vector<Comp*> GetComponentsInChildrenRecursive();
 
-
-
-
 	GameObject* GetChild(const char* child_name);
 	GameObject* GetChild(const int& index);
 	// look for child of child of child bla bla
@@ -277,9 +274,7 @@ private:
 	void GetComponentsChildren(const ComponentType& type, std::vector<Component*>* to_fill, bool recursive);
 	void ReTag(const char* from, const char* to);
 
-
 	// Events 
-
 	void SendAlienEventHierarchy(void* object, AlienEventType type); // Only hierarchy component
 	void SendAlienEventAll(void* object, AlienEventType type);   // All scene components
 	void SendAlientEventThis(void* object, AlienEventType type); // Itself components

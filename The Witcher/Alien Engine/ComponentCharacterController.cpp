@@ -27,14 +27,12 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	controller = App->physx->CreateCharacterController(desc);
 
 	moveDirection = controller_offset = float3::zero();
-	
+
 	LinkShapesToComponent();
 
 	SetCollisionLayer("Default");
 
 	physics->AddController(this);
-	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
-
 }
 
 void ComponentCharacterController::LinkShapesToComponent()
@@ -53,10 +51,10 @@ void ComponentCharacterController::LinkShapesToComponent()
 ComponentCharacterController::~ComponentCharacterController()
 {
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
-	
-	if(controller)
+
+	if (controller)
 		controller->release();
-	
+
 	delete report;
 }
 
@@ -91,8 +89,7 @@ void ComponentCharacterController::SetStepOffset(const float stepOffset)
 
 	switch (desc.getType())
 	{
-	case PxControllerShapeType::eCAPSULE:
-	{
+	case PxControllerShapeType::eCAPSULE: {
 		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
 		capsule_c->setStepOffset(desc.stepOffset);
 		break;
@@ -251,25 +248,25 @@ bool ComponentCharacterController::DrawInspector()
 	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy))
 	{
 		ImGui::Spacing();
-	
+
 		DrawLayersCombo();
 		float slopeLimitDeg = RadToDeg(acosf((float)desc.slopeLimit));
-		ImGui::Title("Slope Limit", 1);				if (ImGui::DragFloat("##slopeLimit", &slopeLimitDeg, 0.03f, 0.0f, 180.0f))					{ SetSlopeLimit(slopeLimitDeg); }
-		ImGui::Title("Step Offset", 1);				if (ImGui::DragFloat("##stepOffset", &desc.stepOffset, 0.03f, 0.0f, FLT_MAX))				{ SetStepOffset(desc.stepOffset); }
-		ImGui::Title("Skin Width", 1);				if (ImGui::DragFloat("##skinWidth", &desc.contactOffset, 0.03f, 0.0001f, FLT_MAX))			{ SetContactOffset(desc.contactOffset); }
+		ImGui::Title("Slope Limit", 1);				if (ImGui::DragFloat("##slopeLimit", &slopeLimitDeg, 0.03f, 0.0f, 180.0f)) { SetSlopeLimit(slopeLimitDeg); }
+		ImGui::Title("Step Offset", 1);				if (ImGui::DragFloat("##stepOffset", &desc.stepOffset, 0.03f, 0.0f, FLT_MAX)) { SetStepOffset(desc.stepOffset); }
+		ImGui::Title("Skin Width", 1);				if (ImGui::DragFloat("##skinWidth", &desc.contactOffset, 0.03f, 0.0001f, FLT_MAX)) { SetContactOffset(desc.contactOffset); }
 		ImGui::Title("Min Move Distance", 1);		ImGui::DragFloat("##minDist", &min_distance, 0.03f, 0.f, FLT_MAX);
-		ImGui::Title("Center", 1);					if (ImGui::DragFloat3("##center", controller_offset.ptr(), 0.03f, -math::inf, math::inf))	{ SetCharacterOffset(controller_offset); }
-		ImGui::Title("Radius", 1);					if (ImGui::DragFloat("##radius", &desc.radius, 0.05f, 0.1f, FLT_MAX))						{ SetCharacterRadius(desc.radius); }
-		ImGui::Title("Height", 1);					if (ImGui::DragFloat("##height", &desc.height, 0.05f, 0.0f, FLT_MAX))						{ SetCharacterHeight(desc.height); }
-		
+		ImGui::Title("Center", 1);					if (ImGui::DragFloat3("##center", controller_offset.ptr(), 0.03f, -math::inf, math::inf)) { SetCharacterOffset(controller_offset); }
+		ImGui::Title("Radius", 1);					if (ImGui::DragFloat("##radius", &desc.radius, 0.05f, 0.1f, FLT_MAX)) { SetCharacterRadius(desc.radius); }
+		ImGui::Title("Height", 1);					if (ImGui::DragFloat("##height", &desc.height, 0.05f, 0.0f, FLT_MAX)) { SetCharacterHeight(desc.height); }
+
 		ImGui::Separator();
-		ImGui::Title("Experimental features",0);
+		ImGui::Title("Experimental features", 0);
 		ImGui::Separator();
 		ImGui::Title("Gravity", 1);					ImGui::DragFloat("##gravity", &gravity, 0.01f, 0.00f, FLT_MAX);
 		ImGui::Title("Force gravity", 1);			ImGui::Checkbox("##forceGravity", &force_gravity);
 		ImGui::Title("Force move", 1);				ImGui::Checkbox("##forceMove", &force_move);
-		
-		
+
+
 		//ImGui::Checkbox("isGrounded", &isGrounded); // debug test
 
 		/*ImGui::Separator();
@@ -284,55 +281,29 @@ bool ComponentCharacterController::DrawInspector()
 
 void ComponentCharacterController::Update()
 {
-	//collider->Update();
-
 	if (!enabled || controller == nullptr) return;
 
-	if (Time::IsPlaying())
-	{
-		// TODO DELETE hardcoded test 1 -----------------------------------------------------------------------
-		//moveDirection.x = moveDirection.z = 0.0f;
-		//float speed = 10.0f;
-		//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.x -= 1.0f;
-		//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.x += 1;
-		//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.z += 1;
-		//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.z -= 1;
-		//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
-		//	moveDirection.y = 8.0f;
+	if (Time::IsPlaying()) {
 
-		//moveDirection = float3(moveDirection.x * speed, moveDirection.y, moveDirection.z * speed) ; // SPEED
-		// ----------------------------------------------------------------------------------------------------
-
-		if (force_move && isGrounded && velocity.isZero())
-		{
-			// always force downwards to mantain collision state 
-			// (cct solver puts on top of skin and not returns collision state when performs a 0y)
+		if (force_move && isGrounded && velocity.isZero()) {
 			Move(float3(0.0f, -controller->getContactOffset(), 0.0f));
 		}
 
-		if (force_gravity && !isGrounded)
-		{
+		if (force_gravity && !isGrounded) {
 			moveDirection.y -= gravity * Time::GetDT();
 			Move(moveDirection * Time::GetDT());
 			isGrounded ? moveDirection.y = 0.0f : 0;
 		}
-		//else // TODO: DELETE HARDCODED TEST from 1
-		//{
-		//	Move(float3(moveDirection.x, moveDirection.y - controller->getContactOffset(), moveDirection.z) * Time::GetDT());
-		//}
 
 		transform->SetGlobalPosition(PXVEC3EXT_TO_F3(controller->getPosition()) - controller_offset);
 	}
-	else
-	{
+	else {
 		controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
 	}
 }
 
+// always force downwards to mantain collision state 
+// (cct solver puts on top of skin and not returns collision state when performs a 0y)
 PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 {
 	if (!enabled) return collisionFlags;
@@ -341,7 +312,7 @@ PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 	velocity = controller->getPosition();
 
 	// perform the move
-	PxFilterData filter_data( layer_num, physics->ID, 0, 0);
+	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
 	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter); // TODO: implement filters callback when needed
 	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
 
@@ -362,14 +333,20 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 
 	if (!enabled || controller == nullptr) return;
 
-	PxShape* all_shapes;
-	Uint32 ns = controller->getActor()->getNbShapes();
-	controller->getActor()->getShapes(&all_shapes, ns);
+	PxShape* shapes[10];
+	PxRigidDynamic* actor = controller->getActor();
+	Uint32 ns = actor->getNbShapes();
+	controller->getActor()->getShapes(shapes, ns);
 	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
 
 	for (uint i = 0; i < ns; ++i) {
-		all_shapes[i].setSimulationFilterData(filter_data);
-		all_shapes[i].setQueryFilterData(filter_data);
+		if (!shapes[i]->isExclusive()) {
+			actor->detachShape(*shapes[i]);
+			shapes[i]->setSimulationFilterData(filter_data);
+			shapes[i]->setQueryFilterData(filter_data);
+			actor->attachShape(*shapes[i]);
+		}
+
 	}
 }
 
@@ -418,24 +395,22 @@ void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
 
 void ComponentCharacterController::SetDefaultConf()
 {
-	desc.radius = 0.5f;
-	desc.height = 2.0f;
+	min_distance = 0.001f;
+
 	if (desc.material) desc.material->release();
+
 	desc.material = App->physx->CreateMaterial(static_friction, dynamic_friction, restitution);
 	desc.position = F3_TO_PXVEC3EXT(game_object_attached->transform->GetGlobalPosition());
+	desc.radius = 0.5f;
+	desc.height = 2.0f;
 	desc.slopeLimit = cosf(DegToRad(45.0f));
 	desc.nonWalkableMode = PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
-	// hit report callback
+
+	// Hit report callback ------------
+
 	if (report) delete report;
 	desc.reportCallback = report = new UserControllerHitReport();
 	report->controller = this;
-	// 
-
-	//desc.invisibleWallHeight = 100.0f;// TODO: implement if needed automatic invisible walls
-	//desc.maxJumpHeight = 1.0f;
-	//desc.upDirection = // up direction can be changed to simulate planetoids or surfaces with other gravity dir vector
-
-	min_distance = 0.001f;
 }
 
 void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit hit)
@@ -482,7 +457,7 @@ float ComponentCharacterController::GetSlopeLimit() const
 void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 {
 	ControllerColliderHit _hit;
-	
+
 	ComponentCollider* col = (ComponentCollider*)hit.shape->userData;
 	_hit.collider = col;
 	if (_hit.collider)
@@ -497,7 +472,7 @@ void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 	_hit.moveLength = hit.length;
 	_hit.normal = PXVEC3_TO_F3(hit.worldNormal);
 	_hit.point = PXVEC3EXT_TO_F3(hit.worldPos);
-	
+
 	controller->OnControllerColliderHit(_hit);
 }
 
@@ -510,7 +485,7 @@ void UserControllerHitReport::onControllerHit(const PxControllersHit& hit)
 	_hit.gameObject = _hit.controller->game_object_attached;
 	_hit.rigidbody = _hit.collider->physics->GetRigidBody();
 	_hit.transform = _hit.gameObject->transform;
-	
+
 	_hit.moveDirection = PXVEC3_TO_F3(hit.dir);
 	_hit.moveLength = hit.length;
 	_hit.normal = PXVEC3_TO_F3(hit.worldNormal);

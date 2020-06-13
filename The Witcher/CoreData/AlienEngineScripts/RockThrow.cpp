@@ -57,26 +57,24 @@ void RockThrow::ReleaseExplosionParticle()
 
 void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 {
-	std::vector<ComponentCollider*> hitted;
-	hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 5);
-	for (auto it = hitted.begin(); it != hitted.end(); ++it) {
+	if (!collided) {
+		std::vector<ComponentCollider*> hitted;
+		hitted = Physics::OverlapSphere(game_object->transform->GetGlobalPosition(), 5);
+		for (auto it = hitted.begin(); it != hitted.end(); ++it) {
 
-		if (strcmp((*it)->game_object_attached->GetTag(), "Player") == 0) {
-			PlayerController* player_ctrl = (*it)->game_object_attached->GetComponent<PlayerController>();
-			if (player_ctrl && !player_ctrl->is_immune && player_ctrl->state->type != StateType::DEAD) {
-				if (!collided) {
+			if (strcmp((*it)->game_object_attached->GetTag(), "Player") == 0) {
+				PlayerController* player_ctrl = (*it)->game_object_attached->GetComponent<PlayerController>();
+				if (player_ctrl && !player_ctrl->is_immune && player_ctrl->state->type != StateType::DEAD) {
 					float3 dir = ((*it)->game_object_attached->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 					dir.y = 0;
 					player_ctrl->ReceiveDamage(10.0f, dir * 20);
 					collided = true;
 				}
 			}
-		}
 
-		if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
-			Enemy* enemy = (*it)->game_object_attached->GetComponent<Enemy>();
-			if (enemy && enemy->game_object->GetComponent<Boss>()->state != Boss::BossState::DEAD && strcmp(enemy->game_object->GetName(), "Ciri") != 0) {
-				if (!collided) {
+			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
+				Enemy* enemy = (*it)->game_object_attached->GetComponent<Enemy>();
+				if (enemy && enemy->game_object->GetComponent<Boss>()->state != Boss::BossState::DEAD && strcmp(enemy->game_object->GetName(), "Ciri") != 0) {
 					float3 dir = ((*it)->game_object_attached->transform->GetGlobalPosition() - this->transform->GetGlobalPosition()).Normalized();
 					dir.y = 0;
 					enemy->GetDamaged(10, dir * 20);
@@ -84,11 +82,9 @@ void RockThrow::OnTriggerEnter(ComponentCollider* collider)
 				}
 			}
 		}
-
-	}
-
-	if (!particle_instance) {
-		particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object, true);
+		if (!particle_instance) {
+			particle_instance = GameManager::instance->particle_pool->GetInstance("Ciri_Rock_Particle", float3::zero(), float3::zero(), game_object, true);
+		}
 	}
 
 }

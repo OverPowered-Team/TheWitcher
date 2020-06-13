@@ -1,5 +1,8 @@
 #include "Trigger_To_Lvl1_Tutorial.h"
 #include "UI_DamageCount.h"
+#include "GameManager.h"
+#include "Scores_Data.h"
+
 Trigger_To_Lvl1_Tutorial::Trigger_To_Lvl1_Tutorial() : Alien()
 {
 }
@@ -20,7 +23,8 @@ void Trigger_To_Lvl1_Tutorial::OnTriggerEnter(ComponentCollider* col)
 {
 	if (strcmp(col->game_object_attached->GetTag(), "Player") == 0)
 	{
-		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
+		Scores_Data::last_checkpoint_position = float3::inf();
+		GameManager::instance->PrepareDataNextScene(false);
 		SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::FADE);
 	}
 }

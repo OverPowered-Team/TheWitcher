@@ -160,9 +160,9 @@ void Ghoul::SetState(const char* state_str)
 bool Ghoul::IsRangeEnemy()
 {
     if (ghoul_type == GhoulType::MINI)
-        return false;
-    else
         return true;
+    else
+        return false;
 }
 
 void Ghoul::Action()
@@ -220,8 +220,6 @@ void Ghoul::OnAnimationEnd(const char* name)
 {
     if (strcmp(name, "Slash") == 0) {
         can_get_interrupted = true;
-        //stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-        //animator->SetCurrentStateSpeed(stats["HitSpeed"].GetValue());
         ReleaseParticle("EnemyAttackParticle");
         if (distance < stats["VisionRange"].GetValue() && distance > stats["JumpRange"].GetValue())
             SetState("Move");
@@ -231,14 +229,21 @@ void Ghoul::OnAnimationEnd(const char* name)
     }
     else if (strcmp(name, "Jump") == 0)
     {
-        if (distance < stats["AttackRange"].GetValue())
-            SetState("Attack");
-        else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
-            SetState("Move");
+        if (is_attacking)
+        {
+            if (distance < stats["AttackRange"].GetValue())
+                SetState("Attack");
+            else if (distance < stats["VisionRange"].GetValue() && distance > stats["MoveRange"].GetValue())
+                SetState("Move");
+            else
+                SetState("Idle");
+        }
         else
-            SetState("Idle");
+            SetState("Guard");
+
 
         can_jump = false;
+
         if (ghoul_type != GhoulType::MINI)
         {
             ReleaseParticle("AreaAttackSlash");
@@ -256,24 +261,29 @@ void Ghoul::OnAnimationEnd(const char* name)
     {
         ReleaseParticle("hit_particle");
 
-        if(!is_dead)
-            SetState("Idle");
-        else
+        if (stats["Health"].GetValue() <= 0.0F)
         {
+            SetState("Hit");
+            if (!IsRangeEnemy())
+                RemoveBattleCircle();
+
             if (!was_dizzy)
                 was_dizzy = true;
             else
             {
                 state = GhoulState::DYING;
-                GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
+        else if (is_attacking)
+            ChangeAttackEnemy();
+        else if (!is_dead)
+            SetState("Guard");
+
         animator->SetBool("attack", false);
     }
     else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
     {
         state = GhoulState::DYING;
-        GameManager::instance->player_manager->IncreaseUltimateCharge(10);
     }
 }
 
