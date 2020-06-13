@@ -1048,6 +1048,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), (*player)->player_data.stats["Chaos"].GetMaxValue());
 			}
 
+			GameManager::instance->PrepareDataNextScene(false);
+
 			// Player Used this Bonfire
 			bonfire->SetBonfireUsed();
 		}

@@ -202,7 +202,7 @@ void InGame_UI::Update()
 		}
 	}
 
-	if (!particles.empty())
+	/*if (!particles.empty())
 	{
 		auto particle = particles.begin();
 		for (; particle != particles.end(); ++particle)
@@ -223,38 +223,38 @@ void InGame_UI::Update()
 				--particle;
 			}
 		}
-	}
+	}*/
 
-	if (changing_alpha_filter)
-	{
-		float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.5f;
-		float lerp = 0.0f;
+	//if (changing_alpha_filter)
+	//{
+	//	float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.5f;
+	//	float lerp = 0.0f;
 
-		if (ulti_active)
-		{
-			lerp = Maths::Lerp(0.0f, 0.2f, t);
-		}
-		else
-		{
-			lerp = Maths::Lerp(0.2f, 0.0f, t);
-		}
+	//	if (ulti_active)
+	//	{
+	//		lerp = Maths::Lerp(0.0f, 0.2f, t);
+	//	}
+	//	else
+	//	{
+	//		lerp = Maths::Lerp(0.2f, 0.0f, t);
+	//	}
 
-		ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, lerp);
+	//	ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, lerp);
 
-		if (t >= 1)
-		{
-			if (ulti_active)
-			{
-				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.2f);
-			}
-			else
-			{
-				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
-			}
+	//	if (t >= 1)
+	//	{
+	//		if (ulti_active)
+	//		{
+	//			ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.2f);
+	//		}
+	//		else
+	//		{
+	//			ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
+	//		}
 
-			changing_alpha_filter = false;
-		}
-	}
+	//		changing_alpha_filter = false;
+	//	}
+	//}
 }
 
 void InGame_UI::PauseMenu(bool to_open)
