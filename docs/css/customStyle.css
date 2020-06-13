@@ -1,0 +1,107 @@
+
+
+@font-face {
+    font-family: 'Pacifico';
+    src: url('../fonts/Pacifico.ttf')  /* Safari, Android, iOS */
+       
+  }
+
+
+.logotipo
+{
+    color: rgb(254, 138, 225);
+    font-size: 30px;
+    font-family: 'Pacifico';
+}
+.rounded-image
+{
+    border-radius: 50%;
+}
+
+.rss-font-size
+{
+    font-size: 50px;
+}
+
+.parallax
+{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+.color-overlay
+{
+    width: 100%;
+    height: 100%;
+    /* background: rgb(0, 0, 0); */
+    opacity: 0.8;
+    position: absolute; 
+}
+
+.white::after
+{
+    background: white !important;
+}
+
+/* Code Colors */
+.color-code
+{
+    background: var(--code);
+}
+.code-background
+{
+    background-color: var(--code);
+}
+.code-color::after
+{
+    background: var(--code) !important;
+}
+
+.code-text
+{
+    color: var(--code);
+}
+
+
+
+/* Design Colors */
+.color-design
+{
+    background: var(--design);
+}
+.design-background
+{
+    background-color: var(--design);
+}
+.design-color::after, .design-color:hover::before
+{
+    background: var(--design) !important;
+}
+.design-text
+{
+    color: var(--design);
+}
+
+
+/* Art Colors */
+
+.color-art
+{
+    background: var(--art);
+}
+.art-background
+{
+    background-color: var(--art);
+}
+.art-color::after, .art-color:hover::before
+{
+    background: var(--art) !important;
+}
+
+.art-text
+{
+    color: var(--art);
+}
+
