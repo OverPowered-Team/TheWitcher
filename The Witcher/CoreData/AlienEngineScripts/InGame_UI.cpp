@@ -299,26 +299,26 @@ void InGame_UI::ShowCheckpointSaved()
 
 void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 {
-	UI_Particles* particle = new UI_Particles();
-	// not working very well but it's the best I accomplished
-	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
-		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
+	//UI_Particles* particle = new UI_Particles();
+	//// not working very well but it's the best I accomplished
+	////particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
+	//	//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	float random = Random::GetRandomIntBetweenTwo(1, 2);
-	if (random == 1)
-	{
-		particle->origin_position = float3(0.0f, 0.0f, -0.1f);
-	}
-	else
-	{
-		particle->origin_position = float3(25.f, 0.0f, -0.1f);
-	}
+	//float random = Random::GetRandomIntBetweenTwo(1, 2);
+	//if (random == 1)
+	//{
+	//	particle->origin_position = float3(0.0f, 0.0f, -0.1f);
+	//}
+	//else
+	//{
+	//	particle->origin_position = float3(25.f, 0.0f, -0.1f);
+	//}
 
-	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
-	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
-	particle->time_passed = internal_timer;
+	//particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
+	//particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
+	//particle->time_passed = internal_timer;
 
-	particles.push_back(particle);
+	//particles.push_back(particle);
 }
 
 void InGame_UI::ShowUltiFilter(bool show)
