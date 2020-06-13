@@ -34,7 +34,7 @@ void SadTutorial::Update()
 
 		has_exploded = true;
 	}
-	if (Time::GetGameTime() - timer_explosion >= time_to_explode+1 && !has_post_exploded)
+	if (Time::GetGameTime() - timer_explosion >= time_to_explode+2 && !has_post_exploded)
 	{
 		emitter->StartSound("Play_Explosion");
 		has_post_exploded = true;

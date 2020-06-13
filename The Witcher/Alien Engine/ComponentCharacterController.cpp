@@ -27,7 +27,7 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	controller = App->physx->CreateCharacterController(desc);
 
 	moveDirection = controller_offset = float3::zero();
-	
+
 	LinkShapesToComponent();
 
 	SetCollisionLayer("Default");
@@ -51,10 +51,10 @@ void ComponentCharacterController::LinkShapesToComponent()
 ComponentCharacterController::~ComponentCharacterController()
 {
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
-	
-	if(controller)
+
+	if (controller)
 		controller->release();
-	
+
 	delete report;
 }
 
@@ -248,25 +248,25 @@ bool ComponentCharacterController::DrawInspector()
 	if (ImGui::CollapsingHeader(" Character Controller", &not_destroy))
 	{
 		ImGui::Spacing();
-	
+
 		DrawLayersCombo();
 		float slopeLimitDeg = RadToDeg(acosf((float)desc.slopeLimit));
-		ImGui::Title("Slope Limit", 1);				if (ImGui::DragFloat("##slopeLimit", &slopeLimitDeg, 0.03f, 0.0f, 180.0f))					{ SetSlopeLimit(slopeLimitDeg); }
-		ImGui::Title("Step Offset", 1);				if (ImGui::DragFloat("##stepOffset", &desc.stepOffset, 0.03f, 0.0f, FLT_MAX))				{ SetStepOffset(desc.stepOffset); }
-		ImGui::Title("Skin Width", 1);				if (ImGui::DragFloat("##skinWidth", &desc.contactOffset, 0.03f, 0.0001f, FLT_MAX))			{ SetContactOffset(desc.contactOffset); }
+		ImGui::Title("Slope Limit", 1);				if (ImGui::DragFloat("##slopeLimit", &slopeLimitDeg, 0.03f, 0.0f, 180.0f)) { SetSlopeLimit(slopeLimitDeg); }
+		ImGui::Title("Step Offset", 1);				if (ImGui::DragFloat("##stepOffset", &desc.stepOffset, 0.03f, 0.0f, FLT_MAX)) { SetStepOffset(desc.stepOffset); }
+		ImGui::Title("Skin Width", 1);				if (ImGui::DragFloat("##skinWidth", &desc.contactOffset, 0.03f, 0.0001f, FLT_MAX)) { SetContactOffset(desc.contactOffset); }
 		ImGui::Title("Min Move Distance", 1);		ImGui::DragFloat("##minDist", &min_distance, 0.03f, 0.f, FLT_MAX);
-		ImGui::Title("Center", 1);					if (ImGui::DragFloat3("##center", controller_offset.ptr(), 0.03f, -math::inf, math::inf))	{ SetCharacterOffset(controller_offset); }
-		ImGui::Title("Radius", 1);					if (ImGui::DragFloat("##radius", &desc.radius, 0.05f, 0.1f, FLT_MAX))						{ SetCharacterRadius(desc.radius); }
-		ImGui::Title("Height", 1);					if (ImGui::DragFloat("##height", &desc.height, 0.05f, 0.0f, FLT_MAX))						{ SetCharacterHeight(desc.height); }
-		
+		ImGui::Title("Center", 1);					if (ImGui::DragFloat3("##center", controller_offset.ptr(), 0.03f, -math::inf, math::inf)) { SetCharacterOffset(controller_offset); }
+		ImGui::Title("Radius", 1);					if (ImGui::DragFloat("##radius", &desc.radius, 0.05f, 0.1f, FLT_MAX)) { SetCharacterRadius(desc.radius); }
+		ImGui::Title("Height", 1);					if (ImGui::DragFloat("##height", &desc.height, 0.05f, 0.0f, FLT_MAX)) { SetCharacterHeight(desc.height); }
+
 		ImGui::Separator();
-		ImGui::Title("Experimental features",0);
+		ImGui::Title("Experimental features", 0);
 		ImGui::Separator();
 		ImGui::Title("Gravity", 1);					ImGui::DragFloat("##gravity", &gravity, 0.01f, 0.00f, FLT_MAX);
 		ImGui::Title("Force gravity", 1);			ImGui::Checkbox("##forceGravity", &force_gravity);
 		ImGui::Title("Force move", 1);				ImGui::Checkbox("##forceMove", &force_move);
-		
-		
+
+
 		//ImGui::Checkbox("isGrounded", &isGrounded); // debug test
 
 		/*ImGui::Separator();
@@ -312,7 +312,7 @@ PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 	velocity = controller->getPosition();
 
 	// perform the move
-	PxFilterData filter_data( layer_num, physics->ID, 0, 0);
+	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
 	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter); // TODO: implement filters callback when needed
 	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
 
@@ -333,14 +333,20 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 
 	if (!enabled || controller == nullptr) return;
 
-	PxShape* all_shapes;
-	Uint32 ns = controller->getActor()->getNbShapes();
-	controller->getActor()->getShapes(&all_shapes, ns);
+	PxShape* shapes[10];
+	PxRigidDynamic* actor = controller->getActor();
+	Uint32 ns = actor->getNbShapes();
+	controller->getActor()->getShapes(shapes, ns);
 	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
 
 	for (uint i = 0; i < ns; ++i) {
-		all_shapes[i].setSimulationFilterData(filter_data);
-		all_shapes[i].setQueryFilterData(filter_data);
+		if (!shapes[i]->isExclusive()) {
+			actor->detachShape(*shapes[i]);
+			shapes[i]->setSimulationFilterData(filter_data);
+			shapes[i]->setQueryFilterData(filter_data);
+			actor->attachShape(*shapes[i]);
+		}
+
 	}
 }
 
@@ -451,7 +457,7 @@ float ComponentCharacterController::GetSlopeLimit() const
 void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 {
 	ControllerColliderHit _hit;
-	
+
 	ComponentCollider* col = (ComponentCollider*)hit.shape->userData;
 	_hit.collider = col;
 	if (_hit.collider)
@@ -466,7 +472,7 @@ void UserControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 	_hit.moveLength = hit.length;
 	_hit.normal = PXVEC3_TO_F3(hit.worldNormal);
 	_hit.point = PXVEC3EXT_TO_F3(hit.worldPos);
-	
+
 	controller->OnControllerColliderHit(_hit);
 }
 
@@ -479,7 +485,7 @@ void UserControllerHitReport::onControllerHit(const PxControllersHit& hit)
 	_hit.gameObject = _hit.controller->game_object_attached;
 	_hit.rigidbody = _hit.collider->physics->GetRigidBody();
 	_hit.transform = _hit.gameObject->transform;
-	
+
 	_hit.moveDirection = PXVEC3_TO_F3(hit.dir);
 	_hit.moveLength = hit.length;
 	_hit.normal = PXVEC3_TO_F3(hit.worldNormal);
