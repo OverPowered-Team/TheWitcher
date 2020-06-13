@@ -127,11 +127,7 @@ update_status ModulePhysX::PreUpdate(float dt)
 
 	if (Time::IsPlaying())
 	{
-		//accumulator += game_dt;
-		//if (accumulator < fixed_dt)
-		//	return UPDATE_CONTINUE;
-		//accumulator -= fixed_dt;
-		px_scene->simulate(game_dt); // TODO, fixed time step / substeps
+		px_scene->simulate(game_dt);
 		px_scene->fetchResults(true);
 	}
 
