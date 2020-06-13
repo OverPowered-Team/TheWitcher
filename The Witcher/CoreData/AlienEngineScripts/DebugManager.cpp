@@ -40,6 +40,10 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_2))
 		{
+			if (GameManager::instance)
+			{
+				GameManager::instance->PrepareDataNextScene(false);
+			}
 			SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
