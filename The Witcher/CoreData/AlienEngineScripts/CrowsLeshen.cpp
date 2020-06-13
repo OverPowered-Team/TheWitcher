@@ -25,6 +25,7 @@ void CrowsLeshen::Start()
 
 	max_track_distance = 4.0f;
 	tracking = true;
+	collided = false;
 
 }
 
@@ -36,6 +37,7 @@ void CrowsLeshen::Update()
 		Quat rot = Quat::RotateAxisAngle(float3::unitY(), -(angle * Maths::Rad2Deg() - 90.f) * Maths::Deg2Rad());
 		transform->SetGlobalRotation(rot);
 		setted_direction = true;
+		collided = false;
 	}
 
 	float distance_to_player = transform->GetGlobalPosition().Distance(leshen->player_controllers[target]->transform->GetGlobalPosition());
@@ -54,7 +56,7 @@ void CrowsLeshen::Update()
 		}
 	}
 
-	transform->AddPosition(transform->forward * speed);
+	transform->AddPosition(transform->forward * speed * 60 * Time::GetDT());
 	
 
 	if (life_time <= total_life_time) {
@@ -78,8 +80,6 @@ void CrowsLeshen::Reset()
 
 	max_track_distance = 4.0f;
 	tracking = true;
-
-	transform->SetGlobalPosition(float3::zero());
 	game_object->GetComponent<ComponentCollider>()->SetEnable(false);
 }
 
@@ -88,9 +88,12 @@ void CrowsLeshen::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 		PlayerController* player_ctrl = collider->game_object_attached->GetComponent<PlayerController>();
 		if (player_ctrl && !player_ctrl->is_immune) {
+			if (!collided) {
 			player_ctrl->ReceiveDamage(10.0f);
 			GameManager::instance->particle_pool->ReleaseInstance("Crow", game_object);
 			Reset();
+			collided = true;
+			}
 		}
-	}
+		}
 }

@@ -31,8 +31,6 @@ out float visibility;
 out vec4 FragPosLightSpace[MAX_SPACEMATRIX];
 //out float visibility;
 
-uniform vec4 clip_plane;
-
 void main()
 {
     // --------------- OUTS ---------------
@@ -46,9 +44,6 @@ void main()
 
     visibility = exp(-pow((distance * density), gradient));
     visibility = clamp(visibility, 0.0, 1.0);
-    // ------------------------
-    gl_ClipDistance[0] = dot(worldPos, clip_plane);
-    //gl_ClipDistance[0] = -1;
     // --------------------------------------- 
 
     // --------------- Animation -------------
@@ -136,6 +131,7 @@ struct Material {
 
     float smoothness;
     float metalness;
+    bool emissive;
 };
 
 // Function declarations
@@ -151,6 +147,7 @@ uniform ivec3 max_lights;
 
 uniform vec3 view_pos;
 
+uniform float bloom_threshold = 1;
 uniform bool activeFog;
 uniform vec3 backgroundColor;
 
@@ -167,8 +164,10 @@ in vec3 norms;
 in mat3 TBN;
 in float visibility;
 in vec4 FragPosLightSpace[MAX_SPACEMATRIX];
+
 // Outs
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
 
 void main()
 {
@@ -214,12 +213,22 @@ void main()
 
     // ----------------------------------------------------------
 
+    // Final Color 
     FragColor = vec4(result, 1.0) * objectColor;
 
+    // Fog 
     if(activeFog == true)
     {
         FragColor = mix(vec4(backgroundColor, 1.0), FragColor, visibility);
     }
+
+    // Write in the 2nd color buffer if the output color is higher than a threshold
+    float brightness = dot(vec3(FragColor.rgb * bloom_threshold), vec3(vec3(0.2126, 0.7152, 0.0722)));
+    if(brightness > 1.0 && objectMaterial.emissive)
+        BrightColor = vec4(FragColor.rgb, 1.0);
+    else
+        BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
+
 }
 
 // Function definitions

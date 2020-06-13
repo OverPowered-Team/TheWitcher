@@ -193,7 +193,7 @@ bool ParticleSystem::Update(float dt)
 					currentFrame = particleInfo.currentAnimation.startFrame;
 				}
 				else
-					currentFrame = particleInfo.currentAnimation.endFrame;
+					currentFrame = particleInfo.currentAnimation.endFrame-1;
 
 			}
 
@@ -276,6 +276,8 @@ void ParticleSystem::DrawParticles()
 
 	ComponentCamera* mainCamera = App->renderer3D->GetCurrentMainCamera();
 
+
+	material->used_shader->SetUniform1i("objectMaterial.emissive", material->shaderInputs.emissive);
 
 	//-------------------------- DRAW PARTICLES FAR TO NEAR ------------------
 	for (std::vector<Particle*>::reverse_iterator iter = particles.rbegin(); iter != particles.rend(); ++iter)
@@ -421,6 +423,7 @@ void ParticleSystem::Stop()
 
 void ParticleSystem::ResetSystem()
 {
+	currentFrame = 0;
 	// Reset Emmitter
 	emmitter.Reset();
 	emmitter.current_delay = 0.f;

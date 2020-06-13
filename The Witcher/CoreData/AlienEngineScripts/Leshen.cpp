@@ -6,6 +6,7 @@
 #include "PlayerAttacks.h"
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
+#include "CloudLeshen.h"
 #include "Leshen.h"
 #include "Scores_Data.h"
 #include "Boss_Lifebar.h"
@@ -24,9 +25,10 @@ void Leshen::StartEnemy()
 
 	Boss::StartEnemy();
 
+	mesh = game_object->GetChild("Mesh");
+
 	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
-	meshes = game_object->GetChild("Meshes");
 	cloud_collider = game_object->GetChild("CloudCollider");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
 
@@ -54,6 +56,24 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		Scores_Data::won_level1 = true;
 		GameManager::instance->PrepareDataNextScene(false);
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
+	}
+
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		if ((*iter))
+		{
+			//ComponentMaterial* material = (*iter)->GetComponent<ComponentMaterial>();
+			if (defaultMaterial == nullptr)
+			{
+				defaultMaterial = (ResourceMaterial*)(*iter)->GetMaterial();
+			}
+
+			if ((*iter))
+			{
+				(*iter)->material = &hitMaterial;
+			}
+		}
+		inHit = true;
 	}
 
 	return damage;
@@ -178,7 +198,7 @@ void Leshen::LaunchCloudAction()
 {
 	times_hitted = 0;
 	direction = -(player_controllers[0]->transform->GetGlobalPosition() - transform->GetLocalPosition()).Normalized();
-	meshes->SetEnable(false);
+	mesh->SetEnable(false);
 	SpawnParticle("Cloud", float3::zero(), true);
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
@@ -312,12 +332,14 @@ void Leshen::EndCrowsAction()
 
 void Leshen::EndCloudAction()
 {
-	meshes->SetEnable(true);
+	mesh->SetEnable(true);
 	ReleaseParticle("Cloud");
 	current_action->state = Leshen::ActionState::ENDED;
 	direction_time = 0.0f;
 	times_switched = 0;
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
+	cloud_collider->GetComponent<CloudLeshen>()->player_entered[0] = false;
+	cloud_collider->GetComponent<CloudLeshen>()->player_entered[1] = false;
 }
 
 void Leshen::SetActionVariables()

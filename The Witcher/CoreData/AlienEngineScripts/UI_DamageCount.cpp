@@ -75,10 +75,10 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 			}
 		}
 
-		damage_num->go = GameObject::Instantiate(text_right, 
-			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x+100,
-			damage_num->starting_y_position,
-			0), false, GameObject::FindWithName("List_DmgNums2"));
+		damage_num->go = GameObject::Instantiate(text_right,
+			float3(damagecount_player2->game_object_attached->transform->GetGlobalPosition().x + 100,
+				damage_num->starting_y_position,
+				0), false, GameObject::FindWithName("List_DmgNums2"));
 
 		if (!is_fading_in2 && damagecount_player2->current_color.a == 0)
 		{
@@ -93,9 +93,18 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 	
 	if (player->attacks->GetCurrentAttack()->IsLast())
 	{
-		damage_num->is_last = true;
-		damage_num->combo_text = damage_num->go->GetChild("Combo")->GetComponent<ComponentText>();
-		damage_num->combo_text->SetAlpha(1);
+		float offset = 0.0f;
+
+		if (!player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Spell))
+		{
+			damage_num->is_last = true;
+			damage_num->combo_text = damage_num->go->GetChild("Combo")->GetComponent<ComponentText>();
+			damage_num->combo_text->SetAlpha(1);
+		}
+		else
+		{
+			offset = 1000.0f;
+		}
 
 		int sign = 0;
 
@@ -111,14 +120,18 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 		// Checking for relics 
 		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
 		{
-			damage_num->relic_images.push_back(damage_num->go->GetChild("Fire")->GetComponent<ComponentImage>());
+			damage_num->relic_images.push_back(damage_num->go->GetChild("Fire")->GetComponent<ComponentImage>()) ;
+			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x - offset * sign,
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
+				0);
 		}
 
 		if (player->attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
 		{
 			damage_num->relic_images.push_back(damage_num->go->GetChild("Ice")->GetComponent<ComponentImage>());
 			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
-				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1) - offset * sign,
 				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
 				0);
 		}
@@ -127,7 +140,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 		{
 			damage_num->relic_images.push_back(damage_num->go->GetChild("Poison")->GetComponent<ComponentImage>());
 			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
-				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1)- offset * sign,
 				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
 				0);
 		}
@@ -136,7 +149,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 		{
 			damage_num->relic_images.push_back(damage_num->go->GetChild("Earth")->GetComponent<ComponentImage>());
 			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
-				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1)- offset * sign,
 				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
 				0);
 		}
@@ -145,7 +158,7 @@ void UI_DamageCount::AddDamageCount(float damage, PlayerController* player)
 		{
 			damage_num->relic_images.push_back(damage_num->go->GetChild("Lighting")->GetComponent<ComponentImage>());
 			damage_num->relic_images.back()->game_object_attached->transform->SetLocalPosition(
-				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1),
+				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().x + sign * 250 * (damage_num->relic_images.size() - 1)- offset * sign,
 				damage_num->relic_images.back()->game_object_attached->transform->GetLocalPosition().y,
 				0);
 		}

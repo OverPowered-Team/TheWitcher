@@ -24,12 +24,12 @@ void CiriOriginal::StartEnemy()
 
 	state = Boss::BossState::IDLE;
 
-	meshes = game_object->GetChild("Meshes");
-
 	HUD = GameObject::FindWithName("Boss_HUD")->GetComponent<Boss_Lifebar>();
 
 	fight_controller = GetComponent<CiriFightController>();
 	is_immune = true;
+
+	gravity = 0;
 
 }
 

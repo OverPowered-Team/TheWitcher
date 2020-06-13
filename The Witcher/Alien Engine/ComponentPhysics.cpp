@@ -30,17 +30,38 @@ ComponentPhysics::ComponentPhysics(GameObject* go) : Component(go)
 
 ComponentPhysics::~ComponentPhysics()
 {
-	if (state != PhysicState::DISABLED) {
+	if (actor)  // Dettach and Delete Actor
+	{
+		PxU32 num_shapes = actor->getNbShapes();
+		PxShape* shapes[10]; 
+		actor->getShapes(shapes, num_shapes);
+
+		for (PxU32 i = 0; i < num_shapes; ++i)
+			actor->detachShape(*shapes[i]);
+
 		App->physx->RemoveBody(actor);
 		actor = nullptr;
 	}
-	
+
 	rigid_body = nullptr;
 }
 
 ComponentRigidBody* ComponentPhysics::GetRigidBody()
 {
+
 	return (rigid_body && IsDynamic()) ? rigid_body : nullptr;
+}
+
+void ComponentPhysics::OnEnable()
+{
+	if (CheckChangeState())
+		UpdateBody();
+}
+
+void ComponentPhysics::OnDisable()
+{
+	if (CheckChangeState())
+		UpdateBody();
 }
 
 void ComponentPhysics::Update()
@@ -135,8 +156,7 @@ void ComponentPhysics::AttachCollider(ComponentCollider* collider, bool only_upd
 	{
 		if (!ShapeAttached(collider->shape))
 			actor->attachShape(*collider->shape);
-		if (IsDynamic())
-			actor->is<PxRigidDynamic>()->wakeUp();
+		WakeUp();
 	}
 }
 
@@ -156,8 +176,7 @@ void ComponentPhysics::DettachCollider(ComponentCollider* collider, bool only_up
 	{
 		if (ShapeAttached(collider->shape))
 			actor->detachShape(*collider->shape);
-		if (IsDynamic())
-			actor->is<PxRigidDynamic>()->wakeUp();
+		WakeUp();
 	}
 }
 
@@ -235,7 +254,7 @@ bool ComponentPhysics::RemoveController(ComponentCharacterController* ctrl)
 
 void ComponentPhysics::SwitchedController(ComponentCharacterController* ctrl)
 {
-	if (!ctrl->enabled )
+	if (!ctrl->enabled)
 	{
 		ctrl->controller->release();
 		ctrl->controller = nullptr;
@@ -262,8 +281,7 @@ bool ComponentPhysics::CheckController(ComponentCharacterController* ctrl)
 
 bool ComponentPhysics::CheckChangeState()
 {
-	if (!controller && !rigid_body && colliders.empty()) // Delete if not has physic components
-	{
+	if (!controller && !rigid_body && colliders.empty()) {  // Delete if not has physic components
 		Destroy();
 		state = PhysicState::DISABLED;
 		return true;
@@ -271,16 +289,17 @@ bool ComponentPhysics::CheckChangeState()
 
 	PhysicState new_state = PhysicState::DISABLED;
 
-	if (rigid_body  /*&& rigid_body->IsEnabled()*/)
-	{
+	if (!go->IsEnabled()) {
+		new_state = PhysicState::DISABLED;
+	}
+	else if (rigid_body  /*&& rigid_body->IsEnabled()*/) {
 		new_state = PhysicState::DYNAMIC;
 	}
-	else if (HasEnabledColliders())
-	{
+	else if (HasEnabledColliders()) {
 		new_state = PhysicState::STATIC;
 	}
 
-	if (new_state != state) {
+	if (new_state != state) { // If state is different
 		state = new_state;
 		return true;
 	}
@@ -293,11 +312,11 @@ void ComponentPhysics::UpdateBody()
 	if (actor)  // Dettach and Delete Actor
 	{
 		PxU32 num_shapes = actor->getNbShapes();
-		PxShape* shapes = nullptr; // Buffer Shapes 
-		actor->getShapes(&shapes, num_shapes);
+		PxShape* shapes[10]; // Buffer Shapes 
+		actor->getShapes(shapes, num_shapes);
 
 		for (PxU32 i = 0; i < num_shapes; ++i)
-			actor->detachShape(shapes[i]);
+			actor->detachShape(*shapes[i]);
 
 		App->physx->RemoveBody(actor);
 		actor = nullptr;
@@ -339,19 +358,17 @@ void ComponentPhysics::GizmoManipulation()
 {
 	bool is_using_gizmo = ImGuizmo::IsUsing() && game_object_attached->IsSelected();
 	PxRigidDynamic* dyn = actor->is<PxRigidDynamic>();
-	bool need_sleep_wakeup = IsDynamic() && !IsKinematic();
 
 	if (gizmo_selected)
 	{
 		if (!is_using_gizmo)
 		{
+			WakeUp();
 			gizmo_selected = false;
-			if (need_sleep_wakeup)
-				dyn->wakeUp();
+
 		}
 		else
-			if (need_sleep_wakeup)
-				dyn->putToSleep();
+			PutToSleep();
 	}
 	else
 		if (is_using_gizmo)
@@ -395,17 +412,13 @@ void ComponentPhysics::UpdatePositioning()
 
 void ComponentPhysics::WakeUp()
 {
-	if (IsDynamic())
-	{
+	if (IsDynamic() && !IsKinematic())
 		actor->is<PxRigidDynamic>()->wakeUp();
-	}
-	actor->setGlobalPose(actor->getGlobalPose());
-	
 }
 
 void ComponentPhysics::PutToSleep()
 {
-	if (IsDynamic())
+	if (IsDynamic() && !IsKinematic())
 		actor->is<PxRigidDynamic>()->putToSleep();
 }
 
@@ -431,7 +444,7 @@ bool ComponentPhysics::ShapeAttached(PxShape* shape)
 {
 	bool ret = false;
 	PxU32 num_shapes = actor->getNbShapes();
-	PxShape** shapes = new PxShape * [num_shapes]; // Buffer Shapes 
+	PxShape* shapes[10]; // Buffer Shapes 
 	actor->getShapes(shapes, num_shapes);
 
 	for (PxU32 i = 0; i < num_shapes; i++)
@@ -441,7 +454,6 @@ bool ComponentPhysics::ShapeAttached(PxShape* shape)
 			break;
 		}
 
-	delete[]shapes;
 	return ret;
 }
 

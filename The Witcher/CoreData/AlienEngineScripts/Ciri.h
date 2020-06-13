@@ -46,6 +46,9 @@ public:
 	void LaunchComboAction();
 	void LaunchMiniScreamAction();
 
+	void SetAsCanGetInterrupted();
+	void SetAsCantGetInterrupted();
+
 	void MiniScream();
 
 	ActionState UpdateAction() override;
@@ -55,7 +58,6 @@ public:
 	ActionState UpdateMiniScreamAction();
 
 	ResourceMaterial dissolve_mat;
-	std::vector<ComponentMaterial*> meshes_materials;
 
 	void CheckForGapCloser();
 
@@ -72,6 +74,10 @@ public:
 	
 	void SetStats(const char* json) override;
 
+	void PlaySFX(const char* sfx_name) override;
+	bool IsHit() override;
+	void SetState(const char* state) override;
+
 };
 
 ALIEN_FACTORY Ciri* CreateCiri() {
@@ -82,11 +88,13 @@ ALIEN_FACTORY Ciri* CreateCiri() {
 	SHOW_VOID_FUNCTION(Ciri::ActivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::DeactivateCollider, ciri);
 	SHOW_VOID_FUNCTION(Ciri::MiniScream, ciri);
-	SHOW_VOID_FUNCTION(Ciri::SpawnAttackParticle, ciri);
+	SHOW_VOID_FUNCTION(Ciri::SetAsCanGetInterrupted, ciri);
+	SHOW_VOID_FUNCTION(Ciri::SetAsCantGetInterrupted, ciri);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->mini_scream_range);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_speed);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->dash_time);
+	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(ciri->gravity);
 	
 
 	return ciri;

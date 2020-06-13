@@ -1419,6 +1419,11 @@ bool ComponentCheckbox::GetStatus()
 	return clicked;
 }
 
+void ComponentCheckbox::SetStatus(bool clicked)
+{
+	this->clicked = clicked;
+}
+
 void ComponentCheckbox::HandleAlienEvent(const AlienEvent& e)
 {
 	switch (e.type)

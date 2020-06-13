@@ -129,32 +129,37 @@ void PlayerController::CheckGround()
 	RaycastHit hit;
 	is_grounded = false;
 	float ground_distance = 0.3F;
-	float offset = transform->GetGlobalScale().y * 0.5f;
-
-	//capsulecast
-	float4x4 cast_transform = transform->GetGlobalMatrix();
-	cast_transform.Translate(float3(0, offset, 0));
 	
 	//raycast
 	float3 center_position = transform->GetGlobalPosition();
-	center_position.y += offset;
+	center_position.y += 0.5f;
 
 	Physics::SetQueryHitTriggers(false);
 	Physics::SetQueryInitialOverlaping(false);
 
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	//if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	if(Physics::SphereCast(center_position, 0.25f, -float3::unitY(), 2.0f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
-			Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
-			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
+			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+			if (angle >= 45)
+				return;
 
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
+			if (Physics::Raycast(center_position, -float3::unitY(), 2.f, hit, Physics::GetLayerMask(layers)))
+			{
+				if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
+				{
+					Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+					direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
-			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
-			if (angle > 45 && direction.y > 0)
-				is_grounded = false;
+					/*float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+					if (angle > 45 && direction.y > 0)
+						is_grounded = false;*/
+				}
+			}
 		}
 	}
 }
@@ -427,6 +432,9 @@ void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
+	if (minigame_value <= 0)
+		minigame_value = 0.1f;
+
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 
 	if(HUD)
@@ -478,6 +486,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
+			player_data.vertical_speed = knock_speed.y;
 			SetState(StateType::HIT);
 		}
 
@@ -700,17 +709,16 @@ bool PlayerController::CheckBoundaries()
 	return true;
 }
 
-bool PlayerController::CheckForPossibleRevive()
+PlayerController* PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
 		float distance = this->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= player_data.revive_range) {
-			player_being_revived = GameManager::instance->player_manager->players_dead[i];
-			return true;
+			return GameManager::instance->player_manager->players_dead[i];
 		}
 	}
 
-	return false;
+	return nullptr;
 }
 
 void PlayerController::HitFreeze(float freeze_time)
@@ -863,62 +871,49 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 }
 void PlayerController::ChangeColorParticle()
 {
-	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
-	bool color_changed = false;
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
-		color_changed = true;
-		my_color.x = 1.0f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
-	{
-		color_changed = true;
-		my_color.z = 1.0f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
-	{
-		color_changed = true;
-		if (my_color.x <= 0.5)
-			my_color.x += 0.5f;
-		else
-			my_color.x = 1.0f;
-		my_color.y += 0.5f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
-	{
-		color_changed = true;
-		if (my_color.x <= 0.3f)
-			my_color.x += 0.7f;
-		else
-			my_color.x = 1.0f;
-		my_color.y = 1.0f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
-	{
-		color_changed = true;
-		my_color.y = 1.0f;
-	}
-
-	if (color_changed)
-	{
-		for (auto it = particles.begin(); it != particles.end(); ++it)
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 		{
-			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
-			{
-				/*GameObject* p_go = (*it)->GetChild("Relic_Effect_Particle");
-				if (p_go)
-				{
-					//p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
-					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
-				}*/
-				for (auto it_tip = (*it)->GetChildren().begin(); it_tip != (*it)->GetChildren().end(); ++it_tip)
-				{
-					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
-					(*it_tip)->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
-				}
-			}
+			GameObject* p_fire = (*it)->GetChild("effect_attack_fire");
+			GameObject* p_ice = (*it)->GetChild("effect_attack_ice");
+			GameObject* p_earth = (*it)->GetChild("effect_attack_earth");
+			GameObject* p_lightning = (*it)->GetChild("effect_attack_lightning");
+			GameObject* p_poison = (*it)->GetChild("effect_attack_poison");
+			if (p_fire)
+				p_fire->SetEnable(false);
+			if (p_ice)
+				p_ice->SetEnable(false);
+			if (p_earth)
+				p_earth->SetEnable(false);
+			if (p_lightning)
+				p_lightning->SetEnable(false);
+			if (p_poison)
+				p_poison->SetEnable(false);
+
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+				if (p_fire)
+					p_fire->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+				if (p_ice)
+					p_ice->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+				if (p_earth)
+					p_earth->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+				if (p_lightning)
+					p_lightning->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+				if (p_poison)
+					p_poison->SetEnable(true);
+			
 		}
 	}
+	
 
 }
 void PlayerController::CheckEnemyCircle()
@@ -1061,6 +1056,8 @@ void PlayerController::OnTriggerEnter(ComponentCollider* col)
 				(*player)->HUD->GetComponent<UI_Char_Frame>()->ManaChange((*player)->player_data.stats["Chaos"].GetValue(), (*player)->player_data.stats["Chaos"].GetMaxValue());
 			}
 
+			GameManager::instance->PrepareDataNextScene(false);
+
 			// Player Used this Bonfire
 			bonfire->SetBonfireUsed();
 		}
@@ -1116,22 +1113,11 @@ void PlayerController::OnEnemyKill(uint enemy_type)
 
 	player_data.total_kills++;
 	player_data.type_kills[enemy_type]++;
-	GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 
 	//UI
 	HUD->GetComponent<UI_Char_Frame>()->StartFadeKillCount(player_data.total_kills);
-	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->StartLerpParticleUltibar(transform->GetGlobalPosition());
 }
 
-void PlayerController::OnUltimateActivation(float value)
-{
-	animator->IncreaseAllStateSpeeds(2.0f);
-}
-
-void PlayerController::OnUltimateDeactivation(float value)
-{
-	animator->DecreaseAllStateSpeeds(2.0f);
-}
 void PlayerController::OnDrawGizmosSelected()
 {
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), player_data.revive_range, Color::Cyan()); //snap_range
@@ -1167,8 +1153,8 @@ void PlayerController::InitKeyboardControls()
 		keyboard_move_down = SDL_SCANCODE_S;
 		keyboard_jump = SDL_SCANCODE_SPACE;
 		keyboard_dash = SDL_SCANCODE_LSHIFT;
-		keyboard_light_attack = SDL_SCANCODE_C;
-		keyboard_heavy_attack = SDL_SCANCODE_V;
+		keyboard_light_attack = SDL_SCANCODE_J;
+		keyboard_heavy_attack = SDL_SCANCODE_K;
 		keyboard_revive = SDL_SCANCODE_F;
 		keyboard_ultimate = SDL_SCANCODE_X;
 		keyboard_spell_1 = SDL_SCANCODE_1;

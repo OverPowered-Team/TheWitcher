@@ -23,6 +23,7 @@ public:
 	void ShowTriggerAttack(bool show);
 	void ShowTriggerDash(bool show);
 	void ShowTriggerMagic(bool show);
+	void ShowTriggerRelics(bool show);
 
 private:
 	
@@ -32,6 +33,7 @@ private:
 	void HandleTriggerDash();
 	void HandleTriggerMagic();
 	void HandleTriggerAttack();
+	void HandleTriggerRelic();
 
 private:
 
@@ -39,6 +41,7 @@ private:
 	Current_Showing current_state_attack = Current_Showing::ANY;
 	Current_Showing current_state_dash = Current_Showing::ANY;
 	Current_Showing current_state_magic = Current_Showing::ANY;
+	Current_Showing current_state_relics = Current_Showing::ANY;
 
 	// Components Attack
 	ComponentImage*		X			= nullptr;
@@ -53,13 +56,19 @@ private:
 	std::vector<ComponentImage*> magic_images;
 	ComponentText* text_magic = nullptr;
 
+	// Components Relics
+	ComponentImage* back_relic = nullptr;
+	ComponentText* text_relic = nullptr;
+
 	// Effects
 	bool show_attack	= false;
 	bool show_dash		= false;
 	bool show_magic		= false;
+	bool show_relics	= false;
 	float attack_time	= 0.0f;
 	float dash_time		= 0.0f;
 	float magic_time	= 0.0f;
+	float relics_time	= 0.0f;
 
 };
 

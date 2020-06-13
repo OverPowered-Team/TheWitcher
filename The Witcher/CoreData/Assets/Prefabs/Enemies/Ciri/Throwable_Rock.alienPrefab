@@ -5,8 +5,8 @@
             {
                 "Name": "Throwable_Rock",
                 "FamilyNumber": 1,
-                "ID": "11846405337785739768",
-                "ParentID": "527988958724828874",
+                "ID": "538280012689700062",
+                "ParentID": "14235763481077222397",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -15,7 +15,7 @@
                 "IsPrefab": true,
                 "PrefabLocked": false,
                 "Tag": "UnTagged",
-                "PrefabID": "4638823414610262877",
+                "PrefabID": "17590654672988669431",
                 "Components": [
                     {
                         "Type": 0,
@@ -25,18 +25,18 @@
                             0
                         ],
                         "Rotation": [
-                            -0.7071068286895752,
                             0,
                             0,
-                            0.70710670948028564
+                            0,
+                            1
                         ],
                         "Scale": [
                             1,
-                            0.99999946355819702,
-                            0.99999946355819702
+                            1,
+                            1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12851588143317235099"
+                        "ID": "8224174586299830300"
                     },
                     {
                         "Type": 1,
@@ -44,19 +44,19 @@
                         "Wireframe": false,
                         "ViewVertexNormals": false,
                         "ViewFaceNormals": false,
-                        "DrawAABB": true,
+                        "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "6905078902547249403",
+                        "ID": "7621644023603221721",
                         "HasMesh": true,
                         "IsPrimitive": false,
-                        "MeshID": "8797527771750224161",
+                        "MeshID": "18210873923598222769",
                         "Enabled": true
                     },
                     {
                         "Type": 2,
-                        "ID": "2962378686851914800",
+                        "ID": "12769864521226032388",
                         "HasMaterial": true,
-                        "MaterialID": "7276007029675818916",
+                        "MaterialID": "11506864934564604525",
                         "Enabled": true
                     },
                     {
@@ -77,14 +77,7 @@
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
-                        "Radius": 1.0627763271331787
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "8537366942916641334",
-                        "ResourceID": "15376558035015047884",
-                        "DataName": "RockThrow",
-                        "HasInspector": false
+                        "Radius": 1.2899999618530273
                     },
                     {
                         "Type": 11,
@@ -98,6 +91,242 @@
                         "FreezeRotX": false,
                         "FreezeRotY": false,
                         "FreezeRotZ": false
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "3665788454295286105",
+                        "ResourceID": "15376558035015047884",
+                        "DataName": "RockThrow",
+                        "HasInspector": false
+                    }
+                ]
+            },
+            {
+                "Name": "Aura",
+                "FamilyNumber": 2,
+                "ID": "12395975626301635707",
+                "ParentID": "538280012689700062",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": true,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "PrefabID": "17590654672988669431",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.26154026389122009,
+                            0,
+                            0.26923477649688721
+                        ],
+                        "Rotation": [
+                            -0.0518215112388134,
+                            0.26122555136680603,
+                            0.025096571072936058,
+                            0.96355897188186646
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            0.99999994039535522
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "15215313717808873362"
+                    },
+                    {
+                        "Type": 15,
+                        "ID": "13417838944078576672",
+                        "Billboard": 4,
+                        "Start": {
+                            "Position": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                0,
+                                0,
+                                0,
+                                1
+                            ],
+                            "Global": false,
+                            "Velocity": [
+                                0,
+                                -0,
+                                0
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Speed": 0,
+                            "Color": [
+                                0,
+                                1,
+                                0.48275852203369141,
+                                0.22570532560348511
+                            ],
+                            "SizeStart3D": false,
+                            "Size": 1.2000000476837158,
+                            "Size3D": [
+                                1.2000000476837158,
+                                1.2000000476837158,
+                                1.2000000476837158
+                            ],
+                            "LightColor": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "MaxLifeTime": 10,
+                            "AxisRotationStart": false,
+                            "Angle3D": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ChangeOverLifeTime": false,
+                            "RotateOverLifeTime": true
+                        },
+                        "End": {
+                            "StartTime": 0,
+                            "FinalTime": 0.20000000298023224,
+                            "Speed": 0,
+                            "Color": [
+                                0,
+                                1,
+                                0.6099998950958252,
+                                1
+                            ],
+                            "Size": 4,
+                            "Size3D": [
+                                4,
+                                4,
+                                4
+                            ],
+                            "LightColor": [
+                                -1.5816464369601856e+38,
+                                -1.5816464369601856e+38,
+                                -1.5816464369601856e+38,
+                                -1.5816464369601856e+38
+                            ],
+                            "Force": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AxisRotation": false,
+                            "AngularVelocity": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "AngularAcceleration": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Emmitter": {
+                            "Shape": 0,
+                            "Zone": 0,
+                            "Distance": 20,
+                            "Radius": 5,
+                            "OutRadius": 10,
+                            "CubeSize": [
+                                10,
+                                5,
+                                10
+                            ],
+                            "MaxLife": 15,
+                            "CurrentLife": 5.4689912796020508,
+                            "SpawnRate": 1,
+                            "Delay": 0,
+                            "Loop": false,
+                            "Position": [
+                                -0.26154026389122009,
+                                0,
+                                0.26923477649688721
+                            ],
+                            "RelativePosition": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "Rotation": [
+                                -7.5000066757202148,
+                                30.053691864013672,
+                                5.0000028610229492
+                            ],
+                            "RelativeRotation": [
+                                -0,
+                                0,
+                                -0
+                            ],
+                            "Scale": [
+                                0,
+                                0,
+                                0
+                            ]
+                        },
+                        "Bursts": {
+                            "Size": 0
+                        },
+                        "Blending": {
+                            "Source": 6,
+                            "Destination": 7,
+                            "Equation": 0
+                        },
+                        "HasMaterial": true,
+                        "MaterialID": "9355253139928541928",
+                        "HasAnimation": false,
+                        "Animation": {
+                            "AnimSpeed": 0.10000000149011612,
+                            "Rows": 1,
+                            "Columns": 1,
+                            "StartFrame": 0,
+                            "EndFrame": 0
+                        },
+                        "HasMesh": true,
+                        "Mesh": {
+                            "MeshType": 7,
+                            "Size": 1,
+                            "MeshesAttached": {
+                                "MeshID_0": "16913850371853128067"
+                            }
+                        },
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": false,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }

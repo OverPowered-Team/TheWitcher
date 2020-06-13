@@ -22,6 +22,8 @@ void Boss::StartEnemy()
 
 void Boss::UpdateEnemy()
 {
+	Enemy::UpdateEnemy();
+
 	player_distance[0] = transform->GetGlobalPosition().Distance(player_controllers[0]->game_object->transform->GetGlobalPosition());
 	player_distance[1] = transform->GetGlobalPosition().Distance(player_controllers[1]->game_object->transform->GetGlobalPosition());
 
@@ -67,10 +69,10 @@ void Boss::UpdateEnemy()
 			LOG("NO CURRENT ACTION DETECTED");
 		break;
 	case Boss::BossState::HIT:
-		if (current_action)
-			state = BossState::ATTACK;
-		else
-			state = BossState::IDLE;
+		velocity += velocity * knock_slow * Time::GetDT();
+		velocity.y += gravity * Time::GetDT();
+		character_ctrl->Move(velocity * Time::GetDT());
+
 		break;
 	case Boss::BossState::DYING: {
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();

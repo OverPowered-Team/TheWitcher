@@ -38,6 +38,10 @@ void GhoulOriginal::UpdateEnemy()
     }
         break;
 
+    case GhoulState::GUARD:
+        Guard();
+        break;
+
     case GhoulState::ATTACK:
     {
         if (distance < stats["AttackRange"].GetValue())

@@ -46,6 +46,12 @@ struct ShaderInputs
 		float amplitude = 0.75f;
 	} waveShaderProperties;
 
+	struct EmeraldShaderProperties
+	{
+		float speed = 1.0f;
+		float movement = 1.0f;
+	} emeraldShaderProperties;
+
 	struct IluminatedShaderProperties {
 		float3 object_color = float3(1.f, 1.f, 1.f);
 	} iluminatedShaderProperties;

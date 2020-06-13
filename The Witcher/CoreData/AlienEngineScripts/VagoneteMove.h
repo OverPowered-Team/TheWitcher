@@ -93,6 +93,7 @@ private:
 
 	std::vector<VagoneteInputs*> players;
 	float max_life = 0.0f;
+	bool first_frame = true;
 };
 
 ALIEN_FACTORY VagoneteMove* CreateVagoneteMove() {

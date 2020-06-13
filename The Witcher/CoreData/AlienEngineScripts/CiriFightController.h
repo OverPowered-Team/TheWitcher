@@ -40,7 +40,6 @@ public:
 	ComponentMaterial* material_platform = nullptr;
 	int count_circle = 58;
 	bool changing_platform = false;
-	float time_platform = 0.0;
 	bool desactived_mid_platform = false;
 	float rescale_platform_value = 0.1;
 
@@ -52,7 +51,7 @@ public:
 	bool first_wall_door = true;
 
 	// Rocks
-	int throw_time = 0;
+	float throw_time = 0;
 	bool rock_throwed = false;
 	std::vector<GameObject*> rocks_throwed;
 

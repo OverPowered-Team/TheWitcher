@@ -48,22 +48,19 @@ void BlockerObstacle::StartEnemy()
 	// Root Material
 	// 3rd Roots
 	material_3rd = roots[2]->GetChild(0)->GetComponent<ComponentMaterial>();
-	//resource_mat_org = (ResourceMaterial*)material_3rd->GetMaterial();
-	//resource_mat_3rd = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
-	//material_3rd->SetMaterial(resource_mat_3rd);
 	material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 
 	//// 2nd Roots
 	material_2nd = roots[1]->GetChild(0)->GetComponent<ComponentMaterial>();
-	//resource_mat_2nd = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
-	//material_2nd->SetMaterial(resource_mat_2nd);
 	material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 
 	//// 1st Roots
 	material_1st = roots[0]->GetChild(0)->GetComponent<ComponentMaterial>();
-	//resource_mat_1st = new ResourceMaterial((ResourceMaterial*)material_3rd->GetMaterial());
-	//material_1st->SetMaterial(resource_mat_1st);
 	material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+
+
+	
+
 }
 
 void BlockerObstacle::UpdateEnemy()
@@ -115,7 +112,10 @@ void BlockerObstacle::UpdateEnemy()
 			material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
 
 			if (material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+			{
+				roots[0]->SetEnable(false);
 				root_1st = false;
+			}
 
 		}
 		break;
@@ -132,6 +132,11 @@ void BlockerObstacle::CleanUpEnemy()
 	material_3rd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 	material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 	material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+
+	material_3rd->material->renderMode = 0;
+	material_2nd->material->renderMode = 0;
+	material_1st->material->renderMode = 0;
+
 }
 
 float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 knockback)
@@ -144,6 +149,7 @@ float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 kn
 	{
 		state = ObstacleState::DYING;
 		root_1st = true;
+		material_1st->material->renderMode = 1;
 	}
 
 	last_player_hit = player;
@@ -220,8 +226,16 @@ void BlockerObstacle::CheckRootHealth()
 	LOG("One: %f", one_third_life);
 
 	if (current_health <= two_third_life && current_health > one_third_life&& roots[2]->IsEnabled())
+	{
+		material_3rd->material->renderMode = 1;
 		root_3rd = true;
+	}
+		
 	else if (current_health <= one_third_life && roots[1]->IsEnabled())
+	{
+		material_2nd->material->renderMode = 1;
 		root_2nd = true;
+	}
+		
 
 }

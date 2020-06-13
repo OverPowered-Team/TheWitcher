@@ -35,6 +35,7 @@
 #include "..\..\..\Alien Engine\ComponentText.h"
 #include "..\..\..\Alien Engine\ComponentCurve.h"
 #include "..\..\..\Alien Engine\ComponentImage.h"
+#include "..\..\..\Alien Engine\ComponentCheckbox.h"
 #include "..\..\..\Alien Engine\ComponentBar.h"
 #include "..\..\..\Alien Engine\ComponentConvexHullCollider.h"
 #include "..\..\..\Alien Engine\ComponentTrail.h"

@@ -26,13 +26,11 @@ void Spawner::Spawn(TO_SPAWN type, float3 position, int head_type)
 	}
 	case 2:
 	{
-		head = leshen_head;
-		break;
+		return;
 	}
 	case 3:
 	{
-		head = ciri_head;
-		break;
+		return;
 	}
 	case 4:
 	{

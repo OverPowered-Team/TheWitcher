@@ -88,10 +88,8 @@ public:
 	bool CheckBoundaries();
 	void OnDrawGizmosSelected();
 	float3 GetDirectionVector();
-	bool CheckForPossibleRevive();
+	PlayerController* CheckForPossibleRevive();
 
-	void OnUltimateActivation(float value);
-	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void UpdateDashEffect();
 	void OnEnemyKill(uint enemy_type);
@@ -164,7 +162,6 @@ public:
 
 	//Others
 	float delay_footsteps = 0.2f;
-	PlayerController* player_being_revived = nullptr;
 	bool godmode = false;
 
 	//Revive

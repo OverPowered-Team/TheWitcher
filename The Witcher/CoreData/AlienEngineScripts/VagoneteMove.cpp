@@ -36,6 +36,8 @@ void VagoneteMove::Start()
 
 	max_life = vagonete_life;
 	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
+
+	first_frame = true;
 }
 
 void VagoneteMove::Update()
@@ -53,6 +55,7 @@ void VagoneteMove::Update()
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 {
+	float rumble_strength = 0.05f;
 	if (strcmp("VagoneteDirection", col->game_object_attached->GetTag()) == 0) {
 		VagoneteDirection* direction = col->game_object_attached->GetComponent<VagoneteDirection>();
 		if (direction != nullptr) {
@@ -80,6 +83,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 			if ((*item)->state != VagoneteInputs::State::COVER)
 			{
 				DecreaseLife();
+				Input::DoRumble(item - players.begin()+1, rumble_strength, 1.5f);
 			}
 		}
 	}
@@ -94,11 +98,15 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		if (col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
 			if (VagoneteInputs::globalInclination >= -35) {
 				DecreaseLife();
+				for (int i = 1; i < 3; ++i)
+					Input::DoRumble(i, rumble_strength, 1.5f);
 			}
 		}
 		else {
 			if (VagoneteInputs::globalInclination <= 35) {
 				DecreaseLife();
+				for (int i = 1; i < 3; ++i)
+					Input::DoRumble(i, rumble_strength, 1.f);
 			}
 		}
 	}
@@ -125,30 +133,54 @@ void VagoneteMove::SetVelocity(float max_velocity, float acceleration)
 
 void VagoneteMove::FollowCurve()
 {	
-	float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
-	float3 nextPos = curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT() * 5);
+	if (!first_frame) {
+		float3 currentPos = curve->curve.ValueAtDistance(actual_pos);
+		/*float3 nextPos = curve->curve.ValueAtDistance(actual_pos + Time::GetDT() / math::Abs(transform->GetGlobalPosition().Distance(curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT()))));
 
-	float3 vector = (currentPos - nextPos).Normalized();
-	float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
-	float3 Y = vector.Cross(normal);
-	float3x3 rot = float3x3(vector, normal, Y);
-	rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
-	rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
+		float3 vector = (currentPos - nextPos).Normalized();
+		float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
+		float3 Y = vector.Cross(normal);
+		float3x3 rot = float3x3(vector, normal, Y);
+		rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
+		rigid_body->SetPosition(currentPos + float3{ 0, VagoneteInputs::globalInclinationY, 0 });
 
-	actual_pos += current_speed * Time::GetDT();
+		actual_pos += Time::GetDT() / math::Abs(transform->GetGlobalPosition().Distance(curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT())));
 
-	current_speed += acceleration * Time::GetDT();
-	if (acceleration > 0) {
-		current_speed = Maths::Clamp(current_speed, 0.0F, max_velocity);
+		current_speed += acceleration * Time::GetDT();
+		if (acceleration > 0) {
+			current_speed = Maths::Clamp(current_speed, 0.0F, max_velocity);
+		}
+		else {
+			current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
+		}*/
+
+		//Position
+		rigid_body->SetPosition(currentPos);
+
+		//Rotation
+		float3 nextPos = curve->curve.ValueAtDistance(actual_pos + Time::GetDT() / math::Abs(transform->GetGlobalPosition().Distance(curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT()))));
+		float3 vector = (currentPos - nextPos).Normalized();
+		float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
+		float3 Y = vector.Cross(normal);
+		float3x3 rot = float3x3(vector, normal, Y);
+		rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
+		/*float3 vector = (nextPos - currentPos).Normalized();
+		float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
+		float3 Y = normal.Cross(vector);
+		Quat q = Quat::RotateFromTo(-transform->right, vector) * rigid_body->GetRotation();
+		rigid_body->SetRotation(q /* VagoneteInputs::playerRotation);*/
+
+		//Iterator
+		actual_pos += Time::GetDT() / math::Abs(transform->GetGlobalPosition().Distance(curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT())));
+
+		if (actual_pos > curve->curve.length&& next_curve != nullptr) {
+			actual_pos = current_speed * Time::GetDT();
+			curve = next_curve;
+			next_curve = nullptr;
+		}
 	}
 	else {
-		current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
-	}
-
-	if (actual_pos > curve->curve.length && next_curve != nullptr) {
-		actual_pos = current_speed * Time::GetDT();
-		curve = next_curve;
-		next_curve = nullptr;
+		first_frame = false;
 	}
 }
 

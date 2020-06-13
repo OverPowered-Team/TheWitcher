@@ -40,7 +40,7 @@ void Scale_Win::Start()
 		GameObject::FindWithName("Defeat")->SetEnable(false);
 		if (Scores_Data::won_level2)
 		{
-			GameObject::FindWithName("Victory")->GetChild("Text")->GetComponent<ComponentText>()->SetText("Congratulations! Main Menu");
+			GameObject::FindWithName("Victory")->GetChild("Text")->GetComponent<ComponentText>()->SetText("Congratulations!");
 		}
 	}
 	else
@@ -274,6 +274,8 @@ void Scale_Win::HandleSceneLoad()
 			{
 				Scores_Data::won_level1 = false;
 				Scores_Data::won_level2 = false;
+				Scores_Data::player1_relics.clear();
+				Scores_Data::player2_relics.clear();
 				SceneManager::LoadScene("CreditsMenu", FadeToBlackType::VERTICAL_CURTAIN);
 			}
 			else
@@ -291,7 +293,7 @@ std::vector<int> Scale_Win::ConvertKillsMapToVector(const std::map<uint, uint>& 
 	auto iter = kills_map.begin();
 	for (; iter != kills_map.end(); ++iter)
 	{
-		if ((*iter).first != 4)
+		if ((*iter).first != 4 && (*iter).first != 2 && (*iter).first != 3)
 		{
 			for (int i = 0; i < (*iter).second; ++i)
 			{

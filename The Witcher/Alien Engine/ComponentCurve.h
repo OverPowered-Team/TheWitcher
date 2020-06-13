@@ -22,7 +22,8 @@ public:
 	void SetControlPointAt(int index, const float3& value);
 	void SetControlPointNormalAt(int index, const float3& value);
 
-	void CalculateLength();
+	void CalculateCurveLength();
+	void CalculateSegmentsLength();
 
 	void SetDetail(int detail);
 
@@ -49,6 +50,7 @@ private:
 
 	std::vector<float3> control_points;
 	std::vector<float3> control_points_normals;
+	std::vector<float> segments_length;
 
 	float3 position = float3::zero();
 };

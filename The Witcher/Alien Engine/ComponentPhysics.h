@@ -35,6 +35,9 @@ public:
 
 private:
 
+	void OnEnable();
+	void OnDisable();
+
 	void Update();
 	void PostUpdate();
 	void HandleAlienEvent(const AlienEvent& e);
