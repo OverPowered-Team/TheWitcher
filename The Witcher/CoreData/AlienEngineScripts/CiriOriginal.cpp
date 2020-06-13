@@ -29,6 +29,8 @@ void CiriOriginal::StartEnemy()
 	fight_controller = GetComponent<CiriFightController>();
 	is_immune = true;
 
+	gravity = 0;
+
 }
 
 void CiriOriginal::UpdateEnemy()

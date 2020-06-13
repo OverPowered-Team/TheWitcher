@@ -29,9 +29,9 @@ void Ciri::StartEnemy()
 	dissolve_mat.renderMode = meshes[0]->material->renderMode;
 	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 0;
 
-	for (int i = 0; i < meshes_materials.size(); ++i) 
+	for (int i = 0; i < meshes.size(); ++i)
 	{
-		meshes_materials[i]->material = &dissolve_mat;
+		meshes[i]->material = &dissolve_mat;
 	}
 
 	state = Boss::BossState::NONE;
@@ -42,10 +42,9 @@ void Ciri::StartEnemy()
 void Ciri::UpdateEnemy()
 {
 	Boss::UpdateEnemy();
-
 	
 	if (dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn < 1 && appearing) {
-		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn += 0.1 * Time::GetDT();
+		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn += 0.2 * Time::GetDT();
 	}
 	else {
 		appearing = false;
@@ -53,7 +52,6 @@ void Ciri::UpdateEnemy()
 
 	if (dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn > 0 && disappearing) {
 		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn -= 0.2 * Time::GetDT();
-		LOG("disappearing");
 	}
 	else {
 		disappearing = false;
@@ -67,8 +65,6 @@ void Ciri::CleanUpEnemy()
 
 float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 {
-	SetState("Hit");
-
 	if (GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>())
 	{
 		GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddDamageCount(dmg, player);
@@ -84,6 +80,7 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	{
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
+		SetState("Hit");
 	}
 
 	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
@@ -107,6 +104,9 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 		SetState("Dying");
 		PlaySFX("Death");
+		animator->PlayState("Death");
+
+		fight_controller->OnCloneDead(game_object);
 	}
 
 	HitFreeze(player->attacks->GetCurrentAttack()->info.freeze_time);
@@ -186,8 +186,6 @@ void Ciri::LaunchAction()
 
 float Ciri::GetDamaged(float dmg, float3 knock_back)
 {
-	SetState("Hit");
-
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 
@@ -195,6 +193,7 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 
 	if (can_get_interrupted)
 	{
+		SetState("Hit");
 		animator->PlayState("Hit");
 		PlaySFX("Hit");
 	}
@@ -206,6 +205,10 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 
 		SetState("Dying");
 		PlaySFX("Death");
+
+		animator->PlayState("Death");
+
+		fight_controller->OnCloneDead(game_object);
 	}
 
 	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
@@ -267,6 +270,16 @@ void Ciri::LaunchMiniScreamAction()
 	animator->PlayState("Scream");
 	fight_controller->scream_cd_timer = 0;
 	SpawnParticle("Ciri_MiniScream", { 0, 0.6, 0 }, true);
+}
+
+void Ciri::SetAsCanGetInterrupted()
+{
+	can_get_interrupted = true;
+}
+
+void Ciri::SetAsCantGetInterrupted()
+{
+	can_get_interrupted = false;
 }
 
 void Ciri::MiniScream()
@@ -387,21 +400,15 @@ void Ciri::EndMiniScreamAction(GameObject* go_ended)
 void Ciri::OnAnimationEnd(const char* name)
 {
 	if (strcmp(name, "Combo3") == 0) {
-		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		ReleaseParticle("EnemyAttackParticle");
 		EndComboAction(nullptr);
 	}
 	if (strcmp(name, "Combo") == 0) {
-		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		ReleaseParticle("EnemyAttackParticle");
 		CheckForGapCloser();
 	}
 	if (strcmp(name, "Combo2") == 0) {
-		can_get_interrupted = true;
 		stats["HitSpeed"].SetCurrentStat(stats["HitSpeed"].GetBaseValue());
-		ReleaseParticle("EnemyAttackParticle");
 		CheckForGapCloser();
 	}
 	if (strcmp(name, "Scream") == 0) {
@@ -410,6 +417,13 @@ void Ciri::OnAnimationEnd(const char* name)
 	}
 	if (strcmp(name, "Spawn") == 0) {
 		state = Boss::BossState::IDLE;
+	}
+
+	if (strcmp(name, "Hit") == 0) {
+		if (current_action) {
+			current_action->state = Boss::ActionState::ENDED;
+		}
+		state = BossState::IDLE;
 	}
 }
 
