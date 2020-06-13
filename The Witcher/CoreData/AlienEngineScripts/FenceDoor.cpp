@@ -1,5 +1,4 @@
 #include "FenceDoor.h"
-#include "AttackTrigger.h"
 
 FenceDoor::FenceDoor() : Alien()
 {
@@ -15,9 +14,9 @@ void FenceDoor::Start()
 
 void FenceDoor::Explode()
 {
-	GameObject* broken = game_object->parent->GetChild(1);
-	broken->SetEnable(true);
+	GameObject* broken = game_object->GetChild(1);
 	if (broken != nullptr) {
+		broken->SetEnable(true);
 		auto rbs = broken->GetComponentsInChildren<ComponentRigidBody>();
 		for (auto i = rbs.begin(); i != rbs.end(); ++i) {
 			(*i)->SetIsKinematic(false);
@@ -32,12 +31,14 @@ void FenceDoor::Explode()
 			particles["smoke"]->Restart();*/
 	}
 
-	GameObject::Destroy(game_object);
+	game_object->GetChild(0)->GetComponent<ComponentRigidBody>()->Destroy();
+	game_object->GetChild(0)->GetComponent<ComponentBoxCollider>()->Destroy();
+	game_object->GetChild(0)->SetEnable(false);
 }
 
 void FenceDoor::Fall()
 {
-	auto rbs = game_object->parent->GetChild(1)->GetComponentsInChildren<ComponentConvexHullCollider>();
+	auto rbs = game_object->GetChild(1)->GetComponentsInChildren<ComponentConvexHullCollider>();
 	for (auto i = rbs.begin(); i != rbs.end(); ++i) {
 		(*i)->SetEnable(false);
 		(*i)->Destroy();
@@ -48,22 +49,4 @@ void FenceDoor::Fall()
 void FenceDoor::DeleteMyself()
 {
 	GameObject::Destroy(game_object);
-}
-
-void FenceDoor::OnTriggerEnter(ComponentCollider* collider)
-{
-	if (collider->game_object_attached->IsEnabled())
-	{
-		if (strcmp("PlayerAttack", collider->game_object_attached->GetTag()) == 0) {
-			++current_hits;
-			if (current_hits >= hits_to_broke)
-			{
-				Explode();
-				auto audio = collider->game_object_attached->GetComponent<AttackTrigger>()->player_obj->GetComponent<ComponentAudioEmitter>();
-				//auto audio = collider->game_object_attached->parent->parent->parent->parent->parent->parent->parent->parent->parent->parent->parent->GetComponent<ComponentAudioEmitter>();
-				if (audio)
-					audio->StartSound("Play_FenceDestroy");
-			}
-		}
-	}
 }

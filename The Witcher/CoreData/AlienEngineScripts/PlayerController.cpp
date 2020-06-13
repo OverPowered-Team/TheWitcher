@@ -129,32 +129,37 @@ void PlayerController::CheckGround()
 	RaycastHit hit;
 	is_grounded = false;
 	float ground_distance = 0.3F;
-	float offset = transform->GetGlobalScale().y * 0.5f;
-
-	//capsulecast
-	float4x4 cast_transform = transform->GetGlobalMatrix();
-	cast_transform.Translate(float3(0, offset, 0));
 	
 	//raycast
 	float3 center_position = transform->GetGlobalPosition();
-	center_position.y += offset;
+	center_position.y += 0.5f;
 
 	Physics::SetQueryHitTriggers(false);
 	Physics::SetQueryInitialOverlaping(false);
 
-	if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	//if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
+	if(Physics::SphereCast(center_position, 0.25f, -float3::unitY(), 2.0f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
-			Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
-			direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
+			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+			if (angle >= 45)
+				return;
 
 			is_grounded = player_data.vertical_speed > 0 ? false : true;
+			if (Physics::Raycast(center_position, -float3::unitY(), 2.f, hit, Physics::GetLayerMask(layers)))
+			{
+				if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
+				{
+					Quat ground_rot = Quat::RotateFromTo(transform->up, hit.normal);
+					direction = ground_rot * direction; //We rotate the direction vector for the amount of slope we currently are on.
 
-			float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
-			if (angle > 45 && direction.y > 0)
-				is_grounded = false;
+					/*float angle = RadToDeg(transform->up.AngleBetween(hit.normal));
+					if (angle > 45 && direction.y > 0)
+						is_grounded = false;*/
+				}
+			}
 		}
 	}
 }
@@ -427,6 +432,9 @@ void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
+	if (minigame_value <= 0)
+		minigame_value = 0.1f;
+
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 
 	if(HUD)
@@ -478,6 +486,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		{
 			animator->PlayState("Hit");
 			player_data.velocity = knock_speed;
+			player_data.vertical_speed = knock_speed.y;
 			SetState(StateType::HIT);
 		}
 
@@ -700,17 +709,16 @@ bool PlayerController::CheckBoundaries()
 	return true;
 }
 
-bool PlayerController::CheckForPossibleRevive()
+PlayerController* PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
 		float distance = this->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= player_data.revive_range) {
-			player_being_revived = GameManager::instance->player_manager->players_dead[i];
-			return true;
+			return GameManager::instance->player_manager->players_dead[i];
 		}
 	}
 
-	return false;
+	return nullptr;
 }
 
 void PlayerController::HitFreeze(float freeze_time)

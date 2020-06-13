@@ -6,6 +6,7 @@
 #include "PlayerAttacks.h"
 #include "RootLeshen.h"
 #include "CrowsLeshen.h"
+#include "CloudLeshen.h"
 #include "Leshen.h"
 #include "Scores_Data.h"
 #include "Boss_Lifebar.h"
@@ -318,6 +319,8 @@ void Leshen::EndCloudAction()
 	direction_time = 0.0f;
 	times_switched = 0;
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(false);
+	cloud_collider->GetComponent<CloudLeshen>()->player_entered[0] = false;
+	cloud_collider->GetComponent<CloudLeshen>()->player_entered[1] = false;
 }
 
 void Leshen::SetActionVariables()

@@ -248,14 +248,9 @@ void ComponentAnimatedImage::Draw(bool isGame)
 		scale.z = matrix[2][2];
 
 
-		float4x4 uiLocal = float4x4::FromTRS(position, game_object_attached->transform->GetGlobalRotation(), scale);
+		float4x4 uiLocal = float4x4::FromTRS(game_object_attached->transform->GetGlobalPosition(), game_object_attached->transform->GetGlobalRotation(), game_object_attached->transform->GetGlobalScale());
 		float4x4 uiGlobal = uiLocal;
 
-		/*	if (!particleInfo.globalTransform)
-			{
-				float4x4 parentGlobal = owner->emmitter.GetGlobalTransform();
-				particleGlobal = parentGlobal * particleLocal;
-			}*/
 
 		glPushMatrix();
 		glMultMatrixf((GLfloat*)&(uiGlobal.Transposed()));
