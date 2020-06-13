@@ -90,15 +90,12 @@ void DialogueManager::Update()
 
 void DialogueManager::Pause(bool pause)
 {
-
-	/*playing = !playing;
+	playing = !playing;
 	
-	if (pause) // TODO --> IVAN PLS do the RESUME, I IMPLLORE you. I'll kidnap 1000 children before I let the dialogues die
+	if (pause) 
 		audioEmitter->PauseByEventName(currentDialogue.audioData.eventName.c_str());
 	else
-		*/
-
-
+		audioEmitter->ResumeByEventName(currentDialogue.audioData.eventName.c_str());
 }
 
 bool DialogueManager::InputNewDialogue(Dialogue& dialogue, float volume)

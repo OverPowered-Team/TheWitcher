@@ -262,7 +262,7 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
-	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	GameManager::instance->dialogue_manager->Pause(to_open);
 	if (GameObject::FindWithName("Tutorial_Triggers"))
 	{
 		GameObject::FindWithName("Tutorial_Triggers")->GetChild("HUD")->SetEnable(!to_open);
