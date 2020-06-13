@@ -33,11 +33,11 @@ ComponentPhysics::~ComponentPhysics()
 	if (actor)  // Dettach and Delete Actor
 	{
 		PxU32 num_shapes = actor->getNbShapes();
-		PxShape* shapes = nullptr; 
-		actor->getShapes(&shapes, num_shapes);
+		PxShape* shapes[10]; 
+		actor->getShapes(shapes, num_shapes);
 
 		for (PxU32 i = 0; i < num_shapes; ++i)
-			actor->detachShape(shapes[i]);
+			actor->detachShape(*shapes[i]);
 
 		App->physx->RemoveBody(actor);
 		actor = nullptr;
@@ -48,6 +48,7 @@ ComponentPhysics::~ComponentPhysics()
 
 ComponentRigidBody* ComponentPhysics::GetRigidBody()
 {
+
 	return (rigid_body && IsDynamic()) ? rigid_body : nullptr;
 }
 
@@ -311,11 +312,11 @@ void ComponentPhysics::UpdateBody()
 	if (actor)  // Dettach and Delete Actor
 	{
 		PxU32 num_shapes = actor->getNbShapes();
-		PxShape* shapes = nullptr; 
-		actor->getShapes(&shapes, num_shapes);
+		PxShape* shapes[10]; // Buffer Shapes 
+		actor->getShapes(shapes, num_shapes);
 
 		for (PxU32 i = 0; i < num_shapes; ++i)
-			actor->detachShape(shapes[i]);
+			actor->detachShape(*shapes[i]);
 
 		App->physx->RemoveBody(actor);
 		actor = nullptr;
@@ -443,7 +444,7 @@ bool ComponentPhysics::ShapeAttached(PxShape* shape)
 {
 	bool ret = false;
 	PxU32 num_shapes = actor->getNbShapes();
-	PxShape** shapes = new PxShape * [num_shapes]; // Buffer Shapes 
+	PxShape* shapes[10]; // Buffer Shapes 
 	actor->getShapes(shapes, num_shapes);
 
 	for (PxU32 i = 0; i < num_shapes; i++)
@@ -453,7 +454,6 @@ bool ComponentPhysics::ShapeAttached(PxShape* shape)
 			break;
 		}
 
-	delete[]shapes;
 	return ret;
 }
 
