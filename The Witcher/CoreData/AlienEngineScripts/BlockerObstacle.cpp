@@ -112,7 +112,10 @@ void BlockerObstacle::UpdateEnemy()
 			material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
 
 			if (material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+			{
+				roots[0]->SetEnable(false);
 				root_1st = false;
+			}
 
 		}
 		break;

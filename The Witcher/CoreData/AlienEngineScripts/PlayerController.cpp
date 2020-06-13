@@ -68,7 +68,7 @@ void PlayerController::Start()
 	if(trail_go)
 		dash_trail = trail_go->GetComponent<ComponentTrail>();
 	
-	if (dash_trail != nullptr) //todo no ser tant guarro
+	if (dash_trail != nullptr)
 	{
 		dash_trail->Stop();
 	}
