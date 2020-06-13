@@ -16,6 +16,7 @@ public:
 	enum class Orientation { X = 0, Y = 1, Z = 2, MAX =3};
 
 	ComponentCapsuleCollider(GameObject* go);
+
 	void SetRotation(const float3& value);
 	void SetRadius(float radius);
 	float GetRadius() { return radius; }

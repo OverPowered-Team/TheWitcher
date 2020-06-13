@@ -86,6 +86,7 @@ private:
 	void SaveComponent(JSONArraypack* config);
 	void LoadComponent(JSONArraypack* config);
 	void SetBodyProperties();
+	bool RgidBodyEnable();
 
 private:
 
