@@ -215,10 +215,7 @@ void InGame_UI::Update()
 
 			if (lerp >= 1)
 			{
-				float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / 
-					(float)GameManager::instance->player_manager->max_ultimate_charge;
-
-				ulti_bar->UpdateBar(new_value);
+				//ulti_bar->UpdateBar(new_value);
 				
 				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;

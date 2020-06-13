@@ -150,7 +150,6 @@ void GhoulDodge::OnAnimationEnd(const char* name)
             else
             {
                 state = GhoulState::DYING;
-                GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
         rand_num = Random::GetRandomIntBetweenTwo(0, 2);
@@ -158,7 +157,6 @@ void GhoulDodge::OnAnimationEnd(const char* name)
     else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
     {
         state = GhoulState::DYING;
-        GameManager::instance->player_manager->IncreaseUltimateCharge(10);
     }
 }
 

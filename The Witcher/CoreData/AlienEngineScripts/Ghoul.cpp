@@ -265,7 +265,6 @@ void Ghoul::OnAnimationEnd(const char* name)
             else
             {
                 state = GhoulState::DYING;
-                GameManager::instance->player_manager->IncreaseUltimateCharge(10);
             }
         }
         animator->SetBool("attack", false);
@@ -273,7 +272,6 @@ void Ghoul::OnAnimationEnd(const char* name)
     else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
     {
         state = GhoulState::DYING;
-        GameManager::instance->player_manager->IncreaseUltimateCharge(10);
     }
 }
 
