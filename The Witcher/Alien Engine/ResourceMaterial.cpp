@@ -285,6 +285,9 @@ void ResourceMaterial::SaveMaterialValues(JSONfilepack* file)
 	file->SetNumber("water_move", shaderInputs.oceanShaderProperties.water_move);
 	file->SetNumber("reduce_water_tex", shaderInputs.oceanShaderProperties.reduce_water_tex);
 
+	// emerald values
+	//file->SetNumber("emerald_speed", shaderInputs.emeraldShaderProperties.speed);
+
 	file->FinishSave();
 }
 
@@ -304,10 +307,14 @@ void ResourceMaterial::ReadMaterialValues(JSONfilepack* file)
 		textures[iter].first = std::stoull(file->GetString(std::to_string(iter).data()));
 		textures[iter].second = App->resources->GetTextureByID(textures[iter].first);
 	}
+
 	//water values
 	shaderInputs.oceanShaderProperties.speed = file->GetNumber("water_speed");
 	shaderInputs.oceanShaderProperties.water_move = file->GetNumber("water_move");
 	shaderInputs.oceanShaderProperties.reduce_water_tex = file->GetNumber("reduce_water_tex");
+
+	// emerald values
+	//shaderInputs.oceanShaderProperties.speed = file->GetNumber("emerald_speed");
 }
 
 void ResourceMaterial::ApplyMaterial()
@@ -713,12 +720,17 @@ void ResourceMaterial::ShaderInputsSegment()
 
 		break;
 	}
+	case SHADER_TEMPLATE::EMERALD:
+	{
+		ImGui::SliderFloat("Speed", (float*)&shaderInputs.emeraldShaderProperties.speed, 0.0f, 10.0f);
+		break;
+	}
+
 	default:
 		LOG_ENGINE("We currently don't support editing this type of uniform...");
 		break;
 	}
 	ImGui::Spacing();
-
 }
 
 void ResourceMaterial::InputTexture(TextureType texType)

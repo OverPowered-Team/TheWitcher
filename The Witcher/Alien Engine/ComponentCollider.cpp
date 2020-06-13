@@ -25,6 +25,7 @@ ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.emplace(this, std::bind(&ComponentCollider::DrawScene, this));
 #endif // !GAME_VERSION
+
 }
 
 ComponentCollider::~ComponentCollider()
@@ -40,6 +41,7 @@ ComponentCollider::~ComponentCollider()
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
 #endif // !GAME_VERSION
+
 }
 
 // Colliders Functions --------------------------------
@@ -192,7 +194,7 @@ void ComponentCollider::OnDisable()
 
 void ComponentCollider::DrawScene()
 {
-	if (enabled == true && (game_object_attached->IsSelected() || App->physx->debug_physics))
+	if (enabled && go->IsEnabled() && (go->IsSelected() || App->physx->debug_physics))
 	{
 		App->physx->DrawCollider(this);
 	}

@@ -33,8 +33,6 @@ ComponentCharacterController::ComponentCharacterController(GameObject* go) : Com
 	SetCollisionLayer("Default");
 
 	physics->AddController(this);
-	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED);
-
 }
 
 void ComponentCharacterController::LinkShapesToComponent()
@@ -91,8 +89,7 @@ void ComponentCharacterController::SetStepOffset(const float stepOffset)
 
 	switch (desc.getType())
 	{
-	case PxControllerShapeType::eCAPSULE:
-	{
+	case PxControllerShapeType::eCAPSULE: {
 		PxCapsuleController* capsule_c = (PxCapsuleController*)controller;
 		capsule_c->setStepOffset(desc.stepOffset);
 		break;
@@ -284,55 +281,29 @@ bool ComponentCharacterController::DrawInspector()
 
 void ComponentCharacterController::Update()
 {
-	//collider->Update();
-
 	if (!enabled || controller == nullptr) return;
 
-	if (Time::IsPlaying())
-	{
-		// TODO DELETE hardcoded test 1 -----------------------------------------------------------------------
-		//moveDirection.x = moveDirection.z = 0.0f;
-		//float speed = 10.0f;
-		//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.x -= 1.0f;
-		//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.x += 1;
-		//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.z += 1;
-		//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_STATE::KEY_REPEAT)
-		//	moveDirection.z -= 1;
-		//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
-		//	moveDirection.y = 8.0f;
+	if (Time::IsPlaying()) {
 
-		//moveDirection = float3(moveDirection.x * speed, moveDirection.y, moveDirection.z * speed) ; // SPEED
-		// ----------------------------------------------------------------------------------------------------
-
-		if (force_move && isGrounded && velocity.isZero())
-		{
-			// always force downwards to mantain collision state 
-			// (cct solver puts on top of skin and not returns collision state when performs a 0y)
+		if (force_move && isGrounded && velocity.isZero()) {
 			Move(float3(0.0f, -controller->getContactOffset(), 0.0f));
 		}
 
-		if (force_gravity && !isGrounded)
-		{
+		if (force_gravity && !isGrounded) {
 			moveDirection.y -= gravity * Time::GetDT();
 			Move(moveDirection * Time::GetDT());
 			isGrounded ? moveDirection.y = 0.0f : 0;
 		}
-		//else // TODO: DELETE HARDCODED TEST from 1
-		//{
-		//	Move(float3(moveDirection.x, moveDirection.y - controller->getContactOffset(), moveDirection.z) * Time::GetDT());
-		//}
 
 		transform->SetGlobalPosition(PXVEC3EXT_TO_F3(controller->getPosition()) - controller_offset);
 	}
-	else
-	{
+	else {
 		controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
 	}
 }
 
+// always force downwards to mantain collision state 
+// (cct solver puts on top of skin and not returns collision state when performs a 0y)
 PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 {
 	if (!enabled) return collisionFlags;
@@ -418,24 +389,22 @@ void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
 
 void ComponentCharacterController::SetDefaultConf()
 {
-	desc.radius = 0.5f;
-	desc.height = 2.0f;
+	min_distance = 0.001f;
+
 	if (desc.material) desc.material->release();
+
 	desc.material = App->physx->CreateMaterial(static_friction, dynamic_friction, restitution);
 	desc.position = F3_TO_PXVEC3EXT(game_object_attached->transform->GetGlobalPosition());
+	desc.radius = 0.5f;
+	desc.height = 2.0f;
 	desc.slopeLimit = cosf(DegToRad(45.0f));
 	desc.nonWalkableMode = PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
-	// hit report callback
+
+	// Hit report callback ------------
+
 	if (report) delete report;
 	desc.reportCallback = report = new UserControllerHitReport();
 	report->controller = this;
-	// 
-
-	//desc.invisibleWallHeight = 100.0f;// TODO: implement if needed automatic invisible walls
-	//desc.maxJumpHeight = 1.0f;
-	//desc.upDirection = // up direction can be changed to simulate planetoids or surfaces with other gravity dir vector
-
-	min_distance = 0.001f;
 }
 
 void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit hit)

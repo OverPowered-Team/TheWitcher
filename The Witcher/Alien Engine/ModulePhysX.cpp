@@ -59,8 +59,8 @@ bool ModulePhysX::Init()
 	px_pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
 	px_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *px_foundation, PxTolerancesScale(), true, px_pvd);
-
 	px_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *px_foundation, PxCookingParams(PxTolerancesScale()));
+
 	if (!px_cooking)
 		LOG_ENGINE("PxCreateCooking failed!");
 
@@ -146,9 +146,13 @@ update_status ModulePhysX::PostUpdate(float dt)
 
 bool ModulePhysX::CleanUp()
 {
+	
+	PX_RELEASE(controllers_manager);
 	PX_RELEASE(px_scene);
 	PX_RELEASE(px_dispatcher);
+	PX_RELEASE(px_cooking);
 	PX_RELEASE(px_physics);
+	
 	delete px_simulation_callback;
 	px_simulation_callback = nullptr;
 	delete px_controller_filter;
@@ -162,6 +166,7 @@ bool ModulePhysX::CleanUp()
 		px_pvd->release();	px_pvd = NULL;
 		PX_RELEASE(transport);
 	}
+
 	PX_RELEASE(px_foundation);
 
 	UnloadPhysicsExplicitely();
@@ -217,9 +222,9 @@ bool ModulePhysX::LoadPhysicsExplicitely()
 
 void ModulePhysX::UnloadPhysicsExplicitely()
 {
-	FreeLibrary(physx_lib);
 	FreeLibrary(common_lib);
 	FreeLibrary(foundation_lib);
+	FreeLibrary(physx_lib);
 }
 
 void ModulePhysX::DrawCollider(ComponentCollider* collider)

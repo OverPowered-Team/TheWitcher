@@ -61,6 +61,7 @@ public:
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 	bool GetStatus();
+	void SetStatus(bool clicked);
 
 protected:
 	void HandleAlienEvent(const AlienEvent& e);
