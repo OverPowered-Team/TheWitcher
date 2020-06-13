@@ -18,15 +18,16 @@ void AttackTrigger::Update()
 	if (rbdy)
 	{
 		rbdy->SetPosition(game_object->parent->transform->GetGlobalPosition());
+		rbdy->SetRotation(game_object->parent->transform->GetGlobalRotation());
+		transform->SetLocalScale({ 1,1,1 });
 	}
 		
 }
 
 void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
 {
-	if (!player)
+	if (!player || !player->attacks->GetCurrentAttack())
 	{
-		LOG("Error: No Player found on AttackTrigger");
 		return;
 	}
 
@@ -35,7 +36,7 @@ void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
 		Enemy* enemy = collider->game_object_attached->GetComponent<Enemy>();
 		if(enemy && !enemy->IsDead() && !enemy->is_immune)
 		{
-			if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->CanHit(enemy))
+			if (player->attacks->GetCurrentAttack()->CanHit(enemy))
 			{
 				float damage = player->attacks->GetCurrentDMG();
 				float3 knock = enemy->can_get_interrupted ? player->attacks->GetKnockBack(enemy->transform) : float3::zero();
