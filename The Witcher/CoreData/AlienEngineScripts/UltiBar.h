@@ -10,8 +10,8 @@ public:
 	UltiBar();
 	virtual ~UltiBar();
 	
-	void Start();
-	void Update();
+	//void Start();
+	//void Update();
 
 	void UpdateBar(float actual_value);
 

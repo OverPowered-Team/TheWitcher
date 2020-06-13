@@ -11,7 +11,7 @@ Training_Zone::~Training_Zone()
 
 void Training_Zone::Start()
 {
-	Invoke(std::bind(&Training_Zone::Init, this), 3);
+	Invoke(std::bind(&Training_Zone::Init, this), 10);
 }
 
 void Training_Zone::Update()
