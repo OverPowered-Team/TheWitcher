@@ -31,14 +31,16 @@ void FenceDoor::Explode()
 			particles["smoke"]->Restart();*/
 	}
 
-	game_object->GetChild(0)->GetComponent<ComponentRigidBody>()->Destroy();
+	/*game_object->GetChild(0)->GetComponent<ComponentRigidBody>()->Destroy();
 	game_object->GetChild(0)->GetComponent<ComponentBoxCollider>()->Destroy();
-	game_object->GetChild(0)->SetEnable(false);
+	game_object->GetChild(0)->SetEnable(false);*/
+
+	GameObject::Destroy(game_object->GetChild(0));
 }
 
 void FenceDoor::Fall()
 {
-	auto rbs = game_object->GetChild(1)->GetComponentsInChildren<ComponentConvexHullCollider>();
+	auto rbs = game_object->GetChild(0)->GetComponentsInChildren<ComponentConvexHullCollider>();
 	for (auto i = rbs.begin(); i != rbs.end(); ++i) {
 		(*i)->SetEnable(false);
 		(*i)->Destroy();
