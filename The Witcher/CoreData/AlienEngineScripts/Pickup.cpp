@@ -26,6 +26,7 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0) {
 
 		PlayerController* player = collider->game_object_attached->GetComponent<PlayerController>();
+
 		if (player && player->state->type != StateType::DEAD)
 		{
 			switch (picky) //This was made by the mastermind of Víctor, not mine Att: Ivan
@@ -33,6 +34,7 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 			case PickUps::HEALTH_ORB:
 			{
 				player->IncreaseStat(stat_to_change, value);
+				player->SpawnParticle("allow_combo_expanse", player->particle_spawn_positions[1]->transform->GetLocalPosition());
 				break;
 			}
 			case PickUps::COIN:
