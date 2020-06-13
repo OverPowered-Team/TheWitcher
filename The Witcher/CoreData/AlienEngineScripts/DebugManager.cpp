@@ -36,10 +36,19 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_1))
 		{
+			if (GameManager::instance)
+			{
+				GameManager::instance->PrepareDataNextScene(false);
+			}
 			SceneManager::LoadScene("ForceLoadTutorial", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_2))
 		{
+			if (GameManager::instance)
+			{
+				GameManager::instance->PrepareDataNextScene(false);
+			}
+			Scores_Data::last_checkpoint_position = float3::inf();
 			SceneManager::LoadScene("TutorialToLvl1", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
@@ -48,15 +57,18 @@ void DebugManager::Update()
 			{
 				GameManager::instance->PrepareDataNextScene(false);
 			}
+			Scores_Data::last_checkpoint_position = float3::inf();
 			Scores_Data::won_level1 = true;
 			SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_4))
 		{
+			Scores_Data::last_checkpoint_position = float3::inf();
 			SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_5))
 		{
+			Scores_Data::last_checkpoint_position = float3::inf();
 			SceneManager::LoadScene("WagonToCiri", FadeToBlackType::VERTICAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_6))
@@ -65,6 +77,7 @@ void DebugManager::Update()
 			{
 				GameManager::instance->PrepareDataNextScene(false);
 			}
+			Scores_Data::last_checkpoint_position = float3::inf();
 			Scores_Data::won_level1 = true;
 			Scores_Data::won_level2 = true;
 			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::VERTICAL_CURTAIN);
