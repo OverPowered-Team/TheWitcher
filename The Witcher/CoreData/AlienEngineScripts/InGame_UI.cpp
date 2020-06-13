@@ -99,7 +99,7 @@ void InGame_UI::Update()
 
 	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_START))
 		|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_START)) || (Input::GetKeyDown(SDL_SCANCODE_ESCAPE))) 
-		&& !died && !relics_menu->IsEnabled())
+		&& !died && !relics_menu->IsEnabled() && !GameObject::FindWithName("Extra_Menus")->IsEnabled())
 	{
 		PauseMenu(!Time::IsGamePaused());
 	}
@@ -262,7 +262,7 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
-	GameManager::instance->dialogue_manager->Pause(to_open);
+	GameManager::instance->dialogue_manager->Pause(!to_open);
 
 	if (GameObject::FindWithName("Boss_HUD"))
 	{
@@ -280,7 +280,7 @@ void InGame_UI::RelicsMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	relics_menu->SetEnable(to_open);
-	GameManager::instance->dialogue_manager->Pause(to_open);
+	GameManager::instance->dialogue_manager->Pause(!to_open);
 	if (to_open)
 	{
 		LoadActiveRelics();
