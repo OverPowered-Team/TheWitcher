@@ -372,6 +372,33 @@ Quat Enemy::RotateProjectile()
 	return rot2 * rot1;
 }
 
+//void Enemy::PlaySwitchSFX(const char* sfx_name)
+//{
+//	switch (type)
+//	{
+//	case EnemyType::GHOUL:
+//		audio_emitter->SetSwitchState("EnemyType", "Ghoul");
+//		break;
+//	case EnemyType::NILFGAARD_SOLDIER:
+//		audio_emitter->SetSwitchState("EnemyType", "Nilfgaard_Melee");
+//		break;
+//	case EnemyType::DROWNED:
+//		audio_emitter->SetSwitchState("EnemyType", "Drowned");
+//		break;
+//	case EnemyType::BLOCKER_OBSTACLE:
+//		audio_emitter->SetSwitchState("EnemyType", "BlockerObstacle");
+//		break;
+//	}
+//
+//	audio_emitter->StartSound(sfx_name);
+//
+//}
+//
+//void Enemy::PlaySFX(const char* sfx_name)
+//{
+//	audio_emitter->StartSound(sfx_name);
+//}
+
 void Enemy::Decapitate(PlayerController* player)
 {
 	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetGlobalPosition());
