@@ -46,15 +46,19 @@ void MainMenu_Buttons::Settings()
 
 void MainMenu_Buttons::AddVolume()
 {
+	volume += 5.0f;
+	if (volume >= 100.0f)
+		volume = 100.0f;
+
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();
-	//UIConfig::AddVolume(emitter);
+	emitter->SetRTPCValue("GeneralVolume", volume);
 
 }
 
 void MainMenu_Buttons::SubtractVolume()
 {
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();
-	//UIConfig::SubtractVolume(emitter);
+
 }
 
 void MainMenu_Buttons::FullScreen()
@@ -63,7 +67,7 @@ void MainMenu_Buttons::FullScreen()
 		Screen::SetFullScreen(false);
 	else
 		Screen::SetFullScreen(true);
-	//UIConfig::FullScreen();
+	
 }
 
 
