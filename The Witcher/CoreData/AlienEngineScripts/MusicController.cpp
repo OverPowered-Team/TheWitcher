@@ -22,6 +22,7 @@ void MusicController::Awake()
 	emitter->StartSound("Play_Coal_Mine_Music");
 	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
 	last_music = "Quiet";
+	is_combat = false;
 }
 
 void MusicController::Start()
