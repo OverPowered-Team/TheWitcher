@@ -1145,8 +1145,8 @@ void PlayerController::InitKeyboardControls()
 		keyboard_move_down = SDL_SCANCODE_S;
 		keyboard_jump = SDL_SCANCODE_SPACE;
 		keyboard_dash = SDL_SCANCODE_LSHIFT;
-		keyboard_light_attack = SDL_SCANCODE_C;
-		keyboard_heavy_attack = SDL_SCANCODE_V;
+		keyboard_light_attack = SDL_SCANCODE_J;
+		keyboard_heavy_attack = SDL_SCANCODE_K;
 		keyboard_revive = SDL_SCANCODE_F;
 		keyboard_ultimate = SDL_SCANCODE_X;
 		keyboard_spell_1 = SDL_SCANCODE_1;
