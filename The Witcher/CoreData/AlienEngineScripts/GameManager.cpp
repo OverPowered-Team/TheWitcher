@@ -49,8 +49,20 @@ void GameManager::PrepareDataNextScene(bool dead)
 	Scores_Data::dead = dead;
 
 	// TO DO: Add maps instead of equaling them
-	Scores_Data::player1_kills = player_manager->players[0]->player_data.type_kills;
-	Scores_Data::player2_kills = player_manager->players[1]->player_data.type_kills;
+	auto iter = player_manager->players[0]->player_data.type_kills.begin();
+	for (; iter != player_manager->players[0]->player_data.type_kills.end(); ++iter)
+	{
+		Scores_Data::player1_kills[(*iter).first] += (*iter).second;
+	}
+
+	iter = player_manager->players[1]->player_data.type_kills.begin();
+	for (; iter != player_manager->players[1]->player_data.type_kills.end(); ++iter)
+	{
+		Scores_Data::player2_kills[(*iter).first] += (*iter).second;
+	}
+
+	//Scores_Data::player1_kills = player_manager->players[0]->player_data.type_kills;
+	//Scores_Data::player2_kills = player_manager->players[1]->player_data.type_kills;
 
 	GameObject::FindWithName("HUD_Game")->GetChild("UI_InGame")->GetChild("InGame")->GetComponent<UI_DamageCount>()->AddRemainingComboPoints();
 

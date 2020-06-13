@@ -34,6 +34,10 @@ void LoadingBackground::Start()
 
 void LoadingBackground::Update()
 {
+	if (change_next) {
+		SceneManager::ChangeToAsyncScene();
+	}
+
 	if (!lerping) {
 		if (SceneManager::IsSceneAsyncReady()) {
 			lerping = true;
@@ -42,7 +46,10 @@ void LoadingBackground::Update()
 	}
 	else {
 		if (anim->current_color.a <= 0.0F) {
-			SceneManager::ChangeToAsyncScene();
+			anim->current_color.a = 0.0F;
+			text->SetAlpha(0.0F);
+			change_next = true;
+			return;
 		}
 		float t = (Time::GetGameTime() - time) / 1.0F;
 		float lerp = Maths::Lerp(1.0F, 0.0F, t);

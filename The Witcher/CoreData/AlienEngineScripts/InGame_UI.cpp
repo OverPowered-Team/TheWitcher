@@ -274,7 +274,7 @@ void InGame_UI::RelicsMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	relics_menu->SetEnable(to_open);
-	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	GameManager::instance->dialogue_manager->Pause(to_open);
 	if (to_open)
 	{
 		LoadActiveRelics();
