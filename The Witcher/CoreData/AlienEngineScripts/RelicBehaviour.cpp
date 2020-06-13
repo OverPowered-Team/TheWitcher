@@ -43,6 +43,7 @@ AttackRelic::AttackRelic() : Relic()
 
 AttackRelic::~AttackRelic()
 {
+
 }
 
 void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
@@ -164,7 +165,11 @@ void RelicBehaviour::Start()
 
 	material = game_object->GetComponent<ComponentMaterial>();
 	if (material)
+	{
 		material->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+		material->material->renderMode = 0;
+	}
+		
 	
 }
 
@@ -194,6 +199,7 @@ void RelicBehaviour::Update()
 		if (material->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
 		{
 			material->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+			material->material->renderMode = 0;
 			Destroy(this->game_object);
 		}
 	}
@@ -327,6 +333,7 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 			audio_emitter->StartSound("Play_Collect_Runestone");
 
 			picked = true;
+			material->material->renderMode = 1;
 		}
 	}
 }
