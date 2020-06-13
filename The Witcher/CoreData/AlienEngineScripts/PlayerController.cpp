@@ -863,58 +863,49 @@ void PlayerController::ReleaseParticle(std::string particle_name)
 }
 void PlayerController::ChangeColorParticle()
 {
-	float4 my_color = { 0.0f,0.0f,0.0f,1.0f };
-	bool color_changed = false;
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+	for (auto it = particles.begin(); it != particles.end(); ++it)
 	{
-		color_changed = true;
-		my_color.x = 1.0f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
-	{
-		color_changed = true;
-		my_color.z = 1.0f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
-	{
-		color_changed = true;
-		if (my_color.x <= 0.5)
-			my_color.x += 0.5f;
-		else
-			my_color.x = 1.0f;
-		my_color.y += 0.5f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
-	{
-		color_changed = true;
-		if (my_color.x <= 0.3f)
-			my_color.x += 0.7f;
-		else
-			my_color.x = 1.0f;
-		my_color.y = 1.0f;
-	}
-	if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
-	{
-		color_changed = true;
-		my_color.y = 1.0f;
-	}
-
-	if (color_changed)
-	{
-		for (auto it = particles.begin(); it != particles.end(); ++it)
+		if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
 		{
-			if (std::strcmp((*it)->GetName(), attacks->GetCurrentAttack()->info.particle_name.c_str()) == 0)
-			{
-				GameObject* p_go = (*it)->GetChild("effect_attack_relic");
-				if (p_go)
-				{
-					p_go->SetEnable(true);
-					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleInitialColor(my_color);
-					p_go->GetComponent<ComponentParticleSystem>()->GetSystem()->SetParticleFinalColor(my_color);
-				}
-			}
+			GameObject* p_fire = (*it)->GetChild("effect_attack_fire");
+			GameObject* p_ice = (*it)->GetChild("effect_attack_ice");
+			GameObject* p_earth = (*it)->GetChild("effect_attack_earth");
+			GameObject* p_lightning = (*it)->GetChild("effect_attack_lightning");
+			GameObject* p_poison = (*it)->GetChild("effect_attack_poison");
+			if (p_fire)
+				p_fire->SetEnable(false);
+			if (p_ice)
+				p_ice->SetEnable(false);
+			if (p_earth)
+				p_earth->SetEnable(false);
+			if (p_lightning)
+				p_lightning->SetEnable(false);
+			if (p_poison)
+				p_poison->SetEnable(false);
+
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Fire))
+				if (p_fire)
+					p_fire->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Ice))
+				if (p_ice)
+					p_ice->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Earth))
+				if (p_earth)
+					p_earth->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Lightning))
+				if (p_lightning)
+					p_lightning->SetEnable(true);
+			
+			if (attacks->GetCurrentAttack()->HasTag(Attack_Tags::T_Poison))
+				if (p_poison)
+					p_poison->SetEnable(true);
+			
 		}
 	}
+	
 
 }
 void PlayerController::CheckEnemyCircle()

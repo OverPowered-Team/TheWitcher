@@ -33,6 +33,7 @@ public:
 	void SetState(const char* state_group, const char* new_state);
 	void SetRTPCValue(const char* RTPC, float value);
 	void PauseByEventName(const char* event_name);
+	void ResumeByEventName(const char* event_name);
 
 	WwiseT::AudioSource* GetSource() const;
 private:

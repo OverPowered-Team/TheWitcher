@@ -43,6 +43,7 @@ public:
 	ResourceFont* GetFont() const;
 
 	void GenerateVAOVBO();
+	void DeleteVAOVBO(); 
 
 	void SetText(const char* newText);
 	const char* GetText();

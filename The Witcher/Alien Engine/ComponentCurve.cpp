@@ -68,6 +68,11 @@ bool ComponentCurve::DrawInspector()
 			curve.SetDetail(curve.detail);
 		}
 		ImGui::Spacing();
+		if (ImGui::Button("Calculate Length")) {
+			curve.CalculateSegmentsLength();
+			curve.CalculateCurveLength();
+		}
+		ImGui::Spacing();
 
 		if (ImGui::Button("Add Segment in the beggining")) {
 			curve.AddSegment(true);
@@ -357,15 +362,18 @@ float3 Curve::ValueAt(float at)
 	float ratio_segments = 1 / (float)num_segments;
 	int current_segment = at / ratio_segments + 1;
 	int indexControl = (current_segment - 1) * 3;
+
+	if (current_segment > segments_length.size())
+		CalculateSegmentsLength();
 	
-	float time = Maths::Map(at, ratio_segments * (current_segment - 1), ratio_segments * current_segment, 0.0F, 1.0F);
+	float time = (at - (ratio_segments * (current_segment - 1))) * segments_length[current_segment-1] / ((ratio_segments * current_segment) - (ratio_segments * (current_segment - 1)));
 	
 	return CubicCurve(control_points[indexControl], control_points[indexControl + 1], 
-		control_points[indexControl + 2], control_points[indexControl + 3], time);
+		control_points[indexControl + 2], control_points[indexControl + 3], time/ segments_length[current_segment-1]);
 }
 
 float3 Curve::ValueAtDistance(float dst) {
-	if(length == 0.f) CalculateLength();
+	if (length == 0.f) CalculateCurveLength();
 	float t = dst / length;
 	return ValueAt(t);
 }
@@ -381,26 +389,52 @@ float3 Curve::NormalAt(float at)
 
 	int num_segments = (control_points.size() - 1) / 3;
 	int indexControl = at / (1.f / (float)num_segments);
+
+	
+	float ratio_segments = 1 / (float)num_segments;
+	int current_segment = at / ratio_segments + 1;
+	
+
+	if (current_segment > segments_length.size())
+		CalculateSegmentsLength();
+
+	float time = (at - (ratio_segments * (current_segment - 1))) * segments_length[current_segment - 1] / ((ratio_segments * current_segment) - (ratio_segments * (current_segment - 1)));
 	
 	return Quat::SlerpVector(
 		control_points_normals[indexControl].Normalized(), 
 		control_points_normals[indexControl + 1].Normalized(), 
-		at * (float)num_segments - indexControl // t in Slerp must be from 0 to 1 in that segment so we have to multiply the global t with the number of segments and substract the index of the point
+		time / segments_length[current_segment - 1]
 	).Normalized();
 }
 
 float3 Curve::NormalAtDistance(float dst)
 {
-	if (length == 0.f) CalculateLength();
+	if (length == 0.f) CalculateCurveLength();
 	float t = dst / length;
 	return NormalAt(t);
 }
 
-void Curve::CalculateLength() {
+void Curve::CalculateCurveLength() {
 	length = 0.f;
 	float speed = 0.0001f;
 	for (float f = speed; f <= 1.0f; f += speed) {
 		length += std::abs(ValueAt(f).Distance(ValueAt(f - speed)));
+	}
+}
+
+void Curve::CalculateSegmentsLength()
+{
+	int num_segments = (control_points.size() - 1) / 3;
+	segments_length.clear();
+	for (int i = 0; i < num_segments; ++i) {
+		float speed = 0.0001f;
+		float l = 0.f;
+		for (float f = speed; f <= 1.0f; f += speed) {
+			l += std::abs(CubicCurve(control_points[i], control_points[i + 1],
+				control_points[i + 2], control_points[i + 3], f).Distance(CubicCurve(control_points[i], control_points[i + 1],
+					control_points[i + 2], control_points[i + 3], f - speed)));
+		}
+		segments_length.push_back(l);
 	}
 }
 

@@ -33,9 +33,8 @@ enum class SHADER_TEMPLATE
 	WATER,
 	DISSOLVE,
 	OCEAN_SHADER,
-	TRAIL
-
-
+	TRAIL,
+	EMERALD
 };
 
 struct ShaderInputs;
