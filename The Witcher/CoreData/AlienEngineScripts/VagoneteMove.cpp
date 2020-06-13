@@ -146,13 +146,13 @@ void VagoneteMove::FollowCurve()
 
 		actual_pos += Time::GetDT() / math::Abs(transform->GetGlobalPosition().Distance(curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT())));
 
-		current_speed += acceleration * Time::GetDT();
+		*/current_speed += acceleration * Time::GetDT();
 		if (acceleration > 0) {
 			current_speed = Maths::Clamp(current_speed, 0.0F, max_velocity);
 		}
 		else {
 			current_speed = Maths::Clamp(current_speed, max_velocity, current_speed);
-		}*/
+		}
 
 		//Position
 		rigid_body->SetPosition(currentPos);
