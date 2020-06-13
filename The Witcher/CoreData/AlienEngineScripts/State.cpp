@@ -319,10 +319,6 @@ State* HitState::OnAnimationEnd(PlayerController* player, const char* name)
 
 void HitState::OnEnter(PlayerController* player)
 {
-	if (player->player_being_revived != nullptr)
-	{
-		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
-	}
 }
 
 void HitState::OnExit(PlayerController* player)
@@ -339,20 +335,17 @@ void RevivingState::OnEnter(PlayerController* player)
 	player->input_blocked = true;
 	player->player_data.velocity = float3::zero();
 	player->animator->SetBool("reviving", true);
-	((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
+	((DeadState*)player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->StartMinigame(player);
 }
 
 void RevivingState::OnExit(PlayerController* player)
 {
 	player->animator->SetBool("reviving", false);
-	
-	if (player->player_being_revived->state->type != StateType::DEAD)
-	{
-		player->player_being_revived = nullptr;
-	}
-	else
-		((DeadState*)player->player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
-		
+
+	if(((DeadState*)player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->revive_state != States::POSTGAME)
+		((DeadState*)player_being_revived->state)->revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->RestartMinigame();
+
+	player_being_revived = nullptr;
 	player->input_blocked = false;
 }
 
@@ -367,9 +360,9 @@ void DeadState::OnEnter(PlayerController* player)
 {
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
-	//player->play
 	player->player_data.velocity = float3::zero();
 	player->is_immune = true;
+
 	GameManager::instance->event_manager->OnPlayerDead(player);
 	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
 	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, float3(player->game_object->transform->GetGlobalPosition().x + vector.x, player->game_object->transform->GetGlobalPosition().y + vector.y + 1, player->game_object->transform->GetGlobalPosition().z + vector.z));
@@ -447,10 +440,12 @@ State* GroundState::HandleInput(PlayerController* player)
 
 	if (Input::GetControllerButtonDown(player->controller_index, player->controller_revive)
 		|| Input::GetKeyDown(player->keyboard_revive)) {
-		if (player->CheckForPossibleRevive()) {
-			player->player_data.velocity = float3::zero();
-			player->animator->SetBool("reviving", true);
-			return new RevivingState();
+		PlayerController* dead_player = player->CheckForPossibleRevive();
+		if (dead_player) {
+			RevivingState* new_state = new RevivingState();
+			new_state->player_being_revived = dead_player;
+
+			return new_state;
 		}
 	}
 

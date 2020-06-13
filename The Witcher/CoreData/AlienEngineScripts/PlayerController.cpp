@@ -139,7 +139,7 @@ void PlayerController::CheckGround()
 
 	//if (Physics::Raycast(center_position, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
 	//if (Physics::CapsuleCast(cast_transform, 0.1, 0.25, -float3::unitY(), 10.f, hit, Physics::GetLayerMask(layers)))
-	if(Physics::SphereCast(center_position, 0.3f, -float3::unitY(), 2.0f, hit, Physics::GetLayerMask(layers)))
+	if(Physics::SphereCast(center_position, 0.25f, -float3::unitY(), 2.0f, hit, Physics::GetLayerMask(layers)))
 	{
 		if (transform->GetGlobalPosition().Distance(hit.point) < ground_distance)
 		{
@@ -432,6 +432,9 @@ void PlayerController::Revive(float minigame_value)
 {
 	animator->SetBool("dead", false);
 	animator->PlayState("Revive");
+	if (minigame_value <= 0)
+		minigame_value = 0.1f;
+
 	player_data.stats["Health"].IncreaseStat(player_data.stats["Health"].GetMaxValue() * minigame_value);
 
 	if(HUD)
@@ -706,17 +709,16 @@ bool PlayerController::CheckBoundaries()
 	return true;
 }
 
-bool PlayerController::CheckForPossibleRevive()
+PlayerController* PlayerController::CheckForPossibleRevive()
 {
 	for (int i = 0; i < GameManager::instance->player_manager->players_dead.size(); ++i) {
 		float distance = this->transform->GetGlobalPosition().Distance(GameManager::instance->player_manager->players_dead[i]->transform->GetGlobalPosition());
 		if (distance <= player_data.revive_range) {
-			player_being_revived = GameManager::instance->player_manager->players_dead[i];
-			return true;
+			return GameManager::instance->player_manager->players_dead[i];
 		}
 	}
 
-	return false;
+	return nullptr;
 }
 
 void PlayerController::HitFreeze(float freeze_time)
