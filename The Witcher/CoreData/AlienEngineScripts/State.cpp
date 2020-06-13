@@ -367,7 +367,7 @@ void DeadState::OnEnter(PlayerController* player)
 {
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
-	//player->play
+	player->audio->StartSound("Play_Death");
 	player->player_data.velocity = float3::zero();
 	player->is_immune = true;
 	GameManager::instance->event_manager->OnPlayerDead(player);

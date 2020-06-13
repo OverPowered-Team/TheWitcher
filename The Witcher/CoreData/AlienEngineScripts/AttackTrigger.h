@@ -14,9 +14,10 @@ public:
 	void OnTriggerEnter(ComponentCollider* collider);
 	GameObject* player_obj = nullptr;
 	PlayerController* player = nullptr;
+	ComponentRigidBody* rbdy = nullptr;
 public:
 	void Start();
-	
+	void Update();
 };
 
 ALIEN_FACTORY AttackTrigger* CreateAttackTrigger() {

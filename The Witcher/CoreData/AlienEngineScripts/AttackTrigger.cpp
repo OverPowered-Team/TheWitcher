@@ -1,4 +1,5 @@
 #include "AttackTrigger.h"
+#include "SoundMaterial.h"
 #include "PlayerController.h"
 #include "PlayerAttacks.h"
 #include "Enemy.h"
@@ -10,6 +11,15 @@ AttackTrigger::AttackTrigger()
 
 AttackTrigger::~AttackTrigger()
 {
+}
+
+void AttackTrigger::Update()
+{
+	if (rbdy)
+	{
+		rbdy->SetPosition(game_object->parent->transform->GetGlobalPosition());
+	}
+		
 }
 
 void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
@@ -36,6 +46,13 @@ void AttackTrigger::OnTriggerEnter(ComponentCollider* collider)
 		}
 	}
 	//Here we will be able to get the audio material and play the sound of the surface we hit
+	SoundMaterial* s_material = collider->game_object_attached->GetComponent<SoundMaterial>();
+	if (s_material)
+	{
+		player->audio->SetSwitchState("Material", s_material->GetMaterialName().c_str());
+		player->audio->StartSound("Play_Impact");
+	}
+
 }
 
 void AttackTrigger::Start()
@@ -45,5 +62,9 @@ void AttackTrigger::Start()
 		LOG("Error: No Player found on AttackTrigger");
 		return;
 	}
-	player = player_obj->GetComponent<PlayerController>();
+
+	if (player_obj)
+		player = player_obj->GetComponent<PlayerController>();
+
+	rbdy = GetComponent<ComponentRigidBody>();
 }

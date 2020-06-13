@@ -158,6 +158,11 @@ void PlayerAttacks::DoAttack()
 
 	player_controller->animator->PlayState(current_attack->info.name.c_str());
 
+	if(!current_attack->HasTag(Attack_Tags::T_Spell))
+		player_controller->audio->SetSwitchState("AttackString", current_attack->info.name.c_str());
+	else
+		player_controller->audio->SetSwitchState("SpellString", current_attack->info.name.c_str());
+
 	//calculate end of attack
 	start_attack_time = Time::GetGameTime();
 	float animation_duration = player_controller->animator->GetCurrentStateDuration();
