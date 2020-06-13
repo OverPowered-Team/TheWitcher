@@ -55,6 +55,7 @@ void VagoneteMove::Update()
 
 void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 {
+	float rumble_strength = 0.05f;
 	if (strcmp("VagoneteDirection", col->game_object_attached->GetTag()) == 0) {
 		VagoneteDirection* direction = col->game_object_attached->GetComponent<VagoneteDirection>();
 		if (direction != nullptr) {
@@ -82,6 +83,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 			if ((*item)->state != VagoneteInputs::State::COVER)
 			{
 				DecreaseLife();
+				Input::DoRumble(item - players.begin()+1, rumble_strength, 1.5f);
 			}
 		}
 	}
@@ -96,11 +98,15 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		if (col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
 			if (VagoneteInputs::globalInclination >= -35) {
 				DecreaseLife();
+				for (int i = 1; i < 3; ++i)
+					Input::DoRumble(i, rumble_strength, 1.5f);
 			}
 		}
 		else {
 			if (VagoneteInputs::globalInclination <= 35) {
 				DecreaseLife();
+				for (int i = 1; i < 3; ++i)
+					Input::DoRumble(i, rumble_strength, 1.f);
 			}
 		}
 	}
