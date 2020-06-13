@@ -1,11 +1,12 @@
 {
+    "Name": "Bonfire",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "Bonfire",
                 "FamilyNumber": 1,
-                "ID": "4524131087846069162",
-                "ParentID": "5503854878348388814",
+                "ID": "1710950527649829440",
+                "ParentID": "12736680637920272787",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,9 +20,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0.032481584697961807
+                            2.8075008392333984,
+                            0.575653076171875,
+                            -7.4015336036682129
                         ],
                         "Rotation": [
                             0,
@@ -35,7 +36,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3914038212540563416"
+                        "ID": "2723311620034614383"
                     },
                     {
                         "Enabled": true,
@@ -72,7 +73,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "5361414835095422486",
+                        "ID": "11608599089159155036",
                         "ResourceID": "3059754619729026801",
                         "DataName": "Bonfire",
                         "HasInspector": false
@@ -82,8 +83,8 @@
             {
                 "Name": "Model_xd",
                 "FamilyNumber": 2,
-                "ID": "3969864468065079906",
-                "ParentID": "4524131087846069162",
+                "ID": "17836830618612849118",
+                "ParentID": "1710950527649829440",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -113,14 +114,14 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3333331860781495592"
+                        "ID": "10258578959091553366"
                     },
                     {
                         "Enabled": true,
-                        "Type": 9,
+                        "Type": 8,
                         "Center": [
                             0,
-                            0,
+                            -0.0099999997764825821,
                             0
                         ],
                         "Rotation": [
@@ -133,17 +134,15 @@
                         "StaticFriction": 0.5,
                         "DynamicFriction": 0.5,
                         "CollisionLayer": "Default",
-                        "Radius": 0.30000001192092896,
-                        "Height": 10,
-                        "Orientation": 1
+                        "Radius": 0.30000001192092896
                     }
                 ]
             },
             {
                 "Name": "Logs",
                 "FamilyNumber": 3,
-                "ID": "15246095963057571192",
-                "ParentID": "3969864468065079906",
+                "ID": "16188454877964242168",
+                "ParentID": "17836830618612849118",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -173,7 +172,7 @@
                             0.20000000298023224
                         ],
                         "ScaleNegative": false,
-                        "ID": "8954844586140982746"
+                        "ID": "18053914390206478048"
                     },
                     {
                         "Type": 1,
@@ -183,7 +182,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "232215339274225917",
+                        "ID": "3271271471224695679",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 5,
@@ -191,7 +190,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "3914982872216045030",
+                        "ID": "10375653606208121646",
                         "HasMaterial": true,
                         "MaterialID": "12565647866873130753",
                         "Enabled": true
@@ -201,9 +200,9 @@
             {
                 "Name": "Fire",
                 "FamilyNumber": 4,
-                "ID": "1770985924446680873",
-                "ParentID": "15246095963057571192",
-                "Enabled": false,
+                "ID": "2707939479408650920",
+                "ParentID": "16188454877964242168",
+                "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
@@ -232,7 +231,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18185424491947770549"
+                        "ID": "2486399278528464079"
                     },
                     {
                         "Type": 1,
@@ -242,21 +241,59 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "6276260925538916748",
+                        "ID": "9199067946611369743",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
                         "Enabled": true
+                    },
+                    {
+                        "Type": 2,
+                        "ID": "1104683767996020460",
+                        "HasMaterial": true,
+                        "MaterialID": "12021644403805349879",
+                        "Enabled": true
+                    },
+                    {
+                        "Type": 5,
+                        "Enabled": true,
+                        "ID": "9537597349736784514",
+                        "PrintIcon": true,
+                        "Intensity": 1,
+                        "Position": [
+                            2.8075008392333984,
+                            0.4599631130695343,
+                            -7.4015336036682129
+                        ],
+                        "Ambient": [
+                            1,
+                            0.35227251052856445,
+                            0
+                        ],
+                        "Diffuse": [
+                            1,
+                            0.99998998641967773,
+                            0.99998998641967773
+                        ],
+                        "Specular": [
+                            9.9999999747524271e-07,
+                            9.9998999303352321e-07,
+                            9.9998999303352321e-07
+                        ],
+                        "Constant": 1,
+                        "Linear": 0.10000000149011612,
+                        "Quadratic": 0.019999999552965164,
+                        "InteractWithShadows": true
                     }
                 ]
             },
             {
                 "Name": "ParticlesSmoke",
                 "FamilyNumber": 5,
-                "ID": "12230023223344740641",
-                "ParentID": "1770985924446680873",
+                "ID": "9349585706747040893",
+                "ParentID": "2707939479408650920",
                 "Enabled": true,
-                "ParentEnabled": false,
+                "ParentEnabled": true,
                 "Selected": false,
                 "ParentSelected": true,
                 "IsStatic": false,
@@ -284,17 +321,17 @@
                             5.0000004768371582
                         ],
                         "ScaleNegative": false,
-                        "ID": "15742825401903612558"
+                        "ID": "2766554154327405625"
                     },
                     {
                         "Type": 15,
-                        "ID": "4423305085357634556",
+                        "ID": "17345997881038562317",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
-                                2.9045686721801758,
-                                1.0484752655029297,
-                                -7.4843020439147949
+                                2.7182111740112305,
+                                0.87359476089477539,
+                                -7.3955988883972168
                             ],
                             "Rotation": [
                                 0,
@@ -338,12 +375,29 @@
                             "Angle3D": [
                                 0,
                                 0,
-                                180
+                                0
+                            ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
                             ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 10,
                             "Speed": 0,
                             "Color": [
@@ -393,14 +447,14 @@
                                 0.20000000298023224
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 0,
+                            "CurrentLife": 8.3189916610717773,
                             "SpawnRate": 5,
                             "Delay": 1,
                             "Loop": true,
                             "Position": [
-                                0,
-                                0.3952808678150177,
-                                0.03248157724738121
+                                2.8075008392333984,
+                                0.97093391418457031,
+                                -7.4015336036682129
                             ],
                             "RelativePosition": [
                                 0,
@@ -441,15 +495,25 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": false,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             },
             {
                 "Name": "Ashes",
                 "FamilyNumber": 4,
-                "ID": "4121303484098408746",
-                "ParentID": "15246095963057571192",
+                "ID": "15795089281554115171",
+                "ParentID": "16188454877964242168",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -479,7 +543,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "18134005229413686948"
+                        "ID": "10137910326821403955"
                     },
                     {
                         "Type": 1,
@@ -489,7 +553,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "12610744642131423746",
+                        "ID": "15027182120052088594",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -497,7 +561,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "1357299765930011902",
+                        "ID": "4788673855321992034",
                         "HasMaterial": true,
                         "MaterialID": "14951482005846074971",
                         "Enabled": true
@@ -527,8 +591,8 @@
             {
                 "Name": "Interact",
                 "FamilyNumber": 2,
-                "ID": "14880440735932151976",
-                "ParentID": "4524131087846069162",
+                "ID": "9331453441747207868",
+                "ParentID": "1710950527649829440",
                 "Enabled": false,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -558,15 +622,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "2122027894784331320"
+                        "ID": "12350836455065444502"
                     }
                 ]
             },
             {
                 "Name": "Checkpoint",
                 "FamilyNumber": 2,
-                "ID": "3988017739230094983",
-                "ParentID": "4524131087846069162",
+                "ID": "5397224621804730700",
+                "ParentID": "1710950527649829440",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -596,11 +660,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13152951024368617786"
+                        "ID": "7219478418973116979"
                     },
                     {
                         "Type": 29,
-                        "ID": "15697320413272139757",
+                        "ID": "353111553347767096",
                         "ResourceID": "16616027483535891490",
                         "DataName": "CheckPoint",
                         "HasInspector": false
@@ -608,6 +672,5 @@
                 ]
             }
         ]
-    },
-    "Name": "Bonfire"
+    }
 }

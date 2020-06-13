@@ -37,6 +37,13 @@ void MainMenu_Buttons::Muffin()
 	AlienEngine::OpenURL("https://github.com/OverPowered-Team");
 }
 
+void MainMenu_Buttons::Settings()
+{
+	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
+	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::SETTINGS);
+	GameObject::FindWithName("Main_Menu_UI")->SetEnable(false);
+}
+
 void MainMenu_Buttons::AddVolume()
 {
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();

@@ -74,6 +74,7 @@ public:
 	State* OnAnimationEnd(PlayerController* player, const char* name) override;
 	void OnEnter(PlayerController* player) override;
 	void OnExit(PlayerController* player) override;
+	TrailVector trailvec(float angle);
 };
 
 class AttackingState : public State

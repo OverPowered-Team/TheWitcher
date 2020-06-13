@@ -30,8 +30,9 @@ void Scale_Win::Start()
 	// Texts
 	score_text_1 = GameObject::FindWithName("Score_Player_1")->GetComponent<ComponentText>();
 	score_text_2 = GameObject::FindWithName("Score_Player_2")->GetComponent<ComponentText>();
-	score_text_1->SetText(std::to_string(Scores_Data::player1_damage).c_str());
-	score_text_2->SetText(std::to_string(Scores_Data::player2_damage).c_str());
+	score_text_1->SetText("0");
+	score_text_2->SetText("0");
+	damage_done = GameObject::FindWithName("DamageDone")->GetComponent<ComponentText>();
 
 	// Win/Lose
 	if (!Scores_Data::dead)
@@ -51,11 +52,47 @@ void Scale_Win::Start()
 
 	first_frame = true;
 	spawned_invoke = false;
+	start_time_damage = Time::GetGameTime();
 }
 
 void Scale_Win::Update()
 {
-	if (!first_frame && !spawned_invoke) {
+	if (is_damage_setting)
+	{
+		float t = (Time::GetGameTime() - start_time_damage) / damage_time;
+		float lerp1 = Maths::Lerp(0, Scores_Data::player1_damage, t);
+		float lerp2 = Maths::Lerp(0, Scores_Data::player2_damage, t);
+
+		score_text_1->SetText(std::to_string((int)lerp1).c_str());
+		score_text_2->SetText(std::to_string((int)lerp2).c_str());
+
+		if (t >= 0.8f)
+		{
+			float text_t = (t - 0.8f) / 0.2f;
+			float alpha = Maths::Lerp(1.0f, 0.0f, text_t);
+
+			damage_done->SetAlpha(alpha);
+
+			if (text_t >= 1)
+			{
+				damage_done->SetAlpha(0);
+			}
+		}
+
+		if (t >= 1)
+		{
+			score_text_1->SetText(std::to_string(Scores_Data::player1_damage).c_str());
+			score_text_2->SetText(std::to_string(Scores_Data::player2_damage).c_str());
+			player1_points = Scores_Data::player1_damage;
+			player2_points = Scores_Data::player2_damage;
+			is_damage_setting = false;
+		}
+
+		return;
+	}
+
+	if (!spawned_invoke && !is_damage_setting) 
+	{
 		std::vector<float2> spawn_points;
 
 		spawn_points.reserve(3);
