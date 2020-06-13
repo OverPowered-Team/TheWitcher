@@ -52,6 +52,10 @@ void MainMenu_Buttons::SubtractVolume()
 
 void MainMenu_Buttons::FullScreen()
 {
+	if (Screen::IsFullScreen())
+		Screen::SetFullScreen(false);
+	else
+		Screen::SetFullScreen(true);
 	//UIConfig::FullScreen();
 }
 

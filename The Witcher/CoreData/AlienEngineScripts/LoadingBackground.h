@@ -32,6 +32,8 @@ public:
 	bool lerping = false;
 
 	float time = 0;
+
+	bool change_next = false;
 };
 
 ALIEN_FACTORY LoadingBackground* CreateLoadingBackground() {

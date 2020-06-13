@@ -24,6 +24,7 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 	{
+		Scores_Data::last_checkpoint_position = float3::inf();
 		std::string current_scene = SceneManager::GetCurrentScene();
 
 		if (strcmp(current_scene.c_str(), "Wagonnetes") == 0)
@@ -37,6 +38,7 @@ void Trigger_Win::OnTriggerEnter(ComponentCollider* collider)
 		}	
 		else 
 		{
+			GameManager::instance->PrepareDataNextScene(false);
 			Scores_Data::won_level2 = true;
 			SceneManager::LoadScene("NewWin_Menu", FadeToBlackType::FADE);
 		}

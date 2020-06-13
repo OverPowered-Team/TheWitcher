@@ -90,8 +90,6 @@ public:
 	float3 GetDirectionVector();
 	bool CheckForPossibleRevive();
 
-	void OnUltimateActivation(float value);
-	void OnUltimateDeactivation(float value);
 	void OnHit(Enemy* enemy, float dmg_dealt);
 	void UpdateDashEffect();
 	void OnEnemyKill(uint enemy_type);

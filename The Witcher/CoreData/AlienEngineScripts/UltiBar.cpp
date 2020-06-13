@@ -8,108 +8,108 @@ UltiBar::~UltiBar()
 {
 }
 
-void UltiBar::Start()
-{
-	// GameObjects
-	ultibar = game_object->GetChild("Ultibar");
-	normal_ulti = ultibar->GetComponent<ComponentBar>();
-
-	// Controls
-	controls = game_object->GetChild("Ulti_Controls");
-	controls_lb = controls->GetChild("LeftControl");
-	controls_rb = controls->GetChild("RightControl");
-	lb_image = controls_lb->GetComponent<ComponentImage>();
-	rb_image = controls_rb->GetComponent<ComponentImage>();
-	pre_scale = controls_lb->transform->GetLocalScale().x;
-
-	// Enables Setting
-	controls->SetEnable(false);
-	ultibar->SetEnable(true);
-	normal_ulti->SetBarValue(0);
-}
-
-void UltiBar::Update()
-{
-	internal_timer += Time::GetDT();
-
-	// Bar Charges With Lerp
-	if (bar_charging)
-	{
-		float t = (internal_timer - bar_charging_time) * (1 / ulti_increase_lerp_time);
-		float lerp = Maths::Lerp(previous_bar_value, new_bar_value, t);
-
-		normal_ulti->SetBarValue(lerp);
-
-		if (t >= 1)
-		{
-			bar_charging = false;
-
-			if (is_max)
-			{
-				// Data Setting
-				is_max = false;
-				controls_lerping = true;
-				is_bar_charged = true;
-
-				// Enables Setting
-				controls->SetEnable(true);
-
-				// Lerping Time Settings
-				glow_time = internal_timer;
-				actual_time = internal_timer;
-			}
-		}
-	}
-
-	if (controls_lerping)
-	{
-		ControlsLerp();
-	}
-
-	// Charged Bar Glowing
-	if (is_bar_charged)
-	{
-		float t = (internal_timer - glow_time);
-		float color = 0.0f;
-
-		if (glowing)
-		{
-			color = Maths::Lerp(1.f, 0.6f, t);
-		}
-		else
-		{
-			color = Maths::Lerp(0.6f, 1.0f, t);
-		}
-
-		normal_ulti->SetBarColor(color, color, color, 1);
-
-		if (t >= 1)
-		{
-			glowing = !glowing;
-			glow_time = internal_timer;
-		}
-	}
-}
+//void UltiBar::Start()
+//{
+//	// GameObjects
+//	ultibar = game_object->GetChild("Ultibar");
+//	normal_ulti = ultibar->GetComponent<ComponentBar>();
+//
+//	// Controls
+//	controls = game_object->GetChild("Ulti_Controls");
+//	controls_lb = controls->GetChild("LeftControl");
+//	controls_rb = controls->GetChild("RightControl");
+//	lb_image = controls_lb->GetComponent<ComponentImage>();
+//	rb_image = controls_rb->GetComponent<ComponentImage>();
+//	pre_scale = controls_lb->transform->GetLocalScale().x;
+//
+//	// Enables Setting
+//	controls->SetEnable(false);
+//	ultibar->SetEnable(true);
+//	normal_ulti->SetBarValue(0);
+//}
+//
+//void UltiBar::Update()
+//{
+//	internal_timer += Time::GetDT();
+//
+//	// Bar Charges With Lerp
+//	if (bar_charging)
+//	{
+//		float t = (internal_timer - bar_charging_time) * (1 / ulti_increase_lerp_time);
+//		float lerp = Maths::Lerp(previous_bar_value, new_bar_value, t);
+//
+//		normal_ulti->SetBarValue(lerp);
+//
+//		if (t >= 1)
+//		{
+//			bar_charging = false;
+//
+//			if (is_max)
+//			{
+//				// Data Setting
+//				is_max = false;
+//				controls_lerping = true;
+//				is_bar_charged = true;
+//
+//				// Enables Setting
+//				controls->SetEnable(true);
+//
+//				// Lerping Time Settings
+//				glow_time = internal_timer;
+//				actual_time = internal_timer;
+//			}
+//		}
+//	}
+//
+//	if (controls_lerping)
+//	{
+//		ControlsLerp();
+//	}
+//
+//	// Charged Bar Glowing
+//	if (is_bar_charged)
+//	{
+//		float t = (internal_timer - glow_time);
+//		float color = 0.0f;
+//
+//		if (glowing)
+//		{
+//			color = Maths::Lerp(1.f, 0.6f, t);
+//		}
+//		else
+//		{
+//			color = Maths::Lerp(0.6f, 1.0f, t);
+//		}
+//
+//		normal_ulti->SetBarColor(color, color, color, 1);
+//
+//		if (t >= 1)
+//		{
+//			glowing = !glowing;
+//			glow_time = internal_timer;
+//		}
+//	}
+//}
 
 void UltiBar::UpdateBar(float actual_value)
 {
-	if (actual_value == 0)
-	{
-		if (controls->IsEnabled())
-		{
-			controls->SetEnable(false);
-		}
-		is_bar_charged = false;
-	}
-	else if (actual_value == 1)
-	{
-		is_max = true;
-	}
+	//if (actual_value == 0)
+	//{
+	//	if (controls->IsEnabled())
+	//	{
+	//		controls->SetEnable(false);
+	//	}
+	//	is_bar_charged = false;
+	//}
+	//else if (actual_value == 1)
+	//{
+	//	is_max = true;
+	//}
 
-	previous_bar_value = normal_ulti->GetBarValue();
-	new_bar_value = actual_value;
-	bar_charging = true;
-	bar_charging_time = internal_timer;
+	//previous_bar_value = normal_ulti->GetBarValue();
+	//new_bar_value = actual_value;
+	//bar_charging = true;
+	//bar_charging_time = internal_timer;
 }
 
 void UltiBar::ControlsLerp()
