@@ -90,15 +90,19 @@ void Wagonnete_UI::ActivateTrigger(Wagonnette_Triggers::TRIGGER_TYPE type)
 	switch (type)
 	{
 	case Wagonnette_Triggers::TRIGGER_TYPE::DUCKING:
+	{
 		duck_changing = true;
 		duck_state = TRANSITION_STATE::FADE_IN;
 		duck_time = Time::GetGameTime();
 		break;
+	}
 	case Wagonnette_Triggers::TRIGGER_TYPE::DODGING:
+	{
 		dodge_changing = true;
 		dodge_state = TRANSITION_STATE::FADE_IN;
 		dodge_time = Time::GetGameTime();
 		break;
+	}
 	}
 }
 
