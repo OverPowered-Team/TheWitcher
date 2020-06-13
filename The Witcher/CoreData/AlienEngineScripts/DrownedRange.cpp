@@ -135,7 +135,6 @@ void DrownedRange::OnAnimationEnd(const char* name)
 			else
 			{
 				state = DrownedState::DYING;
-				GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 			}
 		}
 			
@@ -143,7 +142,6 @@ void DrownedRange::OnAnimationEnd(const char* name)
 	else if ((strcmp(name, "Dizzy") == 0) && stats["Health"].GetValue() <= 0)
 	{
 		state = DrownedState::DYING;
-		GameManager::instance->player_manager->IncreaseUltimateCharge(10);
 	}
 	else if (strcmp(name, "GetOff") == 0)
 	{

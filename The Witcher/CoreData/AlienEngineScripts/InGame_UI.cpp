@@ -202,7 +202,7 @@ void InGame_UI::Update()
 		}
 	}
 
-	if (!particles.empty())
+	/*if (!particles.empty())
 	{
 		auto particle = particles.begin();
 		for (; particle != particles.end(); ++particle)
@@ -215,10 +215,7 @@ void InGame_UI::Update()
 
 			if (lerp >= 1)
 			{
-				float new_value = (float)GameManager::instance->player_manager->collective_ultimate_charge / 
-					(float)GameManager::instance->player_manager->max_ultimate_charge;
-
-				ulti_bar->UpdateBar(new_value);
+				//ulti_bar->UpdateBar(new_value);
 				
 				GameObject::Destroy((*particle)->particle);
 				(*particle) = nullptr;
@@ -226,38 +223,38 @@ void InGame_UI::Update()
 				--particle;
 			}
 		}
-	}
+	}*/
 
-	if (changing_alpha_filter)
-	{
-		float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.5f;
-		float lerp = 0.0f;
+	//if (changing_alpha_filter)
+	//{
+	//	float t = (Time::GetTimeSinceStart() - time_ulti_filter) / 0.5f;
+	//	float lerp = 0.0f;
 
-		if (ulti_active)
-		{
-			lerp = Maths::Lerp(0.0f, 0.2f, t);
-		}
-		else
-		{
-			lerp = Maths::Lerp(0.2f, 0.0f, t);
-		}
+	//	if (ulti_active)
+	//	{
+	//		lerp = Maths::Lerp(0.0f, 0.2f, t);
+	//	}
+	//	else
+	//	{
+	//		lerp = Maths::Lerp(0.2f, 0.0f, t);
+	//	}
 
-		ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, lerp);
+	//	ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, lerp);
 
-		if (t >= 1)
-		{
-			if (ulti_active)
-			{
-				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.2f);
-			}
-			else
-			{
-				ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
-			}
+	//	if (t >= 1)
+	//	{
+	//		if (ulti_active)
+	//		{
+	//			ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.2f);
+	//		}
+	//		else
+	//		{
+	//			ulti_filter->SetBackgroundColor(0, 0.5f, 1.f, 0.f);
+	//		}
 
-			changing_alpha_filter = false;
-		}
-	}
+	//		changing_alpha_filter = false;
+	//	}
+	//}
 }
 
 void InGame_UI::PauseMenu(bool to_open)
@@ -265,7 +262,7 @@ void InGame_UI::PauseMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	pause_menu->SetEnable(to_open);
-	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	GameManager::instance->dialogue_manager->Pause(to_open);
 	if (GameObject::FindWithName("Tutorial_Triggers"))
 	{
 		GameObject::FindWithName("Tutorial_Triggers")->GetChild("HUD")->SetEnable(!to_open);
@@ -277,7 +274,7 @@ void InGame_UI::RelicsMenu(bool to_open)
 	in_game->SetEnable(!to_open);
 	Time::SetPause(to_open);
 	relics_menu->SetEnable(to_open);
-	game_object->GetComponent<DialogueManager>()->Pause(to_open);
+	GameManager::instance->dialogue_manager->Pause(to_open);
 	if (to_open)
 	{
 		LoadActiveRelics();
@@ -302,26 +299,26 @@ void InGame_UI::ShowCheckpointSaved()
 
 void InGame_UI::StartLerpParticleUltibar(const float3& world_position)
 {
-	UI_Particles* particle = new UI_Particles();
-	// not working very well but it's the best I accomplished
-	//particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
-		//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
+	//UI_Particles* particle = new UI_Particles();
+	//// not working very well but it's the best I accomplished
+	////particle->origin_position = float3(ComponentCamera::WorldToScreenPoint(world_position).x/canvas->width, 
+	//	//ComponentCamera::WorldToScreenPoint(world_position).y / canvas->height, 1);
 
-	float random = Random::GetRandomIntBetweenTwo(1, 2);
-	if (random == 1)
-	{
-		particle->origin_position = float3(0.0f, 0.0f, -0.1f);
-	}
-	else
-	{
-		particle->origin_position = float3(25.f, 0.0f, -0.1f);
-	}
+	//float random = Random::GetRandomIntBetweenTwo(1, 2);
+	//if (random == 1)
+	//{
+	//	particle->origin_position = float3(0.0f, 0.0f, -0.1f);
+	//}
+	//else
+	//{
+	//	particle->origin_position = float3(25.f, 0.0f, -0.1f);
+	//}
 
-	particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
-	particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
-	particle->time_passed = internal_timer;
+	//particle->final_position = game_object->GetChild("InGame")->GetChild("Ulti_bar")->transform->GetLocalPosition();
+	//particle->particle = GameObject::Instantiate(ulti_particle, particle->origin_position, false, in_game);
+	//particle->time_passed = internal_timer;
 
-	particles.push_back(particle);
+	//particles.push_back(particle);
 }
 
 void InGame_UI::ShowUltiFilter(bool show)
