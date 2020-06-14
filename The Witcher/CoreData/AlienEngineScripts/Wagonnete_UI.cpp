@@ -14,8 +14,8 @@ void Wagonnete_UI::Start()
 	godmode = game_object->GetChild("Godmode");
 	godmode->SetEnable(false);
 
-	duck = game_object->GetChild("Duck")->GetComponent<ComponentImage>();
-	dodge = game_object->GetChild("Dodge")->GetComponent<ComponentImage>();
+	duck = game_object->GetChild("Duck")->GetComponent<ComponentAnimatedImage>();
+	dodge = game_object->GetChild("Dodge")->GetComponent<ComponentAnimatedImage>();
 	duck->current_color.a = 0;
 	dodge->current_color.a = 0;
 }
@@ -86,7 +86,7 @@ void Wagonnete_UI::UpdateLifebar(float new_life, float max_life)
 }
 
 void Wagonnete_UI::ActivateTrigger(Wagonnette_Triggers::TRIGGER_TYPE type)
-{
+{	
 	switch (type)
 	{
 	case Wagonnette_Triggers::TRIGGER_TYPE::DUCKING:
@@ -106,7 +106,7 @@ void Wagonnete_UI::ActivateTrigger(Wagonnette_Triggers::TRIGGER_TYPE type)
 	}
 }
 
-void Wagonnete_UI::HandleImage(ComponentImage* image)
+void Wagonnete_UI::HandleImage(ComponentAnimatedImage* image)
 {
 	TRANSITION_STATE* state = nullptr;
 	float* time = nullptr;
@@ -129,7 +129,7 @@ void Wagonnete_UI::HandleImage(ComponentImage* image)
 	{
 	case TRANSITION_STATE::FADE_IN:
 	{
-		float t = (Time::GetGameTime() - (*time)) / 0.5f;
+		float t = (Time::GetGameTime() - (*time))/0.75f;
 		float lerp = Maths::Lerp(0.f, 1.f, t);
 
 		image->current_color.a = lerp;
@@ -154,7 +154,7 @@ void Wagonnete_UI::HandleImage(ComponentImage* image)
 	}
 	case TRANSITION_STATE::FADE_OUT:
 	{
-		float t = (Time::GetGameTime() - (*time)) / 0.5f;
+		float t = (Time::GetGameTime() - (*time))/ 0.75f;
 		float lerp = Maths::Lerp(1.0f, 0.f, t);
 
 		image->current_color.a = lerp;
