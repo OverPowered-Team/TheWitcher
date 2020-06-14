@@ -32,7 +32,7 @@ public:
 
 private:
 
-	void HandleImage(ComponentImage* image);
+	void HandleImage(ComponentAnimatedImage* image);
 
 public:
 
@@ -43,8 +43,8 @@ private:
 
 	ComponentBar* lifebar = nullptr;
 
-	ComponentImage* duck = nullptr;
-	ComponentImage* dodge = nullptr;
+	ComponentAnimatedImage* duck = nullptr;
+	ComponentAnimatedImage* dodge = nullptr;
 
 	// States
 	TRANSITION_STATE duck_state = TRANSITION_STATE::ANY;
