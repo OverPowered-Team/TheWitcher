@@ -138,7 +138,7 @@ void NilfgaardSoldier::Stun(float time)
 		animator->SetBool("stunned", true);
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
-		audio_emitter->StartSound("Play_Dizzy_Enemy");
+		audio_emitter->StartSound("Dizzy_Enemy");
 	}
 }
 
