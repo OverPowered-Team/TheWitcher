@@ -17,7 +17,11 @@ public:
 		SLOPE_TO_CAVE,
 		CAVE,
 		PRE_BOSS,
-		AFTER_BOSS
+		AFTER_BOSS,
+		BRIDGE,
+		DA_BIG_TRUNK,
+		ENTRY_ZONE,
+		HALL
 		);
 	enum (AudioEffects,
 		QUIET,
@@ -36,7 +40,10 @@ public:
 		TREES_SQUEAKING,
 		DRIPPING,
 		ROCKS_FALLING,
-		MINECART
+		MINECART,
+		WOOD_CRACKING,
+		DWARVES,
+		PAIN_SCREAM
 		);
 	struct MovingSpatial {
 		GameObject* spatial_place = nullptr;
@@ -97,7 +104,6 @@ public:
 };
 ALIEN_FACTORY TriggerEnvironment* CreateTriggerEnvironment() {
 	TriggerEnvironment* alien = new TriggerEnvironment();
-	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerEnvironment::EnvironmentZone, alien->zone);
 	SHOW_TEXT("Choose an audio event to reproduce in your environment");
 	SHOW_TEXT("Only choose spatial if you know your sound IS in fact spatial");
