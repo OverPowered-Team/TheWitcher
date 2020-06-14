@@ -13,6 +13,7 @@ Pickup::~Pickup()
 void Pickup::Start()
 {
 	start_time = Time::GetGameTime();
+	audio_emitter = GetComponent<ComponentAudioEmitter>();
 }
 
 void Pickup::Update()
@@ -35,6 +36,7 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 			{
 				player->IncreaseStat(stat_to_change, value);
 				player->SpawnParticle("allow_combo_expanse", player->particle_spawn_positions[1]->transform->GetLocalPosition());
+				audio_emitter->StartSound("Play_Orb");
 				break;
 			}
 			case PickUps::COIN:
@@ -46,6 +48,7 @@ void Pickup::OnTriggerEnter(ComponentCollider* collider)
 				else {
 					Scores_Data::coin_points_2 += value;
 				}
+				audio_emitter->StartSound("Play_Coin");
 				break;
 			}
 			}

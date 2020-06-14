@@ -26,6 +26,7 @@ public:
 
 private:
 	float start_time = 0;
+	ComponentAudioEmitter* audio_emitter = nullptr;
 };
 
 ALIEN_FACTORY Pickup* CreatePickup() {

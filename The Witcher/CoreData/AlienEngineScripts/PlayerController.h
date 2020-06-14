@@ -156,6 +156,7 @@ public:
 	//DashCollider
 	Prefab dash_collider;
 	float3 last_dash_position = float3::zero();
+	bool dash_start = false;
 
 	//UI 
 	GameObject* HUD = nullptr;

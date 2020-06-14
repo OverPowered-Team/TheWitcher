@@ -365,9 +365,6 @@ void PlayerController::PlayAttackParticle()
 		
 		if(attacks->GetCurrentAttack()->IsLast())
 			ChangeColorParticle();
-
-		/*particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(false);
-		particles[attacks->GetCurrentAttack()->info.particle_name]->SetEnable(true);*/
 	}
 }
 
@@ -1016,8 +1013,17 @@ void PlayerController::UpdateDashEffect()
 				dash_coll->player_dashing = this;
 
 				if (dash_coll->effect->on_dash_effect->name != "")
-					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name, 
+				{
+					GameManager::instance->particle_pool->GetInstance("p_" + dash_coll->effect->on_dash_effect->name,
 						float3::zero(), float3::zero(), dash_coll->game_object, true);
+
+					if (dash_start)
+					{
+						std::string audio_name = "Play_" + dash_coll->effect->on_dash_effect->name;
+						audio->StartSound(audio_name.c_str());
+					}
+				}
+					
 			}
 		}
 	}
