@@ -207,6 +207,7 @@ private:
 	void DeleteReturns();
 	void UpdateUIInput();
 	void UpdateGamePadInput();
+	void CheckIfCanvasHasNavigation();
 	u64 SetNewSelected(std::string neightbour, u64 selected_neightbour);
 	ComponentCanvas* GetCanvas();
 	void UIOrdering(std::vector<std::pair<float, GameObject*>>* current, std::vector<std::pair<float, GameObject*>>* ui_2d, std::vector<std::pair<float, GameObject*>>* ui_world);
