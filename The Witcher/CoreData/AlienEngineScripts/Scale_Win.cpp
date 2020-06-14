@@ -39,6 +39,7 @@ void Scale_Win::Start()
 	{
 		GameObject::FindWithName("Victory")->SetEnable(true);
 		GameObject::FindWithName("Defeat")->SetEnable(false);
+		emitter->StartSound("Victory");
 		if (Scores_Data::won_level2)
 		{
 			GameObject::FindWithName("Victory")->GetChild("Text")->GetComponent<ComponentText>()->SetText("Congratulations!");
@@ -46,6 +47,7 @@ void Scale_Win::Start()
 	}
 	else
 	{
+		emitter->StartSound("Music_Balance");
 		GameObject::FindWithName("Victory")->SetEnable(false);
 		GameObject::FindWithName("Defeat")->SetEnable(true);
 	}
