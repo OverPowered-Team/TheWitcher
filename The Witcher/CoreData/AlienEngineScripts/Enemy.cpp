@@ -407,7 +407,7 @@ void Enemy::Decapitate(PlayerController* player)
 	{
 		// If not working, check prefab
 		game_object->GetChild("Mesh")->GetChild("Head")->SetEnable(false); //disable old head
-		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
+		//SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
 		
 		vector<GameObject*> iss = decapitated_head->GetChildren();
 		for (auto it = iss.begin(); it != iss.end(); it++)
