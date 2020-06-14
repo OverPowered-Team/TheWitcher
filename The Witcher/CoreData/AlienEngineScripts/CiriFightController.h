@@ -55,6 +55,9 @@ public:
 	bool rock_throwed = false;
 	std::vector<GameObject*> rocks_throwed;
 
+private:
+	ComponentAudioEmitter* emitter = nullptr;
+
 public:
 
 	CiriFightController();
