@@ -49,6 +49,7 @@ ALIEN_FACTORY NilfSoldierShield* CreateNilfSoldierShield() {
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_FLOAT(nilfgaard->block_attack_time);
 	SHOW_IN_INSPECTOR_AS_DRAGABLE_INT(nilfgaard->max_break_shield_attack);
 	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, nilfgaard);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::PlayAttackSFX, nilfgaard);
 
 	return nilfgaard;
 } 

@@ -95,7 +95,7 @@ void Ghoul::Stun(float time)
         state = GhoulState::STUNNED;
         animator->PlayState("Dizzy");
         current_stun_time = Time::GetGameTime();
-        audio_emitter->StartSound("Play_Dizzy_Enemy");
+        PlaySwitchSFX("Enemy_Dizzy");
         stun_time = time;
     }
 }
@@ -276,8 +276,10 @@ void Ghoul::OnAnimationEnd(const char* name)
         }
         else if (is_attacking)
             ChangeAttackEnemy();
-        else if (!is_dead)
+        else if (!is_dead && ghoul_type != GhoulType::MINI)
             SetState("Guard");
+        else
+            SetState("Idle");
 
         animator->SetBool("attack", false);
     }
@@ -317,15 +319,6 @@ void Ghoul::DeactivateRangeCollider()
     range_collider->SetEnable(false);
 }
 
-void Ghoul::PlaySFX(const char* sfx_name)
-{
-    if (sfx_name == "Hit")
-        audio_emitter->StartSound("GhoulHit");
-    else if (sfx_name == "Death")
-        audio_emitter->StartSound("GhoulDeath");
-    else
-        LOG("Sound effect with name %s not found!", sfx_name);
-}
 
 bool Ghoul::IsState(const char* state_str)
 {
@@ -348,11 +341,13 @@ bool Ghoul::IsState(const char* state_str)
 void Ghoul::CanJump()
 {
     can_jump = true;
+    PlaySFX("Ghoul_Jump");
 }
 
 void Ghoul::CanNotJump()
 {
     can_jump = false;
+    PlaySFX("Ghoul_JumpFall");
 }
 
 void Ghoul::DoAwake() // Do this in other enemies
@@ -475,7 +470,6 @@ void Ghoul::DoAwake() // Do this in other enemies
 void Ghoul::Dying() // TODO: in other enemies
 {
 	animator->PlayState("Death");
-	audio_emitter->StartSound("GhoulDeath");
 	last_player_hit->OnEnemyKill((uint)type);
 	state = GhoulState::DEAD;
 	if (m_controller && is_combat)

@@ -77,7 +77,6 @@ void DrownedRange::UpdateEnemy()
 		state = DrownedState::DEAD;
 		animator->PlayState("Death");
 		last_player_hit->OnEnemyKill((uint)type);
-		audio_emitter->StartSound("Play_Drowner_Death");
 		if (m_controller && is_combat)
 		{
 			is_combat = false;
@@ -101,7 +100,7 @@ void DrownedRange::ShootSlime()
 	float3 slime_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(slime, slime_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
-	audio_emitter->StartSound("Play_Drowner_Shot_Attack");
+	PlayAttackSFX();
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	arrow_rb->SetRotation(RotateProjectile());
 	arrow_rb->AddForce(direction.Mul(20), ForceMode::IMPULSE);
