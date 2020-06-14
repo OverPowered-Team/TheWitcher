@@ -54,14 +54,13 @@ void ComponentCharacterController::CreateController()
 		controller = App->physx->CreateCharacterController(desc);
 		LinkShapesToComponent();
 		SetCollisionLayer(layer_name);
-
+		UpdateParameters();
 	}
 }
 
 void ComponentCharacterController::DeleteController()
 {
-	if (controller){
-		
+	if (controller != nullptr) {
 		PX_RELEASE(controller);
 		controller = nullptr;
 	}
@@ -240,7 +239,7 @@ void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 
 	enabled = to_load->GetBoolean("Enabled");
 
-	if (enabled == false)
+	if (!enabled)
 	{
 		OnDisable();
 	}
@@ -249,6 +248,7 @@ void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 	force_gravity = to_load->GetBoolean("ForceGravity");
 	force_move = to_load->GetBoolean("ForceMove");
 	min_distance = to_load->GetNumber("MinMoveDistance");
+	
 	SetSlopeLimit(to_load->GetNumber("SlopeLimit"));
 	SetContactOffset(to_load->GetNumber("SkinWidth"));
 	SetCharacterOffset(to_load->GetFloat3("Center"));
@@ -438,7 +438,10 @@ void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit
 
 bool ComponentCharacterController::SetPosition(float3 position) const
 {
-	return controller->setPosition(F3_TO_PXVEC3EXT(position));
+	if (controller != nullptr) {
+		return controller->setPosition(F3_TO_PXVEC3EXT(position + controller_offset));
+	}
+	return false;
 }
 
 bool ComponentCharacterController::SetFootPosition(float3 position) const

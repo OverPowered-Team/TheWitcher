@@ -303,7 +303,7 @@ void ComponentLightDirectional::SaveComponent(JSONArraypack* to_save)
 	to_save->SetFloat3("Specular", float3(light_props.specular));
 	to_save->SetBoolean("CastShadows", castShadows);
 	to_save->SetNumber("SizeBakedShadow", sizefrustrumbaked);
-	to_save->SetNumber("sadowIntensity", float(light_props.shadowIntensity));
+	to_save->SetNumber("shadowIntensity", float(light_props.shadowIntensity));
 
 }
 
