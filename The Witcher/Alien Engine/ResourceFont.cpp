@@ -8,7 +8,7 @@
 #include "glew/include/glew.h"
 #include "mmgr/mmgr.h"
 
-ResourceFont::ResourceFont(ResourceFontData fontData) :Resource(), fontData(fontData)
+ResourceFont::ResourceFont(ResourceFontData fontData):Resource(), fontData(fontData)
 {
 	type = ResourceType::RESOURCE_FONT;
 }
@@ -25,7 +25,6 @@ ResourceFont::~ResourceFont()
 	}
 
 	fontData.fontBuffer.clear();
-
 }
 
 void ResourceFont::CreateMeta()
@@ -190,7 +189,7 @@ ResourceFont* ResourceFont::LoadFile(const char* file, u64 forced_id)
 		fontData.fontBuffer.resize(charactersSize);
 		for (uint i = 0; i < charactersSize; ++i)
 		{
-			uint width = fontData.charactersMap[i + 32].size.x;
+ 			uint width = fontData.charactersMap[i + 32].size.x;
 			uint height = fontData.charactersMap[i + 32].size.y;
 
 			bytes = sizeof(uint8_t) * width * height;
@@ -200,7 +199,7 @@ ResourceFont* ResourceFont::LoadFile(const char* file, u64 forced_id)
 			fontData.charactersMap[i + 32].textureID = ResourceFont::LoadTextureCharacter(width, height, fontData.fontBuffer[i]);
 
 			cursor += bytes;
-
+			
 		}
 
 		res = new ResourceFont(fontData);
@@ -220,7 +219,7 @@ ResourceFont* ResourceFont::LoadFile(const char* file, u64 forced_id)
 		cursor += bytes;
 
 		RELEASE_ARRAY(buffer);
-
+	
 	}
 
 	return res;
