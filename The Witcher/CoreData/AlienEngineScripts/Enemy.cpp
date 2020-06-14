@@ -842,6 +842,7 @@ void Enemy::IDontWannaGoMrStark()
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 0.1);
+		GameObject::Destroy(decapitated_head);
 	}
 }
 
