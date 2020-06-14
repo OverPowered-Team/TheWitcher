@@ -1019,7 +1019,7 @@ void PlayerController::UpdateDashEffect()
 
 					if (dash_start)
 					{
-						std::string audio_name = "Play_" + dash_coll->effect->on_dash_effect->name;
+						std::string audio_name = "Play_" + dash_coll->effect->sound_name;
 						audio->StartSound(audio_name.c_str());
 					}
 				}

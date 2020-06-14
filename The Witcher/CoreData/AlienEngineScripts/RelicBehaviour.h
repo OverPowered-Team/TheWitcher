@@ -60,6 +60,7 @@ public:
 
 	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
 
+	std::string sound_name = "";
 	EffectData* effect_to_apply = nullptr;
 };
 
