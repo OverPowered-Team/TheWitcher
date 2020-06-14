@@ -30,7 +30,7 @@ void Subtitle::Start()
 	}
 
 
-	std::string json_path = std::string("GameData/Intro.json");
+	std::string json_path = std::string("GameData/Transition/Jaskier_Intro.json");
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
 	if (jsonDoc)
 	{
@@ -66,7 +66,7 @@ void Subtitle::Update()
 	if (!text || !audio)
 		return;
 	current_time = Time::GetGameTime() - start_time;
-	
+	LOG("%f", current_time);
 	if (!change_scene)
 	{
 		if (subtitles.size() > 0 && subtitles.size() > current_sub)
@@ -88,9 +88,11 @@ void Subtitle::Update()
 		}
 	}
 	
-	if (SceneManager::IsSceneAsyncReady()) {
+	if (SceneManager::IsSceneAsyncReady()) 
+	{
+		LOG("I'm ready");
 		skip->SetEnable(true);
-
+	
 		if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1, Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
 		{
 			change_scene = true;

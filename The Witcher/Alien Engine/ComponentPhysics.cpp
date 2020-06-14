@@ -358,10 +358,8 @@ void ComponentPhysics::UpdateActorTransform()
 		LOG_ENGINE("Error! GameObject %s transform is NaN or Infinite -> Physics Can't be updated ");
 		return;
 	}
-	if (IsKinematic() && Time::IsPlaying())
-		actor->is<PxRigidDynamic>()->setKinematicTarget(trans);
-	else
-		actor->setGlobalPose(trans);
+	
+	actor->setGlobalPose(trans);
 }
 
 void ComponentPhysics::UpdatePositioning()
