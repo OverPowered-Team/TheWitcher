@@ -41,6 +41,7 @@ ALIEN_FACTORY NilfSoldierRange* CreateNilfSoldierRange() {
 	SHOW_IN_INSPECTOR_AS_PREFAB(nilfgaard->arrow);
 	SHOW_VOID_FUNCTION(NilfSoldierRange::ShootAttack, nilfgaard);
 	SHOW_VOID_FUNCTION(Enemy::CanGetInterrupted, nilfgaard);
+	SHOW_VOID_FUNCTION(NilfgaardSoldier::PlayAttackSFX, nilfgaard);
 
 	return nilfgaard;
 } 
