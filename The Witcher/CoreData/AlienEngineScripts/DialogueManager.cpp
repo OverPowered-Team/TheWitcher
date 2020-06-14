@@ -146,7 +146,7 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 	audioEmitter->StopSoundByName(currentDialogue.audioData.eventName.c_str());
 	LOG("Stopped playing dialogue with event name: %s", currentDialogue.audioData.eventName.c_str());
 
-	// Set Data --> TODO: other members in "audioData"
+	// Set Data 
 	currentDialogue.audioData.eventName = std::string(newDialogue.audioData.eventName.c_str());
 	currentDialogue.priority = std::string(newDialogue.priority.c_str());
 	currentDialogue.subtitlesText = std::string(newDialogue.subtitlesText.c_str());
@@ -156,11 +156,9 @@ void DialogueManager::OverrideDialogue(Dialogue& newDialogue, float volume)
 	if (text->IsEnabled() == false)
 		text->SetEnable(true);
 	image->SetBackgroundColor(image->current_color.r, image->current_color.g, image->current_color.b, start_bg_alpha);
-
 	text->SetText(newDialogue.subtitlesText.c_str());
 
 	// Play new
-	//audioEmitter->SetSwitchState(newDialogue.audioData.groupID, newDialogue.audioData.stateID); 
 	audioEmitter->SetState("GameVolumes", "Dialogues");
 	audioEmitter->ChangeVolume(volume);
 	audioEmitter->StartSound(currentDialogue.audioData.eventName.c_str());
