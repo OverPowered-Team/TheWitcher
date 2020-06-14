@@ -145,11 +145,13 @@ void CiriOriginal::Scream()
 void CiriOriginal::LaunchRockAction()
 {
 	CreateThrowableRock();
+	audio_emitter->StartSound("Play_Ciri_Rock");
 }
 
 void CiriOriginal::LaunchScreamAction()
 {
 	animator->PlayState("Scream");
+	audio_emitter->StartSound("Play_Ciri_Scream");
 }
 
 Boss::ActionState CiriOriginal::UpdateAction()

@@ -27,6 +27,8 @@ void CiriFightController::Start()
 	clone_positions = game_object->GetChild("ClonePositions")->GetChildren();
 	rock_positions = game_object->GetChild("Rock_Positions")->GetChildren();
 
+	emitter = GetComponent<ComponentAudioEmitter>();
+
 	if (platform)
 		material_platform = (*platform->GetChildren().begin())->GetComponent<ComponentMaterial>();
 
@@ -62,6 +64,7 @@ void CiriFightController::Update()
 		phase_change = true;
 		tornado = GameManager::instance->particle_pool->GetInstance("ciri_tornado", transform->GetGlobalPosition());
 		SpawnRocks();
+		emitter->StartSound("Play_Ciri_Tornado");
 		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
 		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
 	}
@@ -178,6 +181,7 @@ void CiriFightController::UpdatePhaseFour()
 void CiriFightController::OnCloneDead(GameObject* clone)
 {
 	clones_dead++;
+	emitter->StartSound("Play_CiriClone_Death");
 	game_object->GetComponent<CiriOriginal>()->GetDamaged(clone_dead_damage);
 	if (clones_dead == 2) {
 		FinishPhaseOne();

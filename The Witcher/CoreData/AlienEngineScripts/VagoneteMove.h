@@ -85,6 +85,8 @@ public:
 
 	bool godmode = false;
 
+	ComponentAudioEmitter* emiter = nullptr;
+
 private:
 
 	void FollowCurve();

@@ -26,6 +26,8 @@ public:
 	bool disappearing = false;
 
 	CiriFightController* fight_controller = nullptr;
+
+	ComponentAudioEmitter* emitter = nullptr;
 	
 	
 public:
