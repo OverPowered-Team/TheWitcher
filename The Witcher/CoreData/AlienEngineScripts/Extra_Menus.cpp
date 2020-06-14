@@ -67,7 +67,7 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 	case MENU::SETTINGS:
 		leaderboard->SetEnable(false);
 		controls->SetEnable(false);
-		B->SetEnable(true); //This might destroy the game, because you need to reset the allow_navigation and you are not doing it now
+		B->SetEnable(true); 
 		settings->SetEnable(true);
 		break;
 	case MENU::LEADERBOARD:
