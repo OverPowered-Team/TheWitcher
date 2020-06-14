@@ -317,7 +317,6 @@ void RollingState::OnExit(PlayerController* player)
 	else if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 		player->ReleaseParticle("Yenn_Portal");
 		
-	player->dash_start = false;
 }
 
 TrailVector RollingState::trailvec(float angle)

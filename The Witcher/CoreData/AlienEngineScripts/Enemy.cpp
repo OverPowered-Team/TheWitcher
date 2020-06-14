@@ -194,7 +194,7 @@ void Enemy::UpdateEnemy()
 				(*it)->spawned_particle->SetEnable(true);
 			}
 
-			std::string audio_name = "Play_" + (*it)->name;
+			std::string audio_name = "Play_" + (*it)->sound_name;
 			audio_emitter->StartSound(audio_name.c_str());
 		}
 
@@ -555,7 +555,7 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	if (new_effect->ticks_time == 0)
 	{
-		std::string audio_name = "Play_" + new_effect->name;
+		std::string audio_name = "Play_" + new_effect->sound_name;
 		audio_emitter->StartSound(audio_name.c_str());
 	}
 

@@ -58,6 +58,7 @@ void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
 	effect->on_hit_effect = effect_to_apply;
 	effect_to_apply->name += "_" + std::to_string(_player->relics.size());
 	effect->name = effect_to_apply->name;
+	effect->sound_name = effect_to_apply->sound_name;
 
 	switch (relic_effect)
 	{
@@ -103,7 +104,8 @@ void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 	DashEffect* effect = new DashEffect();
 	effect->on_dash_effect = effect_to_apply;
 	effect->name = effect_to_apply->name;
-	effect->sound_name = sound_name;
+	effect->sound_name = effect_to_apply->sound_name;
+	effect->sound_trail = sound_trail;
 
 	switch (relic_effect)
 	{
@@ -231,6 +233,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		if (std::strcmp(json_array, "ATTACK") == 0)
 		{
 			EffectData* _effect = new EffectData();
+			_effect->sound_name = type_array->GetString("hit_effect.sound_name");
 			_effect->name = type_array->GetString("hit_effect.name");
 			_effect->vfx_on_apply = type_array->GetString("hit_effect.vfx_on_apply");
 			_effect->vfx_position = type_array->GetNumber("hit_effect.vfx_position");
@@ -270,7 +273,8 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		else if (std::strcmp(json_array, "DASH") == 0)
 		{
 			EffectData* _effect = new EffectData();
-			((DashRelic*)relic)->sound_name = type_array->GetString("dash_effect.sound_name");
+			((DashRelic*)relic)->sound_trail = type_array->GetString("dash_effect.sound_trail");
+			_effect->sound_name = type_array->GetString("dash_effect.sound_name");
 			_effect->name = type_array->GetString("dash_effect.name");
 			_effect->vfx_on_apply = type_array->GetString("dash_effect.vfx_on_apply");
 			_effect->vfx_position = type_array->GetNumber("dash_effect.vfx_position");
