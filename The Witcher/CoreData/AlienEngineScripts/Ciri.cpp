@@ -453,9 +453,6 @@ void Ciri::SetStats(const char* json)
 	JSONfilepack::FreeJSON(stat);
 }
 
-void Ciri::PlaySFX(const char* sfx_name)
-{
-}
 
 bool Ciri::IsHit()
 {

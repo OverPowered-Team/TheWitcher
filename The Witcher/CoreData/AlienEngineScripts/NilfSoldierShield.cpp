@@ -73,7 +73,6 @@ void NilfSoldierShield::UpdateEnemy()
 	case NilfgaardSoldierState::DYING:
 	{
 		animator->PlayState("Death");
-		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill((uint)type);
 		state = NilfgaardSoldierState::DEAD;
 		if (m_controller && is_combat)
@@ -144,8 +143,6 @@ void NilfSoldierShield::Block()
 		has_been_attacked = false;
 		break_shield_attack = 0;
 		is_blocked = false;
-
-		ChangeAttackEnemy();
 	}
 }
 
@@ -173,7 +170,7 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 			break_shield_attack++;
 
 		SpawnParticle("BlinkEmitter", particle_spawn_positions[4]->transform->GetGlobalPosition());
-		PlaySFX("Block");
+		PlaySFX("Soldier_Block");
 	}
 	else
 	{
@@ -193,6 +190,7 @@ float NilfSoldierShield::GetDamaged(float dmg, PlayerController* player, float3 
 
 		last_player_hit = player;
 		velocity = knock_back; 
+		PlaySwitchSFX("Enemy_GetHit");
 
 		SpawnParticle(last_player_hit->attacks->GetCurrentAttack()->info.hit_particle_name, particle_spawn_positions[1]->transform->GetGlobalPosition(), false, float3(0.0f, 0.0f, -20.0f));
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);

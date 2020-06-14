@@ -262,6 +262,7 @@ void ResourceShader::UpdateUniforms(ShaderInputs inputs)
 		SetUniform4f("objectMaterial.diffuse_color", inputs.standardShaderProperties.diffuse_color);
 		SetUniform1f("objectMaterial.smoothness", inputs.standardShaderProperties.smoothness);
 		SetUniform1f("objectMaterial.metalness", inputs.standardShaderProperties.metalness);
+		SetUniform1i("objectMaterial.emissive", inputs.emissive);
 		
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, App->resources->alpha_noise_texture->id);
@@ -362,6 +363,9 @@ void ResourceShader::ApplyCurrentShaderGlobalUniforms(ComponentCamera* camera)
 			SetUniform1f("density", camera->fogDensity);
 			SetUniform1f("gradient", camera->fogGradient);
 		}
+		if (camera->bloom)
+			SetUniform1f("bloom_threshold", camera->threshold);
+
 		ApplyLightsUniforms();
 		break;
 	}

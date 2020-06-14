@@ -64,7 +64,7 @@ void Drowned::Stun(float time)
 	{
 		state = DrownedState::STUNNED;
 		animator->PlayState("Dizzy");
-		audio_emitter->StartSound("Play_Dizzy_Enemy");
+		PlaySwitchSFX("Enemy_Dizzy");
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
 	}
@@ -100,16 +100,6 @@ bool Drowned::IsState(const char* state_str)
 		return (state == DrownedState::STUNNED ? true : false);
 	else
 		LOG("Incorrect state name: %s", state_str);
-}
-
-void Drowned::PlaySFX(const char* sfx_name)
-{
-	if (sfx_name == "Hit")
-		audio_emitter->StartSound("Play_Drowner_Hit");
-	else if (sfx_name == "Death")
-		audio_emitter->StartSound("Play_Drowner_Hit"); // TODO: Put Death sfx
-	else
-		LOG("Sound effect with name %s not found!", sfx_name);
 }
 
 float Drowned::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
@@ -157,6 +147,7 @@ void Drowned::SetState(const char* state_str)
 		animator->SetFloat("speed", 0.0F);
 		is_hide = false;
 		animator->SetBool("hide", false);
+		PlaySFX("Drowner_Dig");
 		SpawnParticle("DirtSkirt", particle_spawn_positions[2]->transform->GetGlobalPosition());
 		SpawnParticle("DigParticle", particle_spawn_positions[2]->transform->GetGlobalPosition());
 		SpawnParticle("HeadDigParticle", particle_spawn_positions[0]->transform->GetGlobalPosition(), false, float3::zero(), particle_spawn_positions[0]);
@@ -167,6 +158,7 @@ void Drowned::SetState(const char* state_str)
 		character_ctrl->velocity = PxExtendedVec3(0.0f, 0.0f, 0.0f);
 		velocity = float3::zero();
 		animator->SetFloat("speed", 0.0F);
+		PlaySFX("Drowner_Dig");
 		SpawnParticle("DirtSkirt", particle_spawn_positions[2]->transform->GetGlobalPosition());
 		SpawnParticle("DigParticle", particle_spawn_positions[2]->transform->GetGlobalPosition());
 		SpawnParticle("HeadDigParticle", particle_spawn_positions[0]->transform->GetGlobalPosition(), false, float3::zero(), particle_spawn_positions[0]);
