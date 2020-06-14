@@ -211,6 +211,7 @@ State* AttackingState::HandleInput(PlayerController* player)
 
 	if ((Input::GetControllerButtonDown(player->controller_index, player->controller_dash)
 		|| Input::GetKeyDown(player->keyboard_dash)) && player->attacks->CanBeInterrupted()) {
+		player->dash_start = true;
 		return new RollingState();
 	}
 
@@ -317,6 +318,7 @@ void RollingState::OnExit(PlayerController* player)
 	else if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 		player->ReleaseParticle("Yenn_Portal");
 		
+	player->dash_start = false;
 }
 
 TrailVector RollingState::trailvec(float angle)

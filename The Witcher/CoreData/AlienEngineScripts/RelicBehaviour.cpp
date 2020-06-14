@@ -158,6 +158,7 @@ void RelicBehaviour::Start()
 	if (relic)
 	{
 		audio_emitter = GetComponent<ComponentAudioEmitter>();
+		audio_emitter->StartSound("Play_Ambient_Runestone");
 		relic->relic_effect = relic_effect;
 		SetRelic(json_str.data());
 	}

@@ -1,11 +1,12 @@
 {
+    "Name": "Health_Orb",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "Health_Orb",
                 "FamilyNumber": 1,
-                "ID": "4296169868618246930",
-                "ParentID": "4411173466170834045",
+                "ID": "17991278422331716032",
+                "ParentID": "1702839464817361204",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,7 +36,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "8593631981818221422"
+                        "ID": "17229432234102121580"
                     },
                     {
                         "Enabled": true,
@@ -58,8 +59,18 @@
                         "Radius": 0.30000001192092896
                     },
                     {
+                        "ID": "15049546439719003808",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 1,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": false
+                    },
+                    {
                         "Type": 29,
-                        "ID": "1684744059161657055",
+                        "ID": "11622985587504742387",
                         "ResourceID": "5",
                         "DataName": "Pickup",
                         "HasInspector": true,
@@ -78,6 +89,11 @@
                                 "VarType": 6,
                                 "Name": "stat_to_change",
                                 "string": "Health"
+                            },
+                            {
+                                "VarType": 14,
+                                "Name": "picky",
+                                "enumInt": 1
                             }
                         ]
                     }
@@ -86,8 +102,8 @@
             {
                 "Name": "spawn",
                 "FamilyNumber": 2,
-                "ID": "18192426973218320776",
-                "ParentID": "4296169868618246930",
+                "ID": "4541089371868491099",
+                "ParentID": "17991278422331716032",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -117,11 +133,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15751911359323786609"
+                        "ID": "5593421354961451433"
                     },
                     {
                         "Type": 15,
-                        "ID": "1481239343956695551",
+                        "ID": "2549986192431266888",
                         "Billboard": 4,
                         "Start": {
                             "Position": [
@@ -137,7 +153,7 @@
                             ],
                             "Global": false,
                             "Velocity": [
-                                -0,
+                                0,
                                 0,
                                 -0
                             ],
@@ -173,10 +189,27 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 0.20000000298023224,
                             "Speed": 0,
                             "Color": [
@@ -226,7 +259,7 @@
                                 10
                             ],
                             "MaxLife": 0.20000000298023224,
-                            "CurrentLife": 0.21500003337860107,
+                            "CurrentLife": 0.216000035405159,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": false,
@@ -285,6 +318,16 @@
                             "MeshesAttached": {
                                 "MeshID_0": "16913850371853128067"
                             }
+                        },
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": true,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
                         }
                     }
                 ]
@@ -292,8 +335,8 @@
             {
                 "Name": "shield",
                 "FamilyNumber": 2,
-                "ID": "12677573696188315752",
-                "ParentID": "4296169868618246930",
+                "ID": "7061803550573021631",
+                "ParentID": "17991278422331716032",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -323,11 +366,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4792223772763149638"
+                        "ID": "5445244515459738906"
                     },
                     {
                         "Type": 15,
-                        "ID": "16996887467077713765",
+                        "ID": "5329583180925591216",
                         "Billboard": 4,
                         "Start": {
                             "Position": [
@@ -344,7 +387,7 @@
                             "Global": false,
                             "Velocity": [
                                 0,
-                                0,
+                                -0,
                                 0
                             ],
                             "Force": [
@@ -379,10 +422,27 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": false,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 10,
                             "Speed": 0,
                             "Color": [
@@ -432,7 +492,7 @@
                                 10
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 6.3290066719055176,
+                            "CurrentLife": 5.7000036239624023,
                             "SpawnRate": 0,
                             "Delay": 0.20000000298023224,
                             "Loop": true,
@@ -491,6 +551,16 @@
                             "MeshesAttached": {
                                 "MeshID_0": "16913850371853128067"
                             }
+                        },
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": true,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
                         }
                     }
                 ]
@@ -498,8 +568,8 @@
             {
                 "Name": "p_smoke",
                 "FamilyNumber": 2,
-                "ID": "17033411213227724480",
-                "ParentID": "4296169868618246930",
+                "ID": "6580234558104998720",
+                "ParentID": "17991278422331716032",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -529,11 +599,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "10734438482046588736"
+                        "ID": "13632029986290243691"
                     },
                     {
                         "Type": 15,
-                        "ID": "8069022337872394003",
+                        "ID": "2744900060033628093",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
@@ -549,9 +619,9 @@
                             ],
                             "Global": false,
                             "Velocity": [
-                                -0.36597472429275513,
-                                -0.084530502557754517,
-                                -0.33002585172653198
+                                -0.3495490550994873,
+                                -0.13190123438835144,
+                                0.33229124546051025
                             ],
                             "Force": [
                                 0,
@@ -585,10 +655,27 @@
                                 0,
                                 0
                             ],
+                            "Random": true,
+                            "RandomAngleZ": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleY": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "RandomAngleX": [
+                                0,
+                                0,
+                                0
+                            ],
                             "ChangeOverLifeTime": true,
                             "RotateOverLifeTime": true
                         },
                         "End": {
+                            "StartTime": 0,
                             "FinalTime": 2.5,
                             "Speed": 0,
                             "Color": [
@@ -638,7 +725,7 @@
                                 10
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 6.3290066719055176,
+                            "CurrentLife": 5.7000036239624023,
                             "SpawnRate": 20,
                             "Delay": 0,
                             "Loop": true,
@@ -686,11 +773,20 @@
                             "StartFrame": 0,
                             "EndFrame": 0
                         },
-                        "HasMesh": false
+                        "HasMesh": false,
+                        "HasLight": false,
+                        "Light": {
+                            "Emitting": true,
+                            "Casting": 0,
+                            "Random": false,
+                            "ColorParticle": false,
+                            "Alpha": false,
+                            "Size": false,
+                            "MaxLights": 10
+                        }
                     }
                 ]
             }
         ]
-    },
-    "Name": "Health_Orb"
+    }
 }
