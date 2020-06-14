@@ -15,7 +15,7 @@ void TriggerEnvironment::Start()
 	emitter = game_object->GetComponent<ComponentAudioEmitter>();
 	LookForPlayers();//This is the result of what you made me do
 	//I know this is ugly but right now we can't do it dynamically to show in inspector
-	emitter->SetState("Env_Lvl1", "Quiet");
+
 	env_elements.push_back(audio1);
 	env_elements.push_back(audio2);
 	env_elements.push_back(audio3);
@@ -164,6 +164,15 @@ std::string TriggerEnvironment::GetAudioElementByEnum(AudioEffects eff)
 	case AudioEffects::ROCKS_FALLING:
 		return name = "Play_RocksFalling";
 		break;
+	case AudioEffects::DWARVES:
+		return name = "Play_darfs_singing";
+		break;
+	case AudioEffects::PAIN_SCREAM:
+		return name = "Play_dead_soldier_scream";
+		break;
+	case AudioEffects::WOOD_CRACKING:
+		return name = "Play_wood_cracking";
+		break;
 	}
 }
 
@@ -201,6 +210,18 @@ std::string TriggerEnvironment::GetZoneByEnum(EnvironmentZone zone)
 		break;
 	case EnvironmentZone::SLOPE_TO_CAVE:
 		return name = "Slope_To_Cave";
+		break;
+	case EnvironmentZone::BRIDGE:
+		return name = "Bridge";
+		break;
+	case EnvironmentZone::DA_BIG_TRUNK:
+		return name = "Da_Big_Trunk";
+		break;
+	case EnvironmentZone::ENTRY_ZONE:
+		return name = "Entry_Zone";
+		break;
+	case EnvironmentZone::HALL:
+		return name = "Hall";
 		break;
 	}
 }
