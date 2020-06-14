@@ -34,7 +34,7 @@ public:
 		std::map<std::string, Stat> stats;
 
 		//OTHER DATA
-		float revive_range = 5.0f;
+		float revive_range = 3.0f;
 
 		//BASIC MOVEMENT DATA
 		float3 velocity = float3::zero();
@@ -156,6 +156,7 @@ public:
 	//DashCollider
 	Prefab dash_collider;
 	float3 last_dash_position = float3::zero();
+	bool dash_start = false;
 
 	//UI 
 	GameObject* HUD = nullptr;

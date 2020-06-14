@@ -129,7 +129,7 @@ void Wagonnete_UI::HandleImage(ComponentImage* image)
 	{
 	case TRANSITION_STATE::FADE_IN:
 	{
-		float t = (Time::GetGameTime() - (*time)) / 0.25f;
+		float t = (Time::GetGameTime() - (*time)) / 0.5f;
 		float lerp = Maths::Lerp(0.f, 1.f, t);
 
 		image->current_color.a = lerp;
@@ -148,12 +148,13 @@ void Wagonnete_UI::HandleImage(ComponentImage* image)
 		if ((*time) + 2 < Time::GetGameTime())
 		{
 			(*state) = TRANSITION_STATE::FADE_OUT;
+			(*time) = Time::GetGameTime();
 		}
 		break;
 	}
 	case TRANSITION_STATE::FADE_OUT:
 	{
-		float t = (Time::GetGameTime() - (*time)) / 0.25f;
+		float t = (Time::GetGameTime() - (*time)) / 0.5f;
 		float lerp = Maths::Lerp(1.0f, 0.f, t);
 
 		image->current_color.a = lerp;

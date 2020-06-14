@@ -193,7 +193,7 @@ void Enemy::UpdateEnemy()
 				(*it)->spawned_particle->SetEnable(true);
 			}
 
-			std::string audio_name = "Play_" + (*it)->name;
+			std::string audio_name = "Play_" + (*it)->sound_name;
 			audio_emitter->StartSound(audio_name.c_str());
 		}
 
@@ -371,6 +371,33 @@ Quat Enemy::RotateProjectile()
 	return rot2 * rot1;
 }
 
+//void Enemy::PlaySwitchSFX(const char* sfx_name)
+//{
+//	switch (type)
+//	{
+//	case EnemyType::GHOUL:
+//		audio_emitter->SetSwitchState("EnemyType", "Ghoul");
+//		break;
+//	case EnemyType::NILFGAARD_SOLDIER:
+//		audio_emitter->SetSwitchState("EnemyType", "Nilfgaard_Melee");
+//		break;
+//	case EnemyType::DROWNED:
+//		audio_emitter->SetSwitchState("EnemyType", "Drowned");
+//		break;
+//	case EnemyType::BLOCKER_OBSTACLE:
+//		audio_emitter->SetSwitchState("EnemyType", "BlockerObstacle");
+//		break;
+//	}
+//
+//	audio_emitter->StartSound(sfx_name);
+//
+//}
+//
+//void Enemy::PlaySFX(const char* sfx_name)
+//{
+//	audio_emitter->StartSound(sfx_name);
+//}
+
 void Enemy::Decapitate(PlayerController* player)
 {
 	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetGlobalPosition());
@@ -379,7 +406,7 @@ void Enemy::Decapitate(PlayerController* player)
 	{
 		// If not working, check prefab
 		game_object->GetChild("Mesh")->GetChild("Head")->SetEnable(false); //disable old head
-		SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
+		//SpawnParticle(decapitation_particle, particle_spawn_positions[0]->transform->GetGlobalPosition()); //0 is head position
 		
 		vector<GameObject*> iss = decapitated_head->GetChildren();
 		for (auto it = iss.begin(); it != iss.end(); it++)
@@ -463,6 +490,9 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 	if (stats["Health"].GetValue() <= 0.0F) {
 
+		if (is_dead)
+			overkill_hits++;
+
 		animator->SetBool("dead", true);
 		is_dead = true;
 		OnDeathHit();
@@ -473,6 +503,11 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 			PlaySFX("Death");
 
 			Decapitate(player);
+		}
+		else if (overkill_hits >= 3) //overkill of 3 hits 
+		{
+			SetState("Dying");
+			PlaySFX("Death");
 		}
 	}
 
@@ -527,7 +562,7 @@ void Enemy::AddEffect(Effect* new_effect)
 
 	if (new_effect->ticks_time == 0)
 	{
-		std::string audio_name = "Play_" + new_effect->name;
+		std::string audio_name = "Play_" + new_effect->sound_name;
 		audio_emitter->StartSound(audio_name.c_str());
 	}
 

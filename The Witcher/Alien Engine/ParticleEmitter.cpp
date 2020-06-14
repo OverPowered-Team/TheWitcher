@@ -1,13 +1,18 @@
+#include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "ParticleEmitter.h"
 #include "ParticleSystem.h"
 #include "RandomHelper.h"
-
+#include "ModuleObjects.h"
 #include "MathGeoLib/include/Geometry/Circle.h"
 #include "GL/gl.h"
 #include "mmgr/mmgr.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 ParticleEmmitter::ParticleEmmitter() : particleSystem()
 {
+	localAABB = AABB(float3(-5.f, -5.f, -5.f), float3(5.f, 5.f, 5.f));
+		
 }
 
 ParticleEmmitter::~ParticleEmmitter()
@@ -543,6 +548,78 @@ float3 ParticleEmmitter::GetScale() const
 float4x4 ParticleEmmitter::GetGlobalTransform() const
 {
 	return float4x4::FromTRS(position, rotation, float3::one());
+}
+
+void ParticleEmmitter::DrawGlobalAABB()
+{
+	
+		if (particleSystem == nullptr)
+			return;
+
+		float3 color = float3(0.f, 1.f, 0.f);
+		float current_color[4];
+		glGetFloatv(GL_CURRENT_COLOR, current_color);
+		App->renderer3D->last_color.Set(current_color[0], current_color[1], current_color[2], current_color[3]);
+
+		glDisable(GL_LIGHTING);
+		glColor4fv(&color[0]);
+		glLineWidth(2.f);
+		glBegin(GL_LINES);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.minPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.minPoint.y, globalAABB.minPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.minPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.minPoint.x, globalAABB.minPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.minPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.minPoint.x, globalAABB.maxPoint.y, globalAABB.minPoint.z);
+
+
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.minPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.maxPoint.y, globalAABB.minPoint.z);
+
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.minPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.minPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.maxPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.minPoint.x, globalAABB.maxPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.maxPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.maxPoint.y, globalAABB.minPoint.z);
+
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.maxPoint.y, globalAABB.minPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.maxPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.minPoint.y, globalAABB.maxPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.maxPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.minPoint.y, globalAABB.maxPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.minPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.minPoint.y, globalAABB.maxPoint.z);
+		glVertex3f(globalAABB.minPoint.x, globalAABB.maxPoint.y, globalAABB.maxPoint.z);
+
+		glVertex3f(globalAABB.minPoint.x, globalAABB.maxPoint.y, globalAABB.maxPoint.z);
+		glVertex3f(globalAABB.maxPoint.x, globalAABB.maxPoint.y, globalAABB.maxPoint.z);
+
+
+		glEnable(GL_LIGHTING);
+		glColor4fv(&App->renderer3D->last_color[0]);
+		glLineWidth(1.f);
+		glEnd();
+	
+
+}
+
+void ParticleEmmitter::RecalculateAABB(math::float4x4 globalMatrix)
+{
+	particleSystem->emmitter.obb = particleSystem->emmitter.localAABB;
+	particleSystem->emmitter.obb.Transform(globalMatrix);
+
+	particleSystem->emmitter.globalAABB.SetNegativeInfinity();
+	particleSystem->emmitter.globalAABB.Enclose(particleSystem->emmitter.obb);
+
 }
 
 void ParticleEmmitter::Stop()

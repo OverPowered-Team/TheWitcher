@@ -10,6 +10,14 @@ FenceDoor::~FenceDoor()
 
 void FenceDoor::Start()
 {
+	GameObject* objparticles = game_object->GetChild("Particles");
+	if (objparticles != nullptr) {
+		std::vector<ComponentParticleSystem*> particle_gos = objparticles->GetComponentsInChildren<ComponentParticleSystem>();
+		for (auto it = particle_gos.begin(); it != particle_gos.end(); ++it) {
+			particles.insert(std::pair((*it)->game_object_attached->GetName(), (*it)));
+			(*it)->OnStop();
+		}
+	}
 }
 
 void FenceDoor::Explode()
@@ -25,15 +33,11 @@ void FenceDoor::Explode()
 
 		Invoke(std::bind(&FenceDoor::Fall, this), time_to_despawn);
 
-		/*if (particles.find("explosion") != particles.end())
+		if (particles.find("explosion") != particles.end())
 			particles["explosion"]->Restart();
 		if (particles.find("smoke") != particles.end())
-			particles["smoke"]->Restart();*/
+			particles["smoke"]->Restart();
 	}
-
-	/*game_object->GetChild(0)->GetComponent<ComponentRigidBody>()->Destroy();
-	game_object->GetChild(0)->GetComponent<ComponentBoxCollider>()->Destroy();
-	game_object->GetChild(0)->SetEnable(false);*/
 
 	GameObject::Destroy(game_object->GetChild(0));
 }

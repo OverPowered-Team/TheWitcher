@@ -53,11 +53,12 @@ void ProgressiveFog::Update()
 		break;
 
 	case FogState::TRANSITION:
-
-		float percentage = CalculateRatio();
-		camera->SetFogDensity(targetFogDensity * percentage);
-		//camera->SetFogGradient(targetFogGradient * percentage);
-
+		if (object_inside != nullptr)
+		{
+			float percentage = CalculateRatio();
+			camera->SetFogDensity(targetFogDensity * percentage);
+			//camera->SetFogGradient(targetFogGradient * percentage);
+		}
 		break;
 	}
 }
@@ -68,25 +69,32 @@ void ProgressiveFog::OnDrawGizmosSelected()
 	Gizmos::DrawWireSphere(transform->GetGlobalPosition(), outterRadius * 0.5f, Color::Blue());
 }
 
-void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
+void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index, GameObject* obj)
 {
 	switch (collider_index)
 	{
 	case 1:
-		fogState = FogState::TRANSITION;
+		if (object_inside == nullptr)
+		{
+			fogState = FogState::TRANSITION;
 
-		camera->SetBackgroundColor(fogColor);
-		camera->EnableFog();
-		camera->SetFogDensity(0.0001f);
-		camera->SetFogGradient(targetFogGradient);
+			camera->SetBackgroundColor(fogColor);
+			camera->EnableFog();
+			camera->SetFogDensity(0.0001f);
+			camera->SetFogGradient(targetFogGradient);
 
+			object_inside = obj;
+		}
 		//LOG("State in TRANSITION");
 		break;
 
 	case 2:
-		fogState = FogState::ON;
+		if (object_inside == obj)
+		{
+			fogState = FogState::ON;
 
-		camera->SetFogDensity(targetFogDensity);
+			camera->SetFogDensity(targetFogDensity);
+		}
 		//camera->SetFogGradient(targetFogGradient);
 
 		//LOG("State ON");
@@ -94,19 +102,27 @@ void ProgressiveFog::RecieveCollisionEnterInteraction(int collider_index)
 	}
 }
 
-void ProgressiveFog::RecieveCollisionExitInteraction(int collider_index)
+void ProgressiveFog::RecieveCollisionExitInteraction(int collider_index, GameObject* obj)
 {
 	switch (collider_index)
 	{
 	case 1:
-		fogState = FogState::OFF;
-		camera->DisableFog();
-		//LOG("State in OFF");
+		if (object_inside == obj)
+		{
+			fogState = FogState::OFF;
+			camera->DisableFog();
+
+			object_inside = nullptr;
+			//LOG("State in OFF");
+		}
 		break;
 
 	case 2:
-		fogState = FogState::TRANSITION;
-		//LOG("State in TRANSITION");
+		if (object_inside == obj)
+		{
+			fogState = FogState::TRANSITION;
+			//LOG("State in TRANSITION");
+		}
 		break;
 	}
 }
@@ -115,7 +131,7 @@ float ProgressiveFog::CalculateRatio()
 {
 	float totalDistance = outterRadius - innerRadius;
 
-	float3 camPos = camera->game_object_attached->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
+	float3 camPos = object_inside->transform->GetGlobalPosition() - game_object->transform->GetGlobalPosition();
 	float3 outterPos = camPos;
 	camPos.Normalize();
 	float3 innerPos = camPos * innerRadius;

@@ -3,15 +3,17 @@
 #include "ComponentPhysics.h"
 #include "GameObject.h"
 
-ComponentBasePhysic::ComponentBasePhysic(GameObject* go): Component(go)
+ComponentBasePhysic::ComponentBasePhysic(GameObject* go) : Component(go)
 {
-	transform = go->GetComponent<ComponentTransform>();
+	this->transform = go->GetComponent<ComponentTransform>();
 	this->go = go;
 
-	(go->HasComponent<ComponentPhysics>()) 
-		? physics = go->GetComponent<ComponentPhysics>() 
+	(go->HasComponent<ComponentPhysics>())
+		? physics = go->GetComponent<ComponentPhysics>()
 		: go->AddComponent(physics = new ComponentPhysics(go));
+
 }
+
 ComponentBasePhysic::~ComponentBasePhysic()
 {
 }

@@ -11,6 +11,7 @@ struct Modifier
 
 struct EffectData {
 	std::string name = "";
+	std::string sound_name = "";
 	std::string vfx_on_apply = "";
 	std::string vfx_on_tick = "";
 
@@ -37,6 +38,8 @@ public:
 	bool AffectsStat(std::string stat_name);
 
 	std::string name = "";
+	std::string sound_name = "";
+	std::string sound_trail = "";
 	std::vector<Modifier> additive_modifiers;
 	std::vector<Modifier> multiplicative_modifiers;
 
