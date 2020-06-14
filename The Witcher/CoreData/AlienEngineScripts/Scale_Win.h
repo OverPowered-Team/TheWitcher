@@ -77,6 +77,8 @@ private:
 
 	bool first_frame = true;
 	bool spawned_invoke = false;
+
+	ComponentAudioEmitter* emitter = nullptr;
 };
 
 ALIEN_FACTORY Scale_Win* CreateScale_Win() {
