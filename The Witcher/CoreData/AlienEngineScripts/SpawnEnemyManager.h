@@ -4,6 +4,7 @@
 #include "Macros/AlienScripts.h"
 
 class SpawnEnemy;
+class Enemy;
 
 class ALIEN_ENGINE_API SpawnEnemyManager : public Alien {
 
@@ -17,7 +18,7 @@ public:
 	void OnDrawGizmosSelected();
 
 	void CheckForPlayers();
-	void SpawnEnemies();
+	std::vector<Enemy*> SpawnEnemies();
 	void SpawnEnemiesEnter();
 
 public:

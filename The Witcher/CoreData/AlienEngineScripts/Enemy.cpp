@@ -41,7 +41,7 @@ void Enemy::Awake()
 		//		}	
 		//	}
 		//}
-		LOG("Got Meshes");
+		//LOG("Got Meshes");
 	}
 
 }
@@ -317,7 +317,7 @@ void Enemy::Move(float3 direction)
 	{
 		velocity = velocity.Normalized()* stats["Agility"].GetValue();
 	}
-	LOG("%f", velocity.Length());
+
 	character_ctrl->Move(velocity * Time::GetDT() * Time::GetScaleTime());
 	animator->SetFloat("speed", velocity.Length());
 
@@ -842,7 +842,6 @@ void Enemy::IDontWannaGoMrStark()
 	{
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 0.1);
-		GameObject::Destroy(decapitated_head);
 	}
 }
 
