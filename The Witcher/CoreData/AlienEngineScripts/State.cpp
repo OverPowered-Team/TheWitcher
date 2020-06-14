@@ -393,7 +393,6 @@ void DeadState::OnEnter(PlayerController* player)
 	float3 vector = (Camera::GetCurrentCamera()->game_object_attached->transform->GetGlobalPosition() - player->game_object->transform->GetGlobalPosition()).Normalized();
 	revive_world_ui = GameObject::Instantiate(player->revive_world_ui, float3(player->game_object->transform->GetGlobalPosition().x + vector.x, player->game_object->transform->GetGlobalPosition().y + vector.y + 1, player->game_object->transform->GetGlobalPosition().z + vector.z));
 	revive_world_ui->transform->SetLocalScale(0.1f, 0.1f, 0.1f);
-	revive_world_ui->SetNewParent(player->game_object);
 	revive_world_ui->GetComponentInChildren<MiniGame_Revive>()->player_dead = player;
 }
 
