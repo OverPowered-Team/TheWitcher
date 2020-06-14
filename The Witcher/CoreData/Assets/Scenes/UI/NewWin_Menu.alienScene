@@ -35,7 +35,7 @@
                 "ParentID": "17232811697877510915",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": false,
+                "Selected": true,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -46,8 +46,8 @@
                         "Type": 0,
                         "Position": [
                             0,
-                            12.906820297241211,
-                            25.319890975952148
+                            13.278476715087891,
+                            24.420434951782227
                         ],
                         "Rotation": [
                             8.861096745249597e-09,
@@ -79,7 +79,7 @@
                         "isFovHori": 0,
                         "ID": "9557805678483822847",
                         "IsGameCamera": true,
-                        "IsSelectedCamera": false,
+                        "IsSelectedCamera": true,
                         "PrintIcon": true,
                         "IconColor": [
                             0.85000002384185791,
@@ -98,13 +98,15 @@
                         "Skybox_PositiveY": "Library\/Textures\/13945118401434491814.dds",
                         "Skybox_NegativeY": "Library\/Textures\/13294645959885894553.dds",
                         "Skybox_PositiveZ": "Library\/Textures\/882162789730207050.dds",
-                        "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds"
+                        "Skybox_NegativeZ": "Library\/Textures\/13059454142476507694.dds",
+                        "shadow_far_plane": 0,
+                        "frustum_to_generate": 0
                     },
                     {
                         "Type": 17,
                         "Enabled": true,
                         "ID": "6614237717751499353",
-                        "ListenerID": "4187024158"
+                        "ListenerID": "2356757877"
                     }
                 ]
             },
@@ -1083,7 +1085,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "6400987107833740083",
+                        "ID": "2603596826790514596",
                         "Text": "4872",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -1137,7 +1139,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "7314264150860268396",
+                        "ID": "7255104024109753945",
                         "Text": "5623",
                         "UIType": 22,
                         "FontID": "3939517210320041199",
@@ -1190,8 +1192,8 @@
                         "ID": "16493090976228441335"
                     },
                     {
-                        "Width": 10.079999923706055,
-                        "Height": 5.130000114440918,
+                        "Width": 0,
+                        "Height": 0,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
@@ -1242,7 +1244,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "5463337205023579632",
+                        "ID": "670453629910204877",
                         "Text": "Go to Level 2",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1296,7 +1298,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "711198927213487878",
+                        "ID": "15240033208799376212",
                         "Text": "-Geralt-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1350,7 +1352,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "14499656600620720308",
+                        "ID": "16801127997516705163",
                         "Text": "-Yennefer-",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1403,8 +1405,8 @@
                         "ID": "1807586485847697053"
                     },
                     {
-                        "Width": 10.090000152587891,
-                        "Height": 5.1500000953674316,
+                        "Width": 0,
+                        "Height": 0,
                         "Enabled": true,
                         "Type": 30,
                         "UIType": 20,
@@ -1425,7 +1427,7 @@
                 "ParentID": "6167678599204295045",
                 "Enabled": true,
                 "ParentEnabled": true,
-                "Selected": true,
+                "Selected": false,
                 "ParentSelected": false,
                 "IsStatic": false,
                 "IsPrefab": false,
@@ -1455,7 +1457,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "10127313543215575813",
+                        "ID": "13898141550041336422",
                         "Text": "Retry Level",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1520,6 +1522,60 @@
                             0.99998998641967773,
                             1
                         ]
+                    }
+                ]
+            },
+            {
+                "Name": "DamageDone",
+                "FamilyNumber": 2,
+                "ID": "8983017212440019090",
+                "ParentID": "15963664901747148926",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": false,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -3.4000000953674316,
+                            35,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            0.012000000104308128,
+                            0.012000000104308128,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "6477552161801797114"
+                    },
+                    {
+                        "Type": 30,
+                        "ID": "6061657144398029315",
+                        "Text": "   Damage  Done",
+                        "UIType": 22,
+                        "FontID": "16371028872590582604",
+                        "Enabled": true,
+                        "Color": [
+                            0.95098036527633667,
+                            0.95097082853317261,
+                            0.95097082853317261,
+                            1
+                        ],
+                        "Width": 220,
+                        "Interlineal": 1.5,
+                        "Align": 1
                     }
                 ]
             },
