@@ -269,6 +269,7 @@ void GameObject::DrawGame()
 void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* meshes_to_draw, std::vector<std::pair<float, GameObject*>>* meshes_to_draw_transparency, std::vector<GameObject*>* dynamic_objects, std::vector<std::pair<float, GameObject*>>* to_draw_ui, const ComponentCamera* camera)
 {
 	OPTICK_EVENT();
+
 	// TODO: HUGE TODO!: REVIEW THIS FUNCTION 
 	if (!is_static) {
 		ComponentMesh* mesh = GetComponent<ComponentMesh>();
@@ -362,6 +363,9 @@ void GameObject::AddComponent(Component* component)
 
 void GameObject::PostUpdate()
 {
+	if (!enabled)
+		return;
+
 	OPTICK_EVENT();
 	if (!components.empty()) {
 		auto item = components.begin();
@@ -382,6 +386,9 @@ void GameObject::PostUpdate()
 
 void GameObject::PreUpdate()
 {
+	if (!enabled)
+		return;
+
 	OPTICK_EVENT();
 	if (!components.empty()) {
 		auto item = components.begin();
@@ -402,6 +409,9 @@ void GameObject::PreUpdate()
 
 void GameObject::Update()
 {
+	if (!enabled)
+		return;
+
 	OPTICK_EVENT();
 	if (!components.empty()) {
 		auto item = components.begin();
