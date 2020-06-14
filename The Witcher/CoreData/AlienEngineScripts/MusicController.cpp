@@ -12,15 +12,30 @@ MusicController::~MusicController()
 void MusicController::Awake()
 {
 	emitter = this->GetComponent<ComponentAudioEmitter>(); //Its ugly I know
-	emitter->StartSound("Play_Bad_News_Ahead");
-	emitter->StartSound("Play_Combat_Music");
-	emitter->StartSound("Play_KaerMorhen");
-	emitter->StartSound("Play_Ladies_of_the_Woods");
-	emitter->StartSound("Play_No_Surrender");
-	emitter->StartSound("Play_Random_Level1_Music");
-	emitter->StartSound("Play_Trial_Of_The_Grasses");
-	emitter->StartSound("Play_Coal_Mine_Music");
-	emitter->SetState("Interactive_Music_Lvl1", "Quiet");
+
+	if (is_lvl1)
+	{
+		emitter->StartSound("Play_Bad_News_Ahead");
+		emitter->StartSound("Play_Combat_Music");
+		emitter->StartSound("Play_KaerMorhen");
+		emitter->StartSound("Play_Ladies_of_the_Woods");
+		emitter->StartSound("Play_No_Surrender");
+		emitter->StartSound("Play_Random_Level1_Music");
+		emitter->StartSound("Play_Trial_Of_The_Grasses");
+		emitter->StartSound("Play_Coal_Mine_Music");
+		emitter->SetState("Interactive_Music_Lvl1", "Quiet");
+	}
+	else
+	{
+		emitter->StartSound("Play_Combat_Level2");
+		emitter->StartSound("Play_Level2_Bridge");
+		emitter->StartSound("Play_Level2_Ghouls");
+		emitter->StartSound("Play_Level2_Hall");
+		emitter->StartSound("Play_Level2_Start");
+		emitter->StartSound("Play_Minecarts");
+		emitter->SetState("Music_Lvl2_and_wagons", "Quiet");
+	}
+
 	last_music = "Quiet";
 	is_combat = false;
 }
@@ -29,6 +44,8 @@ void MusicController::Start()
 {
 
 	t1 = Time::GetGameTime();
+
+
 }
 
 void MusicController::Update()
@@ -41,7 +58,12 @@ void MusicController::Update()
 				emitter->SetState("Interactive_Music_Lvl1", "Boss");
 			}
 			else
-				emitter->SetState("Interactive_Music_Lvl1", "Combat");
+			{
+				if(is_lvl1)
+					emitter->SetState("Interactive_Music_Lvl1", "Combat");
+				else
+					emitter->SetState("Music_Lvl2_and_wagons", "Combat");
+			}
 
 			has_changed = !has_changed;
 		}
@@ -49,7 +71,11 @@ void MusicController::Update()
 	}
 	else if (!is_combat && has_changed && enemies_in_sight.size() <= 0)
 	{
-		emitter->SetState("Interactive_Music_Lvl1", last_music.c_str()); //CASE OF AFTER BOSS KILLING
+		if(is_lvl1)
+			emitter->SetState("Interactive_Music_Lvl1", last_music.c_str()); //CASE OF AFTER BOSS KILLING
+		else
+			emitter->SetState("Music_Lvl2_and_wagons", last_music.c_str());
+
 		has_changed = !has_changed;
 		already_minium = false;
 		to_normal_rtpc = true;

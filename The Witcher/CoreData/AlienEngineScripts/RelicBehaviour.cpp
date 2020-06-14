@@ -43,6 +43,7 @@ AttackRelic::AttackRelic() : Relic()
 
 AttackRelic::~AttackRelic()
 {
+
 }
 
 void AttackRelic::OnPickUp(PlayerController* _player, std::string attack)
@@ -102,6 +103,7 @@ void DashRelic::OnPickUp(PlayerController* _player, std::string attack)
 	DashEffect* effect = new DashEffect();
 	effect->on_dash_effect = effect_to_apply;
 	effect->name = effect_to_apply->name;
+	effect->sound_name = sound_name;
 
 	switch (relic_effect)
 	{
@@ -158,13 +160,18 @@ void RelicBehaviour::Start()
 	if (relic)
 	{
 		audio_emitter = GetComponent<ComponentAudioEmitter>();
+		audio_emitter->StartSound("Play_Ambient_Runestone");
 		relic->relic_effect = relic_effect;
 		SetRelic(json_str.data());
 	}
 
 	material = game_object->GetComponent<ComponentMaterial>();
 	if (material)
+	{
 		material->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+		material->material->renderMode = 0;
+	}
+		
 	
 }
 
@@ -194,6 +201,7 @@ void RelicBehaviour::Update()
 		if (material->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
 		{
 			material->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+			material->material->renderMode = 0;
 			Destroy(this->game_object);
 		}
 	}
@@ -262,12 +270,13 @@ void RelicBehaviour::SetRelic(const char* json_array)
 		else if (std::strcmp(json_array, "DASH") == 0)
 		{
 			EffectData* _effect = new EffectData();
+			((DashRelic*)relic)->sound_name = type_array->GetString("dash_effect.sound_name");
 			_effect->name = type_array->GetString("dash_effect.name");
 			_effect->vfx_on_apply = type_array->GetString("dash_effect.vfx_on_apply");
 			_effect->vfx_position = type_array->GetNumber("dash_effect.vfx_position");
 			_effect->time = type_array->GetNumber("dash_effect.time");
 			_effect->ticks_time = type_array->GetNumber("dash_effect.ticks_time");
-
+			
 			JSONArraypack* flat_modifiers = type_array->GetArray("dash_effect.flat_modifiers");
 			if (flat_modifiers)
 			{
@@ -295,7 +304,7 @@ void RelicBehaviour::SetRelic(const char* json_array)
 					mult_modifiers->GetAnotherNode();
 				}
 			}
-
+			
 			((DashRelic*)relic)->effect_to_apply = _effect;
 		}
 	}
@@ -327,6 +336,7 @@ void RelicBehaviour::OnTriggerEnter(ComponentCollider* collider)
 			audio_emitter->StartSound("Play_Collect_Runestone");
 
 			picked = true;
+			material->material->renderMode = 1;
 		}
 	}
 }

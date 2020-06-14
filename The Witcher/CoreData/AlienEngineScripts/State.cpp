@@ -281,7 +281,7 @@ void RollingState::OnEnter(PlayerController* player)
 	player->animator->PlayState("Roll");
 	player->audio->StartSound("Play_Roll");
 	player->last_dash_position = player->transform->GetGlobalPosition();
-
+	player->dash_start = true;
 
 	if (player->player_data.type == PlayerController::PlayerType::GERALT)
 	{
@@ -317,6 +317,7 @@ void RollingState::OnExit(PlayerController* player)
 	else if (player->player_data.type == PlayerController::PlayerType::YENNEFER)
 		player->ReleaseParticle("Yenn_Portal");
 		
+	player->dash_start = false;
 }
 
 TrailVector RollingState::trailvec(float angle)

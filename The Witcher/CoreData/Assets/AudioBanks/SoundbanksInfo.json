@@ -5,11 +5,11 @@
   "SchemaVersion": "11",
   "SoundbankVersion": "128",
   "RootPaths": {
-   "ProjectRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\",
-   "SourceFilesRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
-   "SoundBanksRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
+   "ProjectRoot": "C:\\Users\\Lluis\\Documents\\GitHub\\WwiseProject\\TheWitcher\\",
+   "SourceFilesRoot": "C:\\Users\\Lluis\\Documents\\GitHub\\WwiseProject\\TheWitcher\\.cache\\Windows\\",
+   "SoundBanksRoot": "C:\\Users\\Lluis\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows\\",
    "ExternalSourcesInputFile": "",
-   "ExternalSourcesOutputRoot": "C:\\Users\\Iván\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
+   "ExternalSourcesOutputRoot": "C:\\Users\\Lluis\\Documents\\GitHub\\WwiseProject\\TheWitcher\\GeneratedSoundBanks\\Windows"
   },
   "DialogueEvents": [],
   "StreamedFiles": [],
@@ -299,6 +299,11 @@
     "Path": "Music2.bnk",
     "IncludedEvents": [
      {
+      "Id": "818563156",
+      "Name": "Play_No_Surrender",
+      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_No_Surrender"
+     },
+     {
       "Id": "1570292205",
       "Name": "Play_Random_Level1_Music",
       "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_Random_Level1_Music"
@@ -315,6 +320,12 @@
      }
     ],
     "IncludedMemoryFiles": [
+     {
+      "Id": "148062312",
+      "Language": "SFX",
+      "ShortName": "bensound-epic.wav",
+      "Path": "SFX\\bensound-epic_F17FB28C.wem"
+     },
      {
       "Id": "246608315",
       "Language": "SFX",
@@ -575,6 +586,16 @@
     "Path": "Objects_SFX.bnk",
     "IncludedEvents": [
      {
+      "Id": "1347347604",
+      "Name": "Play_Ambient_Runestone",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Ambient_Runestone"
+     },
+     {
+      "Id": "3114179205",
+      "Name": "Play_Coin",
+      "ObjectPath": "\\Events\\Default Work Unit\\Object\\Play_Coin"
+     },
+     {
       "Id": "3145159334",
       "Name": "Play_Collect_Runestone",
       "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Collect_Runestone"
@@ -583,6 +604,11 @@
       "Id": "3449845084",
       "Name": "Play_Earth_Runestone",
       "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Earth_Runestone"
+     },
+     {
+      "Id": "42497351",
+      "Name": "Play_Earth_Trail",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Earth_Trail"
      },
      {
       "Id": "2372531077",
@@ -595,9 +621,19 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Fire_Runestone"
      },
      {
+      "Id": "1530659311",
+      "Name": "Play_Fire_Trail",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Fire_Trail"
+     },
+     {
       "Id": "1709736977",
       "Name": "Play_Ice_Runestone",
       "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Ice_Runestone"
+     },
+     {
+      "Id": "35719318",
+      "Name": "Play_Ice_Trail",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Ice_Trail"
      },
      {
       "Id": "928466002",
@@ -605,9 +641,19 @@
       "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Lightning_Runestone"
      },
      {
+      "Id": "2808828905",
+      "Name": "Play_Orb",
+      "ObjectPath": "\\Events\\Default Work Unit\\Object\\Play_Orb"
+     },
+     {
       "Id": "1352529336",
       "Name": "Play_Poison_Runestone",
       "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Poison_Runestone"
+     },
+     {
+      "Id": "3710312539",
+      "Name": "Play_Poison_Trail",
+      "ObjectPath": "\\Events\\Default Work Unit\\Runestone\\Play_Poison_Trail"
      },
      {
       "Id": "1007768684",
@@ -617,16 +663,46 @@
     ],
     "IncludedMemoryFiles": [
      {
+      "Id": "47263518",
+      "Language": "SFX",
+      "ShortName": "Magic_organic_flutter_ethereal_02_SFXBible_ss06013.wav",
+      "Path": "SFX\\Magic_organic_flutter_ethereal_02_SFXBible_ss06013_F17FB28C.wem"
+     },
+     {
       "Id": "81725165",
       "Language": "SFX",
       "ShortName": "443_wood- impact- small- fast- debris- destruction- smash- splinters 024.wav",
       "Path": "SFX\\443_wood- impact- small- fast- debris- destruction- smash- splinters 024_1C9C67B2.wem"
      },
      {
+      "Id": "86027356",
+      "Language": "SFX",
+      "ShortName": "2ndpoison.wav",
+      "Path": "SFX\\2ndpoison_1C9C67B2.wem"
+     },
+     {
+      "Id": "146395725",
+      "Language": "SFX",
+      "ShortName": "Coin_flip_toss_ring_BLASTWAVEFX_11978.wav",
+      "Path": "SFX\\Coin_flip_toss_ring_BLASTWAVEFX_11978_1C9C67B2.wem"
+     },
+     {
+      "Id": "225718011",
+      "Language": "SFX",
+      "ShortName": "Fantasy_Game_Poison_1 (1).wav",
+      "Path": "SFX\\Fantasy_Game_Poison_1 (1)_1C9C67B2.wem"
+     },
+     {
       "Id": "264947119",
       "Language": "SFX",
       "ShortName": "fire_runestone.wav",
       "Path": "SFX\\fire_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "308424538",
+      "Language": "SFX",
+      "ShortName": "Snow-Plate-Crust-Drop-Gritty-1.wav",
+      "Path": "SFX\\Snow-Plate-Crust-Drop-Gritty-1_1C9C67B2.wem"
      },
      {
       "Id": "367052369",
@@ -641,10 +717,34 @@
       "Path": "SFX\\earth_runestone_1C9C67B2.wem"
      },
      {
+      "Id": "381923074",
+      "Language": "SFX",
+      "ShortName": "ice2.wav",
+      "Path": "SFX\\ice2_1C9C67B2.wem"
+     },
+     {
       "Id": "401112432",
       "Language": "SFX",
       "ShortName": "poison_runestone.wav",
       "Path": "SFX\\poison_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "435814746",
+      "Language": "SFX",
+      "ShortName": "poison3 (1).wav",
+      "Path": "SFX\\poison3 (1)_1C9C67B2.wem"
+     },
+     {
+      "Id": "478883925",
+      "Language": "SFX",
+      "ShortName": "EFX_SD_Organic_Rock_Movement_18.wav",
+      "Path": "SFX\\EFX_SD_Organic_Rock_Movement_18_1C9C67B2.wem"
+     },
+     {
+      "Id": "498906062",
+      "Language": "SFX",
+      "ShortName": "Ancient_Game_Magic_Buff_Melodic_2.wav",
+      "Path": "SFX\\Ancient_Game_Magic_Buff_Melodic_2_1C9C67B2.wem"
      },
      {
       "Id": "586983686",
@@ -653,16 +753,52 @@
       "Path": "SFX\\ice_runestone_1C9C67B2.wem"
      },
      {
+      "Id": "638440512",
+      "Language": "SFX",
+      "ShortName": "Fire-Torch-Whoosh-Fast.wav",
+      "Path": "SFX\\Fire-Torch-Whoosh-Fast_1C9C67B2.wem"
+     },
+     {
+      "Id": "652735994",
+      "Language": "SFX",
+      "ShortName": "1ce.wav",
+      "Path": "SFX\\1ce_1C9C67B2.wem"
+     },
+     {
       "Id": "713490204",
       "Language": "SFX",
       "ShortName": "barrel_destroyed.wav",
       "Path": "SFX\\barrel_destroyed_1C9C67B2.wem"
      },
      {
+      "Id": "824128198",
+      "Language": "SFX",
+      "ShortName": "Torch_single_pass_by_whoosh_07_SFXBible_ss00767.wav",
+      "Path": "SFX\\Torch_single_pass_by_whoosh_07_SFXBible_ss00767_1C9C67B2.wem"
+     },
+     {
+      "Id": "837127173",
+      "Language": "SFX",
+      "ShortName": "MediumRockTumble18.wav",
+      "Path": "SFX\\MediumRockTumble18_1C9C67B2.wem"
+     },
+     {
       "Id": "948641462",
       "Language": "SFX",
       "ShortName": "lightning_runestone.wav",
       "Path": "SFX\\lightning_runestone_1C9C67B2.wem"
+     },
+     {
+      "Id": "957636271",
+      "Language": "SFX",
+      "ShortName": "MediumRockRattle1.wav",
+      "Path": "SFX\\MediumRockRattle1_1C9C67B2.wem"
+     },
+     {
+      "Id": "1028474054",
+      "Language": "SFX",
+      "ShortName": "Fireball_catapult_whoosh_pass_by_heavy_2_BLASTWAVEFX_01646.wav",
+      "Path": "SFX\\Fireball_catapult_whoosh_pass_by_heavy_2_BLASTWAVEFX_01646_1C9C67B2.wem"
      }
     ]
    },
@@ -1177,47 +1313,47 @@
      {
       "Id": "1224400269",
       "Name": "Play_Leshen_Cloud",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Cloud"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Cloud"
      },
      {
       "Id": "3186651586",
       "Name": "Play_Leshen_Cloud_Appears",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Cloud_Appears"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Cloud_Appears"
      },
      {
       "Id": "4142666928",
       "Name": "Play_Leshen_Cloud_Disapears",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Cloud_Disapears"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Cloud_Disapears"
      },
      {
       "Id": "890332400",
       "Name": "Play_Leshen_Death",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Death"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Death"
      },
      {
       "Id": "3936739521",
       "Name": "Play_Leshen_Hit",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Hit"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Hit"
      },
      {
       "Id": "3930890845",
       "Name": "Play_Leshen_Melee_Attack",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Melee_Attack"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Melee_Attack"
      },
      {
       "Id": "3931950402",
       "Name": "Play_Leshen_Raven_Cloud",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Raven_Cloud"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Raven_Cloud"
      },
      {
       "Id": "115571181",
       "Name": "Play_Leshen_Raven_Throw",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Raven_Throw"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Raven_Throw"
      },
      {
       "Id": "1023174917",
       "Name": "Play_Leshen_Roots",
-      "ObjectPath": "\\Events\\Default Work Unit\\Enemy_Interaction\\Leshen\\Play_Leshen_Roots"
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Leshen\\Play_Leshen_Roots"
      },
      {
       "Id": "1718791025",
@@ -1633,17 +1769,29 @@
     "Path": "Music_456999454qq364.bnk",
     "IncludedEvents": [
      {
-      "Id": "818563156",
-      "Name": "Play_No_Surrender",
-      "ObjectPath": "\\Events\\Default Work Unit\\Music\\Play_No_Surrender"
+      "Id": "1140170877",
+      "Name": "Play_Ciri_Music",
+      "ObjectPath": "\\Events\\Default Work Unit\\Bosses\\Ciri\\Play_Ciri_Music"
      }
     ],
     "IncludedMemoryFiles": [
      {
-      "Id": "148062312",
+      "Id": "715475659",
       "Language": "SFX",
-      "ShortName": "bensound-epic.wav",
-      "Path": "SFX\\bensound-epic_F17FB28C.wem"
+      "ShortName": "Level2 Music\\After Ciri.wav",
+      "Path": "SFX\\Level2 Music\\After Ciri_1C9C67B2.wem"
+     },
+     {
+      "Id": "830804940",
+      "Language": "SFX",
+      "ShortName": "Level2 Music\\Before Ciri.wav",
+      "Path": "SFX\\Level2 Music\\Before Ciri_1C9C67B2.wem"
+     },
+     {
+      "Id": "880628954",
+      "Language": "SFX",
+      "ShortName": "Level2 Music\\Ciri Boss.wav",
+      "Path": "SFX\\Level2 Music\\Ciri Boss_1C9C67B2.wem"
      }
     ]
    }

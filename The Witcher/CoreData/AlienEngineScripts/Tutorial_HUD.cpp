@@ -131,39 +131,51 @@ void Tutorial_HUD::ShowTriggerRelics(bool show)
 void Tutorial_HUD::Start()
 {
 	// Attack
-	X			= game_object->GetChild("Attack")->GetChild("AttackX")->GetComponent<ComponentImage>();
-	Y			= game_object->GetChild("Attack")->GetChild("AttackY")->GetComponent<ComponentImage>();
-	text_attack = game_object->GetChild("Attack")->GetChild("Text")->GetComponent<ComponentText>();
-	X->SetBackgroundColor(1, 1, 1, 0);
-	Y->SetBackgroundColor(1, 1, 1, 0);
-	text_attack->SetAlpha(0);
-
-	// Dash
-	RB = game_object->GetChild("Dash")->GetChild("RB")->GetComponent<ComponentImage>();
-	text_dash = game_object->GetChild("Dash")->GetChild("Text")->GetComponent<ComponentText>();
-	RB->SetBackgroundColor(1, 1, 1, 0);
-	text_dash->SetAlpha(0);
-
-	// Magic
-	magic_images.push_back(game_object->GetChild("Magic")->GetChild("X")->GetComponent<ComponentImage>());
-	magic_images.push_back(game_object->GetChild("Magic")->GetChild("Y")->GetComponent<ComponentImage>());
-	magic_images.push_back(game_object->GetChild("Magic")->GetChild("A")->GetComponent<ComponentImage>());
-	magic_images.push_back(game_object->GetChild("Magic")->GetChild("B")->GetComponent<ComponentImage>());
-	magic_images.push_back(game_object->GetChild("Magic")->GetChild("LT")->GetComponent<ComponentImage>());
-	text_magic = game_object->GetChild("Magic")->GetChild("Text")->GetComponent<ComponentText>();
-	text_magic->SetAlpha(0);
-
-	auto iter = magic_images.begin();
-	for (; iter != magic_images.end(); ++iter)
+	if (game_object->GetChild("Attack"))
 	{
-		(*iter)->SetBackgroundColor(1, 1, 1, 0);
+		X = game_object->GetChild("Attack")->GetChild("AttackX")->GetComponent<ComponentImage>();
+		Y = game_object->GetChild("Attack")->GetChild("AttackY")->GetComponent<ComponentImage>();
+		text_attack = game_object->GetChild("Attack")->GetChild("Text")->GetComponent<ComponentText>();
+		X->SetBackgroundColor(1, 1, 1, 0);
+		Y->SetBackgroundColor(1, 1, 1, 0);
+		text_attack->SetAlpha(0);
 	}
 
-	// Relics
-	back_relic = game_object->GetChild("RelicsMenu")->GetChild("Back")->GetComponent<ComponentImage>();
-	text_relic = game_object->GetChild("RelicsMenu")->GetChild("Text")->GetComponent<ComponentText>();
-	back_relic->SetBackgroundColor(1, 1, 1, 0);
-	text_relic->SetAlpha(0);
+	// Dash
+	if (game_object->GetChild("Dash"))
+	{
+		RB = game_object->GetChild("Dash")->GetChild("RB")->GetComponent<ComponentImage>();
+		text_dash = game_object->GetChild("Dash")->GetChild("Text")->GetComponent<ComponentText>();
+		RB->SetBackgroundColor(1, 1, 1, 0);
+		text_dash->SetAlpha(0);
+	}
+
+	// Magic
+	if (game_object->GetChild("Magic"))
+	{
+		magic_images.push_back(game_object->GetChild("Magic")->GetChild("X")->GetComponent<ComponentImage>());
+		magic_images.push_back(game_object->GetChild("Magic")->GetChild("Y")->GetComponent<ComponentImage>());
+		magic_images.push_back(game_object->GetChild("Magic")->GetChild("A")->GetComponent<ComponentImage>());
+		magic_images.push_back(game_object->GetChild("Magic")->GetChild("B")->GetComponent<ComponentImage>());
+		magic_images.push_back(game_object->GetChild("Magic")->GetChild("LT")->GetComponent<ComponentImage>());
+		text_magic = game_object->GetChild("Magic")->GetChild("Text")->GetComponent<ComponentText>();
+		text_magic->SetAlpha(0);
+
+		auto iter = magic_images.begin();
+		for (; iter != magic_images.end(); ++iter)
+		{
+			(*iter)->SetBackgroundColor(1, 1, 1, 0);
+		}
+	}
+
+	if (game_object->GetChild("RelicsMenu"))
+	{
+		// Relics
+		back_relic = game_object->GetChild("RelicsMenu")->GetChild("Back")->GetComponent<ComponentImage>();
+		text_relic = game_object->GetChild("RelicsMenu")->GetChild("Text")->GetComponent<ComponentText>();
+		back_relic->SetBackgroundColor(1, 1, 1, 0);
+		text_relic->SetAlpha(0);
+	}
 }
 
 void Tutorial_HUD::Update()

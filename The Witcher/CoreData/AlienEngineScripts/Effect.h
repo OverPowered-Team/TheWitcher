@@ -78,6 +78,7 @@ public:
 	virtual ~DashEffect();
 
 	EffectData* on_dash_effect = nullptr;
+	std::string sound_name = "";
 	std::string element;
 };
 
