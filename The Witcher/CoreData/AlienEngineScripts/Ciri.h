@@ -74,7 +74,6 @@ public:
 	
 	void SetStats(const char* json) override;
 
-	void PlaySFX(const char* sfx_name) override;
 	bool IsHit() override;
 	void SetState(const char* state) override;
 

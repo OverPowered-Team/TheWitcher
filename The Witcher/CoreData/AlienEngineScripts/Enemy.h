@@ -46,7 +46,11 @@ public:
 	void DeactivateCollider();
 	Quat RotateProjectile();
 
-	virtual void PlaySFX(const char* sfx_name) {}
+	void PlaySwitchSFX(const char* sfx_name, int extra = 0);
+	void PlaySFX(const char* sfx_name);
+	void PlayGetHitSFX();
+
+	virtual void PlayAttackSFX();
 
 	virtual void Stun(float time) {};
 	virtual void SetState(const char* state) {};
