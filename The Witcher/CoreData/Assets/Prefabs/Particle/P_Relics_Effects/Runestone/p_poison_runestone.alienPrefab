@@ -1,11 +1,12 @@
 {
+    "Name": "p_poison_runestone",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "p_poison_runestone",
                 "FamilyNumber": 1,
-                "ID": "10887501750083092704",
-                "ParentID": "14046935774256790219",
+                "ID": "17676761903750194714",
+                "ParentID": "5978818555969051675",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,16 +36,16 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "12682648234587829917"
+                        "ID": "1148517376874219937"
                     },
                     {
                         "Type": 15,
-                        "ID": "2289622349695101965",
+                        "ID": "12325331806551052275",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
                                 0,
-                                4.0880517959594727,
+                                0.5,
                                 0
                             ],
                             "Rotation": [
@@ -55,9 +56,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.72221046686172485,
-                                0.59463852643966675,
-                                0.35329467058181763
+                                -0.63327640295028687,
+                                0.63693183660507202,
+                                -0.439634770154953
                             ],
                             "Force": [
                                 0,
@@ -84,7 +85,7 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 2,
+                            "MaxLifeTime": 1,
                             "AxisRotationStart": false,
                             "Angle3D": [
                                 0,
@@ -160,9 +161,9 @@
                                 0.5,
                                 0.10000000149011612
                             ],
-                            "MaxLife": 2,
-                            "CurrentLife": 2.0019993782043457,
-                            "SpawnRate": 100,
+                            "MaxLife": 1,
+                            "CurrentLife": 1.0149999856948853,
+                            "SpawnRate": 20,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
@@ -189,6 +190,17 @@
                                 0,
                                 0,
                                 0
+                            ],
+                            "ActiveAABB": true,
+                            "PositionAABB": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "SizeAABB": [
+                                10,
+                                10,
+                                10
                             ]
                         },
                         "Bursts": {
@@ -212,6 +224,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -223,6 +236,5 @@
                 ]
             }
         ]
-    },
-    "Name": "p_poison_runestone"
+    }
 }

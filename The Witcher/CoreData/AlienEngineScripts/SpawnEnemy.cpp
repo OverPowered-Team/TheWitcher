@@ -12,13 +12,15 @@ SpawnEnemy::~SpawnEnemy()
 {
 }
 
-void SpawnEnemy::InstantiateEnemy(GameObject* parent)
+Enemy* SpawnEnemy::InstantiateEnemy(GameObject* parent)
 {
 	Enemy* enemy = GameManager::instance->enemy_manager->CreateEnemy(enemy_type, game_object->transform->GetGlobalPosition(), (ExtraEnumType)extra_type);
 	enemy->character_ctrl->SetPosition(game_object->transform->GetGlobalPosition());
 	enemy->is_obstacle = true;
 	enemy->game_object->SetNewParent(parent);
 	Destroy(game_object);
+
+	return enemy;
 }
 
 void SpawnEnemy::InstantiateEnemy()

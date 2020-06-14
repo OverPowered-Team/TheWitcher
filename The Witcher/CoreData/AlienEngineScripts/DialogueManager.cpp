@@ -49,7 +49,7 @@ void DialogueManager::LoadJSONDialogues()
 
 		do
 		{
-			LOG("Loading new dialogue data...");
+			//LOG("Loading new dialogue data...");
 			std::string eventName = dialogues->GetString("eventName");
 			std::string subtitles = dialogues->GetString("subtitles");
 			float time = dialogues->GetNumber("time");
@@ -71,7 +71,6 @@ void DialogueManager::Update()
 	{
 		if (playing)
 		{
-			LOG("Subtitles current: %f vs total: %f", currentDialogue.subtitlesTime.currentTime, currentDialogue.subtitlesTime.totalTime);
 			if ((currentDialogue.subtitlesTime.currentTime += Time::GetDT()) >= currentDialogue.subtitlesTime.totalTime)
 			{
 				playing = false;
