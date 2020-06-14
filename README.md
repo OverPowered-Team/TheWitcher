@@ -133,7 +133,7 @@ Iván Ropero García [RoperoIvan](https://github.com/RoperoIvan)
 
 Yessica Tamara Servín Domínguez [YessicaSD](https://github.com/YessicaSD)
 
-Francisco Javier Venteo Rodrigo [CereVenteo](https://github.com/CereVenteo)
+Cere Venteo [CereVenteo](https://github.com/CereVenteo)
 
 Victor Segura Blanco [VictorSegura99](https://github.com/VictorSegura99)
 

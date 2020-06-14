@@ -154,8 +154,10 @@
         <div class="row ">
 
           <!-- This is a title !!!!!!!!!! -->
-          <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Animator controller</h2>
+          <div class="row ">
+            <div class="col-12 position-relative">
+              <h2 class="section-title text-center code-color">Animator Controller</h2>
+            </div>
           </div>
           
           <div class="container">
@@ -164,15 +166,15 @@
 
             <p>After that. I structured the controller like a state machine, where each state has its own animation clip and playback speed. These states may or may not be connected to each other by transitions which allow the passage from one animation state to another if the specific conditions are met.</p>
 
-            <p>At the start of the Project 3 assignement I said to myself: I would very much like to make an animation controller editor like UnityEngine's. So using the NodeEditor library I created a graphical interface to edit an animation controller.</p>
+            <p>At the start of the Project 3 assignement I said to myself: I would very much like to make an animation controller editor like UnityEngine's. So using the NodeEditor library I created a graphical interface to edit an animation controller. In addition, I made the transitions between animation states more sophisticated adding a parameter list to enable diferent kind of conditions.</p>
 
             <p>Features:</p>
 
-            <li>Animation state management</li>
-            <li>States transitions management</li>
-            <li>AnimationController parameters</li>
-            <li>Transition conditions</li>
-            <li>Play mode visualization</li>
+            <li>Animation state management: The user can create, edit the name, select the animation clip, modify the speed at which the state plays and delete the state.</li>
+            <li>States transitions management: The user can create, and remove transitions between states.</li>
+            <li>AnimationController parameters: The user can create, edit and remove parameters of the parameters list</li>
+            <li>Transition conditions: The user can create, select the parameter that will affect the condition and in which way and remove the condition.</li>
+            <li>Play mode visualization: This feature is pretty usefull for debug purposes, it shows the user how the animation state machine is working at every frame.</li>
           </div>
 
           <div id="myCarousel" class="carousel slide bg-inverse w-50 ml-auto mr-auto" data-ride="carousel">
