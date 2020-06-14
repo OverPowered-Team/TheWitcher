@@ -148,7 +148,7 @@ void SimulationEventCallback::onTrigger(PxTriggerPair* pairs, PxU32 num_pairs)
 
 		collider_A = (ComponentCollider*)trigger_pair.triggerShape->userData;
 		collider_B = (ComponentCollider*)trigger_pair.otherShape->userData;
-		if (!collider_A || !collider_B) continue;
+		if (!collider_A || !collider_B) continue;   
 		if (trigger_pair.flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)) continue;
 		if (collider_A->physics->scripts.empty() && collider_B->physics->scripts.empty()) continue;  // If any collider has scripts discard
 		if (trigger_pair.status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)	      callback_type = CallbackType::ENTER;
