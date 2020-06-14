@@ -1,11 +1,12 @@
 {
+    "Name": "p_ice_runestone",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "p_ice_runestone",
                 "FamilyNumber": 1,
-                "ID": "14201512018017605026",
-                "ParentID": "14046935774256790219",
+                "ID": "4373857134847931890",
+                "ParentID": "5978818555969051675",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -35,11 +36,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4356176201093071948"
+                        "ID": "4118012560637389806"
                     },
                     {
                         "Type": 15,
-                        "ID": "8365804596439982851",
+                        "ID": "6709022731803311291",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
@@ -55,9 +56,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -0.24869386851787567,
-                                -0.96116769313812256,
-                                -0.1196158304810524
+                                0.40315482020378113,
+                                -0.8956986665725708,
+                                0.18759015202522278
                             ],
                             "Force": [
                                 0,
@@ -84,7 +85,7 @@
                                 0,
                                 0
                             ],
-                            "MaxLifeTime": 3,
+                            "MaxLifeTime": 2,
                             "AxisRotationStart": false,
                             "Angle3D": [
                                 0,
@@ -161,8 +162,8 @@
                                 0.10000000149011612
                             ],
                             "MaxLife": 1,
-                            "CurrentLife": 1.0039998292922974,
-                            "SpawnRate": 200,
+                            "CurrentLife": 1.0169999599456787,
+                            "SpawnRate": 50,
                             "Delay": 0,
                             "Loop": false,
                             "Position": [
@@ -189,6 +190,17 @@
                                 0,
                                 0,
                                 0
+                            ],
+                            "ActiveAABB": true,
+                            "PositionAABB": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "SizeAABB": [
+                                10,
+                                10,
+                                10
                             ]
                         },
                         "Bursts": {
@@ -196,7 +208,7 @@
                         },
                         "Burst": {
                             "TimeBurst-0": 0,
-                            "PartsInstanciate-0": 200
+                            "PartsInstanciate-0": 50
                         },
                         "Blending": {
                             "Source": 6,
@@ -216,6 +228,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -227,6 +240,5 @@
                 ]
             }
         ]
-    },
-    "Name": "p_ice_runestone"
+    }
 }
