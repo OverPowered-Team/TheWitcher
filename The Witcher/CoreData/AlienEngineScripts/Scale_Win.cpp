@@ -85,6 +85,8 @@ void Scale_Win::Update()
 			score_text_2->SetText(std::to_string(Scores_Data::player2_damage).c_str());
 			player1_points = Scores_Data::player1_damage;
 			player2_points = Scores_Data::player2_damage;
+			current_points1 = player1_points;
+			current_points2 = player2_points;
 			is_damage_setting = false;
 		}
 
