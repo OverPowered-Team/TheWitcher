@@ -58,9 +58,6 @@ void BlockerObstacle::StartEnemy()
 	material_1st = roots[0]->GetChild(0)->GetComponent<ComponentMaterial>();
 	material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn = 1;
 
-
-	
-
 }
 
 void BlockerObstacle::UpdateEnemy()
@@ -104,6 +101,7 @@ void BlockerObstacle::UpdateEnemy()
 		if(!children_enemies.empty())
 			ReleaseChildren();
 		state = ObstacleState::DEAD;
+		PlaySwitchSFX("Enemy_Death");
 	}
 	break;
 	case ObstacleState::DEAD:
@@ -144,11 +142,13 @@ float BlockerObstacle::GetDamaged(float dmg, PlayerController* player, float3 kn
 	float aux_health = stats["Health"].GetValue();
 	stats["Health"].DecreaseStat(dmg);
 	CheckRootHealth();
+	PlaySwitchSFX("Enemy_GetHit");
 
 	if (stats["Health"].GetValue() <= 0.f)
 	{
 		state = ObstacleState::DYING;
 		root_1st = true;
+		PlaySFX("BlockerObstacle_Vanish");
 		material_1st->material->renderMode = 1;
 	}
 
@@ -225,16 +225,18 @@ void BlockerObstacle::CheckRootHealth()
 	LOG("Two: %f", two_third_life);
 	LOG("One: %f", one_third_life);
 
-	if (current_health <= two_third_life && current_health > one_third_life&& roots[2]->IsEnabled())
+	if (current_health <= two_third_life && current_health > one_third_life && !root_3rd)
 	{
 		material_3rd->material->renderMode = 1;
 		root_3rd = true;
+		PlaySFX("BlockerObstacle_Vanish");
 	}
 		
-	else if (current_health <= one_third_life && roots[1]->IsEnabled())
+	else if (current_health <= one_third_life && roots[1]->IsEnabled() && !root_2nd)
 	{
 		material_2nd->material->renderMode = 1;
 		root_2nd = true;
+		PlaySFX("BlockerObstacle_Vanish");
 	}
 		
 

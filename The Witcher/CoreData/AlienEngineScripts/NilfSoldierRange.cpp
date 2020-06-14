@@ -80,7 +80,6 @@ void NilfSoldierRange::UpdateEnemy()
 	case NilfgaardSoldierState::DYING:
 	{
 		animator->PlayState("Death");
-		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill((uint)type);
 		state = NilfgaardSoldierState::DEAD;
 		if (m_controller && is_combat)
@@ -167,11 +166,10 @@ void NilfSoldierRange::Flee()
 
 void NilfSoldierRange::ShootAttack()
 {
-	SpawnAttackParticle();
+	PlayAttackSFX();
 	float3 arrow_pos = transform->GetGlobalPosition() + direction.Mul(1).Normalized() + float3(0.0F, 1.0F, 0.0F);
 	GameObject* arrow_go = GameObject::Instantiate(arrow, arrow_pos);
 	ComponentRigidBody* arrow_rb = arrow_go->GetComponent<ComponentRigidBody>();
-	audio_emitter->StartSound("SoldierShoot");
 	arrow_go->GetComponent<ArrowScript>()->damage = stats["Damage"].GetValue();
 	float angle = 10.f * Maths::Deg2Rad();
 
