@@ -70,7 +70,7 @@ void main()
      
     if(activeFog)
     {
-        FragColor = mix(vec4(backgroundColor, 1.0), FragColor, visibility);
+        FragColor = mix(vec4(backgroundColor, 0.0), FragColor, visibility);
     }
 
     if(objectMaterial.emissive)
