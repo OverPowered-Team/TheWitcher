@@ -70,6 +70,16 @@ void PauseMenu_Buttons::RetryLevel()
 
 void PauseMenu_Buttons::Exit_to_Menu()
 {
+	Scores_Data::player1_damage = 0;
+	Scores_Data::player2_damage = 0;
+	Scores_Data::player1_kills.clear();
+	Scores_Data::player2_kills.clear();
+	Scores_Data::won_level1 = false;
+	Scores_Data::won_level2 = false;
+	Scores_Data::player1_relics.clear();
+	Scores_Data::player2_relics.clear();
+	Scores_Data::last_checkpoint_position = float3::inf();
+
 	GameObject::FindWithName("UI_InGame")->GetComponent<InGame_UI>()->PauseMenu(false);
 	SceneManager::LoadScene("Main_Menu", FadeToBlackType::FADE);
 }
