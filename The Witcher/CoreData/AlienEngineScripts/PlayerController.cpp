@@ -1021,6 +1021,7 @@ void PlayerController::UpdateDashEffect()
 					{
 						std::string audio_name = "Play_" + dash_coll->effect->sound_name;
 						audio->StartSound(audio_name.c_str());
+						dash_start = false;
 					}
 				}
 					

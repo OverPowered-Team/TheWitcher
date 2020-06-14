@@ -33,6 +33,7 @@ public:
 	virtual void OnPickUp(PlayerController* player, std::string attack = std::string());
 
 	std::string name = "";
+	std::string sound_name = "";
 	std::string description = "";
 	float valor = 0.0;
 	float time = 0.0;
@@ -59,8 +60,7 @@ public:
 	virtual ~DashRelic();
 
 	void OnPickUp(PlayerController* player, std::string attack = std::string()) override;
-
-	std::string sound_name = "";
+	std::string sound_trail = "";
 	EffectData* effect_to_apply = nullptr;
 };
 
