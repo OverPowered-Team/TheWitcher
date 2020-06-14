@@ -387,7 +387,7 @@ void PlayerController::PlayAllowParticle()
 void PlayerController::ReleaseAttackParticle()
 {
 	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
-	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+//	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
 }
 
