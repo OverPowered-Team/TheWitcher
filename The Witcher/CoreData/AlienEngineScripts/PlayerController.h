@@ -34,7 +34,7 @@ public:
 		std::map<std::string, Stat> stats;
 
 		//OTHER DATA
-		float revive_range = 5.0f;
+		float revive_range = 3.0f;
 
 		//BASIC MOVEMENT DATA
 		float3 velocity = float3::zero();
