@@ -590,9 +590,8 @@ void ResourceShader::SetDirectionalLights(const std::string& name, const std::li
 					SetUniformMat4f(clightspaceMB, (*iter)->light->projMatrix * (*iter)->light->viewMatrix[it]);
 				}
 
-				std::string cintensity = std::string(cname).append(".shadowIntensity");
-				SetUniform1f(cintensity, (*iter)->shadowIntensity
-				);
+				std::string cshadowintensity = std::string(cname).append(".shadowIntensity");
+				SetUniform1f(cshadowintensity, (*iter)->shadowIntensity);
 			}
 			else
 				SetUniform1i(cshadow, 0);
