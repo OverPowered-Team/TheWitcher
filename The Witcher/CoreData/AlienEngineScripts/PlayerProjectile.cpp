@@ -13,6 +13,7 @@ PlayerProjectile::~PlayerProjectile()
 void PlayerProjectile::Start()
 {
 	start_time = Time::GetGameTime();
+	audio = GetComponent<ComponentAudioEmitter>();
 }
 
 void PlayerProjectile::Update()
@@ -39,11 +40,18 @@ void PlayerProjectile::OnTriggerEnter(ComponentCollider* collider)
 			player->player_data.total_damage_dealt += damage_dealt;
 
 			if (!enemy->IsDead())
+			{
+				if(audio)
+					audio->StartSound("Play_RockThrow");
 				GameObject::Destroy(this->game_object);
+			}
+				
 		}
 	}
 	else if (strcmp(collider->game_object_attached->GetTag(), "Player") != 0)
 	{
+		if (audio)
+			audio->StartSound("Play_RockThrow");
 		GameObject::Destroy(this->game_object);
 	}
 }
