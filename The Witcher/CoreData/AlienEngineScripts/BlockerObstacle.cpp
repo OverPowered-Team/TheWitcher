@@ -105,6 +105,17 @@ void BlockerObstacle::UpdateEnemy()
 	}
 	break;
 	case ObstacleState::DEAD:
+		if (root_2nd)
+		{
+			material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
+
+			if (material_2nd->material->shaderInputs.dissolveFresnelShaderProperties.burn <= 0)
+			{
+				roots[1]->SetEnable(false);
+				root_2nd = false;
+			}
+
+		}
 		if (root_1st)
 		{
 			material_1st->material->shaderInputs.dissolveFresnelShaderProperties.burn -= burnSpeed * Time::GetDT();
@@ -166,11 +177,21 @@ void BlockerObstacle::LookForMyChildren()
 			has_started = true;
 			GameObject* spawner = game_object->GetChild("SpawnerManager");
 			if (spawner)
-				spawner->GetComponent<SpawnEnemyManager>()->SpawnEnemies();
+			{
+				std::vector<Enemy*> enemy_list = spawner->GetComponent<SpawnEnemyManager>()->SpawnEnemies();
+
+				for (auto it_enemy = enemy_list.begin(); it_enemy != enemy_list.end(); it_enemy++)
+				{
+					children_enemies.push_back(*it_enemy);
+					(*it_enemy)->is_obstacle = true;
+				}
+			}
 			else
 				LOG("No spawner");
 
 			enemy_die_damage = stats["Health"].GetMaxValue() / children_enemies.size();
+
+			break;
 		}
 	}
 }
@@ -181,6 +202,9 @@ void BlockerObstacle::ManageHealth()
 	CheckRootHealth();
 	if (children_enemies.size() <= 0 || stats["Health"].GetValue() <= 0) {
 		state = ObstacleState::DYING;
+		root_1st = true;
+		PlaySFX("BlockerObstacle_Vanish");
+		material_1st->material->renderMode = 1;
 		LOG("ESTOY MUERTO");
 	}
 }
@@ -210,7 +234,10 @@ void BlockerObstacle::ReleaseChildren()
 void BlockerObstacle::ReleaseMyself(Enemy* en)
 {
 	auto iter = std::find(children_enemies.begin(), children_enemies.end(), en);
-	children_enemies.erase(iter);
+	if (*iter)
+		children_enemies.erase(iter);
+	else
+		LOG("Enemy not here");
 	ManageHealth();
 	LOG("I HAVE THIS CHILDREN: %i", children_enemies.size());
 }
