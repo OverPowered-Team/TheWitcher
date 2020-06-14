@@ -21,6 +21,9 @@ void Ciri::StartEnemy()
 
 	Boss::StartEnemy();
 
+	dissolve_mat.renderMode = 1;
+	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 0;
+
 	fight_controller = GameObject::FindWithName("Ciri")->GetComponent<CiriFightController>();
 
 	state = Boss::BossState::NONE;
@@ -95,6 +98,7 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		SetState("Dying");
 		PlaySFX("Death");
 		animator->PlayState("Death");
+		disappearing = true;
 
 		fight_controller->OnCloneDead(game_object);
 	}
@@ -197,6 +201,7 @@ float Ciri::GetDamaged(float dmg, float3 knock_back)
 		PlaySFX("Death");
 
 		animator->PlayState("Death");
+		disappearing = true;
 
 		fight_controller->OnCloneDead(game_object);
 	}

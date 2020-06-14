@@ -389,7 +389,7 @@ void CiriFightController::SpawnRocks()
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
 		if (phase > 1) {
-			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.04f;
+			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.035f;
 		}
 	}
 
