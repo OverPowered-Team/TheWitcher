@@ -41,7 +41,6 @@ public:
 	bool IsDying() override;
 	bool IsHit() override;
 	bool IsState(const char*) override;
-	void PlaySFX(const char* sfx_name);
 
 	void OnAnimationEnd(const char* name) override {};
 public:
