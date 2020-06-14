@@ -78,10 +78,15 @@ void ComponentUI::Update()
 {
 	
 	if (Time::IsPlaying()) {
-		if (canvas != nullptr && canvas->allow_navigation && (!App->objects->first_assigned_selected || (App->objects->GetGameObjectByID(App->objects->selected_ui) != nullptr && !App->objects->GetGameObjectByID(App->objects->selected_ui)->enabled)))
-			CheckFirstSelected();
+		if (canvas != nullptr && canvas->allow_navigation)
+		{
+			if(!App->objects->first_assigned_selected || (App->objects->GetGameObjectByID(App->objects->selected_ui) != nullptr && App->objects->GetGameObjectByID(App->objects->selected_ui)->GetComponent<ComponentUI>()!=nullptr && !App->objects->GetGameObjectByID(App->objects->selected_ui)->GetComponent<ComponentUI>()->active))
+				CheckFirstSelected();
+		}
 
-		//UILogicMouse();
+			
+
+		
 
 		(game_object_attached->enabled) ? active = true : active = false;
 		

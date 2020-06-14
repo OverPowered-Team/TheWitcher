@@ -162,7 +162,7 @@ private:
 	//std::map<float, Particle*> sortedParticles;
 	std::vector<Particle*> particles;
 	uint totalParticles = 0u;
-	
+	ComponentTransform* owner = nullptr;
 	
 
 public:

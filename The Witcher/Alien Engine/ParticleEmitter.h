@@ -4,6 +4,8 @@
 
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/quat.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
+#include "MathGeoLib/include/Geometry/OBB.h"
 
 #include <vector>
 
@@ -129,6 +131,8 @@ public:
 	float3 GetScale() const;
 	float4x4 GetGlobalTransform() const;
 
+	void DrawGlobalAABB();
+	void RecalculateAABB(math::float4x4 globalMatrix);
 	// ---------------------------
 
 	void Stop();
@@ -137,6 +141,10 @@ public:
 
 	ParticleSystem* particleSystem = nullptr;
 	std::vector<Burst> bursts;
+	AABB localAABB;
+	OBB obb;
+	AABB globalAABB;
+	
 
 private:
 
@@ -163,6 +171,8 @@ private:
 	bool loop = true;
 
 	bool playing = true;
+
+	
 
 	// ----- Position Respect Game Object ------
 

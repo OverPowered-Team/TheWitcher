@@ -61,6 +61,13 @@ bool ComponentCanvas::DrawInspector()
 	{
 		ImGui::Spacing();
 
+		ImGui::Checkbox("Allow Navigation", &aux_navi);
+		if (aux_navi != allow_navigation)
+			SetNavigation(aux_navi);
+
+		ImGui::Spacing();
+
+
 		ImGui::Text("Canvas World");
 
 		ImGui::SameLine();
@@ -154,6 +161,17 @@ float3 ComponentCanvas::GetWorldPositionInCanvas(const float3& world_position)
 		game_object_attached->transform->GetGlobalPosition().y + (position.y * height / App->objects->current_viewport->GetSize().y),
 		game_object_attached->transform->GetGlobalPosition().z
 		);
+}
+
+void ComponentCanvas::SetNavigation(bool allow)
+{
+	if (allow)
+		allow_navigation = true;
+	else
+		allow_navigation = false;
+
+	App->objects->first_assigned_selected = false;
+
 }
 
 

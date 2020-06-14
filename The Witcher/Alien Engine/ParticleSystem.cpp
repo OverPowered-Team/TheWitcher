@@ -12,7 +12,6 @@
 
 ParticleSystem::ParticleSystem()
 {
-	
 	particles.reserve(MAX_PARTICLES);
 	emmitter.particleSystem = this;
 
@@ -436,6 +435,8 @@ void ParticleSystem::ResetSystem()
 	}
 
 	particles.clear();
+	
+	emmitter.RecalculateAABB(owner->GetGlobalMatrix());
 
 	// Update counter
 	totalParticles = 0u;
