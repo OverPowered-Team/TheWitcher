@@ -23,17 +23,6 @@ void Ciri::StartEnemy()
 
 	fight_controller = GameObject::FindWithName("Ciri")->GetComponent<CiriFightController>();
 
-	dissolve_mat.color = meshes[0]->material->color;
-	dissolve_mat.used_shader = meshes[0]->material->used_shader;
-	dissolve_mat.simple_depth_shader = meshes[0]->material->simple_depth_shader;
-	dissolve_mat.renderMode = meshes[0]->material->renderMode;
-	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 0;
-
-	for (int i = 0; i < meshes.size(); ++i)
-	{
-		meshes[i]->material = &dissolve_mat;
-	}
-
 	state = Boss::BossState::NONE;
 	animator->PlayState("Spawn");
 	appearing = true;
