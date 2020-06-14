@@ -80,9 +80,20 @@ void MiniGame_Revive::Update()
 	}
 	case States::POSTGAME:
 	{
-		player_dead->Revive(revive_percentatge);
-		player_reviving->SetState(StateType::IDLE);
-		EndMinigame();
+		if (first_post)
+		{
+			player_dead->Revive(revive_percentatge);
+			player_reviving->SetState(StateType::IDLE);
+			game_object->parent->GetComponent<ComponentAudioEmitter>()->StartSound();
+			first_post = false;
+			sound_time = Time::GetGameTime();
+		}
+
+		if (sound_time + 1.5f < Time::GetGameTime())
+		{
+			EndMinigame();
+		}
+
 		break;
 	}
 	}
@@ -200,7 +211,7 @@ void MiniGame_Revive::StartMinigame(PlayerController* player_reviving)
 
 void MiniGame_Revive::EndMinigame()
 {
-	Destroy(this->game_object->parent);
+	Destroy(game_object->parent);
 }
 
 void MiniGame_Revive::RestartMinigame()

@@ -267,6 +267,7 @@ void UI_DamageCount::Start()
 	original_position_x2= game_object->GetChild("Parent_DamageCount_Player2")->transform->GetLocalPosition().x;
 	original_position_y2= game_object->GetChild("Parent_DamageCount_Player2")->transform->GetLocalPosition().y;
 
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
 }
 
 void UI_DamageCount::Update()
@@ -510,6 +511,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal1 <= stoi(text->GetText()))
 					{
+						emitter->StartSound("Damage_Divisible");
 						game_object->GetChild("Character1")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal1 += 50;
 						is_shaking1 = true;
@@ -520,6 +522,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 				{
 					if (shake_goal2 <= stoi(text->GetText()))
 					{
+						emitter->StartSound("Damage_Divisible");
 						game_object->GetChild("Character2")->GetComponent<UI_Char_Frame>()->PlayerOnFire(true);
 						shake_goal2 += 50;
 						is_shaking2 = true;
@@ -530,6 +533,7 @@ void UI_DamageCount::DamageCount_Handling(int index)
 
 				if ((*vector_to_transition).size() == 0)
 				{
+					emitter->StartSound("Damage_Count");
 					if (index == 1)
 					{
 						is_scaling1 = true;
