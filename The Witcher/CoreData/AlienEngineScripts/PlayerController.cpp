@@ -40,6 +40,9 @@ void PlayerController::Start()
 	camera = Camera::GetCurrentCamera();
 	shake = camera->game_object_attached->GetComponent<CameraShake>();
 	particle_spawn_positions = game_object->GetChild("Particle_Positions")->GetChildren();
+
+	if (audio)
+		audio->SetSwitchState("PlayerType", player_data.type == PlayerType::GERALT ? "Geralt":"Yennefer");
 	
 	LoadStats();
 	CalculateAABB();
@@ -394,15 +397,7 @@ void PlayerController::Jump()
 	player_data.vertical_speed = player_data.stats["Jump_Power"].GetValue();
 	is_grounded = false;
 	animator->PlayState("Air");
-	switch (player_data.type)
-	{
-	case PlayerController::PlayerType::GERALT:
-		audio->StartSound("Play_GeraltJump");
-		break;
-	case PlayerController::PlayerType::YENNEFER:
-		audio->StartSound("Play_YennJump");
-		break;
-	}
+	audio->StartSound("Play_Jump");
 	animator->SetBool("air", true);
 }
 
@@ -457,16 +452,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 			return;
 
 		player_data.stats["Health"].DecreaseStat(dmg);
-
-		switch (player_data.type)
-		{
-		case PlayerController::PlayerType::GERALT:
-			audio->StartSound("Play_GeraltGetDamaged");
-			break;
-		case PlayerController::PlayerType::YENNEFER:
-			audio->StartSound("Play_YennGetDamaged");
-			break;
-		}
+		audio->StartSound("Play_GetDamaged");
 
 		if (HUD)
 		{
