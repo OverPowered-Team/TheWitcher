@@ -162,7 +162,11 @@ void VagoneteMove::FollowCurve()
 		}
 
 		//Position
+
+		Quat currentRot = rigid_body->GetRotation();
+
 		rigid_body->SetPosition(currentPos);
+
 
 		//Rotation
 		float3 nextPos = curve->curve.ValueAtDistance(actual_pos + Time::GetDT() / math::Abs(transform->GetGlobalPosition().Distance(curve->curve.ValueAtDistance(actual_pos + current_speed * Time::GetDT()))));
@@ -170,7 +174,14 @@ void VagoneteMove::FollowCurve()
 		float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
 		float3 Y = vector.Cross(normal);
 		float3x3 rot = float3x3(vector, normal, Y);
-		rigid_body->SetRotation(rot.ToQuat() * VagoneteInputs::playerRotation);
+
+		
+		Quat finalRot = rot.ToQuat() * VagoneteInputs::playerRotation;
+
+		
+
+		rigid_body->SetRotation(currentRot.Slerp(finalRot, Time::GetDT()*6.0F));
+
 		/*float3 vector = (nextPos - currentPos).Normalized();
 		float3 normal = curve->curve.NormalAtDistance(actual_pos).Normalized();
 		float3 Y = normal.Cross(vector);
