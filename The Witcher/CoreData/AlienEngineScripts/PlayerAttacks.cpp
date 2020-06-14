@@ -527,8 +527,8 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 void PlayerAttacks::AllowCombo()
 {
 	can_execute_input = true;
-	if(current_attack)
-		player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());
+	/*if(current_attack)
+		player_controller->SpawnParticle(current_attack->info.allow_combo_p_name, player_controller->particle_spawn_positions[1]->transform->GetLocalPosition());*/
 }
 
 bool PlayerAttacks::CanBeInterrupted()
@@ -682,7 +682,7 @@ void PlayerAttacks::CreateAttacks()
 			info.next_light = attack_combo->GetString("next_attack_light");
 			info.next_heavy = attack_combo->GetString("next_attack_heavy");
 			info.shake = attack_combo->GetNumber("cam_shake");
-			info.allow_combo_p_name = attack_combo->GetString("allow_particle");
+			//info.allow_combo_p_name = attack_combo->GetString("allow_particle");
 			info.hit_particle_name = attack_combo->GetString("enemy_hit_particle");
 			info.snap_detection_range = attack_combo->GetNumber("snap_detection_range");
 			info.min_distance_to_target = attack_combo->GetNumber("min_distance_to_target");

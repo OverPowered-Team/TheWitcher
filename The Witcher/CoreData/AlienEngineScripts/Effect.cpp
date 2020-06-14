@@ -10,6 +10,7 @@ Effect::Effect()
 Effect::Effect(EffectData* data)
 {
     name = data->name;
+    sound_name = data->sound_name;
     time = data->time;
     ticks_time = data->ticks_time;
 

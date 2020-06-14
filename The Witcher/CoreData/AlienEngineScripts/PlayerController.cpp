@@ -384,7 +384,7 @@ void PlayerController::PlayAllowParticle()
 void PlayerController::ReleaseAttackParticle()
 {
 	ReleaseParticle(attacks->GetCurrentAttack()->info.particle_name);
-	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
+//	ReleaseParticle(attacks->GetCurrentAttack()->info.allow_combo_p_name);
 	ReleaseParticle(attacks->GetCurrentAttack()->info.chain_particle);
 }
 
@@ -1019,8 +1019,9 @@ void PlayerController::UpdateDashEffect()
 
 					if (dash_start)
 					{
-						std::string audio_name = "Play_" + dash_coll->effect->on_dash_effect->name;
+						std::string audio_name = "Play_" + dash_coll->effect->sound_name;
 						audio->StartSound(audio_name.c_str());
+						dash_start = false;
 					}
 				}
 					
