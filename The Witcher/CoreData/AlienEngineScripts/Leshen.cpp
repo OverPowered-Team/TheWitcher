@@ -58,6 +58,8 @@ float Leshen::GetDamaged(float dmg, PlayerController* player, float3 knock)
 		Invoke(std::bind(&Leshen::ChangeScene, this), 4.f);
 	}
 
+	audio_emitter->StartSound("Play_Leshen_Hit");
+
 	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
 	{
 		if ((*iter))
@@ -202,6 +204,7 @@ void Leshen::LaunchCloudAction()
 	SpawnParticle("Cloud", float3::zero(), true);
 	game_object->GetComponent<ComponentAudioEmitter>()->StartSound("Play_Leshen_Cloud_Appears");
 	cloud_collider->GetComponent<ComponentSphereCollider>()->SetEnable(true);
+	audio_emitter->StartSound("Play_Leshen_Raven_Cloud");
 }
 
 Boss::ActionState Leshen::UpdateAction()

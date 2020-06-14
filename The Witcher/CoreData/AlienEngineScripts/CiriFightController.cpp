@@ -49,6 +49,9 @@ void CiriFightController::Start()
 	}
 
 	rocks_respawn = GameObject::FindWithName("Rocks_spawn");
+	emitter->StopSoundByName("Play_Ciri_Music");
+	emitter->SetSwitchState("Ciri_Boss", "Pre_Fight");
+	emitter->StartSound("Play_Ciri_Music");
 }
 
 void CiriFightController::Update()
@@ -67,6 +70,9 @@ void CiriFightController::Update()
 		emitter->StartSound("Play_Ciri_Tornado");
 		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[0]->transform->GetGlobalPosition());
 		GameManager::instance->enemy_manager->CreateEnemy(EnemyType::CIRI_CLONE, clone_positions[1]->transform->GetGlobalPosition());
+		emitter->StopSoundByName("Play_Ciri_Music");
+		emitter->SetSwitchState("Ciri_Boss", "In_Fight");
+		emitter->StartSound("Play_Ciri_Music");
 	}
 	if (fight_started) {
 		switch (phase)
@@ -151,6 +157,9 @@ void CiriFightController::FinishPhaseThree()
 	GameManager::instance->event_manager->ReceiveDialogueEvent(10, 0.5f);
 	GameObject::FindWithName("Butterfly_emitter")->SetEnable(true);
 	GameObject::FindWithName("Rock_particles3")->SetEnable(false);
+	emitter->StopSoundByName("Play_Ciri_Music");
+	emitter->SetSwitchState("Ciri_Boss", "Post_Fight");
+	emitter->StartSound("Play_Ciri_Music");
 }
 
 void CiriFightController::FinishPhaseFour()
@@ -380,7 +389,7 @@ void CiriFightController::SpawnRocks()
 	for (int i = 0; i < 5; ++i) {
 		rocks.push_back(GameObject::Instantiate(rock_orbit, float3::zero(), true, rock_positions[i]));
 		if (phase > 1) {
-			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.04f;
+			rocks.back()->GetComponent<RockOrbit>()->init_velocity = 0.035f;
 		}
 	}
 
