@@ -54,10 +54,10 @@ State* RunningState::HandleInput(PlayerController* player)
 
 void RunningState::Update(PlayerController* player)
 {
-	if (Time::GetGameTime() - player->timer >= player->delay_footsteps) {
+	/*if (Time::GetGameTime() - player->timer >= player->delay_footsteps) {
 		player->timer = Time::GetGameTime();
 		player->audio->StartSound("Player_Footstep");
-	}
+	}*/
 	player->HandleMovement();
 
 	if (!player->is_grounded)
@@ -92,8 +92,8 @@ void RunningState::OnEnter(PlayerController* player)
 	if(found_running == false)
 		player->SpawnParticle("p_run", float3(0.f, 0.f, -0.15f));	
 	
-	player->audio->StartSound("Player_Footstep");
-	player->timer = Time::GetGameTime();
+	/*player->audio->StartSound("Player_Footstep");
+	player->timer = Time::GetGameTime();*/
 }
 
 void RunningState::OnExit(PlayerController* player)
@@ -386,6 +386,7 @@ void DeadState::OnEnter(PlayerController* player)
 {
 	player->animator->PlayState("Death");
 	player->animator->SetBool("dead", true);
+	player->audio->StartSound("Play_Death");
 	player->player_data.velocity = float3::zero();
 	player->is_immune = true;
 
