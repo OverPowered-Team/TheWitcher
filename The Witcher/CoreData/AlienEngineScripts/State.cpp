@@ -279,7 +279,7 @@ void RollingState::OnEnter(PlayerController* player)
 		player->player_data.velocity = player->transform->forward * player->player_data.stats["Dash_Power"].GetValue();
 
 	player->animator->PlayState("Roll");
-	player->audio->StartSound("Play_Roll");
+	player->audio->StartSound("Play_Dodge");
 	player->last_dash_position = player->transform->GetGlobalPosition();
 	player->dash_start = true;
 
