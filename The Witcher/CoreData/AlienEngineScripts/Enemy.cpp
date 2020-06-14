@@ -491,6 +491,9 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 
 	if (stats["Health"].GetValue() <= 0.0F) {
 
+		if (is_dead)
+			overkill_hits++;
+
 		animator->SetBool("dead", true);
 		is_dead = true;
 		OnDeathHit();
@@ -501,6 +504,11 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 			PlaySFX("Death");
 
 			Decapitate(player);
+		}
+		else if (overkill_hits >= 3) //overkill of 3 hits 
+		{
+			SetState("Dying");
+			PlaySFX("Death");
 		}
 	}
 

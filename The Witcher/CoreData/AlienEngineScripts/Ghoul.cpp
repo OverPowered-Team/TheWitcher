@@ -229,7 +229,7 @@ void Ghoul::OnAnimationEnd(const char* name)
     }
     else if (strcmp(name, "Jump") == 0)
     {
-        if (is_attacking)
+        if (is_attacking || ghoul_type == GhoulType::MINI)
         {
             if (distance < stats["AttackRange"].GetValue())
                 SetState("Attack");
