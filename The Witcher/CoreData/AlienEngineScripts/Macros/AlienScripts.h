@@ -39,6 +39,8 @@
 #include "..\..\..\Alien Engine\ComponentBar.h"
 #include "..\..\..\Alien Engine\ComponentConvexHullCollider.h"
 #include "..\..\..\Alien Engine\ComponentTrail.h"
+#include "..\..\..\Alien Engine\Trail.h"
+
 /*-----------------COMPONENTS-------------------*/
 
 /*-----------------MATH-------------------*/

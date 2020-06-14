@@ -37,17 +37,28 @@ void MainMenu_Buttons::Muffin()
 	AlienEngine::OpenURL("https://github.com/OverPowered-Team");
 }
 
+void MainMenu_Buttons::Settings()
+{
+	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
+	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::SETTINGS);
+	GameObject::FindWithName("Main_Menu_UI")->SetEnable(false);
+}
+
 void MainMenu_Buttons::AddVolume()
 {
+	volume += 5.0f;
+	if (volume >= 100.0f)
+		volume = 100.0f;
+
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();
-	//UIConfig::AddVolume(emitter);
+	emitter->SetRTPCValue("GeneralVolume", volume);
 
 }
 
 void MainMenu_Buttons::SubtractVolume()
 {
 	ComponentAudioEmitter* emitter = GetComponent<ComponentAudioEmitter>();
-	//UIConfig::SubtractVolume(emitter);
+
 }
 
 void MainMenu_Buttons::FullScreen()
@@ -56,7 +67,7 @@ void MainMenu_Buttons::FullScreen()
 		Screen::SetFullScreen(false);
 	else
 		Screen::SetFullScreen(true);
-	//UIConfig::FullScreen();
+	
 }
 
 

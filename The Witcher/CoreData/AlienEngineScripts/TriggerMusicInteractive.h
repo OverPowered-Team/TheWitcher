@@ -21,8 +21,25 @@ public:
 		PRE_BOSS,
 		RAVINE,
 		SLOPE_TO_CAVE,
-		MINE
+		MINE,
+		BRIDGE,
+		// lvl2 and vagonetas
+		DA_BIG_TRUNK,
+		ENTRY_ZONE,
+		HALL,
+		MINECARTS_CAVE,
 		);
+
+	/*enum (Music2,
+		BRIDGE,
+		COMBAT,
+		DA_BIG_TRUNK,
+		ENTRY_ZONE,
+		GHOUL_NESTS,
+		HALL,
+		MINECARTS_CAVE,
+		QUIET);*/
+
 	TriggerMusicInteractive();
 	virtual ~TriggerMusicInteractive();
 	void Start();
@@ -40,10 +57,13 @@ public:
 	GameObject* p2 = nullptr;
 	int player_counter = 0;
 	bool first_time = true;
+
+	bool is_lvl1 = true;
 };
 ALIEN_FACTORY TriggerMusicInteractive* CreateTriggerMusicInteractive() {
 	TriggerMusicInteractive* alien = new TriggerMusicInteractive();
 	// To show in inspector here
 	SHOW_IN_INSPECTOR_AS_ENUM(TriggerMusicInteractive::Music, alien->interactive);
+	SHOW_IN_INSPECTOR_AS_CHECKBOX_BOOL(alien->is_lvl1);
 	return alien;
 }

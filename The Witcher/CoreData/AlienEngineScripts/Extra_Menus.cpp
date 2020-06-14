@@ -26,15 +26,15 @@ void Extra_Menus::Start()
 	if (strcmp(SceneManager::GetCurrentScene(), "Main_Menu") == 0)
 	{
 		previous_menu = GameObject::FindWithName("Main_Menu_UI");
-		ComponentCheckbox* checkbox = GameObject::FindWithName("Settings")->GetChild("CheckboxFS")->GetComponent<ComponentCheckbox>();
-	    checkbox->SetStatus(Screen::IsFullScreen());
+		//ComponentCheckbox* checkbox = GameObject::FindWithName("Settings")->GetChild("CheckboxFS")->GetComponent<ComponentCheckbox>();
+	    // checkbox->SetStatus(Screen::IsFullScreen());
 	}
 	else
 	{
 		previous_menu = GameObject::FindWithName("Pause_Menu")->GetChild("Menu");
 	}
 
-	
+	game_object->SetEnable(false);
 
 }
 
@@ -67,8 +67,8 @@ void Extra_Menus::MenuSpawn(MENU menu_type)
 	case MENU::SETTINGS:
 		leaderboard->SetEnable(false);
 		controls->SetEnable(false);
-		B->SetEnable(false);
-		settings->SetEnable(false);
+		B->SetEnable(true);
+		settings->SetEnable(true);
 		break;
 	case MENU::LEADERBOARD:
 		leaderboard->SetEnable(true);

@@ -309,20 +309,20 @@ void Enemy::Guard()
 	float3 avoid_vector = steeringAvoid->AvoidObstacle(avoid_force);
 
 	// Option 1: Combiantion of behaviours
-	/*if (player_controllers[current_player]->battleCircle < distance)
-		velocity += avoid_vector * avoid_force + velocity_vec * (1 - avoid_force);
+	if (player_controllers[current_player]->battleCircle < distance)
+		velocity += avoid_vector + velocity_vec;
 	else
-		velocity = float3::zero();*/
+		velocity = float3::zero();
 
 	// Option 2: Different behaviours
-	if (avoid_vector.LengthSq() > 0)
+	/*if (avoid_vector.LengthSq() > 0)
 		velocity += avoid_vector;
 	else if (player_controllers[current_player]->battleCircle < distance && stats["AttackRange"].GetValue() < distance)
 		velocity += velocity_vec;
 	else if (stats["AttackRange"].GetValue() > distance)
 		velocity -= velocity_vec;
 	else 
-		velocity = float3::zero();
+		velocity = float3::zero();*/
 
 	animator->SetFloat("speed", velocity.Length());
 
@@ -371,6 +371,33 @@ Quat Enemy::RotateProjectile()
 	Quat rot2 = Quat::RotateFromTo(newUp, desiredUp);
 	return rot2 * rot1;
 }
+
+//void Enemy::PlaySwitchSFX(const char* sfx_name)
+//{
+//	switch (type)
+//	{
+//	case EnemyType::GHOUL:
+//		audio_emitter->SetSwitchState("EnemyType", "Ghoul");
+//		break;
+//	case EnemyType::NILFGAARD_SOLDIER:
+//		audio_emitter->SetSwitchState("EnemyType", "Nilfgaard_Melee");
+//		break;
+//	case EnemyType::DROWNED:
+//		audio_emitter->SetSwitchState("EnemyType", "Drowned");
+//		break;
+//	case EnemyType::BLOCKER_OBSTACLE:
+//		audio_emitter->SetSwitchState("EnemyType", "BlockerObstacle");
+//		break;
+//	}
+//
+//	audio_emitter->StartSound(sfx_name);
+//
+//}
+//
+//void Enemy::PlaySFX(const char* sfx_name)
+//{
+//	audio_emitter->StartSound(sfx_name);
+//}
 
 void Enemy::Decapitate(PlayerController* player)
 {
@@ -697,14 +724,24 @@ void Enemy::AddBattleCircle(PlayerController* player_controller)
 		return;
 
 	is_battle_circle = true;
-	player_controller->enemy_battle_circle.push_back(this);
 
 	if (player_controller->current_attacking_enemies == player_controller->max_attacking_enemies)
 	{
-		SetState("Guard");
+		int other_player = player_controller->controller_index == 1 ? 1 : 0;
+		if(player_controllers[other_player]->state->type != StateType::DEAD && player_controllers[other_player]->current_attacking_enemies != player_controllers[other_player]->max_attacking_enemies)
+		{
+			player_controllers[other_player]->enemy_battle_circle.push_back(this);
+			AddAttacking(player_controllers[other_player]);
+		}
+		else
+		{
+			player_controller->enemy_battle_circle.push_back(this);
+			SetState("Guard");
+		}
 	}
 	else
 	{
+		player_controller->enemy_battle_circle.push_back(this);
 		AddAttacking(player_controller);
 	}
 }
@@ -713,6 +750,7 @@ void Enemy::AddAttacking(PlayerController* player_controller)
 {
 	player_controller->current_attacking_enemies++;
 	is_attacking = true;
+	current_player = player_controller->controller_index - 1;
 	if(!is_dead)
 		SetState("Move");
 }

@@ -27,11 +27,16 @@ public:
 
 	float3 GetWorldPositionInCanvas(const float3& world_position);
 
+	void SetNavigation(bool allow);
+
 public:
 	uint width = 0, height = 0;
 	bool allow_navigation	= true;
 	bool isWorld			= false;
 	BillboardType bbtype	= BillboardType::SCREEN;
+
+private :
+	bool aux_navi = true;
 };
 
 

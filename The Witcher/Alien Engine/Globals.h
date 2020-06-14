@@ -9,7 +9,7 @@
 #include "glew/include/glew.h"
 
 // DISCOMMENT TO START THE ENGINE IN PLAY MODE
-#define GAME_VERSION
+//#define GAME_VERSION
 
 #define LOG_ENGINE(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 

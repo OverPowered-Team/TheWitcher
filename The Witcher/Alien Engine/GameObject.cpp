@@ -290,11 +290,17 @@ void GameObject::SetDrawList(std::vector<std::pair<float, GameObject*>>* meshes_
 				}
 			}
 		}
-		else if (GetComponent<ComponentParticleSystem>() != nullptr)
+
+		ComponentParticleSystem* partSystem = GetComponent<ComponentParticleSystem>();
+
+		if (partSystem != nullptr)
 		{
-			float3 obj_pos = transform->GetGlobalPosition();
-			float distance = camera->frustum.pos.Distance(obj_pos);
-			meshes_to_draw_transparency->push_back({ distance, this });
+			if (App->renderer3D->IsInsideFrustum(camera, partSystem->GetSystem()->emmitter.globalAABB))
+			{
+				float3 obj_pos = transform->GetGlobalPosition();
+				float distance = camera->frustum.pos.Distance(obj_pos);
+				meshes_to_draw_transparency->push_back({ distance, this });
+			}
 		}
 		else if (GetComponent<ComponentTrail>() != nullptr)
 		{
