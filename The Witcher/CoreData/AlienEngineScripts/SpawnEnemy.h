@@ -11,7 +11,7 @@ public:
 	SpawnEnemy();
 	virtual ~SpawnEnemy();
 
-	void InstantiateEnemy(GameObject* parent);
+	Enemy* InstantiateEnemy(GameObject* parent);
 	void InstantiateEnemy();
 
 public:

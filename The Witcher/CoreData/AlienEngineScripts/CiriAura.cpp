@@ -1,6 +1,6 @@
 #include "CiriAura.h"
 
-CiriAura::CiriAura() : Enemy()
+CiriAura::CiriAura() : Alien()
 {
 }
 
@@ -8,7 +8,7 @@ CiriAura::~CiriAura()
 {
 }
 
-void CiriAura::UpdateEnemy()
+void CiriAura::Update()
 {
 	if (im_dead_fuck)
 		return;
