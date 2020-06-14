@@ -445,6 +445,7 @@ void PlayerController::ReceiveDamage(float dmg, float3 knock_speed, bool knock)
 		if (player_data.stats["Absorb"].GetValue() > 0)
 		{
 			AbsorbHit();
+			audio->StartSound("Play_QuenHit");
 			return;
 		}
 

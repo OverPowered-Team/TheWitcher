@@ -5,8 +5,8 @@
             {
                 "Name": "Yennefer_Rock",
                 "FamilyNumber": 1,
-                "ID": "653850843527172438",
-                "ParentID": "14823242940331849949",
+                "ID": "4715595014692102170",
+                "ParentID": "14495077789790025734",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -36,7 +36,7 @@
                             0.458579421043396
                         ],
                         "ScaleNegative": false,
-                        "ID": "15337525354027687789"
+                        "ID": "17309361908284256419"
                     },
                     {
                         "Type": 1,
@@ -46,7 +46,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "16690760032783443694",
+                        "ID": "18153595192754755221",
                         "HasMesh": true,
                         "IsPrimitive": true,
                         "PrimType": 1,
@@ -54,7 +54,7 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "6218090166253429395",
+                        "ID": "4867003775437256693",
                         "HasMaterial": true,
                         "MaterialID": "0",
                         "Enabled": true
@@ -85,7 +85,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "15636817103823067704",
+                        "ID": "11077381663772748442",
                         "ResourceID": "1500231456347285610",
                         "DataName": "PlayerProjectile",
                         "HasInspector": true,
@@ -93,7 +93,7 @@
                             {
                                 "VarType": 3,
                                 "Name": "damage",
-                                "float": 20
+                                "float": 7
                             },
                             {
                                 "VarType": 3,
@@ -111,14 +111,24 @@
                                 "float": 24
                             }
                         ]
+                    },
+                    {
+                        "ID": "11465163250957367655",
+                        "Type": 16,
+                        "Enabled": true,
+                        "Volume": 0.54500001668930054,
+                        "Mute": false,
+                        "Bank": "0",
+                        "Event": "0",
+                        "PlayOnAwake": false
                     }
                 ]
             },
             {
                 "Name": "Particle_trail",
                 "FamilyNumber": 2,
-                "ID": "9798907301323329455",
-                "ParentID": "653850843527172438",
+                "ID": "11112066418432178046",
+                "ParentID": "4715595014692102170",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -148,11 +158,11 @@
                             2.1806473731994629
                         ],
                         "ScaleNegative": false,
-                        "ID": "14370108537932369630"
+                        "ID": "12904769743183158772"
                     },
                     {
                         "Type": 15,
-                        "ID": "797604327405075268",
+                        "ID": "18332876979369771040",
                         "Billboard": 1,
                         "Start": {
                             "Position": [
@@ -168,8 +178,8 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                0.071617148816585541,
-                                0.18673773109912872,
+                                -0.18966920673847198,
+                                -0.063447557389736176,
                                 0
                             ],
                             "Force": [
@@ -274,7 +284,7 @@
                                 10
                             ],
                             "MaxLife": 0.20000000298023224,
-                            "CurrentLife": 0.13100001215934753,
+                            "CurrentLife": 0.049000002443790436,
                             "SpawnRate": 0,
                             "Delay": 0,
                             "Loop": true,
@@ -299,6 +309,17 @@
                                 -0
                             ],
                             "Scale": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "ActiveAABB": true,
+                            "PositionAABB": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "SizeAABB": [
                                 0,
                                 0,
                                 0
@@ -331,7 +352,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
-                            "Emitting": true,
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,
@@ -345,8 +366,8 @@
             {
                 "Name": "Particle_rings",
                 "FamilyNumber": 2,
-                "ID": "7935686650297532745",
-                "ParentID": "653850843527172438",
+                "ID": "4386992387953113989",
+                "ParentID": "4715595014692102170",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -376,11 +397,11 @@
                             2.1806473731994629
                         ],
                         "ScaleNegative": false,
-                        "ID": "14411091868952012087"
+                        "ID": "1248571560239177710"
                     },
                     {
                         "Type": 15,
-                        "ID": "689085675419738030",
+                        "ID": "18351503811267072777",
                         "Billboard": 0,
                         "Start": {
                             "Position": [
@@ -396,9 +417,9 @@
                             ],
                             "Global": true,
                             "Velocity": [
-                                -1.0033513307571411,
-                                -0.85440206527709961,
-                                1.5044212341308594
+                                -0.6277620792388916,
+                                1.1858010292053223,
+                                1.4831688404083252
                             ],
                             "Force": [
                                 0,
@@ -502,7 +523,7 @@
                                 10
                             ],
                             "MaxLife": 10,
-                            "CurrentLife": 4.4029979705810547,
+                            "CurrentLife": 2.8039989471435547,
                             "SpawnRate": 50,
                             "Delay": 0,
                             "Loop": true,
@@ -530,6 +551,17 @@
                                 0,
                                 0,
                                 0
+                            ],
+                            "ActiveAABB": true,
+                            "PositionAABB": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "SizeAABB": [
+                                0,
+                                0,
+                                0
                             ]
                         },
                         "Bursts": {
@@ -553,7 +585,7 @@
                         "HasMesh": false,
                         "HasLight": false,
                         "Light": {
-                            "Emitting": true,
+                            "Emitting": false,
                             "Casting": 0,
                             "Random": false,
                             "ColorParticle": false,

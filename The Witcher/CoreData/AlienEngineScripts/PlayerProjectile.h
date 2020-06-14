@@ -25,6 +25,7 @@ public:
 	PlayerController* player;
 
 private:
+	ComponentAudioEmitter* audio = nullptr;
 	float start_time = 0.0f;
 };
 
