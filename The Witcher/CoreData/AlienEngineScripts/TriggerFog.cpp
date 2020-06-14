@@ -16,19 +16,18 @@ void TriggerFog::Start()
 
 void TriggerFog::OnTriggerEnter(ComponentCollider* collider)
 {
-	ComponentCamera* camera = collider->game_object_attached->GetComponent<ComponentCamera>();
-	if (camera != nullptr)
+	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 	{
-		parentScript->RecieveCollisionEnterInteraction(collider_index);
+		parentScript->RecieveCollisionEnterInteraction(collider_index, collider->game_object_attached);
 	}
 }
 
 void TriggerFog::OnTriggerExit(ComponentCollider* collider)
 {
-	ComponentCamera* camera = collider->game_object_attached->GetComponent<ComponentCamera>();
-	if (camera != nullptr)
+	
+	if (strcmp(collider->game_object_attached->GetTag(), "Player") == 0)
 	{
-		parentScript->RecieveCollisionExitInteraction(collider_index);
+		parentScript->RecieveCollisionExitInteraction(collider_index, collider->game_object_attached);
 	}
 }
 

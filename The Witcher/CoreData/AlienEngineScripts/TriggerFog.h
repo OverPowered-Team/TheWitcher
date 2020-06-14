@@ -20,6 +20,7 @@ public:
 
 	int collider_index = 0;
 	ProgressiveFog* parentScript = nullptr;
+
 };
 
 ALIEN_FACTORY TriggerFog* CreateTriggerFog() {
