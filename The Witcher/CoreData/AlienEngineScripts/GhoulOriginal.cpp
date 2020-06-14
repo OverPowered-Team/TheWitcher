@@ -71,5 +71,10 @@ void GhoulOriginal::UpdateEnemy()
 		Dying(); 
         break;
     }
+
+    case GhoulState::DEAD:
+        IDontWannaGoMrStark();
+        break;
+
     }
 }

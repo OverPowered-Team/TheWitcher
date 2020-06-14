@@ -76,6 +76,7 @@ void Boss::UpdateEnemy()
 		break;
 	case Boss::BossState::DYING: {
 		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
+
 		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = BossState::DEAD;
 		if (m_controller && is_combat)

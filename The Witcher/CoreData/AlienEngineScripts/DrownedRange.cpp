@@ -74,8 +74,6 @@ void DrownedRange::UpdateEnemy()
 
 	case DrownedState::DYING:
 	{
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		state = DrownedState::DEAD;
 		animator->PlayState("Death");
 		last_player_hit->OnEnemyKill((uint)type);
@@ -90,6 +88,11 @@ void DrownedRange::UpdateEnemy()
 			game_object->parent->parent->GetComponent<BlockerObstacle>()->ReleaseMyself(this);
 		}
 	}
+
+	case DrownedState::DEAD:
+		IDontWannaGoMrStark();
+		break;
+
 	}
 }
 

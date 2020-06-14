@@ -123,6 +123,20 @@ void PanelPhysics::PanelLogic()
 			}
 		}
 
+		uint statics = App->physx->px_scene->getNbActors(PxActorTypeFlag::eRIGID_STATIC);
+		uint controllers = App->physx->GetNbControllers();
+		uint dynamics = App->physx->px_scene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC) - controllers;
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Spacing();
+
+		ImGui::Title("Elements");				ImGui::Text("%u", statics + controllers + dynamics);
+		ImGui::Spacing();
+		ImGui::Title("  Statics", 2);			ImGui::Text("%u", statics);
+		ImGui::Title("  Dynamics", 2);			ImGui::Text("%u", dynamics);
+		ImGui::Title("  Controllers", 2);		ImGui::Text("%u", controllers);
+
 	}
 
 	ImGui::End();

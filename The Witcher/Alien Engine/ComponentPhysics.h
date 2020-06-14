@@ -56,10 +56,10 @@ private:
 
 	bool AddController(ComponentCharacterController* ctrl);
 	bool RemoveController(ComponentCharacterController* ctrl);
-	void SwitchedController(ComponentCharacterController* ctrl);
 	bool CheckController(ComponentCharacterController* ctrl);
 
 	void GizmoManipulation();
+	void UpdateActorTransform();
 	void UpdatePositioning();
 	void WakeUp();
 	void PutToSleep();
@@ -88,7 +88,7 @@ protected:
 	ComponentTransform*				transform = nullptr;
 	std::list<ComponentCollider*>	colliders;
 	std::list<ComponentScript*>		scripts;
-	ComponentCharacterController*	controller = nullptr;
+	ComponentCharacterController*	character_ctrl = nullptr;
 	ComponentRigidBody*				rigid_body = nullptr;
 	PxRigidActor*					actor = nullptr;
 	CollisionLayers*				layers = nullptr;
