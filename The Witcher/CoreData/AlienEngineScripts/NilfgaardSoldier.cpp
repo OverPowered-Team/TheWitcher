@@ -117,19 +117,6 @@ void NilfgaardSoldier::RotateSoldier()
 	transform->SetGlobalRotation(rot);
 }
 
-void NilfgaardSoldier::PlaySFX(const char* sfx_name)
-{
-	if (sfx_name == "Hit")
-		audio_emitter->StartSound("SoldierHit");
-	else if (sfx_name == "Death")
-		audio_emitter->StartSound("SoldierDeath");
-	else if (sfx_name == "Block")
-		audio_emitter->StartSound("SoldierBlock");
-	else
-		LOG("Sound effect with name %s not found!", sfx_name);
-}
-
-
 void NilfgaardSoldier::Stun(float time)
 {
 	if (state != NilfgaardSoldierState::STUNNED && state != NilfgaardSoldierState::DEAD && state != NilfgaardSoldierState::DYING)
@@ -138,8 +125,16 @@ void NilfgaardSoldier::Stun(float time)
 		animator->SetBool("stunned", true);
 		current_stun_time = Time::GetGameTime();
 		stun_time = time;
-		audio_emitter->StartSound("Dizzy_Enemy");
+		PlaySwitchSFX("Enemy_Dizzy");
 	}
+}
+
+void NilfgaardSoldier::PlayAttackSFX()
+{
+	if(nilf_type == NilfgaardType::ARCHER)
+		PlaySwitchSFX("Enemy_Attack", 1);
+	else
+		PlaySwitchSFX("Enemy_Attack");
 }
 
 bool NilfgaardSoldier::IsDead()

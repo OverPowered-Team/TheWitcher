@@ -63,7 +63,6 @@ public:
 	void ActivateRangeCollider();
 	void DeactivateRangeCollider();
 
-	void PlaySFX(const char* sfx_name);
 	bool IsState(const char* state_str) override;
 
 	void CanJump();
