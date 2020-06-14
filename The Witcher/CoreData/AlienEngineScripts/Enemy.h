@@ -92,6 +92,7 @@ public:
 	float knock_slow = -4.2f;
 	float increase_hit_animation = 1.0f;
 	float gravity = -20.0f;
+	int overkill_hits = 0;
 	bool is_immune = false;
 	bool is_mini = false;
 

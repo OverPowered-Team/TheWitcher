@@ -38,6 +38,8 @@ void VagoneteMove::Start()
 	HUD = GameObject::FindWithName("Wagonnette_UI")->GetComponent<Wagonnete_UI>();
 
 	first_frame = true;
+
+	emiter = GetComponent<ComponentAudioEmitter>();
 }
 
 void VagoneteMove::Update()
@@ -84,10 +86,12 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 			{
 				DecreaseLife();
 				Input::DoRumble(item - players.begin()+1, rumble_strength, 1.5f);
+				emiter->StartSound("Play_Wagon_Wood");
 			}
 		}
 	}
 	else if (strcmp("VagoneteDie", col->game_object_attached->GetTag()) == 0) {
+		emiter->StartSound("Play_Wagon_BigRock");
 		SceneManager::LoadScene("Lvl2ToWagon", FadeToBlackType::VERTICAL_CURTAIN);
 	}
 	else if (strcmp("VagoneteVelocity", col->game_object_attached->GetTag()) == 0) {
@@ -98,6 +102,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		LOG("AAAAAAAAA");
 		if (!col->game_object_attached->GetComponent<VagoneteObstacle>()->isObstacleRight) {
 			if (VagoneteInputs::globalInclination >= -35) {
+				emiter->StartSound("Play_Wagon_Rock");
 				DecreaseLife();
 				Input::DoRumble(1, rumble_strength, 1.5f);
 				Input::DoRumble(2, rumble_strength, 1.5f);
@@ -105,6 +110,7 @@ void VagoneteMove::OnTriggerEnter(ComponentCollider* col)
 		}
 		else {
 			if (VagoneteInputs::globalInclination <= 35) {
+				emiter->StartSound("Play_Wagon_Rock");
 				DecreaseLife();
 				Input::DoRumble(1, rumble_strength, 1.5f);
 				Input::DoRumble(2, rumble_strength, 1.5f);
