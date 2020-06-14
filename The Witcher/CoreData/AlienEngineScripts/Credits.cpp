@@ -22,11 +22,11 @@ void Credits::Start()
 
 void Credits::Update()
 {
-	if ((time + 0.5f) < Time::GetGameTime())
+	if ((time + 1.0f) < Time::GetGameTime())
 	{
 		if (transform->GetLocalPosition().y < last_position)
 		{
-			float position_to_add = (last_position / (time_credits_last - 0.5f)) * Time::GetDT();
+			float position_to_add = (last_position / (time_credits_last - 1.0f)) * Time::GetDT();
 			transform->AddPosition(float3(0, position_to_add, 0));
 			if (transform->GetLocalPosition().y >= last_position)
 			{
