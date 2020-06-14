@@ -52,8 +52,6 @@ void NilfSoldierMelee::UpdateEnemy()
 
 	case NilfgaardSoldierState::DYING:
 	{
-		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
-		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 		animator->PlayState("Death");
 		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill((uint)type);
@@ -71,6 +69,10 @@ void NilfSoldierMelee::UpdateEnemy()
 			else
 				LOG("There's no blocker");
 		}
+		break;
+
+	case NilfgaardSoldierState::DEAD:
+		IDontWannaGoMrStark();
 		break;
 	}
 	}

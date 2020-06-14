@@ -19,44 +19,88 @@
 ComponentCharacterController::ComponentCharacterController(GameObject* go) : ComponentCollider(go)
 {
 	type = ComponentType::CHARACTER_CONTROLLER;
-	// GameObject Components 
-	transform = go->GetComponent<ComponentTransform>();
 
-	// load default settings
+	// Create Callback
+
+	desc.material = material;
+	desc.reportCallback = report = new UserControllerHitReport();
+	report->controller = this;
+
 	SetDefaultConf();
-	controller = App->physx->CreateCharacterController(desc);
-
-	moveDirection = controller_offset = float3::zero();
-
-	LinkShapesToComponent();
-
-	SetCollisionLayer("Default");
-
+	CreateController();
 	physics->AddController(this);
-}
-
-void ComponentCharacterController::LinkShapesToComponent()
-{
-	// links hidden kinematic actor shapes with user data
-	// contacts callback method currently needs user data on shape ptr
-	Uint32 ns = controller->getActor()->getNbShapes();
-	PxShape* all_shapes;
-	controller->getActor()->getShapes(&all_shapes, ns);
-	for (uint i = 0; i < ns; ++i)
-		all_shapes[i].userData = this;
-
-	controller->setUserData(this);
 }
 
 ComponentCharacterController::~ComponentCharacterController()
 {
 	go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
 
-	if (controller)
-		controller->release();
+	DeleteController();
 
-	delete report;
+	if (report) {
+		delete report;
+	}
 }
+
+bool ComponentCharacterController::CharacterEnabled()
+{
+	return controller ;
+}
+
+void ComponentCharacterController::CreateController()
+{
+	if (enabled && go->IsEnabled() && !controller) {
+		desc.position = F3_TO_PXVEC3EXT(game_object_attached->transform->GetGlobalPosition() - controller_offset);
+		controller = App->physx->CreateCharacterController(desc);
+		LinkShapesToComponent();
+		SetCollisionLayer(layer_name);
+
+	}
+}
+
+void ComponentCharacterController::DeleteController()
+{
+	if (controller){
+		
+		PX_RELEASE(controller);
+		controller = nullptr;
+	}
+}
+
+void ComponentCharacterController::OnEnable()
+{
+	CreateController();
+	physics->PutToSleep();
+}
+
+void ComponentCharacterController::OnDisable()
+{
+	DeleteController();
+	physics->WakeUp();
+}
+
+void ComponentCharacterController::SetDefaultConf()
+{
+	move_direction = controller_offset = float3::zero();
+	desc.nonWalkableMode = PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
+	desc.radius = 0.5f;
+	desc.height = 1.0f;
+	min_distance = 0.001f;
+	desc.slopeLimit = cosf(DegToRad(45.0f));
+}
+
+void ComponentCharacterController::LinkShapesToComponent()
+{
+	PxShape* shapes[10];
+	Uint32 nb_shapes = controller->getActor()->getNbShapes();
+	controller->getActor()->getShapes(shapes, nb_shapes);
+
+	for (uint i = 0; i < nb_shapes; ++i)
+		shapes[i]->userData = this;
+
+	controller->setUserData(this);
+}
+
 
 // Movement Functions -----------------------------------------
 
@@ -65,7 +109,7 @@ void ComponentCharacterController::SetContactOffset(const float contactOffset)
 	float max = FLT_MAX, min = 0.0001f;
 	desc.contactOffset = Clamp(contactOffset, min, max);
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	switch (desc.getType())
 	{
@@ -85,7 +129,7 @@ void ComponentCharacterController::SetStepOffset(const float stepOffset)
 	float max = FLT_MAX, min = 0.0f;
 	desc.stepOffset = Clamp(stepOffset, min, max);
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	switch (desc.getType())
 	{
@@ -105,7 +149,7 @@ void ComponentCharacterController::SetSlopeLimit(const float slopeLimit)
 	float _slopeLimit = Clamp(slopeLimit, min, max);
 	desc.slopeLimit = cosf(DegToRad(_slopeLimit));
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	switch (desc.getType())
 	{
@@ -125,7 +169,7 @@ void ComponentCharacterController::SetCharacterHeight(const float height)
 	float max = FLOAT_INF, min = 0.0f; // 0 means sphere
 	desc.height = Clamp(height, min, max);
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	switch (desc.getType())
 	{
@@ -145,7 +189,7 @@ void ComponentCharacterController::SetCharacterRadius(const float radius)
 	float max = FLOAT_INF, min = 0.1f;
 	desc.radius = Clamp(radius, min, max);
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	switch (desc.getType())
 	{
@@ -165,7 +209,7 @@ void ComponentCharacterController::SetCharacterOffset(float3 offset)
 {
 	controller_offset = offset;
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
 }
@@ -193,25 +237,27 @@ void ComponentCharacterController::SaveComponent(JSONArraypack* to_save)
 
 void ComponentCharacterController::LoadComponent(JSONArraypack* to_load)
 {
+
 	enabled = to_load->GetBoolean("Enabled");
-	SetSlopeLimit(to_load->GetNumber("SlopeLimit"));
-	SetStepOffset(to_load->GetNumber("StepOffset"));
-	SetContactOffset(to_load->GetNumber("SkinWidth"));
-	min_distance = to_load->GetNumber("MinMoveDistance");
-	SetCharacterOffset(to_load->GetFloat3("Center"));
-	SetCharacterRadius(to_load->GetNumber("CharacterRadius"));
-	SetCharacterHeight(to_load->GetNumber("CharacterHeight"));
-
-	gravity = to_load->GetNumber("Gravity");
-	force_gravity = to_load->GetBoolean("ForceGravity");
-	force_move = to_load->GetBoolean("ForceMove");
-
-	SetCollisionLayer(to_load->GetString("CollisionLayer", "Default"));
 
 	if (enabled == false)
 	{
 		OnDisable();
 	}
+
+	gravity = to_load->GetNumber("Gravity");
+	force_gravity = to_load->GetBoolean("ForceGravity");
+	force_move = to_load->GetBoolean("ForceMove");
+	min_distance = to_load->GetNumber("MinMoveDistance");
+	SetSlopeLimit(to_load->GetNumber("SlopeLimit"));
+	SetContactOffset(to_load->GetNumber("SkinWidth"));
+	SetCharacterOffset(to_load->GetFloat3("Center"));
+	SetCharacterRadius(to_load->GetNumber("CharacterRadius"));
+	SetCharacterHeight(to_load->GetNumber("CharacterHeight"));
+	SetCollisionLayer(to_load->GetString("CollisionLayer", "Default"));
+
+	SetStepOffset(to_load->GetNumber("StepOffset"));
+	SetPosition(transform->GetGlobalPosition());
 }
 
 void ComponentCharacterController::UpdateParameters()
@@ -266,11 +312,6 @@ bool ComponentCharacterController::DrawInspector()
 		ImGui::Title("Force gravity", 1);			ImGui::Checkbox("##forceGravity", &force_gravity);
 		ImGui::Title("Force move", 1);				ImGui::Checkbox("##forceMove", &force_move);
 
-
-		//ImGui::Checkbox("isGrounded", &isGrounded); // debug test
-
-		/*ImGui::Separator();
-		ImGui::Text("velocity: %f,%f,%f", velocity.x, velocity.y, velocity.z);*/
 		ImGui::Spacing();
 	}
 
@@ -281,24 +322,21 @@ bool ComponentCharacterController::DrawInspector()
 
 void ComponentCharacterController::Update()
 {
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
-	if (Time::IsPlaying()) {
-
+	if (!Time::IsPlaying() || physics->gizmo_selected) {
+		controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
+	}
+	else {
 		if (force_move && isGrounded && velocity.isZero()) {
 			Move(float3(0.0f, -controller->getContactOffset(), 0.0f));
 		}
-
 		if (force_gravity && !isGrounded) {
-			moveDirection.y -= gravity * Time::GetDT();
-			Move(moveDirection * Time::GetDT());
-			isGrounded ? moveDirection.y = 0.0f : 0;
+			move_direction.y -= gravity * Time::GetDT();
+			Move(move_direction * Time::GetDT());
+			isGrounded ? move_direction.y = 0.0f : 0;
 		}
-
 		transform->SetGlobalPosition(PXVEC3EXT_TO_F3(controller->getPosition()) - controller_offset);
-	}
-	else {
-		controller->setPosition(F3_TO_PXVEC3EXT(transform->GetGlobalPosition() + controller_offset));
 	}
 }
 
@@ -308,18 +346,14 @@ PxControllerCollisionFlags ComponentCharacterController::Move(float3 motion)
 {
 	if (!enabled) return collisionFlags;
 
-	// set velocity on current position before move
-	velocity = controller->getPosition();
-
-	// perform the move
+	// Filter data -------------------------
 	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
-	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter); // TODO: implement filters callback when needed
-	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
+	PxControllerFilters filters(&filter_data, App->physx->px_controller_filter); 
+	PxExtendedVec3 last_position = controller->getPosition();
 
-	// set grounded internal state
-	collisionFlags.isSet(PxControllerCollisionFlag::eCOLLISION_DOWN) ? isGrounded = true : isGrounded = false;
-	// substract the difference from current pos to velocity before move
-	velocity = isGrounded ? F3_TO_PXVEC3EXT(float3::zero()) : PXVEC3_TO_VEC3EXT(controller->getPosition() - velocity);
+	collisionFlags = controller->move(F3_TO_PXVEC3(motion), min_distance, Time::GetDT(), filters);
+	collisionFlags.isSet(PxControllerCollisionFlag::eCOLLISION_DOWN) ? isGrounded = true : isGrounded = false; 	// set grounded internal state
+	velocity = isGrounded ? F3_TO_PXVEC3EXT(float3::zero()) : PXVEC3_TO_VEC3EXT(controller->getPosition() - last_position); 	// substract the difference from current pos to velocity before move
 
 	return collisionFlags;
 }
@@ -331,7 +365,7 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	layer_num = index;
 	layer_name = layer;
 
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	PxShape* shapes[10];
 	PxRigidDynamic* actor = controller->getActor();
@@ -340,19 +374,14 @@ void ComponentCharacterController::SetCollisionLayer(std::string layer)
 	PxFilterData filter_data(layer_num, physics->ID, 0, 0);
 
 	for (uint i = 0; i < ns; ++i) {
-		if (!shapes[i]->isExclusive()) {
-			actor->detachShape(*shapes[i]);
-			shapes[i]->setSimulationFilterData(filter_data);
-			shapes[i]->setQueryFilterData(filter_data);
-			actor->attachShape(*shapes[i]);
-		}
-
+		shapes[i]->setSimulationFilterData(filter_data);
+		shapes[i]->setQueryFilterData(filter_data);
 	}
 }
 
 void ComponentCharacterController::DrawScene()
 {
-	if (!enabled || controller == nullptr) return;
+	if (!CharacterEnabled()) return;
 
 	if (game_object_attached->IsSelected() && App->physx->debug_physics == false)
 	{
@@ -389,33 +418,12 @@ void ComponentCharacterController::DrawScene()
 
 }
 
-void ComponentCharacterController::HandleAlienEvent(const AlienEvent& e)
-{
-}
-
-void ComponentCharacterController::SetDefaultConf()
-{
-	min_distance = 0.001f;
-
-	if (desc.material) desc.material->release();
-
-	desc.material = App->physx->CreateMaterial(static_friction, dynamic_friction, restitution);
-	desc.position = F3_TO_PXVEC3EXT(game_object_attached->transform->GetGlobalPosition());
-	desc.radius = 0.5f;
-	desc.height = 2.0f;
-	desc.slopeLimit = cosf(DegToRad(45.0f));
-	desc.nonWalkableMode = PxControllerNonWalkableMode::ePREVENT_CLIMBING_AND_FORCE_SLIDING;
-
-	// Hit report callback ------------
-
-	if (report) delete report;
-	desc.reportCallback = report = new UserControllerHitReport();
-	report->controller = this;
-}
-
 void ComponentCharacterController::OnControllerColliderHit(ControllerColliderHit hit)
 {
 	Alien* alien = nullptr;
+
+	if (!CharacterEnabled()) return;
+
 	for (ComponentScript* script : physics->scripts)
 	{
 		try {
@@ -496,5 +504,5 @@ void UserControllerHitReport::onControllerHit(const PxControllersHit& hit)
 
 void UserControllerHitReport::onObstacleHit(const PxControllerObstacleHit& hit)
 {
-	LOG_ENGINE("OBSTACLE HIT");
+
 }

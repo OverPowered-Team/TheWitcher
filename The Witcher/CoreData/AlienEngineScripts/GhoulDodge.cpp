@@ -82,9 +82,12 @@ void GhoulDodge::UpdateEnemy()
     case GhoulState::DYING:
     {
 		Dying(); 
-
         break;
     }
+
+    case GhoulState::DEAD:
+        IDontWannaGoMrStark();
+        break;
     }
 }
 

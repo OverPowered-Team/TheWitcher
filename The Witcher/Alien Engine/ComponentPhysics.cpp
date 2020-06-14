@@ -66,8 +66,6 @@ void ComponentPhysics::OnDisable()
 
 void ComponentPhysics::Update()
 {
-	if (IsDisabled()) return;
-
 	GizmoManipulation();  // Check if gizmo is selected
 	UpdatePositioning();  // Move body or gameobject
 }
@@ -235,8 +233,7 @@ bool ComponentPhysics::AddController(ComponentCharacterController* ctrl)
 {
 	if (CheckController(ctrl)) // TODO: review this
 	{
-		controller = ctrl;
-		if (CheckChangeState()) UpdateBody();
+		character_ctrl = ctrl;
 		return true;
 	}
 	return false;
@@ -244,34 +241,16 @@ bool ComponentPhysics::AddController(ComponentCharacterController* ctrl)
 
 bool ComponentPhysics::RemoveController(ComponentCharacterController* ctrl)
 {
-	if (ctrl == controller) // TODO: review this
+	if (ctrl == character_ctrl) // TODO: review this
 	{
-		controller = nullptr;
-		if (CheckChangeState()) UpdateBody();
+		character_ctrl = nullptr;
+
+		if (CheckChangeState())
+			UpdateBody();
+
 		return true;
 	}
-}
-
-void ComponentPhysics::SwitchedController(ComponentCharacterController* ctrl)
-{
-	if (!ctrl->enabled)
-	{
-		ctrl->controller->release();
-		ctrl->controller = nullptr;
-		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_DELETED);
-	}
-	else
-	{
-		ctrl->controller = App->physx->CreateCharacterController(ctrl->desc);
-		// relink shapes
-		ctrl->LinkShapesToComponent();
-		// relink controller to base physics
-		AddController(ctrl);
-		// send event
-		go->SendAlientEventThis(this, AlienEventType::CHARACTER_CTRL_ADDED); // this do nothing
-		// update parameters
-		ctrl->UpdateParameters();
-	}
+	return false;
 }
 
 bool ComponentPhysics::CheckController(ComponentCharacterController* ctrl)
@@ -281,7 +260,7 @@ bool ComponentPhysics::CheckController(ComponentCharacterController* ctrl)
 
 bool ComponentPhysics::CheckChangeState()
 {
-	if (!controller && !rigid_body && colliders.empty()) {  // Delete if not has physic components
+	if ( !character_ctrl && !rigid_body && colliders.empty()) {  // Delete if not has physic components
 		Destroy();
 		state = PhysicState::DISABLED;
 		return true;
@@ -337,9 +316,7 @@ void ComponentPhysics::UpdateBody()
 				actor->attachShape(*collider->shape);
 
 		if (IsDynamic())
-		{
 			rigid_body->SetBodyProperties();
-		}
 	}
 }
 
@@ -357,7 +334,6 @@ float3 ComponentPhysics::GetValidPhysicScale()
 void ComponentPhysics::GizmoManipulation()
 {
 	bool is_using_gizmo = ImGuizmo::IsUsing() && game_object_attached->IsSelected();
-	PxRigidDynamic* dyn = actor->is<PxRigidDynamic>();
 
 	if (gizmo_selected)
 	{
@@ -375,31 +351,40 @@ void ComponentPhysics::GizmoManipulation()
 			gizmo_selected = true;
 }
 
+void ComponentPhysics::UpdateActorTransform()
+{
+	PxTransform trans;
+	if (!F4X4_TO_PXTRANS(transform->GetGlobalMatrix(), trans)) {
+		LOG_ENGINE("Error! GameObject %s transform is NaN or Infinite -> Physics Can't be updated ");
+		return;
+	}
+	if (IsKinematic() && Time::IsPlaying())
+		actor->is<PxRigidDynamic>()->setKinematicTarget(trans);
+	else
+		actor->setGlobalPose(trans);
+}
+
 void ComponentPhysics::UpdatePositioning()
 {
-	if (!Time::IsPlaying() || gizmo_selected)
-	{
-		PxTransform trans;
-		if (!F4X4_TO_PXTRANS(transform->GetGlobalMatrix(), trans)) {
-			LOG_ENGINE("Error! GameObject %s transform is NaN or Infinite -> Physics Can't be updated ");
-			return;
-		}
+	if (IsDisabled()) return;
 
-		if (IsKinematic() && Time::IsPlaying())
-			actor->is<PxRigidDynamic>()->setKinematicTarget(trans);
-		else
-			actor->setGlobalPose(trans);
+	if (character_ctrl && character_ctrl->IsEnabled()) {
+		UpdateActorTransform();
+		PutToSleep();
+		return;
+	}
+
+	if ( !Time::IsPlaying() || gizmo_selected) {
+		UpdateActorTransform();
 	}
 	else
 	{
-		if (IsDynamic())
-		{
+		if (IsDynamic()) {
 			PxTransform trans = actor->getGlobalPose(); // Get Controller Position
 			transform->SetGlobalPosition(PXVEC3_TO_F3(trans.p));
 			transform->SetGlobalRotation(PXQUAT_TO_QUAT(trans.q));
 		}
-		else
-		{
+		else {
 			PxTransform trans;
 			if (!F4X4_TO_PXTRANS(transform->GetGlobalMatrix(), trans)) {
 				LOG_ENGINE("Error! GameObject %s transform is NaN or Infinite -> Physics Can't be updated ");
@@ -448,8 +433,7 @@ bool ComponentPhysics::ShapeAttached(PxShape* shape)
 	actor->getShapes(shapes, num_shapes);
 
 	for (PxU32 i = 0; i < num_shapes; i++)
-		if (shapes[i] == shape)
-		{
+		if (shapes[i] == shape) {
 			ret = true;
 			break;
 		}

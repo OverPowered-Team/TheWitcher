@@ -82,9 +82,9 @@ protected:
 	const AABB GetLocalMeshAabb() const;
 	const ComponentMesh* GetMesh() const;
 
-	void OnEnable();
-	void OnDisable();
-	virtual void Update();
+	bool ColliderEnabled();
+	virtual void OnEnable();
+	virtual void OnDisable();
 
 	bool DrawInspector();
 	void DrawLayersCombo();

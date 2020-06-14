@@ -14,7 +14,7 @@
 #include "Gizmos.h"
 #include "Physics.h"
 
-ComponentCollider::ComponentCollider(GameObject* go) : ComponentBasePhysic(go)
+ComponentCollider::ComponentCollider(GameObject* go ) : ComponentBasePhysic(go)
 {
 	// Default values 
 	center = float3::zero();
@@ -32,11 +32,12 @@ ComponentCollider::~ComponentCollider()
 {
 	if (!IsController()) {
 		go->SendAlientEventThis(this, AlienEventType::COLLIDER_DELETED);
-		material->release();
-		material = nullptr;
 		shape->release();
 		shape = nullptr;
 	}
+
+	material->release();
+	material = nullptr;
 
 #ifndef GAME_VERSION
 	App->objects->debug_draw_list.erase(App->objects->debug_draw_list.find(this));
@@ -49,6 +50,8 @@ ComponentCollider::~ComponentCollider()
 void ComponentCollider::SetCenter(const float3& value)
 {
 	center = value;
+	if (IsController()) return;
+
 	PxTransform trans = shape->getLocalPose();
 	trans.p = F3_TO_PXVEC3(center.Mul(physics->scale));
 	BeginUpdateShape();
@@ -59,6 +62,8 @@ void ComponentCollider::SetCenter(const float3& value)
 void ComponentCollider::SetRotation(const float3& value)
 {
 	rotation = value;
+	if (IsController()) return;
+
 	PxTransform trans = shape->getLocalPose();
 	float3 rad_rotation = DEGTORAD * rotation;
 	trans.q = QUAT_TO_PXQUAT(Quat::FromEulerXYZ(rad_rotation.x, rad_rotation.y, rad_rotation.z));
@@ -70,6 +75,7 @@ void ComponentCollider::SetRotation(const float3& value)
 void ComponentCollider::SetIsTrigger(bool value)
 {
 	is_trigger = value;
+	if (IsController()) return;
 
 	BeginUpdateShape();
 	if (is_trigger) {
@@ -122,6 +128,7 @@ void ComponentCollider::SetCollisionLayer(std::string layer)
 	if (!physics->layers->GetIndexByName(layer, index)) return;
 	layer_num = index;
 	layer_name = layer;
+
 	BeginUpdateShape();
 	PxFilterData filter_data;
 	filter_data.word0 = index;
@@ -156,8 +163,7 @@ void ComponentCollider::LoadComponent(JSONArraypack* to_load)
 {
 	enabled = to_load->GetBoolean("Enabled");
 
-	if (enabled == false)
-	{
+	if (enabled == false) {
 		OnDisable();
 	}
 
@@ -172,24 +178,14 @@ void ComponentCollider::LoadComponent(JSONArraypack* to_load)
 	EndUpdateShape(true);
 }
 
-void ComponentCollider::Update()
-{
-}
-
 void ComponentCollider::OnEnable()
 {
-	if (!IsController())
-		physics->AttachCollider(this);
-	else
-		physics->SwitchedController((ComponentCharacterController*)this);
+	physics->AttachCollider(this);
 }
 
 void ComponentCollider::OnDisable()
 {
-	if (!IsController())
-		physics->DettachCollider(this);
-	else
-		physics->SwitchedController((ComponentCharacterController*)this);
+	physics->DettachCollider(this);
 }
 
 void ComponentCollider::DrawScene()
@@ -303,7 +299,7 @@ void ComponentCollider::DrawCombineModeCombo(CombineMode& current_mode, int mode
 
 	if (ImGui::BeginComboEx(std::string("##" + std::string(name)).c_str(), (std::string(" ") + mode_names[(int)current_mode]).c_str(), 200, ImGuiComboFlags_NoArrowButton))
 	{
-		for (int n = 0; n < (int)CombineMode::Unknown ; ++n)
+		for (int n = 0; n < (int)CombineMode::Unknown; ++n)
 		{
 			bool is_selected = ((int)current_mode == n);
 
@@ -362,6 +358,8 @@ void ComponentCollider::InitMaterial()
 
 void ComponentCollider::BeginUpdateShape(bool force_update)
 {
+	if (IsController()) return;
+
 	if (!this->force_update)
 		physics->DettachCollider(this, true);
 
@@ -371,6 +369,8 @@ void ComponentCollider::BeginUpdateShape(bool force_update)
 
 void ComponentCollider::EndUpdateShape(bool force_update)
 {
+	if (IsController()) return;
+
 	if (force_update)
 		this->force_update = false;
 
