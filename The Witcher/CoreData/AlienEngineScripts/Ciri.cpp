@@ -37,6 +37,8 @@ void Ciri::StartEnemy()
 	state = Boss::BossState::NONE;
 	animator->PlayState("Spawn");
 	appearing = true;
+
+	emitter = GetComponent<ComponentAudioEmitter>();
 }
 
 void Ciri::UpdateEnemy()
@@ -79,7 +81,6 @@ float Ciri::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (can_get_interrupted)
 	{
 		animator->PlayState("Hit");
-		PlaySFX("Hit");
 		SetState("Hit");
 	}
 
@@ -247,6 +248,8 @@ void Ciri::LaunchDashAction()
 	animator->PlayState("Dash");
 	animator->SetStateSpeed("Dash", 1.0f);
 
+	emitter->StartSound("Play_CiriClone_Dash");
+
 	OrientToPlayerWithoutSlerp(target);
 }
 
@@ -270,6 +273,7 @@ void Ciri::LaunchMiniScreamAction()
 	animator->PlayState("Scream");
 	fight_controller->scream_cd_timer = 0;
 	SpawnParticle("Ciri_MiniScream", { 0, 0.6, 0 }, true);
+	emitter->StartSound("Play_CiriClone_Scream");
 }
 
 void Ciri::SetAsCanGetInterrupted()
