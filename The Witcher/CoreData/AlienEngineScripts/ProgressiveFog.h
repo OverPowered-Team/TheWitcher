@@ -23,8 +23,8 @@ public:
 
 public:
 
-	void RecieveCollisionEnterInteraction(int collider_index);
-	void RecieveCollisionExitInteraction(int collider_index);
+	void RecieveCollisionEnterInteraction(int collider_index, GameObject* obj);
+	void RecieveCollisionExitInteraction(int collider_index, GameObject* obj);
 
 	float CalculateRatio();
 
@@ -46,6 +46,9 @@ public:
 	ComponentSphereCollider* outterCol = nullptr;
 
 	FogState fogState = FogState::OFF;
+
+private:
+	GameObject* object_inside = nullptr;
 };
 
 ALIEN_FACTORY ProgressiveFog* CreateProgressiveFog() {

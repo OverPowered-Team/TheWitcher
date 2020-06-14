@@ -100,6 +100,28 @@ void Enemy::StartEnemy()
 			(*it)->OnStop();
 		}
 	}*/
+
+	dissolve_mat.color = meshes[0]->material->color;
+	dissolve_mat.used_shader = meshes[0]->material->used_shader;
+	dissolve_mat.simple_depth_shader = meshes[0]->material->simple_depth_shader;
+	dissolve_mat.renderMode = 0;
+	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+	dissolve_mat.shaderInputs.standardShaderProperties.diffuse_color = meshes[0]->material->shaderInputs.standardShaderProperties.diffuse_color;
+
+	dissolve_mat.textures[(int)TextureType::DIFFUSE] = meshes[0]->material->textures[(int)TextureType::DIFFUSE];
+	if (dissolve_mat.textures[(int)TextureType::DIFFUSE].second != nullptr)
+		dissolve_mat.textures[(int)TextureType::DIFFUSE].second->IncreaseReferences();
+	dissolve_mat.textures[(int)TextureType::SPECULAR] = meshes[0]->material->textures[(int)TextureType::SPECULAR];
+	if (dissolve_mat.textures[(int)TextureType::SPECULAR].second != nullptr)
+		dissolve_mat.textures[(int)TextureType::SPECULAR].second->IncreaseReferences();
+	dissolve_mat.textures[(int)TextureType::NORMALS] = meshes[0]->material->textures[(int)TextureType::NORMALS];
+	if (dissolve_mat.textures[(int)TextureType::NORMALS].second != nullptr)
+		dissolve_mat.textures[(int)TextureType::NORMALS].second->IncreaseReferences();
+
+	for (int i = 0; i < meshes.size(); ++i)
+	{
+		meshes[i]->material = &dissolve_mat;
+	}
 }
 
 void Enemy::UpdateEnemy()
@@ -246,6 +268,15 @@ void Enemy::CleanUpEnemy()
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
+
+	/*if (dissolve_mat.textures[0].second != nullptr)
+		dissolve_mat.textures[0].second->DecreaseReferences();
+
+	if (dissolve_mat.textures[1].second != nullptr)
+		dissolve_mat.textures[1].second->DecreaseReferences();
+
+	if (dissolve_mat.textures[2].second != nullptr)
+		dissolve_mat.textures[2].second->DecreaseReferences();*/
 }
 
 void Enemy::SetStats(const char* json)
@@ -402,6 +433,7 @@ Quat Enemy::RotateProjectile()
 void Enemy::Decapitate(PlayerController* player)
 {
 	decapitated_head = GameObject::Instantiate(head_prefab, particle_spawn_positions[0]->transform->GetGlobalPosition());
+	ChangeHeadMaterial(decapitated_head);
 
 	if (decapitated_head)
 	{
@@ -431,6 +463,7 @@ void Enemy::Decapitate(PlayerController* player)
 		head_rb->AddTorque(decapitated_head->transform->forward * decapitation_force * 0.5f);
 	}
 }
+
 
 void Enemy::CanGetInterrupted()
 {
@@ -784,4 +817,60 @@ void Enemy::SpawnHealthOrb()
 	int rand_num = Random::GetRandomIntBetweenTwo(0,2);
 	if(rand_num == 0)
 		GameObject::Instantiate(life_orb, transform->GetGlobalPosition() + float3::unitY() * 0.5);
+
+	StartDissolving();
+}
+
+void Enemy::IDontWannaGoMrStark()
+{
+	if (dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn > 0)
+		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn -= dissolveSpeed * Time::GetDT();
+
+	if (dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn <= 0 && is_disolving)
+	{
+		EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent<EnemyManager>();
+		Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 0.1);
+	}
+}
+
+void Enemy::StartDissolving()
+{
+	is_disolving = true;
+	dissolve_mat.renderMode = 1;
+}
+
+void Enemy::ChangeHeadMaterial(GameObject* head)
+{
+	switch (type)
+	{
+	case EnemyType::GHOUL:
+	{
+		ComponentMaterial* head_material = head->GetComponent<ComponentMaterial>();
+		if (head_material)
+		{
+			head_material->material = &dissolve_mat;
+		}
+	}
+		break;
+	case EnemyType::NILFGAARD_SOLDIER:
+	{
+		ComponentMaterial* head_material = head->GetChild("Head")->GetComponent<ComponentMaterial>();
+
+		if (head_material)
+		{
+			head_material->material = &dissolve_mat;
+		}
+	}
+		break;
+	case EnemyType::DROWNED:
+	{
+		std::vector<ComponentMaterial*> head_material = head->GetChild("Mesh")->GetComponentsInChildren<ComponentMaterial>();
+
+		for (auto iter = head_material.begin(); iter != head_material.end(); iter++)
+		{
+			(*iter)->material = &dissolve_mat;
+		}
+	}
+		break;
+	}
 }

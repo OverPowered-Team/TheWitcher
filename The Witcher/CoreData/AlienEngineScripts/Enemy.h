@@ -84,6 +84,12 @@ public:
 
 	void SpawnHealthOrb();
 
+	void IDontWannaGoMrStark();
+
+	void StartDissolving();
+	void ChangeHeadMaterial(GameObject* head);
+
+
 public:
 	float distance = 0.0F;
 	float3 direction; 
@@ -95,6 +101,10 @@ public:
 	int overkill_hits = 0;
 	bool is_immune = false;
 	bool is_mini = false;
+
+	float dissolveSpeed = 0.2f;
+	bool is_disolving = false;
+	bool has_disolved = false;
 
 	EnemyType type = EnemyType::NONE;
 	ComponentAnimator* animator = nullptr;
@@ -125,6 +135,8 @@ public:
 	std::vector<ComponentMaterial*> meshes;
 	
 	PlayerController* last_player_hit;
+
+	ResourceMaterial dissolve_mat;
 
 protected:
 	std::vector<GameObject*> particle_spawn_positions;

@@ -308,6 +308,10 @@ bool ResourceFont::LoadMemory()
 
 void ResourceFont::FreeMemory()
 {
+	for (auto item = fontData.charactersMap.begin(); item != fontData.charactersMap.end(); ++item) {
+		glDeleteTextures(1, &(*item).second.textureID);
+		(*item).second.textureID = 0;
+	}
 	for (auto itBuff = fontData.fontBuffer.begin(); itBuff != fontData.fontBuffer.end(); itBuff++)
 	{
 		delete[](*itBuff);

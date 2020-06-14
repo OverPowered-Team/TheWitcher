@@ -66,7 +66,7 @@ bool ModulePhysX::Init()
 
 	PxSceneDesc sceneDesc(px_physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-	px_dispatcher = PxDefaultCpuDispatcherCreate(2);
+	px_dispatcher = PxDefaultCpuDispatcherCreate(4);
 	sceneDesc.cpuDispatcher = px_dispatcher;
 	sceneDesc.filterShader = FilterShader;
 	sceneDesc.kineKineFilteringMode = PxPairFilteringMode::eKEEP;

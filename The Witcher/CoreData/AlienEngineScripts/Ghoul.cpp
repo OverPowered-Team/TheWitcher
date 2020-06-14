@@ -474,9 +474,6 @@ void Ghoul::DoAwake() // Do this in other enemies
 
 void Ghoul::Dying() // TODO: in other enemies
 {
-	EnemyManager* enemy_manager = GameObject::FindWithName("GameManager")->GetComponent< EnemyManager>();
-	//Ori Ori function sintaxis
-	Invoke([enemy_manager, this]() -> void {enemy_manager->DeleteEnemy(this); }, 5);
 	animator->PlayState("Death");
 	audio_emitter->StartSound("GhoulDeath");
 	last_player_hit->OnEnemyKill((uint)type);

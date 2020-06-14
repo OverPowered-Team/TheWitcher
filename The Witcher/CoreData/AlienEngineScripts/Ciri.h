@@ -59,8 +59,6 @@ public:
 	ActionState UpdateComboAction();
 	ActionState UpdateMiniScreamAction();
 
-	ResourceMaterial dissolve_mat;
-
 	void CheckForGapCloser();
 
 	void EndAction(GameObject* go_ended) override;

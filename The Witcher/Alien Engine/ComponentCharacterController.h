@@ -53,32 +53,12 @@ public:
 	ComponentCharacterController(GameObject* go);
 	virtual ~ComponentCharacterController();
 
-	//void Jump(float3 direction= float3::zero());
-	//bool CanJump();
-	//bool OnGround();
-
-	//float GetJumpSpeed() { return jump_speed; }
-	//void SetJumpSpeed(const float jump_speed);
-	//float GetGravity() { return gravity; }
-	//void SetGravity(const float fall_speed);
-
-	//void ApplyImpulse(float3 direction = float3::zero());
-	//void SetWalkDirection(float3 direction);
-
-	//void SetRotation(const Quat rotation);
-	//Quat GetRotation() const;
-
-	//void SetPosition(const float3 pos);
-	//float3 GetPosition() const;
 
 	void SetCharacterOffset(float3 offset);
-	//float GetCharacterHeight() { return character_height; }
+	float GetCharacterHeight() { return desc.height; }
 	void SetCharacterHeight(const float height);
-	//float GetCharacterRadius() { return character_radius; }
+	float GetCharacterRadius() { return desc.radius; }
 	void SetCharacterRadius(const float radius);
-	
-	// Auto resize from the bottom (moving position pivot automatly)
-	void Resize(const float new_height);
 	void SetSlopeLimit(const float slopeLimit);
 	float GetSlopeLimit() const;
 	void SetStepOffset(const float stepOffset);
@@ -97,41 +77,52 @@ public:
 	void SetCollisionLayer(std::string layer);
 
 private:
+
+	bool CharacterEnabled();
+
+	void CreateController();
+	void DeleteController();
+
 	void SetDefaultConf();
-
 	void OnControllerColliderHit(ControllerColliderHit hit);
-
 	void LinkShapesToComponent();
-
 	void UpdateParameters(); // called when object is enabled, just in case to refresh some changed data
 
-protected:
-
-	/*void RecreateCapusle();
-
-	void Reset() {}*/
-
+	void OnEnable();
+	void OnDisable();
 	void Clone(Component* clone) {}
 	void Update();
 	void DrawScene() override;
 	bool DrawInspector();
 
-	void HandleAlienEvent(const AlienEvent& e);
 	void SaveComponent(JSONArraypack* to_save);
 	void LoadComponent(JSONArraypack* to_load);
 
 public:
+
 	PxControllerCollisionFlags collisionFlags;
 	// The velocity returned is simply the difference in distance 
 	// for the current timestep before and after a call to CharacterController.Move
 	PxExtendedVec3 velocity;
 	bool isGrounded = false;
 
-protected:
-	ComponentTransform* transform = nullptr;
-	float gravity = 20.0f;//9.8f;
-	
-	// advanced options -------------
+private:
+
+	PxController* controller = nullptr;
+	UserControllerHitReport* report = nullptr;
+	PxCapsuleControllerDesc desc;
+
+	float min_distance = 0.0f;
+	float dynamic_friction = 0.5f;
+	float static_friction = 0.5f;
+	float restitution = 0.6f;
+
+	float gravity = 20.0f;
+	float3 move_direction = float3::zero();
+	float3 controller_offset = float3::zero();
+
+	// Advanced options -------------
+
 	// Forces move with zero vector when controller is idle, 
 	// this forces messages from OnControllerColliderHit in any situation,
 	// if off, messages from this callback only happen when a move is performed.
@@ -140,20 +131,23 @@ protected:
 	// if on, forces gravity defined on gravity field always
 	// that isGrounded is false
 	bool force_gravity = false;
-	PxController* controller = nullptr;
-
-private:
-	PxCapsuleControllerDesc desc;
-	float min_distance;
-	
-	// callbacks
-	UserControllerHitReport* report = nullptr;
-
-	float dynamic_friction = 0.5f;
-	float static_friction = 0.5f;
-	float restitution = 0.6f;
-
-	// internal extra functionality
-	float3 moveDirection;
-	float3 controller_offset;
 };
+
+
+//void Jump(float3 direction= float3::zero());
+//bool CanJump();
+//bool OnGround();
+
+//float GetJumpSpeed() { return jump_speed; }
+//void SetJumpSpeed(const float jump_speed);
+//float GetGravity() { return gravity; }
+//void SetGravity(const float fall_speed);
+
+//void ApplyImpulse(float3 direction = float3::zero());
+//void SetWalkDirection(float3 direction);
+
+//void SetRotation(const Quat rotation);
+//Quat GetRotation() const;
+
+//void SetPosition(const float3 pos);
+//float3 GetPosition() const;

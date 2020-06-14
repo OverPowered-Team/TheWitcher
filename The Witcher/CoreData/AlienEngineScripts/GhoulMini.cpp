@@ -67,5 +67,9 @@ void GhoulMini::UpdateEnemy()
         Dying();
         break;
     }
+
+    case GhoulState::DEAD:
+        IDontWannaGoMrStark();
+        break;
     }
 }
