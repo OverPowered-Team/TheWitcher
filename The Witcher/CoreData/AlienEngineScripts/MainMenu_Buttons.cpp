@@ -40,8 +40,21 @@ void MainMenu_Buttons::Muffin()
 void MainMenu_Buttons::Settings()
 {
 	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
+
+	//Descomenta perque la allow navigation funcioni, has de tnir em compte que al tirar enrere has de tornar a modificar el allow_navigation
+	/*ComponentCanvas* canvasExtra = GameObject::FindWithName("Extra_Menus")->GetComponent<ComponentCanvas>();
+	if (canvasExtra != nullptr) {
+		canvasExtra->allow_navigation = true;
+	}*/
+
 	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::SETTINGS);
+
 	GameObject::FindWithName("Main_Menu_UI")->SetEnable(false);
+
+	/*ComponentCanvas* canvasMain = GameObject::FindWithName("Main_Menu_UI")->GetComponent<ComponentCanvas>();
+	if (canvasMain != nullptr) {
+		canvasMain->allow_navigation = false;
+	}*/
 }
 
 void MainMenu_Buttons::AddVolume()
