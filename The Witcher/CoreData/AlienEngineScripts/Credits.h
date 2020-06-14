@@ -19,6 +19,7 @@ public:
 
 	ComponentText* points1 = nullptr;
 	ComponentText* points2 = nullptr;
+
 };
 
 ALIEN_FACTORY Credits* CreateCredits() {

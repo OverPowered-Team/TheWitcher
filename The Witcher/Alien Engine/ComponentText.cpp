@@ -24,7 +24,7 @@
 ComponentText::ComponentText(GameObject* obj) : ComponentUI(obj)
 {
 	text = "Hola";
-	if(!font)
+	if (!font)
 		font = App->resources->default_font;
 
 	GenerateVAOVBO();
@@ -162,11 +162,11 @@ void ComponentText::Draw(bool isGame)
 		font->text_shader->SetUniform1i("isGame", isGame);
 		font->text_shader->SetUniform4f("textColor", float4(current_color.r, current_color.g, current_color.b, current_color.a));
 
-		#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 		glm::mat4 projection = glm::ortho(0.0f, App->ui->panel_game->width, 0.0f, App->ui->panel_game->height);
-		#else
+#else
 		glm::mat4 projection = glm::ortho(0.0f, (float)App->window->width, 0.0f, (float)App->window->height);
-		#endif
+#endif
 
 		proj_mat = float4x4(projection[0][0], projection[0][1], projection[0][2], projection[0][3],
 			projection[1][0], projection[1][1], projection[1][2], projection[1][3],
@@ -175,19 +175,19 @@ void ComponentText::Draw(bool isGame)
 
 		float3 canvas_pos = canvas_trans->GetGlobalPosition();
 		float3 object_pos = transform->GetGlobalPosition();
-		float3 canvasPivot = {	canvas_pos.x - canvas->width * 0.5F, 
+		float3 canvasPivot = { canvas_pos.x - canvas->width * 0.5F,
 								canvas_pos.y + canvas->height * 0.5F,
 								0 };
 
 		float2 origin = float2((object_pos.x - canvasPivot.x) / (canvas->width), (canvasPivot.y + object_pos.y) / (canvas->height));
 
-		#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 		x = origin.x * App->ui->panel_game->width;
 		y = origin.y * App->ui->panel_game->height;
-		#else
+#else
 		x = origin.x * App->window->width;
 		y = origin.y * App->window->height;
-		#endif
+#endif
 
 		font->text_shader->SetUniformMat4f("projection", proj_mat);
 	}
@@ -202,7 +202,7 @@ void ComponentText::Draw(bool isGame)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(VAO);
-	
+
 	std::string::const_iterator c;
 	float pos_x = 0;
 	float pos_y = 0;
@@ -212,13 +212,13 @@ void ComponentText::Draw(bool isGame)
 	// TODO4: Modo game la UI
 	float factor_x = 0;
 	float factor_y = 0;
-	#ifndef GAME_VERSION
+#ifndef GAME_VERSION
 	factor_x = App->ui->panel_game->width / canvas->width;
 	factor_y = App->ui->panel_game->height / canvas->height;
-	#else
+#else
 	factor_x = App->window->width / canvas->width;
 	factor_y = App->window->height / canvas->height;
-	#endif
+#endif
 
 	int current_line = 0;
 	// First text pos and second line size
@@ -340,7 +340,7 @@ void ComponentText::Draw(bool isGame)
 						current_line_pos.push_back(aux);
 						current_size = 0;
 					}
-					if((*aux_c) == '/' && (*aux_c + 1) == '0')
+					if ((*aux_c) == '/' && (*aux_c + 1) == '0')
 					{
 						lines_current_size.push_back(current_size);
 						current_line_pos.push_back(aux);
@@ -378,7 +378,7 @@ void ComponentText::Draw(bool isGame)
 			}
 			break;
 		}
-		
+
 
 		float vertex[6][3] = {
 			{ xpos,     ypos + h,	matrix[2][3]},
@@ -424,14 +424,14 @@ void ComponentText::Draw(bool isGame)
 			glEnd();
 		}
 #endif
-	
+
 		if (align != TextAlign::LEFT)
 		{
-			if(isGame && App->renderer3D->actual_game_camera != nullptr)
+			if (isGame && App->renderer3D->actual_game_camera != nullptr)
 				pos_x += ch.advance * scale.x * factor_x;
 			else
 				pos_x += ch.advance * scale.x;
-		}	
+		}
 		else if (align == TextAlign::LEFT)
 		{
 			if (isGame && App->renderer3D->actual_game_camera != nullptr)
@@ -466,7 +466,7 @@ void ComponentText::Draw(bool isGame)
 					lines_current_size.push_back(line);
 				}
 			}
-			
+
 		}
 	}
 
@@ -710,7 +710,7 @@ void ComponentText::GenerateVAOVBO()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 3, NULL, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, uvID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 2, NULL, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(1);
@@ -727,21 +727,21 @@ void ComponentText::GenerateVAOVBO()
 
 void ComponentText::DeleteVAOVBO()
 {
-	
+
 	if (VAO != 0)
 		glDeleteVertexArrays(1, &VAO);
-	
-	if(verticesID != 0)
+
+	if (verticesID != 0)
 		glDeleteBuffers(1, &verticesID);
-	
+
 	if (uvID != 0)
 		glDeleteBuffers(1, &uvID);
 
-	if(text_background.id != 0)
+	if (text_background.id != 0)
 		glDeleteBuffers(1, &text_background.id);
 
 	VAO = 0;
-	verticesID = 0; 
+	verticesID = 0;
 	uvID = 0;
 	text_background.id = 0;
 }
@@ -768,7 +768,3 @@ void ComponentText::SetColor(float3 color)
 	current_color.g = color.y;
 	current_color.b = color.z;
 }
-
-
-
-

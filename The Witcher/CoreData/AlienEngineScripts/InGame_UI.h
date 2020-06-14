@@ -95,6 +95,10 @@ private:
 	// Relics Menu
 	std::vector<std::vector<ComponentImage*>> geralt_relics;
 	std::vector<std::vector<ComponentImage*>> yennefer_relics;
+
+	// Audio
+	ComponentAudioEmitter* died_emitter = nullptr;
+	ComponentAudioEmitter* emitter = nullptr;
 };
 
 ALIEN_FACTORY InGame_UI* CreateInGame_UI() {
