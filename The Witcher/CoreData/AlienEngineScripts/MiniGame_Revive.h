@@ -60,6 +60,9 @@ private:
 	bool heart_pumpum = false;
 	float heart_time = 0.0f;
 
+	float sound_time = 0.0f;
+	bool first_post = true;
+
 	// Green Part reduction
 	int correct_inputs = 0;
 	float previous_scale = 0.0f;

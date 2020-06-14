@@ -57,6 +57,9 @@ private:
 
 private:
 
+	// Audio
+	ComponentAudioEmitter* emitter = nullptr;
+
 	// vectors
 	std::vector<DamageNum*> transition_player1_damagenums;
 	std::vector<DamageNum*> player1_damagenums;
