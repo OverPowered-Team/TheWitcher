@@ -6,7 +6,7 @@
 #include "Enemy.h"
 
 class CiriAuraTrigger;
-class ALIEN_ENGINE_API CiriAura : public Enemy {
+class ALIEN_ENGINE_API CiriAura : public Alien {
 
 public: 
 	enum(AuraState,
@@ -19,7 +19,7 @@ public:
 public:
 	CiriAura();
 	virtual ~CiriAura();
-	void UpdateEnemy() override;
+	void Update();
 private:
 	void Appear();
 	void Disappear();

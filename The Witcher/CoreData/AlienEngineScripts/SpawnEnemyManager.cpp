@@ -44,13 +44,16 @@ void SpawnEnemyManager::CheckForPlayers()
 	}
 }
 
-void SpawnEnemyManager::SpawnEnemies()
+std::vector<Enemy*> SpawnEnemyManager::SpawnEnemies()
 {
+	std::vector<Enemy*> enemy_vector;
 	for (int i = 0; i < enemies_to_spawn.size(); ++i)
 	{
-		enemies_to_spawn[i]->InstantiateEnemy(game_object->parent->GetChild("ChildEnemies"));
+		enemy_vector.push_back(enemies_to_spawn[i]->InstantiateEnemy(game_object->parent->GetChild("ChildEnemies")));
 	}
 	GameObject::Destroy(game_object);
+
+	return enemy_vector;
 }
 
 void SpawnEnemyManager::SpawnEnemiesEnter()
