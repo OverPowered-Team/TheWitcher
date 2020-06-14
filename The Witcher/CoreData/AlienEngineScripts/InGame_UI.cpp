@@ -42,6 +42,9 @@ void InGame_UI::Start()
 	component_checkpoint_saved_text = checkpoint_saved_text->GetComponent<ComponentText>();
 	checkpoint_saved_text->SetEnable(false);
 
+	died_emitter = you_died->GetComponent<ComponentAudioEmitter>();
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
+
 	for (int i = 0; i < 5; ++i)
 	{
 		std::vector<ComponentImage*> relics;
@@ -102,6 +105,7 @@ void InGame_UI::Update()
 		&& !died && !relics_menu->IsEnabled() && !GameObject::FindWithName("Extra_Menus")->IsEnabled())
 	{
 		PauseMenu(!Time::IsGamePaused());
+		emitter->StartSound();
 	}
 
 	if (((Input::GetControllerButtonDown(1, Input::CONTROLLER_BUTTON_BACK))
@@ -109,6 +113,7 @@ void InGame_UI::Update()
 		&& !died && !pause_menu->IsEnabled())
 	{
 		RelicsMenu(!Time::IsGamePaused());
+		emitter->StartSound();
 	}
 
 	if (relics_menu->IsEnabled())
@@ -117,6 +122,7 @@ void InGame_UI::Update()
 			|| (Input::GetControllerButtonDown(2, Input::CONTROLLER_BUTTON_B)))
 		{
 			RelicsMenu(!Time::IsGamePaused());
+			emitter->StartSound();
 		}
 	}
 
@@ -186,6 +192,7 @@ void InGame_UI::Update()
 				time = internal_timer;
 				waiting = 2;
 				died_gone = true;
+				died_emitter->StartSound();
 			}
 			else
 			{

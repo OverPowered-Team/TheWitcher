@@ -101,26 +101,31 @@ void Enemy::StartEnemy()
 		}
 	}*/
 
-	dissolve_mat.color = meshes[0]->material->color;
-	dissolve_mat.used_shader = meshes[0]->material->used_shader;
-	dissolve_mat.simple_depth_shader = meshes[0]->material->simple_depth_shader;
-	dissolve_mat.renderMode = 0;
-	dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 1;
-	dissolve_mat.shaderInputs.standardShaderProperties.diffuse_color = meshes[0]->material->shaderInputs.standardShaderProperties.diffuse_color;
-
-	dissolve_mat.textures[(int)TextureType::DIFFUSE] = meshes[0]->material->textures[(int)TextureType::DIFFUSE];
-	if (dissolve_mat.textures[(int)TextureType::DIFFUSE].second != nullptr)
-		dissolve_mat.textures[(int)TextureType::DIFFUSE].second->IncreaseReferences();
-	dissolve_mat.textures[(int)TextureType::SPECULAR] = meshes[0]->material->textures[(int)TextureType::SPECULAR];
-	if (dissolve_mat.textures[(int)TextureType::SPECULAR].second != nullptr)
-		dissolve_mat.textures[(int)TextureType::SPECULAR].second->IncreaseReferences();
-	dissolve_mat.textures[(int)TextureType::NORMALS] = meshes[0]->material->textures[(int)TextureType::NORMALS];
-	if (dissolve_mat.textures[(int)TextureType::NORMALS].second != nullptr)
-		dissolve_mat.textures[(int)TextureType::NORMALS].second->IncreaseReferences();
-
-	for (int i = 0; i < meshes.size(); ++i)
+	if (type != EnemyType::BLOCKER_OBSTACLE)
 	{
-		meshes[i]->material = &dissolve_mat;
+		dissolve_mat.color = meshes[0]->material->color;
+		dissolve_mat.used_shader = meshes[0]->material->used_shader;
+		dissolve_mat.simple_depth_shader = meshes[0]->material->simple_depth_shader;
+		dissolve_mat.renderMode = 0;
+		dissolve_mat.shaderInputs.dissolveFresnelShaderProperties.burn = 1;
+		dissolve_mat.shaderInputs.standardShaderProperties.diffuse_color = meshes[0]->material->shaderInputs.standardShaderProperties.diffuse_color;
+
+		dissolve_mat.textures[(int)TextureType::DIFFUSE] = meshes[0]->material->textures[(int)TextureType::DIFFUSE];
+		/*if (dissolve_mat.textures[(int)TextureType::DIFFUSE].second != nullptr)
+			dissolve_mat.textures[(int)TextureType::DIFFUSE].second->IncreaseReferences();*/
+		dissolve_mat.textures[(int)TextureType::SPECULAR] = meshes[0]->material->textures[(int)TextureType::SPECULAR];
+		/*if (dissolve_mat.textures[(int)TextureType::SPECULAR].second != nullptr)
+			dissolve_mat.textures[(int)TextureType::SPECULAR].second->IncreaseReferences();*/
+		dissolve_mat.textures[(int)TextureType::NORMALS] = meshes[0]->material->textures[(int)TextureType::NORMALS];
+		/*if (dissolve_mat.textures[(int)TextureType::NORMALS].second != nullptr)
+			dissolve_mat.textures[(int)TextureType::NORMALS].second->IncreaseReferences();*/
+
+		for (int i = 0; i < meshes.size(); ++i)
+		{
+			meshes[i]->material->DecreaseReferences();
+			meshes[i]->material = &dissolve_mat;
+			meshes[i]->material->IncreaseReferences();
+		}
 	}
 }
 
@@ -267,15 +272,6 @@ void Enemy::CleanUpEnemy()
 		decapitated_head->ToDelete();
 		decapitated_head = nullptr;
 	}
-
-	/*if (dissolve_mat.textures[0].second != nullptr)
-		dissolve_mat.textures[0].second->DecreaseReferences();
-
-	if (dissolve_mat.textures[1].second != nullptr)
-		dissolve_mat.textures[1].second->DecreaseReferences();
-
-	if (dissolve_mat.textures[2].second != nullptr)
-		dissolve_mat.textures[2].second->DecreaseReferences();*/
 }
 
 void Enemy::SetStats(const char* json)
@@ -402,32 +398,48 @@ Quat Enemy::RotateProjectile()
 	return rot2 * rot1;
 }
 
-//void Enemy::PlaySwitchSFX(const char* sfx_name)
-//{
-//	switch (type)
-//	{
-//	case EnemyType::GHOUL:
-//		audio_emitter->SetSwitchState("EnemyType", "Ghoul");
-//		break;
-//	case EnemyType::NILFGAARD_SOLDIER:
-//		audio_emitter->SetSwitchState("EnemyType", "Nilfgaard_Melee");
-//		break;
-//	case EnemyType::DROWNED:
-//		audio_emitter->SetSwitchState("EnemyType", "Drowned");
-//		break;
-//	case EnemyType::BLOCKER_OBSTACLE:
-//		audio_emitter->SetSwitchState("EnemyType", "BlockerObstacle");
-//		break;
-//	}
-//
-//	audio_emitter->StartSound(sfx_name);
-//
-//}
-//
-//void Enemy::PlaySFX(const char* sfx_name)
-//{
-//	audio_emitter->StartSound(sfx_name);
-//}
+void Enemy::PlaySwitchSFX(const char* sfx_name, int extra)
+{
+	switch (type)
+	{
+	case EnemyType::GHOUL:
+		audio_emitter->SetSwitchState("EnemyType", "Ghoul");
+		break;
+	case EnemyType::NILFGAARD_SOLDIER:
+		if(extra == 0)
+			audio_emitter->SetSwitchState("EnemyType", "Nilfgaard_Melee");
+		else
+			audio_emitter->SetSwitchState("EnemyType", "Nilfgard_Range");
+		break;
+	case EnemyType::DROWNED:
+		audio_emitter->SetSwitchState("EnemyType", "Drowned");
+		break;
+	case EnemyType::BLOCKER_OBSTACLE:
+		audio_emitter->SetSwitchState("EnemyType", "BlockerObstacle");
+		break;
+	}
+
+	audio_emitter->StartSound(sfx_name);
+
+}
+
+void Enemy::PlaySFX(const char* sfx_name)
+{
+	audio_emitter->StartSound(sfx_name);
+}
+
+void Enemy::PlayGetHitSFX()
+{
+	/*if (last_player_hit->game_object->GetComponent<PlayerController>()->controller_index == 1)*/
+		PlaySwitchSFX("Enemy_GetHit");
+	/*else
+		PlaySFX("Enemy_GetHitMagic");*/
+}
+
+void Enemy::PlayAttackSFX()
+{
+	PlaySwitchSFX("Enemy_Attack");
+}
 
 void Enemy::Decapitate(PlayerController* player)
 {
@@ -449,6 +461,7 @@ void Enemy::Decapitate(PlayerController* player)
 			}
 		}
 		
+		PlaySwitchSFX("Enemy_CutHead");
 
 		ComponentRigidBody* head_rb = decapitated_head->GetComponent<ComponentRigidBody>();
 		head_rb->SetRotation(particle_spawn_positions[0]->transform->GetGlobalRotation());
@@ -501,7 +514,7 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 	if (can_get_interrupted)
 	{
 		animator->PlayState("Hit");
-		PlaySFX("Hit");
+		PlayGetHitSFX();
 	}
 
 	float2 temp_e = float2(particle_spawn_positions[1]->transform->GetGlobalPosition().x, particle_spawn_positions[1]->transform->GetGlobalPosition().z);
@@ -533,14 +546,14 @@ float Enemy::GetDamaged(float dmg, PlayerController* player, float3 knock_back)
 		if (player->attacks->GetCurrentAttack() && player->attacks->GetCurrentAttack()->IsLast())
 		{
 			SetState("Dying");
-			PlaySFX("Death");
+			PlaySwitchSFX("Enemy_Death");
 
 			Decapitate(player);
 		}
 		else if (overkill_hits >= 3) //overkill of 3 hits 
 		{
 			SetState("Dying");
-			PlaySFX("Death");
+			PlaySwitchSFX("Enemy_Death");
 		}
 	}
 

@@ -18,6 +18,7 @@ void Head_Script::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (first)
 	{
+		game_object->GetComponent<ComponentAudioEmitter>()->StartSound();
 		if (collider->game_object_attached == GameObject::FindWithName("Right_Scale"))
 		{
 			script_scale->current_points2 = script_scale->player2_points;

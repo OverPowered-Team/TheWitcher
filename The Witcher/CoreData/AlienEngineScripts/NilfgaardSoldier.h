@@ -37,6 +37,7 @@ public:
 	void SetStats(const char* json) override;
 
 	void Stun(float time) override;
+	void PlayAttackSFX() override;
 	bool IsDead() override;
 	bool IsDying() override;
 	bool IsHit() override;
@@ -48,8 +49,6 @@ public:
 	bool IsRangeEnemy();
 
 	void RotateSoldier();
-
-	void PlaySFX(const char* sfx_name);
 
 	void OnAnimationEnd(const char* name) override;
 	void OnTriggerEnter(ComponentCollider* collider) {};

@@ -53,7 +53,6 @@ void NilfSoldierMelee::UpdateEnemy()
 	case NilfgaardSoldierState::DYING:
 	{
 		animator->PlayState("Death");
-		audio_emitter->StartSound("SoldierDeath");
 		last_player_hit->OnEnemyKill((uint)type);
 		state = NilfgaardSoldierState::DEAD;
 		if (m_controller && is_combat)
