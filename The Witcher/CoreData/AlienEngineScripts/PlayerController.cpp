@@ -528,7 +528,7 @@ void PlayerController::HitByRock(float time, float dmg)
 	if (state->type != StateType::DEAD || !is_immune) {
 		ReceiveDamage(dmg, float3::zero(), false);
 		Invoke(std::bind(&PlayerController::RecoverFromRockHit, this), time);
-		transform->SetLocalScale(1.f, 0.25f, 1.f);
+		//transform->SetLocalScale(1.f, 0.25f, 1.f);
 		if (state->type != StateType::DEAD) {
 			is_immune = true;
 		}
@@ -538,7 +538,7 @@ void PlayerController::HitByRock(float time, float dmg)
 void PlayerController::RecoverFromRockHit()
 {
 	is_immune = false;
-	transform->SetLocalScale(1.f, 1.f, 1.f);
+	//transform->SetLocalScale(1.f, 1.f, 1.f);
 }
 
 void PlayerController::AddEffect(Effect* _effect)
