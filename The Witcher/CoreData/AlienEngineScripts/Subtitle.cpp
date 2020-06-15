@@ -30,7 +30,22 @@ void Subtitle::Start()
 	}
 
 
-	std::string json_path = std::string("GameData/Transition/Jaskier_Intro.json");
+	std::string json_path;
+	switch (subtile_id)
+	{
+	case Subtitle_Id::INTRO:
+		json_path = std::string("GameData/Transition/Jaskier_Intro.json");
+		break;
+	case Subtitle_Id::MIDDLE:
+		json_path = std::string("GameData/Transition/Jaskier_Medio.json");
+		break;
+	case Subtitle_Id::END:
+		json_path = std::string("GameData/Transition/Jaskier_Final.json");
+		break;
+	default:
+		break;
+	}
+	
 	JSONfilepack* jsonDoc = JSONfilepack::GetJSON(json_path.c_str());
 	if (jsonDoc)
 	{
@@ -59,6 +74,22 @@ void Subtitle::Start()
 	skip = GameObject::FindWithName("Text");
 	skip->SetEnable(false);
 	SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
+
+	switch (subtile_id)
+	{
+	case Subtitle_Id::INTRO:
+		SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
+		break;
+	case Subtitle_Id::MIDDLE:
+		SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
+		break;
+	case Subtitle_Id::END:
+		SceneManager::LoadSceneAsync("Credits");
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Subtitle::Update()
@@ -66,7 +97,7 @@ void Subtitle::Update()
 	if (!text || !audio)
 		return;
 	current_time = Time::GetGameTime() - start_time;
-	LOG("%f", current_time);
+	//LOG("%f", current_time);
 	if (!change_scene)
 	{
 		if (subtitles.size() > 0 && subtitles.size() > current_sub)
@@ -90,12 +121,14 @@ void Subtitle::Update()
 	
 	if (SceneManager::IsSceneAsyncReady()) 
 	{
-		LOG("I'm ready");
+		//LOG("I'm ready");
+		//LOG("%f", end_seconds);
 		skip->SetEnable(true);
 	
 		if (!change_scene && (current_time > end_seconds || Input::GetControllerButton(1, Input::CONTROLLER_BUTTON_START) || Input::GetKeyDown(SDL_SCANCODE_A)))
 		{
 			change_scene = true;
+			//LOG("change scene");
 			if (audio)
 				audio->Mute(true);
 			if (song)
