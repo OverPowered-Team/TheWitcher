@@ -226,9 +226,11 @@
                       <p>At the start of the project, a simple State Machine based on a enum was developed for the character, but we quickly realized that it had bad scalability and would make us repeat code.</p>
                       <p>To fix these problems, I changed from Enum State Machine to a Hierarchical State Machine, which encapsulated the different states of the characters effectively and helped us scale the functionalities of each state.</p>
                   </div>
-                  <div class="col-lg-4">
+				  <div  class="col">
+                  <div class="col-lg-8">
                       <img src="../images/Axel/fsm.png" alt="Image" class="img-fluid">
                   </div>
+				  </div>
               </div>
           </div>
       </div>
@@ -244,10 +246,17 @@
 					  the Physics Module was changed and I had to redo the movement.</p>
 					  <p>Also, there was a problem with the movement when going down a slope, since it was made accelerating forward, it would go in the air, fall down, move forward, go into the air again, fall down over and over when going down a slope. I had to make a Raycast from the feet of the player to detect the surface the character was on and then calculate the slope of it to adapt the movement on that direction.</p>
                   </div>
-				  <div class="col-lg-4">
+
+
+              </div>
+			  <div class="row ">
+			  				  <div class="col-lg-4">
                       <img src="../images/Axel/slope.gif" alt="Image" class="img-fluid">
                   </div>
-              </div>
+			  				  <div class="col-lg-4">
+                      <img src="../images/Axel/dodge.gif" alt="Image" class="img-fluid">
+                  </div>
+				  </div>
           </div>
       </div>
 
@@ -267,6 +276,11 @@
                   <div class="col">
                       <p>To create the combos of the characters, I based the structure on a simple State Machine of Attacks. Each Attack would be a node with its own information of damage and effects, and also would point to the other Attacks it can link to.</p>
                       <p>With this structure we easily created new Attacks and made them link to each other with the input we wanted to.</p>
+                  </div>
+                 <div class="col">
+                      <div class="col-lg-10">
+                          <img src="../images/Axel/combo.gif" alt="Image" class="img-fluid">
+                      </div>
                   </div>
                   <div class="col-12 mb-4 position-relative">
                       <h4 class="section-title code-color">Spells</h4>
@@ -289,7 +303,12 @@
                               <li data-target="#myCarousel" data-slide-to="1"></li>
                               <li data-target="#myCarousel" data-slide-to="2"></li>
                               <li data-target="#myCarousel" data-slide-to="3"></li>
+							  <li data-target="#myCarousel" data-slide-to="4"></li>
+                              <li data-target="#myCarousel" data-slide-to="5"></li>
+                              <li data-target="#myCarousel" data-slide-to="6"></li>
+							<li data-target="#myCarousel" data-slide-to="7"></li>
                           </ol>
+
                           <div class="carousel-inner" role="listbox">
                               <div class="carousel-item active">
                                   <img class="d-block w-100" src="../images/Axel/quen.gif" alt="First slide">
@@ -313,6 +332,30 @@
                                   <img class="d-block w-100" src="../images/Axel/aard.gif" alt="Fourth slide">
                                   <div class="carousel-caption">
                                       <h3>Aard</h3>
+                                  </div>
+                              </div>
+							  <div class="carousel-item">
+                                  <img class="d-block w-100" src="../images/Axel/fthrower.gif" alt="Second slide">
+                                  <div class="carousel-caption">
+                                      <h3>Flamethrower</h3>
+                                  </div>
+                              </div>
+                              <div class="carousel-item">
+                                  <img class="d-block w-100" src="../images/Axel/earthproj.gif" alt="Third slide">
+                                  <div class="carousel-caption">
+                                      <h3>Earth Projectile</h3>
+                                  </div>
+                              </div>
+                              <div class="carousel-item">
+                                  <img class="d-block w-100" src="../images/Axel/nova.gif" alt="Fourth slide">
+                                  <div class="carousel-caption">
+                                      <h3>Ice Nova</h3>
+                                  </div>
+                              </div>
+								 <div class="carousel-item">
+                                  <img class="d-block w-100" src="../images/Axel/chain.gif" alt="Fourth slide">
+                                  <div class="carousel-caption">
+                                      <h3>Chain Lightning</h3>
                                   </div>
                               </div>
                           </div>
@@ -355,6 +398,14 @@
 					  <p>The idea was to have two long range combos with low damage and two close range combos with higher damage. With these sets of combos, we thought that would be a good idea to move the enemy so we could flow between those. So we made one of the long range combos pull the enemy towards Yennefer and one of the close range combos to knock the enemy away.</p>
                       </div>
                   </div>
+				  <div class="row ">
+				  		<div class="col-lg-4">
+                          <img src="../images/Axel/yenn_combo1.gif" alt="Image" class="img-fluid">
+                      </div>
+								<div class="col-lg-4">
+                          <img src="../images/Axel/yenn_combo2.gif" alt="Image" class="img-fluid">
+                      </div>
+				  </div>
               </div>
           </div>
 
@@ -368,12 +419,6 @@
                           <p>I worked on the structure of the Relic System with Cere, setting the base of how it would interact with the Character, the Stats of the player and the effects they would apply, depending on the type of Relic that was picked up.</p>
 						  <p>We based the structure on Relic Types and Relic Effects, the type indicates if it's going to work on a Dash or an Attack, and then the effect will determine if it's going to be fire(apply burn), ice(apply slow), etc.</p>
 						  <p>After helping with the base, I left Cere to continue the work and develop all the Relics.</p>
-                      </div>
-                      <div class="col-lg-4">
-                          <img src="../images/Axel/dizzy.gif" alt="Image" class="img-fluid">
-                      </div>
-                      <div class="col-lg-4">
-                          <img src="../images/Axel/decapitation.gif" alt="Image" class="img-fluid">
                       </div>
                   </div>
               </div>
@@ -407,12 +452,14 @@
                               <li>Dizzy: this is a state the enemy enters when it dies and the enemy stops attacking. The enemy will stumble for a second before actually dying, this allows the player to continue attacking even if it's dead to achieve a decapitation.</li>
                           </ul>
                       </div>
+					  <div class="row ">
                       <div class="col-lg-4">
                           <img src="../images/Axel/dizzy.gif" alt="Image" class="img-fluid">
                       </div>
                       <div class="col-lg-4">
                           <img src="../images/Axel/decapitation.gif" alt="Image" class="img-fluid">
                       </div>
+					  </div>
                   </div>
               </div>
           </div>
