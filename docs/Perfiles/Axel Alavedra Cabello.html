@@ -338,8 +338,8 @@
                       <p>After working on the Hierarchical State Machine rework, I started improving the character movement that was done before. I added acceleration and slow to the dodge, and had to rework most of the basic movement since during the development of the project,
 					  the Physics Module was changed and I had to redo the movement.</p>
 					  <p>Also, there was a problem with the movement when going down a slope, since it was made accelerating forward, it would go in the air, fall down, move forward, go into the air again, fall down over and over when going down a slope. I had to make a Raycast from the feet of the player to detect the surface the character was on and then calculate the slope of it to adapt the movement on that direction.</p>
-                  </div>
-
+					<p>In relation with the movement, I also implemented a set of sphere collider inside the feet of the character which triggers a footstep sound every time it collider with a ground surface, taking in count the material its made of(stone, sand, wood, etc).</p>
+				 </div>
 
               </div>
 			  <div class="row ">
@@ -475,6 +475,7 @@
                           <li>Hit Freeze: this makes the player and the enemy freeze for a set amount of time when a hit connect, improving the feeling of the attack.</li>
                           <li>KnockBack: we can set a knockback direction and force to each attack, so we can have attacks that knock enemies on the air, back or even pull them towards the character.</li>
                           <li>Collider Sleection and Update: allows the selection of differnt types of colliders like a sphere, box or a collider which moves with the weapon of the character and make them change during the attack.</li>
+						  <li>Impact Sound: each attack can impact a surface and it will trigger an impact sound depending on the type of surface(sand, mud, stone).</li>
                       </ul>
                   </div>
               </div>
@@ -550,7 +551,7 @@
                           <img src="../images/Axel/dizzy.gif" alt="Image" class="img-fluid">
                       </div>
                       <div class="col-lg-4">
-                          <img src="../images/Axel/d.gif" alt="Image" class="img-fluid">
+                          <img src="../images/Axel/decap.gif" alt="Image" class="img-fluid">
                       </div>
 					  </div>
                   </div>
