@@ -84,7 +84,7 @@ void Subtitle::Start()
 		SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
 		break;
 	case Subtitle_Id::END:
-		SceneManager::LoadSceneAsync("Credits");
+		SceneManager::LoadSceneAsync("NewWin_Menu");
 		break;
 	default:
 		break;
