@@ -188,7 +188,6 @@
               subtypes.</li>
             <li>Enemy spawner.</li>
             <li>Battle circle and steering avoid.</li>
-            <li>Enemy weapons and some assets.</li>
           </ul>
           <p>And made some props:</p>
           <ul>
@@ -499,6 +498,13 @@
               player can continue.</p>
           </div>
 
+
+          <div class="center-alex">
+            <img src="../images/AlexMorales/Enemies/BlockerObstacle.gif" style="width: 100%;">
+            <p style="text-align: center;">Blocker obstacle vanish</p>
+          </div>
+
+
         </div>
 
       </div>
@@ -522,75 +528,131 @@
         <h2 class="section-title code-color">Enemy Spawner</h2>
       </div>
 
+      <div class="container">
+        <p>When the player enters in the spawn area, the Spawner Manager call the Instantiate function in its children,
+          which has the enemy type and subtype. It can also add a time delay.</p>
+      </div>
+
+      <img src="../images/AlexMorales/Enemies/Spawner.gif" style="width: 100%;">
+      <p style="text-align: center;">Spawner(*Gizmos doesn't correspond to reality)</p>
+
       <div class="col-12 mb-4 position-relative">
         <h2 class="section-title code-color">Steering avoid</h2>
       </div>
 
+      <div class="container">
+        <p>The steering avoid calculates if the other enemies are inside an area. When an enemy is inside, it
+          adds to a vector the opposite directions vectors. Knowing
+          the distance from the center, it also calculates the force of the avoid vector. The result is the direction
+          that the player goes. </p>
+        <p>Once calculated, it adds the avoid vector and the velocity vector torwards the player, giving as a result the
+          final velocity vector.</p>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <img src="../images/AlexMorales/Enemies/MoveFunction.JPG" style="width: 100%;">
+          <p style="text-align: center;">Move code</p>
+        </div>
+
+        <div class="col">
+          <img src="../images/AlexMorales/Enemies/Steering avoid.JPG" style="width: 100%;">
+          <p style="text-align: center;">Steering avoid code</p>
+        </div>
+      </div>
+
+      <img src="../images/AlexMorales/Enemies/SteeringAvoid.gif" style="width: 100%;">
+      <p style="text-align: center;">Steering Avoid</p>
+
       <div class="col-12 mb-4 position-relative">
         <h2 class="section-title code-color">Battle circle</h2>
       </div>
+
+      <div class="container">
+        <p>The battle circle limits the max enemies that can attack the player. When reaches the max, checks if the
+          other player has enemies attacking, and if not, it attacks. In the other case, the enemies surround the player
+          and wait their turn until they can attack. Once the enemy attacking is damaged, check for another candidate to
+          attack.</p>
+      </div>
+
+      <img src="../images/AlexMorales/Enemies/BattleCircle.gif" style="width: 100%;">
+      <p style="text-align: center;">Battle circle with 2 max enemies for each player</p>
+
+
     </div>
 
-
-
-    <div class="row ">
-      <div class="col-12 position-relative">
-        <h2 class="section-title text-center code-color">Projects</h2>
+    <div class="parallax" style="background-color: color-code;">
+      <div class="color-overlay color-code">
+      </div>
+      <div class="container" style="padding: 7em;">
+        <div class="row">
+          <div class="col-12 position-relative">
+            <h2 class="section-title text-center text-white white">Props</h2>
+          </div>
+        </div>
       </div>
     </div>
-
 
     <!-- IMAGENES -->
     <section class="site-section block__62272" id="projects-section">
       <div class="container">
+        <p>I generated some props in order to help the art department. Here are the assets that I created:</p>
         <div id="posts" class="row no-gutter">
-          <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_5.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_5.jpg">
+          <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+            <a href="../images/AlexMorales/Props/Dummy.gif" class="item-wrap fancybox">
+              <span>Dummy</span>
+              <img class="img-fluid" src="../images/AlexMorales/Props/Dummy.gif">
             </a>
           </div>
 
-          <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_6.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_6.jpg">
+          <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+            <a href="../images/AlexMorales/Props/Arrow.gif" class="item-wrap fancybox">
+              <span>Shield</span>
+              <img class="img-fluid" src="../images/AlexMorales/Props/Shield.gif">
             </a>
           </div>
 
-          <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_7.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_7.jpg">
+          <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+            <a href="../images/AlexMorales/Props/Arrow.gif" class="item-wrap fancybox">
+              <span>Arrow</span>
+              <img class="img-fluid" src="../images/AlexMorales/Props/Arrow.gif">
             </a>
           </div>
 
-          <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_1.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_1.jpg">
-            </a>
-          </div>
-          <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_2.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_2.jpg">
+          <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+            <a href="../images/AlexMorales/Props/Bow.gif" class="item-wrap fancybox">
+              <span>Bow</span>
+              <img class="img-fluid" src="../images/AlexMorales/Props/Bow.gif">
             </a>
           </div>
 
-          <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_3.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_3.jpg">
+          <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+            <a href="../images/AlexMorales/Props/Slime.gif" class="item-wrap fancybox">
+              <span>Slime</span>
+              <img class="img-fluid" src="../images/AlexMorales/Props/Slime.gif">
             </a>
           </div>
 
-          <div class="item design col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-            <a href="../images/img_4.jpg" class="item-wrap fancybox">
-              <span class="icon-search2"></span>
-              <img class="img-fluid" src="../images/img_4.jpg">
-            </a>
-          </div>
+            <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+              <a href="../images/AlexMorales/Props/Wagon.gif" class="item-wrap fancybox">
+                <span>Wagon</span>
+                <img class="img-fluid" src="../images/AlexMorales/Props/Wagon.gif">
+              </a>
+            </div>
+
+            <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+              <a href="../images/AlexMorales/Props/Coin.gif" class="item-wrap fancybox">
+                <span>Slime</span>
+                <img class="img-fluid" src="../images/AlexMorales/Props/Coin.gif">
+              </a>
+            </div>
+  
+              <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-6 mb-4">
+                <a href="../images/AlexMorales/Props/Sword.gif" class="item-wrap fancybox">
+                  <span>Wagon</span>
+                  <img class="img-fluid" src="../images/AlexMorales/Props/Sword.gif">
+                </a>
+              </div>
 
         </div>
       </div>
