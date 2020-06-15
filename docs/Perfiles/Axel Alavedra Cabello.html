@@ -226,7 +226,7 @@
                       <p>At the start of the project, a simple State Machine based on a enum was developed for the character, but we quickly realized that it had bad scalability and would make us repeat code.</p>
                       <p>To fix these problems, I changed from Enum State Machine to a Hierarchical State Machine, which encapsulated the different states of the characters effectively and helped us scale the functionalities of each state.</p>
                   </div>
-                  <div class="col-lg-3">
+                  <div class="col-lg-4">
                       <img src="../images/Axel/fsm.png" alt="Image" class="img-fluid">
                   </div>
               </div>
@@ -243,6 +243,9 @@
                       <p>After working on the Hierarchical State Machine rework, I started improving the character movement that was done before. I added acceleration and slow to the dodge, and had to rework most of the basic movement since during the development of the project,
 					  the Physics Module was changed and I had to redo the movement.</p>
 					  <p>Also, there was a problem with the movement when going down a slope, since it was made accelerating forward, it would go in the air, fall down, move forward, go into the air again, fall down over and over when going down a slope. I had to make a Raycast from the feet of the player to detect the surface the character was on and then calculate the slope of it to adapt the movement on that direction.</p>
+                  </div>
+				  <div class="col-lg-4">
+                      <img src="../images/Axel/slope.gif" alt="Image" class="img-fluid">
                   </div>
               </div>
           </div>
@@ -340,6 +343,20 @@
                   </div>
               </div>
           </div>
+		  
+		  <div class="site-section" id="about-section">
+              <div class="container">
+                  <div class="row ">
+                      <div class="col-12 mb-4 position-relative">
+                          <h2 class="section-title code-color">Yennefer</h2>
+                      </div>
+                      <div class="col">
+					  <p>This character requires it's own section in this page because I helped designing the character combos with Alejandro Paris and personally implemented all it's attacks, spells and dodge.</p>
+					  <p>The idea was to have two long range combos with low damage and two close range combos with higher damage. With these sets of combos, we thought that would be a good idea to move the enemy so we could flow between those. So we made one of the long range combos pull the enemy towards Yennefer and one of the close range combos to knock the enemy away.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
 		   <div class="site-section" id="about-section">
               <div class="container">
@@ -348,7 +365,9 @@
                           <h2 class="section-title code-color">Relics</h2>
                       </div>
                       <div class="col">
-                          <p>I worked on the structure of the Relic System with Cere, setting the base of how it would interact with the Character, the Stats of the player and the effects they would apply, depending on the type of Relic that was picked up. After helping with the base, I left Cere to continue the work and develop all the Relics.</p>
+                          <p>I worked on the structure of the Relic System with Cere, setting the base of how it would interact with the Character, the Stats of the player and the effects they would apply, depending on the type of Relic that was picked up.</p>
+						  <p>We based the structure on Relic Types and Relic Effects, the type indicates if it's going to work on a Dash or an Attack, and then the effect will determine if it's going to be fire(apply burn), ice(apply slow), etc.</p>
+						  <p>After helping with the base, I left Cere to continue the work and develop all the Relics.</p>
                       </div>
                       <div class="col-lg-4">
                           <img src="../images/Axel/dizzy.gif" alt="Image" class="img-fluid">
