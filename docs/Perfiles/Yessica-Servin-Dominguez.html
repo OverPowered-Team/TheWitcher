@@ -91,7 +91,7 @@
             <div class="row justify-content-center">
               <div class="container" style="padding-top: 200px">
                 <h1 class="text-white" data-aos="fade-up" data-aos-delay="">Yessica Servin Dominguez</h1>
-                <p class="lead text-white" data-aos="fade-up" data-aos-delay="100"> Siempre hay tiempo para un sea of thieves</p>
+                <p class="lead text-white" data-aos="fade-up" data-aos-delay="100">Do you know this? No -plup-</p>
                 <img class="rounded-image" style="height: 75%;" src="../images/Team/YessicaServinDominguez.PNG">
           
 
@@ -116,9 +116,7 @@
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>Hi! I'm Yessica I'm a half programmer and half artist. My walk throught this project has been a hole odisi. I helped with bug-solving, game-play but mostly helped with assets because it was were I was needed the most.</p>
             <div class="col-md-3 container" style="text-align: center;">
               <!-- <h3 class="footer-title">Follow Me</h3> -->
               <a href="#" class="social-circle m-2 rss-font-size code-text" ><span class="icon-twitter"></span></a>
@@ -155,53 +153,23 @@
 
           <!-- This is a title !!!!!!!!!! -->
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Project overview</h2>
+            <h2 class="section-title code-color">Skinning with shaders</h2>
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>In order to improve the performance of the game we needed to do all the computation of the skinning on the GPU with shaders.
+              <br>Every vertex of a mesh has it's attachment to a bone and weight. What I did was to send an array of transformation matrix of the bones, so in the shader I could get de rotation, position, scale of the skeleton. </p>
+              <p>Then every vertex got two atributes: </p>
+              <ul>
+                <li>A ivec4 of bones id to get the position of the array, the max of bones per vertex it's 4</li>
+                <li>A vec4 of weights it will be influence of every bone</li>
+              </ul>
           </div>
 
-          <div id="myCarousel" class="carousel slide bg-inverse w-50 ml-auto mr-auto" data-ride="carousel">
-            <ol class="carousel-indicators">
-              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-              <li data-target="#myCarousel" data-slide-to="1"></li>
-              <li data-target="#myCarousel" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner" role="listbox">
-              <div class="carousel-item active">
-                <img class="d-block w-100" src="../images/person_1.jpg" alt="First slide">
-                  <div class="carousel-caption">
-                    <h3>First slide</h3>
-                    <p>This is the first slide.</p>
-                  </div>
-              </div>
-              <div class="carousel-item">
-                <img class="d-block w-100" src="../images/person_1.jpg" alt="Second slide">
-                  <div class="carousel-caption">
-                    <!-- <h3>Second slide</h3>
-                    <p>This is the second slide.</p> -->
-                  </div>
-              </div>
-              <div class="carousel-item">
-                <img class="d-block w-100" src="../images/person_1.jpg" alt="Third slide">
-                  <div class="carousel-caption">
-                    <h3>Third slide</h3>
-                    <p>This is the third slide.</p>
-                  </div>
-              </div>
-            </div>
-            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
+          <img class="d-block  mb-5 " style="width: 50%; float: left;" src="../images/YessicaServin/skinning.gif" alt="First slide">
+          <img class="d-block mb-5"  style="width: 50%;" src="../images/YessicaServin/bugSkinningShader.gif" alt="Second slide">
+
+          <p>I got a bug that some model tended to go the senter because I was conserving the original position instiead of start at (0,0,0) and add the result of the trasformations.</p>
 
           </div>
       </div>
@@ -227,41 +195,8 @@
           </div>
         </div>
       </div>
-      
     </div>
 
-
-    <div class="site-section" id="about-section">
-      <div class="container">
-        <div class="row ">
-          <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">About Us</h2>
-          </div>
-          <div class="col-lg-4">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
-          </div>
-          <div class="col-lg-4">
-            <img src="../images/about.jpg" alt="Image" class="img-fluid">
-          </div>
-          <div class="col-lg-4">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
-          </div>
-          
-          
-        </div>
-      </div>
-    </div>
-
-    <div class="row ">
-      <div class="col-12 position-relative">
-        <h2 class="section-title text-center code-color">Projects</h2>
-      </div>
-    </div>
-    
 
     <!-- IMAGENES -->
     <section class="site-section block__62272" id="projects-section">
