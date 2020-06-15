@@ -267,8 +267,8 @@ void CiriFightController::UpdatePlatform()
 				}
 				else if (strcmp((*it)->GetName(), "mid_circle") == 0)
 				{
-					/*if (material_platform)
-						material_platform->material->color = { 1,1,1,1 };*/
+					if (material_platform)
+						material_platform->material->color = { 1,1,1,1 };
 					material_platform = (*it)->GetComponent<ComponentMaterial>();
 				}
 			}
