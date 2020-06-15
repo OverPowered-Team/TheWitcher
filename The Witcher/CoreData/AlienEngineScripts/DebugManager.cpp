@@ -36,10 +36,12 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_0))
 		{
+			Scores_Data::last_checkpoint_position = float3::inf();
 			SceneManager::LoadScene("Main_Menu", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_1))
 		{
+			Scores_Data::last_checkpoint_position = float3::inf();
 			if (GameManager::instance)
 			{
 				GameManager::instance->PrepareDataNextScene(false);
@@ -48,6 +50,7 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_2))
 		{
+			Scores_Data::last_checkpoint_position = float3::inf();
 			if (GameManager::instance)
 			{
 				GameManager::instance->PrepareDataNextScene(false);
@@ -57,11 +60,11 @@ void DebugManager::Update()
 		}
 		if (Input::GetKeyDown(SDL_SCANCODE_3))
 		{
+			Scores_Data::last_checkpoint_position = float3::inf();
 			if (GameManager::instance)
 			{
 				GameManager::instance->PrepareDataNextScene(false);
 			}
-			Scores_Data::last_checkpoint_position = float3::inf();
 			Scores_Data::won_level1 = true;
 			SceneManager::LoadScene("BalanToLvl2", FadeToBlackType::HORIZONTAL_CURTAIN);
 		}
