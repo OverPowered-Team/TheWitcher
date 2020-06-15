@@ -336,6 +336,7 @@ public:
 	float gamma = 1.0f;
 	bool hdr = true;
 
+	GLuint readFboId = 0;
 private:
 	// root
 	GameObject* base_game_object = nullptr;

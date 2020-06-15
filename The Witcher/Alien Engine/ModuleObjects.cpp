@@ -156,6 +156,9 @@ bool ModuleObjects::Start()
 	else {
 		ret = false;
 	}
+
+	glGenFramebuffers(1, &readFboId);
+
 #endif
 
 	return ret;
@@ -723,8 +726,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 	game_viewport->FinalPass();
 	//game_viewport->EndViewport();
 
-	GLuint readFboId = 0;
-	glGenFramebuffers(1, &readFboId);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 		GL_TEXTURE_2D, game_viewport->GetPostProcTexture(), 0);
@@ -732,7 +733,6 @@ update_status ModuleObjects::PostUpdate(float dt)
 		0, 0, App->window->width, App->window->height,
 		GL_COLOR_BUFFER_BIT, GL_LINEAR);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &readFboId);
 
 #endif
 	return UPDATE_CONTINUE;
@@ -849,6 +849,10 @@ bool ModuleObjects::CleanUp()
 	for (Viewport* viewport : viewports) {
 		delete viewport;
 	}
+
+#ifdef GAME_VERSION
+	glDeleteFramebuffers(1, &readFboId);
+#endif 
 
 	return true;
 }
