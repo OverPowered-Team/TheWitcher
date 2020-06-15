@@ -491,7 +491,7 @@ void PlayerAttacks::CastSpell()
 
 void PlayerAttacks::OnHit(Enemy* enemy)
 {
-	current_attack->enemies_hit.push_back(enemy);
+	current_attack->enemies_hit.push_back(enemy->game_object);
 	if (current_attack->info.shake == 1)
 		shake->Shake(0.05f, 0.9, 5.f, 0.1f, 0.1f, 0.1f);
 
@@ -512,7 +512,7 @@ void PlayerAttacks::OnHit(Enemy* enemy)
 		{
 			if (strcmp((*it)->game_object_attached->GetTag(), "Enemy") == 0) {
 				Enemy* enemy_close = (*it)->game_object_attached->GetComponent<Enemy>();
-				if (enemy_close && current_attack->CanHit(enemy_close)) {
+				if (enemy_close && current_attack->CanHit(enemy_close->game_object)) {
 					SpawnChainParticle(enemy->transform->GetGlobalPosition(), enemy_close->transform->GetGlobalPosition());
 					if (!enemy_close->IsDead())
 						enemy_close->GetDamaged(GetCurrentDMG(), player_controller);

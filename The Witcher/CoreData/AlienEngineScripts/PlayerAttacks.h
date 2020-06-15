@@ -88,18 +88,18 @@ public:
 		}
 		return false;
 	}
-	bool CanHit(Enemy* enemy)
+	bool CanHit(GameObject* obj)
 	{
 		for (auto it = enemies_hit.begin(); it != enemies_hit.end(); ++it)
 		{
-			if (enemy == (*it))
+			if (obj == (*it))
 				return false;
 		}
 		return true;
 	}
 public:
 	AttackInfo info;
-	std::vector<Enemy*> enemies_hit;
+	std::vector<GameObject*> enemies_hit;
 	uint current_collider = 0;
 
 private:
