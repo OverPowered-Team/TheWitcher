@@ -12,6 +12,8 @@ public:
 	
 	void Explode();
 
+	void Start() override; 
+
 	void OnTriggerEnter(ComponentCollider* collider) override;
 
 	Prefab object_broken;

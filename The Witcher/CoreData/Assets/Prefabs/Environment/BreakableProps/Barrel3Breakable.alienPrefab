@@ -1,11 +1,12 @@
 {
+    "Name": "Barrel3Breakable",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "Barrel3Breakable",
                 "FamilyNumber": 1,
-                "ID": "9846813289838448255",
-                "ParentID": "16735381944195016108",
+                "ID": "16054213467690828378",
+                "ParentID": "1087279575060972768",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,23 +20,23 @@
                     {
                         "Type": 0,
                         "Position": [
-                            1.0096409320831299,
-                            1.0136563777923584,
-                            -12.820274353027344
+                            0,
+                            0,
+                            0
                         ],
                         "Rotation": [
-                            1.1641534958251043e-10,
-                            -4.4710773750011867e-08,
-                            -1.7462301049597784e-10,
-                            1
+                            6.181800671356541e-08,
+                            0.7071068286895752,
+                            6.181868883459174e-08,
+                            0.70710670948028564
                         ],
                         "Scale": [
-                            0.10000000149011612,
-                            0.10000000149011612,
-                            0.10000000149011612
+                            0.75287491083145142,
+                            0.75287514925003052,
+                            0.75287491083145142
                         ],
                         "ScaleNegative": false,
-                        "ID": "631129235534467623"
+                        "ID": "11057316346558956518"
                     },
                     {
                         "Type": 1,
@@ -45,7 +46,7 @@
                         "ViewFaceNormals": false,
                         "DrawAABB": false,
                         "DrawOBB": false,
-                        "ID": "12815939541404696373",
+                        "ID": "1927901917435743035",
                         "HasMesh": true,
                         "IsPrimitive": false,
                         "MeshID": "1096953912451294089",
@@ -53,13 +54,12 @@
                     },
                     {
                         "Type": 2,
-                        "ID": "9310943644394984702",
+                        "ID": "14555890586494737340",
                         "HasMaterial": true,
                         "MaterialID": "18012963031525131083",
                         "Enabled": true
                     },
                     {
-                        "Enabled": true,
                         "Type": 11,
                         "IsKinematic": 1,
                         "Mass": 1,
@@ -94,7 +94,7 @@
                     },
                     {
                         "Type": 29,
-                        "ID": "5162879804869481181",
+                        "ID": "244355727795125098",
                         "ResourceID": "6638633781827320816",
                         "DataName": "BreakableObject",
                         "HasInspector": true,
@@ -103,6 +103,11 @@
                                 "VarType": 8,
                                 "Name": "object_broken",
                                 "prefab": "5579701708834442290"
+                            },
+                            {
+                                "VarType": 0,
+                                "Name": "hits_to_broke",
+                                "int": 1
                             },
                             {
                                 "VarType": 3,
@@ -119,6 +124,5 @@
                 ]
             }
         ]
-    },
-    "Name": "Barrel3Breakable"
+    }
 }
