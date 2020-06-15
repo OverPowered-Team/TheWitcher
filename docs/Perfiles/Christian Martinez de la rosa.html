@@ -166,10 +166,10 @@
           <div class="container">
             <p>I have worked mainly in Gameplay, but in a few occasions I moved to Engine Programming.</p>
 
-            <p>I have worked in camera and level/environment programming in almost all the time. On the firts time I
+            <p>I have worked on the camera and level/environment programming on almost all the time. At the first time I
               worked with <a href="Iván Ropero.html">Ivan Ropero</a> setting the Wwise environment. Next I moved to
               Gameplay
-              programmer, and in one occasion I moved again to Engine to make some Maths utility for camera shake and
+              programmer, and on one occasion I moved again to Engine to make some Maths utility for camera shake and
               modifying the Component Curve to set normals and fix path iteration.</p>
             <div class="col-md-3 container" style="text-align: center;">
             </div>
@@ -202,9 +202,9 @@
         </div>
 
         <div class="container">
-          <p>The camera is highly important in a videogame and we had to be carefull with it. The fact that our game has
-            two players cooperative increase the difficult. The camera has to be comfortable and safely for game logic.
-            In addition, the camera has to provide very good feeling. I worked in Camera System with <a
+          <p>The camera is highly important in a video game and we had to be careful with it. The fact that our game has
+            two players cooperative increase the difficulty. The camera has to be comfortable and safely for game logic.
+            In addition, the camera has to provide a very good feeling. I worked in Camera System with <a
               href="Iván Ropero.html">Ivan Ropero</a>.</p>
           <div class="col-md-3 container" style="text-align: center;">
           </div>
@@ -215,16 +215,16 @@
         </div>
         <div class="container">
           <p>First of all, the game will have different angle cameras for every part of a map. So, I developed a
-            visualizer in order to let the designers know where de camera will be respect the mid point between the two
+            visualizer in order to let the designers know where the camera will be respected the midpoint between the two
             players.</p>
           <img src="../images/Christian/pivot.gif" alt="Pivot move">
-          <p>Pivot moves with mid point in players.</p>
+          <p>The Pivot moves with midpoint in players.</p>
           <img src="../images/Christian/pivotedit.gif" alt="Pivot edit">
-          <p>Pivot can edit with 2 angles and a distance.</p>
+          <p>The pivot can edit with 2 angles and a distance.</p>
           <img src="../images/Christian/pivotInfo.png" alt="Pivot info">
           <p>The data that the designer can manipulate.</p>
           <img src="../images/Christian/pivotplay.gif" alt="Pivot play">
-          <p>On play, the camera will set its position on the point.</p>
+          <p>In play, the camera will set its position on the point.</p>
           <div class="col-md-3 container" style="text-align: center;">
           </div>
         </div>
@@ -280,9 +280,9 @@
         <h3 class="section-title code-color">Block movement</h3>
       </div>
       <div class="container">
-        <p>The players must not move out of boundings of camera. There was a problem that, even if there is a gap that
+        <p>The players must not move out of bounds of the camera. There was a problem that, even if there is a gap that
           the player could move, that movement will leave the other player out of the camera, so we have to solve that.
-          Then we create the Free camera, that allow free movement although it has not space.</p>
+          Then we create the Free camera, that allow free movement, although it has not space.</p>
         <img src="../images/Christian/moveout.gif">
         <div class="col-md-3 container" style="text-align: center;">
         </div>
@@ -297,8 +297,8 @@
         <p>In some cases, we do not want the camera overstep a line, so I implemented a small system of a camera
           limiter.</p>
         <img src="../images/Christian/limiter.png">
-        <p>It consist in set two positions as limiters, it will draw an infinite imaginary line from one point to
-          another and set a direction. When the camera exceed the line, it will clam the position.</p>
+        <p>It consists in set two positions as limiters, it will draw an infinite imaginary line from one point to
+          another and set a direction. When the camera exceeds the line, it will clamp the position.</p>
         <img src="../images/Christian/limiterDemo.gif">
         <div class="col-md-3 container" style="text-align: center;">
         </div>
@@ -310,10 +310,10 @@
         <h3 class="section-title code-color">Camera Transitions</h3>
       </div>
       <div class="container">
-        <p>The game has multiple cameras in each scenario, so we need to transition the camera smoothly and confortable
+        <p>The game has multiple cameras in each scenario, so we need to transition the camera smoothly and comfortable
           for the players. For transitions we created a Prefab with a system to transition the camera.</p>
         <img src="../images/Christian/prefabtransition.png">
-        <p>The systems is conformed from three colliders that controls the direction of the movement and some visual
+        <p>The systems are conformed from three colliders that controls the direction of the movement and some visual
           information to know the future camera position and the previous camera. We have some information that the
           designer can set.</p>
         <img src="../images/Christian/transitiondata.png">
@@ -343,7 +343,7 @@
       <h3 class="section-title code-color">Breakable Props</h3>
     </div>
     <div class="container">
-      <p>I have made a Script that allows a object explode when players hit it. It is multipurpose, and only need the
+      <p>I have made a Script that allows an object explode when players hit it. It is multipurpose, and only needs the
         original object and the same object with a broken mesh.</p>
 
       <img src="../images/Christian/barrels.gif" style="float:left" width="50%" alt="static camera">
@@ -364,7 +364,7 @@
     </div>
     <div class="container">
       <p>On the first level there is a part of rocks falling downhill. I have made a system of three points where two of
-        them are used for calculate the range of the spawn of rocks and the other to calculate the direction of the
+        them are used for calculating the range of the spawn of rocks and the other to calculate the direction of the
         climb. It also has variables in the inspector to modify the random time of spawn, the damage of the rocks and
         the velocity.
       </p>
@@ -376,7 +376,7 @@
       <h3 class="section-title code-color">Helping in rotations</h3>
     </div>
     <div class="container">
-      <p>I also helped in some rotations like the balance making use of quaternions and the math libray the engine has.
+      <p>I also helped in some rotations like the balance, making use of quaternions and the math library the engine has.
       </p>
       <img src="../images/Christian/balance.gif" alt="balance">
     </div>
@@ -404,7 +404,7 @@
     </div>
     <div class="container">
       <p>I continued the work that <a href="Oriol Capdevila Salinas.html">Oriol Capdevila</a> made creating the
-        component curve. The problem was that the objects were not following the path at a constant speed and makes the level of minecarts so tricky.</p>
+        component curve. The problem was that the objects were not following the path at a constant speed and makes the level of the minecarts so tricky.</p>
 
       <img src="../images/Christian/wagonette1.gif">
       <div class="col-md-3 container" style="text-align: center;">
@@ -417,7 +417,7 @@
       <h3 class="section-title code-color">Normals</h3>
     </div>
     <div class="container">
-      <p>Once the component curve was created, I complement the component with the normals. Each control point has a normal and in all segment it makes a interpolation.</p>
+      <p>Once the component curve was created, I complement the component with the normals. Each control point has a normal and in all segments it makes an interpolation.</p>
       <img src="../images/Christian/normalscube.gif">
       <ul></ul>
       <img src="../images/Christian/normals.gif">
