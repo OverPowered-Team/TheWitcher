@@ -1,11 +1,12 @@
 {
+    "Name": "RockSpawner",
     "Prefab": {
         "GameObjects": [
             {
                 "Name": "RockSpawner",
                 "FamilyNumber": 1,
-                "ID": "3871560242558631986",
-                "ParentID": "14249305928320655553",
+                "ID": "11486547618664826697",
+                "ParentID": "1245320196738607216",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -19,9 +20,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            0,
-                            0,
-                            0
+                            -84.760986328125,
+                            -14.340452194213867,
+                            -96.568130493164063
                         ],
                         "Rotation": [
                             0,
@@ -35,11 +36,11 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "4126613214105908932"
+                        "ID": "6431001251757169166"
                     },
                     {
                         "Type": 29,
-                        "ID": "12899800807101640443",
+                        "ID": "1652073666497789278",
                         "ResourceID": "970113273103268306",
                         "DataName": "RockSpawner",
                         "HasInspector": true,
@@ -47,32 +48,42 @@
                             {
                                 "VarType": 8,
                                 "Name": "rock",
-                                "prefab": "5136856351698450270"
+                                "prefab": "12113032819529225000"
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "damage",
+                                "float": 20
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "time_smashed",
+                                "float": 2
                             },
                             {
                                 "VarType": 3,
                                 "Name": "min_time_btw",
-                                "float": 5
+                                "float": 0.5
                             },
                             {
                                 "VarType": 3,
                                 "Name": "max_time_btw",
-                                "float": 5
+                                "float": 1.2000000476837158
                             },
                             {
                                 "VarType": 3,
-                                "Name": "rocks_rotation",
+                                "Name": "rocks_speed_rotation",
                                 "float": 5
                             },
                             {
                                 "VarType": 3,
                                 "Name": "rocks_speed",
-                                "float": 5
+                                "float": 10
                             },
                             {
                                 "VarType": 3,
                                 "Name": "time_despawn",
-                                "float": 9
+                                "float": 5.5
                             }
                         ]
                     }
@@ -81,8 +92,8 @@
             {
                 "Name": "RockSpawn_0",
                 "FamilyNumber": 2,
-                "ID": "8777045199689025831",
-                "ParentID": "3871560242558631986",
+                "ID": "6286646989256931402",
+                "ParentID": "11486547618664826697",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -96,9 +107,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -16.946308135986328,
-                            20.121267318725586,
-                            30.93284797668457
+                            -17.513435363769531,
+                            16.676128387451172,
+                            27.141082763671875
                         ],
                         "Rotation": [
                             0,
@@ -112,15 +123,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13735287037841003938"
+                        "ID": "2149204091384582822"
                     }
                 ]
             },
             {
                 "Name": "RockSpawn_1",
                 "FamilyNumber": 2,
-                "ID": "9364591954707268818",
-                "ParentID": "3871560242558631986",
+                "ID": "9121691410896986979",
+                "ParentID": "11486547618664826697",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -134,9 +145,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -23.241029739379883,
-                            20.121000289916992,
-                            34.447425842285156
+                            -27.195602416992188,
+                            16.103580474853516,
+                            31.638656616210938
                         ],
                         "Rotation": [
                             0,
@@ -150,15 +161,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "3559588031086155484"
+                        "ID": "1147710156987622345"
                     }
                 ]
             },
             {
                 "Name": "RockSpawn_end",
                 "FamilyNumber": 2,
-                "ID": "13544584367767523936",
-                "ParentID": "3871560242558631986",
+                "ID": "3427072872379774742",
+                "ParentID": "11486547618664826697",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -172,9 +183,9 @@
                     {
                         "Type": 0,
                         "Position": [
-                            -48.164512634277344,
-                            11.370826721191406,
-                            -28.402263641357422
+                            -42.296730041503906,
+                            9.2606468200683594,
+                            -22.511100769042969
                         ],
                         "Rotation": [
                             0,
@@ -188,15 +199,15 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "17377380228774561390"
+                        "ID": "15559700786281511814"
                     }
                 ]
             },
             {
                 "Name": "Collider",
                 "FamilyNumber": 2,
-                "ID": "15686535350148066471",
-                "ParentID": "3871560242558631986",
+                "ID": "16495153639436956375",
+                "ParentID": "11486547618664826697",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -226,7 +237,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "15178508546253252376"
+                        "ID": "10064365210938931242"
                     },
                     {
                         "Enabled": true,
@@ -257,8 +268,8 @@
             {
                 "Name": "ColliderOff",
                 "FamilyNumber": 2,
-                "ID": "17062012906976253115",
-                "ParentID": "3871560242558631986",
+                "ID": "11081777487639962138",
+                "ParentID": "11486547618664826697",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -288,7 +299,7 @@
                             1
                         ],
                         "ScaleNegative": false,
-                        "ID": "13022987653100540701"
+                        "ID": "15814029583026547517"
                     },
                     {
                         "Enabled": true,
@@ -317,6 +328,5 @@
                 ]
             }
         ]
-    },
-    "Name": "RockSpawner"
+    }
 }
