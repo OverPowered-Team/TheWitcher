@@ -6,8 +6,14 @@
 #include "..\..\Timer.h"
 #include <vector>
 
+enum (Subtitle_Id,
+	INTRO,
+	MIDDLE,
+	END);
+
 class subtitle
 {
+	
 public:
 	float start = 0, end = 0;
 	std::string text;
@@ -34,6 +40,8 @@ public:
 	float start_time;
 	bool change_scene = false;
 	GameObject* skip = nullptr;
+	
+	Subtitle_Id subtile_id;
 
 };
 
@@ -42,6 +50,8 @@ ALIEN_FACTORY Subtitle* CreateSubtitle() {
 	
 	SHOW_IN_INSPECTOR_AS_GAMEOBJECT(alien->songBard, "Song gameobject");
 	SHOW_IN_INSPECTOR_AS_INPUT_FLOAT(alien->end_seconds);
+	SHOW_IN_INSPECTOR_AS_ENUM(Subtitle_Id, alien->subtile_id);
+
 	// To show in inspector here
 	return alien;
 } 

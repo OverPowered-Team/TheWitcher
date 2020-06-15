@@ -1,6 +1,6 @@
 {
     "Scene": {
-        "Name": "Final",
+        "Name": "Middle",
         "Textures": [
             {
                 "TextureID": "14507017669522659047"
@@ -603,13 +603,19 @@
                 "TextureID": "13215737378435689216"
             },
             {
+                "TextureID": "9492367232523054128"
+            },
+            {
+                "TextureID": "4460295208109499405"
+            },
+            {
+                "TextureID": "1307287875735877059"
+            },
+            {
                 "TextureID": "8869695324737225345"
             },
             {
                 "TextureID": "7880584220910642403"
-            },
-            {
-                "TextureID": "5384374288350532739"
             },
             {
                 "TextureID": "11946462875500444878"
@@ -629,7 +635,7 @@
                 "Name": "Main Camera",
                 "FamilyNumber": 1,
                 "ID": "9618019881792933534",
-                "ParentID": "16908843094872248336",
+                "ParentID": "15147731931807435986",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -664,7 +670,7 @@
                         "Type": 17,
                         "Enabled": true,
                         "ID": "17200776803129528046",
-                        "ListenerID": "2908383151"
+                        "ListenerID": "272171866"
                     },
                     {
                         "Enabled": true,
@@ -711,7 +717,7 @@
                 "Name": "Directional Light",
                 "FamilyNumber": 1,
                 "ID": "9062556116512014768",
-                "ParentID": "16908843094872248336",
+                "ParentID": "15147731931807435986",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
@@ -783,7 +789,7 @@
                 "Name": "Canvas",
                 "FamilyNumber": 1,
                 "ID": "14974939172428492046",
-                "ParentID": "16908843094872248336",
+                "ParentID": "15147731931807435986",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": true,
@@ -840,7 +846,7 @@
                         "Type": 0,
                         "Position": [
                             -62.228572845458984,
-                            -25.810871124267578,
+                            4.7338070869445801,
                             0
                         ],
                         "Rotation": [
@@ -859,7 +865,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "9501905948931977042",
+                        "ID": "7629543285455829709",
                         "Text": "",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -911,86 +917,6 @@
                 ]
             },
             {
-                "Name": "Image",
-                "FamilyNumber": 2,
-                "ID": "1878769119462742249",
-                "ParentID": "14974939172428492046",
-                "Enabled": true,
-                "ParentEnabled": true,
-                "Selected": false,
-                "ParentSelected": true,
-                "IsStatic": false,
-                "IsPrefab": false,
-                "PrefabLocked": false,
-                "Tag": "UnTagged",
-                "Components": [
-                    {
-                        "Type": 0,
-                        "Position": [
-                            -1.7626457214355469,
-                            0,
-                            0
-                        ],
-                        "Rotation": [
-                            0,
-                            0,
-                            0,
-                            1
-                        ],
-                        "Scale": [
-                            57,
-                            57,
-                            57
-                        ],
-                        "ScaleNegative": false,
-                        "ID": "6366768608157267669"
-                    },
-                    {
-                        "Width": 19.190000534057617,
-                        "Height": 10.170000076293945,
-                        "Enabled": true,
-                        "Type": 30,
-                        "UIType": 20,
-                        "TextureID": "5384374288350532739",
-                        "Color": [
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            0.80000001192092896,
-                            1
-                        ]
-                    },
-                    {
-                        "Type": 29,
-                        "ID": "9066869400742664665",
-                        "ResourceID": "5419049150535630215",
-                        "DataName": "ScaleImage",
-                        "HasInspector": true,
-                        "Inspector": [
-                            {
-                                "VarType": 3,
-                                "Name": "scale.x",
-                                "float": 8
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "scale.y",
-                                "float": 8
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "scale.z",
-                                "float": 8
-                            },
-                            {
-                                "VarType": 3,
-                                "Name": "duration",
-                                "float": 14
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
                 "Name": "Text",
                 "FamilyNumber": 2,
                 "ID": "12012775329694049473",
@@ -1027,7 +953,7 @@
                     },
                     {
                         "Type": 30,
-                        "ID": "3255754641837836749",
+                        "ID": "2684150230417646825",
                         "Text": "start to skip",
                         "UIType": 22,
                         "FontID": "16371028872590582604",
@@ -1041,6 +967,234 @@
                         "Width": 1335,
                         "Interlineal": 1.5,
                         "Align": 0
+                    }
+                ]
+            },
+            {
+                "Name": "Moving Image",
+                "FamilyNumber": 2,
+                "ID": "10653490041881489166",
+                "ParentID": "14974939172428492046",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        "Scale": [
+                            1,
+                            1,
+                            1
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "16500630486418002593"
+                    }
+                ]
+            },
+            {
+                "Name": "Intro1",
+                "FamilyNumber": 3,
+                "ID": "15463407780125944516",
+                "ParentID": "10653490041881489166",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -0.22841262817382813,
+                            0.50136899948120117,
+                            0
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            20.951141357421875,
+                            20.951141357421875,
+                            20.951141357421875
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1011019936808455672"
+                    },
+                    {
+                        "Width": 7.7600002288818359,
+                        "Height": 4.059999942779541,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "9492367232523054128",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "2592718451033534346",
+                        "ResourceID": "857200784288259291",
+                        "DataName": "FadeImages",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "start_next_image",
+                                "float": 15
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "transition_duration",
+                                "float": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Intro1 (1)",
+                "FamilyNumber": 3,
+                "ID": "17214189120307958895",
+                "ParentID": "10653490041881489166",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -1.7598400115966797,
+                            -1.0923700332641602,
+                            0.5
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            22.744651794433594,
+                            22.744651794433594,
+                            22.744651794433594
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "1489768783443808127"
+                    },
+                    {
+                        "Width": 7.0900001525878906,
+                        "Height": 3.7400000095367432,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "4460295208109499405",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
+                    },
+                    {
+                        "Type": 29,
+                        "ID": "5548214426388884016",
+                        "ResourceID": "857200784288259291",
+                        "DataName": "FadeImages",
+                        "HasInspector": true,
+                        "Inspector": [
+                            {
+                                "VarType": 3,
+                                "Name": "start_next_image",
+                                "float": 30
+                            },
+                            {
+                                "VarType": 3,
+                                "Name": "transition_duration",
+                                "float": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Intro1 (2)",
+                "FamilyNumber": 3,
+                "ID": "15410670083235755412",
+                "ParentID": "10653490041881489166",
+                "Enabled": true,
+                "ParentEnabled": true,
+                "Selected": false,
+                "ParentSelected": true,
+                "IsStatic": false,
+                "IsPrefab": false,
+                "PrefabLocked": false,
+                "Tag": "UnTagged",
+                "Components": [
+                    {
+                        "Type": 0,
+                        "Position": [
+                            -1.0049428939819336,
+                            -0.59185218811035156,
+                            0.89999997615814209
+                        ],
+                        "Rotation": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "Scale": [
+                            23.498439788818359,
+                            23.498439788818359,
+                            23.498439788818359
+                        ],
+                        "ScaleNegative": false,
+                        "ID": "8257105059257146157"
+                    },
+                    {
+                        "Width": 7.0999999046325684,
+                        "Height": 3.7400000095367432,
+                        "Enabled": true,
+                        "Type": 30,
+                        "UIType": 20,
+                        "TextureID": "1307287875735877059",
+                        "Color": [
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            0.80000001192092896,
+                            1
+                        ]
                     }
                 ]
             },
@@ -1099,7 +1253,7 @@
                 "Name": "BardMusic",
                 "FamilyNumber": 1,
                 "ID": "7666021728586576451",
-                "ParentID": "16908843094872248336",
+                "ParentID": "15147731931807435986",
                 "Enabled": true,
                 "ParentEnabled": true,
                 "Selected": false,
