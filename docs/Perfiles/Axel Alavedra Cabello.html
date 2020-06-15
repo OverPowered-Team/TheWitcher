@@ -189,7 +189,7 @@
                   </div>
 
                   <div class="container">
-                      <p>I worked with Marc and Cere to implement the Animation Module from the Engine we developed for the Game Engines subject, called <a href="https://github.com/ProboxAM/SparkEngine" target="_blank">Spark Engine</a>.</p>
+                      <p>I worked with Marc to implement the Animation Module from the Engine we developed for the Game Engines subject, called <a href="https://github.com/ProboxAM/SparkEngine" target="_blank">Spark Engine</a>. In this module I worked on the following features:</p>
                       <ul>
                           <li>Importer: I worked on importing the animations and rigs, creating the resource and meta files and saving it in Binary on the Library.</li>
                           <li>DeformableMesh: A component which has assigned a root bone and links the whole skeleton with the meshes it has to affect.</li>
@@ -224,9 +224,9 @@
                   </div>
                   <div class="col">
                       <p>At the start of the project, a simple State Machine based on a enum was developed for the character, but we quickly realized that it had bad scalability and would make us repeat code.</p>
-                      <p>To fix this problems, I changed from Enum State Machine to a Hierarchical State Machine, which encapsulated the different states of the characters effectively and helped us scale the functionalities of each state.</p>
+                      <p>To fix these problems, I changed from Enum State Machine to a Hierarchical State Machine, which encapsulated the different states of the characters effectively and helped us scale the functionalities of each state.</p>
                   </div>
-                  <div class="col-lg-3">
+                  <div class="col-lg-4">
                       <img src="../images/Axel/fsm.png" alt="Image" class="img-fluid">
                   </div>
               </div>
@@ -238,6 +238,14 @@
               <div class="row ">
                   <div class="col-12 mb-4 position-relative">
                       <h2 class="section-title code-color">Character Movement</h2>
+                  </div>
+				  <div class="col">
+                      <p>After working on the Hierarchical State Machine rework, I started improving the character movement that was done before. I added acceleration and slow to the dodge, and had to rework most of the basic movement since during the development of the project,
+					  the Physics Module was changed and I had to redo the movement.</p>
+					  <p>Also, there was a problem with the movement when going down a slope, since it was made accelerating forward, it would go in the air, fall down, move forward, go into the air again, fall down over and over when going down a slope. I had to make a Raycast from the feet of the player to detect the surface the character was on and then calculate the slope of it to adapt the movement on that direction.</p>
+                  </div>
+				  <div class="col-lg-4">
+                      <img src="../images/Axel/slope.gif" alt="Image" class="img-fluid">
                   </div>
               </div>
           </div>
@@ -335,7 +343,57 @@
                   </div>
               </div>
           </div>
+		  
+		  <div class="site-section" id="about-section">
+              <div class="container">
+                  <div class="row ">
+                      <div class="col-12 mb-4 position-relative">
+                          <h2 class="section-title code-color">Yennefer</h2>
+                      </div>
+                      <div class="col">
+					  <p>This character requires it's own section in this page because I helped designing the character combos with Alejandro Paris and personally implemented all it's attacks, spells and dodge.</p>
+					  <p>The idea was to have two long range combos with low damage and two close range combos with higher damage. With these sets of combos, we thought that would be a good idea to move the enemy so we could flow between those. So we made one of the long range combos pull the enemy towards Yennefer and one of the close range combos to knock the enemy away.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
+		   <div class="site-section" id="about-section">
+              <div class="container">
+                  <div class="row ">
+                      <div class="col-12 mb-4 position-relative">
+                          <h2 class="section-title code-color">Relics</h2>
+                      </div>
+                      <div class="col">
+                          <p>I worked on the structure of the Relic System with Cere, setting the base of how it would interact with the Character, the Stats of the player and the effects they would apply, depending on the type of Relic that was picked up.</p>
+						  <p>We based the structure on Relic Types and Relic Effects, the type indicates if it's going to work on a Dash or an Attack, and then the effect will determine if it's going to be fire(apply burn), ice(apply slow), etc.</p>
+						  <p>After helping with the base, I left Cere to continue the work and develop all the Relics.</p>
+                      </div>
+                      <div class="col-lg-4">
+                          <img src="../images/Axel/dizzy.gif" alt="Image" class="img-fluid">
+                      </div>
+                      <div class="col-lg-4">
+                          <img src="../images/Axel/decapitation.gif" alt="Image" class="img-fluid">
+                      </div>
+                  </div>
+              </div>
+          </div>
+		  
+		   <div class="site-section" id="about-section">
+              <div class="container">
+                  <div class="row ">
+                      <div class="col-12 mb-4 position-relative">
+                          <h2 class="section-title code-color">Effects and Stats</h2>
+                      </div>
+                      <div class="col">
+                          <p>The Effects System was designed with scalability in mind, so we could create any type of positive and negative effects, as desired by the Game Designers. To achieve this I created a base Effect class with the ability to modify Stats and have different callbacks based on Event
+						  <p>With the base class created I started working on Timed Effects, with which we can apply positive or negative effects to a Stat during a set amount of time or make it work with ticks, so every x amount of time it will affect the stats.</p>
+						  <p>Thanks to this structure I was able to create Effects like a Burn, Slow, Shield, Speed Boost, etc.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+						  
           <div class="site-section" id="about-section">
               <div class="container">
                   <div class="row ">
@@ -359,228 +417,23 @@
               </div>
           </div>
 
-
-          <div class="row ">
-              <div class="col-12 position-relative">
-                  <h2 class="section-title text-center code-color">Projects</h2>
-              </div>
-          </div>
-
-
-          <!-- IMAGENES -->
-          <section class="site-section block__62272" id="projects-section">
-              <div class="container">
-                  <div id="posts" class="row no-gutter">
-                      <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_5.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_5.jpg">
-                          </a>
-                      </div>
-
-                      <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_6.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_6.jpg">
-                          </a>
-                      </div>
-
-                      <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_7.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_7.jpg">
-                          </a>
-                      </div>
-
-                      <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_1.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_1.jpg">
-                          </a>
-                      </div>
-                      <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_2.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_2.jpg">
-                          </a>
-                      </div>
-
-                      <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_3.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_3.jpg">
-                          </a>
-                      </div>
-
-                      <div class="item design col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                          <a href="../images/img_4.jpg" class="item-wrap fancybox">
-                              <span class="icon-search2"></span>
-                              <img class="img-fluid" src="../images/img_4.jpg">
-                          </a>
-                      </div>
-
-                  </div>
-              </div>
-
-          </section>
-
-
-          <div class="site-section" id="about-section">
-              <div class="container">
-                  <div class="row ">
-
-                      <!-- This is a title !!!!!!!!!! -->
-                      <div class="col-12 mb-4 position-relative">
-                          <h2 class="section-title code-color">Project overview</h2>
-                      </div>
-
-                      <div class="container">
-                          <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-                          <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
-                      </div>
-
-                      <section class=" block__62272" id="projects-section">
-                          <div class="container">
-                              <div id="posts" class="row no-gutter">
-                                  <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                                      <a href="../images/img_5.jpg" class="item-wrap fancybox">
-                                          <span class="icon-search2"></span>
-                                          <img class="img-fluid" src="../images/img_5.jpg">
-                                      </a>
-                                  </div>
-
-                                  <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                                      <a href="../images/img_6.jpg" class="item-wrap fancybox">
-                                          <span class="icon-search2"></span>
-                                          <img class="img-fluid" src="../images/img_6.jpg">
-                                      </a>
-                                  </div>
-
-                                  <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                                      <a href="../images/img_7.jpg" class="item-wrap fancybox">
-                                          <span class="icon-search2"></span>
-                                          <img class="img-fluid" src="../images/img_7.jpg">
-                                      </a>
-                                  </div>
-                              </div>
-
-                          </div>
-                  </div>
-
-                  </section>
-
-              </div>
-          </div>
-          </section>
-
-          <div class="site-section" id="about-section">
+	      <div class="site-section" id="about-section">
               <div class="container">
                   <div class="row ">
                       <div class="col-12 mb-4 position-relative">
-                          <h2 class="section-title code-color">About Us</h2>
+                          <h2 class="section-title code-color">Utilities</h2>
                       </div>
-
-                      <div class="col-lg-4">
-                          <img src="../images/about.jpg" alt="Image" class="img-fluid">
-                      </div>
-
                       <div class="col">
-                          <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-                          <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+                          <p>During the development of the project, the team felt like we needed different types of utility structures so I developed some of them:</p>
+						  <ul>
+							<li>Game Manager: The Game Manager worked as a way to centralize the structure of the game, having different kinds of managers inside like a Enemy Manager, Player Manager, etc. With the Game Manager we could easily access all of these.</li>
+							<li>Particle Pooler: As the performance of the game started to take hits with instantiations, I developed a simple particle pooler which focused on reutilizing the particles and projectiles we would use during the exectuion of the game. Instead of deleting them, we can just disable the unused particles and save them untill another Script requires that kind of particle.</li>
+							<li>Effect Factory: To simplify the use of effects in the game, I created a Factory which we could ask a type of Effect that was needed and it would create a copy of it. All these effects were also previously create in a JSON file, so the Game Designer could also create new effects and update existing ones easily.</li>
+						  </ul>
                       </div>
                   </div>
               </div>
           </div>
-      </div>
-      <div>
-
-      </div>
-
-
-      <div class="site-section" id="services-section">
-          <div class="container">
-              <div class="row ">
-                  <div class="col-12 mb-5 position-relative">
-                      <h2 class="section-title text-center mb-5 code-color">Services</h2>
-                  </div>
-
-                  <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="">
-                      <div class="service d-flex h-100">
-                          <div class="svg-icon">
-                              <img src="../images/flaticon/svg/002-travel-1.svg" alt="Image" class="img-fluid">
-                          </div>
-                          <div class="service-about">
-                              <h3>Content Marketing</h3>
-                              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                      <div class="service d-flex h-100">
-                          <div class="svg-icon">
-                              <img src="../images/flaticon/svg/001-travel.svg" alt="Image" class="img-fluid">
-                          </div>
-                          <div class="service-about">
-                              <h3>Social Media Marketing</h3>
-                              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="">
-                      <div class="service d-flex h-100">
-                          <div class="svg-icon">
-                              <img src="../images/flaticon/svg/003-travel-2.svg" alt="Image" class="img-fluid">
-                          </div>
-                          <div class="service-about">
-                              <h3>Brand &amp; Logo Design</h3>
-                              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                      <div class="service d-flex h-100">
-                          <div class="svg-icon">
-                              <img src="../images/flaticon/svg/004-travel-3.svg" alt="Image" class="img-fluid">
-                          </div>
-                          <div class="service-about">
-                              <h3>Social Media Advertising</h3>
-                              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="">
-                      <div class="service d-flex h-100">
-                          <div class="svg-icon">
-                              <img src="../images/flaticon/svg/005-travel-4.svg" alt="Image" class="img-fluid">
-                          </div>
-                          <div class="service-about">
-                              <h3>Social Media Advertising</h3>
-                              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                      <div class="service d-flex h-100">
-                          <div class="svg-icon">
-                              <img src="../images/flaticon/svg/006-food.svg" alt="Image" class="img-fluid">
-                          </div>
-                          <div class="service-about">
-                              <h3>Web Design / Development</h3>
-                              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                          </div>
-                      </div>
-                  </div>
-
-              </div>
-          </div>
-      </div>
 
       <footer class="site-section bg-light footer">
           <div class="container">
@@ -590,11 +443,8 @@
                   </div>
                   <div class="col-md-3">
                       <h3 class="footer-title rss-font-size">Follow Me</h3>
-                      <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-twitter"></span></a>
-                      <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-facebook"></span></a>
-                      <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-instagram"></span></a>
-                      <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-dribbble"></span></a>
-                      <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-linkedin"></span></a>
+                      <a href="https://twitter.com/Axl_32" class="social-circle m-2 rss-font-size"><span class="icon-twitter"></span></a>
+                      <a href="https://www.linkedin.com/in/axel-alavedra-cabello-113666121/" class="social-circle m-2 rss-font-size"><span class="icon-linkedin"></span></a>
                   </div>
                   <div class="col-md-3" style="margin-left: auto; flex: none; width: auto; ">
                       <a href="/Perfiles/Víctor Segura Blanco.html" class="social-circle m-2 rss-font-size" style="text-align: left;">></a>
