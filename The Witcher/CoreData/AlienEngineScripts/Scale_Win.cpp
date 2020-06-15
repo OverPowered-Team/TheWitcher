@@ -34,6 +34,8 @@ void Scale_Win::Start()
 	score_text_2->SetText("0");
 	damage_done = GameObject::FindWithName("DamageDone")->GetComponent<ComponentText>();
 
+	emitter = game_object->GetComponent<ComponentAudioEmitter>();
+
 	// Win/Lose
 	if (!Scores_Data::dead)
 	{
