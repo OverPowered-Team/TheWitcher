@@ -473,32 +473,26 @@
           </div>
   
             <div class="col-lg-6">
-                <img src="../images/SebiLopezImages/alpha/shaderbatchbefore.png" alt="Image" class="img-fluid" width="700">
+            <img src="../images/SebiLopezImages/alpha/badOptickPaitn.png" alt="Image" class="img-fluid" width="700">
             </div>
             
             <div class="col-lg-6">
-               
-            <img src="../images/SebiLopezImages/alpha/shaderbatchbefore.png" alt="Image" class="img-fluid" width="700">
-          </div>
-            
-        </div>
+              
+            <img src="../images/SebiLopezImages/alpha/GoodOptickPaint.png" alt="Image" class="img-fluid" width="700">
+            </div>
+                
+            </div>
 
         <div class="row ">
          
           <div class="container">
-            <p>The shader bathing consisted of <i>batching</i> together all the objects that used the same shader. With this, I also discovered that we could also </p>
+            <p>The shader bathing consisted of <i>batching</i> together all the objects that used the same shader. With this, I also discovered that we could also save <i>tons</i> of ms in uniform passing.</p>
   
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
-          </div>
-  
-            <div class="col-lg-6">
-                <img src="../images/SebiLopezImages/alpha/badOptickPaitn.png" alt="Image" class="img-fluid" width="700">
-            </div>
-            
-            <div class="col-lg-6">
-               
-            <img src="../images/SebiLopezImages/alpha/GoodOptickPaint.png" alt="Image" class="img-fluid" width="700">
-          </div>
+            <p>We didn't need to pass all the light information for each object, which was really expensive.</p>
+
+            <p>It ended up being a double optimization. In the pictures above, you can see the white rectangles describe the uniform passing cost. In the first image, is repeated for each object, and the second one is only passed once.</p>
+
+          </div>          
             
         </div>
 
