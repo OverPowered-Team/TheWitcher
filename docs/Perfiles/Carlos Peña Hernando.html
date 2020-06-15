@@ -112,13 +112,15 @@
 
           <!-- This is a title !!!!!!!!!! -->
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Project overview</h2>
+            <h2 class="section-title code-color">About Me</h2>
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>Hello there! I'm Carlos Peña and I worked as a programmer for this project</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>I consider myself a person with a great spirit of work and commitment. One of my concerns in game development has always been about how visual effects work and their technical implementation.</p>
+            <p>That is the main reason why I worked as a VFX Programmer in the development of TheWitcher: A Bard's Tale.</p>
+            
             <div class="col-md-3 container" style="text-align: center;">
               <!-- <h3 class="footer-title">Follow Me</h3> -->
               <a href="#" class="social-circle m-2 rss-font-size code-text" ><span class="icon-twitter"></span></a>
@@ -155,13 +157,14 @@
 
           <!-- This is a title !!!!!!!!!! -->
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Project overview</h2>
+            <h2 class="section-title code-color">Project Overview</h2>
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>From the beginning to the end of the development of this project, I have been part of the scrum team of Engine, in charge of our particle system. </p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>Throughout the production I have been constantly updating and expanding the characteristics and services that the particle system can provide based on the proposals and guidelines requested by the design department.</p>
+            <p>Constant communication and feedback with designers has been crucial in order to generate the technology required to achieve remarkable game visuals.</p>
           </div>
 
           <div class="container">
@@ -256,9 +259,9 @@
   
             
             <div class="col">
-              <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+              <p>At the beginning of the production, i have added and kept to date the particle system that I developed together with <a href="https://github.com/Sebi-Lopez">Sebi</a>.</p>
+              <p>You can check the particle system on the <a href="https://chronobyte.github.io/Chrono-Stasis-Engine/">Chrono Stasis Engine</a> page.</p>
               
-              <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
             </div>
   
                   <div class="col-lg-6">
@@ -284,9 +287,11 @@
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>One of the important points to prioritize from the beginning was to be able to transform the particles from their 3x3 rotation matrix. </p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>In this way, we can get features such as "Start Angle Rotation" to provide an initial rotation to the particle or apply a frequency to its rotation matrix depending on the degrees that the user adds to the particle to be able to rotate it over the time.</p>
+            
+          
           </div>
 
         </div>
@@ -300,9 +305,9 @@
         
           
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>Starting to be able to rotate the particle from the Z axis (the axis that points towards the camera) It was expanded to be able to rotate the particle in any axis, thus achieving to be able to orient it in the direction that the user will want.</p>
             
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            
           </div>
           
           <div class="col-lg-4">
@@ -324,9 +329,20 @@
 
           
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>Animation of textures was a very requested request by some designers so I focused from the beginning of production on this topic.</p>
             
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>My approach to obtain this result was as follows:</p>
+
+            <div class="container">
+              <ul>
+                  <li>Memory load of the respective spritesheet</li>
+
+                  <li>Properly calculate all the uvs of each frame of the spritesheet and save them in an array</li>
+
+                  <li> Rebind of uvs buffer of every particle to change the new uvs of the texture sheet to display the proper frame based on a frame counter</li>
+                  
+              </ul>
+          </div>
           </div>
                 <div class="col-lg-5">
                   <img src="../images/CarlosPeñaImages/vertical/v2/cleananim.gif" alt="Image" class="img-fluid">
@@ -347,9 +363,9 @@
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>I adapt the rendering of the particles with their color and texture using the materials implemented by Sebastián. For this I had to reworke the buffers using the vertex array object and binde the corresponding shader that I customize to receive the color and texture as inputs</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>This adaptation and rework of particle painting with shaders will be great for us in the not too distant future to add HDR or bloom to the particles.</p>
           </div>
         </div>
       </div>
@@ -366,9 +382,14 @@
   
          
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>In order to get a better effect transition between Gerald animations, I implemented new functionalities that will exclusively affect the emitter of the particles instead of the whole system. </p>
   
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>In this way, if it is intended to stop emitting more particles, its emission is paused, allowing the particles that have been previously spawned to die.</p>
+
+            <p>
+              A visual example is that of Gerald's running animations, that when he starts to run, the dust particles begin to be emitted and when he stops and Gerard happens to be in an idle state, the emission is paused, allowing the particles to die. </p>
+
+            <p>they had been issued before the change of states. This is a point of improvement with respect to the vertical slice 1 since at the time the entire system paused making all the particles disappear at the moment when it changed states.</p>
           </div>
   
             <div class="col-lg-6">
@@ -400,9 +421,9 @@
     
            
             <div class="container">
-              <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+              <p>In order to be able to produce visual effects such as sword slashes, area of effects, projectils, etc. I took responsibility that the particles were not only painted as quads, but could represent any type of mesh within the system.</p>
     
-              <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+              <p>Thanks to this functionality in the particle system, it has been possible to carry out a large part of the combat vfx of Gerald, Yennefer and enemies.</p>
             </div>
     
               <div class="col-lg-6">
@@ -607,9 +628,10 @@
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>To accelerate the drawing we use frustum culling using bounding boxes.</p>
+            <p> I did the calculation of the AABB, avoiding doing it more than once per frame by gameobject and without having to review all the vertices in each calculation</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            
           </div>
         </div>
       </div>
