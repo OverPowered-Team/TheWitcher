@@ -263,12 +263,10 @@
               <p>You can check the particle system on the <a href="https://chronobyte.github.io/Chrono-Stasis-Engine/">Chrono Stasis Engine</a> page.</p>
               
             </div>
-  
                   <div class="col-lg-6">
                     <img src="../images/CarlosPeñaImages/engine/eng1.gif" alt="Image" class="img-fluid">
                   </div>
-          </div>
-
+            </div>
          
         </div>
       </div>
@@ -542,7 +540,7 @@
       <div class="container">
         <div class="row ">
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Trail Creation </h2>
+            <h2 class="section-title code-color">Trail System </h2>
           </div>
 
           <div class="col-lg-6">
@@ -550,9 +548,10 @@
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>To accomplish certain types of effects such as the dash, the idea of implementing a trail system was proposed since with the particle system we had we could not achieve the desired results.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>We decided to add the trail effect and I was in charge of developing it.
+              The component of trail is a component that leaves a trail behind the gameobject to which it is tied and has the properties of time of life, minimum distance and orientation.</p>
           </div>
         </div>
       </div>
@@ -562,12 +561,26 @@
       <div class="container">
         <div class="row ">
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Interaction & Orientation</h2>
+            <h2 class="section-title code-color">Approach</h2>
           </div>
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+           
+            <p>My approach to handle with trail implementation was as follows</p>
+            <div class="container">
+              <ul>
+                  <li>Trail represented as a collection of nodes</li>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+                  <li>OBB’s face indices as vertex connectors</li>
+
+                  <li> Each node has 2 vertices (2 OBB face indices)</li>
+
+                  <li> Every time the OBB face indices are distanced by a minimum distance from last node, we create a new node with the new OBB face indices
+                  </li>
+
+                  <li> Then, every node vertices are connected with the next node ones and a quad is drawn</li>
+                  
+              </ul>
+          </div>
           </div>
 
           <div class="col-lg-6">
@@ -583,9 +596,16 @@
 
        
         <div class="container">
-          <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+          <p>At this point, We need a logic to make the trail interactive and handle a stretch effect. We will interpret nodes as entities with a lifetime and Every frame we will check if last node is ready to die, if not we will break the loop because
+            we don’t want to take into account next nodes until the last one is dead.
+            </p>
 
-          <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+          <p>According to a selected axis of movement (X, Y, Z), OBB’s vertices are obtained to generate a trail in that direction. But we need to orient the origin and destination vertices if we want to generate a trail in the opposite direction.
+
+      
+            </p>
+
+            <p> To handle this, we rearrange the vertices before we input them as a uniforms flipping them to simulate the quad correctly and rematching its UV’s in the shader. </p>
         </div>
 
           <div class="col-lg-2"></div>
@@ -661,9 +681,9 @@
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>shit fisual effects which i made during first production stages of this project</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            
           </div>
 
         </div>
@@ -737,9 +757,9 @@
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>Taking advantage of the knowledge obtained thanks to the adaptation of the painting of the particles using shaders, i was in charge to deal with some shaders like Fresnel shader to obtein the typical effect of a Fresnel Shield.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>This is the final output using the fresnel shader.</p>
           </div>
 
             <div class="col-lg-3"></div>
