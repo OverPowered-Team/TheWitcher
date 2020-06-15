@@ -73,7 +73,7 @@ void Subtitle::Start()
 
 	skip = GameObject::FindWithName("Text");
 	skip->SetEnable(false);
-	SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
+	//SceneManager::LoadSceneAsync("Lvl_1_Tutorial");
 
 	switch (subtile_id)
 	{
