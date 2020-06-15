@@ -91,7 +91,7 @@
             <div class="row justify-content-center">
               <div class="container" style="padding-top: 200px">
                 <h1 class="text-white" data-aos="fade-up" data-aos-delay="">Sebastián López Tenorio</h1>
-                <p class="lead text-white" data-aos="fade-up" data-aos-delay="100"> Meto buenos navajazos cuando saco a pasear a Lupita por mis calles</p>
+                <p class="lead text-white" data-aos="fade-up" data-aos-delay="100">Nothing as comfy as the warmth of the Boiler Room</p>
                 <img class="rounded-image" style="height: 75%;" src="../images/Team/sebastian-lopez.jpg">
           
 
@@ -116,9 +116,11 @@
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>Hello there! I'm Sebastià López, and I am a member of the Coding Team of this project.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>Most of my work has been put on the engine (also known by the team as "The Boiler Room") and I've found my place in there. During this project, I've realised I really like Engine programming 
+              and it's what I will probably focus on my coding career.
+            </p>
             <div class="col-md-3 container" style="text-align: center;">
               <!-- <h3 class="footer-title">Follow Me</h3> -->
               <a href="#" class="social-circle m-2 rss-font-size code-text" ><span class="icon-twitter"></span></a>
@@ -159,19 +161,19 @@
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>My contributions on the project are mostly centered on the Graphics pipeline of the engine.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>To summarize, here's a list of things I've contributed with.</p>
           </div>
 
           <div class="container">
             <ul>
                 <li>Material System</li>
-                <li>Fog</li>
+                <li>Fog Effect</li>
                 <li>Transparencies</li>
                 <li>Lighting</li>
                 <li>Engine Optimizations</li>
-                <li>Bloom</li>
+                <li>Post-Processing</li>
                 <li>HDR</li>
                 
             </ul>
@@ -252,9 +254,17 @@
   
             
             <div class="col">
-              <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-              
-              <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+              <p>For the Material System I've created a layout similar to Unity.</p>
+              <p>Every material must have a Shader, chosen from the list of shaders that are available. The choosen shader will dictate what Inputs that material can take, such as textures, colors, or other variables needed.</p>
+              <p>The initial basic default shader that I created (and later on evolved) had the lighting calculation and also had the three main texture maps:</p>
+              <div class="container">
+                <ul>
+                    <li>Diffuse Texture</li>
+                    <li>Specular Mapping</li>
+                    <li>Normal Mapping</li>
+                </ul>
+            </div>
+
             </div>
   
                   <div class="col-lg-6">
@@ -295,9 +305,8 @@
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>In the default shader, I applyed a Fog visual effect, that <i>"blends"</i> every pixel of the screen, with the background color of the camera, depending of that pixel's distance from the camera.</p>
+            <p>To customize this effect, you can modify the blending values, defined by the <i>Density</i> of the fog and the <i>Gradient</i> in which it fades through the distance. You can also modify the background color.</p>
           </div>
         </div>
       </div>
@@ -310,9 +319,8 @@
             <h2 class="section-title code-color">Progressive</h2>
           </div>
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>The first time I "stepped" out of the Engine was to program a Script for fog zones that can be added to any level. I created it with the idea of mimmicking the feeling when you enter a fog zone, in which the density rises progressively as you advance through the fog.</p>
+            <p>The script could be customized by two radius, in which the camera would interpolate the wanted values from the outter radius to the inner radius. The script can also set the camera background color.</p>
           </div>
 
           <div class="col-lg-6">
@@ -341,23 +349,23 @@
       <div class="container">
         <div class="row ">
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Improvement </h2>
+            <h2 class="section-title code-color">Drawing Order Improvement</h2>
           </div>
 
           <div class="col-lg-6">
-            <img src="../images/SebiLopezImages/alpha/transpcube.gif" alt="Image" class="img-fluid">
+            <img src="../images/SebiLopezImages/alpha/cubetrans.gif" alt="Image" class="img-fluid">
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>I've also improved the drawing ordering to make sure the transparencies worked correctly. At first, the objects where draw from far to near. Later, we realised we had some situations (like the one seen in the GIF) that needed more than that.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>The next step was to introduce the concept of <i>Render Mode</i> to the material system. It had to options: Transparent or Opaque. When drawing the scene, now we draw opaques objects from far to near, and later, the transparents ones from far to near aswell.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="site-section" id="about-section">
+    <!-- <div class="site-section" id="about-section">
       <div class="container">
         <div class="row ">
           <div class="col-12 mb-4 position-relative">
@@ -375,7 +383,7 @@
 
         </div>
       </div>
-    </div>
+    </div> -->
 
 
     <div class="parallax" style="background-image: url('../images/coding wallpaper.jpg');">
@@ -403,15 +411,14 @@
           </div>
 
           <div class="col">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>I created the first iteration of the default shader (later on it evolved with the contribution of multiple members) in which I implemented the <i>Phong Lighting Model</i>. </p>
+            <p>At this point, we only had one texture input and one color input. </p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="site-section" id="about-section">
+    <!-- <div class="site-section" id="about-section">
       <div class="container">
         <div class="row ">
           <div class="col-12 mb-4 position-relative">
@@ -429,7 +436,7 @@
 
         </div>
       </div>
-    </div>
+    </div> -->
    
    
 
@@ -443,7 +450,7 @@
       <div class="container" style="padding: 7em;">
         <div class="row">
           <div class="col-12 position-relative">
-            <h2 class="section-title text-center text-white white">ENGINE OPTIMIZATION </h2> 
+            <h2 class="section-title text-center text-white white">ENGINE RENDERING OPTIMIZATION</h2> 
           </div>
         </div>
       </div>
@@ -460,9 +467,9 @@
   
          
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>After implementing the default shader with the lighting calculations, and we started to get a higher number of objects in the scene, we had performance troubles when rendering the scene.</p>
   
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <p>Arrived at this point, I researched about possible optimizations that can be done in the rendering pipeline and the one that more popped off was the shader batching. Since binding/chaning shaders is really costly, it would reduce a lot our ms.</p>
           </div>
   
             <div class="col-lg-6">
@@ -479,7 +486,7 @@
         <div class="row ">
          
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>The shader bathing consisted of <i>batching</i> together all the objects that used the same shader. With this, I also discovered that we could also </p>
   
             <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
           </div>
