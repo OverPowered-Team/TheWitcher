@@ -45,10 +45,16 @@ void Extra_Menus::PostUpdate()
 	{
 		if ((strcmp(SceneManager::GetCurrentScene(), "Main_Menu")) == 0 || (Time::IsGamePaused()))
 		{
+			if ((strcmp(SceneManager::GetCurrentScene(), "Main_Menu")) == 0)
+			{
+				previous_menu->parent->GetComponent<ComponentCanvas>()->allow_navigation = true;
+				game_object->GetComponent<ComponentCanvas>()->allow_navigation = false;
+			}
 			if (game_object->IsEnabled())
 			{
-				previous_menu->SetEnable(true);
+				previous_menu->SetEnable(true);	
 				game_object->SetEnable(false);
+				
 			}
 		}
 	}

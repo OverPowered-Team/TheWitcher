@@ -34,7 +34,7 @@ void MainMenu_Buttons::Credits()
 
 void MainMenu_Buttons::Muffin()
 {
-	AlienEngine::OpenURL("https://github.com/OverPowered-Team");
+	AlienEngine::OpenURL("https://overpowered-team.github.io/TheWitcher/index.html");
 }
 
 void MainMenu_Buttons::Settings()
@@ -42,6 +42,7 @@ void MainMenu_Buttons::Settings()
 	GameObject::FindWithName("Extra_Menus")->SetEnable(true);
 
 	GameObject::FindWithName("Extra_Menus")->GetComponent<Extra_Menus>()->MenuSpawn(Extra_Menus::MENU::SETTINGS);
+	GameObject::FindWithName("Extra_Menus")->GetComponent<ComponentCanvas>()->allow_navigation = true;
 
 	GameObject::FindWithName("Main_Menu_UI")->SetEnable(false);
 
