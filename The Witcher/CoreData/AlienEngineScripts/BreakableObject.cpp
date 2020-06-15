@@ -30,6 +30,15 @@ void BreakableObject::Explode()
 	GameObject::Destroy(game_object);
 }
 
+void BreakableObject::Start()
+{
+	ComponentCollider* collider = game_object->GetComponent<ComponentCollider>();
+	if (collider != nullptr)
+	{
+		collider->SetCollisionLayer("Default");
+	}
+}
+
 void BreakableObject::OnTriggerEnter(ComponentCollider* collider)
 {
 	if (collider->game_object_attached->IsEnabled())
