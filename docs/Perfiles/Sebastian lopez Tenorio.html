@@ -125,7 +125,7 @@
               <!-- <h3 class="footer-title">Follow Me</h3> -->
               <a href="#" class="social-circle m-2 rss-font-size code-text" ><span class="icon-twitter"></span></a>
               <a href="#" class="social-circle m-2 rss-font-size code-text" ><span class="icon-instagram"></span></a>
-              <a href="#" class="social-circle m-2 rss-font-size code-text" ><span class="icon-linkedin"></span></a>
+              <a href="https://www.linkedin.com/in/sebi-lopez-a138b019b/" class="social-circle m-2 rss-font-size code-text" ><span class="icon-linkedin"></span></a>
             </div>
           </div>
 
@@ -173,8 +173,8 @@
                 <li>Transparencies</li>
                 <li>Lighting</li>
                 <li>Engine Optimizations</li>
-                <li>Post-Processing</li>
                 <li>HDR</li>
+                <li>Bloom</li>
                 
             </ul>
         </div>
@@ -523,44 +523,26 @@
     <div class="site-section" id="about-section">
       <div class="container">
         <div class="row ">
-
-          <!-- This is a title !!!!!!!!!! -->
-          <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Bloom</h2>
-          </div>
-          
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>Finally, I implemented a Post-Processing Pipeline that allowed me to apply some effects to the scene that we have rendered. This pipeline, doesn't affect the UI, as we had UI-InGame world that we didn't want to get interfered by the post-processing.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <!-- <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p> -->
           </div>
-
-          <div class="col-lg-3"></div>
-               
-          <img src="../images/SebiLopezImages/gold/hdr.gif" alt="Image" class="img-fluid">
-        
-      </div>
-
-
-             
-    <div class="site-section" id="about-section">
-      <div class="container">
-        <div class="row ">
-
           <!-- This is a title !!!!!!!!!! -->
           <div class="col-12 mb-4 position-relative">
             <h2 class="section-title code-color">HDR</h2>
           </div>
           
           <div class="container">
-            <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+            <p>The first feature I introduced was the High Dynamic Range (HDR) image. In which the objects rendered have a wider range of color to be displayed with. This has many tricks with ilumination since darker parts will be seen better, and brighter parts, won't bleed as much.</p>
+            <p>Here we can see how the <i>Exposure</i> can be modified to achieve desired results depending on the lighting we have on the scene.</p>
 
-            <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p>
+            <!-- <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p> -->
           </div>
 
             <div class="col-lg-4"></div>
                
-                <img src="../images/SebiLopezImages/gold/boom.gif" alt="Image" class="img-fluid">
+                <img src="../images/SebiLopezImages/gold/hdrExposure.gif" alt="Image" class="img-fluid">
               
             </div>
 
@@ -574,6 +556,38 @@
         </div>
       </div>
     </div>
+    
+    <div class="site-section" id="about-section">
+      <div class="container">
+        <div class="row ">
+
+          <!-- This is a title !!!!!!!!!! -->
+          <div class="col-12 mb-4 position-relative">
+            <h2 class="section-title code-color">Bloom</h2>
+          </div>
+          
+          <div class="container">
+            <p>And last, but not least. I implemented the <i>Bloom</i> or <i>Emissive effect</i>. This post-processing feature blurs the texture with brighter parts of the rendered scene, so it appears they <i>emit</i> some kind of light.</p>
+            <p>The value of <i>brighter</i> segments of the scene, can be modifyed by a factor, so you can choose what threshold of <i>bright</i> pixels will be blurred.</p>
+
+            <!-- <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.</p> -->
+          </div>
+
+          <div class="col-lg-3"></div>
+               
+          <img src="../images/SebiLopezImages/gold/bloomTextureMix.gif" alt="Image" class="img-fluid">
+
+          <p>Here you can see the <i>bright</i> part of the scene, <i>blurred</i> and <i>blended</i> into the original scene.</p>
+
+          <!-- <img src="../images/SebiLopezImages/gold/bloomTexture.gif" alt="Image" class="img-fluid">
+
+          <img src="../images/SebiLopezImages/gold/bloom.gif" alt="Image" class="img-fluid"> -->
+
+      </div>
+
+
+             
+    
     <div>
 
     </div>
