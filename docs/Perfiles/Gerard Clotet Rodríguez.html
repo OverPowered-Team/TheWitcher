@@ -648,30 +648,106 @@
 
     <div class="site-section" id="about-section">
       <div class="container">
+        <div class="col ">
+          <div class="col-12 mb-4 position-relative">
+            <h2 class="section-title design-color">Directional Blood</h2>
+          </div>
+          <p>I've implemented a feature that rotates blood particle according to player orientation to increase the feel of impacting the enemy</p>
+          <p>Each attack is linked with a different blood particle prefab with a given rotation if the player is in front of the enemy. then when the enemy recieves the hit & spawn the particle, calculates the orientation of the player and applies this orientation + its original given to the particle.</p>
+        
+          <div class = "row">
+            <div class ="col-lg-6">
+              <img src="../images/GerardClotet/gold/blood_directioned.gif" alt="Image" class="img-fluid">
+            </div>
+            <div class ="col-lg-6">
+              <img src="../images/GerardClotet/gold/directional2.gif" alt="Image" class="img-fluid">
+            </div>
+            
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="site-section" id="about-section">
+      <div class="container">
         <div class="row ">
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Emitter Culling</h2>
+            <h2 class="section-title design-color">Rumble</h2>
           </div>
 
-          <div class="col-lg-6">
-            <img src="../images/CarlosPeñaImages/gold/culling.gif" alt="Image" class="img-fluid">
+          <div class="container">
+            <p>Cases where the gamepad rumbles with different intensities & duration</p>
+            <ul>
+                <li>If the player deals damage</li>
+                <li>If the player makes the final attack of combo and hits an enemy the rubmel is more intense</li>      
+                <li>Player recieve damage</li>
+                <li>When the player dies</li>
+            </ul>
           </div>
+        </div>
+      </div>
+    </div>
 
-          <div class="col">
-            <p>To accelerate the drawing we use frustum culling using bounding boxes.</p>
-            <p> I did the calculation of the AABB, avoiding doing it more than once per frame by gameobject and without having to review all the vertices in each calculation</p>
+    <div class="site-section" id="about-section">
+      <div class="container">
+        <div class="col ">
+          <div class="col-12 mb-4 position-relative">
+            <h2 class="section-title design-color">Camera Shake</h2>
+          </div>
+          <p>Cases where the camera shakes with different intensities</p>
+          <div class="container">
+            <ul>
+              <li>If the player deals damage</li>
+              <li>Player recieve damage</li>
+              <li>Complete combo</li>
+            </ul>
+          </div>
+          <div class ="row">
+            <div class ="col-lg-6">
+              <img src="../images/GerardClotet/alpha2/player_die_shake.gif" alt="Image" class="img-fluid">
+            </div>
+            <div class ="col-lg-6">
+              <img src="../images/GerardClotet/alpha2/shake_at_thenendofcombo.gif" alt="Image" class="img-fluid">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section" id="about-section">
+      <div class="container">
+        <div class="col ">
+          <div class="col-12 mb-4 position-relative">
+            <h2 class="section-title design-color">Hit Freeze</h2>
+          </div>
+          <p>Design of freeze</p>
+          <div class ="row">
+            <div class="col-lg-4">
+              <ul>
+                <li>Each attack has its own freeze time</li>
+                <li>The player, the enemy hitted & the player attack particle are freezed according to its freeze time</li>
+                <li>When the player freezes its invulnerable</li>
+              </ul>
+            </div>
+            <div class ="col-lg-6">
+              <img src="../images/GerardClotet/alpha2/hit_freeze.gif" alt="Image" class="img-fluid">
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="parallax" style="background-image: url('../images/coding wallpaper.jpg');">
-      <div class="color-overlay color-code" >
+      <div class="color-overlay color-design" >
       </div>
       <div class="container" style="padding: 7em;">
         <div class="row">
           <div class="col-12 position-relative">
-            <h2 class="section-title text-center text-white white">IN-GAME VFX </h2> 
+            <h2 class="section-title text-center text-white white">COMBAT UI DESIGN</h2> 
           </div>
         </div>
       </div>
@@ -681,111 +757,35 @@
 
     <div class="site-section" id="about-section">
       <div class="container">
-        <div class="row ">
+        <div class="col ">
 
           <!-- This is a title !!!!!!!!!! -->
           <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">VFX Production</h2>
+            <h2 class="section-title design-color">Hit Count</h2>
           </div>
           
           <div class="container">
-            <p>Some visual effects which i made during first production stages of this project</p>
+            <p>Designed hit count system along with <a href="JaumeMontagut.html">Jaume Montagut</a> & implemented by <a href="Víctor Segura Blanco.html">Víctor Segura</a>.</p>
+
+            <ul>
+              <li>Appears damage label individually</li>
+              <li>damage labels reflex visually if the damage comes from a relic element</li>
+              <li>When damage label appears makes a transition of scales as well as the total counter when increases</li>
+              <li>When the total counter reaches certain numbers, shakes</li>
+              <li>If the player doesnt deal damage for a while or receave a hit the total hit counter disappears</li>
+              <li>If the player has combo streaks a fire appears behind the players ui icon</li>
+              <li>When the player completes a combo or recieve a hit  damage labels stacks all together to the global damage counter</li>
+            </ul>
 
             
           </div>
 
-        </div>
-            <!-- IMAGENES -->
-
-            <section class="site-section block__62272" id="projects-section">
-              <div class="container">
-                <div id="posts" class="row no-gutter">
-                  <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v3/gerald_attacks.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v3/gerald_attacks.gif">
-                    </a>
-                  </div>
-        
-                  <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v3/yen_attacks.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v3/yen_attacks.gif">
-                    </a>
-                  </div>
-        
-                  <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v3/yen_attacks2.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v3/yen_attacks2.gif">
-                    </a>
-                  </div>
-        
-                  <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v1/attack_anim.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v1/attack_anim.gif">
-                    </a>
-                  </div>
-                  <div class="item web col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v1/run_anim.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v1/run_anim.gif">
-                    </a>
-                  </div>
-        
-                  <div class="item brand col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v1/spinning_particle.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v1/spinning_particle.gif">
-                    </a>
-                  </div>
-        
-                  <div class="item design col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    <a href="../images/CarlosPeñaImages/vertical/v1/attack_particle.gif" class="item-wrap fancybox">
-                      <span class="icon-search2"></span>
-                      <img class="img-fluid" src="../images/CarlosPeñaImages/vertical/v1/attack_particle.gif">
-                    </a>
-                  </div>
-        
-                </div>
-              </div>
-        
-            </section>
-       
-
-          
-    <div class="site-section" id="about-section">
-      <div class="container">
-        <div class="row ">
-
-          <!-- This is a title !!!!!!!!!! -->
-          <div class="col-12 mb-4 position-relative">
-            <h2 class="section-title code-color">Shader Production</h2>
-          </div>
-          
-          <div class="container">
-            <p>Taking advantage of the knowledge obtained thanks to the adaptation of the painting of the particles using shaders, i was in charge to deal with some shaders like Fresnel shader to obtein the typical effect of a Fresnel Shield.</p>
-
-            <p>This is the final output using the fresnel shader.</p>
+          <div class ="container">
+            <img src="../images/GerardClotet/gold/UI_combat.gif" alt="Image" class="img-fluid">
           </div>
 
-            <div class="col-lg-3"></div>
-               
-                <img src="../images/CarlosPeñaImages/alpha/quen.gif" alt="Image" class="img-fluid">
-              
-            </div>
-
-          
-        </div>
-    
-
-
-
-          </div>
-        </div>
-      </div>
-    </div>
+        </div>      
+      
     <div>
 
     </div>
@@ -797,18 +797,16 @@
       <div class="container">
         <div class="row">
           <div class="col-md-3" >
-            <a href="/Perfiles/Gerard Marcos Freixas.html" class="social-circle m-2 rss-font-size"><</a>
+            <a href="Marc Doctor Pedrosa.html" class="social-circle m-2 rss-font-size"><</a>
           </div>
-          <div class="col-md-3" >
+          <div class="col-md-5" >
             <h3 class="footer-title rss-font-size">Follow Me</h3>
             <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-twitter"></span></a>
-            <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-facebook"></span></a>
             <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-instagram"></span></a>
-            <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-dribbble"></span></a>
-            <a href="#" class="social-circle m-2 rss-font-size"><span class="icon-linkedin"></span></a>
+            <a href="https://www.linkedin.com/in/gerard-clotet-rodriguez-054176176/" class="social-circle m-2 rss-font-size"><span class="icon-linkedin"></span></a>
           </div>
         <div class="col-md-3" style="margin-left: auto; flex: none; width: auto; ">
-          <a href="/Perfiles/Christian Martinez de la rosa.html" class="social-circle m-2 rss-font-size" style="text-align: left;">></a>
+          <a href="Ricardo Castro Vizcaya.html" class="social-circle m-2 rss-font-size" style="text-align: left;">></a>
         </div>
         </div>
       </div>
